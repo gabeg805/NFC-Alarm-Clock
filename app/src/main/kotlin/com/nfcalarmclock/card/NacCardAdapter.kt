@@ -80,11 +80,6 @@ class NacCardAdapter
 	var onViewHolderCreatedListener: OnViewHolderCreatedListener? = null
 
 	/**
-	 * Indices of the cards that are expanded.
-	 */
-	private var indicesOfExpandedCards: List<Int> = ArrayList()
-
-	/**
 	 * Constructor.
 	 */
 	init
@@ -100,50 +95,6 @@ class NacCardAdapter
 	fun getAlarmAt(index: Int): NacAlarm
 	{
 		return getItem(index)
-	}
-
-	/**
-	 * Count the number of cards that are expanded.
-	 *
-	 * @param  rv  The recyclerview containing the view holders.
-	 *
-	 * @return Number of cards that are expanded.
-	 */
-	fun getCardsExpandedCount(rv: RecyclerView): Int
-	{
-		// Get the indices of expanded cards
-		val indices = getIndicesOfExpandedCards(rv)
-
-		// Count the number of cards that are expanded
-		return indices.size
-	}
-
-	/**
-	 * Get a list of the indices of the cards that are expanded.
-	 *
-	 * @param  rv  The recyclerview containing the view holders.
-	 *
-	 * @return A list of the indices of the cards that are expanded.
-	 */
-	private fun getIndicesOfExpandedCards(rv: RecyclerView): List<Int>
-	{
-		val indices: MutableList<Int> = ArrayList()
-
-		// Iterate over each item
-		for (i in 0 until itemCount)
-		{
-			// Get the card from the adapter
-			val card = rv.findViewHolderForAdapterPosition(i) as NacCardHolder?
-
-			// Check if the card is expanded
-			if (card?.isExpanded == true)
-			{
-				// Add the index to the list
-				indices.add(i)
-			}
-		}
-
-		return indices
 	}
 
 	/**
@@ -170,28 +121,10 @@ class NacCardAdapter
 	{
 		// Get the alarm at the index
 		val alarm = getItem(index)
+		println("onBindViewHolder() : ${alarm.id}")
 
 		// Initialize the card
 		card.bind(alarm)
-
-		// Check if the index is part of the expanded cards
-		if (indicesOfExpandedCards.contains(index))
-		{
-			// Expand the card and change its color
-			card.doExpandWithColor()
-		}
-		// Index is not part of the expanded cards, but the card is expanded.
-		// A card should not be in this state, however, it has been seen to
-		// happen after a new install. Expand an alarm, click on the media
-		// button, select a ringtone, (maybe) change some other component of an
-		// alarm such as an audio option, click on the card to collapse it, and
-		// then copy the alarm. For some reason, the card will act as if it is
-		// expanded
-		else if (card.isExpanded)
-		{
-			// Collapse the card
-			card.doCollapseWithColor()
-		}
 
 		// Call the listener
 		onViewHolderBoundListener?.onViewHolderBound(card, index)
@@ -215,14 +148,6 @@ class NacCardAdapter
 
 		// Return the card
 		return card
-	}
-
-	/**
-	 * Store the indices of the expanded cards.
-	 */
-	fun storeIndicesOfExpandedCards(rv: RecyclerView)
-	{
-		indicesOfExpandedCards = getIndicesOfExpandedCards(rv)
 	}
 
 }

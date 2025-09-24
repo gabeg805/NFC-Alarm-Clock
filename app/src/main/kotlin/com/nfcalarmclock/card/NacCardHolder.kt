@@ -42,10 +42,10 @@ import androidx.core.view.isVisible
 import com.nfcalarmclock.system.toDayString
 import java.util.EnumSet
 
-//import com.google.android.material.timepicker.MaterialTimePicker;
-
 /**
  * Card view holder.
+ *
+ * Haptic: time?
  */
 class NacCardHolder(
 
@@ -682,7 +682,7 @@ class NacCardHolder(
 	 * @return True if the check passed successfully, and the alarm can be
 	 *         modified, and False otherwise.
 	 */
-	private fun checkCanModifyAlarm(): Boolean
+	private fun checkCanModifyAlarm(view: View? = null): Boolean
 	{
 		// Card holder is binding
 		if (isBinding)
@@ -704,6 +704,8 @@ class NacCardHolder(
 		// Alarm can be modified
 		else
 		{
+			// Haptic feedback
+			view?.performHapticFeedback()
 			return true
 		}
 
@@ -816,7 +818,7 @@ class NacCardHolder(
 		doCollapse()
 		setCollapsedBackgroundColor()
 
-		// Reset the height because it wasa showing up as expanded for some
+		// Reset the height because it was showing up as expanded for some
 		// reason
 		if (sharedPreferences.cardIsMeasured && (heightCollapsed > 0))
 		{
@@ -1594,14 +1596,11 @@ class NacCardHolder(
 		alarmOptionsButton.setOnClickListener { view ->
 
 			// Check if the alarm can be modified
-			if (checkCanModifyAlarm())
+			if (checkCanModifyAlarm(view))
 			{
 				// Call the listener for when the button is clicked
 				onCardAlarmOptionsClickedListener?.onCardAlarmOptionsClicked(this, alarm!!)
 			}
-
-			// Haptic feedback
-			view.performHapticFeedback()
 
 		}
 	}
@@ -1687,6 +1686,7 @@ class NacCardHolder(
 
 				// Haptic feedback
 				view.performHapticFeedback()
+
 			}
 
 		}
@@ -1701,7 +1701,7 @@ class NacCardHolder(
 		dayOfWeek.onWeekChangedListener = OnWeekChangedListener { button, day ->
 
 			// Check if the alarm can be modified
-			if (checkCanModifyAlarm())
+			if (checkCanModifyAlarm(button))
 			{
 				// Reset the skip next alarm flag
 				alarm!!.shouldSkipNextAlarm = false
@@ -1782,9 +1782,6 @@ class NacCardHolder(
 				button.toggle()
 			}
 
-			// Haptic feedback
-			button.performHapticFeedback()
-
 		}
 	}
 
@@ -1848,14 +1845,11 @@ class NacCardHolder(
 		dismissOptionsButton.setOnClickListener { view ->
 
 			// Check if the alarm can be modified
-			if (checkCanModifyAlarm())
+			if (checkCanModifyAlarm(view))
 			{
 				// Call the listener for when the button is clicked
 				onCardDismissOptionsClickedListener?.onCardDismissOptionsClicked(this, alarm!!)
 			}
-
-			// Haptic feedback
-			view.performHapticFeedback()
 
 		}
 	}
@@ -1869,7 +1863,7 @@ class NacCardHolder(
 		flashlightButton.setOnClickListener { view ->
 
 			// Check if the alarm can be modified
-			if (checkCanModifyAlarm())
+			if (checkCanModifyAlarm(view))
 			{
 				// Reset the skip next alarm flag
 				alarm!!.shouldSkipNextAlarm = false
@@ -1887,12 +1881,8 @@ class NacCardHolder(
 			else
 			{
 				// Revert the button press
-				val flashlightButton = view as MaterialButton
-				flashlightButton.isChecked = !flashlightButton.isChecked
+				(view as MaterialButton).toggle()
 			}
-
-			// Haptic feedback
-			view.performHapticFeedback()
 
 		}
 	}
@@ -1906,13 +1896,10 @@ class NacCardHolder(
 		flashlightButton.setOnLongClickListener {
 
 			// Check if the alarm can be modified
-			if (checkCanModifyAlarm())
+			if (checkCanModifyAlarm(it))
 			{
 				// Call the listener
 				onCardButtonLongClickedListener?.onCardButtonLongClicked(this, alarm!!, R.id.nacFlashlightOptionsDialog2)
-
-				// Haptic feedback
-				it.performHapticFeedback()
 			}
 
 			true
@@ -1928,14 +1915,11 @@ class NacCardHolder(
 		mediaButton.setOnClickListener { view ->
 
 			// Check if the alarm can be modified
-			if (checkCanModifyAlarm())
+			if (checkCanModifyAlarm(view))
 			{
 				// Call the listener
 				onCardMediaClickedListener?.onCardMediaClicked(this, alarm!!)
 			}
-
-			// Haptic feedback
-			view.performHapticFeedback()
 
 		}
 	}
@@ -1949,14 +1933,11 @@ class NacCardHolder(
 		nameButton.setOnClickListener { view ->
 
 			// Check if the alarm can be modified
-			if (checkCanModifyAlarm())
+			if (checkCanModifyAlarm(view))
 			{
 				// Call the listener
 				onCardNameClickedListener?.onCardNameClicked(this, alarm!!)
 			}
-
-			// Haptic feedback
-			view.performHapticFeedback()
 
 		}
 	}
@@ -1970,7 +1951,7 @@ class NacCardHolder(
 		nfcButton.setOnClickListener { view ->
 
 			// Check if the alarm can be modified
-			if (checkCanModifyAlarm())
+			if (checkCanModifyAlarm(view))
 			{
 				// Reset the skip next alarm flag
 				alarm!!.shouldSkipNextAlarm = false
@@ -1988,12 +1969,8 @@ class NacCardHolder(
 			else
 			{
 				// Revert the button press
-				val nfcButton = view as MaterialButton
-				nfcButton.isChecked = !nfcButton.isChecked
+				(view as MaterialButton).toggle()
 			}
-
-			// Haptic feedback
-			view.performHapticFeedback()
 
 		}
 	}
@@ -2007,13 +1984,10 @@ class NacCardHolder(
 		nfcButton.setOnLongClickListener {
 
 			// Check if the alarm can be modified
-			if (checkCanModifyAlarm())
+			if (checkCanModifyAlarm(it))
 			{
 				// Call the listener
 				onCardButtonLongClickedListener?.onCardButtonLongClicked(this, alarm!!, R.id.nacScanNfcTagDialog2)
-
-				// Haptic feedback
-				it.performHapticFeedback()
 			}
 
 			true
@@ -2029,7 +2003,7 @@ class NacCardHolder(
 		repeatButton.setOnClickListener { view ->
 
 			// Check if the alarm can be modified
-			if (checkCanModifyAlarm())
+			if (checkCanModifyAlarm(view))
 			{
 				// Reset the skip next alarm flag
 				alarm!!.shouldSkipNextAlarm = false
@@ -2048,12 +2022,8 @@ class NacCardHolder(
 			else
 			{
 				// Revert the button press
-				val repeatButton = view as MaterialButton
-				repeatButton.isChecked = !repeatButton.isChecked
+				(view as MaterialButton).toggle()
 			}
-
-			// Haptic feedback
-			view.performHapticFeedback()
 
 		}
 	}
@@ -2067,13 +2037,10 @@ class NacCardHolder(
 		repeatButton.setOnLongClickListener {
 
 			// Check if the alarm can be modified
-			if (checkCanModifyAlarm())
+			if (checkCanModifyAlarm(it))
 			{
 				// Call the listener
 				onCardButtonLongClickedListener?.onCardButtonLongClicked(this, alarm!!, R.id.nacRepeatOptionsDialog2)
-
-				// Haptic feedback
-				it.performHapticFeedback()
 			}
 
 			true
@@ -2089,14 +2056,11 @@ class NacCardHolder(
 		snoozeOptionsButton.setOnClickListener { view ->
 
 			// Check if the alarm can be modified
-			if (checkCanModifyAlarm())
+			if (checkCanModifyAlarm(view))
 			{
 				// Call the listener for when the button is clicked
 				onCardSnoozeOptionsClickedListener?.onCardSnoozeOptionsClicked(this, alarm!!)
 			}
-
-			// Haptic feedback
-			view.performHapticFeedback()
 
 		}
 	}
@@ -2116,7 +2080,7 @@ class NacCardHolder(
 			}
 
 			// Check if the alarm can be modified
-			if (checkCanModifyAlarm())
+			if (checkCanModifyAlarm(button))
 			{
 				// Reset the skip next alarm flag
 				alarm!!.shouldSkipNextAlarm = false
@@ -2145,9 +2109,6 @@ class NacCardHolder(
 				button.isChecked = !state
 			}
 
-			// Haptic feedback
-			button.performHapticFeedback()
-
 		}
 	}
 
@@ -2160,16 +2121,10 @@ class NacCardHolder(
 		timeParentView.setOnClickListener { view ->
 
 			// Check if the alarm can be modified
-			if (checkCanModifyAlarm())
+			if (checkCanModifyAlarm(view))
 			{
 				// Call the listener
 				onCardTimeClickedListener?.onCardTimeClicked(this, alarm!!)
-			}
-			// Unable to modify the alarm
-			else
-			{
-				// Haptic feedback
-				view.performHapticFeedback()
 			}
 
 		}
@@ -2184,7 +2139,7 @@ class NacCardHolder(
 		vibrateButton.setOnClickListener { view ->
 
 			// Check if the alarm can be modified
-			if (checkCanModifyAlarm())
+			if (checkCanModifyAlarm(view))
 			{
 				// Reset the skip next alarm flag
 				alarm!!.shouldSkipNextAlarm = false
@@ -2202,12 +2157,8 @@ class NacCardHolder(
 			else
 			{
 				// Change the state back
-				val vibrateButton = view as MaterialButton
-				vibrateButton.isChecked = !vibrateButton.isChecked
+				(view as MaterialButton).toggle()
 			}
-
-			// Haptic feedback
-			view.performHapticFeedback()
 
 		}
 	}
@@ -2221,13 +2172,10 @@ class NacCardHolder(
 		vibrateButton.setOnLongClickListener {
 
 			// Check if the alarm can be modified
-			if (checkCanModifyAlarm())
+			if (checkCanModifyAlarm(it))
 			{
 				// Call the listener
 				onCardButtonLongClickedListener?.onCardButtonLongClicked(this, alarm!!, R.id.nacVibrateOptionsDialog2)
-
-				// Haptic feedback
-				it.performHapticFeedback()
 			}
 
 			true

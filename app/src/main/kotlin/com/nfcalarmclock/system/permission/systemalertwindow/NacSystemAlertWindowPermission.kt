@@ -21,9 +21,8 @@ object NacSystemAlertWindowPermission
 	 */
 	val isCorrectAndroidVersion: Boolean
 		get() {
-			// Permission only required for API level >= 33
-			return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-					&& (Build.VERSION.SDK_INT <= Build.VERSION_CODES.VANILLA_ICE_CREAM)
+			// Permission only required for API level == 35
+			return Build.VERSION.SDK_INT == Build.VERSION_CODES.VANILLA_ICE_CREAM
 		}
 
 	/**

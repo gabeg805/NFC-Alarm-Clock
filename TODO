@@ -2,6 +2,17 @@
 TODO
 ----
 
+* When using TTS, volume seems to get louder when coming back to music, and
+  then goes down a bit. Is that intentional? Scope revertVolume() as well.
+
+* Opened media activity, started on ringtone. Swipeed over to browse. Selected
+  Etta James I'd rather go blind. When I cam eback to main activity, the alarm
+  card was colored like it was expanded but it was not actually expanded. It
+  should have been expanded.
+
+* Test alarms at the same time one more time, and just make sure you do not
+  need to show the notification that was being done when restarting service.
+
 * When browsing music, clicking on the media button and having the media
   activity open up for the first time, the music order gets all jumbled. Need
   to figure out why this is.
@@ -9,8 +20,6 @@ TODO
 * Alarm was not acting like a full screen intent in Android 15. Why is that?
 
 * Alarm time in activity was not updating until turned on screen. May not be an important bug.
-
-* Test multiple alarms that occur at the same time
 
 * Remove all print statements and TODO statements that were added, before releasing to production.
 
@@ -25,8 +34,6 @@ About -> Über
     - Bottom padding of settings is wack, and possibly in main activity as well
 
     - Test MediaActivity with edge-to-edge
-
-* In NacCardHolder, do I always want to do the haptic jank whenever a button is clicked?
 
 * Start week on and next alarm format radio button colors are not themed
 

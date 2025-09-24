@@ -105,7 +105,7 @@
 	<string name="message_permission_post_notifications_request">Allow permission for alarms to run when the app is not in focus.&lt;br/>&lt;br/>&lt;b>Note:&lt;/b>  This is a side effect of the security policies introduced in &lt;b>Android 13&lt;/b>, which are for the benefit of users, but can
 		restrict apps in instances like this.</string>
 	<string name="message_permission_schedule_exact_alarm_request">Allow permission to have alarms run precisely when scheduled.</string>
-	<string name="message_permission_system_alert_window_request">Allow permission to display app over other apps?&lt;br/>&lt;br/>This will ensure that the alarm screen is shown, which is a requirement for audio to play, if the app is in the background.</string>
+	<string name="message_permission_system_alert_window_request">Allow permission to display app over other apps?&lt;br/>&lt;br/>This will ensure that the alarm screen is shown, which is a requirement for audio to play, if the app is in the background.&lt;br/>&lt;br/>&lt;b>Note:&lt;/b>  This only affects Android 15.</string>
 	<string name="message_playlist">Do you want to play all the music in this folder?</string>
 	<string name="message_nfc_request">Please enable NFC to dismiss the alarm</string>
 	<string name="message_nfc_optional">NFC optional</string>

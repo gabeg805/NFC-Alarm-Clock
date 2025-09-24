@@ -8,7 +8,6 @@ import android.content.IntentFilter
 import android.graphics.drawable.InsetDrawable
 import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.os.Handler
 import android.os.Parcelable
 import android.view.HapticFeedbackConstants
@@ -66,6 +65,7 @@ import com.nfcalarmclock.card.NacCardHolder.OnCardCollapsedListener
 import com.nfcalarmclock.card.NacCardHolder.OnCardDaysChangedListener
 import com.nfcalarmclock.card.NacCardHolder.OnCardDismissEarlyClickedListener
 import com.nfcalarmclock.card.NacCardHolder.OnCardDismissOptionsClickedListener
+import com.nfcalarmclock.card.NacCardHolder.OnCardExpandedListener
 import com.nfcalarmclock.card.NacCardHolder.OnCardMediaClickedListener
 import com.nfcalarmclock.card.NacCardHolder.OnCardNameClickedListener
 import com.nfcalarmclock.card.NacCardHolder.OnCardSnoozeOptionsClickedListener
@@ -264,10 +264,59 @@ class NacMainActivity
 	private var recyclerViewSavedState: Parcelable? = null
 
 	/**
+	 * List of alarm IDs corresponding to cards that are expanded.
+	 */
+	private var expandedAlarmCardIds: MutableList<Long> = arrayListOf()
+
+	/**
 	 * Get the number of alarm cards that are expanded.
 	 */
-	private val cardsExpandedCount: Int
-		get() = alarmCardAdapter.getCardsExpandedCount(recyclerView)
+	//private val cardsExpandedCount: Int
+	//	get() = alarmCardAdapter.getCardsExpandedCount(recyclerView)
+
+	///**
+	// * Count the number of cards that are expanded.
+	// *
+	// * @param  rv  The recyclerview containing the view holders.
+	// *
+	// * @return Number of cards that are expanded.
+	// */
+	//fun getCardsExpandedCount(rv: RecyclerView): Int
+	//{
+	//	// Get the indices of expanded cards
+	//	val indices = getIndicesOfExpandedCards(rv)
+
+	//	// Count the number of cards that are expanded
+	//	return indices.size
+	//}
+
+	///**
+	// * Get a list of the indices of the cards that are expanded.
+	// *
+	// * @param  rv  The recyclerview containing the view holders.
+	// *
+	// * @return A list of the indices of the cards that are expanded.
+	// */
+	//private fun getIndicesOfExpandedCards(rv: RecyclerView): List<Int>
+	//{
+	//	val indices: MutableList<Int> = ArrayList()
+
+	//	// Iterate over each item
+	//	for (i in 0 until itemCount)
+	//	{
+	//		// Get the card from the adapter
+	//		val card = rv.findViewHolderForAdapterPosition(i) as NacCardHolder?
+
+	//		// Check if the card is expanded
+	//		if (card?.isExpanded == true)
+	//		{
+	//			// Add the index to the list
+	//			indices.add(i)
+	//		}
+	//	}
+
+	//	return indices
+	//}
 
 	/**
 	 * Check if the user has created the maximum number of alarms.
@@ -605,13 +654,13 @@ class NacMainActivity
 	{
 		// Setup
 		super.onCreate(savedInstanceState)
+		println("onCreate()")
 
 		// Move the shared preference to device protected storage
 		NacSharedPreferences.moveToDeviceProtectedStorage(this)
 
 		// Set the content view
 		setContentView(R.layout.act_main)
-		println(Environment.getExternalStorageDirectory().path)
 
 		// Set member variables
 		sharedPreferences = NacSharedPreferences(this)
@@ -727,6 +776,7 @@ class NacMainActivity
 	{
 		// Super
 		super.onPause()
+		println("onPause()")
 
 		// Cleanup
 		unregisterMyReceiver(this, timeTickReceiver)
@@ -746,6 +796,7 @@ class NacMainActivity
 	{
 		// Super
 		super.onResume()
+		println("onResume() : $expandedAlarmCardIds")
 
 		lifecycleScope.launch {
 
@@ -852,15 +903,42 @@ class NacMainActivity
 	 */
 	override fun onViewHolderBound(card: NacCardHolder, index: Int)
 	{
+		// Get the alarm
+		val alarm = alarmCardAdapter.getAlarmAt(index)
+		println("onViewHolderBOUND() : ${alarm.id}")
+
+		// Check if the index is part of the expanded cards
+		if (expandedAlarmCardIds.contains(alarm.id))
+		{
+			println("EXPAND WITH COLOR")
+			// Expand the card and change its color
+			card.doExpandWithColor()
+		}
+		// Index is not part of the expanded cards, but the card is expanded.
+		// A card should not be in this state, however, it has been seen to
+		// happen after a new install.
+		//
+		// Expand an alarm, click on the media
+		// button, select a ringtone, (maybe) change some other component of an
+		// alarm such as an audio option, click on the card to collapse it, and
+		// then copy the alarm. For some reason, the card will act as if it is
+		// expanded
+		//
+		// Note: This could occur because by default, the alarm card shows all
+		//       the widgets, which could explain why it thinks it is expanded.
+		else if (card.isExpanded)
+		{
+			println("COLLAPSE WITH COLOR")
+			// Collapse the card
+			card.doCollapseWithColor()
+		}
+
 		// Check if the alarm card has not been measured
 		if (!sharedPreferences.cardIsMeasured)
 		{
 			// Measure the card
 			measureCard(card)
 		}
-
-		// Get the alarm
-		val alarm = alarmCardAdapter.getAlarmAt(index)
 
 		// Check if the alarm was recently added
 		if (recentlyAddedAlarmIds.contains(alarm.id))
@@ -910,9 +988,14 @@ class NacMainActivity
 		// Collapsed listener
 		card.onCardCollapsedListener = OnCardCollapsedListener { _, alarm ->
 
+			// Remove the ID from the expanded list
+			expandedAlarmCardIds.remove(alarm.id)
+			println("Collapsed : $expandedAlarmCardIds")
+
 			// Sort the list when no cards are expanded
-			if (cardsExpandedCount == 0)
+			if (expandedAlarmCardIds.isEmpty())
 			{
+				println("SORT THIS JANK")
 				// TODO: This could be the cause of poor performance when there are a lot of alarms?
 				alarmCardAdapterLiveData.sort()
 			}
@@ -924,6 +1007,15 @@ class NacMainActivity
 				card.highlight()
 				recentlyUpdatedAlarmIds.remove(alarm.id)
 			}
+
+		}
+
+		// Expanded listener
+		card.onCardExpandedListener = OnCardExpandedListener { _, alarm ->
+
+			// Add the ID to the expanded list
+			expandedAlarmCardIds.add(alarm.id)
+			println("Expanded : $expandedAlarmCardIds")
 
 		}
 
@@ -1529,7 +1621,7 @@ class NacMainActivity
 			recyclerViewSavedState = recyclerView.layoutManager?.onSaveInstanceState()
 
 			// Check if no cards are expanded
-			if (cardsExpandedCount == 0)
+			if (expandedAlarmCardIds.isEmpty())
 			{
 				// Merge and sort the alarms
 				alarmCardAdapterLiveData.mergeSort(alarms)
@@ -1557,7 +1649,16 @@ class NacMainActivity
 			}
 
 			// Update the alarm adapter
-			alarmCardAdapter.storeIndicesOfExpandedCards(recyclerView)
+			//println("Storing indices of expanded cards : ${alarmCardAdapter.indicesOfExpandedCards}")
+			//alarmCardAdapter.storeIndicesOfExpandedCards(recyclerView)
+			///**
+			// * Store the indices of the expanded cards.
+			// */
+			//fun storeIndicesOfExpandedCards(rv: RecyclerView)
+			//{
+			//	indicesOfExpandedCards = getIndicesOfExpandedCards(rv)
+			//	println("Indices of expanded cards : $indicesOfExpandedCards")
+			//}
 			alarmCardAdapter.submitList(alarms)
 
 			// Refresh the next alarm message when the adapter list was empty. This

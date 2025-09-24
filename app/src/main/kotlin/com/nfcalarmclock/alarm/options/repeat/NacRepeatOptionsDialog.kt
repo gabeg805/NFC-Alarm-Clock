@@ -173,13 +173,18 @@ class NacRepeatOptionsDialog
 			// Days are empty
 			if (alarm?.days?.isEmpty() == true)
 			{
-				// TODO: Should I be doing this? Think about what feels best as a user in this scenario
-				// TODO: Maybe this should be like every day and just not do anything here?
-				// Get the next alarm day
-				val nextDay = getNextAlarmDay(alarm)
-
-				// Toggle the day
-				alarm.toggleDay(nextDay)
+				// Every 1 week or no days to run before starting were selected
+				if ((selectedRepeatFrequencyValue == 1) || selectedDaysToRunBeforeFrequency.isEmpty())
+				{
+					// Set the days and days to run before starting to the entire week
+					alarm.days = Day.WEEK
+					alarm.repeatFrequencyDaysToRunBeforeStarting = alarm.days
+				}
+				// Every 2+ weeks and days to run before starting has at least 1 day selected
+				else
+				{
+					alarm.days = selectedDaysToRunBeforeFrequency
+				}
 			}
 		}
 		// Every other frequency unit

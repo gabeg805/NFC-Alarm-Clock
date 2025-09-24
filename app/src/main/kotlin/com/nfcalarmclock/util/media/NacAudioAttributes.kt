@@ -175,6 +175,7 @@ class NacAudioAttributes(
 		wasDucking = true
 
 		// Save the current volume
+		println("Duck volume : $streamVolume")
 		sharedPreferences.previousVolume = streamVolume
 
 		// Set the volume to half its current value
@@ -219,6 +220,7 @@ class NacAudioAttributes(
 	fun revertVolume()
 	{
 		// Set the volume to the previous volume
+		println("Revert volume : ${sharedPreferences.previousVolume}")
 		streamVolume = sharedPreferences.previousVolume
 	}
 
@@ -227,6 +229,7 @@ class NacAudioAttributes(
 	 */
 	fun saveCurrentVolume()
 	{
+		println("Save current volume : $streamVolume")
 		sharedPreferences.previousVolume = streamVolume
 	}
 

@@ -1112,7 +1112,7 @@ class NacSharedPreferences(context: Context)
 		get()
 		{
 			val key = resources.getString(R.string.key_default_alarm_snooze_max_snooze)
-			val defaultValue = resources.getInteger(R.integer.default_max_snooze_index)
+			val defaultValue = -1
 
 			return instance.getInt(key, defaultValue)
 		}

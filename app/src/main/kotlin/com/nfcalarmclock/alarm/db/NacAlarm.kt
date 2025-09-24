@@ -1087,8 +1087,6 @@ class NacAlarm()
 		timeOfDismissEarlyAlarm = 0
 
 		// Date is set
-		// TODO: Fix this logic so it jives with addRepeatFrequencyToTime()....unless it is already ok
-		// TODO: It is possible it could affect the results of NacCalendar.alarmToCalendar()?
 		if (date.isNotEmpty())
 		{
 			// Clear the date
