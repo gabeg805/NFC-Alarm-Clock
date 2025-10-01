@@ -24,6 +24,7 @@ import com.nfcalarmclock.db.NacAlarmDatabase.ConvertDismissAndSnoozeOptionsFromM
 import com.nfcalarmclock.db.NacAlarmDatabase.FixDismissAndSnoozeOptionsConvertedFromMinutesToSecondsMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.ClearNfcTagTableMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.DropNfcTagTableMigration
+import com.nfcalarmclock.db.NacAlarmDatabase.RenameShouldDeleteAlarmAfterDismissedColumnMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.RemoveSnoozeHourMinuteColumnsAndRenameShouldEasySnoozeColumnMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.RemoveUseTtsColumnMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.UpdateRepeatFrequencyFrom0To1Migration
@@ -46,6 +47,8 @@ import com.nfcalarmclock.statistics.db.NacAlarmSnoozedStatisticDao
 import com.nfcalarmclock.statistics.db.NacStatisticTypeConverters
 import com.nfcalarmclock.util.NacUtility
 import com.nfcalarmclock.system.getDeviceProtectedStorageContext
+import com.nfcalarmclock.timer.db.NacTimer
+import com.nfcalarmclock.timer.db.NacTimerDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -62,7 +65,7 @@ import javax.inject.Singleton
 /**
  * Store alarms in a Room database.
  */
-@Database(version = 41,
+@Database(version = 42,
 	entities = [
 		NacAlarm::class,
 		NacAlarmCreatedStatistic::class,
@@ -70,7 +73,8 @@ import javax.inject.Singleton
 		NacAlarmDismissedStatistic::class,
 		NacAlarmMissedStatistic::class,
 		NacAlarmSnoozedStatistic::class,
-		NacNfcTag::class],
+		NacNfcTag::class,
+		NacTimer::class],
 	autoMigrations = [
 		AutoMigration(from = 1,  to = 2),
 		AutoMigration(from = 2,  to = 3, spec = ClearAllStatisticsMigration::class),
@@ -112,6 +116,7 @@ import javax.inject.Singleton
 		AutoMigration(from = 38, to = 39),
 		AutoMigration(from = 39, to = 40, spec = UpdateRepeatFrequencyUnitFrom0To1Migration::class),
 		AutoMigration(from = 40, to = 41, spec = RemoveSnoozeHourMinuteColumnsAndRenameShouldEasySnoozeColumnMigration::class),
+		AutoMigration(from = 41, to = 42, spec = RenameShouldDeleteAlarmAfterDismissedColumnMigration::class),
 	]
 )
 @TypeConverters(NacAlarmTypeConverters::class, NacStatisticTypeConverters::class)
@@ -153,6 +158,11 @@ abstract class NacAlarmDatabase
 	 * Store NFC tags in the database.
 	 */
 	abstract fun nfcTagDao(): NacNfcTagDao
+
+	/**
+	 * Store timers in the database.
+	 */
+	abstract fun timerDao(): NacTimerDao
 
 	/**
 	 * Added default snooze and auto dismiss settings to all alarms, since they will now
@@ -332,6 +342,15 @@ abstract class NacAlarmDatabase
 	}
 
 	/**
+	 * Rename the "should delete alarm after dismissed" column so that it does not
+	 * include the word "alarm" and can be used for a timer as well.
+	 */
+	@RenameColumn(tableName =  "alarm", fromColumnName = "should_delete_alarm_after_dismissed", toColumnName = "should_delete_after_dismissed")
+	@RenameColumn(tableName =  "alarm", fromColumnName = "should_dismiss_early", toColumnName = "can_dismiss_early")
+	@RenameColumn(tableName =  "alarm", fromColumnName = "should_say_alarm_name", toColumnName = "should_say_name")
+	internal class RenameShouldDeleteAlarmAfterDismissedColumnMigration : AutoMigrationSpec
+
+	/**
 	 * Remove the "Use TTS" column when auto-migrating.
 	 */
 	@DeleteColumn(tableName = "alarm", columnName = "should_use_tts")
@@ -486,6 +505,8 @@ abstract class NacAlarmDatabase
 
 		/**
 		 * Copy alarms from another database.
+		 *
+		 * TODO: Copy timers as well?
 		 */
 		private suspend fun copyAlarmsFromDb(
 			context: Context,
@@ -961,6 +982,15 @@ class NacAlarmDatabaseModule
 	fun provideNfcTagDao(db: NacAlarmDatabase) : NacNfcTagDao
 	{
 		return db.nfcTagDao()
+	}
+
+	/**
+	 * Provide the timer DAO.
+	 */
+	@Provides
+	fun provideTimerDao(db: NacAlarmDatabase) : NacTimerDao
+	{
+		return db.timerDao()
 	}
 
 }

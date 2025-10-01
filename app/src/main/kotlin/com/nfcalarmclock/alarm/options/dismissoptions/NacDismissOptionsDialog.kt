@@ -87,7 +87,7 @@ class NacDismissOptionsDialog
 		alarm?.canDismissEarly = dismissEarlySwitch.isChecked
 		alarm?.shouldShowDismissEarlyNotification = dismissEarlyNotificationSwitch.isChecked
 		alarm?.dismissEarlyTime = selectedDismissEarlyTime
-		alarm?.shouldDeleteAlarmAfterDismissed = selectedShouldDeleteAlarmAfterDismissed
+		alarm?.shouldDeleteAfterDismissed = selectedShouldDeleteAlarmAfterDismissed
 	}
 
 	/**
@@ -146,7 +146,7 @@ class NacDismissOptionsDialog
 		// Setup the views
 		setupAutoDismiss(a.shouldAutoDismiss, defaultAutoDismissTime)
 		setupDismissEarly(a.canDismissEarly, a.shouldShowDismissEarlyNotification, a.dismissEarlyTime)
-		setupShouldDeleteAlarmAfterDismissed(a.shouldDeleteAlarmAfterDismissed)
+		setupShouldDeleteAlarmAfterDismissed(a.shouldDeleteAfterDismissed)
 		setAutoDismissUsability()
 		setDismissEarlyUsability()
 	}

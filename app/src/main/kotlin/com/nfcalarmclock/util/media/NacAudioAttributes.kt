@@ -175,8 +175,7 @@ class NacAudioAttributes(
 		wasDucking = true
 
 		// Save the current volume
-		println("Duck volume : $streamVolume")
-		sharedPreferences.previousVolume = streamVolume
+		saveCurrentVolume()
 
 		// Set the volume to half its current value
 		streamVolume /= 2
@@ -205,22 +204,24 @@ class NacAudioAttributes(
 	 */
 	fun revertDucking()
 	{
-		if (wasDucking)
+		// Was not ducking, so do nothing
+		if (!wasDucking)
 		{
-			wasDucking = false
-
-			// TODO: Check if this new addition is ok
-			revertVolume()
+			return
 		}
+
+		// Reset the ducking flag
+		wasDucking = false
+
+		// Revert the volume back to what it was
+		revertVolume()
 	}
 
 	/**
-	 * Revert the volume level.
+	 * Revert the volume level to what it previously was.
 	 */
 	fun revertVolume()
 	{
-		// Set the volume to the previous volume
-		println("Revert volume : ${sharedPreferences.previousVolume}")
 		streamVolume = sharedPreferences.previousVolume
 	}
 
@@ -229,7 +230,6 @@ class NacAudioAttributes(
 	 */
 	fun saveCurrentVolume()
 	{
-		println("Save current volume : $streamVolume")
 		sharedPreferences.previousVolume = streamVolume
 	}
 

@@ -67,7 +67,7 @@ class NacAlarmRepository @Inject constructor(
 	/**
 	 * Insert an alarm, asynchronously, into the database.
 	 *
-	 * @param  alarm  Alarm to insert.
+	 * @param alarm Alarm to insert.
 	 *
 	 * @return The row ID of the inserted alarm.
 	 */
@@ -76,7 +76,7 @@ class NacAlarmRepository @Inject constructor(
 	/**
 	 * Update an alarm, asynchronously, in the database.
 	 *
-	 * @param  alarm  Alarm to update.
+	 * @param alarm Alarm to update.
 	 *
 	 * @return The number of alarms updated.
 	 */

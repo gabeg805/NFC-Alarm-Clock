@@ -358,11 +358,6 @@ class NacCardHolder(
 	private val alarmOptionsButton: MaterialButton = root.findViewById(R.id.nac_alarm_options)
 
 	/**
-	 * The parent view that contains the collapse button.
-	 */
-	private val collapseParentView: LinearLayout = root.findViewById(R.id.nac_collapse_parent)
-
-	/**
 	 * The button to expand the alarm card.
 	 */
 	private val expandButton: MaterialButton = root.findViewById(R.id.nac_expand)
@@ -1459,7 +1454,7 @@ class NacCardHolder(
 	private fun setSummaryShoulDeleteAlarmAfterDismissedIcon()
 	{
 		// Get the what the visibility should be
-		val vis = if (alarm!!.shouldDeleteAlarmAfterDismissed) View.VISIBLE else View.GONE
+		val vis = if (alarm!!.shouldDeleteAfterDismissed) View.VISIBLE else View.GONE
 
 		// Check if the visibilty does not match
 		if (vis != deleteAlarmAfterDismissedIcon.visibility)
@@ -1667,11 +1662,10 @@ class NacCardHolder(
 		// id == R.id.nac_dismiss_parent
 		// id == R.id.nac_expand
 		// id == R.id.nac_expand_other
-		// id == R.id.nac_collapse_parent
 
 		// List of all the views that need the same on click listener for the card
 		val allCardViews = listOf(headerView, summaryView, extraBelowSummaryView,
-			expandButton, expandOtherButton, collapseParentView)
+			expandButton, expandOtherButton)
 
 		// Iterate over all the main card views that will control expanding and
 		// collapsing the alarm

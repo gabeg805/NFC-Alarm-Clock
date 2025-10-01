@@ -227,7 +227,7 @@ class NacGeneralSettingFragment
 					sharedPreferences!!.canDismissEarly = a.canDismissEarly
 					sharedPreferences!!.shouldShowDismissEarlyNotification = a.shouldShowDismissEarlyNotification
 					sharedPreferences!!.dismissEarlyTime = a.dismissEarlyTime
-					sharedPreferences!!.shouldDeleteAlarmAfterDismissed = a.shouldDeleteAlarmAfterDismissed
+					sharedPreferences!!.shouldDeleteAlarmAfterDismissed = a.shouldDeleteAfterDismissed
 
 				})
 				.show(childFragmentManager, NacDismissOptionsDialog.TAG)
@@ -323,7 +323,7 @@ class NacGeneralSettingFragment
 						// Text-to-speech
 						R.id.nacTextToSpeechDialog -> {
 							sharedPreferences!!.shouldSayCurrentTime = a.shouldSayCurrentTime
-							sharedPreferences!!.shouldSayAlarmName = a.shouldSayAlarmName
+							sharedPreferences!!.shouldSayAlarmName = a.shouldSayName
 							sharedPreferences!!.ttsFrequency = a.ttsFrequency
 							sharedPreferences!!.ttsVoice = a.ttsVoice
 						}

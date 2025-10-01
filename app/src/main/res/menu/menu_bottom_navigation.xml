@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<!-- Alarm -->
+	<item
+		android:id="@+id/bottom_navigation_alarm"
+		android:enabled="true"
+		android:icon="@drawable/alarm"
+		android:title="@string/word_alarm"
+		/>
+
+	<!-- Timer -->
+	<item
+		android:id="@+id/bottom_navigation_timer"
+		android:enabled="true"
+		android:icon="@drawable/hourglass_empty_32"
+		android:title="@string/word_timer"
+		/>
+
+</menu>

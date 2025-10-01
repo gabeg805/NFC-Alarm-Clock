@@ -210,7 +210,6 @@ class NacWakeupProcess(
 	 */
 	fun cleanup()
 	{
-		println("Wakeup cleanup start : ${audioAttributes.streamVolume}")
 		// Cleanup vibrate
 		vibrator?.cleanup()
 
@@ -243,7 +242,6 @@ class NacWakeupProcess(
 
 		// Cleanup the restrict volume handler
 		restrictVolumeHandler.removeCallbacksAndMessages(null)
-		println("Wakeup cleanup end : ${audioAttributes.streamVolume}")
 	}
 
 	/**
@@ -275,16 +273,12 @@ class NacWakeupProcess(
 			volumeToRestrictChangeTo = newVolume
 			audioAttributes.streamVolume = newVolume
 		}
-		println("Current volume : $currentVolume | Alarm volume : $alarmVolume | Stream : ${audioAttributes.streamVolume}")
 
 		// Wait for a period of time before increasing the volume again.
 		// This will get called even if the volume does not need to change, in
 		// case the user tries to lower then volume after the alarm volume
 		// level has been reached
-		graduallyIncreaseVolumeHandler.postDelayed({
-			println("Gradually increase the bit")
-			graduallyIncreaseVolume()
-												   },
+		graduallyIncreaseVolumeHandler.postDelayed({ graduallyIncreaseVolume() },
 			alarm.graduallyIncreaseVolumeWaitTime * 1000L)
 	}
 
@@ -320,14 +314,10 @@ class NacWakeupProcess(
 		{
 			// Change the volume
 			audioAttributes.streamVolume = volumeToRestrictChangeTo
-			println("Restrict volume to $volumeToRestrictChangeTo")
 		}
 
 		// Run the handler
-		restrictVolumeHandler.postDelayed({
-			println("Restrict the bit")
-			restrictVolume()
-										  },
+		restrictVolumeHandler.postDelayed({ restrictVolume() },
 			PERIOD_RESTRICT_VOLUME)
 	}
 
@@ -485,7 +475,7 @@ class NacWakeupProcess(
 		}
 
 		// Speak via TTS
-		val phrase = NacTranslate.getTtsPhrase(context, alarm.shouldSayCurrentTime, alarm.shouldSayAlarmName, alarm.name)
+		val phrase = NacTranslate.getTtsPhrase(context, alarm.shouldSayCurrentTime, alarm.shouldSayName, alarm.name)
 
 		textToSpeech.speak(phrase, audioAttributes)
 

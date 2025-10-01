@@ -35,9 +35,9 @@ class NacAlarmViewModel @Inject constructor(
 	suspend fun count(): Int = alarmRepository.count()
 
 	/**
-	 * Delete an alarm from the database, and cancel its scheduled run time.
+	 * Delete an alarm from the database.
 	 *
-	 * @param  alarm  Alarm to delete.
+	 * @param alarm Alarm to delete.
 	 *
 	 * @return The number of rows deleted.
 	 */
@@ -51,7 +51,7 @@ class NacAlarmViewModel @Inject constructor(
 	/**
 	 * Find an alarm.
 	 *
-	 * @param  id  The ID of the alarm to find.
+	 * @param id The ID of the alarm to find.
 	 *
 	 * @return The alarm with the ID.
 	 */
@@ -71,9 +71,9 @@ class NacAlarmViewModel @Inject constructor(
 	suspend fun getAllAlarms(): List<NacAlarm> = alarmRepository.getAllAlarms()
 
 	/**
-	 * Insert an alarm into the database, and schedule the alarm to run.
+	 * Insert an alarm into the database.
 	 *
-	 * @param  alarm  The alarm to insert.
+	 * @param alarm The alarm to insert.
 	 *
 	 * @return The row ID of the alarm that was inserted.
 	 */
@@ -101,9 +101,9 @@ class NacAlarmViewModel @Inject constructor(
 	}
 
 	/**
-	 * Update an alarm in the database, and schedule the alarm to run.
+	 * Update an alarm in the database.
 	 *
-	 * @param  alarm  The alarm to update.
+	 * @param alarm The alarm to update.
 	 *
 	 * @return The number of alarms updated.
 	 */

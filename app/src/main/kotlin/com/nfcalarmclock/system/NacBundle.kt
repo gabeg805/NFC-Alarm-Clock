@@ -122,7 +122,7 @@ fun Bundle.getAlarm(): NacAlarm?
 				this.getParcelable(ALARM_PARCEL_NAME)
 			}
 		}
-		catch (bpe: BadParcelableException)
+		catch (_: BadParcelableException)
 		{
 			try
 			{
@@ -137,7 +137,7 @@ fun Bundle.getAlarm(): NacAlarm?
 					this.getParcelable(ALARM_PARCEL_NAME)
 				}
 			}
-			catch (re: RuntimeException)
+			catch (_: RuntimeException)
 			{
 				null
 			}
@@ -214,6 +214,11 @@ object NacBundle
 	 * Tag name for a parceled alarm.
 	 */
 	const val ALARM_PARCEL_NAME = "NacAlarmParcel"
+
+	/**
+	 * Intent action that needs to be passed to a Bundle.
+	 */
+	const val BUNDLE_INTENT_ACTION = "NacBundleIntentAction"
 
 	/**
 	 * Media path key.

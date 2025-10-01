@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:orientation="vertical">
+	<!--
+	app:layout_behavior="@string/appbar_scrolling_view_behavior">
+	-->
+
+	<!-- Next alarm message -->
+	<com.google.android.material.textview.MaterialTextView
+		android:id="@+id/tv_next_alarm"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:background="?attr/colorCard"
+		android:gravity="center_horizontal"
+		android:paddingTop="@dimen/small"
+		android:paddingBottom="@dimen/tiny"
+		android:textSize="@dimen/tsz_normal"
+		android:text=""
+		app:layout_constraintTop_toTopOf="parent"
+		/>
+
+	<!-- Alarm list -->
+	<androidx.recyclerview.widget.RecyclerView
+		android:id="@+id/rv_alarm_list"
+		android:contentDescription="@string/cd_alarm_list"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:clipToPadding="false"
+		android:descendantFocusability="blocksDescendants"
+		android:paddingBottom="@dimen/isz_attention"
+		android:scrollbars="vertical"
+		app:layout_constraintTop_toBottomOf="@id/tv_next_alarm"
+		/>
+
+	<!-- Navigation host -->
+	<androidx.fragment.app.FragmentContainerView
+		android:id="@+id/options_content"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:name="androidx.navigation.fragment.NavHostFragment"
+		app:defaultNavHost="true"
+		/>
+</LinearLayout>

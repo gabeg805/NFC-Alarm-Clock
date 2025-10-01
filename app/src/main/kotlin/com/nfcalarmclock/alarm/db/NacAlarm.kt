@@ -46,7 +46,7 @@ class NacNextAlarm(
  * Alarm.
  */
 @Entity(tableName = "alarm")
-class NacAlarm()
+open class NacAlarm()
 	: Comparable<NacAlarm>,
 	Parcelable
 {
@@ -315,8 +315,8 @@ class NacAlarm()
 	/**
 	 * Whether to say the alarm name via text-to-speech when the alarm goes off.
 	 */
-	@ColumnInfo(name = "should_say_alarm_name", defaultValue = "0")
-	var shouldSayAlarmName: Boolean = false
+	@ColumnInfo(name = "should_say_name", defaultValue = "0")
+	var shouldSayName: Boolean = false
 
 	/**
 	 * Frequency at which to play text-to-speech, in units of minutes.
@@ -370,14 +370,8 @@ class NacAlarm()
 	/**
 	 * Whether the alarm can be dismissed early or not.
 	 */
-	@ColumnInfo(name = "should_dismiss_early", defaultValue = "0")
+	@ColumnInfo(name = "can_dismiss_early", defaultValue = "0")
 	var canDismissEarly: Boolean = false
-
-	/**
-	 * Whether to show a notification for dismiss early or not.
-	 */
-	@ColumnInfo(name = "should_show_dismiss_early_notification", defaultValue = "0")
-	var shouldShowDismissEarlyNotification: Boolean = false
 
 	/**
 	 * Amount of time to allow a user to dismiss early by (minutes).
@@ -390,6 +384,18 @@ class NacAlarm()
 	 */
 	@ColumnInfo(name = "time_of_dismiss_early_alarm", defaultValue = "0")
 	var timeOfDismissEarlyAlarm: Long = 0
+
+	/**
+	 * Whether to show a notification for dismiss early or not.
+	 */
+	@ColumnInfo(name = "should_show_dismiss_early_notification", defaultValue = "0")
+	var shouldShowDismissEarlyNotification: Boolean = false
+
+	/**
+	 * Whether to delete the alarm after it is dismissed or not.
+	 */
+	@ColumnInfo(name = "should_delete_after_dismissed", defaultValue = "0")
+	var shouldDeleteAfterDismissed: Boolean = false
 
 	/**
 	 * Whether to auto snooze or not.
@@ -456,12 +462,6 @@ class NacAlarm()
 	 */
 	@ColumnInfo(name = "should_skip_next_alarm", defaultValue = "0")
 	var shouldSkipNextAlarm: Boolean = false
-
-	/**
-	 * Whether to delete the alarm after it is dismissed or not.
-	 */
-	@ColumnInfo(name = "should_delete_alarm_after_dismissed", defaultValue = "0")
-	var shouldDeleteAlarmAfterDismissed: Boolean = false
 
 	/**
 	 * Check if the alarm has a sound that will be played when it goes off.
@@ -540,7 +540,7 @@ class NacAlarm()
 	 * Check if should use TTS or not.
 	 */
 	val shouldUseTts: Boolean
-		get() = shouldSayCurrentTime || shouldSayAlarmName
+		get() = shouldSayCurrentTime || shouldSayName
 
 	/**
 	 * Populate values with input parcel.
@@ -610,7 +610,7 @@ class NacAlarm()
 
 		// Text-to-speech
 		shouldSayCurrentTime = input.readInt() != 0
-		shouldSayAlarmName = input.readInt() != 0
+		shouldSayName = input.readInt() != 0
 		ttsFrequency = input.readInt()
 		ttsSpeechRate = input.readFloat()
 		ttsVoice = input.readString() ?: ""
@@ -619,10 +619,10 @@ class NacAlarm()
 		shouldAutoDismiss = input.readInt() != 0
 		autoDismissTime = input.readInt()
 		canDismissEarly = input.readInt() != 0
-		shouldShowDismissEarlyNotification = input.readInt() != 0
 		dismissEarlyTime = input.readInt()
 		timeOfDismissEarlyAlarm = input.readLong()
-		shouldDeleteAlarmAfterDismissed = input.readInt() != 0
+		shouldShowDismissEarlyNotification = input.readInt() != 0
+		shouldDeleteAfterDismissed = input.readInt() != 0
 
 		// Snooze
 		shouldAutoSnooze = input.readInt() != 0
@@ -811,19 +811,9 @@ class NacAlarm()
 	}
 
 	/**
-	 * Add to the time, in milliseconds, that the alarm is active.
-	 *
-	 * @param  time  Time, in milliseconds, to add to the active time.
-	 */
-	fun addToTimeActive(time: Long)
-	{
-		timeActive += time
-	}
-
-	/**
 	 * Compare the next day this alarm will run with another alarm.
 	 *
-	 * @param  alarm  An alarm.
+	 * @param alarm An alarm.
 	 *
 	 * @return A negative integer, zero, or a positive integer as this object is
 	 * less than, equal to, or greater than the specified object.
@@ -862,7 +852,7 @@ class NacAlarm()
 	 * At least one alarm should be in use, otherwise the comparison is
 	 * meaningless.
 	 *
-	 * @param  alarm  An alarm.
+	 * @param alarm An alarm.
 	 *
 	 * @return A negative integer, zero, or a positive integer as this object is
 	 * less than, equal to, or greater than the specified object.
@@ -890,7 +880,7 @@ class NacAlarm()
 	/**
 	 * Compare the time of this alarm with another alarm.
 	 *
-	 * @param  alarm  An alarm.
+	 * @param alarm An alarm.
 	 *
 	 * @return A negative integer, zero, or a positive integer as this object is
 	 * less than, equal to, or greater than the specified object.
@@ -908,7 +898,7 @@ class NacAlarm()
 	/**
 	 * Compare this alarm with another alarm.
 	 *
-	 * @param  other  An alarm.
+	 * @param other An alarm.
 	 *
 	 * @return A negative integer, zero, or a positive integer as this object is
 	 * less than, equal to, or greater than the specified object.
@@ -987,19 +977,27 @@ class NacAlarm()
 		alarm.minute = minute
 		alarm.days = days
 		alarm.date = date
+
+		// Repeat
 		alarm.shouldRepeat = shouldRepeat
 		alarm.repeatFrequency = repeatFrequency
 		alarm.repeatFrequencyUnits = repeatFrequencyUnits
 		alarm.repeatFrequencyDaysToRunBeforeStarting = repeatFrequencyDaysToRunBeforeStarting
+
+		// Vibrate
 		alarm.shouldVibrate = shouldVibrate
 		alarm.vibrateDuration = vibrateDuration
 		alarm.vibrateWaitTime = vibrateWaitTime
 		alarm.shouldVibratePattern = shouldVibratePattern
 		alarm.vibrateRepeatPattern = vibrateRepeatPattern
 		alarm.vibrateWaitTimeAfterPattern = vibrateWaitTimeAfterPattern
+
+		// NFC
 		alarm.shouldUseNfc = shouldUseNfc
 		alarm.nfcTagId = nfcTagId
 		alarm.nfcTagDismissOrder = nfcTagDismissOrder
+
+		// Flashlight
 		alarm.shouldUseFlashlight = shouldUseFlashlight
 		alarm.flashlightStrengthLevel = flashlightStrengthLevel
 		alarm.graduallyIncreaseFlashlightStrengthLevelWaitTime = graduallyIncreaseFlashlightStrengthLevelWaitTime
@@ -1016,33 +1014,34 @@ class NacAlarm()
 		alarm.shouldShuffleMedia = shouldShuffleMedia
 		alarm.shouldRecursivelyPlayMedia = shouldRecursivelyPlayMedia
 
-		// Other normal stuff
+		// Volume and audio source
 		alarm.volume = volume
+		alarm.shouldGraduallyIncreaseVolume = shouldGraduallyIncreaseVolume
+		alarm.graduallyIncreaseVolumeWaitTime = graduallyIncreaseVolumeWaitTime
+		alarm.shouldRestrictVolume = shouldRestrictVolume
 		alarm.audioSource = audioSource
+
+		// Name
 		alarm.name = name
 
 		// Text-to-speech
 		alarm.shouldSayCurrentTime = shouldSayCurrentTime
-		alarm.shouldSayAlarmName = shouldSayAlarmName
+		alarm.shouldSayName = shouldSayName
 		alarm.ttsFrequency = ttsFrequency
 		alarm.ttsSpeechRate = ttsSpeechRate
 		alarm.ttsVoice = ttsVoice
 
-		// Volume features
-		alarm.shouldGraduallyIncreaseVolume = shouldGraduallyIncreaseVolume
-		alarm.graduallyIncreaseVolumeWaitTime = graduallyIncreaseVolumeWaitTime
-		alarm.shouldRestrictVolume = shouldRestrictVolume
-
-		// Auto dismiss
+		// Dismiss
+		alarm.shouldAutoDismiss = shouldAutoDismiss
 		alarm.autoDismissTime = autoDismissTime
-
-		// Dismiss early
 		alarm.canDismissEarly = canDismissEarly
-		alarm.shouldShowDismissEarlyNotification = shouldShowDismissEarlyNotification
 		alarm.dismissEarlyTime = dismissEarlyTime
 		alarm.timeOfDismissEarlyAlarm = timeOfDismissEarlyAlarm
+		alarm.shouldShowDismissEarlyNotification = shouldShowDismissEarlyNotification
+		alarm.shouldDeleteAfterDismissed = shouldDeleteAfterDismissed
 
 		// Snooze
+		alarm.shouldAutoSnooze = shouldAutoSnooze
 		alarm.autoSnoozeTime = autoSnoozeTime
 		alarm.maxSnooze = maxSnooze
 		alarm.snoozeDuration = snoozeDuration
@@ -1057,9 +1056,6 @@ class NacAlarm()
 
 		// Skip next alarm
 		alarm.shouldSkipNextAlarm = shouldSkipNextAlarm
-
-		// Delete alarm after dismissed
-		alarm.shouldDeleteAlarmAfterDismissed = shouldDeleteAlarmAfterDismissed
 
 		return alarm
 	}
@@ -1148,7 +1144,7 @@ class NacAlarm()
 	/**
 	 * Check if this alarm equals another alarm.
 	 *
-	 * @param  alarm  An alarm.
+	 * @param alarm An alarm.
 	 *
 	 * @return True if both alarms are the same, and false otherwise.
 	 */
@@ -1160,72 +1156,15 @@ class NacAlarm()
 			&& (isActive == alarm.isActive)
 			&& (timeActive == alarm.timeActive)
 			&& (snoozeCount == alarm.snoozeCount)
-			&& (isEnabled == alarm.isEnabled)
-			&& (hour == alarm.hour)
-			&& (minute == alarm.minute)
-			&& (days == alarm.days)
-			&& (date == alarm.date)
-			&& (shouldRepeat == alarm.shouldRepeat)
-			&& (repeatFrequency == alarm.repeatFrequency)
-			&& (repeatFrequencyUnits == alarm.repeatFrequencyUnits)
-			&& (repeatFrequencyDaysToRunBeforeStarting == alarm.repeatFrequencyDaysToRunBeforeStarting)
-			&& (shouldVibrate == alarm.shouldVibrate)
-			&& (vibrateDuration == alarm.vibrateDuration)
-			&& (vibrateWaitTime == alarm.vibrateWaitTime)
-			&& (shouldVibratePattern == alarm.shouldVibratePattern)
-			&& (vibrateRepeatPattern == alarm.vibrateRepeatPattern)
-			&& (vibrateWaitTimeAfterPattern == alarm.vibrateWaitTimeAfterPattern)
-			&& (shouldUseNfc == alarm.shouldUseNfc)
-			&& (nfcTagId == alarm.nfcTagId)
-			&& (nfcTagDismissOrder == alarm.nfcTagDismissOrder)
-			&& (shouldUseFlashlight == alarm.shouldUseFlashlight)
-			&& (flashlightStrengthLevel == alarm.flashlightStrengthLevel)
-			&& (graduallyIncreaseFlashlightStrengthLevelWaitTime == alarm.graduallyIncreaseFlashlightStrengthLevelWaitTime)
-			&& (shouldBlinkFlashlight == alarm.shouldBlinkFlashlight)
-			&& (flashlightOnDuration == alarm.flashlightOnDuration)
-			&& (flashlightOffDuration == alarm.flashlightOffDuration)
-			&& (mediaPath == alarm.mediaPath)
-			&& (mediaArtist == alarm.mediaArtist)
-			&& (mediaTitle == alarm.mediaTitle)
-			&& (mediaType == alarm.mediaType)
 			&& (localMediaPath == alarm.localMediaPath)
-			&& (shouldShuffleMedia == alarm.shouldShuffleMedia)
-			&& (shouldRecursivelyPlayMedia == alarm.shouldRecursivelyPlayMedia)
-			&& (volume == alarm.volume)
-			&& (audioSource == alarm.audioSource)
-			&& (name == alarm.name)
-			&& (shouldSayCurrentTime == alarm.shouldSayCurrentTime)
-			&& (shouldSayAlarmName == alarm.shouldSayAlarmName)
-			&& (ttsFrequency == alarm.ttsFrequency)
-			&& (ttsSpeechRate == alarm.ttsSpeechRate)
-			&& (ttsVoice == alarm.ttsVoice)
-			&& (shouldGraduallyIncreaseVolume == alarm.shouldGraduallyIncreaseVolume)
-			&& (graduallyIncreaseVolumeWaitTime == alarm.graduallyIncreaseVolumeWaitTime)
-			&& (shouldRestrictVolume == alarm.shouldRestrictVolume)
-			&& (shouldAutoDismiss == alarm.shouldAutoDismiss)
-			&& (autoDismissTime == alarm.autoDismissTime)
-			&& (canDismissEarly == alarm.canDismissEarly)
-			&& (shouldShowDismissEarlyNotification == alarm.shouldShowDismissEarlyNotification)
-			&& (dismissEarlyTime == alarm.dismissEarlyTime)
 			&& (timeOfDismissEarlyAlarm == alarm.timeOfDismissEarlyAlarm)
-			&& (shouldAutoSnooze == alarm.shouldAutoSnooze)
-			&& (autoSnoozeTime == alarm.autoSnoozeTime)
-			&& (maxSnooze == alarm.maxSnooze)
-			&& (snoozeDuration == alarm.snoozeDuration)
-			&& (shouldEasySnooze == alarm.shouldEasySnooze)
-			&& (shouldVolumeSnooze == alarm.shouldVolumeSnooze)
-			&& (shouldShowReminder == alarm.shouldShowReminder)
-			&& (timeToShowReminder == alarm.timeToShowReminder)
-			&& (reminderFrequency == alarm.reminderFrequency)
-			&& (shouldUseTtsForReminder == alarm.shouldUseTtsForReminder)
-			&& (shouldSkipNextAlarm == alarm.shouldSkipNextAlarm)
-			&& (shouldDeleteAlarmAfterDismissed == alarm.shouldDeleteAlarmAfterDismissed)
+			&& fuzzyEquals(alarm)
 	}
 
 	/**
 	 * Check if this alarm has the same ID as another alarm.
 	 *
-	 * @param  alarm  An alarm.
+	 * @param alarm An alarm.
 	 *
 	 * @return True if both alarms are the same, and false otherwise.
 	 */
@@ -1235,8 +1174,7 @@ class NacAlarm()
 	}
 
 	/**
-	 * Fuzzy equals to compare most of the important alarm attributes, but not all
-	 * attributes.
+	 * Fuzzy equals to compare most of the important alarm attributes, but not all.
 	 */
 	fun fuzzyEquals(alarm: NacAlarm): Boolean
 	{
@@ -1265,21 +1203,28 @@ class NacAlarm()
 			&& (flashlightOnDuration == alarm.flashlightOnDuration)
 			&& (flashlightOffDuration == alarm.flashlightOffDuration)
 			&& (mediaPath == alarm.mediaPath)
+			&& (mediaArtist == alarm.mediaArtist)
+			&& (mediaTitle == alarm.mediaTitle)
+			&& (mediaType == alarm.mediaType)
+			&& (shouldShuffleMedia == alarm.shouldShuffleMedia)
+			&& (shouldRecursivelyPlayMedia == alarm.shouldRecursivelyPlayMedia)
 			&& (volume == alarm.volume)
 			&& (audioSource == alarm.audioSource)
 			&& (name == alarm.name)
 			&& (shouldSayCurrentTime == alarm.shouldSayCurrentTime)
-			&& (shouldSayAlarmName == alarm.shouldSayAlarmName)
+			&& (shouldSayName == alarm.shouldSayName)
 			&& (ttsFrequency == alarm.ttsFrequency)
 			&& (ttsSpeechRate == alarm.ttsSpeechRate)
 			&& (ttsVoice == alarm.ttsVoice)
 			&& (shouldGraduallyIncreaseVolume == alarm.shouldGraduallyIncreaseVolume)
+			&& (graduallyIncreaseVolumeWaitTime == alarm.graduallyIncreaseVolumeWaitTime)
 			&& (shouldRestrictVolume == alarm.shouldRestrictVolume)
 			&& (shouldAutoDismiss == alarm.shouldAutoDismiss)
 			&& (autoDismissTime == alarm.autoDismissTime)
 			&& (canDismissEarly == alarm.canDismissEarly)
-			&& (shouldShowDismissEarlyNotification == alarm.shouldShowDismissEarlyNotification)
 			&& (dismissEarlyTime == alarm.dismissEarlyTime)
+			&& (shouldShowDismissEarlyNotification == alarm.shouldShowDismissEarlyNotification)
+			&& (shouldDeleteAfterDismissed == alarm.shouldDeleteAfterDismissed)
 			&& (shouldAutoSnooze == alarm.shouldAutoSnooze)
 			&& (autoSnoozeTime == alarm.autoSnoozeTime)
 			&& (maxSnooze == alarm.maxSnooze)
@@ -1291,7 +1236,6 @@ class NacAlarm()
 			&& (reminderFrequency == alarm.reminderFrequency)
 			&& (shouldUseTtsForReminder == alarm.shouldUseTtsForReminder)
 			&& (shouldSkipNextAlarm == alarm.shouldSkipNextAlarm)
-			&& (shouldDeleteAlarmAfterDismissed == alarm.shouldDeleteAlarmAfterDismissed)
 	}
 
 	/**
@@ -1383,7 +1327,7 @@ class NacAlarm()
 		println("Audio Source          : $audioSource")
 		println("Name                  : $name")
 		println("Tts say time          : $shouldSayCurrentTime")
-		println("Tts say name          : $shouldSayAlarmName")
+		println("Tts say name          : $shouldSayName")
 		println("Tts Freq              : $ttsFrequency")
 		println("Tts Speech Rate       : $ttsSpeechRate")
 		println("Tts Voice             : $ttsVoice")
@@ -1393,9 +1337,10 @@ class NacAlarm()
 		println("Should auto dismiss   : $shouldAutoDismiss")
 		println("Auto Dismiss          : $autoDismissTime")
 		println("Use Dismiss Early     : $canDismissEarly")
-		println("Should Dismiss Early N: $shouldShowDismissEarlyNotification")
 		println("Dismiss Early         : $dismissEarlyTime")
 		println("Time of Early Alarm   : $timeOfDismissEarlyAlarm")
+		println("Should Dismiss Early N: $shouldShowDismissEarlyNotification")
+		println("Should delete after   : $shouldDeleteAfterDismissed")
 		println("Should auto snooze    : $shouldAutoSnooze")
 		println("Auto Snooze           : $autoSnoozeTime")
 		println("Max Snooze            : $maxSnooze")
@@ -1407,7 +1352,6 @@ class NacAlarm()
 		println("Reminder freq         : $reminderFrequency")
 		println("Use Tts 4 Reminder    : $shouldUseTtsForReminder")
 		println("Should skip next      : $shouldSkipNextAlarm")
-		println("Should delete after   : $shouldDeleteAlarmAfterDismissed")
 	}
 
 	/**
@@ -1650,7 +1594,7 @@ class NacAlarm()
 
 		// Text-to-speech
 		output.writeInt(if (shouldSayCurrentTime) 1 else 0)
-		output.writeInt(if (shouldSayAlarmName) 1 else 0)
+		output.writeInt(if (shouldSayName) 1 else 0)
 		output.writeInt(ttsFrequency)
 		output.writeFloat(ttsSpeechRate)
 		output.writeString(ttsVoice)
@@ -1659,10 +1603,10 @@ class NacAlarm()
 		output.writeInt(if (shouldAutoDismiss) 1 else 0)
 		output.writeInt(autoDismissTime)
 		output.writeInt(if (canDismissEarly) 1 else 0)
-		output.writeInt(if (shouldShowDismissEarlyNotification) 1 else 0)
 		output.writeInt(dismissEarlyTime)
 		output.writeLong(timeOfDismissEarlyAlarm)
-		output.writeInt(if (shouldDeleteAlarmAfterDismissed) 1 else 0)
+		output.writeInt(if (shouldShowDismissEarlyNotification) 1 else 0)
+		output.writeInt(if (shouldDeleteAfterDismissed) 1 else 0)
 
 		// Snooze
 		output.writeInt(if (shouldAutoSnooze) 1 else 0)
@@ -1776,18 +1720,18 @@ class NacAlarm()
 
 				// Text-to-speech
 				alarm.shouldSayCurrentTime = shared.shouldSayCurrentTime
-				alarm.shouldSayAlarmName = shared.shouldSayAlarmName
+				alarm.shouldSayName = shared.shouldSayAlarmName
 				alarm.ttsFrequency = shared.ttsFrequency
 				alarm.ttsSpeechRate = shared.ttsSpeechRate
 				alarm.ttsVoice = shared.ttsVoice
 
-				// Auto dismiss
+				// Dismiss
 				alarm.shouldAutoDismiss = shared.shouldAutoDismiss
 				alarm.autoDismissTime = shared.autoDismissTime
 				alarm.canDismissEarly = shared.canDismissEarly
-				alarm.shouldShowDismissEarlyNotification = shared.shouldShowDismissEarlyNotification
 				alarm.dismissEarlyTime = shared.dismissEarlyTime
-				alarm.shouldDeleteAlarmAfterDismissed = shared.shouldDeleteAlarmAfterDismissed
+				alarm.shouldShowDismissEarlyNotification = shared.shouldShowDismissEarlyNotification
+				alarm.shouldDeleteAfterDismissed = shared.shouldDeleteAlarmAfterDismissed
 
 				// Snooze
 				alarm.shouldAutoSnooze = shared.shouldAutoSnooze

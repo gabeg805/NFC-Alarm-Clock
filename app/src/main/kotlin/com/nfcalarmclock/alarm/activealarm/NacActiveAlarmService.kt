@@ -41,18 +41,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class NacActiveAlarmService
 	: LifecycleService()
-	//: Service()
 {
-
-	/**
-	 * Supervisor job for the service.
-	 */
-	//private val job = SupervisorJob()
-
-	/**
-	 * Coroutine scope for the service.
-	 */
-	//private val scope = CoroutineScope(Dispatchers.IO + job)
 
 	/**
 	 * Alarm repository.
@@ -174,7 +163,7 @@ class NacActiveAlarmService
 
 			// Delete the alarm after it is dismissed and cancel any subsequent alarms.
 			// This will also write to the stats table
-			if (alarm!!.shouldDeleteAlarmAfterDismissed)
+			if (alarm!!.shouldDeleteAfterDismissed)
 			{
 				alarmRepository.delete(alarm!!)
 				statisticRepository.insertDeleted(alarm)
@@ -425,16 +414,8 @@ class NacActiveAlarmService
 		// Active alarm was found
 		if (activeAlarm != null)
 		{
-			println("RESTARTING OTHER ACTIVE ALARM")
 			// Start the alarm service for the active alarm
 			startAlarmService(this, activeAlarm)
-
-			//// Create the notification
-			//println("SHOWING NOTIFICATION OF OTHER ACTIVE ALARM")
-			//val notification = NacActiveAlarmNotification(this, activeAlarm)
-
-			//// Show the notification
-			//notification.show()
 		}
 		// No other active alarm
 		else
@@ -479,7 +460,6 @@ class NacActiveAlarmService
 		// Check if a new service was started
 		if (isNewServiceStarted(intentAlarm, intentAction))
 		{
-			println("New service started : ${intentAlarm?.id} | $intentAction")
 			// Check if the alarms are equal
 			if (intentAlarm!!.equals(alarm))
 			{
@@ -489,7 +469,6 @@ class NacActiveAlarmService
 			}
 			else
 			{
-				println("Update time active of current alarm : ${intentAlarm.id} | $intentAction")
 				// Update the active time of the current alarm
 				updateTimeActiveOfCurrentAlarm()
 			}
@@ -584,7 +563,7 @@ class NacActiveAlarmService
 			val cal = alarm!!.snooze()
 
 			// Update the time the alarm was active
-			alarm!!.addToTimeActive(System.currentTimeMillis() - startTime)
+			alarm!!.timeActive += System.currentTimeMillis() - startTime
 
 			// Update the alarm, write to the stats table, and reschedule the alarm
 			alarmRepository.update(alarm!!)
@@ -690,7 +669,7 @@ class NacActiveAlarmService
 				// alarm as inactive though because then it will not go off
 				// again. It should go off again because the alarm has not
 				// been finished being interacted with
-				currentAlarm.addToTimeActive(System.currentTimeMillis() - currentStartTime)
+				currentAlarm.timeActive += System.currentTimeMillis() - currentStartTime
 
 				// Update the alarm
 				alarmRepository.update(currentAlarm)

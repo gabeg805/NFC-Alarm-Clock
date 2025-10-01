@@ -121,7 +121,6 @@ class NacCardAdapter
 	{
 		// Get the alarm at the index
 		val alarm = getItem(index)
-		println("onBindViewHolder() : ${alarm.id}")
 
 		// Initialize the card
 		card.bind(alarm)

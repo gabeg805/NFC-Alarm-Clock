@@ -160,7 +160,7 @@ class NacTextToSpeechDialog
 	{
 		// Update the alarm
 		alarm?.shouldSayCurrentTime = currentTimeCheckBox.isChecked
-		alarm?.shouldSayAlarmName = alarmNameCheckBox.isChecked
+		alarm?.shouldSayName = alarmNameCheckBox.isChecked
 		alarm?.ttsFrequency = selectedTtsFreq
 		alarm?.ttsSpeechRate = ttsSpeechRateSlider.value
 
@@ -262,7 +262,7 @@ class NacTextToSpeechDialog
 
 		// Setup the views
 		setupTtsHelper(a.ttsVoice)
-		setupTtsWhatToSay(a.shouldSayCurrentTime, a.shouldSayAlarmName)
+		setupTtsWhatToSay(a.shouldSayCurrentTime, a.shouldSayName)
 		setupTtsSpeakFrequency(a.ttsFrequency)
 		setupTtsVoice()
 		setupTtsSpeechRate(a.ttsSpeechRate, a.name)

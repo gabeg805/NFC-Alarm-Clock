@@ -13,6 +13,7 @@
 	<dimen name="xlarge">28dp</dimen>
 	<dimen name="xxlarge">32dp</dimen>
 	<dimen name="xxxlarge">36dp</dimen>
+	<dimen name="huge">48dp</dimen>
 	<dimen name="file_browser_fab">100dp</dimen>
 
 	<!-- Image -->
@@ -26,6 +27,7 @@
 	<dimen name="isz_xxxlarge">44dp</dimen>
 	<dimen name="isz_attention">54dp</dimen>
 	<dimen name="isz_focus">72dp</dimen>
+	<dimen name="isz_numpad">80dp</dimen>
 	<dimen name="isz_dismiss_large">30dp</dimen>
 
 	<!-- Text -->

@@ -6,88 +6,85 @@
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
 
-	<androidx.constraintlayout.widget.ConstraintLayout
-		android:id="@+id/activity_main"
+	<androidx.coordinatorlayout.widget.CoordinatorLayout
+		android:id="@+id/coordinator_layout"
 		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:fitsSystemWindows="true">
+		android:layout_height="match_parent">
+		<!--
+		TODO: Put this somewhere?
+		android:fitsSystemWindows="true"
+		-->
 
-		<androidx.coordinatorlayout.widget.CoordinatorLayout
+		<!-- Toolbar -->
+		<com.google.android.material.appbar.AppBarLayout
 			android:layout_width="match_parent"
-			android:layout_height="match_parent">
+			android:layout_height="wrap_content"
+			android:backgroundTint="@color/gray_dark">
 
-			<!-- Toolbar -->
-			<com.google.android.material.appbar.AppBarLayout
+			<com.google.android.material.appbar.MaterialToolbar
+				android:id="@+id/tb_top_bar"
 				android:layout_width="match_parent"
-				android:layout_height="wrap_content">
-
-				<com.google.android.material.appbar.MaterialToolbar
-					android:id="@+id/tb_top_bar"
-					android:layout_width="match_parent"
-					android:layout_height="?attr/actionBarSize"
-					app:title="@string/app_name"
-					app:menu="@menu/menu_action_bar"
-					app:layout_scrollFlags="scroll|enterAlways|snap"
-					style="@style/Toolbar"
-					/>
-			</com.google.android.material.appbar.AppBarLayout>
-
-			<!-- Container for next alarm and alarm list -->
-			<LinearLayout
-				android:layout_width="match_parent"
-				android:layout_height="match_parent"
-				android:orientation="vertical"
-				app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-				<!-- Next alarm message -->
-				<com.google.android.material.textview.MaterialTextView
-					android:id="@+id/tv_next_alarm"
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:background="?attr/colorCard"
-					android:gravity="center_horizontal"
-					android:paddingTop="@dimen/small"
-					android:paddingBottom="@dimen/tiny"
-					android:textSize="@dimen/tsz_normal"
-					android:text=""
-					/>
-
-				<!-- Alarm list -->
-				<androidx.recyclerview.widget.RecyclerView
-					android:id="@+id/rv_alarm_list"
-					android:contentDescription="@string/cd_alarm_list"
-					android:layout_width="match_parent"
-					android:layout_height="match_parent"
-					android:layout_marginBottom="@dimen/normal"
-					android:clipToPadding="false"
-					android:descendantFocusability="blocksDescendants"
-					android:paddingBottom="@dimen/isz_attention"
-					android:scrollbars="vertical"
-					/>
-			</LinearLayout>
-		</androidx.coordinatorlayout.widget.CoordinatorLayout>
-
-		<!-- Floating action button -->
-		<com.google.android.material.floatingactionbutton.FloatingActionButton
-			android:contentDescription="@string/cd_fab_add_alarm"
-			android:id="@+id/fab_add_alarm"
-			android:layout_width="@dimen/isz_attention"
-			android:layout_height="@dimen/isz_attention"
-			android:layout_marginBottom="@dimen/large"
-			android:src="@drawable/plus"
-			app:layout_constraintBottom_toBottomOf="parent"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintEnd_toEndOf="parent"
-			/>
+				android:layout_height="?attr/actionBarSize"
+				app:title="@string/app_name"
+				app:menu="@menu/menu_action_bar"
+				app:layout_scrollFlags="scroll|enterAlways|snap"
+				style="@style/Toolbar"
+				/>
+		</com.google.android.material.appbar.AppBarLayout>
 
 		<!-- Navigation host -->
+		<!-- Note: Add layout_behavior and commented out one in new fragment show alarms -->
 		<androidx.fragment.app.FragmentContainerView
 			android:id="@+id/hello_content"
 			android:layout_width="match_parent"
 			android:layout_height="match_parent"
+			android:layout_marginBottom="?attr/actionBarSize"
 			android:name="androidx.navigation.fragment.NavHostFragment"
 			app:defaultNavHost="true"
+			app:layout_behavior="@string/appbar_scrolling_view_behavior"
+			app:navGraph="@navigation/nav_main_fragments"
 			/>
 
-	</androidx.constraintlayout.widget.ConstraintLayout>
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:orientation="vertical">
+
+
+			<androidx.coordinatorlayout.widget.CoordinatorLayout
+				android:layout_width="match_parent"
+				android:layout_height="0dp"
+				android:layout_weight="1">
+
+				<!-- Floating action button -->
+				<com.google.android.material.floatingactionbutton.FloatingActionButton
+					android:id="@+id/fab_add_alarm"
+					android:contentDescription="@string/cd_fab_add_alarm"
+					android:layout_width="@dimen/isz_attention"
+					android:layout_height="@dimen/isz_attention"
+					android:layout_gravity="bottom|center"
+					android:src="@drawable/plus"
+					/>
+				<!--
+					android:layout_marginBottom="@dimen/large"
+					android:layout_gravity="bottom|center"
+				-->
+			</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
+			<!-- Bottom navigation -->
+			<com.google.android.material.bottomnavigation.BottomNavigationView
+				android:id="@+id/bottom_navigation"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:minHeight="@dimen/touch"
+				android:layout_gravity="bottom"
+				android:layout_marginTop="@dimen/large"
+				app:menu="@menu/menu_bottom_navigation"
+				app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
+				app:itemPaddingTop="8dp"
+				app:itemPaddingBottom="8dp"
+				/>
+		</LinearLayout>
+	</androidx.coordinatorlayout.widget.CoordinatorLayout>
+
 </androidx.core.view.insets.ProtectionLayout>

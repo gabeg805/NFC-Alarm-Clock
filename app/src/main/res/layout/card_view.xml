@@ -228,7 +228,7 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:orientation="vertical"
-			android:visibility="visible">
+			android:visibility="gone">
 
 			<!-- Header divider -->
 			<LinearLayout
@@ -427,9 +427,8 @@
 						/>
 			</LinearLayout>
 
-			<!-- Delete/collapse -->
+			<!-- Options -->
 			<LinearLayout
-				android:id="@+id/nac_collapse_parent"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:paddingTop="@dimen/tiny"
@@ -476,7 +475,7 @@
 					app:iconSize="@dimen/isz_normal"
 					app:icon="@drawable/settings"
 					/>
-			</LinearLayout> <!-- Delete/collapse -->
+			</LinearLayout> <!-- Options -->
 		</LinearLayout> <!-- Expanded alarm -->
 
 	</LinearLayout> <!-- Content -->
