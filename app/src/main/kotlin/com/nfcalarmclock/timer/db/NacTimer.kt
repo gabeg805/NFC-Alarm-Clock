@@ -6,14 +6,13 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.shared.NacSharedPreferences
+import com.nfcalarmclock.system.removeToday
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 
 // TODO: Fragments:
-//       * Add timer
-//       * Active timer that just shows one timer, not multiple.
 //       * List of timers
 // TODO: Compare by duration?
 // TODO: When calculating size of numpads: screen size - (padding normal + height of timer_hour + height of timer_start (make sure heights include margin and if not, add them)) / 4
@@ -213,6 +212,59 @@ class NacTimer()
 	}
 
 	/**
+	 * Print all values in the alarm object.
+	 */
+	@Suppress("unused")
+	override fun print()
+	{
+		println("Alarm Information")
+		println("Id                    : $id")
+		println("Is Active             : $isActive")
+		println("Duration              : $duration")
+		println("Repeat                : $shouldRepeat")
+		println("Repeat Freq           : $repeatFrequency")
+		println("Repeat Freq Units     : $repeatFrequencyUnits")
+		println("Vibrate               : $shouldVibrate")
+		println("Vibrate duration      : $vibrateDuration")
+		println("Vibrate wait time     : $vibrateWaitTime")
+		println("Vibrate pattern       : $shouldVibratePattern")
+		println("Vibrate repeat pat.   : $vibrateRepeatPattern")
+		println("Vibrate wait after    : $vibrateWaitTimeAfterPattern")
+		println("Use NFC               : $shouldUseNfc")
+		println("Nfc Tag Id            : $nfcTagId")
+		println("Nfc Tag Dismiss Order : $nfcTagDismissOrder")
+		println("Sacn NFC tag to start : $scanNfcTagIdToStart")
+		println("Use Flashlight        : $shouldUseFlashlight")
+		println("Flashlight Strength   : $flashlightStrengthLevel")
+		println("Grad Inc Flash        : $graduallyIncreaseFlashlightStrengthLevelWaitTime")
+		println("Should Blink Flash    : $shouldBlinkFlashlight")
+		println("Flashlight On         : $flashlightOnDuration")
+		println("Flashlight Off        : $flashlightOffDuration")
+		println("Media Path            : $mediaPath")
+		println("Media Artist          : $mediaArtist")
+		println("Media Name            : $mediaTitle")
+		println("Media Type            : $mediaType")
+		println("Local media Path      : $localMediaPath")
+		println("Shuffle media         : $shouldShuffleMedia")
+		println("Recusively Play       : $shouldRecursivelyPlayMedia")
+		println("Volume                : $volume")
+		println("Audio Source          : $audioSource")
+		println("Name                  : $name")
+		println("Tts say time          : $shouldSayCurrentTime")
+		println("Tts say name          : $shouldSayName")
+		println("Tts Freq              : $ttsFrequency")
+		println("Tts Speech Rate       : $ttsSpeechRate")
+		println("Tts Voice             : $ttsVoice")
+		println("Grad Inc Vol          : $shouldGraduallyIncreaseVolume")
+		println("Grad Inc Vol Wait T   : $graduallyIncreaseVolumeWaitTime")
+		println("Restrict Vol          : $shouldRestrictVolume")
+		println("Should auto dismiss   : $shouldAutoDismiss")
+		println("Auto Dismiss          : $autoDismissTime")
+		println("Should delete after   : $shouldDeleteAfterDismissed")
+		println("Should Volume Stop    : $shouldVolumeStop")
+	}
+
+	/**
 	 * Write data into parcel (required for Parcelable).
 	 *
 	 * Update this when adding/removing an element.
@@ -306,75 +358,75 @@ class NacTimer()
 		}
 
 		/**
-		 * Build a timer.
-		 *
-		 * TODO: Figure out how defaults should be handled for timer.
+		 * Build an alarm.
 		 */
 		fun build(shared: NacSharedPreferences? = null): NacTimer
 		{
 			// Create a timer
 			val timer = NacTimer()
 
-			// Check if shared preferences is set
-			if (shared != null)
+			// Unable to access defaults in shared preferences because null
+			if (shared == null)
 			{
-				// Repeat
-				timer.shouldRepeat = shared.shouldRepeat
-				timer.repeatFrequency = shared.repeatFrequency
-				timer.repeatFrequencyUnits = shared.repeatFrequencyUnits
-
-				// Vibrate
-				timer.shouldVibrate = shared.shouldVibrate
-				timer.vibrateDuration = shared.vibrateDuration
-				timer.vibrateWaitTime = shared.vibrateWaitTime
-				timer.shouldVibratePattern = shared.shouldVibratePattern
-				timer.vibrateRepeatPattern = shared.vibrateRepeatPattern
-				timer.vibrateWaitTimeAfterPattern = shared.vibrateWaitTimeAfterPattern
-
-				// NFC
-				timer.shouldUseNfc = shared.shouldUseNfc
-				timer.nfcTagId = shared.nfcTagId
-				timer.nfcTagDismissOrder = shared.nfcTagDismissOrder
-
-				// Flashlight
-				timer.shouldUseFlashlight = shared.shouldUseFlashlight
-				timer.flashlightStrengthLevel = shared.flashlightStrengthLevel
-				timer.graduallyIncreaseFlashlightStrengthLevelWaitTime =
-					shared.graduallyIncreaseFlashlightStrengthLevelWaitTime
-				timer.shouldBlinkFlashlight = shared.shouldBlinkFlashlight
-				timer.flashlightOnDuration = shared.flashlightOnDuration
-				timer.flashlightOffDuration = shared.flashlightOffDuration
-
-				// Media
-				timer.mediaPath = shared.mediaPath
-				timer.mediaArtist = shared.mediaArtist
-				timer.mediaTitle = shared.mediaTitle
-				timer.mediaType = shared.mediaType
-				timer.localMediaPath = shared.localMediaPath
-				timer.shouldShuffleMedia = shared.shouldShuffleMedia
-				timer.shouldRecursivelyPlayMedia = shared.recursivelyPlayMedia
-
-				// Volume and audio source
-				timer.volume = shared.volume
-				timer.shouldGraduallyIncreaseVolume = shared.shouldGraduallyIncreaseVolume
-				timer.graduallyIncreaseVolumeWaitTime = shared.graduallyIncreaseVolumeWaitTime
-				timer.shouldRestrictVolume = shared.shouldRestrictVolume
-				timer.audioSource = shared.audioSource
-
-				// Name
-				timer.name = shared.name
-
-				// Text-to-speech
-				timer.shouldSayCurrentTime = shared.shouldSayCurrentTime
-				timer.shouldSayName = shared.shouldSayAlarmName
-				timer.ttsFrequency = shared.ttsFrequency
-				timer.ttsSpeechRate = shared.ttsSpeechRate
-				timer.ttsVoice = shared.ttsVoice
-
-				// Dismiss
-				timer.shouldAutoDismiss = shared.shouldAutoDismiss
-				timer.autoDismissTime = shared.autoDismissTime
+				return timer
 			}
+
+			// Repeat
+			timer.shouldRepeat = shared.shouldRepeatTimer
+			//timer.repeatFrequency = shared.repeatFrequency
+			//timer.repeatFrequencyUnits = shared.repeatFrequencyUnits
+
+			// Vibrate
+			timer.shouldVibrate = shared.shouldVibrateTimer
+			timer.vibrateDuration = shared.vibrateDurationTimer
+			timer.vibrateWaitTime = shared.vibrateWaitTimeTimer
+			timer.shouldVibratePattern = shared.shouldVibratePatternTimer
+			timer.vibrateRepeatPattern = shared.vibrateRepeatPatternTimer
+			timer.vibrateWaitTimeAfterPattern = shared.vibrateWaitTimeAfterPatternTimer
+
+			// NFC
+			timer.shouldUseNfc = shared.shouldUseNfcTimer
+			timer.nfcTagId = shared.nfcTagIdTimer
+			timer.nfcTagDismissOrder = shared.nfcTagDismissOrderTimer
+
+			// Flashlight
+			timer.shouldUseFlashlight = shared.shouldUseFlashlightTimer
+			timer.flashlightStrengthLevel = shared.flashlightStrengthLevelTimer
+			timer.graduallyIncreaseFlashlightStrengthLevelWaitTime = shared.graduallyIncreaseFlashlightStrengthLevelWaitTimeTimer
+			timer.shouldBlinkFlashlight = shared.shouldBlinkFlashlightTimer
+			timer.flashlightOnDuration = shared.flashlightOnDurationTimer
+			timer.flashlightOffDuration = shared.flashlightOffDurationTimer
+
+			// Media
+			timer.mediaPath = shared.mediaPathTimer
+			timer.mediaArtist = shared.mediaArtistTimer
+			timer.mediaTitle = shared.mediaTitleTimer
+			timer.mediaType = shared.mediaTypeTimer
+			timer.localMediaPath = shared.localMediaPathTimer
+			timer.shouldShuffleMedia = shared.shouldShuffleMediaTimer
+			timer.shouldRecursivelyPlayMedia = shared.recursivelyPlayMediaTimer
+
+			// Volume and audio source
+			timer.volume = shared.volumeTimer
+			timer.shouldGraduallyIncreaseVolume = shared.shouldGraduallyIncreaseVolumeTimer
+			timer.graduallyIncreaseVolumeWaitTime = shared.graduallyIncreaseVolumeWaitTimeTimer
+			timer.shouldRestrictVolume = shared.shouldRestrictVolumeTimer
+			timer.audioSource = shared.audioSourceTimer
+
+			// Name
+			timer.name = shared.nameTimer
+
+			// Text-to-speech
+			timer.shouldSayCurrentTime = shared.shouldSayCurrentTimeTimer
+			timer.shouldSayName = shared.shouldSayAlarmNameTimer
+			timer.ttsFrequency = shared.ttsFrequencyTimer
+			timer.ttsSpeechRate = shared.ttsSpeechRateTimer
+			timer.ttsVoice = shared.ttsVoiceTimer
+
+			// Dismiss
+			timer.shouldAutoDismiss = shared.shouldAutoDismissTimer
+			timer.autoDismissTime = shared.autoDismissTimeTimer
+			timer.shouldDeleteAfterDismissed = shared.shouldDeleteAfterDismissedTimer
 
 			return timer
 		}

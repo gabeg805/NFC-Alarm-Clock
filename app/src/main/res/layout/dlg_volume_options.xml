@@ -26,11 +26,12 @@
 		<!-- Description -->
 		<TextView
 			style="@style/Widget.AlarmOptionDialog.Description"
+			android:id="@+id/gradually_increase_volume_description"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:layout_below="@id/gradually_increase_volume_title"
 			android:layout_toStartOf="@id/gradually_increase_volume_switch"
-			android:text="@string/description_volume_gradually_increase_volume"
+			android:text="@string/description_volume_gradually_increase_volume_alarm"
 			/>
 
 		<!-- Switch -->
@@ -85,12 +86,13 @@
 		<!-- Description -->
 		<TextView
 			style="@style/Widget.AlarmOptionDialog.Description"
+			android:id="@+id/restrict_volume_description"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_alignParentStart="true"
 			android:layout_below="@id/restrict_volume_title"
 			android:layout_toStartOf="@id/restrict_volume_switch"
-			android:text="@string/description_volume_restrict_volume"
+			android:text="@string/description_volume_restrict_volume_alarm"
 			/>
 
 		<!-- Switch -->

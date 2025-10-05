@@ -28,9 +28,9 @@ import kotlinx.coroutines.withContext
 import java.util.Locale
 
 /**
- * Text to speech dialog asking the user what TTS settings they want.
+ * Text to speech options for an alarm.
  */
-class NacTextToSpeechDialog
+open class NacTextToSpeechDialog
 	: NacGenericAlarmOptionsDialog()
 {
 

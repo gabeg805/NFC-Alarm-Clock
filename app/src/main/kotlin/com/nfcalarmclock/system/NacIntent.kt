@@ -7,6 +7,7 @@ import android.provider.AlarmClock
 import androidx.core.net.toUri
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.shared.NacSharedPreferences
+import com.nfcalarmclock.timer.db.NacTimer
 import com.nfcalarmclock.util.media.buildLocalMediaPath
 import com.nfcalarmclock.util.media.getMediaArtist
 import com.nfcalarmclock.util.media.getMediaTitle
@@ -16,7 +17,7 @@ import java.util.Calendar
 /**
  * Add an alarm to an intent.
  *
- * @param alarm  An alarm.
+ * @param alarm An alarm.
  *
  * @return The passed in intent with the alarm.
  */
@@ -56,6 +57,24 @@ fun Intent.addMediaInfo(
 
 	// Add the bundle to the intent
 	this.putExtra(NacIntent.MEDIA_BUNDLE_NAME, bundle)
+
+	return this
+}
+
+/**
+ * Add a timer to an intent.
+ *
+ * @param timer A timer.
+ *
+ * @return The passed in intent with the timer.
+ */
+fun Intent.addTimer(timer: NacTimer?): Intent
+{
+	// Create a bundle with the timer
+	val bundle = Bundle().addTimer(timer)
+
+	// Add the bundle to the intent
+	this.putExtra(NacIntent.TIMER_BUNDLE_NAME, bundle)
 
 	return this
 }
@@ -197,6 +216,20 @@ fun Intent.getSetAlarm(context: Context): NacAlarm?
 }
 
 /**
+ * Get the timer associated with the given Intent.
+ *
+ * @return The timer associated with the given Intent.
+ */
+fun Intent.getTimer(): NacTimer?
+{
+	// Get the bundle from the intent
+	val bundle = this.getBundleExtra(NacIntent.TIMER_BUNDLE_NAME)
+
+	// Get the alarm from the bundle
+	return bundle?.getTimer()
+}
+
+/**
  * Intent helper object.
  */
 object NacIntent
@@ -211,5 +244,10 @@ object NacIntent
 	 * Tag name for retrieving a media path from a bundle.
 	 */
 	const val MEDIA_BUNDLE_NAME = "NacMediaBundle"
+
+	/**
+	 * Tag name for retrieving a NacTimer from a bundle.
+	 */
+	const val TIMER_BUNDLE_NAME = "NacTimerBundle"
 
 }

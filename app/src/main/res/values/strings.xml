@@ -33,13 +33,33 @@
 	<string name="dow_today">Today</string>
 	<string name="dow_tomorrow">Tomorrow</string>
 
-	<!-- Words -->
+	<!-- Words/numbers -->
 	<string name="word_app">App</string>
 	<string name="word_version">Version</string>
 	<string name="word_of">of</string>
 	<string name="word_alarm">Alarm</string>
 	<string name="word_timer">Timer</string>
 	<string name="word_reminder">Reminder</string>
+	<string name="word_more">More</string>
+	<string name="letter_h">h</string>
+	<string name="letter_m">m</string>
+	<string name="letter_s">s</string>
+	<string name="number00">00</string>
+	<string name="number0">0</string>
+	<string name="number1">1</string>
+	<string name="number2">2</string>
+	<string name="number3">3</string>
+	<string name="number4">4</string>
+	<string name="number5">5</string>
+	<string name="number6">6</string>
+	<string name="number7">7</string>
+	<string name="number8">8</string>
+	<string name="number9">9</string>
+
+	<!-- Timer add time -->
+	<string name="timer_add_1min">+ 1m</string>
+	<string name="timer_add_30sec">+ 30s</string>
+	<string name="timer_add_5sec">+ 5s</string>
 
 	<!-- States -->
 	<string name="state_unknown">Unknown</string>
@@ -50,6 +70,8 @@
 	<string name="action_alarm_dismiss_early">Dismiss early</string>
 	<string name="action_alarm_copy">Copy</string>
 	<string name="action_alarm_delete">Delete</string>
+	<string name="action_timer_pause">Pause</string>
+	<string name="action_timer_stop">Stop</string>
 	<string name="action_yes">Yes</string>
 	<string name="action_no">No</string>
 	<string name="action_ok">OK</string>
@@ -130,6 +152,7 @@
 	<string name="message_alarm_restore">Restored alarm</string>
 	<string name="message_alarm_dismiss">Dismissed alarm</string>
 	<string name="message_alarm_snooze">Snoozed alarm</string>
+	<string name="message_timer_dismiss">Dismissed timer</string>
 	<string name="message_statistics_started_on">Statistics started on</string>
 	<string name="message_bullet">\u25BA</string>
 	<string name="message_required">Required</string>
@@ -209,6 +232,7 @@
 	<string name="title_select_next_alarm_format">Select a format</string>
 	<string name="title_folder_selected">You selected a folder</string>
 	<string name="title_active_alarms">Active alarms</string>
+	<string name="title_active_timers">Active timers</string>
 	<string name="title_upcoming_reminders">Upcoming reminders</string>
 	<string name="title_dismissed_alarms">Dismissed alarms</string>
 	<string name="title_missed_alarms">Missed alarms</string>
@@ -297,14 +321,17 @@
 	<string name="description_no_notification">Do not show notifications.</string>
 	<string name="description_upcoming_reminder">Reminder for upcoming alarms that are about to be active.</string>
 	<string name="description_active_alarm">Alarms that are currently active.</string>
+	<string name="description_active_timer">Timers that are currently active.</string>
 	<string name="description_missed_alarm">Alarms that are automatically dismissed.</string>
 	<string name="description_skipped_alarm">Alarms that are skipped.</string>
 	<string name="description_color">Hex color</string>
 	<string name="description_day_button_style_filled">Filled-in buttons.</string>
 	<string name="description_day_button_style_outlined">Outlined buttons.</string>
 	<string name="description_media">Music or ringtone</string>
-	<string name="description_scan_nfc_tag">The scanned NFC tag will be required to dismiss this alarm when it goes off.</string>
-	<string name="description_select_nfc_tag">Select an NFC tag that will be required to dismiss this alarm when it goes off. If more than one is selected, it can also be used to dismiss this alarm.</string>
+	<string name="description_scan_nfc_tag_alarm">The scanned NFC tag will be required to dismiss this alarm when it goes off.</string>
+	<string name="description_scan_nfc_tag_timer">The scanned NFC tag will be required to dismiss this timer when it goes off.</string>
+	<string name="description_select_nfc_tag_alarm">Select an NFC tag that will be required to dismiss this alarm when it goes off. If more than one is selected, it can also be used to dismiss this alarm.</string>
+	<string name="description_select_nfc_tag_timer">Select an NFC tag that will be required to dismiss this timer when it goes off. If more than one is selected, it can also be used to dismiss this timer.</string>
 	<string name="description_nfc_tag_dismiss_order">Order in which the NFC tags above should be dismissed.</string>
 	<string name="description_save_nfc_tag">You can reuse this NFC tag, without having to scan it again, by giving it a name.</string>
 	<string name="description_repeat_frequency">Repeat the alarm at a given frequency (every X amount of time).  Note: Selecting hours or days will clear all of the alarm\'s days.</string>
@@ -313,11 +340,14 @@
 	<string name="description_vibrate_custom_pattern">Repeat the vibration duration a set number of times, and then wait for a duration.</string>
 	<string name="description_flashlight_brightness_level">Brightness level of the flashlight.</string>
 	<string name="description_flashlight_blink_on_off">Blink the flashlight on and off at set durations.</string>
-	<string name="description_text_to_speech_what_to_say">What to say with text-to-speech when the alarm is active.</string>
+	<string name="description_text_to_speech_what_to_say_alarm">What to say with text-to-speech when the alarm is active.</string>
+	<string name="description_text_to_speech_what_to_say_timer">What to say with text-to-speech when the timer is active.</string>
 	<string name="description_text_to_speech_speak_frequency">How often to say the selected items above.</string>
 	<string name="description_text_to_speech_speech_rate">How fast text-to-speech should speak.</string>
-	<string name="description_volume_gradually_increase_volume">Increase the volume of the alarm at a set frequency.</string>
-	<string name="description_volume_restrict_volume">Volume cannot be changed when an alarm goes off.</string>
+	<string name="description_volume_gradually_increase_volume_alarm">Increase the volume of the alarm at a set frequency.</string>
+	<string name="description_volume_gradually_increase_volume_timer">Increase the volume of the timer at a set frequency.</string>
+	<string name="description_volume_restrict_volume_alarm">Volume cannot be changed when the alarm goes off.</string>
+	<string name="description_volume_restrict_volume_timer">Volume cannot be changed when the timer goes off.</string>
 	<string name="description_dismiss_options_auto_dismiss">Dismiss the alarm automatically after a set duration.</string>
 	<string name="description_dismiss_options_dismiss_early">Dismiss the alarm early, before it is active.</string>
 	<string name="description_dismiss_options_dismiss_early_notification">Show a notification when the alarm can be dismissed early.</string>
@@ -380,7 +410,8 @@
 	<string name="description_permission_system_alert_window">Ensure that the alarm screen is shown, which is a requirement for audio to play, if the app is in the background and has not been used in a while.  Should only affect Android 13–15.</string>
 	<string name="description_permission_boot">Restore alarms when your device is turned on.  Android will delete alarms when your device is turned off.</string>
 	<string name="description_permission_wakelock">Prevent your device from sleeping so that an activated alarm will continue to go off.</string>
-	<string name="description_audio_sources">The audio channel to play the alarm on.</string>
+	<string name="description_audio_sources_alarm">The audio channel to play the alarm on.</string>
+	<string name="description_audio_sources_timer">The audio channel to play the timer on.</string>
 	<string name="description_widget_alarm_example">The alarm shown in the preview is just an example.</string>
 	<string name="description_text_to_speech_voice">The voice to use for text-to-speech.</string>
 	<string name="description_only_show_app_alarms">Only alarms from this app will be shown in the widget.</string>

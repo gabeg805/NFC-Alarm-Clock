@@ -227,7 +227,7 @@ class NacGeneralSettingFragment
 					sharedPreferences!!.canDismissEarly = a.canDismissEarly
 					sharedPreferences!!.shouldShowDismissEarlyNotification = a.shouldShowDismissEarlyNotification
 					sharedPreferences!!.dismissEarlyTime = a.dismissEarlyTime
-					sharedPreferences!!.shouldDeleteAlarmAfterDismissed = a.shouldDeleteAfterDismissed
+					sharedPreferences!!.shouldDeleteAfterDismissed = a.shouldDeleteAfterDismissed
 
 				})
 				.show(childFragmentManager, NacDismissOptionsDialog.TAG)

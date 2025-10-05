@@ -1285,7 +1285,7 @@ open class NacAlarm()
 	 * Print all values in the alarm object.
 	 */
 	@Suppress("unused")
-	fun print()
+	open fun print()
 	{
 		println("Alarm Information")
 		println("Id                    : $id")
@@ -1665,88 +1665,90 @@ open class NacAlarm()
 			alarm.timeOfDismissEarlyAlarm = 0
 			alarm.shouldSkipNextAlarm = false
 
-			// Check if shared preferences is set
-			if (shared != null)
+			// Unable to access defaults in shared preferences because null
+			if (shared == null)
 			{
-				// Days
-				alarm.days = shared.days.toDays()
-				alarm.date = shared.date
-
-				// Repeat
-				alarm.shouldRepeat = shared.shouldRepeat
-				alarm.repeatFrequency = shared.repeatFrequency
-				alarm.repeatFrequencyUnits = shared.repeatFrequencyUnits
-				alarm.repeatFrequencyDaysToRunBeforeStarting = shared.repeatFrequencyDaysToRunBeforeStarting.toDays()
-
-				// Vibrate
-				alarm.shouldVibrate = shared.shouldVibrate
-				alarm.vibrateDuration = shared.vibrateDuration
-				alarm.vibrateWaitTime = shared.vibrateWaitTime
-				alarm.shouldVibratePattern = shared.shouldVibratePattern
-				alarm.vibrateRepeatPattern = shared.vibrateRepeatPattern
-				alarm.vibrateWaitTimeAfterPattern = shared.vibrateWaitTimeAfterPattern
-
-				// NFC
-				alarm.shouldUseNfc = shared.shouldUseNfc
-				alarm.nfcTagId = shared.nfcTagId
-				alarm.nfcTagDismissOrder = shared.nfcTagDismissOrder
-
-				// Flashlight
-				alarm.shouldUseFlashlight = shared.shouldUseFlashlight
-				alarm.flashlightStrengthLevel = shared.flashlightStrengthLevel
-				alarm.graduallyIncreaseFlashlightStrengthLevelWaitTime = shared.graduallyIncreaseFlashlightStrengthLevelWaitTime
-				alarm.shouldBlinkFlashlight = shared.shouldBlinkFlashlight
-				alarm.flashlightOnDuration = shared.flashlightOnDuration
-				alarm.flashlightOffDuration = shared.flashlightOffDuration
-
-				// Media
-				alarm.mediaPath = shared.mediaPath
-				alarm.mediaArtist = shared.mediaArtist
-				alarm.mediaTitle = shared.mediaTitle
-				alarm.mediaType = shared.mediaType
-				alarm.localMediaPath = shared.localMediaPath
-				alarm.shouldShuffleMedia = shared.shouldShuffleMedia
-				alarm.shouldRecursivelyPlayMedia = shared.recursivelyPlayMedia
-
-				// Volume and audio source
-				alarm.volume = shared.volume
-				alarm.shouldGraduallyIncreaseVolume = shared.shouldGraduallyIncreaseVolume
-				alarm.graduallyIncreaseVolumeWaitTime = shared.graduallyIncreaseVolumeWaitTime
-				alarm.shouldRestrictVolume = shared.shouldRestrictVolume
-				alarm.audioSource = shared.audioSource
-
-				// Name
-				alarm.name = shared.name
-
-				// Text-to-speech
-				alarm.shouldSayCurrentTime = shared.shouldSayCurrentTime
-				alarm.shouldSayName = shared.shouldSayAlarmName
-				alarm.ttsFrequency = shared.ttsFrequency
-				alarm.ttsSpeechRate = shared.ttsSpeechRate
-				alarm.ttsVoice = shared.ttsVoice
-
-				// Dismiss
-				alarm.shouldAutoDismiss = shared.shouldAutoDismiss
-				alarm.autoDismissTime = shared.autoDismissTime
-				alarm.canDismissEarly = shared.canDismissEarly
-				alarm.dismissEarlyTime = shared.dismissEarlyTime
-				alarm.shouldShowDismissEarlyNotification = shared.shouldShowDismissEarlyNotification
-				alarm.shouldDeleteAfterDismissed = shared.shouldDeleteAlarmAfterDismissed
-
-				// Snooze
-				alarm.shouldAutoSnooze = shared.shouldAutoSnooze
-				alarm.autoSnoozeTime = shared.autoSnoozeTime
-				alarm.maxSnooze = shared.maxSnooze
-				alarm.snoozeDuration = shared.snoozeDuration
-				alarm.shouldEasySnooze = shared.shouldEasySnooze
-				alarm.shouldVolumeSnooze = shared.shouldVolumeSnooze
-
-				// Reminder
-				alarm.shouldShowReminder = shared.shouldShowReminder
-				alarm.timeToShowReminder = shared.timeToShowReminder
-				alarm.reminderFrequency = shared.reminderFrequency
-				alarm.shouldUseTtsForReminder = shared.shouldUseTtsForReminder
+				return alarm
 			}
+
+			// Days
+			alarm.days = shared.days.toDays()
+			alarm.date = shared.date
+
+			// Repeat
+			alarm.shouldRepeat = shared.shouldRepeat
+			alarm.repeatFrequency = shared.repeatFrequency
+			alarm.repeatFrequencyUnits = shared.repeatFrequencyUnits
+			alarm.repeatFrequencyDaysToRunBeforeStarting = shared.repeatFrequencyDaysToRunBeforeStarting.toDays()
+
+			// Vibrate
+			alarm.shouldVibrate = shared.shouldVibrate
+			alarm.vibrateDuration = shared.vibrateDuration
+			alarm.vibrateWaitTime = shared.vibrateWaitTime
+			alarm.shouldVibratePattern = shared.shouldVibratePattern
+			alarm.vibrateRepeatPattern = shared.vibrateRepeatPattern
+			alarm.vibrateWaitTimeAfterPattern = shared.vibrateWaitTimeAfterPattern
+
+			// NFC
+			alarm.shouldUseNfc = shared.shouldUseNfc
+			alarm.nfcTagId = shared.nfcTagId
+			alarm.nfcTagDismissOrder = shared.nfcTagDismissOrder
+
+			// Flashlight
+			alarm.shouldUseFlashlight = shared.shouldUseFlashlight
+			alarm.flashlightStrengthLevel = shared.flashlightStrengthLevel
+			alarm.graduallyIncreaseFlashlightStrengthLevelWaitTime = shared.graduallyIncreaseFlashlightStrengthLevelWaitTime
+			alarm.shouldBlinkFlashlight = shared.shouldBlinkFlashlight
+			alarm.flashlightOnDuration = shared.flashlightOnDuration
+			alarm.flashlightOffDuration = shared.flashlightOffDuration
+
+			// Media
+			alarm.mediaPath = shared.mediaPath
+			alarm.mediaArtist = shared.mediaArtist
+			alarm.mediaTitle = shared.mediaTitle
+			alarm.mediaType = shared.mediaType
+			alarm.localMediaPath = shared.localMediaPath
+			alarm.shouldShuffleMedia = shared.shouldShuffleMedia
+			alarm.shouldRecursivelyPlayMedia = shared.recursivelyPlayMedia
+
+			// Volume and audio source
+			alarm.volume = shared.volume
+			alarm.shouldGraduallyIncreaseVolume = shared.shouldGraduallyIncreaseVolume
+			alarm.graduallyIncreaseVolumeWaitTime = shared.graduallyIncreaseVolumeWaitTime
+			alarm.shouldRestrictVolume = shared.shouldRestrictVolume
+			alarm.audioSource = shared.audioSource
+
+			// Name
+			alarm.name = shared.name
+
+			// Text-to-speech
+			alarm.shouldSayCurrentTime = shared.shouldSayCurrentTime
+			alarm.shouldSayName = shared.shouldSayAlarmName
+			alarm.ttsFrequency = shared.ttsFrequency
+			alarm.ttsSpeechRate = shared.ttsSpeechRate
+			alarm.ttsVoice = shared.ttsVoice
+
+			// Dismiss
+			alarm.shouldAutoDismiss = shared.shouldAutoDismiss
+			alarm.autoDismissTime = shared.autoDismissTime
+			alarm.canDismissEarly = shared.canDismissEarly
+			alarm.dismissEarlyTime = shared.dismissEarlyTime
+			alarm.shouldShowDismissEarlyNotification = shared.shouldShowDismissEarlyNotification
+			alarm.shouldDeleteAfterDismissed = shared.shouldDeleteAfterDismissed
+
+			// Snooze
+			alarm.shouldAutoSnooze = shared.shouldAutoSnooze
+			alarm.autoSnoozeTime = shared.autoSnoozeTime
+			alarm.maxSnooze = shared.maxSnooze
+			alarm.snoozeDuration = shared.snoozeDuration
+			alarm.shouldEasySnooze = shared.shouldEasySnooze
+			alarm.shouldVolumeSnooze = shared.shouldVolumeSnooze
+
+			// Reminder
+			alarm.shouldShowReminder = shared.shouldShowReminder
+			alarm.timeToShowReminder = shared.timeToShowReminder
+			alarm.reminderFrequency = shared.reminderFrequency
+			alarm.shouldUseTtsForReminder = shared.shouldUseTtsForReminder
 
 			return alarm
 		}

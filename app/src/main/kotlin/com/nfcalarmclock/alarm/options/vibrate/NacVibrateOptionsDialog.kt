@@ -13,9 +13,9 @@ import com.nfcalarmclock.view.setupProgressAndThumbColor
 import com.nfcalarmclock.view.setupSwitchColor
 
 /**
- * Vibrate options dialog.
+ * Vibrate options for an alarm.
  */
-class NacVibrateOptionsDialog
+open class NacVibrateOptionsDialog
 	: NacGenericAlarmOptionsDialog()
 {
 

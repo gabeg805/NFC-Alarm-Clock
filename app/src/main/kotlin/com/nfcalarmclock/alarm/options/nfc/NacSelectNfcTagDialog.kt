@@ -31,10 +31,10 @@ object NacNfcTagDismissOrder
 }
 
 /**
- * Select an NFC tag that has been previously saved.
+ * Select NFC tag(s) to dismiss an alarm.
  */
 @AndroidEntryPoint
-class NacSelectNfcTagDialog
+open class NacSelectNfcTagDialog
 	: NacGenericAlarmOptionsDialog()
 {
 

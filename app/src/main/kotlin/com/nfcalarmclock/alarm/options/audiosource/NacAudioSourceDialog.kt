@@ -12,10 +12,9 @@ import com.nfcalarmclock.view.getCheckedText
 import androidx.core.view.isNotEmpty
 
 /**
- * A way for users to select the audio source that the alarm media should
- * originate from.
+ * Select the audio source that the media should be played from.
  */
-class NacAudioSourceDialog
+open class NacAudioSourceDialog
 	: NacGenericAlarmOptionsDialog()
 {
 

@@ -104,6 +104,45 @@
 	<string name="key_default_alarm_reminder_frequency">pref_reminder_frequency</string>
 	<string name="key_default_alarm_reminder_should_use_tts_for_reminder">pref_should_use_tts_for_reminder</string>
 
+	<!-- Default timer -->
+	<string name="key_default_timer_repeat_should_repeat">pref_repeat_timer</string>
+	<string name="key_default_timer_vibrate_should_vibrate">pref_vibrate_timer</string>
+	<string name="key_default_timer_vibrate_duration">pref_vibrate_duration_timer</string>
+	<string name="key_default_timer_vibrate_wait_time">pref_vibrate_wait_time_timer</string>
+	<string name="key_default_timer_vibrate_should_vibrate_pattern">pref_should_vibrate_pattern_timer</string>
+	<string name="key_default_timer_vibrate_repeat_pattern">pref_vibrate_repeat_pattern_timer</string>
+	<string name="key_default_timer_vibrate_wait_time_after_pattern">pref_vibrate_wait_time_after_pattern_timer</string>
+	<string name="key_default_timer_nfc_should_use_nfc">pref_use_nfc_timer</string>
+	<string name="key_default_timer_nfc_tag_id">pref_default_alarm_nfc_tag_id_timer</string>
+	<string name="key_default_timer_nfc_tag_dismiss_order">pref_default_alarm_nfc_tag_dismiss_order_timer</string>
+	<string name="key_default_timer_flashlight_should_use_flashlight">pref_use_flashlight_timer</string>
+	<string name="key_default_timer_flashlight_strength_level">pref_flashlight_strength_level_timer</string>
+	<string name="key_default_timer_flashlight_gradually_increase_flashlight_strength_level_wait_time">pref_flashlight_gradually_increase_flashlight_strength_level_wait_time_timer</string>
+	<string name="key_default_timer_flashlight_should_blink">pref_flashlight_should_blink_timer</string>
+	<string name="key_default_timer_flashlight_on_duration">pref_flashlight_on_duration_timer</string>
+	<string name="key_default_timer_flashlight_off_duration">pref_flashlight_off_duration_timer</string>
+	<string name="key_general_default_timer_media_path">pref_sound_timer</string>
+	<string name="key_general_default_timer_media_artist">pref_default_alarm_media_artist_timer</string>
+	<string name="key_general_default_timer_media_title">pref_default_alarm_media_title_timer</string>
+	<string name="key_general_default_timer_media_type">pref_default_alarm_media_type_timer</string>
+	<string name="key_general_default_timer_local_media_path">pref_default_alarm_local_media_path_timer</string>
+	<string name="key_default_timer_media_should_shuffle_media">pref_shuffle_playlist_timer</string>
+	<string name="key_default_timer_media_should_recursively_play_media">pref_recursively_play_media_timer</string>
+	<string name="key_default_timer_volume">pref_volume_timer</string>
+	<string name="key_default_timer_volume_should_gradually_increase_volume">pref_should_gradually_increase_volume_timer</string>
+	<string name="key_default_timer_volume_gradually_increase_volume_wait_time">pref_gradually_increase_volume_wait_time_timer</string>
+	<string name="key_default_timer_volume_should_restrict_volume">pref_should_restrict_volume_timer</string>
+	<string name="key_default_timer_audio_source">pref_audio_source_timer</string>
+	<string name="key_default_timer_name">pref_name_timer</string>
+	<string name="key_default_timer_tts_should_say_current_time">pref_should_say_current_time_timer</string>
+	<string name="key_default_timer_tts_should_say_alarm_name">pref_should_say_alarm_name_timer</string>
+	<string name="key_default_timer_tts_speak_frequency">pref_speak_frequency_timer</string>
+	<string name="key_default_timer_tts_speech_rate">pref_default_alarm_tts_speech_rate_timer</string>
+	<string name="key_default_timer_tts_voice">pref_default_alarm_tts_voice_timer</string>
+	<string name="key_default_timer_dismiss_should_auto_dismiss">pref_should_auto_dismiss_timer</string>
+	<string name="key_default_timer_dismiss_auto_dismiss_time">pref_auto_dismiss_new_timer</string>
+	<string name="key_default_timer_dismiss_should_delete_alarm_after_dismissed">pref_should_delete_alarm_after_dismissed_timer</string>
+
 	<!-- Alarm screen -->
 	<string name="key_use_new_alarm_screen">pref_use_new_alarm_screen</string>
 	<string name="key_alarm_screen_show_alarm_name">pref_alarm_info</string>

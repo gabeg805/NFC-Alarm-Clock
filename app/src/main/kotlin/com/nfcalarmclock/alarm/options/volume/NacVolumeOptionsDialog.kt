@@ -14,9 +14,9 @@ import com.nfcalarmclock.view.setupInputLayoutColor
 import com.nfcalarmclock.view.setupSwitchColor
 
 /**
- * Customize volume options for an alarm.
+ * Volume options for an alarm.
  */
-class NacVolumeOptionsDialog
+open class NacVolumeOptionsDialog
 	: NacGenericAlarmOptionsDialog()
 {
 

@@ -50,7 +50,7 @@ class NacAlarmRepository @Inject constructor(
 	suspend fun findAlarm(id: Long): NacAlarm? = alarmDao.findAlarm(id)
 
 	/**
-	 * The an active alarm.
+	 * An active alarm.
 	 */
 	suspend fun getActiveAlarm(): NacAlarm? = alarmDao.getActiveAlarm()
 

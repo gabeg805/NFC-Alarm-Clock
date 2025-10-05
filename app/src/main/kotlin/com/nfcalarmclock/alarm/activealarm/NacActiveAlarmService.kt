@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Handler
-import android.os.IBinder
 import android.os.PowerManager
 import android.os.PowerManager.WakeLock
 import androidx.lifecycle.LifecycleService
@@ -97,10 +96,6 @@ class NacActiveAlarmService
 	private var autoSnoozeHandler: Handler? = null
 
 	/**
-	 */
-	private var vibrateWatchHandler: Handler? = null
-
-	/**
 	 * Time that the service was started, in milliseconds.
 	 */
 	private var startTime: Long = 0
@@ -118,7 +113,6 @@ class NacActiveAlarmService
 		wakeupProcessDelayHandler?.removeCallbacksAndMessages(null)
 		autoDismissHandler?.removeCallbacksAndMessages(null)
 		autoSnoozeHandler?.removeCallbacksAndMessages(null)
-		vibrateWatchHandler?.removeCallbacksAndMessages(null)
 
 		// Check if a wake lock is held
 		if (wakeLock?.isHeld == true)
@@ -141,7 +135,6 @@ class NacActiveAlarmService
 	fun dismiss(usedNfc: Boolean = false, wasMissed: Boolean = false)
 	{
 		// Update the alarm
-		//scope.launch {
 		lifecycleScope.launch {
 
 			// Dismiss the alarm
@@ -194,8 +187,8 @@ class NacActiveAlarmService
 	/**
 	 * Check if a new service was started.
 	 *
-	 * @param  intentAlarm An alarm from an intent.
-	 * @param  action The action from an intent.
+	 * @param intentAlarm An alarm from an intent.
+	 * @param action The action from an intent.
 	 *
 	 * @return True if a new service was started, and False otherwise.
 	 */
@@ -207,21 +200,6 @@ class NacActiveAlarmService
 		return ((alarm != null)
 			&& (intentAlarm != null)
 			&& (action == ACTION_START_SERVICE))
-	}
-
-	/**
-	 * Check if the same service was started.
-	 *
-	 * @return True if the same service was started, and False otherwise.
-	 */
-
-	/**
-	 * Called when the service is bound.
-	 */
-	override fun onBind(intent: Intent): IBinder?
-	{
-		super.onBind(intent)
-		return null
 	}
 
 	/**
@@ -240,7 +218,6 @@ class NacActiveAlarmService
 		wakeupProcessDelayHandler = Handler(mainLooper)
 		autoDismissHandler = Handler(mainLooper)
 		autoSnoozeHandler = Handler(mainLooper)
-		vibrateWatchHandler = Handler(mainLooper)
 
 		// Enable the activity alias so that tapping an NFC tag will open the main
 		// activity
@@ -275,19 +252,13 @@ class NacActiveAlarmService
 		// Stop the alarm activity
 		NacActiveAlarmActivity.stopAlarmActivity(this)
 
-		//scope.launch {
+		// Set the alarm as not active and update the alarm
 		lifecycleScope.launch {
-
-			// Check if the alarm is not null
 			if (alarm != null)
 			{
-				// Set the alarm as not active
 				alarm!!.isActive = false
-
-				// Update the alarm
 				alarmRepository.update(alarm!!)
 			}
-
 		}
 
 		// Cleanup everything
@@ -302,6 +273,8 @@ class NacActiveAlarmService
 	{
 		// Super
 		super.onStartCommand(intent, flags, startId)
+
+		// TODO: Try to have activity bind and use this flag BIND_ALLOW_ACTIVITY_STARTS, BIND_IMPORTANT
 
 		// Setup the service
 		setupActiveAlarmService(intent)
@@ -335,7 +308,6 @@ class NacActiveAlarmService
 				// Show the skip notification
 				showSkipAlarmNotification()
 
-				//scope.launch {
 				lifecycleScope.launch {
 
 					// Skip the alarm
@@ -382,11 +354,10 @@ class NacActiveAlarmService
 				// Unable to snooze the alarm
 				else
 				{
-					//scope.launch {
+					// Show a toast saying the alarm could not be snoozed
 					lifecycleScope.launch {
 						withContext(Dispatchers.Main)
 						{
-							// Show a toast saying the alarm could not be snoozed
 							NacUtility.quickToast(this@NacActiveAlarmService, R.string.error_message_snooze)
 						}
 					}
@@ -457,34 +428,31 @@ class NacActiveAlarmService
 		// Attempt to get the alarm from the intent
 		val intentAlarm = intent?.getAlarm()
 
-		// Check if a new service was started
+		// New service was started
 		if (isNewServiceStarted(intentAlarm, intentAction))
 		{
-			// Check if the alarms are equal
+			// Alarms are equal. Set the action to indicate this
 			if (intentAlarm!!.equals(alarm))
 			{
-				// Set the action indicating that the alarms are equal
 				intentAction = ACTION_EQUAL_ALARMS
 				return
 			}
+			// Update the active time of the current alarm
 			else
 			{
-				// Update the active time of the current alarm
 				updateTimeActiveOfCurrentAlarm()
 			}
 		}
 
-		// Check if the intent alarm is not null
+		// Set the new alarms for this service
 		if (intentAlarm != null)
 		{
-			// Set the new alarm for this service
 			alarm = intentAlarm
 		}
 
-		// Check if the service alarm is null
+		// No alarm found, so set the action to stop the service
 		if (alarm == null)
 		{
-			// Set the action indicating to stop the service
 			intentAction = ACTION_STOP_SERVICE
 		}
 	}
@@ -556,7 +524,6 @@ class NacActiveAlarmService
 	@UnstableApi
 	fun snooze()
 	{
-		//scope.launch {
 		lifecycleScope.launch {
 
 			// Snooze the alarm and get the next time to run the alarm again
@@ -603,11 +570,11 @@ class NacActiveAlarmService
 		// Start the alarm activity
 		NacActiveAlarmActivity.startAlarmActivity(this, alarm!!)
 
-		// Wait for auto dismiss and auto snooze, vibrate smart watch
+		// Wait for auto dismiss and auto snooze
 		waitForAutoDismiss()
 		waitForAutoSnooze()
 
-		// Start the wakeup process after a delay of 3 sec. With Android 15, possibly
+		// Start the wakeup process after a delay of 1 sec. With Android 15, possibly
 		// earlier versions as well, need to ensure that the activity is in focus before
 		// trying to request audio focus, otherwise any media or TTS will fail
 		wakeupProcess = NacWakeupProcess(this, alarm!!)
@@ -617,16 +584,12 @@ class NacActiveAlarmService
 			wakeupProcess!!.start()
 		}, 1000)
 
-		//scope.launch {
+		// Set the active flag and reset the skip flag, then update the alarm
 		lifecycleScope.launch {
-
-			 // Set the active flag and reset the skip flag
 			alarm!!.isActive = true
 			alarm!!.shouldSkipNextAlarm = false
 
-			// Update the alarm
 			alarmRepository.update(alarm!!)
-
 		}
 	}
 
@@ -659,7 +622,6 @@ class NacActiveAlarmService
 		val currentStartTime = startTime
 		val currentAlarm = alarm!!
 
-		//scope.launch {
 		lifecycleScope.launch {
 
 			// Check if the service has started
@@ -785,14 +747,14 @@ class NacActiveAlarmService
 		/**
 		 * Tag for the wakelock.
 		 */
-		const val WAKELOCK_TAG = "NFC Alarm Clock:NacForegroundService"
+		const val WAKELOCK_TAG = "NFC Alarm Clock:NacActiveAlarmService"
 
 		/**
-		 * Dismiss the alarm service for the given alarm.
+		 * Dismiss the service for the given alarm.
 		 */
 		fun dismissAlarmService(context: Context, alarm: NacAlarm?)
 		{
-			// Create an intent with the alarm activity
+			// Create an intent with the alarm service
 			val intent = getDismissIntent(context, alarm)
 
 			// Start the service. This will not be a foreground service so do
@@ -801,11 +763,11 @@ class NacActiveAlarmService
 		}
 
 		/**
-		 * Dismiss the alarm activity for the given alarm with NFC.
+		 * Dismiss the service for the given alarm with NFC.
 		 */
 		fun dismissAlarmServiceWithNfc(context: Context, alarm: NacAlarm?)
 		{
-			// Create the intent with the alarm activity
+			// Create the intent with the alarm service
 			val intent = getDismissIntentWithNfc(context, alarm)
 
 			// Start the service. This will not be a foreground service so do
@@ -829,7 +791,7 @@ class NacActiveAlarmService
 
 		/**
 		 * Get an intent that will be used to dismiss the foreground alarm
-		 * service witH NFC.
+		 * service with NFC.
 		 *
 		 * @return An intent that will be used to dismiss the foreground alarm
 		 *         service with NFC.

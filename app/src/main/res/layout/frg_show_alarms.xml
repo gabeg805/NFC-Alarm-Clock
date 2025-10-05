@@ -44,4 +44,5 @@
 		android:name="androidx.navigation.fragment.NavHostFragment"
 		app:defaultNavHost="true"
 		/>
+
 </LinearLayout>

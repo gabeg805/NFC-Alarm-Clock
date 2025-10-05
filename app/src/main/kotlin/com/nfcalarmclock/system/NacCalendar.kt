@@ -730,6 +730,33 @@ object NacCalendar
 	}
 
 	/**
+	 * The full time until the timer rings string, #h #m #s.
+	 *
+	 * @return The full time until the timer rings string, #h #m #s.
+	 */
+	fun getFullTimeUntilTimer(context: Context, secsUntilFinished: Long): String
+	{
+		// Get the hour, minute, and seconds values
+		val hour = secsUntilFinished / 3600
+		val minute = secsUntilFinished / 60
+		val seconds = secsUntilFinished % 60
+
+		// Get the hour, minute, and seconds letters
+		val h = context.resources.getString(R.string.letter_h)
+		val m = context.resources.getString(R.string.letter_m)
+		val s = context.resources.getString(R.string.letter_s)
+
+		var text = ""
+
+		text  = if (hour > 0) "$hour$h " else text
+		text += if (minute > 0) "$minute$m " else text
+		text += "$seconds$s"
+
+		// Get the full time until the timer rings
+		return text
+	}
+
+	/**
 	 * The full time string, EEE, HH:MM AM/PM.
 	 *
 	 * @return The full time string, EEE, HH:MM AM/PM.

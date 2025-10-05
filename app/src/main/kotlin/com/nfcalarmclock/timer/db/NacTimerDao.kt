@@ -41,6 +41,14 @@ interface NacTimerDao
 	suspend fun delete(timer: NacTimer): Int
 
 	/**
+	 * Get an active timer.
+	 *
+	 * @return An active timer.
+	 */
+	@Query("SELECT * FROM timer WHERE is_active=1 LIMIT 1")
+	suspend fun getActiveTimer(): NacTimer?
+
+	/**
 	 * Insert a timer.
 	 *
 	 * @param timer The timer to insert.

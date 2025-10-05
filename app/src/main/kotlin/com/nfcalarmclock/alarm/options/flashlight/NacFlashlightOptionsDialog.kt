@@ -22,9 +22,9 @@ import com.nfcalarmclock.view.setupProgressAndThumbColor
 import com.nfcalarmclock.view.setupSwitchColor
 
 /**
- * Dialog to prompt user what flashlight options they want.
+ * Flashlight options for an alarm.
  */
-class NacFlashlightOptionsDialog
+open class NacFlashlightOptionsDialog
 	: NacGenericAlarmOptionsDialog()
 {
 

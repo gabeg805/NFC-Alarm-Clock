@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:id="@+id/all_options"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:padding="@dimen/large"
+	android:orientation="vertical">
+
+	<!-- Flashlight -->
+	<Button
+		style="@style/Widget.AlarmOptionMain.Button"
+		android:id="@+id/option_flashlight"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/action_alarm_option_flashlight"
+		/>
+
+	<!-- NFC -->
+	<Button
+		style="@style/Widget.AlarmOptionMain.Button"
+		android:id="@+id/option_nfc"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/title_alarm_nfc"
+		/>
+
+	<!-- Vibrate -->
+	<Button
+		style="@style/Widget.AlarmOptionMain.Button"
+		android:id="@+id/option_vibrate"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/title_alarm_vibrate"
+		/>
+
+	<!-- Separator -->
+	<View style="@style/Widget.AlarmOptionMain.Separator" />
+
+	<!-- Audio source -->
+	<Button
+		style="@style/Widget.AlarmOptionMain.Button"
+		android:id="@+id/option_audio_source"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/action_alarm_option_audio_source"
+		/>
+
+	<!-- Text-to-speech -->
+	<Button
+		style="@style/Widget.AlarmOptionMain.Button"
+		android:id="@+id/option_text_to_speech"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/action_alarm_option_text_to_speech"
+		/>
+
+	<!-- Volume -->
+	<Button
+		style="@style/Widget.AlarmOptionMain.Button"
+		android:id="@+id/option_volume"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/action_alarm_option_volume"
+		/>
+
+</LinearLayout>

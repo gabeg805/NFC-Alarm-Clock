@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:layout_marginBottom="?attr/actionBarSize">
+
+	<!-- TODO: On back press should go to show timers fragment. Maybe that's handled in navigation? -->
+	<!-- Progress indicator -->
+	<com.google.android.material.progressindicator.CircularProgressIndicator
+		android:id="@+id/timer_progress"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:indeterminate="false"
+		app:indicatorDirectionCircular="counterclockwise"
+		app:indicatorSize="320dp"
+		android:progress="0"
+		app:trackCornerRadius="4dp"
+		app:trackThickness="8dp"
+		app:layout_constraintVertical_bias="0.2"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		/>
+
+	<!-- Hour -->
+	<TextView
+		style="@style/Timer.TimeText"
+		android:id="@+id/timer_hour"
+		android:text="@string/number0"
+		app:layout_constraintTop_toTopOf="@id/timer_progress"
+		app:layout_constraintBottom_toBottomOf="@id/timer_progress"
+		app:layout_constraintStart_toStartOf="@id/timer_progress"
+		app:layout_constraintEnd_toStartOf="@id/timer_hour_units"
+		app:layout_constraintHorizontal_chainStyle="packed"
+		/>
+
+	<TextView
+		style="@style/Timer.UnitsText"
+		android:id="@+id/timer_hour_units"
+		android:text="@string/letter_h"
+		app:layout_constraintStart_toEndOf="@id/timer_hour"
+		app:layout_constraintEnd_toStartOf="@id/timer_minute"
+		app:layout_constraintBaseline_toBaselineOf="@id/timer_hour"
+		/>
+
+	<!-- Minute -->
+	<TextView
+		style="@style/Timer.TimeText"
+		android:id="@+id/timer_minute"
+		android:text="@string/number0"
+		app:layout_constraintTop_toTopOf="@id/timer_progress"
+		app:layout_constraintBottom_toBottomOf="@id/timer_progress"
+		app:layout_constraintStart_toEndOf="@id/timer_hour_units"
+		app:layout_constraintEnd_toStartOf="@id/timer_minute_units"
+		/>
+
+	<TextView
+		style="@style/Timer.UnitsText"
+		android:id="@+id/timer_minute_units"
+		android:text="@string/letter_m"
+		app:layout_constraintStart_toEndOf="@id/timer_minute"
+		app:layout_constraintEnd_toStartOf="@id/timer_seconds"
+		app:layout_constraintBaseline_toBaselineOf="@id/timer_minute"
+		/>
+
+	<!-- Seconds -->
+	<TextView
+		style="@style/Timer.TimeText"
+		android:id="@+id/timer_seconds"
+		android:text="@string/number0"
+		app:layout_constraintTop_toTopOf="@id/timer_progress"
+		app:layout_constraintBottom_toBottomOf="@id/timer_progress"
+		app:layout_constraintStart_toEndOf="@id/timer_minute_units"
+		app:layout_constraintEnd_toStartOf="@id/timer_seconds_units"
+		/>
+
+	<TextView
+		style="@style/Timer.UnitsText"
+		android:id="@+id/timer_seconds_units"
+		android:layout_marginEnd="@dimen/zero"
+		android:text="@string/letter_s"
+		app:layout_constraintStart_toEndOf="@id/timer_seconds"
+		app:layout_constraintEnd_toEndOf="@id/timer_progress"
+		app:layout_constraintBaseline_toBaselineOf="@id/timer_seconds"
+		/>
+
+	<!-- Reset timer -->
+	<com.google.android.material.button.MaterialButton
+		style="@style/Widget.Material3.Button.IconButton"
+		android:id="@+id/timer_reset"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		app:iconPadding="@dimen/zero"
+		app:iconGravity="textStart"
+		app:iconSize="@dimen/isz_large"
+		app:iconTint="@color/white"
+		app:icon="@drawable/autorenew_32"
+		app:layout_constraintTop_toBottomOf="@id/timer_seconds"
+		app:layout_constraintBottom_toBottomOf="@id/timer_progress"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		/>
+
+	<!-- Pause/resume timer -->
+	<com.google.android.material.button.MaterialButton
+		style="@style/Timer.NumberpadButton"
+		android:id="@+id/timer_pause_resume"
+		android:layout_marginTop="@dimen/zero"
+		android:layout_marginBottom="@dimen/zero"
+		android:backgroundTint="?attr/colorAccent"
+		app:iconPadding="@dimen/zero"
+		app:iconGravity="textStart"
+		app:iconSize="@dimen/isz_xxxlarge"
+		app:icon="@drawable/pause_32"
+		app:layout_constraintTop_toBottomOf="@id/timer_progress"
+		app:layout_constraintBottom_toTopOf="@id/timer_add_5s"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		/>
+
+	<!-- Stop timer -->
+	<com.google.android.material.button.MaterialButton
+		style="@style/Timer.NumberpadButton"
+		android:id="@+id/timer_stop"
+		android:layout_marginTop="@dimen/zero"
+		android:layout_marginBottom="@dimen/zero"
+		android:backgroundTint="?attr/colorAccent"
+		app:iconPadding="@dimen/zero"
+		app:iconGravity="textStart"
+		app:iconSize="@dimen/isz_xxxlarge"
+		app:icon="@drawable/stop_32"
+		app:layout_constraintTop_toBottomOf="@id/timer_progress"
+		app:layout_constraintBottom_toTopOf="@id/timer_add_5s"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		/>
+
+	<!-- Add time -->
+	<com.google.android.material.button.MaterialButton
+		style="@style/Timer.NumberpadButton"
+		android:id="@+id/timer_add_1m"
+		android:layout_width="wrap_content"
+		android:layout_height="@dimen/isz_xxxlarge"
+		android:layout_marginTop="@dimen/zero"
+		android:layout_marginBottom="@dimen/zero"
+		android:textSize="@dimen/tsz_medium"
+		android:text="@string/timer_add_1min"
+		app:layout_constraintTop_toBottomOf="@id/timer_pause_resume"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintEnd_toStartOf="@id/timer_add_30s"
+		app:layout_constraintHorizontal_chainStyle="packed"
+		/>
+
+	<com.google.android.material.button.MaterialButton
+		style="@style/Timer.NumberpadButton"
+		android:id="@+id/timer_add_30s"
+		android:layout_width="wrap_content"
+		android:layout_height="@dimen/isz_xxxlarge"
+		android:layout_marginTop="@dimen/zero"
+		android:layout_marginBottom="@dimen/zero"
+		android:layout_marginStart="@dimen/normal"
+		android:layout_marginEnd="@dimen/normal"
+		android:textSize="@dimen/tsz_medium"
+		android:text="@string/timer_add_30sec"
+		app:layout_constraintTop_toBottomOf="@id/timer_pause_resume"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintStart_toEndOf="@id/timer_add_1m"
+		app:layout_constraintEnd_toEndOf="@id/timer_add_5s"
+		/>
+
+	<com.google.android.material.button.MaterialButton
+		style="@style/Timer.NumberpadButton"
+		android:id="@+id/timer_add_5s"
+		android:layout_width="wrap_content"
+		android:layout_height="@dimen/isz_xxxlarge"
+		android:layout_marginTop="@dimen/zero"
+		android:layout_marginBottom="@dimen/zero"
+		android:textSize="@dimen/tsz_medium"
+		android:text="@string/timer_add_5sec"
+		app:layout_constraintTop_toBottomOf="@id/timer_pause_resume"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintStart_toEndOf="@id/timer_add_30s"
+		app:layout_constraintEnd_toEndOf="parent"
+		/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

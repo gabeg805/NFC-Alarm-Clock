@@ -25,7 +25,7 @@ import kotlinx.coroutines.withContext
  * off.
  */
 @AndroidEntryPoint
-class NacScanNfcTagDialog
+open class NacScanNfcTagDialog
 
 	// Constructor
 	: NacGenericAlarmOptionsDialog(),

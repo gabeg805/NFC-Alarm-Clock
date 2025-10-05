@@ -4,7 +4,8 @@
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
-	android:padding="@dimen/large"
+	android:paddingTop="@dimen/normal"
+	android:paddingHorizontal="@dimen/large"
 	android:orientation="vertical">
 
 	<!-- Repeat, Vibrate, NFC, Flashlight -->
@@ -196,4 +197,5 @@
 			app:icon="@drawable/settings"
 			/>
 	</LinearLayout>
+
 </LinearLayout>

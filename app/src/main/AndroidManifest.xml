@@ -147,6 +147,13 @@
 			android:exported="false"
 			/>
 
+		<!-- Active timer service (show notification and call timer fragment) -->
+		<service
+			android:name=".timer.active.NacActiveTimerService"
+			android:foregroundServiceType="systemExempted"
+			android:exported="false"
+			/>
+
 		<!-- Upcoming reminder -->
 		<service
 			android:name=".alarm.options.upcomingreminder.NacUpcomingReminderService"

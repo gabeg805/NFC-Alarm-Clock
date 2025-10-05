@@ -45,6 +45,14 @@ abstract class NacGenericAlarmOptionsDialog
 	var onSaveAlarmListener: OnSaveAlarmListener? = null
 
 	/**
+	 * Get the alarm/timer argument from the fragment.
+	 */
+	open fun getFragmentArgument(): NacAlarm?
+	{
+		return arguments?.getAlarm()
+	}
+
+	/**
 	 * Setup all alarm options.
 	 */
 	abstract fun setupAlarmOptions(alarm: NacAlarm?)
@@ -147,10 +155,9 @@ abstract class NacGenericAlarmOptionsDialog
 		super.onViewCreated(view, savedInstanceState)
 
 		// Get the bundle
-		val alarm = arguments?.getAlarm()
+		val alarm = getFragmentArgument()
 
 		// Setup any alarm options
-		// TODO: Can this be moved after setting up the views below?
 		setupAlarmOptions(alarm)
 
 		// Setup the views

@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:id="@+id/nav_timer_options"
+	app:startDestination="@id/nacTimerCardOptionsDialog">
+
+	<dialog
+		android:id="@+id/nacTimerCardOptionsDialog"
+		android:name="com.nfcalarmclock.timer.options.NacTimerCardOptionsDialog"
+		android:label="NacTimerCardOptionsDialog" >
+		<action
+			android:id="@+id/action_nacTimerCardOptionsDialog_to_nacTimerOptionsDialog"
+			app:destination="@id/nacTimerOptionsDialog" />
+		<action
+			android:id="@+id/action_nacTimerCardOptionsDialog_to_nacFlashlightOptionsDialog3"
+			app:destination="@id/nacFlashlightOptionsDialog3" />
+		<action
+			android:id="@+id/action_nacTimerCardOptionsDialog_to_nacScanNfcTagDialog3"
+			app:destination="@id/nacScanNfcTagDialog3" />
+		<action
+			android:id="@+id/action_nacTimerCardOptionsDialog_to_nacVibrateOptionsDialog3"
+			app:destination="@id/nacVibrateOptionsDialog3" />
+	</dialog>
+	<dialog
+		android:id="@+id/nacTimerOptionsDialog"
+		android:name="com.nfcalarmclock.timer.options.NacTimerOptionsDialog"
+		android:label="NacTimerOptionsDialog" >
+		<action
+			android:id="@+id/action_nacTimerOptionsDialog_to_nacFlashlightOptionsDialog3"
+			app:destination="@id/nacFlashlightOptionsDialog3" />
+		<action
+			android:id="@+id/action_nacTimerOptionsDialog_to_nacScanNfcTagDialog3"
+			app:destination="@id/nacScanNfcTagDialog3" />
+		<action
+			android:id="@+id/action_nacTimerOptionsDialog_to_nacVibrateOptionsDialog3"
+			app:destination="@id/nacVibrateOptionsDialog3" />
+		<action
+			android:id="@+id/action_nacTimerOptionsDialog_to_nacAudioSourceDialog2"
+			app:destination="@id/nacAudioSourceDialog2" />
+		<action
+			android:id="@+id/action_nacTimerOptionsDialog_to_nacTextToSpeechDialog2"
+			app:destination="@id/nacTextToSpeechDialog2" />
+		<action
+			android:id="@+id/action_nacTimerOptionsDialog_to_nacVolumeOptionsDialog2"
+			app:destination="@id/nacVolumeOptionsDialog2" />
+	</dialog>
+	<dialog
+		android:id="@+id/nacFlashlightOptionsDialog3"
+		android:name="com.nfcalarmclock.timer.options.flashlight.NacFlashlightOptionsDialog"
+		android:label="NacFlashlightOptionsDialog" />
+	<dialog
+		android:id="@+id/nacScanNfcTagDialog3"
+		android:name="com.nfcalarmclock.timer.options.nfc.NacScanNfcTagDialog"
+		android:label="NacScanNfcTagDialog" >
+		<action
+			android:id="@+id/action_nacScanNfcTagDialog3_to_nacSelectNfcTagDialog2"
+			app:destination="@id/nacSelectNfcTagDialog2" />
+		<action
+			android:id="@+id/action_nacScanNfcTagDialog3_to_nacSaveNfcTagDialog2"
+			app:destination="@id/nacSaveNfcTagDialog2" />
+	</dialog>
+	<dialog
+		android:id="@+id/nacVibrateOptionsDialog3"
+		android:name="com.nfcalarmclock.timer.options.vibrate.NacVibrateOptionsDialog"
+		android:label="NacVibrateOptionsDialog" />
+	<dialog
+		android:id="@+id/nacAudioSourceDialog2"
+		android:name="com.nfcalarmclock.timer.options.audiosource.NacAudioSourceDialog"
+		android:label="NacAudioSourceDialog" />
+	<dialog
+		android:id="@+id/nacTextToSpeechDialog2"
+		android:name="com.nfcalarmclock.timer.options.tts.NacTextToSpeechDialog"
+		android:label="NacTextToSpeechDialog" />
+	<dialog
+		android:id="@+id/nacVolumeOptionsDialog2"
+		android:name="com.nfcalarmclock.timer.options.volume.NacVolumeOptionsDialog"
+		android:label="NacVolumeOptionsDialog" />
+	<dialog
+		android:id="@+id/nacSelectNfcTagDialog2"
+		android:name="com.nfcalarmclock.timer.options.nfc.NacSelectNfcTagDialog"
+		android:label="NacSelectNfcTagDialog" />
+	<dialog
+		android:id="@+id/nacSaveNfcTagDialog2"
+		android:name="com.nfcalarmclock.timer.options.nfc.NacSaveNfcTagDialog"
+		android:label="NacSaveNfcTagDialog" />
+</navigation>

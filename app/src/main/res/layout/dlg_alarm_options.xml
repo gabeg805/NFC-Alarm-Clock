@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:id="@+id/all_alarm_options"
+	android:id="@+id/all_options"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
 	android:padding="@dimen/large"
@@ -10,7 +10,7 @@
 	<!-- Flashlight -->
 	<Button
 		style="@style/Widget.AlarmOptionMain.Button"
-		android:id="@+id/alarm_option_flashlight"
+		android:id="@+id/option_flashlight"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:text="@string/action_alarm_option_flashlight"
@@ -19,7 +19,7 @@
 	<!-- NFC -->
 	<Button
 		style="@style/Widget.AlarmOptionMain.Button"
-		android:id="@+id/alarm_option_nfc"
+		android:id="@+id/option_nfc"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:text="@string/title_alarm_nfc"
@@ -28,7 +28,7 @@
 	<!-- Repeat -->
 	<Button
 		style="@style/Widget.AlarmOptionMain.Button"
-		android:id="@+id/alarm_option_repeat"
+		android:id="@+id/option_repeat"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:text="@string/title_alarm_repeat"
@@ -37,7 +37,7 @@
 	<!-- Vibrate -->
 	<Button
 		style="@style/Widget.AlarmOptionMain.Button"
-		android:id="@+id/alarm_option_vibrate"
+		android:id="@+id/option_vibrate"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:text="@string/title_alarm_vibrate"
@@ -49,7 +49,7 @@
 	<!-- Audio source -->
 	<Button
 		style="@style/Widget.AlarmOptionMain.Button"
-		android:id="@+id/alarm_option_audio_source"
+		android:id="@+id/option_audio_source"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:text="@string/action_alarm_option_audio_source"
@@ -58,7 +58,7 @@
 	<!-- Text-to-speech -->
 	<Button
 		style="@style/Widget.AlarmOptionMain.Button"
-		android:id="@+id/alarm_option_text_to_speech"
+		android:id="@+id/option_text_to_speech"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:text="@string/action_alarm_option_text_to_speech"
@@ -67,7 +67,7 @@
 	<!-- Upcoming reminder -->
 	<Button
 		style="@style/Widget.AlarmOptionMain.Button"
-		android:id="@+id/alarm_option_upcoming_reminder"
+		android:id="@+id/option_upcoming_reminder"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:text="@string/action_alarm_option_upcoming_reminder"
@@ -76,7 +76,7 @@
 	<!-- Volume -->
 	<Button
 		style="@style/Widget.AlarmOptionMain.Button"
-		android:id="@+id/alarm_option_volume"
+		android:id="@+id/option_volume"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:text="@string/action_alarm_option_volume"

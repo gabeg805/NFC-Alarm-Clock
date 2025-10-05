@@ -143,27 +143,27 @@ fun waitToCleanupBackStackEntryLifecycleObserver(
 }
 
 /**
- * Show the options for an alarm.
+ * Options for an alarm.
  */
-class NacAlarmOptionsDialog
+open class NacAlarmOptionsDialog
 	: NacBottomSheetDialogFragment()
 {
 
 	/**
 	 * Find the correct navigation ID to use from a button ID.
 	 */
-	private fun findNavIdFromButtonId(id: Int): Int
+	open fun findNavIdFromButtonId(id: Int): Int
 	{
 		return when (id)
 		{
-			R.id.alarm_option_flashlight -> R.id.nacFlashlightOptionsDialog
-			R.id.alarm_option_nfc -> R.id.nacScanNfcTagDialog
-			R.id.alarm_option_repeat -> R.id.nacRepeatOptionsDialog
-			R.id.alarm_option_vibrate -> R.id.nacVibrateOptionsDialog
-			R.id.alarm_option_audio_source -> R.id.nacAudioSourceDialog
-			R.id.alarm_option_text_to_speech -> R.id.nacTextToSpeechDialog
-			R.id.alarm_option_upcoming_reminder -> R.id.nacUpcomingReminderDialog
-			R.id.alarm_option_volume -> R.id.nacVolumeOptionsDialog
+			R.id.option_flashlight -> R.id.nacFlashlightOptionsDialog
+			R.id.option_nfc -> R.id.nacScanNfcTagDialog
+			R.id.option_repeat -> R.id.nacRepeatOptionsDialog
+			R.id.option_vibrate -> R.id.nacVibrateOptionsDialog
+			R.id.option_audio_source -> R.id.nacAudioSourceDialog
+			R.id.option_text_to_speech -> R.id.nacTextToSpeechDialog
+			R.id.option_upcoming_reminder -> R.id.nacUpcomingReminderDialog
+			R.id.option_volume -> R.id.nacVolumeOptionsDialog
 			else -> -1
 		}
 	}
@@ -192,7 +192,7 @@ class NacAlarmOptionsDialog
 		val navController = findNavController()
 
 		// Get the container of the dialog
-		val container = view.findViewById<LinearLayout>(R.id.all_alarm_options)
+		val container: LinearLayout = view.findViewById(R.id.all_options)
 
 		// Iterate over each child in the container
 		for (v in container.children)
@@ -204,7 +204,7 @@ class NacAlarmOptionsDialog
 				continue
 			}
 			// Check if this is the flashlight option
-			else if (v.id == R.id.alarm_option_flashlight)
+			else if (v.id == R.id.option_flashlight)
 			{
 				// Check if should hide this option
 				if (!sharedPreferences.shouldShowFlashlightButton)

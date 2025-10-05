@@ -16,9 +16,10 @@
 	<!-- Text to speech description -->
 	<TextView
 		style="@style/Widget.AlarmOptionDialog.DescriptionBeforeCheckBox"
+		android:id="@+id/tts_what_to_say_description"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="@string/description_text_to_speech_what_to_say"
+		android:text="@string/description_text_to_speech_what_to_say_alarm"
 		/>
 
 	<!-- Option to say current time -->

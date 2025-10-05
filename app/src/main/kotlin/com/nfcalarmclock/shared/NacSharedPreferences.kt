@@ -135,7 +135,7 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
-	 * Audio source.
+	 * Audio source of an alarm.
 	 */
 	var audioSource: String
 		get()
@@ -154,7 +154,26 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
-	 * Auto dismiss time.
+	 * Audio source of a timer.
+	 */
+	var audioSourceTimer: String
+		get()
+		{
+			val key = resources.getString(R.string.key_default_timer_audio_source)
+			val audioSources = resources.getStringArray(R.array.audio_sources)
+			val defaultValue = audioSources[2]
+
+			return instance.getString(key, defaultValue) ?: ""
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_timer_audio_source)
+
+			saveString(key, value)
+		}
+
+	/**
+	 * Auto dismiss time of an alarm.
 	 */
 	var autoDismissTime: Int
 		get()
@@ -167,6 +186,24 @@ class NacSharedPreferences(context: Context)
 		set(value)
 		{
 			val key = resources.getString(R.string.key_default_alarm_dismiss_auto_dismiss_time)
+
+			saveInt(key, value)
+		}
+
+	/**
+	 * Auto dismiss time of a timer.
+	 */
+	var autoDismissTimeTimer: Int
+		get()
+		{
+			val key = resources.getString(R.string.key_default_timer_dismiss_auto_dismiss_time)
+			val defaultValue = 900
+
+			return instance.getInt(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_timer_dismiss_auto_dismiss_time)
 
 			saveInt(key, value)
 		}
@@ -614,6 +651,24 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
+	 * Whether a timer should be auto dismissed or not.
+	 */
+	var shouldAutoDismissTimer: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.key_default_timer_dismiss_should_auto_dismiss)
+			val defaultValue = true
+
+			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_timer_dismiss_should_auto_dismiss)
+
+			saveBoolean(key, value)
+		}
+
+	/**
 	 * Whether an alarm should be auto snoozed or not.
 	 */
 	var shouldAutoSnooze: Boolean
@@ -971,7 +1026,7 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
-	 * Number of seconds to turn off the flashlight.
+	 * Number of seconds to turn off the flashlight for an alarm.
 	 */
 	var flashlightOffDuration: String
 		get()
@@ -989,7 +1044,25 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
-	 * Number of seconds to turn on the flashlight.
+	 * Number of seconds to turn off the flashlight for a timer.
+	 */
+	var flashlightOffDurationTimer: String
+		get()
+		{
+			val key = resources.getString(R.string.key_default_timer_flashlight_off_duration)
+			val defaultValue = "1"
+
+			return instance.getString(key, defaultValue) ?: ""
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_timer_flashlight_off_duration)
+
+			saveString(key, value)
+		}
+
+	/**
+	 * Number of seconds to turn on the flashlight for an alarm.
 	 */
 	var flashlightOnDuration: String
 		get()
@@ -1007,7 +1080,25 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
-	 * Strength level of the flashlight.
+	 * Number of seconds to turn on the flashlight for a timer.
+	 */
+	var flashlightOnDurationTimer: String
+		get()
+		{
+			val key = resources.getString(R.string.key_default_timer_flashlight_on_duration)
+			val defaultValue = "1"
+
+			return instance.getString(key, defaultValue) ?: ""
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_timer_flashlight_on_duration)
+
+			saveString(key, value)
+		}
+
+	/**
+	 * Strength level of the flashlight of an alarm.
 	 */
 	var flashlightStrengthLevel: Int
 		get()
@@ -1025,8 +1116,26 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
+	 * Strength level of the flashlight of a timer.
+	 */
+	var flashlightStrengthLevelTimer: Int
+		get()
+		{
+			val key = resources.getString(R.string.key_default_timer_flashlight_strength_level)
+			val defaultValue = 0
+
+			return instance.getInt(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_timer_flashlight_strength_level)
+
+			saveInt(key, value)
+		}
+
+	/**
 	 * Amount of time to wait before gradually increasing the flashlight strength level
-	 * another step.
+	 * another step for an alarm.
 	 */
 	var graduallyIncreaseFlashlightStrengthLevelWaitTime: Int
 		get()
@@ -1044,7 +1153,27 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
-	 * Amount of time to wait before gradually increasing the volume another step.
+	 * Amount of time to wait before gradually increasing the flashlight strength level
+	 * another step for a timer.
+	 */
+	var graduallyIncreaseFlashlightStrengthLevelWaitTimeTimer: Int
+		get()
+		{
+			val key = resources.getString(R.string.key_default_timer_flashlight_gradually_increase_flashlight_strength_level_wait_time)
+			val defaultValue = 5
+
+			return instance.getInt(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_timer_flashlight_gradually_increase_flashlight_strength_level_wait_time)
+
+			saveInt(key, value)
+		}
+
+	/**
+	 * Amount of time to wait before gradually increasing the volume another step for an
+	 * alarm.
 	 */
 	var graduallyIncreaseVolumeWaitTime: Int
 		get()
@@ -1057,6 +1186,25 @@ class NacSharedPreferences(context: Context)
 		set(value)
 		{
 			val key = resources.getString(R.string.key_default_alarm_volume_gradually_increase_volume_wait_time)
+
+			saveInt(key, value)
+		}
+
+	/**
+	 * Amount of time to wait before gradually increasing the volume another step for a
+	 * timer.
+	 */
+	var graduallyIncreaseVolumeWaitTimeTimer: Int
+		get()
+		{
+			val key = resources.getString(R.string.key_default_timer_volume_gradually_increase_volume_wait_time)
+			val defaultValue = 5
+
+			return instance.getInt(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_timer_volume_gradually_increase_volume_wait_time)
 
 			saveInt(key, value)
 		}
@@ -1154,7 +1302,7 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
-	 * Local media path.
+	 * Local media path for an alarm.
 	 */
 	var localMediaPath: String
 		get()
@@ -1171,7 +1319,24 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
-	 * Media artist.
+	 * Local media path for a timer.
+	 */
+	var localMediaPathTimer: String
+		get()
+		{
+			val key = resources.getString(R.string.key_general_default_timer_local_media_path)
+
+			return instance.getString(key, "") ?: ""
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_general_default_timer_local_media_path)
+
+			saveString(key, value)
+		}
+
+	/**
+	 * Media artist for an alarm.
 	 */
 	var mediaArtist: String
 		get()
@@ -1188,7 +1353,24 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
-	 * Media path.
+	 * Media artist for a timer.
+	 */
+	var mediaArtistTimer: String
+		get()
+		{
+			val key = resources.getString(R.string.key_general_default_timer_media_artist)
+
+			return instance.getString(key, "") ?: ""
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_general_default_timer_media_artist)
+
+			saveString(key, value)
+		}
+
+	/**
+	 * Media path for an alarm.
 	 */
 	var mediaPath: String
 		get()
@@ -1205,7 +1387,24 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
-	 * Media title.
+	 * Media path for a timer.
+	 */
+	var mediaPathTimer: String
+		get()
+		{
+			val key = resources.getString(R.string.key_general_default_timer_media_path)
+
+			return instance.getString(key, "") ?: ""
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_general_default_timer_media_path)
+
+			saveString(key, value)
+		}
+
+	/**
+	 * Media title for an alarm.
 	 */
 	var mediaTitle: String
 		get()
@@ -1222,7 +1421,24 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
-	 * Media type.
+	 * Media title for a timer.
+	 */
+	var mediaTitleTimer: String
+		get()
+		{
+			val key = resources.getString(R.string.key_general_default_timer_media_title)
+
+			return instance.getString(key, "") ?: ""
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_general_default_timer_media_title)
+
+			saveString(key, value)
+		}
+
+	/**
+	 * Media type for an alarm.
 	 */
 	var mediaType: Int
 		get()
@@ -1235,6 +1451,24 @@ class NacSharedPreferences(context: Context)
 		set(value)
 		{
 			val key = resources.getString(R.string.key_general_default_alarm_media_type)
+
+			saveInt(key, value)
+		}
+
+	/**
+	 * Media type for a timer.
+	 */
+	var mediaTypeTimer: Int
+		get()
+		{
+			val key = resources.getString(R.string.key_general_default_timer_media_type)
+			val defaultValue = NacMedia.TYPE_RINGTONE
+
+			return instance.getInt(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_general_default_timer_media_type)
 
 			saveInt(key, value)
 		}
@@ -1269,6 +1503,23 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
+	 * Name of the timer.
+	 */
+	var nameTimer: String
+		get()
+		{
+			val key = resources.getString(R.string.key_default_timer_name)
+
+			return instance.getString(key, "") ?: ""
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_timer_name)
+
+			saveString(key, value)
+		}
+
+	/**
 	 * Name color.
 	 */
 	val nameColor: Int
@@ -1293,7 +1544,7 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
-	 * Order in which to dismiss NFC tags when multiple are selected.
+	 * Order in which to dismiss NFC tags when multiple are selected for an alarm.
 	 */
 	var nfcTagDismissOrder: Int
 		get()
@@ -1311,6 +1562,24 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
+	 * Order in which to dismiss NFC tags when multiple are selected for a timer.
+	 */
+	var nfcTagDismissOrderTimer: Int
+		get()
+		{
+			val key = resources.getString(R.string.key_default_timer_nfc_tag_dismiss_order)
+			val defaultValue = 0
+
+			return instance.getInt(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_timer_nfc_tag_dismiss_order)
+
+			saveInt(key, value)
+		}
+
+	/**
 	 * ID of the NFC tag that needs to be used to dismiss the alarm.
 	 */
 	var nfcTagId: String
@@ -1323,6 +1592,23 @@ class NacSharedPreferences(context: Context)
 		set(value)
 		{
 			val key = resources.getString(R.string.key_default_alarm_nfc_tag_id)
+
+			saveString(key, value)
+		}
+
+	/**
+	 * ID of the NFC tag that needs to be used to dismiss the timer.
+	 */
+	var nfcTagIdTimer: String
+		get()
+		{
+			val key = resources.getString(R.string.key_default_timer_nfc_tag_id)
+
+			return instance.getString(key, "") ?: ""
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_timer_nfc_tag_id)
 
 			saveString(key, value)
 		}
@@ -1399,7 +1685,7 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
-	 * Whether to recursively play the media in a directory.
+	 * Whether to recursively play the media in a directory for an alarm.
 	 */
 	var recursivelyPlayMedia: Boolean
 		get()
@@ -1412,6 +1698,24 @@ class NacSharedPreferences(context: Context)
 		set(value)
 		{
 			val key = resources.getString(R.string.key_default_alarm_media_should_recursively_play_media)
+
+			saveBoolean(key, value)
+		}
+
+	/**
+	 * Whether to recursively play the media in a directory for a timer.
+	 */
+	var recursivelyPlayMediaTimer: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.key_default_timer_media_should_recursively_play_media)
+			val defaultValue = false
+
+			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_timer_media_should_recursively_play_media)
 
 			saveBoolean(key, value)
 		}
@@ -1489,7 +1793,7 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
-	 * Whether the flashlight should be blinked or not.
+	 * Whether the flashlight should be blinked or not for an alarm.
 	 */
 	var shouldBlinkFlashlight: Boolean
 		get()
@@ -1507,9 +1811,27 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
+	 * Whether the flashlight should be blinked or not for a timer.
+	 */
+	var shouldBlinkFlashlightTimer: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.key_default_timer_flashlight_should_blink)
+			val defaultValue = false
+
+			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_timer_flashlight_should_blink)
+
+			saveBoolean(key, value)
+		}
+
+	/**
 	 * Whether to use delete the alarm after it is dismissed or not.
 	 */
-	var shouldDeleteAlarmAfterDismissed: Boolean
+	var shouldDeleteAfterDismissed: Boolean
 		get()
 		{
 			val key = resources.getString(R.string.key_default_alarm_dismiss_should_delete_alarm_after_dismissed)
@@ -1520,6 +1842,24 @@ class NacSharedPreferences(context: Context)
 		set(value)
 		{
 			val key = resources.getString(R.string.key_default_alarm_dismiss_should_delete_alarm_after_dismissed)
+
+			saveBoolean(key, value)
+		}
+
+	/**
+	 * Whether to use delete the timer after it is dismissed or not.
+	 */
+	var shouldDeleteAfterDismissedTimer: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.key_default_timer_dismiss_should_delete_alarm_after_dismissed)
+			val defaultValue = false
+
+			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_timer_dismiss_should_delete_alarm_after_dismissed)
 
 			saveBoolean(key, value)
 		}
@@ -1543,7 +1883,7 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
-	 * Whether volume should be gradually increased or not.
+	 * Whether volume should be gradually increased or not for an alarm.
 	 */
 	var shouldGraduallyIncreaseVolume: Boolean
 		get()
@@ -1556,6 +1896,24 @@ class NacSharedPreferences(context: Context)
 		set(value)
 		{
 			val key = resources.getString(R.string.key_default_alarm_volume_should_gradually_increase_volume)
+
+			saveBoolean(key, value)
+		}
+
+	/**
+	 * Whether volume should be gradually increased or not for a timer.
+	 */
+	var shouldGraduallyIncreaseVolumeTimer: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.key_default_timer_volume_should_gradually_increase_volume)
+			val defaultValue = false
+
+			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_timer_volume_should_gradually_increase_volume)
 
 			saveBoolean(key, value)
 		}
@@ -1597,7 +1955,25 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
-	 * Whether volume should be restricted or not.
+	 * Whether the timer should be repeated or not.
+	 */
+	var shouldRepeatTimer: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.key_default_timer_repeat_should_repeat)
+			val defaultValue = false
+
+			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_timer_repeat_should_repeat)
+
+			saveBoolean(key, value)
+		}
+
+	/**
+	 * Whether volume should be restricted or not for an alarm.
 	 */
 	var shouldRestrictVolume: Boolean
 		get()
@@ -1610,6 +1986,24 @@ class NacSharedPreferences(context: Context)
 		set(value)
 		{
 			val key = resources.getString(R.string.key_default_alarm_volume_should_restrict_volume)
+
+			saveBoolean(key, value)
+		}
+
+	/**
+	 * Whether volume should be restricted or not for a timer.
+	 */
+	var shouldRestrictVolumeTimer: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.key_default_timer_volume_should_restrict_volume)
+			val defaultValue = false
+
+			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_timer_volume_should_restrict_volume)
 
 			saveBoolean(key, value)
 		}
@@ -1651,7 +2045,25 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
-	 * Whether to say the current time or not via text-to-speech.
+	 * Whether to say the timer name or not via text-to-speech.
+	 */
+	var shouldSayAlarmNameTimer: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.key_default_timer_tts_should_say_alarm_name)
+			val defaultValue = false
+
+			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_timer_tts_should_say_alarm_name)
+
+			saveBoolean(key, value)
+		}
+
+	/**
+	 * Whether to say the current time or not via text-to-speech for an alarm.
 	 */
 	var shouldSayCurrentTime: Boolean
 		get()
@@ -1664,6 +2076,24 @@ class NacSharedPreferences(context: Context)
 		set(value)
 		{
 			val key = resources.getString(R.string.key_default_alarm_tts_should_say_current_time)
+
+			saveBoolean(key, value)
+		}
+
+	/**
+	 * Whether to say the current time or not via text-to-speech for a timer.
+	 */
+	var shouldSayCurrentTimeTimer: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.key_default_timer_tts_should_say_current_time)
+			val defaultValue = false
+
+			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_timer_tts_should_say_current_time)
 
 			saveBoolean(key, value)
 		}
@@ -1813,7 +2243,7 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
-	 * Whether to shuffle media or not.
+	 * Whether to shuffle media or not for an alarm.
 	 */
 	var shouldShuffleMedia: Boolean
 		get()
@@ -1826,6 +2256,24 @@ class NacSharedPreferences(context: Context)
 		set(value)
 		{
 			val key = resources.getString(R.string.key_default_alarm_media_should_shuffle_media)
+
+			saveBoolean(key, value)
+		}
+
+	/**
+	 * Whether to shuffle media or not for a timer.
+	 */
+	var shouldShuffleMediaTimer: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.key_default_timer_media_should_shuffle_media)
+			val defaultValue = false
+
+			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_timer_media_should_shuffle_media)
 
 			saveBoolean(key, value)
 		}
@@ -1849,7 +2297,7 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
-	 * Whether the flashlight should be used or not.
+	 * Whether the flashlight should be used or not for an alarm.
 	 */
 	var shouldUseFlashlight: Boolean
 		get()
@@ -1862,6 +2310,24 @@ class NacSharedPreferences(context: Context)
 		set(value)
 		{
 			val key = resources.getString(R.string.key_default_alarm_flashlight_should_use_flashlight)
+
+			saveBoolean(key, value)
+		}
+
+	/**
+	 * Whether the flashlight should be used or not for a timer.
+	 */
+	var shouldUseFlashlightTimer: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.key_default_timer_flashlight_should_use_flashlight)
+			val defaultValue = false
+
+			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_timer_flashlight_should_use_flashlight)
 
 			saveBoolean(key, value)
 		}
@@ -1885,7 +2351,7 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
-	 * Whether NFC is required or not.
+	 * Whether NFC is required or not for an alarm.
 	 */
 	var shouldUseNfc: Boolean
 		get()
@@ -1898,6 +2364,24 @@ class NacSharedPreferences(context: Context)
 		set(value)
 		{
 			val key = resources.getString(R.string.key_default_alarm_nfc_should_use_nfc)
+
+			saveBoolean(key, value)
+		}
+
+	/**
+	 * Whether NFC is required or not for a timer.
+	 */
+	var shouldUseNfcTimer: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.key_default_timer_nfc_should_use_nfc)
+			val defaultValue = false
+
+			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_timer_nfc_should_use_nfc)
 
 			saveBoolean(key, value)
 		}
@@ -1921,7 +2405,7 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
-	 * Whether the alarm should vibrate the phone or not.
+	 * Whether the alarm should vibrate the device or not.
 	 */
 	var shouldVibrate: Boolean
 		get()
@@ -1939,7 +2423,25 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
-	 * Whether to vibrate using a pattern or not.
+	 * Whether the timer should vibrate the device or not.
+	 */
+	var shouldVibrateTimer: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.key_default_timer_vibrate_should_vibrate)
+			val defaultValue = true
+
+			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_timer_vibrate_should_vibrate)
+
+			saveBoolean(key, value)
+		}
+
+	/**
+	 * Whether to vibrate using a pattern or not for an alarm.
 	 */
 	var shouldVibratePattern: Boolean
 		get()
@@ -1952,6 +2454,24 @@ class NacSharedPreferences(context: Context)
 		set(value)
 		{
 			val key = resources.getString(R.string.key_default_alarm_vibrate_should_vibrate_pattern)
+
+			saveBoolean(key, value)
+		}
+
+	/**
+	 * Whether to vibrate using a pattern or not for a timer.
+	 */
+	var shouldVibratePatternTimer: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.key_default_timer_vibrate_should_vibrate_pattern)
+			val defaultValue = false
+
+			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_timer_vibrate_should_vibrate_pattern)
 
 			saveBoolean(key, value)
 		}
@@ -2071,7 +2591,7 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
-	 * Text-to-speech frequency at which it will speak.
+	 * Text-to-speech frequency at which it will speak for an alarm.
 	 */
 	var ttsFrequency: Int
 		get()
@@ -2089,7 +2609,25 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
-	 * Text-to-speech speech rate.
+	 * Text-to-speech frequency at which it will speak for a timer.
+	 */
+	var ttsFrequencyTimer: Int
+		get()
+		{
+			val key = resources.getString(R.string.key_default_timer_tts_speak_frequency)
+			val defaultValue = 0
+
+			return instance.getInt(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_timer_tts_speak_frequency)
+
+			saveInt(key, value)
+		}
+
+	/**
+	 * Text-to-speech speech rate for an alarm.
 	 */
 	var ttsSpeechRate: Float
 		get()
@@ -2106,7 +2644,24 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
-	 * Text-to-speech voice name.
+	 * Text-to-speech speech rate for a timer.
+	 */
+	var ttsSpeechRateTimer: Float
+		get()
+		{
+			val key = resources.getString(R.string.key_default_timer_tts_speech_rate)
+
+			return instance.getFloat(key, 0.7f)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_timer_tts_speech_rate)
+
+			saveFloat(key, value)
+		}
+
+	/**
+	 * Text-to-speech voice name for an alarm.
 	 */
 	var ttsVoice: String
 		get()
@@ -2123,7 +2678,24 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
-	 * Duration to vibrate the device for.
+	 * Text-to-speech voice name for a timer.
+	 */
+	var ttsVoiceTimer: String
+		get()
+		{
+			val key = resources.getString(R.string.key_default_timer_tts_voice)
+
+			return instance.getString(key, "") ?: ""
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_timer_tts_voice)
+
+			saveString(key, value)
+		}
+
+	/**
+	 * Duration to vibrate the device for, for an alarm.
 	 */
 	var vibrateDuration: Long
 		get()
@@ -2141,7 +2713,25 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
-	 * Number of times to repeat the vibration.
+	 * Duration to vibrate the device for, for a timer.
+	 */
+	var vibrateDurationTimer: Long
+		get()
+		{
+			val key = resources.getString(R.string.key_default_timer_vibrate_duration)
+			val defaultValue = 500L
+
+			return instance.getLong(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_timer_vibrate_duration)
+
+			saveLong(key, value)
+		}
+
+	/**
+	 * Number of times to repeat the vibration for an alarm.
 	 */
 	var vibrateRepeatPattern: Int
 		get()
@@ -2159,7 +2749,25 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
-	 * Amount of time to wait in between vibrations.
+	 * Number of times to repeat the vibration for a timer.
+	 */
+	var vibrateRepeatPatternTimer: Int
+		get()
+		{
+			val key = resources.getString(R.string.key_default_timer_vibrate_repeat_pattern)
+			val defaultValue = 3
+
+			return instance.getInt(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_timer_vibrate_repeat_pattern)
+
+			saveInt(key, value)
+		}
+
+	/**
+	 * Amount of time to wait in between vibrations for an alarm.
 	 */
 	var vibrateWaitTime: Long
 		get()
@@ -2177,8 +2785,26 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
+	 * Amount of time to wait in between vibrations for a timer.
+	 */
+	var vibrateWaitTimeTimer: Long
+		get()
+		{
+			val key = resources.getString(R.string.key_default_timer_vibrate_wait_time)
+			val defaultValue = 1000L
+
+			return instance.getLong(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_timer_vibrate_wait_time)
+
+			saveLong(key, value)
+		}
+
+	/**
 	 * Amount of time to wait after the vibration has been repeated the set number of
-	 * times.
+	 * times for an alarm.
 	 */
 	var vibrateWaitTimeAfterPattern: Long
 		get()
@@ -2196,19 +2822,56 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
+	 * Amount of time to wait after the vibration has been repeated the set number of
+	 * times for a timer.
+	 */
+	var vibrateWaitTimeAfterPatternTimer: Long
+		get()
+		{
+			val key = resources.getString(R.string.key_default_timer_vibrate_wait_time_after_pattern)
+			val defaultValue = 2000L
+
+			return instance.getLong(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_timer_vibrate_wait_time_after_pattern)
+
+			saveLong(key, value)
+		}
+
+	/**
 	 * Alarm volume level.
 	 */
 	var volume: Int
 		get()
 		{
 			val key = resources.getString(R.string.key_default_alarm_volume)
-			val defaultValue = resources.getInteger(R.integer.default_volume)
+			val defaultValue = 75
 
 			return instance.getInt(key, defaultValue)
 		}
 		set(value)
 		{
 			val key = resources.getString(R.string.key_default_alarm_volume)
+
+			saveInt(key, value)
+		}
+
+	/**
+	 * Timer volume level.
+	 */
+	var volumeTimer: Int
+		get()
+		{
+			val key = resources.getString(R.string.key_default_timer_volume)
+			val defaultValue = 75
+
+			return instance.getInt(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_timer_volume)
 
 			saveInt(key, value)
 		}

@@ -18,7 +18,7 @@ import com.nfcalarmclock.view.notification.NacNotification
 import java.util.Calendar
 
 /**
- * Notification to display for active alarms.
+ * Active alarm notification.
  */
 class NacActiveAlarmNotification(
 
@@ -224,22 +224,13 @@ class NacActiveAlarmNotification(
 		return channel
 	}
 
-	/**
-	 * @see NacNotification.show
-	 */
-	public override fun show()
-	{
-		// Super
-		super.show()
-	}
-
 	companion object
 	{
 
 		/**
 		 * Notification ID.
 		 */
-		const val ID = 79
+		const val ID = 69
 
 	}
 

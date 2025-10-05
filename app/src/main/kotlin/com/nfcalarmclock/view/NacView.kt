@@ -25,6 +25,7 @@ import androidx.core.view.updateLayoutParams
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.android.material.slider.Slider
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputLayout
@@ -204,6 +205,23 @@ fun MaterialCheckBox.setupCheckBoxColor(sharedPreferences: NacSharedPreferences)
 
 	// Set the state list of the checkbox
 	this.buttonTintList = ColorStateList(states, colors)
+}
+
+/**
+ * Setup the progress and indicator color of a ProgressIndicator.
+ */
+fun CircularProgressIndicator.setupProgressAndIndicatorColor(sharedPreferences: NacSharedPreferences)
+{
+	// Get the theme color
+	val themeColor = sharedPreferences.themeColor
+
+	// Get the contrast color and blend it with the theme
+	val contrastColor = calcContrastColor(themeColor)
+	val blendedColor = ColorUtils.blendARGB(themeColor, contrastColor, 0.7f)
+
+	// Set the colors
+	this.setIndicatorColor(blendedColor)
+	this.trackColor = themeColor
 }
 
 /**

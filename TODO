@@ -2,6 +2,12 @@
 TODO
 ----
 
+* Change name of notification objects to notification builders
+
+* Add default timer in Settings
+
+* Add loading thing when loading media activity
+
 * When using TTS, volume seems to get louder when coming back to music, and
   then goes down a bit. Is that intentional? Scope revertVolume() as well.
 

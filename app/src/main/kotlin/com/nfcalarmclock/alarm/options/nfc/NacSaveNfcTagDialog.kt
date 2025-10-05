@@ -21,7 +21,7 @@ import kotlinx.coroutines.launch
  * Save an NFC tag that was scanned.
  */
 @AndroidEntryPoint
-class NacSaveNfcTagDialog
+open class NacSaveNfcTagDialog
 	: NacGenericAlarmOptionsDialog()
 {
 
