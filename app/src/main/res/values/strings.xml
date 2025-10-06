@@ -71,6 +71,7 @@
 	<string name="action_alarm_copy">Copy</string>
 	<string name="action_alarm_delete">Delete</string>
 	<string name="action_timer_pause">Pause</string>
+	<string name="action_timer_resume">Resume</string>
 	<string name="action_timer_stop">Stop</string>
 	<string name="action_yes">Yes</string>
 	<string name="action_no">No</string>

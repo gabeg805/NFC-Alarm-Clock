@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Binder
 import android.os.Build
+import android.os.CountDownTimer
 import android.os.Handler
 import android.os.IBinder
 import android.os.PowerManager
@@ -32,6 +33,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.concurrent.TimeUnit
 import javax.inject.Inject
+import kotlin.math.ceil
 
 /**
  * Service to allow a timer to be run.
@@ -43,10 +45,27 @@ class NacActiveTimerService
 {
 
 	/**
-	 * Binder given to clients.
+	 * Listener for when the active timer service is stopped.
 	 */
-	private val binder: NacLocalBinder = NacLocalBinder()
+	fun interface OnActiveTimerServiceStoppedListener
+	{
+		fun onActiveTimerServiceStopped()
+	}
 
+	/**
+	 * Interface for when the countdown timer changes.
+	 */
+	interface OnCountdownTimerChangedListener
+	{
+		fun onCountdownFinished()
+		fun onCountdownPaused()
+		fun onCountdownReset(secUntilFinished: Long)
+		fun onCountdownTick(secUntilFinished: Long, newProgress: Int)
+	}
+
+	/**
+	 * Local binder class that can return the service.
+	 */
 	inner class NacLocalBinder
 		: Binder()
 	{
@@ -58,6 +77,11 @@ class NacActiveTimerService
 		fun getService(): NacActiveTimerService = this@NacActiveTimerService
 
 	}
+
+	/**
+	 * Binder given to clients.
+	 */
+	private val binder: NacLocalBinder = NacLocalBinder()
 
 	/**
 	 * Timer repository.
@@ -96,6 +120,86 @@ class NacActiveTimerService
 	private var autoDismissHandler: Handler? = null
 
 	/**
+	 * Countdown timer.
+	 */
+	var countDownTimer: CountDownTimer? = null
+
+	/**
+	 * Listener for when the service is stopped.
+	 */
+	var onActiveTimerServiceStoppedListener: OnActiveTimerServiceStoppedListener? = null
+
+	/**
+	 * Listener for when the countdown timer changes.
+	 */
+	var onCountdownTimerChangedListener: OnCountdownTimerChangedListener? = null
+
+	/**
+	 * Total duration of the timer, in milliseconds.
+	 */
+	var totalDurationMillis: Long = 0
+
+	/**
+	 * Milliseconds until the countdown finishes.
+	 */
+	var millisUntilFinished: Long = 0
+
+	/**
+	 * Seconds until the countdown finishes.
+	 */
+	val secUntilFinished: Long
+		get() = ceil(millisUntilFinished / 1000f).toLong()
+
+	/**
+	 * Current countdown progress as a percentage.
+	 */
+	val progress: Int
+		get() = ((totalDurationMillis - millisUntilFinished) * 100 / totalDurationMillis).toInt()
+
+	/**
+	 * Whether this is the first tick of the countdown timer, while being connected to
+	 * the fragment, or not.
+	 */
+	var isFirstTick: Boolean = true
+
+	/**
+	 * Add time to the countdown.
+	 */
+	fun addTimeToCountdown(sec: Long)
+	{
+		// Cancel the countdown
+		countDownTimer?.cancel()
+
+		// Add time to the time until finished
+		millisUntilFinished += sec*1000
+		println("New millis : $millisUntilFinished")
+
+		// Time until finished exceeds the total time. Update the total time to match the
+		// new time until finished. Use seconds until finished because it rounds up, in
+		// case the milliseconds are off by a little
+		if (totalDurationMillis < millisUntilFinished)
+		{
+			totalDurationMillis = secUntilFinished * 1000
+			println("Updated total duration to match millis : $totalDurationMillis")
+		}
+
+		// Start the countdown
+		startCountdownTimer()
+	}
+
+	/**
+	 * Add time to the countdown.
+	 */
+	fun cancelCountdownTimer()
+	{
+		// Cancel the countdown
+		countDownTimer?.cancel()
+
+		// Set it to null to indicate that the timer is not running
+		countDownTimer = null
+	}
+
+	/**
 	 * Run cleanup.
 	 */
 	@UnstableApi
@@ -128,6 +232,7 @@ class NacActiveTimerService
 
 			// Dismiss the timer
 			timer!!.isActive = false
+			println("Dismissing timer, so inactive.")
 
 			// TODO: Do I even need to schedule anything because it will either be started or not?
 
@@ -179,6 +284,7 @@ class NacActiveTimerService
 	{
 		// Super
 		super.onBind(intent)
+		println("onBind()")
 
 		return binder
 	}
@@ -222,6 +328,7 @@ class NacActiveTimerService
 		lifecycleScope.launch {
 			if (timer != null)
 			{
+				println("OnDestroy, Makking timer inactive.")
 				timer!!.isActive = false
 				timerRepository.update(timer!!)
 			}
@@ -235,6 +342,7 @@ class NacActiveTimerService
 	 * Called when the service is started.
 	 */
 	@UnstableApi
+	@RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
 	override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int
 	{
 		// Super
@@ -254,20 +362,12 @@ class NacActiveTimerService
 			// Timers are equal. TODO: What should be done here? Could this be equivalent of adding time?
 			ACTION_EQUAL_ALARMS ->
 			{
-				println("DO NOTHING HERE")
+				println("DO NOTHING HERE? EQUAL ALARMS IN TIMER SERVICE")
 				// TODO
 				//NacActiveAlarmActivity.startAlarmActivity(this, alarm!!)
 				return START_STICKY
 
 			}
-
-			// Snooze.
-			// TODO: This could be the equivalent of adding time to the service?
-			//ACTION_SNOOZE_ALARM ->
-			//{
-			//		snooze()
-			//	}
-			//}
 
 			// Start the service
 			ACTION_START_SERVICE ->
@@ -286,12 +386,48 @@ class NacActiveTimerService
 			// Dismiss with NFC
 			ACTION_DISMISS_TIMER_WITH_NFC -> dismiss(usedNfc = true)
 
+			// Pause
+			ACTION_PAUSE_TIMER -> {
+				println("PAUSE TIMER")
+				cancelCountdownTimer()
+				updateNotification()
+				onCountdownTimerChangedListener?.onCountdownPaused()
+			}
+
+			// Resume
+			ACTION_RESUME_TIMER -> {
+				println("RESUMIO TIMER")
+				startCountdownTimer()
+				updateNotification()
+			}
+
 			// The default case if things go wrong
 			else -> stopActiveTimerService()
 
 		}
 
 		return START_NOT_STICKY
+	}
+
+	/**
+	 * Reset the timer.
+	 */
+	@RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
+	fun resetCountdownTimer()
+	{
+		// Set the total duration and millis needed to finish
+		totalDurationMillis = timer!!.duration*1000
+		millisUntilFinished = totalDurationMillis
+
+		// Cancel the countdown
+		cancelCountdownTimer()
+
+		// Update the notification
+		updateNotification()
+
+		// Call the listener
+		println("Total : $totalDurationMillis | Millis : $millisUntilFinished | Sec : $secUntilFinished")
+		onCountdownTimerChangedListener?.onCountdownReset(secUntilFinished)
 	}
 
 	/**
@@ -398,31 +534,96 @@ class NacActiveTimerService
 		// Cleanup any resources
 		cleanup()
 
-		// Get the power manager and timeout for the wakelock
-		val powerManager = getSystemService(POWER_SERVICE) as PowerManager
-		val timeout = timer!!.autoDismissTime * 1000L
-
-		// Acquire the wakelock
-		wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
-			WAKELOCK_TAG)
-		wakeLock!!.acquire(timeout)
-
-		// Start the timer activity
-		// TODO: How to start the fragment? Start activity and indicate fragment?
-		//NacActiveTimerFragment.startAlarmActivity(this, timer!!)
-
-		// Wait for auto dismiss
-		waitForAutoDismiss()
-
-		// Start the wakeup process
-		wakeupProcess = NacWakeupProcess(this, timer!!)
-		wakeupProcess!!.start()
+		// Set the total duration and millis needed to finish
+		// TODO: How do I want to use the isActive time? In relation to say counting down vs ringing and counting up
+		totalDurationMillis = timer!!.duration*1000
+		millisUntilFinished = totalDurationMillis
 
 		// Set the active flag and update the timer in the database
 		lifecycleScope.launch {
 			timer!!.isActive = true
 			timerRepository.update(timer!!)
+			println("Timer is active. Updating the database")
+		 }
+
+		// Start the countdown timer
+		startCountdownTimer()
+	}
+
+	/**
+	 * Start the countdown timer.
+	 */
+	fun startCountdownTimer()
+	{
+		// Start the countdown timer since the fragment is no longer doing it
+		countDownTimer = object : CountDownTimer(millisUntilFinished, 1000)
+		{
+
+			/**
+			 * Every tick of the countdown.
+			 */
+			@RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
+			override fun onTick(millisUntilFinished: Long)
+			{
+				// Set the milliseconds until finished
+				this@NacActiveTimerService.millisUntilFinished = millisUntilFinished
+				println("SERVICE ON TICK : $millisUntilFinished | $secUntilFinished | Total : ${totalDurationMillis / 1000L} | $progress")
+
+				// Update the notification
+				updateNotification()
+
+				// Call the listener
+				onCountdownTimerChangedListener?.onCountdownTick(secUntilFinished, progress)
+
+				// Change the first tick to false once the fragment has been connected
+				// and has received the first tick
+				if ((onCountdownTimerChangedListener != null) && isFirstTick)
+				{
+					isFirstTick = false
+				}
+			}
+
+			/**
+			 * Countdown finished.
+			 */
+			@RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
+			override fun onFinish()
+			{
+				println("SERVICE DONE WITH COUNTDOWN")
+
+				// Set the milliseconds until finished
+				this@NacActiveTimerService.millisUntilFinished = 0
+
+				// Change the seconds in the notification to 0
+				updateNotification()
+
+				// Get the power manager and timeout for the wakelock
+				val powerManager = getSystemService(POWER_SERVICE) as PowerManager
+				val timeout = timer!!.autoDismissTime * 1000L
+
+				// Acquire the wakelock
+				wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
+					WAKELOCK_TAG)
+				wakeLock!!.acquire(timeout)
+
+				// Start the timer activity
+				// TODO: How to start the fragment? Start activity and indicate fragment?
+				//NacActiveTimerFragment.startAlarmActivity(this, timer!!)
+
+				// Wait for auto dismiss
+				waitForAutoDismiss()
+
+				// Start the wakeup process
+				wakeupProcess = NacWakeupProcess(this@NacActiveTimerService, timer!!)
+				wakeupProcess!!.start()
+
+				// Call the listener
+				onCountdownTimerChangedListener?.onCountdownFinished()
+			}
 		}
+
+		// Start the timer
+		countDownTimer!!.start()
 	}
 
 	/**
@@ -431,6 +632,9 @@ class NacActiveTimerService
 	@Suppress("deprecation")
 	fun stopActiveTimerService()
 	{
+		// Call the listener
+		onActiveTimerServiceStoppedListener?.onActiveTimerServiceStopped()
+
 		// Stop the foreground service using the updated form of
 		// stopForeground() for API >= 33
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
@@ -450,7 +654,7 @@ class NacActiveTimerService
 	 * Update the notification.
 	 */
 	@RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
-	fun updateNotification(secUntilFinished: Long)
+	fun updateNotification()
 	{
 		// Get the notification manager and builder
 		val notificationManagerCompat = NotificationManagerCompat.from(this)
@@ -460,9 +664,32 @@ class NacActiveTimerService
 		val newTitle = NacCalendar.getFullTimeUntilTimer(this, secUntilFinished)
 		println("UPDATE NOTIFICATION : New text? $newTitle")
 
-		val notification = notificationBuilder.builder()
+		// Notification builder
+		// TODO: Consolidate this to the variable above
+		var notificationBuilder2 = notificationBuilder.builder()
 			.setContentTitle(newTitle)
-			.build()
+
+		if (millisUntilFinished > 0)
+		{
+			if (countDownTimer == null)
+			{
+				val label = resources.getString(R.string.action_timer_resume)
+				notificationBuilder2 = notificationBuilder2.addAction(R.drawable.play, label, notificationBuilder.resumePendingIntent)
+			}
+			else
+			{
+				val label = resources.getString(R.string.action_timer_pause)
+				notificationBuilder2 = notificationBuilder2.addAction(R.drawable.pause_32, label, notificationBuilder.pausePendingIntent)
+			}
+		}
+		else
+		{
+			val label = resources.getString(R.string.action_timer_stop)
+			notificationBuilder2 = notificationBuilder2.addAction(R.drawable.stop_32, label, notificationBuilder.dismissPendingIntent)
+		}
+
+		// Create the notification
+		val notification = notificationBuilder2.build()
 
 		// Update
 		notificationManagerCompat.notify(notificationBuilder.id, notification)
@@ -521,6 +748,16 @@ class NacActiveTimerService
 		const val ACTION_DISMISS_TIMER_WITH_NFC = "com.nfcalarmclock.timer.active.ACTION_DISMISS_TIMER_WITH_NFC"
 
 		/**
+		 * Action to pause the timer.
+		 */
+		const val ACTION_PAUSE_TIMER = "com.nfcalarmclock.timer.active.ACTION_PAUSE_TIMER"
+
+		/**
+		 * Action to resume the timer.
+		 */
+		const val ACTION_RESUME_TIMER = "com.nfcalarmclock.timer.active.ACTION_RESUME_TIMER"
+
+		/**
 		 * Action to do when alarms are equal. This is to say when the service
 		 * is started with the same alarm.
 		 */
@@ -566,7 +803,6 @@ class NacActiveTimerService
 		 */
 		fun getDismissIntent(context: Context, timer: NacTimer?): Intent
 		{
-			// Create the intent with the timer service
 			return Intent(ACTION_DISMISS_TIMER, null, context, NacActiveTimerService::class.java)
 				.addTimer(timer)
 		}
@@ -580,8 +816,29 @@ class NacActiveTimerService
 		 */
 		private fun getDismissIntentWithNfc(context: Context, timer: NacTimer?): Intent
 		{
-			// Create the intent with the timer service
 			return Intent(ACTION_DISMISS_TIMER_WITH_NFC, null, context, NacActiveTimerService::class.java)
+				.addTimer(timer)
+		}
+
+		/**
+		 * Get an intent to pause the active timer service.
+		 *
+		 * @return An intent to pause the active timer service.
+		 */
+		fun getPauseIntent(context: Context, timer: NacTimer?): Intent
+		{
+			return Intent(ACTION_PAUSE_TIMER, null, context, NacActiveTimerService::class.java)
+				.addTimer(timer)
+		}
+
+		/**
+		 * Get an intent to resume the active timer service.
+		 *
+		 * @return An intent to resume the active timer service.
+		 */
+		fun getResumeIntent(context: Context, timer: NacTimer?): Intent
+		{
+			return Intent(ACTION_RESUME_TIMER, null, context, NacActiveTimerService::class.java)
 				.addTimer(timer)
 		}
 
@@ -596,7 +853,6 @@ class NacActiveTimerService
 		 */
 		fun getStartIntent(context: Context, timer: NacTimer?): Intent
 		{
-			// Create an intent with the timer service
 			return Intent(ACTION_START_SERVICE, null, context, NacActiveTimerService::class.java)
 				.addTimer(timer)
 		}

@@ -2,6 +2,10 @@
 TODO
 ----
 
+* Run optimizer to make sure all the code is good and unused resources are removed before production
+
+* What's new dialog seemed to show up twice. Investigate this.
+
 * Change name of notification objects to notification builders
 
 * Add default timer in Settings

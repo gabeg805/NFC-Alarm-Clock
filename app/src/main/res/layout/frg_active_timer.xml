@@ -136,6 +136,7 @@
 		app:layout_constraintBottom_toTopOf="@id/timer_add_5s"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
+		android:visibility="invisible"
 		/>
 
 	<!-- Add time -->

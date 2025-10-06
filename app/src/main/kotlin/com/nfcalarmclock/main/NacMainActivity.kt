@@ -304,6 +304,11 @@ class NacMainActivity
 
 		// Cleanup any extra media files in device encrypted storage
 		lifecycleScope.launch {  cleanupExtraMediaFilesInDeviceEncryptedStorage() }
+		//lifecycleScope.launch {
+		//	timerViewModel.allTimers.observe(this@NacMainActivity) { allTimers ->
+		//		allTimers.forEach { timerViewModel.delete(it) }
+		//	}
+		//}
 	}
 
 	/**
@@ -428,12 +433,28 @@ class NacMainActivity
 						// No timers. Have user add a timer
 						if (timerViewModel.count() == 0)
 						{
+							println("Showing add a single timer")
 							navController.navigate(R.id.nacAddTimerFragment)
 						}
-						// 1+ timers. Show list of timers
+						// 1+ timers.
 						else
 						{
-							navController.navigate(R.id.nacAddTimerFragment)
+							// Get an active timer, if present
+							val activeTimer = timerViewModel.getActiveTimer()
+
+							// Show active timer
+							if (activeTimer != null)
+							{
+								println("Showing active timer")
+								navController.navigate(R.id.nacActiveTimerFragment, activeTimer.toBundle())
+							}
+							// Show list of timers
+							else
+							{
+								// TODO: Change to show list
+								println("Showing list of timers")
+								navController.navigate(R.id.nacAddTimerFragment)
+							}
 						}
 					}
 					true

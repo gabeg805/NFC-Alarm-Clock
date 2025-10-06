@@ -45,7 +45,7 @@ interface NacTimerDao
 	 *
 	 * @return An active timer.
 	 */
-	@Query("SELECT * FROM timer WHERE is_active=1 LIMIT 1")
+	@Query("SELECT * FROM timer WHERE is_active=1 ORDER BY id ASC LIMIT 1")
 	suspend fun getActiveTimer(): NacTimer?
 
 	/**

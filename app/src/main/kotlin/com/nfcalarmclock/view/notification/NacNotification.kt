@@ -219,6 +219,9 @@ abstract class NacNotification(
 
 	/**
 	 * Show the notification.
+	 *
+	 * TODO: Looks like this class does not inherit from builder because of this method. Do I need this?
+	 * TODO: Could I override build() and return null if I don't have permission?
 	 */
 	protected open fun show()
 	{

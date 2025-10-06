@@ -129,9 +129,9 @@ class NacActiveTimerNotification(
 		}
 
 	/**
-	 * The pending intent to use when dismissing the timer.
+	 * The pending intent to dismiss the timer.
 	 */
-	private val dismissPendingIntent: PendingIntent
+	val dismissPendingIntent: PendingIntent
 		@OptIn(UnstableApi::class)
 		get()
 		{
@@ -146,10 +146,44 @@ class NacActiveTimerNotification(
 		}
 
 	/**
+	 * The pending intent to pause the timer.
+	 */
+	val pausePendingIntent: PendingIntent
+		@OptIn(UnstableApi::class)
+		get()
+		{
+			// Create an intent to pause the active timer service
+			val intent = NacActiveTimerService.getPauseIntent(context, timer)
+
+			// Determine the pending intent flags
+			val flags = PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
+
+			// Create the pending intent
+			return PendingIntent.getService(context, 0, intent, flags)
+		}
+
+	/**
+	 * The pending intent to resume the timer.
+	 */
+	val resumePendingIntent: PendingIntent
+		@OptIn(UnstableApi::class)
+		get()
+		{
+			// Create an intent to resume the active timer service
+			val intent = NacActiveTimerService.getResumeIntent(context, timer)
+
+			// Determine the pending intent flags
+			val flags = PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
+
+			// Create the pending intent
+			return PendingIntent.getService(context, 0, intent, flags)
+		}
+
+	/**
 	 * Whether the timer should use NFC or not.
 	 */
-	private val shouldUseNfc: Boolean
-		get() = (timer != null) && timer.shouldUseNfc && NacSharedPreferences(context).shouldShowNfcButton
+	val shouldUseNfc: Boolean
+		get() = NacNfc.exists(context) && (timer?.shouldUseNfc == true) && NacSharedPreferences(context).shouldShowNfcButton
 
 	/**
 	 * @see NacNotification.builder
@@ -158,7 +192,7 @@ class NacActiveTimerNotification(
 	{
 		// Build the notification
 		var builder = super.builder()
-			.setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_DEFERRED)
+			.setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_DEFAULT)
 			.setAutoCancel(false)
 			.setOngoing(true)
 			.setOnlyAlertOnce(true)
@@ -168,13 +202,13 @@ class NacActiveTimerNotification(
 		// Check if NFC does not need to be used to dismiss the timer
 		// Note: This evaluates to False on the emulator because the emulator
 		// is unable to use NFC
-		if (!NacNfc.exists(context) || !shouldUseNfc)
-		{
-			// Add the stop button to the notification
-			val stop = context.getString(R.string.action_timer_stop)
+		//if (!shouldUseNfc)
+		//{
+		//	// Add the stop button to the notification
+		//	val stop = context.getString(R.string.action_timer_stop)
 
-			builder = builder.addAction(R.drawable.stop_filled_32, stop, dismissPendingIntent)
-		}
+		//	builder = builder.addAction(R.drawable.stop_filled_32, stop, dismissPendingIntent)
+		//}
 
 		// Return the builder
 		return builder

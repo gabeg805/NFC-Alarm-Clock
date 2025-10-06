@@ -240,11 +240,16 @@ class NacAddTimerFragment
 			timer.duration = seconds + minute*60 + hour*3600
 
 			// Save the timer
-			timerViewModel.insert(timer)
+			println("Inserting into jank")
+			timerViewModel.insert(timer) {
+				println("Does timer have id? ${timer.id}")
 
-			// Start the timer
-			NacActiveTimerService.startTimerService(context, timer)
-			findNavController().navigate(R.id.nacActiveTimerFragment, timer.toBundle())
+				// Start the timer
+				NacActiveTimerService.startTimerService(context, timer)
+				findNavController().navigate(R.id.nacActiveTimerFragment, timer.toBundle())
+
+			}
+
 		}
 
 		// Setup more button click
