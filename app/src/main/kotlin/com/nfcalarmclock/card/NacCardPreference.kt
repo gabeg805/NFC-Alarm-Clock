@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import androidx.preference.Preference
 import androidx.preference.PreferenceViewHolder
 import com.nfcalarmclock.R
+import com.nfcalarmclock.alarm.card.NacAlarmCardHolder
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.nfc.db.NacNfcTag
 import com.nfcalarmclock.shared.NacSharedPreferences
@@ -108,7 +109,7 @@ class NacCardPreference @JvmOverloads constructor(
 	/**
 	 * Alarm card.
 	 */
-	lateinit var card: NacCardHolder
+	lateinit var card: NacAlarmCardHolder
 
 	// Constructor
 	init
@@ -128,7 +129,7 @@ class NacCardPreference @JvmOverloads constructor(
 		// Create the alarm card holder object
 		val sharedPreferences = NacSharedPreferences(context)
 		val alarm = NacAlarm.build(sharedPreferences)
-		card = NacCardHolder(holder.itemView)
+		card = NacAlarmCardHolder(holder.itemView)
 
 		// Bind the alarm to the card and expand the card
 		card.bind(alarm)
@@ -141,61 +142,61 @@ class NacCardPreference @JvmOverloads constructor(
 		card.switch.alpha = calcAlpha(false)
 
 		// Days
-		card.onCardDaysChangedListener = NacCardHolder.OnCardDaysChangedListener { _, a ->
+		card.onCardDaysChangedListener = NacAlarmCardHolder.OnCardDaysChangedListener { _, a ->
 			sharedPreferences.days = a.days.daysToValue()
 		}
 
 		// Repeat
-		card.onCardUseRepeatChangedListener = NacCardHolder.OnCardUseRepeatChangedListener { _, a ->
+		card.onCardUseRepeatChangedListener = NacAlarmCardHolder.OnCardUseRepeatChangedListener { _, a ->
 			sharedPreferences.shouldRepeat = a.shouldRepeat
 			card.toastRepeat(context)
 		}
 
 		// Vibrate
-		card.onCardUseVibrateChangedListener = NacCardHolder.OnCardUseVibrateChangedListener { _, a ->
+		card.onCardUseVibrateChangedListener = NacAlarmCardHolder.OnCardUseVibrateChangedListener { _, a ->
 			sharedPreferences.shouldVibrate = a.shouldVibrate
 			card.toastVibrate(context)
 		}
 
 		// NFC
-		card.onCardUseNfcChangedListener = NacCardHolder.OnCardUseNfcChangedListener { _, a ->
+		card.onCardUseNfcChangedListener = NacAlarmCardHolder.OnCardUseNfcChangedListener { _, a ->
 			sharedPreferences.shouldUseNfc = a.shouldUseNfc
 			card.toastNfc(context, allNfcTags)
 		}
 
 		// Flashlight
-		card.onCardUseFlashlightChangedListener = NacCardHolder.OnCardUseFlashlightChangedListener { _, a ->
+		card.onCardUseFlashlightChangedListener = NacAlarmCardHolder.OnCardUseFlashlightChangedListener { _, a ->
 			sharedPreferences.shouldUseFlashlight = a.shouldUseFlashlight
 			card.toastFlashlight(context)
 		}
 
 		// Media
-		card.onCardMediaClickedListener = NacCardHolder.OnCardMediaClickedListener { _, a ->
+		card.onCardMediaClickedListener = NacAlarmCardHolder.OnCardMediaClickedListener { _, a ->
 			onCardMediaClickedListener?.onCardMediaClicked(a)
 		}
 
 		// Volume
-		card.onCardVolumeChangedListener = NacCardHolder.OnCardVolumeChangedListener { _, a ->
+		card.onCardVolumeChangedListener = NacAlarmCardHolder.OnCardVolumeChangedListener { _, a ->
 			sharedPreferences.volume = a.volume
 		}
 
 		// Name
-		card.onCardNameClickedListener = NacCardHolder.OnCardNameClickedListener { _, a ->
+		card.onCardNameClickedListener = NacAlarmCardHolder.OnCardNameClickedListener { _, a ->
 			onCardNameClickedListener?.onCardNameClicked(a)
 		}
 
 		// Dismiss options
-		card.onCardDismissOptionsClickedListener = NacCardHolder.OnCardDismissOptionsClickedListener { _, a ->
+		card.onCardDismissOptionsClickedListener = NacAlarmCardHolder.OnCardDismissOptionsClickedListener { _, a ->
 			onCardDismissOptionsClickedListener?.onCardDismissOptionsClicked(a)
 		}
 
 		// Snooze options
-		card.onCardSnoozeOptionsClickedListener = NacCardHolder.OnCardSnoozeOptionsClickedListener { _, a ->
+		card.onCardSnoozeOptionsClickedListener = NacAlarmCardHolder.OnCardSnoozeOptionsClickedListener { _, a ->
 			onCardSnoozeOptionsClickedListener?.onCardSnoozeOptionsClicked(a)
 		}
 
 		// Alarm options
-		card.onCardAlarmOptionsClickedListener = NacCardHolder.OnCardAlarmOptionsClickedListener { _, a ->
+		card.onCardAlarmOptionsClickedListener = NacAlarmCardHolder.OnCardAlarmOptionsClickedListener { _, a ->
 			onCardAlarmOptionsClickedListener?.onCardAlarmOptionsClicked(a)
 		}
 

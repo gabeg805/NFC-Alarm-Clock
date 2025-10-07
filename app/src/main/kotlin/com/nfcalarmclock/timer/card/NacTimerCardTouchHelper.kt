@@ -8,8 +8,5 @@ import com.nfcalarmclock.timer.db.NacTimer
  * Card touch helper for timers.
  */
 class NacTimerCardTouchHelper(
-
 	onCardSwipedListener: NacBaseCardTouchHelperCallback.OnCardSwipedListener<NacTimer>
-
-	// Constructor
 ) : ItemTouchHelper(NacBaseCardTouchHelperCallback(onCardSwipedListener))

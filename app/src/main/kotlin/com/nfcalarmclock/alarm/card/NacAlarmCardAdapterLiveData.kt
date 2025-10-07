@@ -1,9 +1,9 @@
-package com.nfcalarmclock.card
+package com.nfcalarmclock.alarm.card
 
 import androidx.lifecycle.MutableLiveData
 import com.nfcalarmclock.alarm.db.NacAlarm
 
-class NacCardAdapterLiveData
+class NacAlarmCardAdapterLiveData
 	: MutableLiveData<List<NacAlarm>>()
 {
 

@@ -14,11 +14,8 @@ import com.nfcalarmclock.alarm.db.NacAlarm
  *
  * @param onCardSwipedListener Listener for when the card is swiped.
  */
-class NacBaseCardTouchHelperCallback<T: NacAlarm>(
-
+open class NacBaseCardTouchHelperCallback<T: NacAlarm>(
 	private val onCardSwipedListener: OnCardSwipedListener<T>
-
-	// Constructor
 ) : ItemTouchHelper.Callback()
 {
 
@@ -66,7 +63,7 @@ class NacBaseCardTouchHelperCallback<T: NacAlarm>(
 	 *
 	 * @return The card holder.
 	 */
-	private fun getCardHolder(vh: RecyclerView.ViewHolder): NacBaseCardHolder<T>
+	protected fun getCardHolder(vh: RecyclerView.ViewHolder): NacBaseCardHolder<T>
 	{
 		return vh as NacBaseCardHolder<T>
 	}
@@ -120,17 +117,6 @@ class NacBaseCardTouchHelperCallback<T: NacAlarm>(
 	override fun getMovementFlags(rv: RecyclerView, vh: RecyclerView.ViewHolder): Int
 	{
 		return makeMovementFlags(0, LEFT or RIGHT)
-		// TODO: Only alarm needs this
-		//// Check if collapsed
-		//return if (isCollapsed(vh))
-		//{
-		//	makeMovementFlags(0, LEFT or RIGHT)
-		//}
-		//// Expanded
-		//else
-		//{
-		//	0
-		//}
 	}
 
 	/**
@@ -150,19 +136,6 @@ class NacBaseCardTouchHelperCallback<T: NacAlarm>(
 	{
 		return 0.5f
 	}
-
-	// TODO: Only alarm needs this
-	///**
-	// * Check if card is collapsed.
-	// */
-	//private fun isCollapsed(vh: RecyclerView.ViewHolder): Boolean
-	//{
-	//	// Get the card holder
-	//	val holder = getCardHolder(vh)
-
-	//	// Check if the card is collapsed or the alarm is not in use
-	//	return holder.isCollapsed && !holder.isAlarmInUse
-	//}
 
 	/**
 	 * Allow the card to be swiped.
@@ -204,13 +177,6 @@ class NacBaseCardTouchHelperCallback<T: NacAlarm>(
 		action: Int,
 		active: Boolean)
 	{
-		// TODO: Only alarm needs this
-		//// Do nothing if the card is expanded
-		//if (!isCollapsed(vh))
-		//{
-		//	return
-		//}
-
 		// Get the foreground view
 		val fg = getCardView(vh)
 
@@ -269,13 +235,7 @@ class NacBaseCardTouchHelperCallback<T: NacAlarm>(
 	 */
 	override fun onSwiped(vh: RecyclerView.ViewHolder, direction: Int)
 	{
-		// TODO: Only alarm needs this
-		//// Do nothing if the card is expanded
-		//if (!isCollapsed(vh))
-		//{
-		//	return
-		//}
-
+		// Get the item that is being swiped
 		val adapter = vh.bindingAdapter as NacBaseCardAdapter<*, *>
 		val index = vh.bindingAdapterPosition
 		val item = adapter.getItemAt(index) as T

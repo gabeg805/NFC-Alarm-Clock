@@ -28,7 +28,6 @@ import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.db.NacNextAlarm
 import com.nfcalarmclock.card.NacBaseCardAdapter
 import com.nfcalarmclock.card.NacBaseCardTouchHelperCallback
-import com.nfcalarmclock.card.NacCardAdapterLiveData
 import com.nfcalarmclock.card.NacCardLayoutManager
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.NacBundle.BUNDLE_INTENT_ACTION

@@ -13,12 +13,8 @@ import com.nfcalarmclock.shared.NacSharedPreferences
  *
  * @param root Root view.
  */
-abstract class NacBaseCardHolder<T: NacAlarm>(
-
-	val root: View
-
-	// Constructor
-) : RecyclerView.ViewHolder(root)
+abstract class NacBaseCardHolder<T: NacAlarm>(val root: View)
+	: RecyclerView.ViewHolder(root)
 {
 
 	/**
@@ -40,16 +36,6 @@ abstract class NacBaseCardHolder<T: NacAlarm>(
 	 * Delete swipe view.
 	 */
 	val deleteSwipeView: RelativeLayout? = root.findViewById(R.id.nac_swipe_delete)
-
-	///**
-	// * Constructor.
-	// */
-	//init
-	//{
-	//	// Initialize the colors and listeners
-	//	initColors()
-	//	initListeners()
-	//}
 
 	/**
 	 * Hide the swipe views.

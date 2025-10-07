@@ -11,12 +11,13 @@ import com.nfcalarmclock.view.performHapticFeedback
 import com.nfcalarmclock.view.setupThemeColor
 
 /**
- * Timer card holder.
+ * Timer ViewHolder for a CardView.
  *
  * @param root Root view.
  */
-class NacTimerCardHolder(root: View)
-	: NacBaseCardHolder<NacTimer>(root)
+class NacTimerCardHolder(
+	root: View
+) : NacBaseCardHolder<NacTimer>(root)
 {
 
 	/**

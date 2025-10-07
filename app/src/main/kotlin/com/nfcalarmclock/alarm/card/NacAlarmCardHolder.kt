@@ -1,4 +1,4 @@
-package com.nfcalarmclock.card
+package com.nfcalarmclock.alarm.card
 
 import android.animation.Animator
 import android.animation.AnimatorInflater
@@ -10,16 +10,13 @@ import android.view.ViewGroup
 import android.view.animation.AccelerateInterpolator
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.RelativeLayout
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.TextView
 import androidx.annotation.OptIn
 import androidx.appcompat.widget.SwitchCompat
-import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat
 import androidx.media3.common.util.UnstableApi
-import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.color.MaterialColors
 import com.nfcalarmclock.R
@@ -27,7 +24,6 @@ import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmService.Companion.dismi
 import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmService.Companion.startAlarmService
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.nfc.db.NacNfcTag
-import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.NacCalendar.Day
 import com.nfcalarmclock.util.NacUtility.getHeight
 import com.nfcalarmclock.util.NacUtility.quickToast
@@ -39,17 +35,18 @@ import com.nfcalarmclock.view.setupRippleColor
 import com.nfcalarmclock.view.setupSwitchColor
 import androidx.core.view.isGone
 import androidx.core.view.isVisible
+import com.nfcalarmclock.card.NacBaseCardHolder
+import com.nfcalarmclock.card.NacHeightAnimator
 import com.nfcalarmclock.system.toDayString
 import java.util.EnumSet
 
 /**
- * Card view holder.
+ * Alarm ViewHolder for a CardView.
  *
  * @param root Root view.
  */
-class NacCardHolder(
-	val root: View
-) : RecyclerView.ViewHolder(root)
+class NacAlarmCardHolder(root: View)
+	: NacBaseCardHolder<NacAlarm>(root)
 {
 
 	/**
@@ -57,7 +54,7 @@ class NacCardHolder(
 	 */
 	fun interface OnCardAlarmOptionsClickedListener
 	{
-		fun onCardAlarmOptionsClicked(card: NacCardHolder, alarm: NacAlarm)
+		fun onCardAlarmOptionsClicked(card: NacAlarmCardHolder, alarm: NacAlarm)
 	}
 
 	/**
@@ -65,7 +62,7 @@ class NacCardHolder(
 	 */
 	fun interface OnCardButtonLongClickedListener
 	{
-		fun onCardButtonLongClicked(card: NacCardHolder, alarm: NacAlarm, destinationId: Int)
+		fun onCardButtonLongClicked(card: NacAlarmCardHolder, alarm: NacAlarm, destinationId: Int)
 	}
 
 	/**
@@ -73,7 +70,7 @@ class NacCardHolder(
 	 */
 	fun interface OnCardCollapsedListener
 	{
-		fun onCardCollapsed(card: NacCardHolder, alarm: NacAlarm)
+		fun onCardCollapsed(card: NacAlarmCardHolder, alarm: NacAlarm)
 	}
 
 	/**
@@ -81,7 +78,7 @@ class NacCardHolder(
 	 */
 	fun interface OnCardDaysChangedListener
 	{
-		fun onCardDaysChanged(card: NacCardHolder, alarm: NacAlarm)
+		fun onCardDaysChanged(card: NacAlarmCardHolder, alarm: NacAlarm)
 	}
 
 	/**
@@ -89,7 +86,7 @@ class NacCardHolder(
 	 */
 	fun interface OnCardDismissEarlyClickedListener
 	{
-		fun onCardDismissEarlyClicked(card: NacCardHolder, alarm: NacAlarm)
+		fun onCardDismissEarlyClicked(card: NacAlarmCardHolder, alarm: NacAlarm)
 	}
 
 	/**
@@ -97,7 +94,7 @@ class NacCardHolder(
 	 */
 	fun interface OnCardDismissOptionsClickedListener
 	{
-		fun onCardDismissOptionsClicked(card: NacCardHolder, alarm: NacAlarm)
+		fun onCardDismissOptionsClicked(card: NacAlarmCardHolder, alarm: NacAlarm)
 	}
 
 	/**
@@ -105,7 +102,7 @@ class NacCardHolder(
 	 */
 	fun interface OnCardExpandedListener
 	{
-		fun onCardExpanded(card: NacCardHolder, alarm: NacAlarm)
+		fun onCardExpanded(card: NacAlarmCardHolder, alarm: NacAlarm)
 	}
 
 	/**
@@ -113,7 +110,7 @@ class NacCardHolder(
 	 */
 	fun interface OnCardMediaClickedListener
 	{
-		fun onCardMediaClicked(card: NacCardHolder, alarm: NacAlarm)
+		fun onCardMediaClicked(card: NacAlarmCardHolder, alarm: NacAlarm)
 	}
 
 	/**
@@ -121,7 +118,7 @@ class NacCardHolder(
 	 */
 	fun interface OnCardNameClickedListener
 	{
-		fun onCardNameClicked(card: NacCardHolder, alarm: NacAlarm)
+		fun onCardNameClicked(card: NacAlarmCardHolder, alarm: NacAlarm)
 	}
 
 	/**
@@ -129,7 +126,7 @@ class NacCardHolder(
 	 */
 	fun interface OnCardSnoozeOptionsClickedListener
 	{
-		fun onCardSnoozeOptionsClicked(card: NacCardHolder, alarm: NacAlarm)
+		fun onCardSnoozeOptionsClicked(card: NacAlarmCardHolder, alarm: NacAlarm)
 	}
 
 	/**
@@ -137,7 +134,7 @@ class NacCardHolder(
 	 */
 	fun interface OnCardSwitchChangedListener
 	{
-		fun onCardSwitchChanged(card: NacCardHolder, alarm: NacAlarm)
+		fun onCardSwitchChanged(card: NacAlarmCardHolder, alarm: NacAlarm)
 	}
 
 	/**
@@ -145,7 +142,7 @@ class NacCardHolder(
 	 */
 	fun interface OnCardTimeClickedListener
 	{
-		fun onCardTimeClicked(card: NacCardHolder, alarm: NacAlarm)
+		fun onCardTimeClicked(card: NacAlarmCardHolder, alarm: NacAlarm)
 	}
 
 	/**
@@ -153,7 +150,7 @@ class NacCardHolder(
 	 */
 	fun interface OnCardUpdatedListener
 	{
-		fun onCardUpdated(card: NacCardHolder, alarm: NacAlarm)
+		fun onCardUpdated(card: NacAlarmCardHolder, alarm: NacAlarm)
 	}
 
 	/**
@@ -161,7 +158,7 @@ class NacCardHolder(
 	 */
 	fun interface OnCardUseFlashlightChangedListener
 	{
-		fun onCardUseFlashlightChanged(card: NacCardHolder, alarm: NacAlarm)
+		fun onCardUseFlashlightChanged(card: NacAlarmCardHolder, alarm: NacAlarm)
 	}
 
 	/**
@@ -169,7 +166,7 @@ class NacCardHolder(
 	 */
 	fun interface OnCardUseNfcChangedListener
 	{
-		fun onCardUseNfcChanged(card: NacCardHolder, alarm: NacAlarm)
+		fun onCardUseNfcChanged(card: NacAlarmCardHolder, alarm: NacAlarm)
 	}
 
 	/**
@@ -177,7 +174,7 @@ class NacCardHolder(
 	 */
 	fun interface OnCardUseRepeatChangedListener
 	{
-		fun onCardUseRepeatChanged(card: NacCardHolder, alarm: NacAlarm)
+		fun onCardUseRepeatChanged(card: NacAlarmCardHolder, alarm: NacAlarm)
 	}
 
 	/**
@@ -185,7 +182,7 @@ class NacCardHolder(
 	 */
 	fun interface OnCardUseVibrateChangedListener
 	{
-		fun onCardUseVibrateChanged(card: NacCardHolder, alarm: NacAlarm)
+		fun onCardUseVibrateChanged(card: NacAlarmCardHolder, alarm: NacAlarm)
 	}
 
 	/**
@@ -193,33 +190,13 @@ class NacCardHolder(
 	 */
 	fun interface OnCardVolumeChangedListener
 	{
-		fun onCardVolumeChanged(card: NacCardHolder, alarm: NacAlarm)
+		fun onCardVolumeChanged(card: NacAlarmCardHolder, alarm: NacAlarm)
 	}
-
-	/**
-	 * Shared preferences.
-	 */
-	private val sharedPreferences: NacSharedPreferences = NacSharedPreferences(context)
 
 	/**
 	 * Alarm.
 	 */
 	var alarm: NacAlarm? = null
-
-	/**
-	 * Card view.
-	 */
-	val cardView: CardView = root.findViewById(R.id.nac_card)
-
-	/**
-	 * Copy swipe view.
-	 */
-	val copySwipeView: RelativeLayout? = root.findViewById(R.id.nac_swipe_copy)
-
-	/**
-	 * Delete swipe view.
-	 */
-	val deleteSwipeView: RelativeLayout? = root.findViewById(R.id.nac_swipe_delete)
 
 	/**
 	 * Header view.
@@ -568,19 +545,20 @@ class NacCardHolder(
 	/**
 	 * Bind the alarm to the card view.
 	 */
-	fun bind(alarm: NacAlarm)
+	override fun bind(item: NacAlarm)
 	{
 		// Set the alarm and binding flag
-		this.alarm = alarm
+		alarm = item
 		isBinding = true
 
-		// Hide the swipe views
-		hideSwipeViews()
+		// Hide the views such as vibrate, NFC, and flashlight, if the user does not want them visible
 		hideAppearanceSettingViews()
 
-		// Setup the views and the meridian color because it is dependent on the alarm
-		// being bound to the card holder
-		initViews()
+		// Super
+		super.bind(item)
+
+		// Setup the meridian color because it is dependent on the alarm being bound to
+		// the card holder
 		setMeridianColor()
 
 		// Unset the binding flag
@@ -889,15 +867,6 @@ class NacCardHolder(
 	}
 
 	/**
-	 * Hide the swipe views.
-	 */
-	private fun hideSwipeViews()
-	{
-		copySwipeView?.visibility = View.GONE
-		deleteSwipeView?.visibility = View.GONE
-	}
-
-	/**
 	 * Highlight the alarm card.
 	 */
 	fun highlight()
@@ -922,7 +891,7 @@ class NacCardHolder(
 	 * Do not initialize the meridian color because when this is called, then alarm still
 	 * has not been bound to the card holder.
 	 */
-	private fun initColors()
+	override fun initColors()
 	{
 		setDividerColor()
 		timeView.setTextColor(sharedPreferences.timeColor)
@@ -949,7 +918,7 @@ class NacCardHolder(
 	/**
 	 * Initialize the listeners of the various views.
 	 */
-	private fun initListeners()
+	override fun initListeners()
 	{
 		setupCardExpandCollapseClickListeners()
 		setupCardAnimatorListener()
@@ -977,7 +946,7 @@ class NacCardHolder(
 	/**
 	 * Initialize the various views.
 	 */
-	private fun initViews()
+	override fun initViews()
 	{
 		refreshExtraViewWithCollapse()
 		setTimeView()
@@ -2232,7 +2201,7 @@ class NacCardHolder(
 				}
 
 				// Call the listener
-				onCardVolumeChangedListener?.onCardVolumeChanged(this@NacCardHolder, alarm!!)
+				onCardVolumeChangedListener?.onCardVolumeChanged(this@NacAlarmCardHolder, alarm!!)
 			}
 
 		})
