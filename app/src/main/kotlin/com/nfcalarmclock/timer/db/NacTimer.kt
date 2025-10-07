@@ -6,7 +6,6 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.shared.NacSharedPreferences
-import com.nfcalarmclock.system.removeToday
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -145,6 +144,80 @@ class NacTimer()
 		shouldAutoDismiss = input.readInt() != 0
 		autoDismissTime = input.readInt()
 		shouldVolumeStop = input.readInt() != 0
+	}
+
+	/**
+	 * Create a copy of this timer.
+	 *
+	 * The ID of the new timer will be set to 0.
+	 *
+	 * @return A copy of this timer.
+	 */
+	override fun copy(): NacTimer
+	{
+		val timer = build()
+
+		// ID
+		timer.id = 0
+
+		// Repeat
+		timer.shouldRepeat = shouldRepeat
+		//timer.repeatFrequency = repeatFrequency
+		//timer.repeatFrequencyUnits = repeatFrequencyUnits
+
+		// Vibrate
+		timer.shouldVibrate = shouldVibrate
+		timer.vibrateDuration = vibrateDuration
+		timer.vibrateWaitTime = vibrateWaitTime
+		timer.shouldVibratePattern = shouldVibratePattern
+		timer.vibrateRepeatPattern = vibrateRepeatPattern
+		timer.vibrateWaitTimeAfterPattern = vibrateWaitTimeAfterPattern
+
+		// NFC
+		timer.shouldUseNfc = shouldUseNfc
+		timer.nfcTagId = nfcTagId
+		timer.nfcTagDismissOrder = nfcTagDismissOrder
+
+		// Flashlight
+		timer.shouldUseFlashlight = shouldUseFlashlight
+		timer.flashlightStrengthLevel = flashlightStrengthLevel
+		timer.graduallyIncreaseFlashlightStrengthLevelWaitTime = graduallyIncreaseFlashlightStrengthLevelWaitTime
+		timer.shouldBlinkFlashlight = shouldBlinkFlashlight
+		timer.flashlightOnDuration = flashlightOnDuration
+		timer.flashlightOffDuration = flashlightOffDuration
+
+		// Media
+		timer.mediaPath = mediaPath
+		timer.mediaArtist = mediaArtist
+		timer.mediaTitle = mediaTitle
+		timer.mediaType = mediaType
+		timer.localMediaPath = localMediaPath
+		timer.shouldShuffleMedia = shouldShuffleMedia
+		timer.shouldRecursivelyPlayMedia = shouldRecursivelyPlayMedia
+
+		// Volume and audio source
+		timer.volume = volume
+		timer.shouldGraduallyIncreaseVolume = shouldGraduallyIncreaseVolume
+		timer.graduallyIncreaseVolumeWaitTime = graduallyIncreaseVolumeWaitTime
+		timer.shouldRestrictVolume = shouldRestrictVolume
+		timer.audioSource = audioSource
+
+		// Name
+		timer.name = name
+
+		// Text-to-speech
+		timer.shouldSayCurrentTime = shouldSayCurrentTime
+		timer.shouldSayName = shouldSayName
+		timer.ttsFrequency = ttsFrequency
+		timer.ttsSpeechRate = ttsSpeechRate
+		timer.ttsVoice = ttsVoice
+
+		// Dismiss
+		timer.shouldAutoDismiss = shouldAutoDismiss
+		timer.autoDismissTime = autoDismissTime
+		timer.shouldDeleteAfterDismissed = shouldDeleteAfterDismissed
+
+		return timer
 	}
 
 	/**

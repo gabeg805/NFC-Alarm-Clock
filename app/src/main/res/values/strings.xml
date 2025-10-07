@@ -149,8 +149,11 @@
 	<string name="message_flashlight_disabled">Flashlight off</string>
 	<string name="message_flashlight_enabled">Flashlight on</string>
 	<string name="message_alarm_copy">Copied alarm</string>
+	<string name="message_timer_copy">Copied timer</string>
 	<string name="message_alarm_delete">Deleted alarm</string>
+	<string name="message_timer_delete">Deleted timer</string>
 	<string name="message_alarm_restore">Restored alarm</string>
+	<string name="message_timer_restore">Restored timer</string>
 	<string name="message_alarm_dismiss">Dismissed alarm</string>
 	<string name="message_alarm_snooze">Snoozed alarm</string>
 	<string name="message_timer_dismiss">Dismissed timer</string>
@@ -186,6 +189,7 @@
 	<string name="error_message_active_delete">Unable to delete an active alarm</string>
 	<string name="error_message_active_modify">Unable to modify an active alarm</string>
 	<string name="error_message_max_alarms">Max number of alarms created</string>
+	<string name="error_message_max_timers">Max number of timers created</string>
 	<string name="error_message_nfc_mismatch">NFC tag does not match the saved tag.</string>
 	<string name="error_message_nfc_unsupported">Your device does not support NFC</string>
 	<string name="error_message_nfc_name_exists">This name is already being used</string>
@@ -420,6 +424,7 @@
 
 	<!-- Content descriptions -->
 	<string name="cd_alarm_list">List of alarms will be shown here.</string>
+	<string name="cd_timer_list">List of timers will be shown here.</string>
 	<string name="cd_nfc_tag_list">List of NFC tags will be shown here.</string>
 	<string name="cd_fab_add_alarm">Add a new alarm.</string>
 	<string name="cd_fab_launch_system_file_browser">Launch system file browser.</string>

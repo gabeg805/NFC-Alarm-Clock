@@ -45,16 +45,10 @@ import java.util.EnumSet
 /**
  * Card view holder.
  *
- * Haptic: time?
+ * @param root Root view.
  */
 class NacCardHolder(
-
-	/**
-	 * Root view.
-	 */
 	val root: View
-
-	// Constructor
 ) : RecyclerView.ViewHolder(root)
 {
 

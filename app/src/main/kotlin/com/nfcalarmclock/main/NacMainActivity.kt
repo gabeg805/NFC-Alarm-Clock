@@ -279,7 +279,7 @@ class NacMainActivity
 		// Set member variables
 		sharedPreferences = NacSharedPreferences(this)
 		toolbar = findViewById(R.id.tb_top_bar)
-		floatingActionButton = findViewById(R.id.fab_add_alarm)
+		floatingActionButton = findViewById(R.id.floating_action_button)
 		bottomNavigation = findViewById(R.id.bottom_navigation)
 		permissionRequestManager = NacPermissionRequestManager(this)
 		shutdownBroadcastReceiver = NacShutdownBroadcastReceiver()
@@ -451,9 +451,8 @@ class NacMainActivity
 							// Show list of timers
 							else
 							{
-								// TODO: Change to show list
 								println("Showing list of timers")
-								navController.navigate(R.id.nacAddTimerFragment)
+								navController.navigate(R.id.nacShowTimersFragment)
 							}
 						}
 					}

@@ -21,6 +21,7 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.nfcalarmclock.R
 import com.nfcalarmclock.shared.NacSharedPreferences
+import com.nfcalarmclock.system.NacCalendar
 import com.nfcalarmclock.system.getTimer
 import com.nfcalarmclock.timer.db.NacTimer
 import com.nfcalarmclock.view.calcContrastColor
@@ -234,31 +235,6 @@ class NacActiveTimerFragment
 
 		override fun onServiceDisconnected(className: ComponentName) {}
 	}
-
-	///**
-	// * Add time to the countdown.
-	// */
-	//private fun addTimeToTimer(sec: Long)
-	//{
-	//	// Cancel the countdown
-	//	countDownTimer.cancel()
-
-	//	// Add time to the time until finished
-	//	millisUntilFinished += sec*1000
-	//	println("New millis : $millisUntilFinished")
-
-	//	// Time until finished exceeds the total time. Update the total time to match the
-	//	// new time until finished. Use seconds until finished because it rounds up, in
-	//	// case the milliseconds are off by a little
-	//	if (totalDurationMillis < millisUntilFinished)
-	//	{
-	//		totalDurationMillis = secUntilFunished * 1000
-	//		println("Updated total duration to match millis : $totalDurationMillis")
-	//	}
-
-	//	// Start the countdown
-	//	startCountdownTimer()
-	//}
 
 	/**
 	 * Create the root view.
@@ -504,42 +480,38 @@ class NacActiveTimerFragment
 	private fun updateHourMinuteSecondsTextViews(secUntilFunished: Long)
 	{
 		// Get the hour, minutes, and seconds to display
-		val hour = secUntilFunished / 3600
-		val minute = secUntilFunished / 60
-		val seconds = secUntilFunished % 60
-		val minuteString = minute.toString()
-		val secondsString = seconds.toString()
+		val (hour, minute, seconds) = NacCalendar.getTimerHourMinuteSecondsZeroPadded(secUntilFunished)
 
+		// Update the hours
+		if (hour.isEmpty())
+		{
+			hourTextView.text = hour
+			hourTextView.visibility = View.VISIBLE
+			hourUnits.visibility = View.VISIBLE
+		}
 		// Hide the hours
-		if (hour == 0L)
+		else
 		{
 			hourTextView.visibility = View.GONE
 			hourUnits.visibility = View.GONE
 		}
-		// Update the hours
-		else
-		{
-			hourTextView.text = hour.toString()
-			hourTextView.visibility = View.VISIBLE
-			hourUnits.visibility = View.VISIBLE
-		}
 
+		// Update the minutes
+		if (minute.isEmpty())
+		{
+			minuteTextView.text = minute
+			minuteTextView.visibility = View.VISIBLE
+			minuteUnits.visibility = View.VISIBLE
+		}
 		// Hide the minutes
-		if (minute == 0L)
+		else
 		{
 			minuteTextView.visibility = View.GONE
 			minuteUnits.visibility = View.GONE
 		}
-		// Update the minutes
-		else
-		{
-			minuteTextView.text = if (hour == 0L) minuteString else minuteString.padStart(2, '0')
-			minuteTextView.visibility = View.VISIBLE
-			minuteUnits.visibility = View.VISIBLE
-		}
 
 		// Update the seconds. These are always visible
-		secondsTextView.text = if ((hour == 0L) && (minute == 0L)) secondsString else secondsString.padStart(2, '0')
+		secondsTextView.text = seconds
 	}
 
 	/**

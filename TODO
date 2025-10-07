@@ -2,6 +2,9 @@
 TODO
 ----
 
+* A repeat option for the timer could simply be number of times to repeat?
+  How would keep track of how many times it has been repeated?
+
 * Run optimizer to make sure all the code is good and unused resources are removed before production
 
 * What's new dialog seemed to show up twice. Investigate this.

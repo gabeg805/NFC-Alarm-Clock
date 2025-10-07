@@ -170,6 +170,7 @@ dependencies {
 
 	// Room database (Any later requires API > 34
 	implementation("androidx.room:room-runtime:2.8.0")
+	implementation("androidx.constraintlayout:constraintlayout:2.2.1")
 	ksp("androidx.room:room-compiler:2.8.0")
 
 	// Room kotlin extensions and coroutines

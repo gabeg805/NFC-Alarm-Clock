@@ -76,15 +76,12 @@ import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.statistics.NacAlarmStatisticViewModel
 import com.nfcalarmclock.system.NacBundle.BUNDLE_INTENT_ACTION
 import com.nfcalarmclock.system.NacCalendar
-import com.nfcalarmclock.system.addAlarm
 import com.nfcalarmclock.system.createTimeTickReceiver
 import com.nfcalarmclock.system.getAlarm
 import com.nfcalarmclock.system.registerMyReceiver
 import com.nfcalarmclock.system.scheduler.NacScheduler
 import com.nfcalarmclock.system.unregisterMyReceiver
-import com.nfcalarmclock.timer.NacTimerViewModel
 import com.nfcalarmclock.util.NacUtility.quickToast
-import com.nfcalarmclock.view.setupThemeColor
 import com.nfcalarmclock.view.toSpannedString
 import com.nfcalarmclock.widget.refreshAppWidgets
 import dagger.hilt.android.AndroidEntryPoint
@@ -93,7 +90,7 @@ import java.io.File
 import java.util.Calendar
 
 /**
- * Show all the alarms.
+ * Show all alarms.
  */
 @AndroidEntryPoint
 class NacShowAlarmsFragment
@@ -139,11 +136,6 @@ class NacShowAlarmsFragment
 	 * Alarm view model.
 	 */
 	private val alarmViewModel: NacAlarmViewModel by viewModels()
-
-	/**
-	 * Timer view model.
-	 */
-	private val timerViewModel: NacTimerViewModel by viewModels()
 
 	/**
 	 * Statistic view model.
@@ -271,6 +263,16 @@ class NacShowAlarmsFragment
 	}
 
 	/**
+	 * Add an alarm that was created from the SET_ALARM intent.
+	 */
+	private fun addAlarmFromSetAlarmIntent(alarm: NacAlarm)
+	{
+		addAlarm(alarm) {
+			recentlyAddedAlarmIds.add(alarm.id)
+		}
+	}
+
+	/**
 	 * Setup the app version if it is not already setup.
 	 */
 	/**
@@ -377,16 +379,6 @@ class NacShowAlarmsFragment
 
 				}
 			})
-	}
-
-	/**
-	 * Add an alarm that was created from the SET_ALARM intent.
-	 */
-	private fun addAlarmFromSetAlarmIntent(alarm: NacAlarm)
-	{
-		addAlarm(alarm) {
-			recentlyAddedAlarmIds.add(alarm.id)
-		}
 	}
 
 	/**
@@ -550,7 +542,7 @@ class NacShowAlarmsFragment
 		val context = requireContext()
 		sharedPreferences = NacSharedPreferences(context)
 		nextAlarmTextView = view.findViewById(R.id.tv_next_alarm)
-		floatingActionButton = requireActivity().findViewById(R.id.fab_add_alarm)
+		floatingActionButton = requireActivity().findViewById(R.id.floating_action_button)
 		recyclerView = view.findViewById(R.id.rv_alarm_list)
 		alarmCardAdapter = NacCardAdapter()
 		alarmCardAdapterLiveData = NacCardAdapterLiveData()

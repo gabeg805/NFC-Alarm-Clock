@@ -2,30 +2,14 @@
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:orientation="vertical"
 	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	android:orientation="vertical">
-	<!--
-	app:layout_behavior="@string/appbar_scrolling_view_behavior">
-	-->
+	android:layout_height="match_parent">
 
-	<!-- Next alarm message -->
-	<com.google.android.material.textview.MaterialTextView
-		android:id="@+id/tv_next_alarm"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:background="?attr/colorCard"
-		android:gravity="center_horizontal"
-		android:paddingTop="@dimen/small"
-		android:paddingBottom="@dimen/tiny"
-		android:textSize="@dimen/tsz_normal"
-		android:text=""
-		/>
-
-	<!-- Alarm list -->
+	<!-- Timer list -->
 	<androidx.recyclerview.widget.RecyclerView
-		android:id="@+id/rv_alarm_list"
-		android:contentDescription="@string/cd_alarm_list"
+		android:id="@+id/rv_timer_list"
+		android:contentDescription="@string/cd_timer_list"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
 		android:clipToPadding="false"
@@ -35,6 +19,7 @@
 		/>
 
 	<!-- Navigation host -->
+	<!-- TODO: Might not need this -->
 	<androidx.fragment.app.FragmentContainerView
 		android:id="@+id/options_content"
 		android:layout_width="match_parent"

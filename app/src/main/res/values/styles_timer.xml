@@ -35,4 +35,14 @@
 		<item name="android:insetRight">@dimen/zero</item>
 	</style>
 
+	<!-- Icon button -->
+	<style name="Timer.IconButton" parent="">
+		<item name="android:insetTop">@dimen/zero</item>
+		<item name="android:insetBottom">@dimen/zero</item>
+		<item name="android:insetLeft">@dimen/zero</item>
+		<item name="android:insetRight">@dimen/zero</item>
+		<item name="iconGravity">textStart</item>
+		<item name="iconPadding">@dimen/zero</item>
+	</style>
+
 </resources>

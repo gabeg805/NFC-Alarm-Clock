@@ -49,6 +49,16 @@ interface NacTimerDao
 	suspend fun getActiveTimer(): NacTimer?
 
 	/**
+	 * Get all timers.
+	 * <p>
+	 * This will wait until all timers are selected.
+	 *
+	 * @return All timers.
+	 */
+	@Query("SELECT * FROM timer")
+	suspend fun getAllTimers(): List<NacTimer>
+
+	/**
 	 * Insert a timer.
 	 *
 	 * @param timer The timer to insert.

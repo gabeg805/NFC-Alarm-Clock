@@ -56,6 +56,11 @@ class NacTimerViewModel @Inject constructor(
 	suspend fun getActiveTimer(): NacTimer? = timerRepository.getActiveTimer()
 
 	/**
+	 * All timers in the database.
+	 */
+	suspend fun getAllTimers(): List<NacTimer> = timerRepository.getAllTimers()
+
+	/**
 	 * Insert a timer into the database.
 	 *
 	 * @param timer The timer to insert.

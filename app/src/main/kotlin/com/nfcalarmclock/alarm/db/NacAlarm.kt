@@ -959,12 +959,11 @@ open class NacAlarm()
 	/**
 	 * Create a copy of this alarm.
 	 *
-	 *
 	 * The ID of the new alarm will be set to 0.
 	 *
 	 * @return A copy of this alarm.
 	 */
-	fun copy(): NacAlarm
+	open fun copy(): NacAlarm
 	{
 		val alarm = build()
 

@@ -48,6 +48,11 @@ class NacTimerRepository @Inject constructor(
 	suspend fun getActiveTimer(): NacTimer? = timerDao.getActiveTimer()
 
 	/**
+	 * All timers in the database.
+	 */
+	suspend fun getAllTimers(): List<NacTimer> = timerDao.getAllTimers()
+
+	/**
 	 * Insert a timer, asynchronously, into the database.
 	 *
 	 * @param timer Timer to insert.

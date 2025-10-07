@@ -15,44 +15,6 @@ class NacCardAdapter
 	: ListAdapter<NacAlarm, NacCardHolder>(DIFF_CALLBACK)
 {
 
-	companion object
-	{
-
-		/**
-		 * Callback to diff two items.
-		 */
-		val DIFF_CALLBACK: DiffUtil.ItemCallback<NacAlarm> =
-			object : DiffUtil.ItemCallback<NacAlarm>()
-			{
-
-				/**
-				 * Check if items are the same.
-				 */
-				override fun areItemsTheSame(
-					oldAlarm: NacAlarm,
-					newAlarm: NacAlarm
-				): Boolean
-				{
-					return oldAlarm.equalsId(newAlarm)
-				}
-
-				/**
-				 * Check if the contents of the items are the same.
-				 */
-				override fun areContentsTheSame(
-					oldAlarm: NacAlarm,
-					newAlarm: NacAlarm
-				): Boolean
-				{
-					// NOTE: if you use equals, your object must properly override Object#equals()
-					// Incorrectly returning false here will result in too many animations.
-					return oldAlarm.equals(newAlarm)
-				}
-
-			}
-
-	}
-
 	/**
 	 * Listener for when an alarm card is bound.
 	 */
@@ -139,7 +101,7 @@ class NacCardAdapter
 	{
 		// Inflate the card
 		val inflater = LayoutInflater.from(parent.context)
-		val root = inflater.inflate(R.layout.card_frame, parent, false)
+		val root = inflater.inflate(R.layout.card_alarm_frame, parent, false)
 		val card = NacCardHolder(root)
 
 		// Call the listener
@@ -147,6 +109,44 @@ class NacCardAdapter
 
 		// Return the card
 		return card
+	}
+
+	companion object
+	{
+
+		/**
+		 * Callback to diff two items.
+		 */
+		val DIFF_CALLBACK: DiffUtil.ItemCallback<NacAlarm> =
+			object : DiffUtil.ItemCallback<NacAlarm>()
+			{
+
+				/**
+				 * Check if items are the same.
+				 */
+				override fun areItemsTheSame(
+					oldAlarm: NacAlarm,
+					newAlarm: NacAlarm
+				): Boolean
+				{
+					return oldAlarm.equalsId(newAlarm)
+				}
+
+				/**
+				 * Check if the contents of the items are the same.
+				 */
+				override fun areContentsTheSame(
+					oldAlarm: NacAlarm,
+					newAlarm: NacAlarm
+				): Boolean
+				{
+					// NOTE: if you use equals, your object must properly override Object#equals()
+					// Incorrectly returning false here will result in too many animations.
+					return oldAlarm.equals(newAlarm)
+				}
+
+			}
+
 	}
 
 }

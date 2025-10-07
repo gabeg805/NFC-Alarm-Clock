@@ -730,6 +730,48 @@ object NacCalendar
 	}
 
 	/**
+	 * Get the hour, minutes and seconds of a timer, and zero pad them where necessary.
+	 *
+	 * @return The hour, minutes and seconds of a timer, and zero pad them where necessary.
+	 */
+	fun getTimerHourMinuteSecondsZeroPadded(duration: Long): Triple<String, String, String>
+	{
+		// Get the hour, minute, and seconds values
+		val hour = duration / 3600
+		val minute = duration / 60
+		val seconds = duration % 60
+		var hourString = hour.toString()
+		var minuteString = minute.toString()
+		var secondsString = seconds.toString()
+
+		// Minutes needs to be zero padded
+		if (hour > 0)
+		{
+			minuteString = minuteString.padStart(2, '0')
+		}
+		// Do not need the hour string
+		else
+		{
+			hourString = ""
+		}
+
+		// Seconds needs to be zero padded
+		if ((hour > 0) || (minute > 0))
+		{
+			secondsString = secondsString.padStart(2, '0')
+		}
+		// Do not need the minute string
+		else
+		{
+			minuteString = ""
+		}
+
+		// Return each component (hour, minute, and seconds) of the timer, zero padded
+		// where necessary
+		return Triple(hourString, minuteString, secondsString)
+	}
+
+	/**
 	 * The full time until the timer rings string, #h #m #s.
 	 *
 	 * @return The full time until the timer rings string, #h #m #s.
@@ -740,6 +782,8 @@ object NacCalendar
 		val hour = secsUntilFinished / 3600
 		val minute = secsUntilFinished / 60
 		val seconds = secsUntilFinished % 60
+		var minuteString = minute.toString()
+		var secondsString = seconds.toString()
 
 		// Get the hour, minute, and seconds letters
 		val h = context.resources.getString(R.string.letter_h)
@@ -748,9 +792,23 @@ object NacCalendar
 
 		var text = ""
 
-		text  = if (hour > 0) "$hour$h " else text
-		text += if (minute > 0) "$minute$m " else text
-		text += "$seconds$s"
+		//text  = if (hour > 0) "$hour$h " else text
+		//text += if (minute > 0) "$minute$m " else text
+		//text += "$seconds$s"
+
+		if (hour > 0)
+		{
+			text = "$hour$h "
+			minuteString = minuteString.padStart(2, '0')
+		}
+
+		if (minute > 0)
+		{
+			text += "$minuteString$m "
+			secondsString = secondsString.padStart(2, '0')
+		}
+
+		text += "$secondsString$s"
 
 		// Get the full time until the timer rings
 		return text

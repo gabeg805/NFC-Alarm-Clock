@@ -7,6 +7,6 @@
 
 	<include layout="@layout/card_copy" />
 	<include layout="@layout/card_delete" />
-	<include layout="@layout/card_view" />
+	<include layout="@layout/card_timer_view" />
 
 </FrameLayout>
