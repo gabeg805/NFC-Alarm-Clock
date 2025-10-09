@@ -776,42 +776,33 @@ object NacCalendar
 	 *
 	 * @return The full time until the timer rings string, #h #m #s.
 	 */
-	fun getFullTimeUntilTimer(context: Context, secsUntilFinished: Long): String
+	fun getFullTimeUntilTimer(context: Context, secUntilFinished: Long): String
 	{
-		// Get the hour, minute, and seconds values
-		val hour = secsUntilFinished / 3600
-		val minute = secsUntilFinished / 60
-		val seconds = secsUntilFinished % 60
-		var minuteString = minute.toString()
-		var secondsString = seconds.toString()
+		// Get the hour, minutes, and seconds to display
+		val (hour, minute, seconds) = getTimerHourMinuteSecondsZeroPadded(secUntilFinished)
 
 		// Get the hour, minute, and seconds letters
 		val h = context.resources.getString(R.string.letter_h)
 		val m = context.resources.getString(R.string.letter_m)
 		val s = context.resources.getString(R.string.letter_s)
 
-		var text = ""
-
-		//text  = if (hour > 0) "$hour$h " else text
-		//text += if (minute > 0) "$minute$m " else text
-		//text += "$seconds$s"
-
-		if (hour > 0)
+		// Show hours, minutes, and seconds
+		return if (hour.isNotEmpty())
 		{
-			text = "$hour$h "
-			minuteString = minuteString.padStart(2, '0')
+			"$hour$h $minute$m $seconds$s"
 		}
-
-		if (minute > 0)
+		// Show minutes and seconds
+		else if (minute.isNotEmpty())
 		{
-			text += "$minuteString$m "
-			secondsString = secondsString.padStart(2, '0')
+
+			"$minute$m $seconds$s"
 		}
+		// Only show seconds
+		else
+		{
 
-		text += "$secondsString$s"
-
-		// Get the full time until the timer rings
-		return text
+			"$seconds$s"
+		}
 	}
 
 	/**

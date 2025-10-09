@@ -213,7 +213,7 @@ class NacTimerCardHolder(
 		secondsTextView.text = seconds
 
 		// TODO: Set the repeat frequency
-		summaryRepeatFrequency.visibility = View.INVISIBLE
+		summaryRepeatFrequency.visibility = View.GONE
 
 		// Set the name
 		if (timer!!.name.isNotEmpty())
@@ -223,7 +223,7 @@ class NacTimerCardHolder(
 		}
 		else
 		{
-			summaryName.visibility = View.INVISIBLE
+			summaryName.visibility = View.GONE
 		}
 	}
 

@@ -1053,7 +1053,7 @@ class NacShowAlarmsFragment
 		floatingActionButton.setOnClickListener { view: View ->
 
 			// Haptic feedback so that the user knows the action was received
-			view.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+			view.performHapticFeedback()
 
 			// Max number of alarms reached
 			if (hasCreatedMaxAlarms)

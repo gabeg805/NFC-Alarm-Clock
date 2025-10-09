@@ -1,12 +1,16 @@
 package com.nfcalarmclock.alarm.activealarm
 
+import android.Manifest
 import android.app.ForegroundServiceStartNotAllowedException
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Handler
 import android.os.PowerManager
 import android.os.PowerManager.WakeLock
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
@@ -19,12 +23,12 @@ import com.nfcalarmclock.alarm.options.missedalarm.NacMissedAlarmNotification
 import com.nfcalarmclock.alarm.options.upcomingreminder.NacUpcomingReminderService
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.statistics.NacAlarmStatisticRepository
-import com.nfcalarmclock.system.scheduler.NacScheduler
-import com.nfcalarmclock.util.NacUtility
 import com.nfcalarmclock.system.addAlarm
 import com.nfcalarmclock.system.disableActivityAlias
 import com.nfcalarmclock.system.enableActivityAlias
 import com.nfcalarmclock.system.getAlarm
+import com.nfcalarmclock.system.scheduler.NacScheduler
+import com.nfcalarmclock.util.NacUtility
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -479,8 +483,7 @@ class NacActiveAlarmService
 		try
 		{
 			// Start the service in the foreground
-			startForeground(NacActiveAlarmNotification.ID,
-				notification.builder().build())
+			startForeground(NacActiveAlarmNotification.ID, notification.build())
 		}
 		catch (e: Exception)
 		{
@@ -503,8 +506,7 @@ class NacActiveAlarmService
 		try
 		{
 			// Start the service in the foreground
-			startForeground(NacSkipAlarmNotification.ID,
-				notification.builder().build())
+			startForeground(NacSkipAlarmNotification.ID, notification.build())
 		}
 		catch (e: Exception)
 		{
@@ -673,7 +675,13 @@ class NacActiveAlarmService
 					this@NacActiveAlarmService, alarm!!)
 
 				// Show the notification
-				notification.show()
+				if ((Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU)
+					|| (ActivityCompat.checkSelfPermission(this, Manifest.permission.POST_NOTIFICATIONS)
+						== PackageManager.PERMISSION_GRANTED))
+				{
+					val notificationManager = NotificationManagerCompat.from(this)
+					notificationManager.notify(notification.id, notification.build())
+				}
 			}
 
 			// Auto dismiss the alarm. This will stop the service

@@ -512,8 +512,7 @@ class NacActiveTimerService
 		try
 		{
 			// Start the service in the foreground
-			startForeground(notification.id,
-				notification.builder().build())
+			startForeground(notification.id, notification.build())
 		}
 		catch (e: Exception)
 		{
@@ -656,42 +655,37 @@ class NacActiveTimerService
 	@RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
 	fun updateNotification()
 	{
-		// Get the notification manager and builder
-		val notificationManagerCompat = NotificationManagerCompat.from(this)
-		val notificationBuilder = NacActiveTimerNotification(this, timer)
-
 		// Get the new title
 		val newTitle = NacCalendar.getFullTimeUntilTimer(this, secUntilFinished)
 		println("UPDATE NOTIFICATION : New text? $newTitle")
 
-		// Notification builder
-		// TODO: Consolidate this to the variable above
-		var notificationBuilder2 = notificationBuilder.builder()
-			.setContentTitle(newTitle)
-
-		if (millisUntilFinished > 0)
-		{
-			if (countDownTimer == null)
-			{
-				val label = resources.getString(R.string.action_timer_resume)
-				notificationBuilder2 = notificationBuilder2.addAction(R.drawable.play, label, notificationBuilder.resumePendingIntent)
-			}
-			else
-			{
-				val label = resources.getString(R.string.action_timer_pause)
-				notificationBuilder2 = notificationBuilder2.addAction(R.drawable.pause_32, label, notificationBuilder.pausePendingIntent)
-			}
-		}
-		else
-		{
-			val label = resources.getString(R.string.action_timer_stop)
-			notificationBuilder2 = notificationBuilder2.addAction(R.drawable.stop_32, label, notificationBuilder.dismissPendingIntent)
-		}
+		// Get the notification manager and builder
+		val notificationManagerCompat = NotificationManagerCompat.from(this)
+		val notificationBuilder = NacActiveTimerNotification(this, timer)
 
 		// Create the notification
-		val notification = notificationBuilder2.build()
+		val notification = notificationBuilder.setContentTitle(newTitle)
+			.apply {
+				// Notification builder
+				if (millisUntilFinished > 0)
+				{
+					if (countDownTimer == null)
+					{
+						notificationBuilder.addAction(R.drawable.play, R.string.action_timer_resume, notificationBuilder.resumePendingIntent)
+					}
+					else
+					{
+						notificationBuilder.addAction(R.drawable.pause_32, R.string.action_timer_pause, notificationBuilder.pausePendingIntent)
+					}
+				}
+				else
+				{
+					notificationBuilder.addAction(R.drawable.stop_32, R.string.action_timer_stop, notificationBuilder.dismissPendingIntent)
+				}
+			}
+			.build()
 
-		// Update
+		// Update the notification
 		notificationManagerCompat.notify(notificationBuilder.id, notification)
 	}
 

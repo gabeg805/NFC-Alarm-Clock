@@ -158,7 +158,7 @@ class NacActiveTimerFragment
 				// TODO: Change so that it goes to show timers instead of add timer...or maybe should just stay in this fragment?
 				// TODO: If I do this, need to think about restarting the service and replaying music and whatnot
 				//findNavController().popBackStack()
-				findNavController().popBackStack(R.id.nacAddTimerFragment, false)
+				findNavController().popBackStack(R.id.nacShowTimersFragment, false)
 
 			}
 
@@ -468,7 +468,7 @@ class NacActiveTimerFragment
 			// Navigate back to show alarms
 			// TODO: Change so that it goes to show timers instead of add timer...or maybe should just stay in this fragment?
 			// TODO: If I do this, need to think about restarting the service and replaying music and whatnot
-			findNavController().popBackStack(R.id.nacAddTimerFragment, false)
+			findNavController().popBackStack(R.id.nacShowTimersFragment, false)
 
 		}
 	}
@@ -477,13 +477,13 @@ class NacActiveTimerFragment
 	 * Update the hour, minute, and seconds textviews based on the milliseconds until
 	 * finished.
 	 */
-	private fun updateHourMinuteSecondsTextViews(secUntilFunished: Long)
+	private fun updateHourMinuteSecondsTextViews(secUntilFinished: Long)
 	{
 		// Get the hour, minutes, and seconds to display
-		val (hour, minute, seconds) = NacCalendar.getTimerHourMinuteSecondsZeroPadded(secUntilFunished)
+		val (hour, minute, seconds) = NacCalendar.getTimerHourMinuteSecondsZeroPadded(secUntilFinished)
 
 		// Update the hours
-		if (hour.isEmpty())
+		if (hour.isNotEmpty())
 		{
 			hourTextView.text = hour
 			hourTextView.visibility = View.VISIBLE
@@ -497,7 +497,7 @@ class NacActiveTimerFragment
 		}
 
 		// Update the minutes
-		if (minute.isEmpty())
+		if (minute.isNotEmpty())
 		{
 			minuteTextView.text = minute
 			minuteTextView.visibility = View.VISIBLE

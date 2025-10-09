@@ -1,91 +1,66 @@
 package com.nfcalarmclock.alarm.options.missedalarm
 
 import android.app.NotificationChannel
+import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.main.NacMainActivity
-import com.nfcalarmclock.view.notification.NacNotification
+import com.nfcalarmclock.system.NacCalendar
+import com.nfcalarmclock.view.notification.NacBaseNotificationBuilder
+import com.nfcalarmclock.view.toSpannedString
 
 /**
+ * Missed alarm notification.
+ *
+ * @param context Context.
+ * @param alarm Alarm.
  */
 class NacMissedAlarmNotification(
-
-	/**
-	 * Context.
-	 */
 	context: Context,
-
-	/**
-	 * The alarm to show the notification about.
-	 */
 	private val alarm: NacAlarm
-
-) : NacNotification(context)
+) : NacBaseNotificationBuilder(context, "NacNotiChannelMissed")
 {
 
 	/**
-	 * @see NacNotification.id
+	 * @see NacBaseNotificationBuilder.id
 	 */
-	override val id: Int
+	public override val id: Int
 		get() = ID
 
 	/**
-	 * @see NacNotification.channelId
+	 * @see NacBaseNotificationBuilder.channelName
 	 */
-	override val channelId: String
-		get() = "NacNotiChannelMissed"
+	override val channelName: String = context.getString(R.string.title_missed_alarms)
 
 	/**
-	 * @see NacNotification.channelName
+	 * @see NacBaseNotificationBuilder.channelDescription
 	 */
-	override val channelName: String
-		get() = context.getString(R.string.title_missed_alarms)
+	override val channelDescription: String = context.getString(R.string.description_missed_alarm)
 
 	/**
-	 * @see NacNotification.channelDescription
+	 * @see NacBaseNotificationBuilder.priorityLevel
 	 */
-	override val channelDescription: String
-		get() = context.getString(R.string.description_missed_alarm)
+	override val priorityLevel: Int = NotificationCompat.PRIORITY_DEFAULT
 
 	/**
-	 * @see NacNotification.title
+	 * @see NacBaseNotificationBuilder.channelImportance
 	 */
-	override val title: String
-		get()
-		{
-			// Get the title
-			val missedAlarm = context.resources.getQuantityString(R.plurals.missed_alarm, lineCount, lineCount)
-
-			// Format the title
-			return "<b>${missedAlarm.replace("$lineCount ", "")}</b>"
-		}
+	override val channelImportance: Int = NotificationManagerCompat.IMPORTANCE_DEFAULT
 
 	/**
-	 * @see NacNotification.priority
+	 * @see NacBaseNotificationBuilder.group
 	 */
-	override val priority: Int
-		get() = NotificationCompat.PRIORITY_DEFAULT
+	override val group: String = "NacNotiGroupMissed"
 
 	/**
-	 * @see NacNotification.importance
-	 */
-	override val importance: Int
-		get() = NotificationManagerCompat.IMPORTANCE_DEFAULT
-
-	/**
-	 * @see NacNotification.group
-	 */
-	override val group: String
-		get() = "NacNotiGroupMissed"
-
-	/**
-	 * @see NacNotification.contentText
+	 * @see NacBaseNotificationBuilder.contentText
 	 */
 	override val contentText: String
 		get()
@@ -104,27 +79,50 @@ class NacMissedAlarmNotification(
 		}
 
 	/**
-	 * @see NacNotification.contentPendingIntent
+	 * @see NacBaseNotificationBuilder.contentPendingIntent
 	 */
 	override val contentPendingIntent: PendingIntent
 		get() = NacMainActivity.getStartPendingIntent(context)
 
 	/**
-	 * @see NacNotification.builder
+	 * Body text of the notification.
 	 */
-	override fun builder(): NotificationCompat.Builder
+	private var body: List<CharSequence> = emptyList()
+
+	/**
+	 * Constructor.
+	 */
+	init
 	{
-		// Create a notification with an inbox style
+		// Create the channel
+		setupChannel()
+
+		// Get the title
+		val missedAlarm = context.resources.getQuantityString(R.plurals.missed_alarm, body.size, body.size)
+		val title = "<b>${missedAlarm.replace("${body.size}", "")}</b>"
+
+		// Create a notification with an inbox style and add each line in the body
 		val inbox = NotificationCompat.InboxStyle()
 
-		// Iterate over each line in the body
 		for (line in body)
 		{
 			inbox.addLine(line)
 		}
 
+		// Used to call cancel() if size was 0. Might not have to because
+		// show() should cancel it anyway
+		setupBody()
+
 		// Build the notification
-		return super.builder()
+		this.setPriority(priorityLevel)
+			.setCategory(category)
+			.setGroup(group)
+			.setContentTitle(title.toSpannedString())
+			.setContentText(contentText)
+			.setContentIntent(contentPendingIntent)
+			.setSmallIcon(smallIcon)
+			.setTicker(channelName)
+			.setColor(ContextCompat.getColor(context, R.color.ic_launcher_background))
 			.setGroupSummary(true)
 			.setAutoCancel(true)
 			.setShowWhen(true)
@@ -132,7 +130,7 @@ class NacMissedAlarmNotification(
 	}
 
 	/**
-	 * @see NacNotification.createChannel
+	 * @see NacBaseNotificationBuilder.createChannel
 	 */
 	@RequiresApi(Build.VERSION_CODES.O)
 	override fun createChannel(): NotificationChannel
@@ -146,6 +144,70 @@ class NacMissedAlarmNotification(
 		channel.enableVibration(true)
 
 		return channel
+	}
+
+	/**
+	 * Get a line that can appear in the body text of the notification.
+	 *
+	 * @return A line that can appear in the body text of the notification.
+	 */
+	private fun getBodyLine(alarm: NacAlarm): String
+	{
+		val cal = NacCalendar.alarmToCalendar(alarm)
+		val time = NacCalendar.getFullTime(context, cal)
+
+		// Check if the alarm name is empty
+		return if (alarm.name.isEmpty())
+		{
+			// The line in the notification will just be the time
+			time
+		}
+		else
+		{
+			// The line in the notification will be the time and the name of the
+			// alarm
+			"$time  —  ${alarm.name}"
+		}
+	}
+
+	/**
+	 * Get a list of notification lines.
+	 *
+	 * @return A list of notification lines.
+	 */
+	private fun getExtraLines(context: Context, groupKey: String?): MutableList<CharSequence>
+	{
+		// Create a list of lines
+		val lines: MutableList<CharSequence> = ArrayList()
+
+		// Get the notification manager
+		val manager = context.getSystemService(Context.NOTIFICATION_SERVICE)
+				as NotificationManager
+
+		// Get the active notifications in the status bar
+		val statusbar = manager.activeNotifications
+
+		// Iterate over each notification
+		for (sb in statusbar)
+		{
+			val notification = sb.notification
+			val sbGroup = notification.group
+
+			// Check that the groups match
+			if ((groupKey != null) && (groupKey == sbGroup))
+			{
+				val extraLines = notification.extras.getCharSequenceArray(
+					NotificationCompat.EXTRA_TEXT_LINES)
+
+				// Check that the extra lines are not null
+				if (extraLines != null)
+				{
+					lines.addAll(listOf(*extraLines))
+				}
+			}
+		}
+
+		return lines
 	}
 
 	/**
@@ -166,17 +228,14 @@ class NacMissedAlarmNotification(
 		body = newBody
 	}
 
-	/**
-	 * @see NacNotification.show
-	 */
-	public override fun show()
-	{
-		// Used to call cancel() if size was 0. Might not have to because
-		// show() should cancel it anyway
-		setupBody()
+	//public override fun show()
+	//{
+	//	// Used to call cancel() if size was 0. Might not have to because
+	//	// show() should cancel it anyway
+	//	setupBody()
 
-		super.show()
-	}
+	//	super.show()
+	//}
 
 	companion object
 	{

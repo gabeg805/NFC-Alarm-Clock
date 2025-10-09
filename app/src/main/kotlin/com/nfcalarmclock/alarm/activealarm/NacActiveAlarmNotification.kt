@@ -8,83 +8,64 @@ import androidx.annotation.OptIn
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.nfc.NacNfc
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.NacCalendar
-import com.nfcalarmclock.view.notification.NacNotification
+import com.nfcalarmclock.view.notification.NacBaseNotificationBuilder
+import com.nfcalarmclock.view.toSpannedString
 import java.util.Calendar
 
 /**
  * Active alarm notification.
+ *
+ * @param context Context.
+ * @param alarm Alarm.
  */
 class NacActiveAlarmNotification(
-
-	/**
-	 * Context.
-	 */
 	context: Context,
-
-	/**
-	 * Alarm.
-	 */
 	private val alarm: NacAlarm?
-
-) : NacNotification(context)
+) : NacBaseNotificationBuilder(context, "NacNotiChannelActiveAlarm")
 {
 
 	/**
-	 * @see NacNotification.id
+	 * @see NacBaseNotificationBuilder.id
 	 */
 	override val id: Int
 		get() = ID
 
 	/**
-	 * @see NacNotification.channelId
-	 */
-	override val channelId: String
-		get() = "NacNotiChannelActiveAlarm"
-
-	/**
-	 * @see NacNotification.channelName
+	 * @see NacBaseNotificationBuilder.channelName
 	 */
 	override val channelName: String
 		get() = context.getString(R.string.title_active_alarms)
 
 	/**
-	 * @see NacNotification.channelDescription
+	 * @see NacBaseNotificationBuilder.channelDescription
 	 */
 	override val channelDescription: String
 		get() = context.getString(R.string.description_active_alarm)
 
 	/**
-	 * @see NacNotification.title
+	 * @see NacBaseNotificationBuilder.channelImportance
 	 */
-	override val title: String
-		get() = "<b>$appName</b>"
+	override val channelImportance: Int = NotificationManagerCompat.IMPORTANCE_HIGH
 
 	/**
-	 * @see NacNotification.priority
+	 * @see NacBaseNotificationBuilder.priorityLevel
 	 */
-	override val priority: Int
-		get() = NotificationCompat.PRIORITY_MAX
+	override val priorityLevel: Int = NotificationCompat.PRIORITY_MAX
 
 	/**
-	 * @see NacNotification.importance
+	 * @see NacBaseNotificationBuilder.group
 	 */
-	override val importance: Int
-		get() = NotificationManagerCompat.IMPORTANCE_HIGH
+	override val group: String = "NacNotiGroupActiveAlarm"
 
 	/**
-	 * @see NacNotification.group
-	 */
-	override val group: String
-		get() = "NacNotiGroupActiveAlarm"
-
-	/**
-	 * @see NacNotification.contentText
+	 * @see NacBaseNotificationBuilder.contentText
 	 */
 	override val contentText: String
 		get()
@@ -107,7 +88,7 @@ class NacActiveAlarmNotification(
 		}
 
 	/**
-	 * @see NacNotification.contentPendingIntent
+	 * @see NacBaseNotificationBuilder.contentPendingIntent
 	 */
 	override val contentPendingIntent: PendingIntent
 		get()
@@ -140,12 +121,6 @@ class NacActiveAlarmNotification(
 		}
 
 	/**
-	 * Whether the alarm should use NFC or not.
-	 */
-	private val shouldUseNfc: Boolean
-		get() = (alarm != null) && alarm.shouldUseNfc && NacSharedPreferences(context).shouldShowNfcButton
-
-	/**
 	 * The pending intent to use when snoozing.
 	 */
 	private val snoozePendingIntent: PendingIntent
@@ -162,52 +137,63 @@ class NacActiveAlarmNotification(
 		}
 
 	/**
-	 * Name of the app.
+	 * Whether the alarm should use NFC or not.
 	 */
-	private val appName = context.getString(R.string.app_name)
+	private val shouldUseNfc: Boolean
+		get() = (alarm != null) && alarm.shouldUseNfc && NacSharedPreferences(context).shouldShowNfcButton
 
 	/**
-	 * @see NacNotification.builder
+	 * Constructor.
 	 */
-	public override fun builder(): NotificationCompat.Builder
+	init
 	{
 		// Get shared preferences
 		val sharedPreferences = NacSharedPreferences(context)
 
-		// Notification actions
-		val dismiss = context.getString(R.string.action_alarm_dismiss)
-		val snooze = context.getString(R.string.action_alarm_snooze)
+		// Create the channel
+		setupChannel()
+
+		// Get the title
+		val appName = context.getString(R.string.app_name)
 
 		// Build the notification
-		var builder = super.builder()
+		// Note: Added the parentheses so that the custom addAction() can be called
+		(this.setPriority(priorityLevel)
+			.setCategory(category)
+			.setGroup(group)
+			.setContentTitle("<b>$appName</b>".toSpannedString())
+			.setContentText(contentText)
+			.setContentIntent(contentPendingIntent)
+			.setSmallIcon(smallIcon)
+			.setTicker(channelName)
 			.setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
+			.setColor(ContextCompat.getColor(context, R.color.ic_launcher_background))
 			.setAutoCancel(false)
 			.setOngoing(true)
 			.setShowWhen(true)
-			.setSound(null)
-			.addAction(R.drawable.snooze, snooze, snoozePendingIntent)
+			.setSound(null) as NacBaseNotificationBuilder)
+			.addAction(R.drawable.snooze, R.string.action_alarm_snooze, snoozePendingIntent)
+			.apply {
+				// Check if NFC does not need to be used to dismiss the alarm
+				// Note: This evaluates to False on the emulator because the emulator
+				// is unable to use NFC
+				if (!NacNfc.exists(context) || !shouldUseNfc)
+				{
+					// Add the dismiss button to the notification
+					addAction(R.drawable.dismiss, R.string.action_alarm_dismiss, dismissPendingIntent)
+				}
 
-		// Check if battery saver option is disabled
-		if (!sharedPreferences.shouldSaveBatteryInAlarmScreen)
-		{
-			builder = builder.setFullScreenIntent(contentPendingIntent, true)
-		}
+				// Check if battery saver option is disabled
+				if (!sharedPreferences.shouldSaveBatteryInAlarmScreen)
+				{
+					setFullScreenIntent(contentPendingIntent, true)
+				}
 
-		// Check if NFC does not need to be used to dismiss the alarm
-		// Note: This evaluates to False on the emulator because the emulator
-		// is unable to use NFC
-		if (!NacNfc.exists(context) || !shouldUseNfc)
-		{
-			// Add the dismiss button to the notification
-			builder = builder.addAction(R.drawable.dismiss, dismiss, dismissPendingIntent)
-		}
-
-		// Return the builder
-		return builder
+			}
 	}
 
 	/**
-	 * @see NacNotification.createChannel
+	 * @see NacBaseNotificationBuilder.createChannel
 	 */
 	@RequiresApi(Build.VERSION_CODES.O)
 	override fun createChannel(): NotificationChannel

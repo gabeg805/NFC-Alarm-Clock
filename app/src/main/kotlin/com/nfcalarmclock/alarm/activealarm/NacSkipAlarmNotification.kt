@@ -7,81 +7,65 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.main.NacMainActivity
 import com.nfcalarmclock.system.NacCalendar
-import com.nfcalarmclock.view.notification.NacNotification
+import com.nfcalarmclock.view.notification.NacBaseNotificationBuilder
+import com.nfcalarmclock.view.toSpannedString
 import java.util.Calendar
 
 /**
- * Notification to display when an alarm is skipped.
+ * Notification when an alarm is skipped.
+ *
+ * Note: This may not actually be shown to the user because the logic for skipping an
+ *       alarm in the active alarm service is so fast.
+ *
+ * @param context Context.
+ * @param alarm Alarm.
  */
 class NacSkipAlarmNotification(
-
-	/**
-	 * Context.
-	 */
 	context: Context,
-
-	/**
-	 * Alarm.
-	 */
 	private val alarm: NacAlarm?
-
-) : NacNotification(context)
+) : NacBaseNotificationBuilder(context, "NacNotiChannelSkipAlarm")
 {
 
 	/**
-	 * @see NacNotification.id
+	 * @see NacBaseNotificationBuilder.id
 	 */
 	override val id: Int
 		get() = ID
 
 	/**
-	 * @see NacNotification.channelId
-	 */
-	override val channelId: String
-		get() = "NacNotiChannelSkipAlarm"
-
-	/**
-	 * @see NacNotification.channelName
+	 * @see NacBaseNotificationBuilder.channelName
 	 */
 	override val channelName: String
 		get() = context.resources.getQuantityString(R.plurals.skipped_alarm, 7)
 
 	/**
-	 * @see NacNotification.channelDescription
+	 * @see NacBaseNotificationBuilder.channelDescription
 	 */
 	override val channelDescription: String
 		get() = context.getString(R.string.description_skipped_alarm)
 
 	/**
-	 * @see NacNotification.title
+	 * @see NacBaseNotificationBuilder.channelImportance
 	 */
-	override val title: String
-		get() = "<b>${context.resources.getQuantityString(R.plurals.skipped_alarm, 1)}</b>"
+	override val channelImportance: Int = NotificationManagerCompat.IMPORTANCE_LOW
 
 	/**
-	 * @see NacNotification.priority
+	 * @see NacBaseNotificationBuilder.priorityLevel
 	 */
-	override val priority: Int
-		get() = NotificationCompat.PRIORITY_LOW
+	override val priorityLevel: Int = NotificationCompat.PRIORITY_LOW
 
 	/**
-	 * @see NacNotification.importance
+	 * @see NacBaseNotificationBuilder.group
 	 */
-	override val importance: Int
-		get() = NotificationManagerCompat.IMPORTANCE_LOW
+	override val group: String = "NacNotiGroupSkipAlarm"
 
 	/**
-	 * @see NacNotification.group
-	 */
-	override val group: String
-		get() = "NacNotiGroupSkipAlarm"
-
-	/**
-	 * @see NacNotification.contentText
+	 * @see NacBaseNotificationBuilder.contentText
 	 */
 	override val contentText: String
 		get()
@@ -104,19 +88,33 @@ class NacSkipAlarmNotification(
 		}
 
 	/**
-	 * @see NacNotification.contentPendingIntent
+	 * @see NacBaseNotificationBuilder.contentPendingIntent
 	 */
 	override val contentPendingIntent: PendingIntent
 		get() = NacMainActivity.getStartPendingIntent(context)
 
 	/**
-	 * @see NacNotification.builder
+	 * Constructor.
 	 */
-	public override fun builder(): NotificationCompat.Builder
+	init
 	{
+		// Create the channel
+		setupChannel()
+
+		// Get the title
+		val title = "<b>${context.resources.getQuantityString(R.plurals.skipped_alarm, 1)}</b>"
+
 		// Build the notification
-		return super.builder()
+		this.setPriority(priorityLevel)
+			.setCategory(category)
+			.setGroup(group)
+			.setContentTitle(title.toSpannedString())
+			.setContentText(contentText)
+			.setContentIntent(contentPendingIntent)
+			.setSmallIcon(smallIcon)
+			.setTicker(channelName)
 			.setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_DEFAULT)
+			.setColor(ContextCompat.getColor(context, R.color.ic_launcher_background))
 			.setAutoCancel(true)
 			.setOngoing(false)
 			.setShowWhen(true)
@@ -124,7 +122,7 @@ class NacSkipAlarmNotification(
 	}
 
 	/**
-	 * @see NacNotification.createChannel
+	 * @see NacBaseNotificationBuilder.createChannel
 	 */
 	@RequiresApi(Build.VERSION_CODES.O)
 	override fun createChannel(): NotificationChannel

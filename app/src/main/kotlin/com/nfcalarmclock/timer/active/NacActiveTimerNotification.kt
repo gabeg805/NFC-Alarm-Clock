@@ -8,6 +8,7 @@ import androidx.annotation.OptIn
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import androidx.media3.common.util.UnstableApi
 import androidx.navigation.NavDeepLinkBuilder
 import com.nfcalarmclock.R
@@ -16,78 +17,53 @@ import com.nfcalarmclock.main.NacMainActivity
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.toBundle
 import com.nfcalarmclock.timer.db.NacTimer
-import com.nfcalarmclock.view.notification.NacNotification
+import com.nfcalarmclock.view.notification.NacBaseNotificationBuilder
 
 /**
  * Active timer notification.
+ *
+ * @param context Context.
+ * @param timer Timer.
  */
 class NacActiveTimerNotification(
-
-	/**
-	 * Context.
-	 */
 	context: Context,
-
-	/**
-	 * Timer.
-	 */
 	private val timer: NacTimer?
-
-) : NacNotification(context)
+) : NacBaseNotificationBuilder(context, "NacNotiChannelActiveTimer")
 {
 
 	/**
-	 * @see NacNotification.id
+	 * @see NacBaseNotificationBuilder.id
 	 */
 	public override val id: Int
 		get() = BASE_ID + (timer?.id?.toInt() ?: 0)
 
 	/**
-	 * @see NacNotification.channelId
+	 * @see NacBaseNotificationBuilder.channelName
 	 */
-	override val channelId: String
-		get() = "NacNotiChannelActiveTimer"
+	override val channelName: String = context.getString(R.string.title_active_timers)
 
 	/**
-	 * @see NacNotification.channelName
+	 * @see NacBaseNotificationBuilder.channelDescription
 	 */
-	override val channelName: String
-		get() = context.getString(R.string.title_active_timers)
+	override val channelDescription: String = context.getString(R.string.description_active_timer)
 
 	/**
-	 * @see NacNotification.channelDescription
+	 * @see NacBaseNotificationBuilder.channelImportance
 	 */
-	override val channelDescription: String
-		get() = context.getString(R.string.description_active_timer)
+	override val channelImportance: Int = NotificationManagerCompat.IMPORTANCE_DEFAULT
 
 	/**
-	 * @see NacNotification.title
-	 *
-	 * Do nothing for title since it will get updated periodically by the active timer
-	 * fragment.
+	 * @see NacBaseNotificationBuilder.priorityLevel
 	 */
-	override val title: String = ""
+	override val priorityLevel: Int = NotificationCompat.PRIORITY_DEFAULT
 
 	/**
-	 * @see NacNotification.priority
+	 * @see NacBaseNotificationBuilder.group
 	 */
-	override val priority: Int
-		get() = NotificationCompat.PRIORITY_DEFAULT
+	override val group: String = "NacNotiGroupActiveTimer"
 
 	/**
-	 * @see NacNotification.importance
-	 */
-	override val importance: Int
-		get() = NotificationManagerCompat.IMPORTANCE_DEFAULT
-
-	/**
-	 * @see NacNotification.group
-	 */
-	override val group: String
-		get() = "NacNotiGroupActiveTimer"
-
-	/**
-	 * @see NacNotification.contentText
+	 * @see NacBaseNotificationBuilder.contentText
 	 */
 	override val contentText: String
 		get()
@@ -105,7 +81,7 @@ class NacActiveTimerNotification(
 		}
 
 	/**
-	 * @see NacNotification.contentPendingIntent
+	 * @see NacBaseNotificationBuilder.contentPendingIntent
 	 */
 	override val contentPendingIntent: PendingIntent
 		get()
@@ -180,19 +156,34 @@ class NacActiveTimerNotification(
 		}
 
 	/**
+	 * @see NacBaseNotificationBuilder.smallIcon
+	 */
+	override val smallIcon: Int = R.drawable.hourglass_empty_32
+
+	/**
 	 * Whether the timer should use NFC or not.
 	 */
 	val shouldUseNfc: Boolean
 		get() = NacNfc.exists(context) && (timer?.shouldUseNfc == true) && NacSharedPreferences(context).shouldShowNfcButton
 
 	/**
-	 * @see NacNotification.builder
+	 * Constructor.
 	 */
-	public override fun builder(): NotificationCompat.Builder
+	init
 	{
+		// Create the channel
+		setupChannel()
+
 		// Build the notification
-		var builder = super.builder()
+		this.setPriority(priorityLevel)
+			.setCategory(category)
+			.setGroup(group)
+			.setContentText(contentText)
+			.setContentIntent(contentPendingIntent)
+			.setSmallIcon(smallIcon)
+			.setTicker(channelName)
 			.setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_DEFAULT)
+			.setColor(ContextCompat.getColor(context, R.color.ic_launcher_background))
 			.setAutoCancel(false)
 			.setOngoing(true)
 			.setOnlyAlertOnce(true)
@@ -209,13 +200,10 @@ class NacActiveTimerNotification(
 
 		//	builder = builder.addAction(R.drawable.stop_filled_32, stop, dismissPendingIntent)
 		//}
-
-		// Return the builder
-		return builder
 	}
 
 	/**
-	 * @see NacNotification.createChannel
+	 * @see NacBaseNotificationBuilder.createChannel
 	 */
 	@RequiresApi(Build.VERSION_CODES.O)
 	override fun createChannel(): NotificationChannel

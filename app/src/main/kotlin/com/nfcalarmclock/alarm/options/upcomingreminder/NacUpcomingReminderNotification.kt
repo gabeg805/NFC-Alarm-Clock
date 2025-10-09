@@ -7,87 +7,60 @@ import android.os.Build
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContextCompat
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.main.NacMainActivity
 import com.nfcalarmclock.system.NacCalendar
-import com.nfcalarmclock.view.notification.NacNotification
+import com.nfcalarmclock.view.notification.NacBaseNotificationBuilder
+import com.nfcalarmclock.view.toSpannedString
 import java.util.Calendar
 
 /**
+ * Upcoming reminder notification indicating that an alarm will go off soon.
+ *
+ * @param context Context.
+ * @param alarm Alarm.
  */
 class NacUpcomingReminderNotification(
-
-	/**
-	 * Context.
-	 */
 	context: Context,
-
-	/**
-	 * Alarm.
-	 */
 	private val alarm: NacAlarm?
-
-) : NacNotification(context)
+) : NacBaseNotificationBuilder(context, "NacNotiChannelUpcoming")
 {
 
 	/**
-	 * @see NacNotification.id
+	 * @see NacBaseNotificationBuilder.id
 	 */
 	public override val id: Int
 		get() = BASE_ID + (alarm?.id?.toInt() ?: 0)
 
 	/**
-	 * @see NacNotification.channelId
+	 * @see NacBaseNotificationBuilder.channelName
 	 */
-	override val channelId: String
-		get() = "NacNotiChannelUpcoming"
+	override val channelName: String = context.getString(R.string.title_upcoming_reminders)
 
 	/**
-	 * @see NacNotification.channelName
+	 * @see NacBaseNotificationBuilder.channelDescription
 	 */
-	override val channelName: String
-		get() = context.getString(R.string.title_upcoming_reminders)
+	override val channelDescription: String = context.getString(R.string.description_upcoming_reminder)
 
 	/**
-	 * @see NacNotification.channelDescription
+	 * @see NacBaseNotificationBuilder.channelImportance
 	 */
-	override val channelDescription: String
-		get() = context.getString(R.string.description_upcoming_reminder)
+	override val channelImportance: Int = NotificationManagerCompat.IMPORTANCE_HIGH
 
 	/**
-	 * @see NacNotification.title
+	 * @see NacBaseNotificationBuilder.priorityLevel
 	 */
-	override val title: String
-		get()
-		{
-			// Get the title
-			val reminder = context.getString(R.string.word_reminder)
-
-			// Format the title
-			return "<b>$reminder</b>"
-		}
+	override val priorityLevel: Int = NotificationCompat.PRIORITY_MAX
 
 	/**
-	 * @see NacNotification.priority
+	 * @see NacBaseNotificationBuilder.group
 	 */
-	override val priority: Int
-		get() = NotificationCompat.PRIORITY_MAX
+	override val group: String = "NacNotiGroupUpcomingReminder"
 
 	/**
-	 * @see NacNotification.importance
-	 */
-	override val importance: Int
-		get() = NotificationManagerCompat.IMPORTANCE_HIGH
-
-	/**
-	 * @see NacNotification.group
-	 */
-	override val group: String
-		get() = "NacNotiGroupUpcomingReminder"
-
-	/**
-	 * @see NacNotification.contentText
+	 * @see NacBaseNotificationBuilder.contentText
 	 */
 	override val contentText: String
 		get()
@@ -119,7 +92,7 @@ class NacUpcomingReminderNotification(
 		}
 
 	/**
-	 * @see NacNotification.contentPendingIntent
+	 * @see NacBaseNotificationBuilder.contentPendingIntent
 	 */
 	override val contentPendingIntent: PendingIntent
 		get() = NacMainActivity.getStartPendingIntent(context)
@@ -141,36 +114,42 @@ class NacUpcomingReminderNotification(
 		}
 
 	/**
-	 * @see NacNotification.builder
+	 * Constructor.
 	 */
-	public override fun builder(): NotificationCompat.Builder
+	init
 	{
+		// Create the channel
+		setupChannel()
+
+		// Get the title
+		val title = "<b>${context.getString(R.string.word_reminder)}</b>"
+
 		// Build the notification
-		val notificationBuilder = super.builder()
+		// Note: Added the parentheses so that the custom addAction() can be called
+		(this.setPriority(priorityLevel)
+			.setCategory(category)
+			.setGroup(group)
+			.setContentTitle(title.toSpannedString())
+			.setContentText(contentText)
+			.setContentIntent(contentPendingIntent)
+			.setSmallIcon(smallIcon)
+			.setTicker(channelName)
 			.setForegroundServiceBehavior(NotificationCompat.FOREGROUND_SERVICE_IMMEDIATE)
+			.setColor(ContextCompat.getColor(context, R.color.ic_launcher_background))
 			.setAutoCancel(true)
 			.setOngoing(false)
-			.setShowWhen(true)
-
-		// Check if the alarm uses a recurring notification
-		return if ((alarm != null) && (alarm.reminderFrequency > 0))
-		{
-			// Notification actions
-			val clear = context.getString(R.string.action_clear_reminder)
-
-			// Add a button to clear the recurring reminder
-			notificationBuilder
-				.addAction(R.drawable.dismiss, clear, clearReminderPendingIntent)
-		}
-		else
-		{
-			// Notification is perfectly built as is
-			notificationBuilder
-		}
+			.setShowWhen(true) as NacBaseNotificationBuilder)
+			.apply {
+				// Add a button to clear the recurring reminder notification
+				if ((alarm != null) && (alarm.reminderFrequency > 0))
+				{
+					addAction(R.drawable.dismiss, R.string.action_clear_reminder, clearReminderPendingIntent)
+				}
+			}
 	}
 
 	/**
-	 * @see NacNotification.createChannel
+	 * @see NacBaseNotificationBuilder.createChannel
 	 */
 	@RequiresApi(Build.VERSION_CODES.O)
 	override fun createChannel(): NotificationChannel
@@ -184,15 +163,6 @@ class NacUpcomingReminderNotification(
 		channel.enableVibration(true)
 
 		return channel
-	}
-
-	/**
-	 * @see NacNotification.show
-	 */
-	public override fun show()
-	{
-		// Super
-		super.show()
 	}
 
 	companion object

@@ -64,8 +64,7 @@ class NacDismissEarlyService
 				val notification = NacDismissEarlyNotification(this, alarm)
 
 				// Start the service in the foreground
-				startForeground(notification.id,
-					notification.builder().build())
+				startForeground(notification.id, notification.build())
 			}
 
 		}

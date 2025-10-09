@@ -558,6 +558,9 @@ class NacMainActivity
 				// Show alarms
 				R.id.nacShowAlarmsFragment -> floatingActionButton.show()
 
+				// Show timers
+				R.id.nacShowTimersFragment -> floatingActionButton.show()
+
 				// Unknown
 				else -> floatingActionButton.hide()
 
