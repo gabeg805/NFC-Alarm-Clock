@@ -8,10 +8,14 @@ import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import androidx.navigation.NavDeepLinkBuilder
 import com.nfcalarmclock.R
+import com.nfcalarmclock.alarm.NacShowAlarmsFragment
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.main.NacMainActivity
+import com.nfcalarmclock.system.NacBundle.BUNDLE_INTENT_ACTION
 import com.nfcalarmclock.system.NacCalendar
+import com.nfcalarmclock.system.toBundle
 import com.nfcalarmclock.view.notification.NacBaseNotificationBuilder
 import com.nfcalarmclock.view.toSpannedString
 import java.util.Calendar
@@ -97,30 +101,29 @@ class NacDismissEarlyNotification(
 	override val contentPendingIntent: PendingIntent
 		get()
 		{
-			val id = alarm?.id ?: 0
-			val intent = NacMainActivity.getStartIntent(context)
-
-			// Determine the pending intent flags
-			val flags = PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-
-			// Return the pending intent for the activity
-			return PendingIntent.getActivity(context, id.toInt(), intent, flags)
+			return NavDeepLinkBuilder(context.applicationContext)
+				.setComponentName(NacMainActivity::class.java)
+				.setGraph(R.navigation.nav_main_fragments)
+				.setDestination(R.id.nacShowAlarmsFragment)
+				.setArguments(alarm!!.toBundle())
+				.createPendingIntent()
 		}
 
 	/**
-	 * The pending intent to use when dismissing the alarm.
+	 * The pending intent to use when dismissing the alarm early.
 	 */
 	private val dismissPendingIntent: PendingIntent
 		get()
 		{
-			// Create an intent to dismiss the active alarm service
-			val intent = NacMainActivity.getDismissEarlyIntent(context, alarm!!)
-
-			// Determine the pending intent flags
-			val flags = PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
-
-			// Create the pending intent
-			return PendingIntent.getActivity(context, 0, intent, flags)
+			return NavDeepLinkBuilder(context.applicationContext)
+				.setComponentName(NacMainActivity::class.java)
+				.setGraph(R.navigation.nav_main_fragments)
+				.setDestination(R.id.nacShowAlarmsFragment)
+				.setArguments(alarm!!.toBundle()
+					.apply {
+						putString(BUNDLE_INTENT_ACTION, NacShowAlarmsFragment.ACTION_DISMISS_ALARM_EARLY)
+					})
+				.createPendingIntent()
 		}
 
 	/**

@@ -2,6 +2,11 @@
 TODO
 ----
 
+* Make sure to grep all TODO even layout resources before production
+
+* How will scanning NFC work using fragments instead of activities now?
+  Can maybe handle this with LiveData?
+
 * A repeat option for the timer could simply be number of times to repeat?
   How would keep track of how many times it has been repeated?
 

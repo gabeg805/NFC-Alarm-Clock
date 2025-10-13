@@ -1,4 +1,4 @@
-package com.nfcalarmclock.timer.add
+package com.nfcalarmclock.timer.addedit
 
 import android.content.res.ColorStateList
 import android.os.Bundle
@@ -15,6 +15,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.button.MaterialButton
 import com.nfcalarmclock.R
 import com.nfcalarmclock.shared.NacSharedPreferences
+import com.nfcalarmclock.system.NacCalendar
 import com.nfcalarmclock.system.toBundle
 import com.nfcalarmclock.timer.NacTimerViewModel
 import com.nfcalarmclock.timer.active.NacActiveTimerService
@@ -26,47 +27,57 @@ import com.nfcalarmclock.view.performHapticFeedback
 import com.nfcalarmclock.view.setupBackgroundColor
 import com.nfcalarmclock.view.setupRippleColor
 import dagger.hilt.android.AndroidEntryPoint
+import kotlin.collections.component1
+import kotlin.collections.component2
 import kotlin.collections.iterator
+import kotlin.getValue
 
-/**
- * Add a timer.
- */
 @AndroidEntryPoint
-class NacAddTimerFragment
+abstract class NacBaseAddEditTimer
 	: Fragment()
 {
 
 	/**
 	 * Navigation controller.
 	 */
-	private val navController by lazy {
+	protected val navController by lazy {
 		(childFragmentManager.findFragmentById(R.id.options_content) as NavHostFragment).navController
 	}
 
 	/**
 	 * Timer view model.
 	 */
-	private val timerViewModel: NacTimerViewModel by viewModels()
+	protected val timerViewModel: NacTimerViewModel by viewModels()
+
+	/**
+	 * Timer.
+	 */
+	protected lateinit var timer: NacTimer
+
+	/**
+	 * Shared preferences.
+	 */
+	protected lateinit var sharedPreferences: NacSharedPreferences
 
 	/**
 	 * Hour textview.
 	 */
-	private lateinit var hourTextView: TextView
+	protected lateinit var hourTextView: TextView
 
 	/**
 	 * Minute textview.
 	 */
-	private lateinit var minuteTextView: TextView
+	protected lateinit var minuteTextView: TextView
 
 	/**
 	 * Second textview.
 	 */
-	private lateinit var secondsTextView: TextView
+	protected lateinit var secondsTextView: TextView
 
 	/**
 	 * Append the time to the timer.
 	 */
-	fun appendTime(value: CharSequence)
+	protected fun appendTime(value: CharSequence)
 	{
 		// Get the hour, min, and sec
 		val hour = hourTextView.text.toString()
@@ -96,7 +107,7 @@ class NacAddTimerFragment
 	/**
 	 * Delete the seconds digit in the time.
 	 */
-	fun deleteTime()
+	protected fun deleteTime()
 	{
 		// Get the hour, min, and sec
 		val hour = hourTextView.text
@@ -117,6 +128,11 @@ class NacAddTimerFragment
 	}
 
 	/**
+	 * Initialize the timer that will be used in the fragment.
+	 */
+	protected abstract fun initTimer()
+
+	/**
 	 * Called to create the root view.
 	 */
 	override fun onCreateView(
@@ -125,7 +141,7 @@ class NacAddTimerFragment
 		savedInstanceState: Bundle?
 	): View?
 	{
-		return inflater.inflate(R.layout.frg_add_timer, container, false)
+		return inflater.inflate(R.layout.frg_add_edit_timer, container, false)
 	}
 
 	/**
@@ -139,37 +155,164 @@ class NacAddTimerFragment
 
 		// Get the context and shared preferences
 		val context = requireContext()
-		val sharedPreferences = NacSharedPreferences(context)
+		sharedPreferences = NacSharedPreferences(context)
 
-		// Handle setting the default media on the first run
-		if (sharedPreferences.mediaPathTimer.isEmpty()
-			&& sharedPreferences.mediaTypeTimer == NacMedia.TYPE_RINGTONE)
-		{
-			val ringtones = NacMedia.getRingtones(context)
-
-			// Iterate over each ringtone
-			for ((title, path) in ringtones)
-			{
-				// Skip if path is empty
-				if (path.isEmpty())
-				{
-					continue
-				}
-
-				// Set the default on the first item and then break out of the loop
-				sharedPreferences.mediaPathTimer = path
-				sharedPreferences.mediaTitleTimer = title
-				break
-			}
-		}
-
-		// Create the timer
-		var timer = NacTimer.Companion.build(sharedPreferences)
+		// Setup the initial media that should be used for a timer, if it has not already
+		// been set or changed
+		setupInitialMediaForTimer()
 
 		// Get the views
 		hourTextView = view.findViewById(R.id.timer_hour)
 		minuteTextView = view.findViewById(R.id.timer_minute)
 		secondsTextView = view.findViewById(R.id.timer_seconds)
+
+		// Setup the views
+		initTimer()
+		setupHourMinuteSecondTextViews()
+		setupNumberPadButtons()
+		setupMoreButton()
+		setupStartButton()
+		setupDoneButton()
+	}
+
+	/**
+	 * Set the timer duration.
+	 */
+	protected fun setDuration()
+	{
+		// Get the hour, minutes, and seconds
+		val hour = hourTextView.text.toString().toLong()
+		val minute = minuteTextView.text.toString().toLong()
+		val seconds = secondsTextView.text.toString().toLong()
+
+		// Set the duration
+		timer.duration = seconds + minute*60 + hour*3600
+	}
+
+	/**
+	 * Setup the done button.
+	 */
+	protected fun setupDoneButton()
+	{
+		// Get the view
+		val view = requireView()
+		val startButton: MaterialButton = view.findViewById(R.id.timer_start)
+		val doneButton: MaterialButton = view.findViewById(R.id.timer_done_edit)
+
+		// Get the contrast color
+		val contrastColor = calcContrastColor(sharedPreferences.themeColor)
+
+		// Setup the view
+		startButton.visibility = View.INVISIBLE
+		doneButton.visibility = View.VISIBLE
+		doneButton.setupBackgroundColor(sharedPreferences)
+		doneButton.setTextColor(contrastColor)
+
+		// On click listener
+		doneButton.setOnClickListener {
+
+			println("Updating timer")
+			// Set the duration
+			setDuration()
+
+			timerViewModel.update(timer) {
+				println("Going back to show timers")
+				findNavController().popBackStack(R.id.nacShowTimersFragment, false)
+			}
+		}
+	}
+
+	/**
+	 * Setup the hour, minute, and seconds textviews.
+	 */
+	protected fun setupHourMinuteSecondTextViews()
+	{
+		// Get the hour, minute, and seconds
+		var (hour, minute, seconds) = NacCalendar.getTimerHourMinuteSecondsZeroPadded(timer.duration)
+		val zeros = resources.getString(R.string.number00)
+
+		// Set the values to "00" if they are empty
+		if (hour.isEmpty())
+		{
+			hour = zeros
+		}
+
+		if (minute.isEmpty())
+		{
+			minute = zeros
+		}
+
+		if (seconds.isEmpty())
+		{
+			seconds= zeros
+		}
+
+		// Set the hour, minute, and seconds
+		println("Hour:Minute:Seconds  $hour:$minute:$seconds")
+		hourTextView.text = hour
+		minuteTextView.text = minute
+		secondsTextView.text = seconds
+	}
+
+	/**
+	 * Setup the initial media path for a timer if it has not already been set.
+	 */
+	protected fun setupInitialMediaForTimer()
+	{
+		// Media path or type have already been set for a timer
+		if (sharedPreferences.mediaPathTimer.isNotEmpty()
+			|| sharedPreferences.mediaTypeTimer != NacMedia.TYPE_RINGTONE)
+		{
+			return
+		}
+
+		// Get all ringtones
+		val context = requireContext()
+		val ringtones = NacMedia.getRingtones(context)
+
+		// Iterate over each ringtone
+		for ((title, path) in ringtones)
+		{
+			// Skip if path is empty
+			if (path.isEmpty())
+			{
+				continue
+			}
+
+			// Set the default on the first item and then break out of the loop
+			sharedPreferences.mediaPathTimer = path
+			sharedPreferences.mediaTitleTimer = title
+			break
+		}
+	}
+
+	/**
+	 * Setup the more button.
+	 */
+	protected fun setupMoreButton()
+	{
+		// Get the views
+		val view = requireView()
+		val moreButton: MaterialButton = view.findViewById(R.id.timer_more_button)
+
+		// Setup more button click
+		moreButton.setOnClickListener {
+			NacTimerCardOptionsDialog.navigate(navController, timer)
+				?.observe(viewLifecycleOwner) { t ->
+					println("EHHLOOOOOOOOOOOOOOOOO")
+					t.print()
+					timer = t
+				}
+		}
+	}
+
+	/**
+	 * Setup the numberpad buttons.
+	 */
+	protected fun setupNumberPadButtons()
+	{
+		// Get the views
+		val view = requireView()
 		val numpad1: MaterialButton = view.findViewById(R.id.timer_numberpad1)
 		val numpad2: MaterialButton = view.findViewById(R.id.timer_numberpad2)
 		val numpad3: MaterialButton = view.findViewById(R.id.timer_numberpad3)
@@ -181,14 +324,6 @@ class NacAddTimerFragment
 		val numpad9: MaterialButton = view.findViewById(R.id.timer_numberpad9)
 		val numpad0: MaterialButton = view.findViewById(R.id.timer_numberpad0)
 		val numpadDel: MaterialButton = view.findViewById(R.id.timer_numberpad_del)
-		val startButton: MaterialButton = view.findViewById(R.id.timer_start)
-		val moreButton: MaterialButton = view.findViewById(R.id.timer_more_button)
-
-		// Setup start button color
-		val contrastColor = calcContrastColor(sharedPreferences.themeColor)
-
-		startButton.setupBackgroundColor(sharedPreferences)
-		startButton.iconTint = ColorStateList.valueOf(contrastColor)
 
 		// Setup numberpad colors
 		numpad1.setupRippleColor(sharedPreferences)
@@ -227,17 +362,31 @@ class NacAddTimerFragment
 
 			true
 		}
+	}
 
-		// Setup start button click
+	/**
+	 * Setup the start button.
+	 */
+	@OptIn(UnstableApi::class)
+	protected fun setupStartButton()
+	{
+		// Get the view
+		val context = requireContext()
+		val view = requireView()
+		val startButton: MaterialButton = view.findViewById(R.id.timer_start)
+
+		// Get the contrast color
+		val contrastColor = calcContrastColor(sharedPreferences.themeColor)
+
+		// Setup the view
+		startButton.setupBackgroundColor(sharedPreferences)
+		startButton.iconTint = ColorStateList.valueOf(contrastColor)
+
+		// On click listener
 		startButton.setOnClickListener {
 
-			// Get the hour, minutes, and seconds
-			val hour = hourTextView.text.toString().toLong()
-			val minute = minuteTextView.text.toString().toLong()
-			val seconds = secondsTextView.text.toString().toLong()
-
 			// Set the duration
-			timer.duration = seconds + minute*60 + hour*3600
+			setDuration()
 
 			// Save the timer
 			println("Inserting into jank")
@@ -250,16 +399,6 @@ class NacAddTimerFragment
 
 			}
 
-		}
-
-		// Setup more button click
-		moreButton.setOnClickListener {
-			NacTimerCardOptionsDialog.Companion.navigate(navController, timer)
-				?.observe(viewLifecycleOwner) { t ->
-					println("EHHLOOOOOOOOOOOOOOOOO")
-					t.print()
-					timer = t
-				}
 		}
 	}
 

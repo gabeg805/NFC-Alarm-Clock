@@ -25,7 +25,7 @@ class NacTimerCardHolder(
 	 */
 	fun interface OnEditTimerClickedListener
 	{
-		fun onEditTimer()
+		fun onEditTimer(timer: NacTimer)
 	}
 
 	/**
@@ -158,7 +158,7 @@ class NacTimerCardHolder(
 			view.setOnClickListener {
 
 				// Call the listener
-				onEditTimerClickedListener?.onEditTimer()
+				onEditTimerClickedListener?.onEditTimer(timer!!)
 
 				// Haptic feedback
 				view.performHapticFeedback()

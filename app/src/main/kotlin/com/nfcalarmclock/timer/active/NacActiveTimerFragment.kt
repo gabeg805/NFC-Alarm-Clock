@@ -1,20 +1,25 @@
 package com.nfcalarmclock.timer.active
 
 import android.Manifest
+import android.animation.ArgbEvaluator
 import android.animation.ObjectAnimator
+import android.animation.ValueAnimator
 import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
 import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Bundle
 import android.os.IBinder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.annotation.RequiresPermission
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.LiveData
 import androidx.media3.common.util.UnstableApi
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.button.MaterialButton
@@ -22,6 +27,7 @@ import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.nfcalarmclock.R
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.NacCalendar
+import com.nfcalarmclock.system.NacNfcIntent
 import com.nfcalarmclock.system.getTimer
 import com.nfcalarmclock.timer.db.NacTimer
 import com.nfcalarmclock.view.calcContrastColor
@@ -96,6 +102,16 @@ class NacActiveTimerFragment
 	private lateinit var stopButton: MaterialButton
 
 	/**
+	 * Scan NFC container.
+	 */
+	private lateinit var scanNfcContainer: LinearLayout
+
+	/**
+	 * Scan NFC textview.
+	 */
+	private lateinit var scanNfcTextView: TextView
+
+	/**
 	 * Add 5 seconds button.
 	 */
 	private lateinit var add5sButton: MaterialButton
@@ -111,6 +127,23 @@ class NacActiveTimerFragment
 	private lateinit var add1mButton: MaterialButton
 
 	/**
+	 * Color animator to make a strobing effect on the seconds text when the timer goes
+	 * off.
+	 */
+	private lateinit var strobingSecondsTextColorAnimator: ObjectAnimator
+
+	/**
+	 * Color animator to make a strobing effect on the seconds units when the timer goes
+	 * off.
+	 */
+	private lateinit var strobingSecondsUnitsColorAnimator: ObjectAnimator
+
+	/**
+	 * NFC intent LiveData.
+	 */
+	private val nfcIntentLiveData: LiveData<Intent> = NacNfcIntent.liveData
+
+	/**
 	 * Whether the timer is running or not.
 	 */
 	private var isRunning: Boolean = true
@@ -119,6 +152,35 @@ class NacActiveTimerFragment
 	 * Active timer service.
 	 */
 	private var service: NacActiveTimerService? = null
+
+	/**
+	 * Start the strobing effect color animators.
+	 */
+	private fun startStrobingEffectColorAnimators()
+	{
+		println("Start strobing jank")
+		// Get the seconds units
+		val secondsUnits: TextView = requireView().findViewById(R.id.timer_seconds_units)
+
+		// Create the animators
+		strobingSecondsTextColorAnimator = ObjectAnimator.ofInt(secondsTextView, "textColor", Color.RED, Color.TRANSPARENT)
+		strobingSecondsUnitsColorAnimator = ObjectAnimator.ofInt(secondsUnits, "textColor", Color.RED, Color.TRANSPARENT)
+
+		// TODO: Maybe cirlce the progress jank with red instead of the text? So that its not as crazy
+		// Setup the animators
+		strobingSecondsTextColorAnimator.duration = 1000
+		strobingSecondsUnitsColorAnimator.duration = 1000
+		strobingSecondsTextColorAnimator.repeatCount = ValueAnimator.INFINITE
+		strobingSecondsUnitsColorAnimator.repeatCount = ValueAnimator.INFINITE
+		strobingSecondsTextColorAnimator.repeatMode = ValueAnimator.REVERSE
+		strobingSecondsUnitsColorAnimator.repeatMode = ValueAnimator.REVERSE
+		strobingSecondsTextColorAnimator.setEvaluator(ArgbEvaluator())
+		strobingSecondsUnitsColorAnimator.setEvaluator(ArgbEvaluator())
+
+		// Start the animators
+		strobingSecondsTextColorAnimator.start()
+		strobingSecondsUnitsColorAnimator.start()
+	}
 
 	/**
 	 * Connection to the active timer service.
@@ -176,9 +238,13 @@ class NacActiveTimerFragment
 					progressIndicator.animateProgress(progressIndicator.progress, 100, 100)
 
 					// TODO: Change text and progress to red to indicate the time past the set timer
+					startStrobingEffectColorAnimators()
+
+					// Setup scan NFC visibility
+					setupScanNfcVisibility(timer.shouldUseNfc)
 
 					// Show the stop button and hide the pause/resume button
-					stopButton.visibility = View.VISIBLE
+					stopButton.visibility = if (timer.shouldUseNfc) View.INVISIBLE else View.VISIBLE
 					pauseResumeButton.visibility = View.INVISIBLE
 
 					// Hide the add time buttons as the timer is no longer running
@@ -205,6 +271,7 @@ class NacActiveTimerFragment
 					// Update the views
 					updateHourMinuteSecondsTextViews(secUntilFinished)
 					updatePauseResumeDrawable()
+					setupScanNfcVisibility(false)
 
 					// Show the resume button again and hide the stop button
 					pauseResumeButton.visibility = View.VISIBLE
@@ -234,6 +301,34 @@ class NacActiveTimerFragment
 		}
 
 		override fun onServiceDisconnected(className: ComponentName) {}
+	}
+
+	/**
+	 * Dismiss the timer service.
+	 *
+	 * @param useNfc Whether NFC was used to dismiss the service or not.
+	 */
+	private fun dismissTimerService(useNfc: Boolean)
+	{
+		// Get the context
+		val context = requireContext()
+
+		// Clear the service stop listener
+		service?.onActiveTimerServiceStoppedListener = null
+
+		// Dismiss with NFC
+		if (useNfc)
+		{
+			NacActiveTimerService.dismissTimerServiceWithNfc(context, timer)
+		}
+		// Dismiss normally
+		else
+		{
+			NacActiveTimerService.dismissTimerService(context, timer)
+		}
+
+		// Navigate back to show alarms
+		findNavController().popBackStack(R.id.nacShowTimersFragment, false)
 	}
 
 	/**
@@ -317,6 +412,8 @@ class NacActiveTimerFragment
 		hourUnits = view.findViewById(R.id.timer_hour_units)
 		minuteUnits = view.findViewById(R.id.timer_minute_units)
 		pauseResumeButton = view.findViewById(R.id.timer_pause_resume)
+		scanNfcContainer = view.findViewById(R.id.timer_scan_nfc_container)
+		scanNfcTextView = view.findViewById(R.id.timer_scan_nfc_text)
 		stopButton = view.findViewById(R.id.timer_stop)
 		add5sButton = view.findViewById(R.id.timer_add_5s)
 		add30sButton = view.findViewById(R.id.timer_add_30s)
@@ -330,8 +427,10 @@ class NacActiveTimerFragment
 		setupResetButton(resetButton)
 		setupPauseResumeButton(sharedPreferences)
 		setupStopButton(sharedPreferences)
+		setupScanNfcVisibility(false)
 		setupAddTimeButtons()
 		setupProgressIndicator(sharedPreferences)
+		setupObserveNfcIntentLiveData()
 		println("Done with onViewCreated()")
 	}
 
@@ -363,6 +462,21 @@ class NacActiveTimerFragment
 		{
 			minuteTextView.visibility = View.GONE
 			minuteUnits.visibility = View.GONE
+		}
+	}
+
+	/**
+	 * Setup the observer for the NFC intent LiveData.
+	 */
+	private fun setupObserveNfcIntentLiveData()
+	{
+		nfcIntentLiveData.observe(viewLifecycleOwner) {
+
+			println("OBSERVED LIFE DATA CHANGE!")
+			// TODO: Check if NFC matches jank
+
+			// Dismiss the service
+			dismissTimerService(true)
 		}
 	}
 
@@ -441,9 +555,23 @@ class NacActiveTimerFragment
 	}
 
 	/**
+	 * Setup the scan NFC views visibility.
+	 */
+	private fun setupScanNfcVisibility(shouldBeVisible: Boolean)
+	{
+		if (shouldBeVisible)
+		{
+			scanNfcContainer.visibility = View.VISIBLE
+		}
+		else
+		{
+			scanNfcContainer.visibility = View.INVISIBLE
+		}
+	}
+
+	/**
 	 * Setup the stop button.
 	 */
-	@RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
 	private fun setupStopButton(sharedPreferences: NacSharedPreferences)
 	{
 		// Setup color
@@ -452,24 +580,9 @@ class NacActiveTimerFragment
 		stopButton.setupBackgroundColor(sharedPreferences)
 		stopButton.iconTint = ColorStateList.valueOf(contrastColor)
 
-		// Setup the click listener
-		// TODO: Figure out what logic should be for NFC
+		// Setup the click listener to dismiss the service
 		stopButton.setOnClickListener {
-
-			//// Reset the timer
-			//service?.resetCountdownTimer()
-
-			// Clear the service stop listener
-			service?.onActiveTimerServiceStoppedListener = null
-
-			// Dismiss the timer
-			NacActiveTimerService.dismissTimerService(requireContext(), timer)
-
-			// Navigate back to show alarms
-			// TODO: Change so that it goes to show timers instead of add timer...or maybe should just stay in this fragment?
-			// TODO: If I do this, need to think about restarting the service and replaying music and whatnot
-			findNavController().popBackStack(R.id.nacShowTimersFragment, false)
-
+			dismissTimerService(false)
 		}
 	}
 

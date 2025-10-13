@@ -1,8 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
+	<!-- Card time text -->
+	<style name="Timer.CardTimeText" parent="">
+		<item name="android:layout_width">wrap_content</item>
+		<item name="android:layout_height">wrap_content</item>
+		<item name="android:textColor">@color/white</item>
+		<item name="android:textSize">@dimen/tsz_xhuge</item>
+		<item name="android:textStyle">normal</item>
+	</style>
+
 	<!-- Time text -->
-	<style name="Timer.TimeText" parent="">
+	<style name="Timer.AddTimeText" parent="">
 		<item name="android:layout_width">wrap_content</item>
 		<item name="android:layout_height">wrap_content</item>
 		<item name="android:textColor">@color/white</item>

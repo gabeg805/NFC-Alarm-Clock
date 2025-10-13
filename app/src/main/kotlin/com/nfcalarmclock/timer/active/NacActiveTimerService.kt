@@ -71,8 +71,7 @@ class NacActiveTimerService
 	{
 
 		/**
-		 * Return this instance of the active timer service so clients can call public
-		 * methods.
+		 * Return this instance of this service so clients can call public methods.
 		 */
 		fun getService(): NacActiveTimerService = this@NacActiveTimerService
 
@@ -320,9 +319,6 @@ class NacActiveTimerService
 
 		// Disable the activity alias so that tapping an NFC tag will not do anything
 		disableActivityAlias(this)
-
-		// TODO: Stop the timer activity
-		// NacActiveTimerActivity.stopTimerActivity(this)
 
 		// Update the timer so it is no longer marked as active in the database
 		lifecycleScope.launch {
@@ -664,23 +660,26 @@ class NacActiveTimerService
 		val notificationBuilder = NacActiveTimerNotification(this, timer)
 
 		// Create the notification
-		val notification = notificationBuilder.setContentTitle(newTitle)
+		val notification = (notificationBuilder.setContentTitle(newTitle) as NacActiveTimerNotification)
 			.apply {
-				// Notification builder
+				// Timer is counting down
 				if (millisUntilFinished > 0)
 				{
+					// Paused
 					if (countDownTimer == null)
 					{
-						notificationBuilder.addAction(R.drawable.play, R.string.action_timer_resume, notificationBuilder.resumePendingIntent)
+						addAction(R.drawable.play, R.string.action_timer_resume, notificationBuilder.resumePendingIntent)
 					}
+					// Resumed and counting down
 					else
 					{
-						notificationBuilder.addAction(R.drawable.pause_32, R.string.action_timer_pause, notificationBuilder.pausePendingIntent)
+						addAction(R.drawable.pause_32, R.string.action_timer_pause, notificationBuilder.pausePendingIntent)
 					}
 				}
+				// Timer has reached 0 and the sound and everything is going off
 				else
 				{
-					notificationBuilder.addAction(R.drawable.stop_32, R.string.action_timer_stop, notificationBuilder.dismissPendingIntent)
+					addAction(R.drawable.stop_32, R.string.action_timer_stop, notificationBuilder.dismissPendingIntent)
 				}
 			}
 			.build()
@@ -706,7 +705,9 @@ class NacActiveTimerService
 		}
 
 		// Amount of time until the timer is automatically dismissed
-		val delay = TimeUnit.SECONDS.toMillis(timer!!.autoDismissTime.toLong()) - 750
+		//val delay = TimeUnit.SECONDS.toMillis(timer!!.autoDismissTime.toLong()) - 750
+		val delay = TimeUnit.SECONDS.toMillis(30) - 750
+		println("Auto dismiss delay : $delay")
 
 		// Automatically dismiss the timer
 		autoDismissHandler!!.postDelayed({

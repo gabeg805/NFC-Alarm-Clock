@@ -160,6 +160,9 @@ class NacTimer()
 		// ID
 		timer.id = 0
 
+		// Duration
+		timer.duration = duration
+
 		// Repeat
 		timer.shouldRepeat = shouldRepeat
 		//timer.repeatFrequency = repeatFrequency
@@ -177,6 +180,7 @@ class NacTimer()
 		timer.shouldUseNfc = shouldUseNfc
 		timer.nfcTagId = nfcTagId
 		timer.nfcTagDismissOrder = nfcTagDismissOrder
+		timer.scanNfcTagIdToStart = scanNfcTagIdToStart
 
 		// Flashlight
 		timer.shouldUseFlashlight = shouldUseFlashlight
@@ -216,6 +220,7 @@ class NacTimer()
 		timer.shouldAutoDismiss = shouldAutoDismiss
 		timer.autoDismissTime = autoDismissTime
 		timer.shouldDeleteAfterDismissed = shouldDeleteAfterDismissed
+		timer.shouldVolumeStop = shouldVolumeStop
 
 		return timer
 	}

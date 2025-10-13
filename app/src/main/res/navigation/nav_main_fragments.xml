@@ -11,7 +11,7 @@
 		android:label="NacShowAlarmsFragment" />
 	<fragment
 		android:id="@+id/nacAddTimerFragment"
-		android:name="com.nfcalarmclock.timer.add.NacAddTimerFragment"
+		android:name="com.nfcalarmclock.timer.addedit.NacAddTimerFragment"
 		android:label="NacAddTimerFragment" >
 		<action
 			android:id="@+id/action_nacAddTimerFragment_to_nacActiveTimerFragment"
@@ -31,5 +31,12 @@
 		<action
 			android:id="@+id/action_nacShowTimersFragment_to_nacActiveTimerFragment"
 			app:destination="@id/nacActiveTimerFragment" />
+		<action
+			android:id="@+id/action_nacShowTimersFragment_to_nacEditTimerFragment"
+			app:destination="@id/nacEditTimerFragment" />
 	</fragment>
+	<fragment
+		android:id="@+id/nacEditTimerFragment"
+		android:name="com.nfcalarmclock.timer.addedit.NacEditTimerFragment"
+		android:label="NacEditTimerFragment" />
 </navigation>

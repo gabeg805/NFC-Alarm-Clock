@@ -241,7 +241,6 @@ class NacActiveAlarmActivity
 	 * After this, onResume() will be called, which will check if an NFC tag was scanned
 	 * and, if so, will disimss the alarm.
 	 */
-	@OptIn(UnstableApi::class)
 	override fun onNewIntent(intent: Intent)
 	{
 		// Super

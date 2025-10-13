@@ -62,6 +62,7 @@
 					android:contentDescription="@string/cd_fab_add_alarm"
 					android:layout_width="@dimen/isz_attention"
 					android:layout_height="@dimen/isz_attention"
+					android:layout_marginBottom="@dimen/large"
 					android:layout_gravity="bottom|center"
 					android:src="@drawable/plus"
 					/>
@@ -78,11 +79,11 @@
 				android:layout_height="wrap_content"
 				android:minHeight="@dimen/touch"
 				android:layout_gravity="bottom"
-				android:layout_marginTop="@dimen/large"
-				app:menu="@menu/menu_bottom_navigation"
-				app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
+				app:backgroundTint="@color/gray_dark2"
 				app:itemPaddingTop="8dp"
 				app:itemPaddingBottom="8dp"
+				app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
+				app:menu="@menu/menu_bottom_navigation"
 				/>
 		</LinearLayout>
 	</androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -4,11 +4,11 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.drawable.InsetDrawable
+import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Parcelable
 import android.provider.AlarmClock
-import android.view.HapticFeedbackConstants
 import android.view.LayoutInflater
 import android.view.MenuInflater
 import android.view.View
@@ -22,6 +22,7 @@ import androidx.core.view.isNotEmpty
 import androidx.core.view.size
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
 import androidx.navigation.fragment.NavHostFragment
@@ -34,20 +35,7 @@ import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textview.MaterialTextView
 import com.nfcalarmclock.R
-import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.alarm.db.NacNextAlarm
-import com.nfcalarmclock.alarm.options.NacAlarmOptionsDialog
-import com.nfcalarmclock.alarm.options.dateandtime.NacDateAndTimePickerDialog
-import com.nfcalarmclock.alarm.options.dismissoptions.NacDismissEarlyService
-import com.nfcalarmclock.alarm.options.dismissoptions.NacDismissOptionsDialog
-import com.nfcalarmclock.alarm.options.mediapicker.NacMediaPickerActivity
-import com.nfcalarmclock.alarm.options.name.NacNameDialog
-import com.nfcalarmclock.alarm.options.nfc.NacNfcTagViewModel
-import com.nfcalarmclock.alarm.options.nfc.db.NacNfcTag
-import com.nfcalarmclock.alarm.options.snoozeoptions.NacSnoozeOptionsDialog
-import com.nfcalarmclock.alarm.options.upcomingreminder.NacUpcomingReminderService
-import com.nfcalarmclock.card.NacBaseCardAdapter
-import com.nfcalarmclock.card.NacBaseCardTouchHelperCallback
+import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmActivity
 import com.nfcalarmclock.alarm.card.NacAlarmCardAdapter
 import com.nfcalarmclock.alarm.card.NacAlarmCardAdapterLiveData
 import com.nfcalarmclock.alarm.card.NacAlarmCardHolder
@@ -68,13 +56,26 @@ import com.nfcalarmclock.alarm.card.NacAlarmCardHolder.OnCardUseNfcChangedListen
 import com.nfcalarmclock.alarm.card.NacAlarmCardHolder.OnCardUseRepeatChangedListener
 import com.nfcalarmclock.alarm.card.NacAlarmCardHolder.OnCardUseVibrateChangedListener
 import com.nfcalarmclock.alarm.card.NacAlarmCardHolder.OnCardVolumeChangedListener
-import com.nfcalarmclock.card.NacCardLayoutManager
 import com.nfcalarmclock.alarm.card.NacAlarmCardTouchHelper
-import com.nfcalarmclock.main.NacMainActivity.Companion.ACTION_DISMISS_ALARM_EARLY
+import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.alarm.db.NacNextAlarm
+import com.nfcalarmclock.alarm.options.NacAlarmOptionsDialog
+import com.nfcalarmclock.alarm.options.dateandtime.NacDateAndTimePickerDialog
+import com.nfcalarmclock.alarm.options.dismissoptions.NacDismissEarlyService
+import com.nfcalarmclock.alarm.options.dismissoptions.NacDismissOptionsDialog
+import com.nfcalarmclock.alarm.options.mediapicker.NacMediaPickerActivity
+import com.nfcalarmclock.alarm.options.name.NacNameDialog
+import com.nfcalarmclock.alarm.options.nfc.NacNfcTagViewModel
+import com.nfcalarmclock.alarm.options.snoozeoptions.NacSnoozeOptionsDialog
+import com.nfcalarmclock.alarm.options.upcomingreminder.NacUpcomingReminderService
+import com.nfcalarmclock.card.NacBaseCardAdapter
+import com.nfcalarmclock.card.NacBaseCardTouchHelperCallback
+import com.nfcalarmclock.card.NacCardLayoutManager
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.statistics.NacAlarmStatisticViewModel
 import com.nfcalarmclock.system.NacBundle.BUNDLE_INTENT_ACTION
 import com.nfcalarmclock.system.NacCalendar
+import com.nfcalarmclock.system.NacNfcIntent
 import com.nfcalarmclock.system.createTimeTickReceiver
 import com.nfcalarmclock.system.getAlarm
 import com.nfcalarmclock.system.registerMyReceiver
@@ -145,11 +146,6 @@ class NacShowAlarmsFragment
 	private val nfcTagViewModel: NacNfcTagViewModel by viewModels()
 
 	/**
-	 * List of all NFC tags.
-	 */
-	private var allNfcTags: List<NacNfcTag> = ArrayList()
-
-	/**
 	 * Mutable live data for the alarm card that can be modified and sorted, or
 	 * not sorted, depending on the circumstance.
 	 *
@@ -163,11 +159,17 @@ class NacShowAlarmsFragment
 	private lateinit var alarmCardTouchHelper: NacAlarmCardTouchHelper
 
 	/**
+	 * NFC intent LiveData.
+	 */
+	private val nfcIntentLiveData: LiveData<Intent> = NacNfcIntent.liveData
+
+	/**
 	 * Receiver for the time tick intent. This is called when the time increments
 	 * every minute.
 	 */
 	private val timeTickReceiver = createTimeTickReceiver { _, _ ->
 
+		println("Time tick receiver")
 		// Set the message for when the next alarm will be run
 		setNextAlarmMessage()
 
@@ -457,6 +459,7 @@ class NacShowAlarmsFragment
 	{
 		// Super
 		super.onResume()
+		println("Show alarms onResume()")
 
 		// Get the intent action and alarm from the fragment arguments bundle. These
 		// could be null, but if an action occurred, they will not be
@@ -466,17 +469,16 @@ class NacShowAlarmsFragment
 		// Alarm should be dismissed early
 		if ((action == ACTION_DISMISS_ALARM_EARLY) && (alarm != null))
 		{
+			println("Show alarms dismissAlarmEarlyFromIntent()")
 			dismissAlarmEarlyFromIntent(alarm)
 		}
 
 		// Add alarm that was created from the SET_ALARM intent
 		if ((action == AlarmClock.ACTION_SET_ALARM) && (alarm != null))
 		{
+			println("Show alarms addAlarmFromSetAlarmIntent()")
 			addAlarmFromSetAlarmIntent(alarm)
 		}
-
-		// Setup UI
-		setupFloatingActionButton()
 
 		// Register the time tick receiver
 		registerMyReceiver(requireContext(), timeTickReceiver, IntentFilter(Intent.ACTION_TIME_TICK))
@@ -489,6 +491,7 @@ class NacShowAlarmsFragment
 	{
 		// Setup
 		super.onViewCreated(view, savedInstanceState)
+		println("Show alarms onViewCreated()")
 
 		// Set member variables
 		val context = requireContext()
@@ -507,7 +510,7 @@ class NacShowAlarmsFragment
 				val card = getAlarmCardAt(index)
 
 				// Haptic feedback so that the user knows the action was received
-				card?.root?.performHapticFeedback(HapticFeedbackConstants.VIRTUAL_KEY)
+				card?.root?.performHapticFeedback()
 
 				// Reset the view on the alarm that was swiped
 				alarmCardAdapter.notifyItemChanged(index)
@@ -541,14 +544,11 @@ class NacShowAlarmsFragment
 		// Set flag that cards need to be measured
 		sharedPreferences.cardIsMeasured = false
 
-		// Setup live data
-		lifecycleScope.launch {
-			setupLiveDataObservers()
-		}
-
-		// Setup UI
+		// Setup
+		setupLiveDataObservers()
 		setupAlarmCardAdapter()
 		setupRecyclerView()
+		setupFloatingActionButton()
 	}
 
 	/**
@@ -608,6 +608,7 @@ class NacShowAlarmsFragment
 	 */
 	private fun setNextAlarmMessage(nextAlarm: NacNextAlarm? = null): NacNextAlarm?
 	{
+		println("setNextAlarmMessage() $nextAlarm")
 		// Cancel any post delayed runnables
 		nextAlarmMessageHandler.removeCallbacksAndMessages(null)
 
@@ -619,6 +620,7 @@ class NacShowAlarmsFragment
 		// Get the next alarm message
 		val message = NacCalendar.Message.getNext(requireContext(),
 			nextAlarm?.calendar, sharedPreferences.nextAlarmFormat)
+		println("Decide next alarm? ${nextAlarm?.alarm?.isEnabled} | ${nextAlarm?.calendar.toString()}")
 
 		// Set the message in the text view
 		nextAlarmTextView.text = message
@@ -626,6 +628,7 @@ class NacShowAlarmsFragment
 		// Check if the next alarm message should be refreshed
 		if (shouldRefreshNextAlarmMessage(nextAlarm))
 		{
+			println("Refresh next alarm!")
 			// Set the message for when the next alarm will be run
 			nextAlarmMessageHandler.postDelayed({
 				setNextAlarmMessage(nextAlarm = nextAlarm.takeIf { nextAlarm!!.alarm.isEnabled })
@@ -760,6 +763,7 @@ class NacShowAlarmsFragment
 			// setupRepeatButtonLongPress
 			// unskip/skipNextAlarm
 			card.onCardUpdatedListener = OnCardUpdatedListener { _, alarm ->
+				println("Card updated!")
 				showNextAlarm(card, alarm)
 				updateAlarm(alarm)
 			}
@@ -801,6 +805,7 @@ class NacShowAlarmsFragment
 
 			// Days
 			card.onCardDaysChangedListener = OnCardDaysChangedListener { _, alarm ->
+				println("Card days changed!")
 				showNextAlarm(card, alarm)
 				updateAlarm(alarm)
 			}
@@ -1195,16 +1200,55 @@ class NacShowAlarmsFragment
 
 		}
 
-		// Observe list of NFC tags
+		// Set the shared preference whether to show the Manage NFC tags
+		// preference or not. It will be shown if there are NFC tags to
+		// manage
 		nfcTagViewModel.allNfcTags.observe(viewLifecycleOwner) {
-
-			// Get the list of all NFC tags
-			allNfcTags = it
-
-			// Set the shared preference whether to show the Manage NFC tags
-			// preference or not. It will be shown if there are NFC tags to
-			// manage
 			sharedPreferences.shouldShowManageNfcTagsPreference = it.isNotEmpty()
+		}
+
+		// TODO: Do I want an alarm intent watcher and timer intent watcher?
+		// NFC intent
+		nfcIntentLiveData.observe(viewLifecycleOwner) { intent ->
+
+			println("Show alarms new NFC intent! ${intent.action}")
+			lifecycleScope.launch {
+
+				// TODO: If this logic is not here, what is the timing between seeing that
+				//  NFC was scanned, posting the intent value, checking the alarm view model
+				//  for an active jank, and then starting the alarm activity/service?
+				// Get the active alarm
+				val activeAlarm = alarmViewModel.getActiveAlarm()
+				println("Show alarms active alarm check livedata: ${activeAlarm != null}")
+
+				// Check if the active alarm is not null
+				// here and then add checks to make sure it is safe to pass into these start
+				// activity/service functions
+				if (activeAlarm != null)
+				{
+					// Remove the grant URI permissions in the untrusted intent
+					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+					{
+						intent.removeFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+						intent.removeFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+					}
+
+					// Check that the nested intent does not grant URI permissions
+					if (((intent.flags and Intent.FLAG_GRANT_READ_URI_PERMISSION) == 0) &&
+						((intent.flags and Intent.FLAG_GRANT_WRITE_URI_PERMISSION) == 0))
+					{
+						println("Show alarms start alarm activity")
+						// Start the alarm activity with the intent containing the NFC tag
+						// information in order to dismiss this alarm
+						NacActiveAlarmActivity.startAlarmActivity(requireContext(), intent, activeAlarm)
+					}
+
+					// TODO: Is this necessary or do I need to popBackStack()?
+					//// Finish the main activity
+					//finish()
+				}
+
+			}
 
 		}
 	}
@@ -1343,6 +1387,7 @@ class NacShowAlarmsFragment
 	 */
 	private fun showNextAlarm(card: NacAlarmCardHolder, alarm: NacAlarm)
 	{
+		println("Show next alarm() : ${alarm.hour}:${alarm.minute} | ${alarm.isEnabled}")
 		// Set the next alarm message and get the next alarm
 		val nextAlarm = setNextAlarmMessage()
 
@@ -1409,104 +1454,104 @@ class NacShowAlarmsFragment
 		// Add callback if listener is set
 		if (!shouldReuseSnackbar)
 		{
-			// Listener when the snackbar is being drawn and thus when it is moving up and down
-			snackbar.view.viewTreeObserver.addOnPreDrawListener(object: ViewTreeObserver.OnPreDrawListener
-			{
+			//// Listener when the snackbar is being drawn and thus when it is moving up and down
+			//snackbar.view.viewTreeObserver.addOnPreDrawListener(object: ViewTreeObserver.OnPreDrawListener
+			//{
 
-				/**
-				 * Called when the view tree is about to be drawn.
-				 */
-				override fun onPreDraw(): Boolean
-				{
-					// Get the current Y position
-					val y = snackbar.view.y
+			//	/**
+			//	 * Called when the view tree is about to be drawn.
+			//	 */
+			//	override fun onPreDraw(): Boolean
+			//	{
+			//		// Get the current Y position
+			//		val y = snackbar.view.y
 
-					// Do nothing when the snackbar has not been shown yet
-					if (prevSnackbarY == 0f)
-					{
-						return true
-					}
-					// Snackbar is moving down
-					else if (prevSnackbarY < y)
-					{
-						// Animate the FAB moving back to its original position
-						floatingActionButton.animate()
-							.apply {
-								translationY(0f)
-								duration = 250
-							}
-							.start()
+			//		// Do nothing when the snackbar has not been shown yet
+			//		if (prevSnackbarY == 0f)
+			//		{
+			//			return true
+			//		}
+			//		// Snackbar is moving down
+			//		else if (prevSnackbarY < y)
+			//		{
+			//			// Animate the FAB moving back to its original position
+			//			floatingActionButton.animate()
+			//				.apply {
+			//					translationY(0f)
+			//					duration = 250
+			//				}
+			//				.start()
 
-						// Remove the listener
-						snackbar.view.viewTreeObserver.removeOnPreDrawListener(this)
-					}
-					// Snackbar is moving up. Update the previous Y position to compare
-					// later
-					else
-					{
-						prevSnackbarY = y
-					}
+			//			// Remove the listener
+			//			snackbar.view.viewTreeObserver.removeOnPreDrawListener(this)
+			//		}
+			//		// Snackbar is moving up. Update the previous Y position to compare
+			//		// later
+			//		else
+			//		{
+			//			prevSnackbarY = y
+			//		}
 
-					return true
-				}
+			//		return true
+			//	}
 
-			})
+			//})
 
-			// Listener for when the snackbar is starting to change and become visible.
-			// This means the view has been measured and has a height, so the animation
-			// of the FAB can be started at the same time since now it is known how much
-			// to animate the FAB's Y position by
-			snackbar.view.addOnLayoutChangeListener { view, _, _, _, _, _, _, _, _ ->
+			//// Listener for when the snackbar is starting to change and become visible.
+			//// This means the view has been measured and has a height, so the animation
+			//// of the FAB can be started at the same time since now it is known how much
+			//// to animate the FAB's Y position by
+			//snackbar.view.addOnLayoutChangeListener { view, _, _, _, _, _, _, _, _ ->
 
-				/**
-				 * Called when the view layout has changed.
-				 */
-				// Get the height of the snackbar
-				val height = view.height.toFloat()
+			//	/**
+			//	 * Called when the view layout has changed.
+			//	 */
+			//	// Get the height of the snackbar
+			//	val height = view.height.toFloat()
 
-				// Animate the FAB moving up
-				floatingActionButton.animate()
-					.apply {
-						translationY(-height)
-						duration = 250
-					}
-					.start()
+			//	// Animate the FAB moving up
+			//	floatingActionButton.animate()
+			//		.apply {
+			//			translationY(-height)
+			//			duration = 250
+			//		}
+			//		.start()
 
-				// Snackbar was already being shown. Update the Y position to the
-				// snackbar's current Y position in case its height changed
-				if (prevSnackbarY > 0)
-				{
-					prevSnackbarY = view.y
-				}
-			}
+			//	// Snackbar was already being shown. Update the Y position to the
+			//	// snackbar's current Y position in case its height changed
+			//	if (prevSnackbarY > 0)
+			//	{
+			//		prevSnackbarY = view.y
+			//	}
+			//}
 
-			// Add the normal show/dismiss callback
-			snackbar.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>()
-			{
+			//// Add the normal show/dismiss callback
+			//snackbar.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>()
+			//{
 
-				/**
-				 * Called when the snackbar is shown.
-				 */
-				override fun onShown(transientBottomBar: Snackbar?)
-				{
-					// The snackbar is visible now, so get its starting Y position
-					prevSnackbarY = snackbar.view.y
-				}
+			//	/**
+			//	 * Called when the snackbar is shown.
+			//	 */
+			//	override fun onShown(transientBottomBar: Snackbar?)
+			//	{
+			//		// The snackbar is visible now, so get its starting Y position
+			//		prevSnackbarY = snackbar.view.y
+			//	}
 
-				/**
-				 * Called when the snackbar has been dismissed.
-				 */
-				override fun onDismissed(transientBottomBar: Snackbar?, event: Int)
-				{
-					// Call the listener
-					onDismissListener(event)
+			//	/**
+			//	 * Called when the snackbar has been dismissed.
+			//	 */
+			//	override fun onDismissed(transientBottomBar: Snackbar?, event: Int)
+			//	{
+			//		// Call the listener
+			//		onDismissListener(event)
 
-					// Reset the values of the FAB and snackbar
-					floatingActionButton.translationY = 0f
-					prevSnackbarY = 0f
-				}
+			//		// Reset the values of the FAB and snackbar
+			//		floatingActionButton.translationY = 0f
+			//		prevSnackbarY = 0f
+			//	}
 
-			})
+			//})
 		}
 
 		// Show the snackbar
@@ -1610,6 +1655,11 @@ class NacShowAlarmsFragment
 		 * Rate at which the next alarm message is refreshed.
 		 */
 		const val REFRESH_NEXT_ALARM_MESSAGE_PERIOD = 1000L
+
+		/**
+		 * Action to dismiss the alarm early.
+		 */
+		const val ACTION_DISMISS_ALARM_EARLY = "com.nfcalarmclock.alarm.ACTION_DISMISS_ALARM_EARLY"
 
 	}
 

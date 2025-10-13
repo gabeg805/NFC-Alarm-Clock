@@ -135,6 +135,24 @@ class NacTimerCardOptionsDialog
 	}
 
 	/**
+	 * Set the message and alpha of the name view.
+	 */
+	private fun setNameMessageAndAlpha(button: MaterialButton)
+	{
+		// Get the name message
+		val message = timer.nameNormalized.ifEmpty {
+			resources.getString(R.string.title_alarm_name)
+		}
+
+		// Get the alpha that the view should be
+		val alpha = if (timer.nameNormalized.isNotEmpty()) 1.0f else 0.3f
+
+		// Set the name as text for the button, and the alpha
+		button.text = message
+		button.alpha = alpha
+	}
+
+	/**
 	 * Set the volume image view.
 	 */
 	private fun setVolumeImageView(imageView: ImageView)
@@ -225,17 +243,8 @@ class NacTimerCardOptionsDialog
 	 */
 	private fun setupName(button: MaterialButton)
 	{
-		// Get the name message
-		val message = timer.nameNormalized.ifEmpty {
-			resources.getString(R.string.title_alarm_name)
-		}
-
-		// Get the alpha that the view should be
-		val alpha = if (timer.nameNormalized.isNotEmpty()) 1.0f else 0.3f
-
-		// Set the name as text for the button, and the alpha
-		button.text = message
-		button.alpha = alpha
+		// Set the message and alpha
+		setNameMessageAndAlpha(button)
 
 		// Show a dialog to set a new name
 		button.setOnClickListener { view ->
@@ -245,6 +254,7 @@ class NacTimerCardOptionsDialog
 				timer.name,
 				onNameEnteredListener = { name ->
 					timer.name = name
+					setNameMessageAndAlpha(button)
 				})
 				.show(parentFragmentManager, NacNameDialog.TAG)
 

@@ -7,17 +7,19 @@
 	android:layout_height="wrap_content"
 	app:contentPaddingTop="@dimen/small"
 	app:contentPaddingBottom="@dimen/tiny"
-	app:contentPaddingLeft="@dimen/normal"
-	app:contentPaddingRight="@dimen/normal"
+	app:contentPaddingLeft="@dimen/medium"
+	app:contentPaddingRight="@dimen/medium"
 	app:cardBackgroundColor="?attr/colorCard">
 
 	<androidx.constraintlayout.widget.ConstraintLayout
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content">
+		android:layout_height="wrap_content"
+		android:layout_marginStart="@dimen/twoline"
+		android:layout_marginEnd="@dimen/twoline">
 
 		<!-- Hour -->
 		<TextView
-			style="@style/Timer.TimeText"
+			style="@style/Timer.CardTimeText"
 			android:id="@+id/timer_hour"
 			android:textSize="@dimen/tsz_attention"
 			android:text="@string/number00"
@@ -40,7 +42,7 @@
 
 		<!-- Minute -->
 		<TextView
-			style="@style/Timer.TimeText"
+			style="@style/Timer.CardTimeText"
 			android:id="@+id/timer_minute"
 			android:textSize="@dimen/tsz_attention"
 			android:text="@string/number00"
@@ -62,7 +64,7 @@
 
 		<!-- Seconds -->
 		<TextView
-			style="@style/Timer.TimeText"
+			style="@style/Timer.CardTimeText"
 			android:id="@+id/timer_seconds"
 			android:textSize="@dimen/tsz_attention"
 			android:text="@string/number00"
@@ -87,14 +89,16 @@
 			android:id="@+id/timer_repeat_frequency"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:paddingEnd="@dimen/tiny"
+			android:layout_marginStart="@dimen/nudge"
+			android:layout_marginEnd="@dimen/tiny"
 			android:text="1x"
+			app:layout_constraintHorizontal_bias="0"
+			app:layout_constraintHorizontal_chainStyle="packed"
+			app:layout_goneMarginStart="@dimen/nudge"
 			app:layout_constraintTop_toBottomOf="@id/timer_seconds"
 			app:layout_constraintBottom_toBottomOf="parent"
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintEnd_toStartOf="@id/timer_name"
-			app:layout_constraintHorizontal_bias="0"
-			app:layout_constraintHorizontal_chainStyle="packed"
 			/>
 
 		<!-- Name -->

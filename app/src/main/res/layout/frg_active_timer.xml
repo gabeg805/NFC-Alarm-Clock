@@ -27,7 +27,7 @@
 
 	<!-- Hour -->
 	<TextView
-		style="@style/Timer.TimeText"
+		style="@style/Timer.AddTimeText"
 		android:id="@+id/timer_hour"
 		android:text="@string/number00"
 		app:layout_constraintTop_toTopOf="@id/timer_progress"
@@ -49,7 +49,7 @@
 
 	<!-- Minute -->
 	<TextView
-		style="@style/Timer.TimeText"
+		style="@style/Timer.AddTimeText"
 		android:id="@+id/timer_minute"
 		android:text="@string/number00"
 		app:layout_constraintTop_toTopOf="@id/timer_progress"
@@ -70,7 +70,7 @@
 
 	<!-- Seconds -->
 	<TextView
-		style="@style/Timer.TimeText"
+		style="@style/Timer.AddTimeText"
 		android:id="@+id/timer_seconds"
 		android:text="@string/number00"
 		app:layout_constraintTop_toTopOf="@id/timer_progress"
@@ -130,6 +130,7 @@
 		android:layout_marginTop="@dimen/zero"
 		android:layout_marginBottom="@dimen/zero"
 		android:backgroundTint="?attr/colorAccent"
+		android:visibility="invisible"
 		app:iconGravity="textStart"
 		app:iconPadding="@dimen/zero"
 		app:iconSize="@dimen/isz_xxxlarge"
@@ -138,8 +139,44 @@
 		app:layout_constraintBottom_toTopOf="@id/timer_add_5s"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
-		android:visibility="invisible"
 		/>
+
+	<!-- Scan NFC -->
+	<LinearLayout
+		android:id="@+id/timer_scan_nfc_container"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:gravity="center_horizontal"
+		android:orientation="vertical"
+		android:visibility="invisible"
+		android:animateLayoutChanges="true"
+		app:layout_constraintTop_toBottomOf="@id/timer_progress"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintEnd_toEndOf="parent">
+
+		<ImageView
+			android:contentDescription="@string/cd_scan_nfc"
+			android:layout_width="@dimen/isz_focus"
+			android:layout_height="@dimen/isz_focus"
+			android:layout_marginStart="@dimen/nudge"
+			android:src="@drawable/tap_and_play"
+			/>
+
+		<TextView
+			android:id="@+id/timer_scan_nfc_text"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="@dimen/small"
+			android:ellipsize="end"
+			android:maxLines="2"
+			android:textAlignment="center"
+			android:textColor="@color/white"
+			android:textSize="@dimen/tsz_large"
+			android:textStyle="bold"
+			android:text="Scan NFC tag"
+			/>
+	</LinearLayout>
 
 	<!-- Add time -->
 	<com.google.android.material.button.MaterialButton

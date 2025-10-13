@@ -111,10 +111,8 @@ class NacActiveTimerNotification(
 		@OptIn(UnstableApi::class)
 		get()
 		{
-			// Create an intent to dismiss the active timer service
+			// Create the intent and get the pending intent flags
 			val intent = NacActiveTimerService.getDismissIntent(context, timer)
-
-			// Determine the pending intent flags
 			val flags = PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
 
 			// Create the pending intent

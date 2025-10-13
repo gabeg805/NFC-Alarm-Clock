@@ -8,7 +8,7 @@
 
 	<!-- Hour -->
 	<TextView
-		style="@style/Timer.TimeText"
+		style="@style/Timer.AddTimeText"
 		android:id="@+id/timer_hour"
 		android:text="@string/number00"
 		app:layout_constraintTop_toTopOf="parent"
@@ -29,7 +29,7 @@
 
 	<!-- Minute -->
 	<TextView
-		style="@style/Timer.TimeText"
+		style="@style/Timer.AddTimeText"
 		android:id="@+id/timer_minute"
 		android:text="@string/number00"
 		app:layout_constraintStart_toEndOf="@id/timer_hour_units"
@@ -48,7 +48,7 @@
 
 	<!-- Seconds -->
 	<TextView
-		style="@style/Timer.TimeText"
+		style="@style/Timer.AddTimeText"
 		android:id="@+id/timer_seconds"
 		android:text="@string/number00"
 		app:layout_constraintStart_toEndOf="@id/timer_minute_units"
@@ -213,6 +213,27 @@
 		app:iconGravity="textStart"
 		app:iconSize="@dimen/isz_xxxlarge"
 		app:icon="@drawable/play"
+		app:layout_constraintTop_toBottomOf="@id/timer_numberpad_del"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		/>
+
+	<!-- Done editing timer -->
+	<com.google.android.material.button.MaterialButton
+		android:id="@+id/timer_done_edit"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:paddingTop="@dimen/normal"
+		android:paddingBottom="@dimen/normal"
+		android:paddingStart="@dimen/xxxlarge"
+		android:paddingEnd="@dimen/xxxlarge"
+		android:layout_marginTop="@dimen/zero"
+		android:layout_marginBottom="@dimen/zero"
+		android:backgroundTint="?attr/colorAccent"
+		android:textSize="@dimen/tsz_normal"
+		android:text="@string/action_save"
+		android:visibility="invisible"
 		app:layout_constraintTop_toBottomOf="@id/timer_numberpad_del"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintStart_toStartOf="parent"

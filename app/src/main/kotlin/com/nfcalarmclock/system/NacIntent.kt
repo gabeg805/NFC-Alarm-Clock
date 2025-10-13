@@ -5,6 +5,8 @@ import android.content.Intent
 import android.os.Bundle
 import android.provider.AlarmClock
 import androidx.core.net.toUri
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.timer.db.NacTimer
@@ -13,6 +15,21 @@ import com.nfcalarmclock.util.media.getMediaArtist
 import com.nfcalarmclock.util.media.getMediaTitle
 import com.nfcalarmclock.util.media.getMediaType
 import java.util.Calendar
+
+/**
+ * Tag name for retrieving a NacAlarm from a bundle.
+ */
+const val ALARM_BUNDLE_NAME = "NacAlarmBundle"
+
+/**
+ * Tag name for retrieving a media path from a bundle.
+ */
+const val MEDIA_BUNDLE_NAME = "NacMediaBundle"
+
+/**
+ * Tag name for retrieving a NacTimer from a bundle.
+ */
+const val TIMER_BUNDLE_NAME = "NacTimerBundle"
 
 /**
  * Add an alarm to an intent.
@@ -27,7 +44,7 @@ fun Intent.addAlarm(alarm: NacAlarm?): Intent
 	val bundle = Bundle().addAlarm(alarm)
 
 	// Add the bundle to the intent
-	this.putExtra(NacIntent.ALARM_BUNDLE_NAME, bundle)
+	this.putExtra(ALARM_BUNDLE_NAME, bundle)
 
 	return this
 }
@@ -56,7 +73,7 @@ fun Intent.addMediaInfo(
 		shuffleMedia, recursivelyPlayMedia)
 
 	// Add the bundle to the intent
-	this.putExtra(NacIntent.MEDIA_BUNDLE_NAME, bundle)
+	this.putExtra(MEDIA_BUNDLE_NAME, bundle)
 
 	return this
 }
@@ -74,7 +91,7 @@ fun Intent.addTimer(timer: NacTimer?): Intent
 	val bundle = Bundle().addTimer(timer)
 
 	// Add the bundle to the intent
-	this.putExtra(NacIntent.TIMER_BUNDLE_NAME, bundle)
+	this.putExtra(TIMER_BUNDLE_NAME, bundle)
 
 	return this
 }
@@ -87,7 +104,7 @@ fun Intent.addTimer(timer: NacTimer?): Intent
 fun Intent.getAlarm(): NacAlarm?
 {
 	// Get the bundle from the intent
-	val bundle = this.getBundleExtra(NacIntent.ALARM_BUNDLE_NAME)
+	val bundle = this.getBundleExtra(ALARM_BUNDLE_NAME)
 
 	// Get the alarm from the bundle
 	return bundle?.getAlarm()
@@ -101,7 +118,7 @@ fun Intent.getAlarm(): NacAlarm?
 fun Intent.getMediaBundle(): Bundle
 {
 	// Get the bundle from the intent
-	return this.getBundleExtra(NacIntent.MEDIA_BUNDLE_NAME) ?: Bundle()
+	return this.getBundleExtra(MEDIA_BUNDLE_NAME) ?: Bundle()
 }
 
 /**
@@ -223,31 +240,36 @@ fun Intent.getSetAlarm(context: Context): NacAlarm?
 fun Intent.getTimer(): NacTimer?
 {
 	// Get the bundle from the intent
-	val bundle = this.getBundleExtra(NacIntent.TIMER_BUNDLE_NAME)
+	val bundle = this.getBundleExtra(TIMER_BUNDLE_NAME)
 
 	// Get the alarm from the bundle
 	return bundle?.getTimer()
 }
 
 /**
- * Intent helper object.
+ * Store any NFC intent in a LiveData singleton object so it can be saved in an activity
+ * and observed in whichever fragment is visible.
  */
-object NacIntent
+object NacNfcIntent
 {
 
 	/**
-	 * Tag name for retrieving a NacAlarm from a bundle.
+	 * The NFC intent as mutable LiveData. Keep private so that only this object is able
+	 * to modify it.
 	 */
-	const val ALARM_BUNDLE_NAME = "NacAlarmBundle"
+	private val mutableLiveData: MutableLiveData<Intent> = MutableLiveData<Intent>()
 
 	/**
-	 * Tag name for retrieving a media path from a bundle.
+	 * The NFC intent LiveData that is publically available.
 	 */
-	const val MEDIA_BUNDLE_NAME = "NacMediaBundle"
+	val liveData: LiveData<Intent> = mutableLiveData
 
 	/**
-	 * Tag name for retrieving a NacTimer from a bundle.
+	 * The NFC intent LiveData that is publically available.
 	 */
-	const val TIMER_BUNDLE_NAME = "NacTimerBundle"
+	fun update(newIntent: Intent)
+	{
+		mutableLiveData.value = newIntent
+	}
 
 }

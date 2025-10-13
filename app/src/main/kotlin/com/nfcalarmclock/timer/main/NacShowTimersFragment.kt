@@ -1,6 +1,7 @@
 package com.nfcalarmclock.timer.main
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.drawable.InsetDrawable
 import android.os.Bundle
 import android.provider.AlarmClock
@@ -12,10 +13,10 @@ import androidx.annotation.OptIn
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,7 +33,9 @@ import com.nfcalarmclock.card.NacCardLayoutManager
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.NacBundle.BUNDLE_INTENT_ACTION
 import com.nfcalarmclock.system.NacCalendar
+import com.nfcalarmclock.system.NacNfcIntent
 import com.nfcalarmclock.system.getTimer
+import com.nfcalarmclock.system.toBundle
 import com.nfcalarmclock.timer.NacTimerViewModel
 import com.nfcalarmclock.timer.card.NacTimerCardAdapter
 import com.nfcalarmclock.timer.card.NacTimerCardHolder
@@ -52,13 +55,6 @@ import java.io.File
 class NacShowTimersFragment
 	: Fragment()
 {
-
-	/**
-	 * Navigation controller.
-	 */
-	private val navController by lazy {
-		(childFragmentManager.findFragmentById(R.id.options_content) as NavHostFragment).navController
-	}
 
 	/**
 	 * Timer view model.
@@ -86,7 +82,7 @@ class NacShowTimersFragment
 	private lateinit var timerCardAdapter: NacTimerCardAdapter
 
 	/**
-	 * Mutable live data for the alarm card that can be modified and sorted, or
+	 * Mutable live data for the timer card that can be modified and sorted, or
 	 * not sorted, depending on the circumstance.
 	 *
 	 * Live data from the view model cannot be sorted, hence the need for this.
@@ -98,6 +94,11 @@ class NacShowTimersFragment
 	 * Timer card touch helper.
 	 */
 	private lateinit var timerCardTouchHelper: NacTimerCardTouchHelper
+
+	/**
+	 * NFC intent LiveData.
+	 */
+	private val nfcIntentLiveData: LiveData<Intent> = NacNfcIntent.liveData
 
 	/**
 	 * The current snackbar being used.
@@ -135,7 +136,7 @@ class NacShowTimersFragment
 		timer: NacTimer,
 		onInsertListener: () -> Unit = {})
 	{
-		// Insert alarm and call the listener
+		// Insert timer and call the listener
 		lifecycleScope.launch {
 			timerViewModel.insert(timer) { onInsertListener() }
 		}
@@ -151,7 +152,7 @@ class NacShowTimersFragment
 		// Create a copy of the timer
 		val copiedTimer = timer.copy()
 
-		// Add the copied alarm. When it is added, it will be interacted with but most
+		// Add the copied timer. When it is added, it will be interacted with but most
 		// likely will not be scrolled as it is probably already on screen. This is
 		// because the index of the copied alarm is right after the original alarm
 		// TODO: Fix error and maybe need recent jank
@@ -213,7 +214,7 @@ class NacShowTimersFragment
 
 				// Check if the local media path is empty or if it is equal to the shared
 				// preference local media path
-				// TODO: Generalize this
+				// TODO: Generalize this or maybe not do this and just delete this logic?
 				lifecycleScope.launch {
 
 					// Check if no alarms are using the local media path
@@ -263,6 +264,7 @@ class NacShowTimersFragment
 	{
 		// Super
 		super.onResume()
+		println("Show timers onResume()")
 
 		// Get the intent action and alarm from the fragment arguments bundle. These
 		// could be null, but if an action occurred, they will not be
@@ -275,9 +277,6 @@ class NacShowTimersFragment
 			// TODO: Add a timer from this jank
 			//addAlarmFromSetAlarmIntent(timer)
 		}
-
-		// Setup UI
-		setupFloatingActionButton()
 	}
 
 	/**
@@ -287,6 +286,7 @@ class NacShowTimersFragment
 	{
 		// Setup
 		super.onViewCreated(view, savedInstanceState)
+		println("Show timers onViewCreated()")
 
 		// Set member variables
 		val context = requireContext()
@@ -328,14 +328,11 @@ class NacShowTimersFragment
 
 		})
 
-		// Setup live data
-		lifecycleScope.launch {
-			setupLiveDataObservers()
-		}
-
-		// Setup UI
+		// Setup
+		setupLiveDataObservers()
 		setupAlarmCardAdapter()
 		setupRecyclerView()
+		setupFloatingActionButton()
 	}
 
 	/**
@@ -372,9 +369,10 @@ class NacShowTimersFragment
 		timerCardAdapter.onViewHolderCreatedListener = NacBaseCardAdapter.OnViewHolderCreatedListener { card ->
 
 			// Edit listener
-			card.onEditTimerClickedListener = NacTimerCardHolder.OnEditTimerClickedListener {
+			card.onEditTimerClickedListener = NacTimerCardHolder.OnEditTimerClickedListener { timer ->
 				// TODO: How should edit look? I don't think I can just reuse add
-				//findNavController().navigate(R.id.nacAddTimerFragment)
+				println("on Edit bro!")
+				findNavController().navigate(R.id.nacEditTimerFragment, timer.toBundle())
 			}
 
 			// Start timer listener
@@ -436,16 +434,8 @@ class NacShowTimersFragment
 				return@setOnClickListener
 			}
 
-			// TODO: Navigate to add timer fragment
+			// Navigate to add timer fragment
 			findNavController().navigate(R.id.nacAddTimerFragment)
-
-			//// Create the timer
-			//val alarm = NacTimer.build(sharedPreferences)
-
-			//// Add the alarm. When it is added, it will be scrolled to and interacted with
-			//addTimer(alarm) {
-			//	recentlyAddedAlarmIds.add(alarm.id)
-			//}
 		}
 	}
 
@@ -514,6 +504,36 @@ class NacShowTimersFragment
 			//}
 
 		}
+
+		// TODO: Do I want an alarm intent watcher and imter intent watcher?
+		// NFC intent
+		nfcIntentLiveData.observe(viewLifecycleOwner) { intent ->
+
+			println("Show timers new NFC intent! ${intent.action}")
+			lifecycleScope.launch {
+
+				// TODO: If this logic is not here, what is the timing between seeing that
+				//  NFC was scanned, posting the intent value, checking the alarm view model
+				//  for an active jank, and then starting the alarm activity/service?
+				// Get the active timer
+				val activeTimer = timerViewModel.getActiveTimer()
+				println("Show timers active timer check : ${activeTimer != null}")
+
+				// Check if the active alarm is not null
+				// here and then add checks to make sure it is safe to pass into these start
+				// activity/service functions
+				if (activeTimer != null)
+				{
+					println("Navigate to active timer fragment yo")
+
+					// TODO: Is this necessary or do I need to popBackStack()?
+					//// Finish the main activity
+					//finish()
+				}
+
+			}
+
+		}
 	}
 
 	/**
@@ -525,9 +545,10 @@ class NacShowTimersFragment
 		val context = requireContext()
 
 		// Create the divider drawable
-		val padding = resources.getDimensionPixelSize(R.dimen.normal)
+		val padding = resources.getDimensionPixelSize(R.dimen.medium)
 		val drawable = ContextCompat.getDrawable(context, R.drawable.card_divider)
 		val divider = InsetDrawable(drawable, padding, 0, padding, 0)
+		//val divider = InsetDrawable(drawable, 0, 0, 0, 0)
 
 		// Create the item decoration
 		val decoration = DividerItemDecoration(context, LinearLayoutManager.VERTICAL)

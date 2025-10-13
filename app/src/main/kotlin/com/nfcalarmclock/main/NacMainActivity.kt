@@ -23,16 +23,13 @@ import com.nfcalarmclock.BuildConfig
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.NacAlarmViewModel
 import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmActivity
-import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmService
-import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.nfc.NacNfc
 import com.nfcalarmclock.ratemyapp.NacRateMyApp
 import com.nfcalarmclock.settings.NacMainSettingActivity
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.NacBundle.BUNDLE_INTENT_ACTION
-import com.nfcalarmclock.system.addAlarm
+import com.nfcalarmclock.system.NacNfcIntent
 import com.nfcalarmclock.system.disableActivityAlias
-import com.nfcalarmclock.system.getAlarm
 import com.nfcalarmclock.system.getDeviceProtectedStorageContext
 import com.nfcalarmclock.system.getSetAlarm
 import com.nfcalarmclock.system.permission.NacPermissionRequestManager
@@ -42,7 +39,6 @@ import com.nfcalarmclock.system.toBundle
 import com.nfcalarmclock.system.triggers.shutdown.NacShutdownBroadcastReceiver
 import com.nfcalarmclock.system.unregisterMyReceiver
 import com.nfcalarmclock.timer.NacTimerViewModel
-import com.nfcalarmclock.util.NacUtility.quickToast
 import com.nfcalarmclock.util.media.buildLocalMediaPath
 import com.nfcalarmclock.util.media.copyMediaToDeviceEncryptedStorage
 import com.nfcalarmclock.util.media.getMediaArtist
@@ -200,33 +196,6 @@ class NacMainActivity
 	}
 
 	/**
-	 * Dismiss an alarm early that was sent the intent action to do so.
-	 */
-	private fun dismissAlarmEarlyFromIntent()
-	{
-		// Get the alarm from the intent
-		val alarm = intent.getAlarm()
-
-		// Check if the alarm is in the intent
-		if (alarm != null)
-		{
-			// Create a bundle with the alarm and intent action
-			val bundle = alarm.toBundle().apply {
-				putString(BUNDLE_INTENT_ACTION, intent.action)
-			}
-
-			// Navigate to the show alarms fragment
-			navController.navigate(R.id.nacShowAlarmsFragment, bundle)
-		}
-		// Null alarm
-		else
-		{
-			// Show error toast
-			quickToast(this@NacMainActivity, R.string.error_message_unable_to_dismiss_early)
-		}
-	}
-
-	/**
 	 * Do the event to update and backup media info in all alarms starting at database
 	 * version 31.
 	 */
@@ -269,6 +238,7 @@ class NacMainActivity
 	{
 		// Setup
 		super.onCreate(savedInstanceState)
+		println("Main activity onCreate()")
 
 		// Move the shared preference to device protected storage
 		NacSharedPreferences.moveToDeviceProtectedStorage(this)
@@ -322,12 +292,28 @@ class NacMainActivity
 	}
 
 	/**
-	 * Called when the activity is paused.
+	 * New intent received. Happens when an NFC tag is discovered.
+	 *
+	 * After this, onResume() will be called, which will check if an NFC tag was scanned.
+	 */
+	override fun onNewIntent(intent: Intent)
+	{
+		// Super
+		super.onNewIntent(intent)
+		println("Main activity onNewIntent()")
+
+		// Set the intent
+		setIntent(intent)
+	}
+
+	/**
+	 * Activity is paused.
 	 */
 	override fun onPause()
 	{
 		// Super
 		super.onPause()
+		println("Main activity onPause()")
 
 		// Cleanup
 		unregisterMyReceiver(this, shutdownBroadcastReceiver)
@@ -345,59 +331,46 @@ class NacMainActivity
 	{
 		// Super
 		super.onResume()
+		println("Main activity onResume()")
 
-		lifecycleScope.launch {
-
-			// Get the active alarm
-			val activeAlarm = alarmViewModel.getActiveAlarm()
-
-			// Check if the active alarm is not null
-			// here and then add checks to make sure it is safe to pass into these start
-			// activity/service functions
-			if (activeAlarm != null)
-			{
-
-				// Check if an NFC tag was scanned to open up the main activity
-				if (NacNfc.wasScanned(intent))
-				{
-					// Remove the grant URI permissions in the untrusted intent
-					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-					{
-						intent.removeFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-						intent.removeFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-					}
-
-					// Check that the nested intent does not grant URI permissions
-					if (((intent.flags and Intent.FLAG_GRANT_READ_URI_PERMISSION) == 0) &&
-						((intent.flags and Intent.FLAG_GRANT_WRITE_URI_PERMISSION) == 0))
-					{
-						// Start the alarm activity with the intent containing the NFC tag
-						// information in order to dismiss this alarm
-						NacActiveAlarmActivity.startAlarmActivity(this@NacMainActivity, intent, activeAlarm)
-					}
-				}
-				// An NFC tag was not scanned so start the alarm service normally
-				else
-				{
-					// Start the alarm service for this alarm
-					NacActiveAlarmService.startAlarmService(this@NacMainActivity, activeAlarm)
-				}
-
-				// Finish the main activity
-				finish()
-			}
-
-		}
-
-		// Alarm should be dismissed early
-		if (intent.action == ACTION_DISMISS_ALARM_EARLY)
+		// An NFC tag was scanned to open up the main activity
+		if (NacNfc.wasScanned(intent))
 		{
-			dismissAlarmEarlyFromIntent()
+			println("Updating NFC intent")
+			NacNfcIntent.update(intent)
+		}
+		else
+		{
+			lifecycleScope.launch {
+
+				// TODO: If this logic is not here, what is the timing between seeing that
+				//  NFC was scanned, posting the intent value, checking the alarm view model
+				//  for an active jank, and then starting the alarm activity/service?
+				// Get any active alarm or timer
+				val activeAlarm = alarmViewModel.getActiveAlarm()
+				val activeTimer = timerViewModel.getActiveTimer()
+
+				// Show the active alarm activity
+				if (activeAlarm != null)
+				{
+					println("Main activity start the active alarm activity")
+					// TODO: Do I even need to do this? The alarm service would already be running?
+					NacActiveAlarmActivity.startAlarmActivity(this@NacMainActivity, activeAlarm)
+				}
+				// Show the active timer fragment
+				else if (activeTimer != null)
+				{
+					println("Main activity start the active timer fragment")
+					navController.navigate(R.id.nacActiveTimerFragment, activeTimer.toBundle())
+				}
+
+			}
 		}
 
 		// Add alarm that was created from the SET_ALARM intent
 		if (intent.action == AlarmClock.ACTION_SET_ALARM)
 		{
+			println("addAlarmFromSetAlarmIntent()")
 			addAlarmFromSetAlarmIntent()
 		}
 
@@ -410,6 +383,7 @@ class NacMainActivity
 		}
 
 		// Setup UI
+		println("setupIntitialDialogToShow()")
 		setupInitialDialogToShow()
 
 		// Bottom navigation
@@ -670,36 +644,6 @@ class NacMainActivity
 
 	companion object
 	{
-
-		/**
-		 * Dismiss an alarm early action.
-		 */
-		const val ACTION_DISMISS_ALARM_EARLY = "com.nfcalarmclock.alarm.ACTION_DISMISS_ALARM_EARLY"
-
-		/**
-		 * Create an intent that will be used to dismiss an alarm early.
-		 *
-		 * @param  context  A context.
-		 *
-		 * @return The Main activity intent.
-		 */
-		fun getDismissEarlyIntent(context: Context, alarm: NacAlarm): Intent
-		{
-			// Create an intent with the main activity
-			val intent = Intent(context, NacMainActivity::class.java)
-			val flags = (Intent.FLAG_ACTIVITY_NEW_TASK
-					or Intent.FLAG_ACTIVITY_CLEAR_TASK
-					or Intent.FLAG_ACTIVITY_NO_HISTORY)
-
-			// Add the action, alarm, and flags to the intent
-			intent.apply {
-				action = ACTION_DISMISS_ALARM_EARLY
-				addAlarm(alarm)
-				addFlags(flags)
-			}
-
-			return intent
-		}
 
 		/**
 		 * Create an intent that will be used to start the Main activity.
