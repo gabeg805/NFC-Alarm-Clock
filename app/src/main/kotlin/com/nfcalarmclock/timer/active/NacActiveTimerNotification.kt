@@ -89,19 +89,10 @@ class NacActiveTimerNotification(
 			return NavDeepLinkBuilder(context.applicationContext)
 				.setComponentName(NacMainActivity::class.java)
 				.setGraph(R.navigation.nav_main_fragments)
-				.setDestination(R.id.nacActiveTimerFragment)
+				.addDestination(R.id.nacShowTimersFragment)
+				.addDestination(R.id.nacActiveTimerFragment)
 				.setArguments(timer!!.toBundle())
 				.createPendingIntent()
-
-			//// TODO: How to start active fragment?
-			//val id = timer?.id ?: 0
-			//val intent = NacActiveAlarmActivity.getStartIntent(context, timer)
-
-			//// Determine the pending intent flags
-			//val flags = PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
-
-			//// Return the pending intent for the activity
-			//return PendingIntent.getActivity(context, id.toInt(), intent, flags)
 		}
 
 	/**

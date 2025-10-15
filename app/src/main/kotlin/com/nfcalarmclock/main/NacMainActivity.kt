@@ -348,20 +348,13 @@ class NacMainActivity
 				//  for an active jank, and then starting the alarm activity/service?
 				// Get any active alarm or timer
 				val activeAlarm = alarmViewModel.getActiveAlarm()
-				val activeTimer = timerViewModel.getActiveTimer()
 
 				// Show the active alarm activity
 				if (activeAlarm != null)
 				{
-					println("Main activity start the active alarm activity")
+					println("Main activity start the active alarm activity : ${activeAlarm.id}")
 					// TODO: Do I even need to do this? The alarm service would already be running?
 					NacActiveAlarmActivity.startAlarmActivity(this@NacMainActivity, activeAlarm)
-				}
-				// Show the active timer fragment
-				else if (activeTimer != null)
-				{
-					println("Main activity start the active timer fragment")
-					navController.navigate(R.id.nacActiveTimerFragment, activeTimer.toBundle())
 				}
 
 			}

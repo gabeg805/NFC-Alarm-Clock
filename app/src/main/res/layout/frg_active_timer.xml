@@ -6,23 +6,31 @@
 	android:layout_height="match_parent"
 	android:layout_marginBottom="?attr/actionBarSize">
 
-	<!-- TODO: On back press should go to show timers fragment. Maybe that's handled in navigation? -->
 	<!-- Progress indicator -->
 	<com.google.android.material.progressindicator.CircularProgressIndicator
+		style="@style/Timer.ActiveCircularProgressIndicator"
 		android:id="@+id/timer_progress"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:indeterminate="false"
-		app:indicatorDirectionCircular="counterclockwise"
-		app:indicatorSize="320dp"
-		android:progress="0"
-		app:trackCornerRadius="4dp"
-		app:trackThickness="8dp"
 		app:layout_constraintVertical_bias="0.2"
 		app:layout_constraintTop_toTopOf="parent"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
+		/>
+
+	<!-- Name -->
+	<TextView
+		style="@style/Widget.TextView.Summary"
+		android:id="@+id/timer_name"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="@dimen/normal"
+		android:alpha="0.75"
+		android:text=""
+		app:layout_constraintBottom_toTopOf="@id/timer_seconds"
+		app:layout_constraintStart_toStartOf="@id/timer_progress"
+		app:layout_constraintEnd_toEndOf="@id/timer_progress"
 		/>
 
 	<!-- Hour -->
@@ -92,7 +100,7 @@
 	<!-- Reset timer -->
 	<com.google.android.material.button.MaterialButton
 		style="@style/Widget.Material3.Button.IconButton"
-		android:id="@+id/timer_reset"
+		android:id="@+id/timer_reset_button"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		app:iconGravity="textStart"
@@ -106,10 +114,28 @@
 		app:layout_constraintEnd_toEndOf="parent"
 		/>
 
-	<!-- Pause/resume timer -->
+	<!-- Resume timer -->
 	<com.google.android.material.button.MaterialButton
 		style="@style/Timer.NumberpadButton"
-		android:id="@+id/timer_pause_resume"
+		android:id="@+id/timer_resume_button"
+		android:layout_marginTop="@dimen/zero"
+		android:layout_marginBottom="@dimen/zero"
+		android:backgroundTint="?attr/colorAccent"
+		android:visibility="invisible"
+		app:iconGravity="textStart"
+		app:iconPadding="@dimen/zero"
+		app:iconSize="@dimen/isz_xxxlarge"
+		app:icon="@drawable/play"
+		app:layout_constraintTop_toBottomOf="@id/timer_progress"
+		app:layout_constraintBottom_toTopOf="@id/timer_add_5s"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		/>
+
+	<!-- Pause timer -->
+	<com.google.android.material.button.MaterialButton
+		style="@style/Timer.NumberpadButton"
+		android:id="@+id/timer_pause_button"
 		android:layout_marginTop="@dimen/zero"
 		android:layout_marginBottom="@dimen/zero"
 		android:backgroundTint="?attr/colorAccent"
@@ -117,10 +143,10 @@
 		app:iconPadding="@dimen/zero"
 		app:iconSize="@dimen/isz_xxxlarge"
 		app:icon="@drawable/pause_32"
-		app:layout_constraintTop_toBottomOf="@id/timer_progress"
-		app:layout_constraintBottom_toTopOf="@id/timer_add_5s"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintTop_toTopOf="@id/timer_resume_button"
+		app:layout_constraintBottom_toBottomOf="@id/timer_resume_button"
+		app:layout_constraintStart_toStartOf="@id/timer_resume_button"
+		app:layout_constraintEnd_toEndOf="@id/timer_resume_button"
 		/>
 
 	<!-- Stop timer -->
@@ -174,7 +200,7 @@
 			android:textColor="@color/white"
 			android:textSize="@dimen/tsz_large"
 			android:textStyle="bold"
-			android:text="Scan NFC tag"
+			android:text=""
 			/>
 	</LinearLayout>
 
@@ -188,7 +214,7 @@
 		android:layout_marginBottom="@dimen/zero"
 		android:textSize="@dimen/tsz_medium"
 		android:text="@string/timer_add_1min"
-		app:layout_constraintTop_toBottomOf="@id/timer_pause_resume"
+		app:layout_constraintTop_toBottomOf="@id/timer_resume_button"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintEnd_toStartOf="@id/timer_add_30s"
@@ -206,7 +232,7 @@
 		android:layout_marginEnd="@dimen/normal"
 		android:textSize="@dimen/tsz_medium"
 		android:text="@string/timer_add_30sec"
-		app:layout_constraintTop_toBottomOf="@id/timer_pause_resume"
+		app:layout_constraintTop_toBottomOf="@id/timer_resume_button"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintStart_toEndOf="@id/timer_add_1m"
 		app:layout_constraintEnd_toEndOf="@id/timer_add_5s"
@@ -221,7 +247,7 @@
 		android:layout_marginBottom="@dimen/zero"
 		android:textSize="@dimen/tsz_medium"
 		android:text="@string/timer_add_5sec"
-		app:layout_constraintTop_toBottomOf="@id/timer_pause_resume"
+		app:layout_constraintTop_toBottomOf="@id/timer_resume_button"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintStart_toEndOf="@id/timer_add_30s"
 		app:layout_constraintEnd_toEndOf="parent"

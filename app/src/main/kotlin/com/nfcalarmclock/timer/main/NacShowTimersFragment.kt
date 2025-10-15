@@ -1,14 +1,16 @@
 package com.nfcalarmclock.timer.main
 
 import android.annotation.SuppressLint
+import android.content.ComponentName
 import android.content.Intent
+import android.content.ServiceConnection
 import android.graphics.drawable.InsetDrawable
 import android.os.Bundle
+import android.os.IBinder
 import android.provider.AlarmClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
 import androidx.annotation.OptIn
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -37,6 +39,7 @@ import com.nfcalarmclock.system.NacNfcIntent
 import com.nfcalarmclock.system.getTimer
 import com.nfcalarmclock.system.toBundle
 import com.nfcalarmclock.timer.NacTimerViewModel
+import com.nfcalarmclock.timer.active.NacActiveTimerService
 import com.nfcalarmclock.timer.card.NacTimerCardAdapter
 import com.nfcalarmclock.timer.card.NacTimerCardHolder
 import com.nfcalarmclock.timer.card.NacTimerCardTouchHelper
@@ -51,6 +54,7 @@ import java.io.File
 /**
  * Show all timers.
  */
+@UnstableApi
 @AndroidEntryPoint
 class NacShowTimersFragment
 	: Fragment()
@@ -101,6 +105,11 @@ class NacShowTimersFragment
 	private val nfcIntentLiveData: LiveData<Intent> = NacNfcIntent.liveData
 
 	/**
+	 * Active timer service.
+	 */
+	private var service: NacActiveTimerService? = null
+
+	/**
 	 * The current snackbar being used.
 	 */
 	private var currentSnackbar: Snackbar? = null
@@ -123,6 +132,79 @@ class NacShowTimersFragment
 			// Check the size
 			return (currentSize+1 > maxTimers)
 		}
+
+	/**
+	 * Listener for when the service is stopped.
+	 */
+	private val onServiceStoppedListener: NacActiveTimerService.OnServiceStoppedListener =
+		NacActiveTimerService.OnServiceStoppedListener {
+			println("SHOW TIMERS THIS JANK IS GETTING STOPPED")
+		}
+
+	/**
+	 * Listener for when the countdown timer changes.
+	 */
+	private val onCountdownTimerChangedListener: NacActiveTimerService.OnCountdownTimerChangedListener =
+		object : NacActiveTimerService.OnCountdownTimerChangedListener {
+
+			override fun onCountdownFinished()
+			{
+				println("SHOW TIMERS DONE WITH THE COUNTDOWN")
+			}
+
+			override fun onCountdownPaused()
+			{
+				println("SHOW TIMERS PAUSED TIMER")
+			}
+
+			override fun onCountdownReset(secUntilFinished: Long)
+			{
+				println("SHOW TIMERS COUNTDOWN RESET : $secUntilFinished")
+			}
+
+			override fun onCountdownTick(secUntilFinished: Long, newProgress: Int)
+			{
+				//println("SHOW TIMERS COUNTDOWN Tick")
+			}
+
+		}
+
+	/**
+	 * Connection to the active timer service.
+	 *
+	 * TODO: Sort timers by active and then duration
+	 */
+	private val serviceConnection = object : ServiceConnection
+	{
+		override fun onServiceConnected(className: ComponentName, serviceBinder: IBinder)
+		{
+			// TODO: Test with multiple active timer services
+			// Set the active timer service
+			val binder = serviceBinder as NacActiveTimerService.NacLocalBinder
+			service = binder.getService()
+			println("Show timers SERVICE IS NOW CONNECTED")
+
+			// Update the hour, minute, and seconds textviews
+			// TODO: Change time and progress of card holder
+			//progressIndicator.progress = service!!.progress
+
+			lifecycleScope.launch {
+
+				timerViewModel.getAllTimers().forEach {
+
+					// Active timer service is stopped listener
+					service!!.addOnServiceStoppedListener(it.id, onServiceStoppedListener)
+
+					// Countdown timer change listener
+					service!!.addOnCountdownTimerChangedListener(it.id, onCountdownTimerChangedListener)
+
+				}
+
+			}
+		}
+
+		override fun onServiceDisconnected(className: ComponentName) {}
+	}
 
 	/**
 	 * Add a timer to the database.
@@ -280,6 +362,39 @@ class NacShowTimersFragment
 	}
 
 	/**
+	 * Fragment started.
+	 */
+	override fun onStart()
+	{
+		// Super
+		super.onStart()
+		println("onStart() show timers")
+
+		// Bind to the active timer service
+		val context = requireContext()
+		val intent = Intent(context, NacActiveTimerService::class.java)
+
+		context.bindService(intent, serviceConnection, 0)
+	}
+
+	/**
+	 * Fragment stopped.
+	 */
+	override fun onStop()
+	{
+		// Super
+		super.onStop()
+		println("onStop() show timers. Canceling timer")
+
+		// Unbind from the active timer service
+		requireContext().unbindService(serviceConnection)
+
+		// Clear the service listeners
+		service?.removeAllMatchingOnServiceStoppedListeners(onServiceStoppedListener)
+		service?.removeAllMatchingOnCountdownTimerChangedListener(onCountdownTimerChangedListener)
+	}
+
+	/**
 	 * Called when the activity is created.
 	 */
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
@@ -377,12 +492,14 @@ class NacShowTimersFragment
 
 			// Start timer listener
 			card.onStartTimerClickedListener = NacTimerCardHolder.OnStartTimerClickedListener {
+				println("Hello start")
 				// TODO: Need to start the service as well
 				//findNavController().navigate(R.id.nacActiveTimerFragment)
 			}
 
 			// Pause timer listener
 			card.onPauseTimerClickedListener = NacTimerCardHolder.OnPauseTimerClickedListener {
+				println("Hello pause")
 				// TODO: Need to communicate with the service. Maybe bind to it?
 			}
 
@@ -628,104 +745,104 @@ class NacShowTimersFragment
 		// Add callback if listener is set
 		if (!shouldReuseSnackbar)
 		{
-			// Listener when the snackbar is being drawn and thus when it is moving up and down
-			snackbar.view.viewTreeObserver.addOnPreDrawListener(object: ViewTreeObserver.OnPreDrawListener
-			{
+			//// Listener when the snackbar is being drawn and thus when it is moving up and down
+			//snackbar.view.viewTreeObserver.addOnPreDrawListener(object: ViewTreeObserver.OnPreDrawListener
+			//{
 
-				/**
-				 * Called when the view tree is about to be drawn.
-				 */
-				override fun onPreDraw(): Boolean
-				{
-					// Get the current Y position
-					val y = snackbar.view.y
+			//	/**
+			//	 * Called when the view tree is about to be drawn.
+			//	 */
+			//	override fun onPreDraw(): Boolean
+			//	{
+			//		// Get the current Y position
+			//		val y = snackbar.view.y
 
-					// Do nothing when the snackbar has not been shown yet
-					if (prevSnackbarY == 0f)
-					{
-						return true
-					}
-					// Snackbar is moving down
-					else if (prevSnackbarY < y)
-					{
-						// Animate the FAB moving back to its original position
-						floatingActionButton.animate()
-							.apply {
-								translationY(0f)
-								duration = 250
-							}
-							.start()
+			//		// Do nothing when the snackbar has not been shown yet
+			//		if (prevSnackbarY == 0f)
+			//		{
+			//			return true
+			//		}
+			//		// Snackbar is moving down
+			//		else if (prevSnackbarY < y)
+			//		{
+			//			// Animate the FAB moving back to its original position
+			//			floatingActionButton.animate()
+			//				.apply {
+			//					translationY(0f)
+			//					duration = 250
+			//				}
+			//				.start()
 
-						// Remove the listener
-						snackbar.view.viewTreeObserver.removeOnPreDrawListener(this)
-					}
-					// Snackbar is moving up. Update the previous Y position to compare
-					// later
-					else
-					{
-						prevSnackbarY = y
-					}
+			//			// Remove the listener
+			//			snackbar.view.viewTreeObserver.removeOnPreDrawListener(this)
+			//		}
+			//		// Snackbar is moving up. Update the previous Y position to compare
+			//		// later
+			//		else
+			//		{
+			//			prevSnackbarY = y
+			//		}
 
-					return true
-				}
+			//		return true
+			//	}
 
-			})
+			//})
 
-			// Listener for when the snackbar is starting to change and become visible.
-			// This means the view has been measured and has a height, so the animation
-			// of the FAB can be started at the same time since now it is known how much
-			// to animate the FAB's Y position by
-			snackbar.view.addOnLayoutChangeListener { view, _, _, _, _, _, _, _, _ ->
+			//// Listener for when the snackbar is starting to change and become visible.
+			//// This means the view has been measured and has a height, so the animation
+			//// of the FAB can be started at the same time since now it is known how much
+			//// to animate the FAB's Y position by
+			//snackbar.view.addOnLayoutChangeListener { view, _, _, _, _, _, _, _, _ ->
 
-				/**
-				 * Called when the view layout has changed.
-				 */
-				// Get the height of the snackbar
-				val height = view.height.toFloat()
+			//	/**
+			//	 * Called when the view layout has changed.
+			//	 */
+			//	// Get the height of the snackbar
+			//	val height = view.height.toFloat()
 
-				// Animate the FAB moving up
-				floatingActionButton.animate()
-					.apply {
-						translationY(-height)
-						duration = 250
-					}
-					.start()
+			//	// Animate the FAB moving up
+			//	floatingActionButton.animate()
+			//		.apply {
+			//			translationY(-height)
+			//			duration = 250
+			//		}
+			//		.start()
 
-				// Snackbar was already being shown. Update the Y position to the
-				// snackbar's current Y position in case its height changed
-				if (prevSnackbarY > 0)
-				{
-					prevSnackbarY = view.y
-				}
-			}
+			//	// Snackbar was already being shown. Update the Y position to the
+			//	// snackbar's current Y position in case its height changed
+			//	if (prevSnackbarY > 0)
+			//	{
+			//		prevSnackbarY = view.y
+			//	}
+			//}
 
-			// Add the normal show/dismiss callback
-			snackbar.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>()
-			{
+			//// Add the normal show/dismiss callback
+			//snackbar.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>()
+			//{
 
-				/**
-				 * Called when the snackbar is shown.
-				 */
-				override fun onShown(transientBottomBar: Snackbar?)
-				{
-					// The snackbar is visible now, so get its starting Y position
-					prevSnackbarY = snackbar.view.y
-				}
+			//	/**
+			//	 * Called when the snackbar is shown.
+			//	 */
+			//	override fun onShown(transientBottomBar: Snackbar?)
+			//	{
+			//		// The snackbar is visible now, so get its starting Y position
+			//		prevSnackbarY = snackbar.view.y
+			//	}
 
-				/**
-				 * Called when the snackbar has been dismissed.
-				 */
-				override fun onDismissed(transientBottomBar: Snackbar?, event: Int)
-				{
-					// Call the listener
-					onDismissListener(event)
+			//	/**
+			//	 * Called when the snackbar has been dismissed.
+			//	 */
+			//	override fun onDismissed(transientBottomBar: Snackbar?, event: Int)
+			//	{
+			//		// Call the listener
+			//		onDismissListener(event)
 
-					// Reset the values of the FAB and snackbar
-					floatingActionButton.translationY = 0f
-					prevSnackbarY = 0f
-				}
+			//		// Reset the values of the FAB and snackbar
+			//		floatingActionButton.translationY = 0f
+			//		prevSnackbarY = 0f
+			//	}
 
-			})
+			//})
 		}
 
 		// Show the snackbar

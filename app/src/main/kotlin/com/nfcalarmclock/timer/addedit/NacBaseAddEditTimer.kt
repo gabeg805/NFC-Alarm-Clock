@@ -87,13 +87,11 @@ abstract class NacBaseAddEditTimer
 		// Time is already full
 		if (!hour.startsWith("0"))
 		{
-			println("TIME IS FULL")
 			return
 		}
 
 		// Build the new time
 		val newTime = "${hour.toInt()}$min$sec$value"
-		println("New : $newTime")
 
 		// Set the new time
 		hourTextView.text = newTime.substring(0, 2)
@@ -116,7 +114,6 @@ abstract class NacBaseAddEditTimer
 
 		// Build the new time
 		val newTime = "0$hour$min$sec"
-		println("New : $newTime")
 
 		// Set the new time
 		hourTextView.text = newTime.substring(0, 2)
@@ -171,8 +168,6 @@ abstract class NacBaseAddEditTimer
 		setupHourMinuteSecondTextViews()
 		setupNumberPadButtons()
 		setupMoreButton()
-		setupStartButton()
-		setupDoneButton()
 	}
 
 	/**
@@ -211,14 +206,14 @@ abstract class NacBaseAddEditTimer
 		// On click listener
 		doneButton.setOnClickListener {
 
-			println("Updating timer")
 			// Set the duration
 			setDuration()
 
+			// Update the timer and then go back to the show timers fragment
 			timerViewModel.update(timer) {
-				println("Going back to show timers")
 				findNavController().popBackStack(R.id.nacShowTimersFragment, false)
 			}
+
 		}
 	}
 
@@ -244,11 +239,14 @@ abstract class NacBaseAddEditTimer
 
 		if (seconds.isEmpty())
 		{
-			seconds= zeros
+			seconds = zeros
 		}
 
+		// Always zero pad seconds
+		seconds = seconds.padStart(2, '0')
+
+
 		// Set the hour, minute, and seconds
-		println("Hour:Minute:Seconds  $hour:$minute:$seconds")
 		hourTextView.text = hour
 		minuteTextView.text = minute
 		secondsTextView.text = seconds
@@ -374,13 +372,16 @@ abstract class NacBaseAddEditTimer
 		val context = requireContext()
 		val view = requireView()
 		val startButton: MaterialButton = view.findViewById(R.id.timer_start)
+		val doneButton: MaterialButton = view.findViewById(R.id.timer_done_edit)
 
 		// Get the contrast color
 		val contrastColor = calcContrastColor(sharedPreferences.themeColor)
 
 		// Setup the view
-		startButton.setupBackgroundColor(sharedPreferences)
+		startButton.visibility = View.VISIBLE
+		doneButton.visibility = View.INVISIBLE
 		startButton.iconTint = ColorStateList.valueOf(contrastColor)
+		startButton.setupBackgroundColor(sharedPreferences)
 
 		// On click listener
 		startButton.setOnClickListener {
@@ -389,9 +390,7 @@ abstract class NacBaseAddEditTimer
 			setDuration()
 
 			// Save the timer
-			println("Inserting into jank")
 			timerViewModel.insert(timer) {
-				println("Does timer have id? ${timer.id}")
 
 				// Start the timer
 				NacActiveTimerService.startTimerService(context, timer)

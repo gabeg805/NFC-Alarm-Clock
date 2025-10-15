@@ -8,7 +8,6 @@ import com.nfcalarmclock.card.NacBaseCardHolder
 import com.nfcalarmclock.system.NacCalendar
 import com.nfcalarmclock.timer.db.NacTimer
 import com.nfcalarmclock.view.performHapticFeedback
-import com.nfcalarmclock.view.setupThemeColor
 
 /**
  * Timer ViewHolder for a CardView.
@@ -33,7 +32,7 @@ class NacTimerCardHolder(
 	 */
 	fun interface OnStartTimerClickedListener
 	{
-		fun onStartTimer()
+		fun onStartTimer(timer: NacTimer)
 	}
 
 	/**
@@ -41,7 +40,15 @@ class NacTimerCardHolder(
 	 */
 	fun interface OnPauseTimerClickedListener
 	{
-		fun onPauseTimer()
+		fun onPauseTimer(timer: NacTimer)
+	}
+
+	/**
+	 * Listener for when the reset timer button is clicked.
+	 */
+	fun interface OnResetTimerClickedListener
+	{
+		fun onResetTimer(timer: NacTimer)
 	}
 
 	/**
@@ -77,11 +84,6 @@ class NacTimerCardHolder(
 	/**
 	 * Summary view containing the days to repeat.
 	 */
-	private val summaryRepeatFrequency: TextView = root.findViewById(R.id.timer_repeat_frequency)
-
-	/**
-	 * Summary view containing the days to repeat.
-	 */
 	private val summaryName: TextView = root.findViewById(R.id.timer_name)
 
 	/**
@@ -93,6 +95,11 @@ class NacTimerCardHolder(
 	 * Pause button.
 	 */
 	private val pauseButton: MaterialButton = root.findViewById(R.id.timer_pause_button)
+
+	/**
+	 * Reset button.
+	 */
+	private val resetButton: MaterialButton = root.findViewById(R.id.timer_reset_button)
 
 	/**
 	 * Listener for editing the timer.
@@ -108,6 +115,11 @@ class NacTimerCardHolder(
 	 * Listener for when the pause timer button is clicked.
 	 */
 	var onPauseTimerClickedListener: OnPauseTimerClickedListener? = null
+
+	/**
+	 * Listener for when the reset timer button is clicked.
+	 */
+	var onResetTimerClickedListener: OnResetTimerClickedListener? = null
 
 	/**
 	 * Constructor.
@@ -139,9 +151,7 @@ class NacTimerCardHolder(
 	 */
 	override fun initColors()
 	{
-		summaryRepeatFrequency.setTextColor(sharedPreferences.daysColor)
 		summaryName.setTextColor(sharedPreferences.nameColor)
-		startButton.setupThemeColor(sharedPreferences)
 	}
 
 	/**
@@ -166,11 +176,44 @@ class NacTimerCardHolder(
 			}
 		}
 
-		// Start timer clicked
-		startButton.setOnClickListener { onStartTimerClickedListener?.onStartTimer() }
+		// Start clicked
+		startButton.setOnClickListener {
 
-		// Pause timer clicked
-		pauseButton.setOnClickListener { onPauseTimerClickedListener?.onPauseTimer() }
+			// Show the pause and reset buttons. Hide the start button
+			startButton.visibility = View.INVISIBLE
+			pauseButton.visibility = View.VISIBLE
+			resetButton.visibility = View.VISIBLE
+
+			// Call the listener
+			onStartTimerClickedListener?.onStartTimer(timer!!)
+
+		}
+
+		// Pause clicked
+		pauseButton.setOnClickListener {
+
+			// Show the start and reset buttons. Hide the pause button
+			startButton.visibility = View.VISIBLE
+			pauseButton.visibility = View.INVISIBLE
+			resetButton.visibility = View.VISIBLE
+
+			// Call the listener
+			onPauseTimerClickedListener?.onPauseTimer(timer!!)
+
+		}
+
+		// Reset clicked
+		resetButton.setOnClickListener {
+
+			// Show the start. Hide the pause and reset buttons
+			startButton.visibility = View.VISIBLE
+			pauseButton.visibility = View.INVISIBLE
+			resetButton.visibility = View.GONE
+
+			// Call the listener
+			onResetTimerClickedListener?.onResetTimer(timer!!)
+
+		}
 	}
 
 	/**
@@ -181,7 +224,7 @@ class NacTimerCardHolder(
 		// Get the hour, minutes, and seconds to display
 		val (hour, minute, seconds) = NacCalendar.getTimerHourMinuteSecondsZeroPadded(timer!!.duration)
 
-		// Set the hours
+		// Show the hours
 		if (hour.isNotEmpty())
 		{
 			hourTextView.text = hour
@@ -195,7 +238,7 @@ class NacTimerCardHolder(
 			hourUnits.visibility = View.GONE
 		}
 
-		// Set the minutes
+		// Show the minutes
 		if (minute.isNotEmpty())
 		{
 			minuteTextView.text = minute
@@ -212,19 +255,11 @@ class NacTimerCardHolder(
 		// Set the seconds. These are always visible
 		secondsTextView.text = seconds
 
-		// TODO: Set the repeat frequency
-		summaryRepeatFrequency.visibility = View.GONE
+		// Name
+		summaryName.text = timer!!.name
+		summaryName.visibility = if (timer!!.name.isNotEmpty()) View.VISIBLE else View.GONE
 
-		// Set the name
-		if (timer!!.name.isNotEmpty())
-		{
-			summaryName.text = timer!!.name
-			summaryName.visibility = View.VISIBLE
-		}
-		else
-		{
-			summaryName.visibility = View.GONE
-		}
+		// TODO: Start/pause/reset visibility
 	}
 
 }
