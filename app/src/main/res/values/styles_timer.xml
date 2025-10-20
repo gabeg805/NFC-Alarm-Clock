@@ -4,22 +4,20 @@
 	<!-- Circular progress -->
 	<style name="Timer.CircularProgressIndicator" parent="">
 		<item name="android:indeterminate">false</item>
-		<item name="indicatorDirectionCircular">counterclockwise</item>
+		<item name="android:progress">0</item>
+		<item name="indicatorDirectionCircular">clockwise</item>
 		<item name="trackCornerRadius">4dp</item>
 		<item name="trackThickness">6dp</item>
+		<item name="trackColor">@color/gray</item>
 	</style>
 
 	<style name="Timer.CardCircularProgressIndicator" parent="Timer.CircularProgressIndicator">
-		<item name="android:progress">100</item>
-		<item name="indicatorSize">240dp</item>
+		<item name="indicatorSize">220dp</item>
 	</style>
 
 	<style name="Timer.ActiveCircularProgressIndicator" parent="Timer.CircularProgressIndicator">
-		<item name="android:progress">0</item>
 		<item name="indicatorSize">320dp</item>
-		<!--
 		<item name="trackThickness">8dp</item>
-		-->
 	</style>
 
 	<!-- Time text -->
@@ -62,12 +60,19 @@
 		<item name="android:insetRight">@dimen/zero</item>
 	</style>
 
+	<style name="Timer.ActionButton" parent="Timer.NumberpadButton">
+		<item name="android:layout_width">@dimen/isz_actionpad</item>
+		<item name="android:layout_height">@dimen/isz_actionpad</item>
+	</style>
+
 	<!-- Icon button -->
 	<style name="Timer.IconButton" parent="Widget.Material3.Button.IconButton">
 		<item name="android:insetTop">@dimen/zero</item>
 		<item name="android:insetBottom">@dimen/zero</item>
 		<item name="android:insetLeft">@dimen/zero</item>
 		<item name="android:insetRight">@dimen/zero</item>
+		<item name="android:textColor">@color/white</item>
+		<item name="android:textSize">@dimen/tsz_normal</item>
 		<item name="iconGravity">textStart</item>
 		<item name="iconPadding">@dimen/zero</item>
 		<item name="iconSize">@dimen/isz_medium</item>

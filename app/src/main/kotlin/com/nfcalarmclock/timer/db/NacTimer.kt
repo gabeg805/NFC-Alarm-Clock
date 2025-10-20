@@ -11,10 +11,6 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 
-// TODO: Fragments:
-//       * List of timers
-// TODO: Compare by duration?
-// TODO: When calculating size of numpads: screen size - (padding normal + height of timer_hour + height of timer_start (make sure heights include margin and if not, add them)) / 4
 /**
  * Timer.
  *
@@ -226,20 +222,20 @@ class NacTimer()
 	}
 
 	/**
-	 * Check if this alarm equals another alarm.
+	 * Check if this timer equals another item.
 	 *
-	 * @param timer An alarm.
+	 * @param other An item to compare.
 	 *
-	 * @return True if both alarms are the same, and false otherwise.
+	 * @return True if both timers are the same, and false otherwise.
 	 */
-	@Suppress("CovariantEquals")
-	fun equals(timer: NacTimer?): Boolean
+	override fun equals(other: Any?): Boolean
 	{
-		return (timer != null)
-				&& (this.equalsId(timer))
-				&& (isActive == timer.isActive)
-				&& (localMediaPath == timer.localMediaPath)
-				&& fuzzyEquals(timer)
+		return (other != null)
+			&& (other is NacTimer)
+			&& (this.equalsId(other))
+			&& (isActive == other.isActive)
+			&& (localMediaPath == other.localMediaPath)
+			&& fuzzyEquals(other)
 	}
 
 	/**
@@ -287,6 +283,18 @@ class NacTimer()
 			&& (shouldAutoDismiss == timer.shouldAutoDismiss)
 			&& (autoDismissTime == timer.autoDismissTime)
 			&& (shouldDeleteAfterDismissed == timer.shouldDeleteAfterDismissed)
+	}
+
+	/**
+	 * Compute hash code of object.
+	 */
+	override fun hashCode(): Int
+	{
+		return super.hashCode() + 31 * (
+			  duration.hashCode()
+			+ shouldVolumeStop.hashCode()
+			+ scanNfcTagIdToStart.hashCode()
+			+ scanNfcTagIdToStartList.hashCode())
 	}
 
 	/**

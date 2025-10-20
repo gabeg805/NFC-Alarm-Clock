@@ -33,7 +33,7 @@ class NacEditTimerFragment
 		super.onViewCreated(view, savedInstanceState)
 
 		// Setup the done button
-		setupDoneButton()
+		setupSaveButton()
 	}
 
 }

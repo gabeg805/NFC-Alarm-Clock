@@ -5,6 +5,8 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.provider.AlarmClock
@@ -12,6 +14,8 @@ import android.view.Menu
 import androidx.activity.viewModels
 import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
+import androidx.core.graphics.ColorUtils
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
@@ -44,6 +48,7 @@ import com.nfcalarmclock.util.media.copyMediaToDeviceEncryptedStorage
 import com.nfcalarmclock.util.media.getMediaArtist
 import com.nfcalarmclock.util.media.getMediaTitle
 import com.nfcalarmclock.util.media.getMediaType
+import com.nfcalarmclock.view.setupRippleColor
 import com.nfcalarmclock.view.setupThemeColor
 import com.nfcalarmclock.whatsnew.NacWhatsNewDialog
 import com.nfcalarmclock.widget.refreshAppWidgets
@@ -104,6 +109,11 @@ class NacMainActivity
 	 * Shutdown broadcast receiver.
 	 */
 	private lateinit var shutdownBroadcastReceiver: NacShutdownBroadcastReceiver
+
+	/**
+	 * Whether the bottom navigation view item was selected by the user or not.
+	 */
+	private var wasBottomNavigationSelectedByUser: Boolean = true
 
 	/**
 	 * Check if the What's New dialog should be shown.
@@ -231,7 +241,7 @@ class NacMainActivity
 	}
 
 	/**
-	 * Called when the activity is created.
+	 * Activity is created.
 	 */
 	@SuppressLint("NewApi")
 	override fun onCreate(savedInstanceState: Bundle?)
@@ -263,6 +273,8 @@ class NacMainActivity
 		setupEdgeToEdge()
 		setupToolbar()
 		setupFloatingActionButton()
+		setupBottomNavigationView()
+		setupNavController()
 
 		// Disable the activity alias so that tapping an NFC tag will NOT open
 		// the main activity
@@ -276,13 +288,16 @@ class NacMainActivity
 		lifecycleScope.launch {  cleanupExtraMediaFilesInDeviceEncryptedStorage() }
 		//lifecycleScope.launch {
 		//	timerViewModel.allTimers.observe(this@NacMainActivity) { allTimers ->
-		//		allTimers.forEach { timerViewModel.delete(it) }
+		//		allTimers.forEach {
+		//			it.isActive = false
+		//			timerViewModel.update(it)
+		//		}
 		//	}
 		//}
 	}
 
 	/**
-	 * Called when the options menu is created.
+	 * Activity creates the options menu.
 	 */
 	override fun onCreateOptionsMenu(menu: Menu): Boolean
 	{
@@ -292,7 +307,7 @@ class NacMainActivity
 	}
 
 	/**
-	 * New intent received. Happens when an NFC tag is discovered.
+	 * Activity received new intent. Happens when an NFC tag is discovered.
 	 *
 	 * After this, onResume() will be called, which will check if an NFC tag was scanned.
 	 */
@@ -323,7 +338,7 @@ class NacMainActivity
 	}
 
 	/**
-	 * Called when the activity is resumed.
+	 * Activity is resumed.
 	 */
 	@SuppressLint("UnsafeIntentLaunch")
 	@OptIn(UnstableApi::class)
@@ -379,12 +394,59 @@ class NacMainActivity
 		println("setupIntitialDialogToShow()")
 		setupInitialDialogToShow()
 
-		// Bottom navigation
+		// Register the shutdown receiver
+		val shutdownIntentFilter = IntentFilter()
+
+		shutdownIntentFilter.addAction(Intent.ACTION_SHUTDOWN)
+		shutdownIntentFilter.addAction(Intent.ACTION_REBOOT)
+		registerMyReceiver(this, shutdownBroadcastReceiver, shutdownIntentFilter)
+
+		// Start NFC
+		NacNfc.start(this)
+
+		// Refresh widgets
+		refreshAppWidgets(this)
+	}
+
+	/**
+	 * Refresh the main activity.
+	 */
+	private fun refreshMainActivity()
+	{
+		// Disable that flag indicating that the main activity should refresh
+		sharedPreferences.shouldRefreshMainActivity = false
+
+		// Recreate the activity
+		recreate()
+	}
+
+	/**
+	 * Setup the bottom navigation view.
+	 */
+	private fun setupBottomNavigationView()
+	{
+		// Get color
+		val gray = ContextCompat.getColor(this, R.color.gray_dark2)
+
+		// Colors
+		bottomNavigation.itemActiveIndicatorColor = ColorStateList.valueOf(gray)
+		bottomNavigation.setupRippleColor(sharedPreferences)
+
+		// Bottom navigation item selected listener
 		bottomNavigation.setOnItemSelectedListener { item ->
 
+			// User did not selected a bottom navigation item so do not navigate anywhere
+			if (!wasBottomNavigationSelectedByUser)
+			{
+				println("DUMMY RETURN EARLY")
+				// Reset the value back to normal
+				wasBottomNavigationSelectedByUser = true
+				return@setOnItemSelectedListener true
+			}
+
+			// Navigate to a destination based on what the user selected
 			when (item.itemId)
 			{
-
 				// Alarm
 				R.id.bottom_navigation_alarm ->
 				{
@@ -413,7 +475,8 @@ class NacMainActivity
 							if (activeTimer != null)
 							{
 								println("Showing active timer")
-								navController.navigate(R.id.nacActiveTimerFragment, activeTimer.toBundle())
+								navController.navigate(R.id.nacShowTimersFragment)
+								//navController.navigate(R.id.nacActiveTimerFragment, activeTimer.toBundle())
 							}
 							// Show list of timers
 							else
@@ -428,35 +491,9 @@ class NacMainActivity
 
 				// Unknown
 				else -> false
-
 			}
 
 		}
-
-		// Register the shutdown receiver
-		val shutdownIntentFilter = IntentFilter()
-
-		shutdownIntentFilter.addAction(Intent.ACTION_SHUTDOWN)
-		shutdownIntentFilter.addAction(Intent.ACTION_REBOOT)
-		registerMyReceiver(this, shutdownBroadcastReceiver, shutdownIntentFilter)
-
-		// Start NFC
-		NacNfc.start(this)
-
-		// Refresh widgets
-		refreshAppWidgets(this)
-	}
-
-	/**
-	 * Refresh the main activity.
-	 */
-	private fun refreshMainActivity()
-	{
-		// Disable that flag indicating that the main activity should refresh
-		sharedPreferences.shouldRefreshMainActivity = false
-
-		// Recreate the activity
-		recreate()
 	}
 
 	/**
@@ -609,10 +646,36 @@ class NacMainActivity
 	}
 
 	/**
+	 * Setup the navigation controller.
+	 */
+	private fun setupNavController()
+	{
+		// Destination changed listener
+		navController.addOnDestinationChangedListener { controller, destination, arguments ->
+
+			// Update the flag indicating that this change was not done by a user
+			wasBottomNavigationSelectedByUser = false
+
+			// Change the bottom navigation view selected item based on the destination
+			println("Changeing bottom nav id : $destination")
+			when (destination.id)
+			{
+				// Alarm
+				R.id.nacShowAlarmsFragment -> bottomNavigation.selectedItemId = R.id.bottom_navigation_alarm
+
+				// Everything else
+				else -> bottomNavigation.selectedItemId = R.id.bottom_navigation_timer
+			}
+
+		}
+	}
+
+	/**
 	 * Setup the toolbar.
 	 */
 	private fun setupToolbar()
 	{
+		// Menu item click listener
 		toolbar.setOnMenuItemClickListener { item ->
 
 			when (item.itemId)

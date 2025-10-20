@@ -414,7 +414,8 @@ class NacTimerCardOptionsDialog
 			if (navController.currentDestination == null)
 			{
 				// Navigate to the destination manually
-				navController.navigate(R.id.nacTimerCardOptionsDialog, bundle)
+				println("CANT DO THIS WILL PROBABLY REMOVE THIS CLASS ANYWAYS")
+				//navController.navigate(R.id.nacTimerCardOptionsDialog, bundle)
 			}
 
 			// Setup an observe to watch for any changes to the alarm

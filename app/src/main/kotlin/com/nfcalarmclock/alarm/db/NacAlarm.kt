@@ -905,7 +905,7 @@ open class NacAlarm()
 	 */
 	override fun compareTo(other: NacAlarm): Int
 	{
-		return if (this.equals(other))
+		return if (this == other)
 		{
 			0
 		} else if (isInUse || other.isInUse)
@@ -1141,23 +1141,23 @@ open class NacAlarm()
 	}
 
 	/**
-	 * Check if this alarm equals another alarm.
+	 * Check if this alarm equals another item.
 	 *
-	 * @param alarm An alarm.
+	 * @param other An item to compare.
 	 *
 	 * @return True if both alarms are the same, and false otherwise.
 	 */
-	@Suppress("CovariantEquals")
-	fun equals(alarm: NacAlarm?): Boolean
+	override fun equals(other: Any?): Boolean
 	{
-		return (alarm != null)
-			&& (this.equalsId(alarm))
-			&& (isActive == alarm.isActive)
-			&& (timeActive == alarm.timeActive)
-			&& (snoozeCount == alarm.snoozeCount)
-			&& (localMediaPath == alarm.localMediaPath)
-			&& (timeOfDismissEarlyAlarm == alarm.timeOfDismissEarlyAlarm)
-			&& fuzzyEquals(alarm)
+		return (other != null)
+			&& (other is NacAlarm)
+			&& (this.equalsId(other))
+			&& (isActive == other.isActive)
+			&& (timeActive == other.timeActive)
+			&& (snoozeCount == other.snoozeCount)
+			&& (localMediaPath == other.localMediaPath)
+			&& (timeOfDismissEarlyAlarm == other.timeOfDismissEarlyAlarm)
+			&& fuzzyEquals(other)
 	}
 
 	/**
@@ -1270,6 +1270,86 @@ open class NacAlarm()
 		{
 			name
 		}
+	}
+
+	/**
+	 * Compute hash code of object.
+	 */
+	override fun hashCode(): Int
+	{
+		return 31 * (
+			+ id.hashCode()
+			+ isActive.hashCode()
+			+ timeActive.hashCode()
+			+ snoozeCount
+			+ isEnabled.hashCode()
+			+ hour
+			+ minute
+			+ shouldRepeat.hashCode()
+			+ repeatFrequency
+			+ repeatFrequencyUnits
+			+ shouldVibrate.hashCode()
+			+ vibrateDuration.hashCode()
+			+ vibrateWaitTime.hashCode()
+			+ shouldVibratePattern.hashCode()
+			+ vibrateRepeatPattern
+			+ vibrateWaitTimeAfterPattern.hashCode()
+			+ shouldUseNfc.hashCode()
+			+ nfcTagDismissOrder
+			+ shouldUseFlashlight.hashCode()
+			+ flashlightStrengthLevel
+			+ graduallyIncreaseFlashlightStrengthLevelWaitTime
+			+ shouldBlinkFlashlight.hashCode()
+			+ mediaType
+			+ shouldShuffleMedia.hashCode()
+			+ shouldRecursivelyPlayMedia.hashCode()
+			+ volume
+			+ shouldSayCurrentTime.hashCode()
+			+ shouldSayName.hashCode()
+			+ ttsFrequency
+			+ ttsSpeechRate.hashCode()
+			+ shouldGraduallyIncreaseVolume.hashCode()
+			+ graduallyIncreaseVolumeWaitTime
+			+ shouldRestrictVolume.hashCode()
+			+ shouldAutoDismiss.hashCode()
+			+ autoDismissTime
+			+ canDismissEarly.hashCode()
+			+ dismissEarlyTime
+			+ timeOfDismissEarlyAlarm.hashCode()
+			+ shouldShowDismissEarlyNotification.hashCode()
+			+ shouldDeleteAfterDismissed.hashCode()
+			+ shouldAutoSnooze.hashCode()
+			+ autoSnoozeTime
+			+ maxSnooze
+			+ snoozeDuration
+			+ shouldEasySnooze.hashCode()
+			+ shouldVolumeSnooze.hashCode()
+			+ shouldShowReminder.hashCode()
+			+ timeToShowReminder
+			+ reminderFrequency
+			+ shouldUseTtsForReminder.hashCode()
+			+ shouldSkipNextAlarm.hashCode()
+			+ days.hashCode()
+			+ date.hashCode()
+			+ repeatFrequencyDaysToRunBeforeStarting.hashCode()
+			+ nfcTagId.hashCode()
+			+ flashlightOnDuration.hashCode()
+			+ flashlightOffDuration.hashCode()
+			+ mediaPath.hashCode()
+			+ mediaArtist.hashCode()
+			+ mediaTitle.hashCode()
+			+ localMediaPath.hashCode()
+			+ audioSource.hashCode()
+			+ name.hashCode()
+			+ ttsVoice.hashCode()
+			+ hasMedia.hashCode()
+			+ canSnooze.hashCode()
+			+ isSnoozed.hashCode()
+			+ isInUse.hashCode()
+			+ isNextSkippedAndFinal.hashCode()
+			+ shouldUseTts.hashCode()
+			+ nameNormalized.hashCode()
+			+ nfcTagIdList.hashCode())
 	}
 
 	/**

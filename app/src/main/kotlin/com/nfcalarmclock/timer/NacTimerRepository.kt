@@ -53,6 +53,15 @@ class NacTimerRepository @Inject constructor(
 	suspend fun getAllTimers(): List<NacTimer> = timerDao.getAllTimers()
 
 	/**
+	 * Whether the table has a matching timer or not.
+	 *
+	 * @param id The ID of the timer to find.
+	 *
+	 * @return The number of timers that match the ID. Should be either 0 or 1.
+	 */
+	suspend fun hasTimer(id: Long): Boolean = timerDao.hasTimer(id)
+
+	/**
 	 * Insert a timer, asynchronously, into the database.
 	 *
 	 * @param timer Timer to insert.

@@ -1,270 +1,448 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout
+<ScrollView
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:id="@+id/timer_scrollview"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:layout_marginBottom="?attr/actionBarSize">
+	android:layout_marginBottom="?attr/actionBarSize"
+	android:fillViewport="true">
 
-	<!-- Hour -->
-	<TextView
-		style="@style/Timer.AddTimeText"
-		android:id="@+id/timer_hour"
-		android:text="@string/number00"
-		app:layout_constraintTop_toTopOf="parent"
-		app:layout_constraintBottom_toTopOf="@id/timer_numberpad1"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintEnd_toStartOf="@id/timer_hour_units"
-		app:layout_constraintHorizontal_chainStyle="packed"
-		/>
-
-	<TextView
-		style="@style/Timer.UnitsText"
-		android:id="@+id/timer_hour_units"
-		android:text="@string/letter_h"
-		app:layout_constraintStart_toEndOf="@id/timer_hour"
-		app:layout_constraintEnd_toStartOf="@id/timer_minute"
-		app:layout_constraintBaseline_toBaselineOf="@id/timer_hour"
-		/>
-
-	<!-- Minute -->
-	<TextView
-		style="@style/Timer.AddTimeText"
-		android:id="@+id/timer_minute"
-		android:text="@string/number00"
-		app:layout_constraintStart_toEndOf="@id/timer_hour_units"
-		app:layout_constraintEnd_toStartOf="@id/timer_minute_units"
-		app:layout_constraintBaseline_toBaselineOf="@id/timer_hour"
-		/>
-
-	<TextView
-		style="@style/Timer.UnitsText"
-		android:id="@+id/timer_minute_units"
-		android:text="@string/letter_m"
-		app:layout_constraintStart_toEndOf="@id/timer_minute"
-		app:layout_constraintEnd_toStartOf="@id/timer_seconds"
-		app:layout_constraintBaseline_toBaselineOf="@id/timer_minute"
-		/>
-
-	<!-- Seconds -->
-	<TextView
-		style="@style/Timer.AddTimeText"
-		android:id="@+id/timer_seconds"
-		android:text="@string/number00"
-		app:layout_constraintStart_toEndOf="@id/timer_minute_units"
-		app:layout_constraintEnd_toStartOf="@id/timer_seconds_units"
-		app:layout_constraintBaseline_toBaselineOf="@id/timer_hour"
-		/>
-
-	<TextView
-		style="@style/Timer.UnitsText"
-		android:id="@+id/timer_seconds_units"
-		android:layout_marginEnd="@dimen/zero"
-		android:text="@string/letter_s"
-		app:layout_constraintStart_toEndOf="@id/timer_seconds"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintBaseline_toBaselineOf="@id/timer_seconds"
-		/>
-
-	<!-- Number pad 1-3 -->
-	<com.google.android.material.button.MaterialButton
-		style="@style/Timer.NumberpadButton"
-		android:id="@+id/timer_numberpad1"
-		android:text="@string/number1"
-		app:layout_constraintTop_toTopOf="parent"
-		app:layout_constraintBottom_toTopOf="@id/timer_numberpad4"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintEnd_toStartOf="@id/timer_numberpad2"
-		app:layout_constraintHorizontal_chainStyle="packed"
-		app:layout_constraintVertical_chainStyle="packed"
-		/>
-
-	<com.google.android.material.button.MaterialButton
-		style="@style/Timer.NumberpadButton"
-		android:id="@+id/timer_numberpad2"
-		android:text="@string/number2"
-		app:layout_constraintTop_toTopOf="@id/timer_numberpad1"
-		app:layout_constraintBottom_toBottomOf="@id/timer_numberpad1"
-		app:layout_constraintStart_toEndOf="@id/timer_numberpad1"
-		app:layout_constraintEnd_toStartOf="@id/timer_numberpad3"
-		app:layout_constraintVertical_chainStyle="packed"
-		/>
-
-	<com.google.android.material.button.MaterialButton
-		style="@style/Timer.NumberpadButton"
-		android:id="@+id/timer_numberpad3"
-		android:text="@string/number3"
-		app:cornerRadius="100dp"
-		app:layout_constraintTop_toTopOf="@id/timer_numberpad1"
-		app:layout_constraintBottom_toBottomOf="@id/timer_numberpad1"
-		app:layout_constraintStart_toEndOf="@id/timer_numberpad2"
-		app:layout_constraintEnd_toEndOf="parent"
-		app:layout_constraintVertical_chainStyle="packed"
-		/>
-
-	<!-- Number pad 4-6 -->
-	<com.google.android.material.button.MaterialButton
-		style="@style/Timer.NumberpadButton"
-		android:id="@+id/timer_numberpad4"
-		android:text="@string/number4"
-		app:layout_constraintTop_toBottomOf="@id/timer_numberpad1"
-		app:layout_constraintBottom_toTopOf="@id/timer_numberpad7"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintEnd_toStartOf="@id/timer_numberpad5"
-		app:layout_constraintHorizontal_chainStyle="packed"
-		/>
-
-	<com.google.android.material.button.MaterialButton
-		style="@style/Timer.NumberpadButton"
-		android:id="@+id/timer_numberpad5"
-		android:text="@string/number5"
-		app:layout_constraintTop_toTopOf="@id/timer_numberpad4"
-		app:layout_constraintBottom_toBottomOf="@id/timer_numberpad4"
-		app:layout_constraintStart_toEndOf="@id/timer_numberpad4"
-		app:layout_constraintEnd_toStartOf="@id/timer_numberpad6"
-		/>
-
-	<com.google.android.material.button.MaterialButton
-		style="@style/Timer.NumberpadButton"
-		android:id="@+id/timer_numberpad6"
-		android:text="@string/number6"
-		app:layout_constraintTop_toTopOf="@id/timer_numberpad4"
-		app:layout_constraintBottom_toBottomOf="@id/timer_numberpad4"
-		app:layout_constraintStart_toEndOf="@id/timer_numberpad5"
-		app:layout_constraintEnd_toEndOf="parent"
-		/>
-
-	<!-- Number pad 7-9 -->
-	<com.google.android.material.button.MaterialButton
-		style="@style/Timer.NumberpadButton"
-		android:id="@+id/timer_numberpad7"
-		android:text="@string/number7"
-		app:layout_constraintTop_toBottomOf="@id/timer_numberpad4"
-		app:layout_constraintBottom_toTopOf="@id/timer_numberpad_invis"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintEnd_toStartOf="@id/timer_numberpad8"
-		app:layout_constraintHorizontal_chainStyle="packed"
-		/>
-
-	<com.google.android.material.button.MaterialButton
-		style="@style/Timer.NumberpadButton"
-		android:id="@+id/timer_numberpad8"
-		android:text="@string/number8"
-		app:layout_constraintTop_toTopOf="@id/timer_numberpad7"
-		app:layout_constraintBottom_toBottomOf="@id/timer_numberpad7"
-		app:layout_constraintStart_toEndOf="@id/timer_numberpad7"
-		app:layout_constraintEnd_toStartOf="@id/timer_numberpad9"
-		/>
-
-	<com.google.android.material.button.MaterialButton
-		style="@style/Timer.NumberpadButton"
-		android:id="@+id/timer_numberpad9"
-		android:text="@string/number9"
-		app:layout_constraintTop_toTopOf="@id/timer_numberpad7"
-		app:layout_constraintBottom_toBottomOf="@id/timer_numberpad7"
-		app:layout_constraintStart_toEndOf="@id/timer_numberpad8"
-		app:layout_constraintEnd_toEndOf="parent"
-		/>
-
-	<!-- Number pad 0-del -->
-	<com.google.android.material.button.MaterialButton
-		style="@style/Timer.NumberpadButton"
-		android:id="@+id/timer_numberpad_invis"
-		android:text=""
-		android:visibility="invisible"
-		app:layout_constraintTop_toBottomOf="@id/timer_numberpad7"
-		app:layout_constraintBottom_toBottomOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintEnd_toStartOf="@id/timer_numberpad0"
-		app:layout_constraintHorizontal_chainStyle="packed"
-		/>
-
-	<com.google.android.material.button.MaterialButton
-		style="@style/Timer.NumberpadButton"
-		android:id="@+id/timer_numberpad0"
-		android:text="@string/number0"
-		app:layout_constraintTop_toTopOf="@id/timer_numberpad_invis"
-		app:layout_constraintBottom_toBottomOf="@id/timer_numberpad_invis"
-		app:layout_constraintStart_toEndOf="@id/timer_numberpad_invis"
-		app:layout_constraintEnd_toStartOf="@id/timer_numberpad_del"
-		/>
-
-	<com.google.android.material.button.MaterialButton
-		style="@style/Timer.NumberpadButton"
-		android:id="@+id/timer_numberpad_del"
-		app:iconGravity="textStart"
-		app:iconPadding="@dimen/zero"
-		app:iconSize="@dimen/isz_normal"
-		app:icon="@drawable/backspace_32"
-		app:layout_constraintTop_toTopOf="@id/timer_numberpad_invis"
-		app:layout_constraintBottom_toBottomOf="@id/timer_numberpad_invis"
-		app:layout_constraintStart_toEndOf="@id/timer_numberpad0"
-		app:layout_constraintEnd_toEndOf="parent"
-		/>
-
-	<!-- Start timer -->
-	<com.google.android.material.button.MaterialButton
-		style="@style/Timer.NumberpadButton"
-		android:id="@+id/timer_start"
-		android:layout_marginTop="@dimen/zero"
-		android:layout_marginBottom="@dimen/zero"
-		android:backgroundTint="?attr/colorAccent"
-		app:iconPadding="@dimen/zero"
-		app:iconGravity="textStart"
-		app:iconSize="@dimen/isz_xxxlarge"
-		app:icon="@drawable/play"
-		app:layout_constraintTop_toBottomOf="@id/timer_numberpad_del"
-		app:layout_constraintBottom_toBottomOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintEnd_toEndOf="parent"
-		/>
-
-	<!-- Done editing timer -->
-	<com.google.android.material.button.MaterialButton
-		android:id="@+id/timer_done_edit"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:paddingTop="@dimen/normal"
-		android:paddingBottom="@dimen/normal"
-		android:paddingStart="@dimen/xxxlarge"
-		android:paddingEnd="@dimen/xxxlarge"
-		android:layout_marginTop="@dimen/zero"
-		android:layout_marginBottom="@dimen/zero"
-		android:backgroundTint="?attr/colorAccent"
-		android:textSize="@dimen/tsz_normal"
-		android:text="@string/action_save"
-		android:visibility="invisible"
-		app:layout_constraintTop_toBottomOf="@id/timer_numberpad_del"
-		app:layout_constraintBottom_toBottomOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintEnd_toEndOf="parent"
-		/>
-
-	<!-- More button -->
-	<com.google.android.material.button.MaterialButton
-		style="@style/Widget.Material3.Button.TextButton"
-		android:id="@+id/timer_more_button"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:alpha="0.4"
-		android:textSize="@dimen/tsz_small"
-		android:text="@string/word_more"
-		app:iconPadding="@dimen/zero"
-		app:iconGravity="top"
-		app:iconSize="@dimen/isz_xlarge"
-		app:icon="@drawable/collapse"
-		app:layout_constraintTop_toTopOf="@id/timer_start"
-		app:layout_constraintBottom_toBottomOf="@id/timer_start"
-		app:layout_constraintEnd_toEndOf="parent"
-		/>
-
-	<!-- Navigation host -->
-	<androidx.fragment.app.FragmentContainerView
-		android:id="@+id/options_content"
+	<androidx.constraintlayout.widget.ConstraintLayout
 		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:name="androidx.navigation.fragment.NavHostFragment"
-		app:defaultNavHost="true"
-		/>
+		android:layout_height="wrap_content">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+		<!-- Hour -->
+		<TextView
+			style="@style/Timer.AddTimeText"
+			android:id="@+id/timer_hour"
+			android:text="@string/number00"
+			app:layout_constraintTop_toTopOf="parent"
+			app:layout_constraintBottom_toTopOf="@id/timer_numberpad_container"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintEnd_toStartOf="@id/timer_hour_units"
+			app:layout_constraintHorizontal_chainStyle="packed"
+			/>
+
+		<TextView
+			style="@style/Timer.UnitsText"
+			android:id="@+id/timer_hour_units"
+			android:text="@string/letter_h"
+			app:layout_constraintStart_toEndOf="@id/timer_hour"
+			app:layout_constraintEnd_toStartOf="@id/timer_minute"
+			app:layout_constraintBaseline_toBaselineOf="@id/timer_hour"
+			/>
+
+		<!-- Minute -->
+		<TextView
+			style="@style/Timer.AddTimeText"
+			android:id="@+id/timer_minute"
+			android:text="@string/number00"
+			app:layout_constraintStart_toEndOf="@id/timer_hour_units"
+			app:layout_constraintEnd_toStartOf="@id/timer_minute_units"
+			app:layout_constraintBaseline_toBaselineOf="@id/timer_hour"
+			/>
+
+		<TextView
+			style="@style/Timer.UnitsText"
+			android:id="@+id/timer_minute_units"
+			android:text="@string/letter_m"
+			app:layout_constraintStart_toEndOf="@id/timer_minute"
+			app:layout_constraintEnd_toStartOf="@id/timer_seconds"
+			app:layout_constraintBaseline_toBaselineOf="@id/timer_minute"
+			/>
+
+		<!-- Seconds -->
+		<TextView
+			style="@style/Timer.AddTimeText"
+			android:id="@+id/timer_seconds"
+			android:text="@string/number00"
+			app:layout_constraintStart_toEndOf="@id/timer_minute_units"
+			app:layout_constraintEnd_toStartOf="@id/timer_seconds_units"
+			app:layout_constraintBaseline_toBaselineOf="@id/timer_hour"
+			/>
+
+		<TextView
+			style="@style/Timer.UnitsText"
+			android:id="@+id/timer_seconds_units"
+			android:layout_marginEnd="@dimen/zero"
+			android:text="@string/letter_s"
+			app:layout_constraintStart_toEndOf="@id/timer_seconds"
+			app:layout_constraintEnd_toEndOf="parent"
+			app:layout_constraintBaseline_toBaselineOf="@id/timer_seconds"
+			/>
+
+		<!-- Number pad container -->
+		<RelativeLayout
+			android:id="@+id/timer_numberpad_container"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginBottom="@dimen/huge"
+			app:layout_constraintBottom_toTopOf="@id/timer_start_button">
+
+			<!-- Number pad 1-3 -->
+			<com.google.android.material.button.MaterialButton
+				style="@style/Timer.NumberpadButton"
+				android:id="@+id/timer_numberpad1"
+				android:layout_toStartOf="@id/timer_numberpad2"
+				android:text="@string/number1"
+				/>
+
+			<com.google.android.material.button.MaterialButton
+				style="@style/Timer.NumberpadButton"
+				android:id="@+id/timer_numberpad2"
+				android:layout_centerHorizontal="true"
+				android:text="@string/number2"
+				/>
+
+			<com.google.android.material.button.MaterialButton
+				style="@style/Timer.NumberpadButton"
+				android:id="@+id/timer_numberpad3"
+				android:layout_toEndOf="@id/timer_numberpad2"
+				android:text="@string/number3"
+				/>
+
+			<!-- Number pad 4-6 -->
+			<com.google.android.material.button.MaterialButton
+				style="@style/Timer.NumberpadButton"
+				android:id="@+id/timer_numberpad4"
+				android:layout_alignTop="@id/timer_numberpad5"
+				android:layout_toStartOf="@id/timer_numberpad5"
+				android:layout_marginTop="@dimen/zero"
+				android:text="@string/number4"
+				/>
+
+			<com.google.android.material.button.MaterialButton
+				style="@style/Timer.NumberpadButton"
+				android:id="@+id/timer_numberpad5"
+				android:layout_below="@id/timer_numberpad2"
+				android:layout_centerHorizontal="true"
+				android:text="@string/number5"
+				/>
+
+			<com.google.android.material.button.MaterialButton
+				style="@style/Timer.NumberpadButton"
+				android:id="@+id/timer_numberpad6"
+				android:layout_alignTop="@id/timer_numberpad5"
+				android:layout_toEndOf="@id/timer_numberpad5"
+				android:layout_marginTop="@dimen/zero"
+				android:text="@string/number6"
+				/>
+
+			<!-- Number pad 7-9 -->
+			<com.google.android.material.button.MaterialButton
+				style="@style/Timer.NumberpadButton"
+				android:id="@+id/timer_numberpad7"
+				android:layout_alignTop="@id/timer_numberpad8"
+				android:layout_toStartOf="@id/timer_numberpad8"
+				android:layout_marginTop="@dimen/zero"
+				android:text="@string/number7"
+				/>
+
+			<com.google.android.material.button.MaterialButton
+				style="@style/Timer.NumberpadButton"
+				android:id="@+id/timer_numberpad8"
+				android:layout_below="@id/timer_numberpad5"
+				android:layout_centerHorizontal="true"
+				android:text="@string/number8"
+				/>
+
+			<com.google.android.material.button.MaterialButton
+				style="@style/Timer.NumberpadButton"
+				android:id="@+id/timer_numberpad9"
+				android:layout_alignTop="@id/timer_numberpad8"
+				android:layout_toEndOf="@id/timer_numberpad8"
+				android:layout_marginTop="@dimen/zero"
+				android:text="@string/number9"
+				/>
+
+			<!-- Number pad 0 and del -->
+			<com.google.android.material.button.MaterialButton
+				style="@style/Timer.NumberpadButton"
+				android:id="@+id/timer_numberpad0"
+				android:layout_below="@id/timer_numberpad8"
+				android:layout_centerHorizontal="true"
+				android:text="@string/number0"
+				/>
+
+			<com.google.android.material.button.MaterialButton
+				style="@style/Timer.NumberpadButton"
+				android:id="@+id/timer_numberpad_del"
+				android:layout_alignTop="@id/timer_numberpad0"
+				android:layout_toEndOf="@id/timer_numberpad0"
+				android:layout_marginTop="@dimen/zero"
+				app:iconGravity="textStart"
+				app:iconPadding="@dimen/zero"
+				app:iconSize="@dimen/isz_normal"
+				app:icon="@drawable/backspace_32"
+				/>
+		</RelativeLayout>
+
+		<!-- Start timer -->
+		<com.google.android.material.button.MaterialButton
+			style="@style/Timer.NumberpadButton"
+			android:id="@+id/timer_start_button"
+			android:layout_marginBottom="@dimen/huge"
+			android:backgroundTint="?attr/colorAccent"
+			app:iconPadding="@dimen/zero"
+			app:iconGravity="textStart"
+			app:iconSize="@dimen/isz_xxxlarge"
+			app:icon="@drawable/play"
+			app:layout_constraintBottom_toTopOf="@id/timer_more_options_container"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintEnd_toEndOf="parent"
+			/>
+
+		<!-- More button -->
+		<com.google.android.material.button.MaterialButton
+			style="@style/Timer.IconButton"
+			android:id="@+id/timer_more_button"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginStart="@dimen/small"
+			android:padding="@dimen/large"
+			android:alpha="0.5"
+			android:text="@string/word_more"
+			app:iconPadding="@dimen/nudge"
+			app:iconSize="@dimen/isz_medium"
+			app:icon="@drawable/expand"
+			app:layout_constraintTop_toTopOf="@id/timer_start_button"
+			app:layout_constraintBottom_toBottomOf="@id/timer_start_button"
+			app:layout_constraintStart_toStartOf="parent"
+			/>
+
+		<!-- Save timer -->
+		<com.google.android.material.button.MaterialButton
+			style="@style/Timer.IconButton"
+			android:id="@+id/timer_save_button"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginEnd="@dimen/small"
+			android:padding="@dimen/large"
+			android:visibility="invisible"
+			android:text="@string/action_save"
+			android:alpha="0.5"
+			app:iconPadding="@dimen/tiny"
+			app:iconSize="@dimen/isz_normal"
+			app:icon="@drawable/save_32"
+			app:layout_constraintTop_toTopOf="@id/timer_start_button"
+			app:layout_constraintBottom_toBottomOf="@id/timer_start_button"
+			app:layout_constraintEnd_toEndOf="parent"
+			/>
+
+		<!-- More options container -->
+		<LinearLayout
+			android:id="@+id/timer_more_options_container"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:paddingTop="@dimen/normal"
+			android:paddingHorizontal="@dimen/large"
+			android:orientation="vertical"
+			android:background="?attr/colorCardExpanded"
+			android:visibility="gone"
+			app:layout_constraintBottom_toBottomOf="parent">
+
+			<!-- Repeat, Vibrate, NFC, Flashlight -->
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:paddingTop="@dimen/tiny"
+				android:paddingBottom="@dimen/tiny"
+				android:gravity="center"
+				android:orientation="horizontal">
+
+				<!-- Repeat -->
+				<com.google.android.material.button.MaterialButton
+					style="@style/Widget.Button.Icon"
+					android:id="@+id/timer_repeat"
+					android:layout_width="@dimen/touch"
+					android:layout_height="@dimen/touch"
+					android:layout_weight="1"
+					android:checkable="true"
+					app:backgroundTint="@android:color/transparent"
+					app:iconTint="@color/card_toggle_button"
+					app:iconSize="@dimen/isz_large"
+					app:icon="@drawable/repeat"
+					/>
+
+				<!-- Vibrate -->
+				<com.google.android.material.button.MaterialButton
+					style="@style/Widget.Button.Icon"
+					android:id="@+id/timer_vibrate"
+					android:layout_width="@dimen/touch"
+					android:layout_height="@dimen/touch"
+					android:layout_weight="1"
+					android:checkable="true"
+					app:backgroundTint="@android:color/transparent"
+					app:iconTint="@color/card_toggle_button"
+					app:iconSize="@dimen/isz_large"
+					app:icon="@drawable/vibrate"
+					/>
+
+				<!-- NFC -->
+				<com.google.android.material.button.MaterialButton
+					style="@style/Widget.Button.Icon"
+					android:id="@+id/timer_nfc"
+					android:layout_width="@dimen/touch"
+					android:layout_height="@dimen/touch"
+					android:layout_weight="1"
+					android:checkable="true"
+					app:backgroundTint="@android:color/transparent"
+					app:iconTint="@color/card_toggle_button"
+					app:iconSize="@dimen/isz_large"
+					app:icon="@drawable/tap_and_play"
+					/>
+
+				<!-- Flashlight -->
+				<com.google.android.material.button.MaterialButton
+					style="@style/Widget.Button.Icon"
+					android:id="@+id/timer_flashlight"
+					android:layout_width="@dimen/touch"
+					android:layout_height="@dimen/touch"
+					android:layout_weight="1"
+					android:checkable="true"
+					app:backgroundTint="@android:color/transparent"
+					app:iconTint="@color/card_toggle_button"
+					app:iconSize="@dimen/isz_large"
+					app:icon="@drawable/flashlight_on_32"
+					/>
+			</LinearLayout>
+
+			<!-- Media -->
+			<com.google.android.material.button.MaterialButton
+				style="@style/Widget.Button.Text.Row"
+				android:id="@+id/timer_media"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="@dimen/tiny"
+				android:text=""
+				app:icon="@drawable/music_note"
+				/>
+
+			<!-- Volume -->
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:gravity="center_vertical"
+				android:orientation="horizontal">
+
+				<ImageView
+					android:id="@+id/timer_volume_icon"
+					android:contentDescription="@string/cd_volume_icon"
+					android:layout_width="@dimen/isz_normal"
+					android:layout_height="@dimen/isz_normal"
+					android:src="@drawable/volume_high"
+					/>
+
+				<SeekBar
+					android:id="@+id/timer_volume_slider"
+					android:contentDescription="@string/cd_volume_slider"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:paddingTop="@dimen/small"
+					android:paddingBottom="@dimen/small"
+					android:paddingStart="@dimen/normal"
+					android:paddingEnd="@dimen/normal"
+					android:max="100"
+					android:progress="75"
+					/>
+			</LinearLayout>
+
+			<!-- Name -->
+			<com.google.android.material.button.MaterialButton
+				style="@style/Widget.Button.Text.Row"
+				android:id="@+id/timer_name"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text=""
+				app:icon="@drawable/label"
+				/>
+
+			<!-- Options divider -->
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:gravity="center_vertical">
+
+				<!-- Divider -->
+				<View
+					android:id="@+id/timer_options_divider1"
+					android:layout_width="0dp"
+					android:layout_height="@dimen/line"
+					android:layout_weight="1"
+					android:background="?attr/colorAccent"
+					/>
+
+				<!-- Title -->
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginHorizontal="@dimen/tiny"
+					android:alpha="0.6"
+					android:textSize="@dimen/tsz_small"
+					android:textStyle="bold"
+					android:text="@string/title_options"
+					/>
+
+				<!-- Divider -->
+				<View
+					android:id="@+id/timer_options_divider2"
+					android:layout_width="0dp"
+					android:layout_height="@dimen/line"
+					android:layout_weight="1"
+					android:background="?attr/colorAccent"
+					/>
+			</LinearLayout>
+
+			<!-- Options -->
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:paddingTop="@dimen/tiny"
+				android:paddingBottom="@dimen/tiny"
+				android:gravity="center_horizontal"
+				android:orientation="horizontal">
+
+				<!-- Stop -->
+				<com.google.android.material.button.MaterialButton
+					style="@style/Widget.Button.Icon"
+					android:id="@+id/timer_stop_options"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:minHeight="@dimen/isz_xxlarge"
+					app:iconSize="@dimen/isz_normal"
+					app:iconTint="@color/white"
+					app:icon="@drawable/stop_filled_32"
+					/>
+
+				<!-- Settings options -->
+				<com.google.android.material.button.MaterialButton
+					style="@style/Widget.Button.Icon"
+					android:id="@+id/timer_settings_options"
+					android:contentDescription="@string/cd_alarm_options"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:minHeight="@dimen/isz_xxlarge"
+					app:iconTint="@color/white"
+					app:iconSize="@dimen/isz_normal"
+					app:icon="@drawable/settings"
+					/>
+			</LinearLayout>
+
+		</LinearLayout>
+
+		<!-- Navigation host -->
+		<androidx.fragment.app.FragmentContainerView
+			android:id="@+id/options_content"
+			android:layout_width="match_parent"
+			android:layout_height="match_parent"
+			android:name="androidx.navigation.fragment.NavHostFragment"
+			app:defaultNavHost="true"
+			/>
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+
+</ScrollView>

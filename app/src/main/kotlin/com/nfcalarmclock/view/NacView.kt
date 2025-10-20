@@ -1,5 +1,7 @@
 package com.nfcalarmclock.view
 
+import android.animation.Animator
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -15,13 +17,16 @@ import android.widget.ImageView
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import android.widget.SeekBar
+import android.widget.TextView
 import androidx.appcompat.widget.SwitchCompat
+import androidx.core.animation.addListener
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.ColorUtils
 import androidx.core.graphics.Insets
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.updateLayoutParams
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -31,6 +36,36 @@ import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputLayout
 import com.nfcalarmclock.R
 import com.nfcalarmclock.shared.NacSharedPreferences
+import com.nfcalarmclock.system.NacCalendar
+
+/**
+ * Setup the ripple color of a BottomNavigationView.
+ */
+fun BottomNavigationView.setupRippleColor(sharedPreferences: NacSharedPreferences, themeColor: Int = sharedPreferences.themeColor)
+{
+	// Blend the theme color
+	val blendedColor = ColorUtils.blendARGB(themeColor, Color.TRANSPARENT, 0.6f)
+
+	// Set the ripple color
+	this.itemRippleColor = ColorStateList.valueOf(blendedColor)
+}
+
+/**
+ * Animate a change in progress.
+ */
+fun CircularProgressIndicator.animateProgress(
+	from: Int,
+	to: Int,
+	millis: Long,
+	onEnd: (Animator) -> Unit = {})
+{
+	ObjectAnimator.ofInt(this, "progress", from, to)
+		.apply {
+			duration = millis
+			addListener(onEnd = onEnd)
+			start()
+		}
+}
 
 /**
  * Determine the correct alpha to use, depending on the state.
@@ -208,23 +243,6 @@ fun MaterialCheckBox.setupCheckBoxColor(sharedPreferences: NacSharedPreferences)
 }
 
 /**
- * Setup the progress and indicator color of a ProgressIndicator.
- */
-fun CircularProgressIndicator.setupProgressAndIndicatorColor(sharedPreferences: NacSharedPreferences)
-{
-	// Get the theme color
-	val themeColor = sharedPreferences.themeColor
-
-	// Get the contrast color and blend it with the theme
-	val contrastColor = calcContrastColor(themeColor)
-	val blendedColor = ColorUtils.blendARGB(themeColor, contrastColor, 0.7f)
-
-	// Set the colors
-	this.setIndicatorColor(blendedColor)
-	this.trackColor = themeColor
-}
-
-/**
  * Setup the progress and thumb color of a SeekBar.
  */
 fun SeekBar.setupProgressAndThumbColor(sharedPreferences: NacSharedPreferences)
@@ -365,3 +383,50 @@ fun TextInputLayout.setupInputLayoutColor(
 //	// Update the layout parameters
 //	this.layoutParams = layoutParams
 //}
+
+/**
+ * Update the hour, minute, and seconds textviews based on the milliseconds until
+ * finished.
+ */
+fun updateHourMinuteSecondsTextViews(
+	hourTextView: TextView,
+	hourUnits: TextView,
+	minuteTextView: TextView,
+	minuteUnits: TextView,
+	secondsTextView: TextView,
+	secUntilFinished: Long)
+{
+	// Get the hour, minutes, and seconds to display
+	val (hour, minute, seconds) = NacCalendar.getTimerHourMinuteSecondsZeroPadded(secUntilFinished)
+
+	// Update the hours
+	if (hour.isNotEmpty())
+	{
+		hourTextView.text = hour
+		hourTextView.visibility = View.VISIBLE
+		hourUnits.visibility = View.VISIBLE
+	}
+	// Hide the hours
+	else
+	{
+		hourTextView.visibility = View.GONE
+		hourUnits.visibility = View.GONE
+	}
+
+	// Update the minutes
+	if (minute.isNotEmpty())
+	{
+		minuteTextView.text = minute
+		minuteTextView.visibility = View.VISIBLE
+		minuteUnits.visibility = View.VISIBLE
+	}
+	// Hide the minutes
+	else
+	{
+		minuteTextView.visibility = View.GONE
+		minuteUnits.visibility = View.GONE
+	}
+
+	// Update the seconds. These are always visible
+	secondsTextView.text = seconds
+}

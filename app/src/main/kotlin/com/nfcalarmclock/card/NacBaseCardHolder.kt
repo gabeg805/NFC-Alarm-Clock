@@ -72,6 +72,6 @@ abstract class NacBaseCardHolder<T: NacAlarm>(val root: View)
 	/**
 	 * Initialize the various views.
 	 */
-	protected abstract fun initViews()
+	abstract fun initViews()
 
 }

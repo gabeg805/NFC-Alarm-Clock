@@ -27,6 +27,7 @@
 		android:layout_height="wrap_content"
 		android:layout_marginBottom="@dimen/normal"
 		android:alpha="0.75"
+		android:textSize="@dimen/tsz_large"
 		android:text=""
 		app:layout_constraintBottom_toTopOf="@id/timer_seconds"
 		app:layout_constraintStart_toStartOf="@id/timer_progress"
@@ -97,16 +98,26 @@
 		app:layout_constraintBaseline_toBaselineOf="@id/timer_seconds"
 		/>
 
+	<!-- Chronometer -->
+	<Chronometer
+		android:id="@+id/timer_chronometer"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:textColor="@color/gray_dark2"
+		android:textSize="0sp"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		/>
+
 	<!-- Reset timer -->
 	<com.google.android.material.button.MaterialButton
-		style="@style/Widget.Material3.Button.IconButton"
+		style="@style/Timer.IconButton"
 		android:id="@+id/timer_reset_button"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		app:iconGravity="textStart"
-		app:iconPadding="@dimen/zero"
+		android:layout_marginBottom="@dimen/normal"
 		app:iconSize="@dimen/isz_large"
-		app:iconTint="@color/white"
 		app:icon="@drawable/autorenew_32"
 		app:layout_constraintTop_toBottomOf="@id/timer_seconds"
 		app:layout_constraintBottom_toBottomOf="@id/timer_progress"
@@ -116,7 +127,7 @@
 
 	<!-- Resume timer -->
 	<com.google.android.material.button.MaterialButton
-		style="@style/Timer.NumberpadButton"
+		style="@style/Timer.ActionButton"
 		android:id="@+id/timer_resume_button"
 		android:layout_marginTop="@dimen/zero"
 		android:layout_marginBottom="@dimen/zero"
@@ -134,7 +145,7 @@
 
 	<!-- Pause timer -->
 	<com.google.android.material.button.MaterialButton
-		style="@style/Timer.NumberpadButton"
+		style="@style/Timer.ActionButton"
 		android:id="@+id/timer_pause_button"
 		android:layout_marginTop="@dimen/zero"
 		android:layout_marginBottom="@dimen/zero"
@@ -151,8 +162,8 @@
 
 	<!-- Stop timer -->
 	<com.google.android.material.button.MaterialButton
-		style="@style/Timer.NumberpadButton"
-		android:id="@+id/timer_stop"
+		style="@style/Timer.ActionButton"
+		android:id="@+id/timer_stop_button"
 		android:layout_marginTop="@dimen/zero"
 		android:layout_marginBottom="@dimen/zero"
 		android:backgroundTint="?attr/colorAccent"

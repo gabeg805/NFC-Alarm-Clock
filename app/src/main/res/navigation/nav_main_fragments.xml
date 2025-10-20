@@ -38,5 +38,9 @@
 	<fragment
 		android:id="@+id/nacEditTimerFragment"
 		android:name="com.nfcalarmclock.timer.addedit.NacEditTimerFragment"
-		android:label="NacEditTimerFragment" />
+		android:label="NacEditTimerFragment" >
+		<action
+			android:id="@+id/action_nacEditTimerFragment_to_nacActiveTimerFragment"
+			app:destination="@id/nacActiveTimerFragment" />
+	</fragment>
 </navigation>

@@ -66,10 +66,6 @@
 					android:layout_gravity="bottom|center"
 					android:src="@drawable/plus"
 					/>
-				<!--
-					android:layout_marginBottom="@dimen/large"
-					android:layout_gravity="bottom|center"
-				-->
 			</androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 			<!-- Bottom navigation -->
@@ -79,7 +75,7 @@
 				android:layout_height="wrap_content"
 				android:minHeight="@dimen/touch"
 				android:layout_gravity="bottom"
-				app:backgroundTint="@color/gray_dark2"
+				app:backgroundTint="@color/black"
 				app:itemPaddingTop="8dp"
 				app:itemPaddingBottom="8dp"
 				app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"

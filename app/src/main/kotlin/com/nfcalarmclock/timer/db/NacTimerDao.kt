@@ -6,6 +6,7 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
+import com.nfcalarmclock.alarm.db.NacAlarm
 
 /**
  * Data access object for timers.
@@ -57,6 +58,16 @@ interface NacTimerDao
 	 */
 	@Query("SELECT * FROM timer")
 	suspend fun getAllTimers(): List<NacTimer>
+
+	/**
+	 * Whether the table has a matching timer or not.
+	 *
+	 * @param id The ID of the timer to find.
+	 *
+	 * @return The number of timers that match the ID. Should be either 0 or 1.
+	 */
+	@Query("SELECT COUNT(id) FROM timer WHERE id=:id")
+	suspend fun hasTimer(id: Long): Boolean
 
 	/**
 	 * Insert a timer.

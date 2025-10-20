@@ -1,23 +1,21 @@
 package com.nfcalarmclock.timer.active
 
 import android.Manifest
-import android.animation.ArgbEvaluator
-import android.animation.ObjectAnimator
-import android.animation.ValueAnimator
 import android.content.ComponentName
 import android.content.Intent
 import android.content.ServiceConnection
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Bundle
 import android.os.IBinder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Chronometer
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.activity.addCallback
+import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresPermission
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.LiveData
 import androidx.media3.common.util.UnstableApi
@@ -26,26 +24,14 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.nfcalarmclock.R
 import com.nfcalarmclock.shared.NacSharedPreferences
-import com.nfcalarmclock.system.NacCalendar
 import com.nfcalarmclock.system.NacNfcIntent
 import com.nfcalarmclock.system.getTimer
 import com.nfcalarmclock.timer.db.NacTimer
+import com.nfcalarmclock.view.animateProgress
 import com.nfcalarmclock.view.calcContrastColor
 import com.nfcalarmclock.view.setupBackgroundColor
-import com.nfcalarmclock.view.setupProgressAndIndicatorColor
+import com.nfcalarmclock.view.updateHourMinuteSecondsTextViews
 import dagger.hilt.android.AndroidEntryPoint
-
-/**
- * Animate a change in progress.
- */
-fun CircularProgressIndicator.animateProgress(from: Int, to: Int, millis: Long)
-{
-	ObjectAnimator.ofInt(this, "progress", from, to)
-		.apply {
-			duration = millis
-			start()
-		}
-}
 
 /**
  * Active timer.
@@ -55,6 +41,11 @@ fun CircularProgressIndicator.animateProgress(from: Int, to: Int, millis: Long)
 class NacActiveTimerFragment
 	: Fragment()
 {
+
+	/**
+	 * Shared preferences.
+	 */
+	private lateinit var sharedPreferences: NacSharedPreferences
 
 	/**
 	 * Timer.
@@ -97,6 +88,11 @@ class NacActiveTimerFragment
 	private lateinit var minuteUnits: TextView
 
 	/**
+	 * Seconds units textview.
+	 */
+	private lateinit var secondsUnits: TextView
+
+	/**
 	 * Resume button.
 	 */
 	private lateinit var resumeButton: MaterialButton
@@ -110,6 +106,11 @@ class NacActiveTimerFragment
 	 * Stop button.
 	 */
 	private lateinit var stopButton: MaterialButton
+
+	/**
+	 * Reset button.
+	 */
+	private lateinit var resetButton: MaterialButton
 
 	/**
 	 * Scan NFC container.
@@ -137,21 +138,9 @@ class NacActiveTimerFragment
 	private lateinit var add1mButton: MaterialButton
 
 	/**
-	 * Color animator to make a strobing effect on the seconds text when the timer goes
-	 * off.
+	 * Chronometer to count up when the timer rings.
 	 */
-	private lateinit var strobingSecondsTextColorAnimator: ObjectAnimator
-
-	/**
-	 * Color animator to make a strobing effect on the seconds units when the timer goes
-	 * off.
-	 */
-	private lateinit var strobingSecondsUnitsColorAnimator: ObjectAnimator
-
-	/**
-	 * NFC intent LiveData.
-	 */
-	private val nfcIntentLiveData: LiveData<Intent> = NacNfcIntent.liveData
+	private lateinit var chronometer: Chronometer
 
 	/**
 	 * Active timer service.
@@ -159,32 +148,24 @@ class NacActiveTimerFragment
 	private var service: NacActiveTimerService? = null
 
 	/**
-	 * Start the strobing effect color animators.
+	 * NFC intent LiveData.
 	 */
-	private fun startStrobingEffectColorAnimators()
-	{
-		println("Start strobing jank")
-		// Get the seconds units
-		val secondsUnits: TextView = requireView().findViewById(R.id.timer_seconds_units)
+	private val nfcIntentLiveData: LiveData<Intent> = NacNfcIntent.liveData
 
-		// Create the animators
-		strobingSecondsTextColorAnimator = ObjectAnimator.ofInt(secondsTextView, "textColor", Color.RED, Color.TRANSPARENT)
-		strobingSecondsUnitsColorAnimator = ObjectAnimator.ofInt(secondsUnits, "textColor", Color.RED, Color.TRANSPARENT)
+	/**
+	 * Whether the circular progress animation is running for a timer or not.
+	 */
+	private var isRunningStartingAnimation: Boolean = false
 
-		// TODO: Maybe cirlce the progress jank with red instead of the text? So that its not as crazy
-		// Setup the animators
-		strobingSecondsTextColorAnimator.duration = 1000
-		strobingSecondsUnitsColorAnimator.duration = 1000
-		strobingSecondsTextColorAnimator.repeatCount = ValueAnimator.INFINITE
-		strobingSecondsUnitsColorAnimator.repeatCount = ValueAnimator.INFINITE
-		strobingSecondsTextColorAnimator.repeatMode = ValueAnimator.REVERSE
-		strobingSecondsUnitsColorAnimator.repeatMode = ValueAnimator.REVERSE
-		strobingSecondsTextColorAnimator.setEvaluator(ArgbEvaluator())
-		strobingSecondsUnitsColorAnimator.setEvaluator(ArgbEvaluator())
-
-		// Start the animators
-		strobingSecondsTextColorAnimator.start()
-		strobingSecondsUnitsColorAnimator.start()
+	/**
+	 * Callback when back is pressed.
+	 */
+	private val onBackPressedCallback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
+		override fun handleOnBackPressed()
+		{
+			println("On back pressed!")
+			findNavController().popBackStack(R.id.nacShowTimersFragment, false)
+		}
 	}
 
 	/**
@@ -194,13 +175,7 @@ class NacActiveTimerFragment
 		NacActiveTimerService.OnServiceStoppedListener {
 			println("THIS JANK IS GETTING STOPPED RIGHT NOW. NEED TO DO SOMETHING")
 
-			//// Reset the timer
-			//resetTimer()
-
 			// Navigate back to show alarms
-			// TODO: Change so that it goes to show timers instead of add timer...or maybe should just stay in this fragment?
-			// TODO: If I do this, need to think about restarting the service and replaying music and whatnot
-			//findNavController().popBackStack()
 			findNavController().popBackStack(R.id.nacShowTimersFragment, false)
 		}
 
@@ -210,68 +185,58 @@ class NacActiveTimerFragment
 	private val onCountdownTimerChangedListener: NacActiveTimerService.OnCountdownTimerChangedListener =
 		object : NacActiveTimerService.OnCountdownTimerChangedListener {
 
-			override fun onCountdownFinished()
+			override fun onCountdownFinished(timer: NacTimer)
 			{
 				println("DONE WITH THE COUNTDOWN")
 				// Change the seconds text and progress to indicate done
 				secondsTextView.text = resources.getString(R.string.number0)
-				progressIndicator.animateProgress(progressIndicator.progress, 100, 100)
+				progressIndicator.animateProgress(progressIndicator.progress, 0, 250,
+					onEnd = {
 
-				// TODO: Change text and progress to red to indicate the time past the set timer
-				startStrobingEffectColorAnimators()
+						// Start the timer ringing animation
+						startTimerRingingAnimation()
 
-				// Setup scan NFC visibility
-				setupScanNfcVisibility(timer.shouldUseNfc)
+						// Set the visibility
+						setScanNfcVisibility(timer.shouldUseNfc)
+						setStopVisibility()
 
-				// Show the stop button. Hide the resume and pause button
-				resumeButton.visibility = View.INVISIBLE
-				pauseButton.visibility = View.INVISIBLE
-				stopButton.visibility = if (timer.shouldUseNfc) View.INVISIBLE else View.VISIBLE
-
-				// Hide the add time buttons as the timer is no longer running
-				add5sButton.visibility = View.INVISIBLE
-				add30sButton.visibility = View.INVISIBLE
-				add1mButton.visibility = View.INVISIBLE
+					})
 			}
 
-			override fun onCountdownPaused()
+			override fun onCountdownPaused(timer: NacTimer)
 			{
-				// Show the resume button. Hide the pause and stop button
-				resumeButton.visibility = View.VISIBLE
-				pauseButton.visibility = View.INVISIBLE
-				stopButton.visibility = View.INVISIBLE
+				// Set the visibility
+				setPauseVisibility()
 			}
 
-			override fun onCountdownReset(secUntilFinished: Long)
+			override fun onCountdownReset(timer: NacTimer, secUntilFinished: Long)
 			{
 				println("COUNTDOWN RESET : $secUntilFinished")
-				// Update the views
-				updateHourMinuteSecondsTextViews(secUntilFinished)
-				setupScanNfcVisibility(false)
+				// Reset progress back to 0
+				progressIndicator.animateProgress(progressIndicator.progress, 0, 250,
+					onEnd = {
 
-				// Show the resume button. Hide the pause and stop button
-				resumeButton.visibility = View.VISIBLE
-				pauseButton.visibility = View.INVISIBLE
-				stopButton.visibility = View.INVISIBLE
+						// Update the views
+						updateHourMinuteSecondsTextViews(secUntilFinished)
+						setScanNfcVisibility(false)
+						setResetVisibility()
 
-				// Show the add time buttons as the timer can be run again, if the user wants to
-				add5sButton.visibility = View.VISIBLE
-				add30sButton.visibility = View.VISIBLE
-				add1mButton.visibility = View.VISIBLE
+					})
 			}
 
-			override fun onCountdownTick(secUntilFinished: Long, newProgress: Int)
+			override fun onCountdownTick(timer: NacTimer, secUntilFinished: Long, newProgress: Int)
 			{
 				println("COUNTDOWN Tick")
-				// Show the pause button. Hide the resume and stop button
-				resumeButton.visibility = View.INVISIBLE
-				pauseButton.visibility = View.VISIBLE
-				stopButton.visibility = View.INVISIBLE
-
+				if (isRunningStartingAnimation)
+				{
+					println("Still running the starting animation for : ${timer.id}")
+					return
+				}
 				// Update the views
+				setResumeVisibility()
 				updateHourMinuteSecondsTextViews(secUntilFinished)
 
-				// Animate the progress to that point
+				// Animate the progress to the new progress
 				progressIndicator.animateProgress(progressIndicator.progress, newProgress, 250)
 			}
 
@@ -287,23 +252,80 @@ class NacActiveTimerFragment
 			// Set the active timer service
 			val binder = serviceBinder as NacActiveTimerService.NacLocalBinder
 			service = binder.getService()
-			//val service: NacActiveTimerService = binder.getService()
-			println("Active Fragment SERVICE IS NOW CONNECTED : ${service!!.progress} | ${timer.id}")
 
-			// Update the hour, minute, and seconds textviews
-			updateHourMinuteSecondsTextViews(service!!.secUntilFinished)
+			// Get the progress and seconds
+			val secUntilFinished = service!!.getSecUntilFinished(timer)
+			val progress = service!!.getProgress(timer)
+			println("Active Fragment SERVICE IS NOW CONNECTED : $progress | ${timer.id}")
 
 			// This is the first tick of the countdown timer, while the service is
 			// connected to this fragment
-			if (service!!.isFirstTick)
+			if (service!!.allIsFirstTick[timer.id]!!)
 			{
-				// Do a little circular animation from 100% to 0% on the first tick
-				progressIndicator.animateProgress(100, 0, 500)
+				println("Progress first tick : ${progressIndicator.progress}")
+
+				// Update the hour, minute, and seconds textviews
+				updateHourMinuteSecondsTextViews(secUntilFinished)
+
+				// Set the flag that the animation is running
+				isRunningStartingAnimation = true
+
+				// Do a little circular animation from 0% to 100% on the first tick
+				// and then reset the running animation flag
+				progressIndicator.animateProgress(0, 100, 500, onEnd = {
+					isRunningStartingAnimation = false
+				})
 			}
 			else
 			{
-				progressIndicator.progress = service!!.progress
+				// Ringing
+				if (service!!.isTimerRinging(timer))
+				{
+					println("YO : ${timer.id} | RINGING")
+
+					// Initialize the seconds to be 0
+					secondsTextView.text = resources.getString(R.string.number0)
+
+					// Start the timer ringing animation
+					startTimerRingingAnimation()
+
+					// Set the visibility
+					setScanNfcVisibility(timer.shouldUseNfc)
+					setStopVisibility()
+				}
+				// Paused
+				else if (service!!.isTimerPaused(timer))
+				{
+					println("YO : ${timer.id}| PAUSED")
+
+					// Update the views
+					updateHourMinuteSecondsTextViews(secUntilFinished)
+					setPauseVisibility()
+					progressIndicator.progress = progress
+				}
+				// Active
+				else if (service!!.isTimerActive(timer))
+				{
+					println("YO : ${timer.id}| ACTIVE")
+
+					// Update the views
+					updateHourMinuteSecondsTextViews(secUntilFinished)
+					setResumeVisibility()
+					progressIndicator.progress = progress
+				}
+				// Reset, not doing anything
+				else
+				{
+					println("YO reset? ${timer.id} | NORMAL")
+					setResetVisibility()
+					progressIndicator.progress = 0
+				}
 			}
+
+			// Set the state of the resume/pause/stop buttons
+			resumeButton.visibility = if (service!!.isTimerPaused(timer)) View.VISIBLE else View.INVISIBLE
+			pauseButton.visibility = if (service!!.isTimerPaused(timer) || service!!.isTimerRinging(timer)) View.INVISIBLE else View.VISIBLE
+			stopButton.visibility = if (service!!.isTimerRinging(timer) && !timer.shouldUseNfc) View.VISIBLE else View.INVISIBLE
 
 			// Active timer service is stopped listener
 			service!!.addOnServiceStoppedListener(timer.id, onServiceStoppedListener)
@@ -325,9 +347,6 @@ class NacActiveTimerFragment
 		// Get the context
 		val context = requireContext()
 
-		// Clear the service stop listener
-		service?.removeOnServiceStoppedListener(timer.id, onServiceStoppedListener)
-
 		// Dismiss with NFC
 		if (useNfc)
 		{
@@ -338,11 +357,6 @@ class NacActiveTimerFragment
 		{
 			NacActiveTimerService.dismissTimerService(context, timer)
 		}
-
-		// Navigate back to show alarms
-		println("Back stack : ${findNavController().currentBackStackEntry} || ${findNavController().previousBackStackEntry}")
-		val x = findNavController().popBackStack(R.id.nacShowTimersFragment, false)
-		println("Was popbackstack successful? $x")
 	}
 
 	/**
@@ -364,13 +378,11 @@ class NacActiveTimerFragment
 	{
 		// Super
 		super.onStart()
-		println("onStart()")
 
 		// Bind to the active timer service
 		val context = requireContext()
-		val intent = Intent(context, NacActiveTimerService::class.java)
 
-		context.bindService(intent, serviceConnection, 0)
+		NacActiveTimerService.bindToService(context, NacActiveTimerService::class.java, serviceConnection)
 	}
 
 	/**
@@ -380,7 +392,9 @@ class NacActiveTimerFragment
 	{
 		// Super
 		super.onStop()
-		println("onStop(). Canceling timer : ${timer.id}")
+
+		// Remove the back press callback
+		onBackPressedCallback.remove()
 
 		// Unbind from the active timer service
 		requireContext().unbindService(serviceConnection)
@@ -418,7 +432,7 @@ class NacActiveTimerFragment
 
 		// Get the context and shared preferences
 		val context = requireContext()
-		val sharedPreferences = NacSharedPreferences(context)
+		sharedPreferences = NacSharedPreferences(context)
 
 		// Get the views
 		progressIndicator = view.findViewById(R.id.timer_progress)
@@ -428,30 +442,117 @@ class NacActiveTimerFragment
 		secondsTextView = view.findViewById(R.id.timer_seconds)
 		hourUnits = view.findViewById(R.id.timer_hour_units)
 		minuteUnits = view.findViewById(R.id.timer_minute_units)
+		secondsUnits = requireView().findViewById(R.id.timer_seconds_units)
 		resumeButton = view.findViewById(R.id.timer_resume_button)
 		pauseButton = view.findViewById(R.id.timer_pause_button)
+		stopButton = view.findViewById(R.id.timer_stop_button)
+		resetButton = view.findViewById(R.id.timer_reset_button)
 		scanNfcContainer = view.findViewById(R.id.timer_scan_nfc_container)
 		scanNfcTextView = view.findViewById(R.id.timer_scan_nfc_text)
-		stopButton = view.findViewById(R.id.timer_stop)
 		add5sButton = view.findViewById(R.id.timer_add_5s)
 		add30sButton = view.findViewById(R.id.timer_add_30s)
 		add1mButton = view.findViewById(R.id.timer_add_1m)
-		val resetButton: MaterialButton = view.findViewById(R.id.timer_reset_button)
+		chronometer = view.findViewById(R.id.timer_chronometer)
 
-		println("onViewCreated()!!!!!!!!!!!!!!!!!!!!!!!")
+		// Setup back press
+		requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)
 
 		// Setup views
-		setupBackPressListener()
-		setupName(sharedPreferences)
+		setupName()
 		setupHourAndMinuteVisibility()
-		setupResetButton(resetButton)
-		setupPauseResumeButton(sharedPreferences)
-		setupStopButton(sharedPreferences)
-		setupScanNfcVisibility(false)
+		setupResetButton()
+		setupPauseButton()
+		setupResumeButton()
+		setupStopButton()
+		setScanNfcVisibility(false)
 		setupAddTimeButtons()
-		setupProgressIndicator(sharedPreferences)
+		setupProgressIndicator()
 		setupObserveNfcIntentLiveData()
-		println("Done with onViewCreated()")
+		setupChronometer()
+	}
+
+	/**
+	 * Set the visibility of views when timer is paused.
+	 */
+	private fun setPauseVisibility()
+	{
+		// Show the resume and reset buttons. Hide the pause and stop buttons
+		resumeButton.visibility = View.VISIBLE
+		pauseButton.visibility = View.INVISIBLE
+		stopButton.visibility = View.INVISIBLE
+		resetButton.visibility = View.VISIBLE
+
+		// Show the add time buttons
+		add5sButton.visibility = View.VISIBLE
+		add30sButton.visibility = View.VISIBLE
+		add1mButton.visibility = View.VISIBLE
+	}
+
+	/**
+	 * Set the visibility of views when timer is reset.
+	 */
+	private fun setResetVisibility()
+	{
+		// Show the resume button. Hide the pause, stop, and reset buttons
+		resumeButton.visibility = View.VISIBLE
+		pauseButton.visibility = View.INVISIBLE
+		stopButton.visibility = View.INVISIBLE
+		resetButton.visibility = View.INVISIBLE
+
+		// Show the add time buttons as the timer can be run again, if the user wants to
+		add5sButton.visibility = View.VISIBLE
+		add30sButton.visibility = View.VISIBLE
+		add1mButton.visibility = View.VISIBLE
+	}
+
+	/**
+	 * Set the visibility of views when timer is started or resumed.
+	 */
+	private fun setResumeVisibility()
+	{
+		// Show the pause and reset buttons. Hide the resume and stop buttons
+		resumeButton.visibility = View.INVISIBLE
+		pauseButton.visibility = View.VISIBLE
+		stopButton.visibility = View.INVISIBLE
+		resetButton.visibility = View.VISIBLE
+
+		// Show the add time buttons
+		add5sButton.visibility = View.VISIBLE
+		add30sButton.visibility = View.VISIBLE
+		add1mButton.visibility = View.VISIBLE
+	}
+
+	/**
+	 * Set the scan NFC views visibility.
+	 */
+	private fun setScanNfcVisibility(shouldBeVisible: Boolean)
+	{
+		if (shouldBeVisible)
+		{
+			scanNfcContainer.visibility = View.VISIBLE
+		}
+		else
+		{
+			scanNfcContainer.visibility = View.INVISIBLE
+		}
+	}
+
+	/**
+	 * Set the visibility of views when timer should be stopped.
+	 */
+	private fun setStopVisibility()
+	{
+		// Show the stop button. Hide the resume and pause button
+		resumeButton.visibility = View.INVISIBLE
+		pauseButton.visibility = View.INVISIBLE
+		stopButton.visibility = if (timer.shouldUseNfc) View.INVISIBLE else View.VISIBLE
+		resetButton.visibility = View.INVISIBLE
+		//resetButton.visibility = if (timer.shouldUseNfc) View.INVISIBLE else View.VISIBLE
+
+		// Hide the add time buttons as the timer is no longer running
+		add5sButton.visibility = View.INVISIBLE
+		add30sButton.visibility = View.INVISIBLE
+		add1mButton.visibility = View.INVISIBLE
 	}
 
 	/**
@@ -465,13 +566,21 @@ class NacActiveTimerFragment
 	}
 
 	/**
-	 * Setup the back press listener.
+	 * Setup the chronometer.
 	 */
-	private fun setupBackPressListener()
+	private fun setupChronometer()
 	{
-		requireActivity().onBackPressedDispatcher.addCallback {
-			println("On back pressed!")
-			findNavController().popBackStack(R.id.nacShowTimersFragment, false)
+		// Tick listener
+		chronometer.onChronometerTickListener = Chronometer.OnChronometerTickListener {
+
+			// Get the elapsed time
+			val now = System.currentTimeMillis()
+			val elapsed = (now - service!!.timerRingingStartTimeMillis[timer.id]!!) / 1000
+			println("Elapsed time : $elapsed")
+
+			// Update the time
+			updateHourMinuteSecondsTextViews(elapsed)
+
 		}
 	}
 
@@ -499,7 +608,7 @@ class NacActiveTimerFragment
 	/**
 	 * Setup the name TextView.
 	 */
-	private fun setupName(sharedPreferences: NacSharedPreferences)
+	private fun setupName()
 	{
 		nameTextView.text = timer.name
 		nameTextView.setTextColor(sharedPreferences.nameColor)
@@ -521,39 +630,23 @@ class NacActiveTimerFragment
 	}
 
 	/**
-	 * Setup the pause/resume button.
+	 * Setup the pause button.
 	 */
 	@RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
-	private fun setupPauseResumeButton(sharedPreferences: NacSharedPreferences)
+	private fun setupPauseButton()
 	{
-		// Setup color
+		// Color
 		val contrastColor = calcContrastColor(sharedPreferences.themeColor)
 
-		resumeButton.setupBackgroundColor(sharedPreferences)
 		pauseButton.setupBackgroundColor(sharedPreferences)
-		resumeButton.iconTint = ColorStateList.valueOf(contrastColor)
 		pauseButton.iconTint = ColorStateList.valueOf(contrastColor)
 
-		// Resume click listener
-		resumeButton.setOnClickListener {
-
-			println("Resume TIMER")
-			// Resume the timer
-			service?.startCountdownTimer(timer)
-
-			// Update the notification
-			service?.updateNotification(timer)
-
-		}
-
-		// Pause click listener
+		// Click listener
 		pauseButton.setOnClickListener {
 
-			println("Pause TIMER")
 			// Pause the timer
+			setPauseVisibility()
 			service?.cancelCountdownTimer(timer)
-
-			// Update the notification
 			service?.updateNotification(timer)
 
 		}
@@ -562,68 +655,109 @@ class NacActiveTimerFragment
 	/**
 	 * Setup the progress indicator.
 	 */
-	private fun setupProgressIndicator(sharedPreferences: NacSharedPreferences)
+	private fun setupProgressIndicator()
 	{
 		// Setup color
-		progressIndicator.setupProgressAndIndicatorColor(sharedPreferences)
+		progressIndicator.setIndicatorColor(sharedPreferences.themeColor)
 	}
 
 	/**
 	 * Setup the reset button.
 	 */
 	@RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
-	private fun setupResetButton(button: MaterialButton)
+	private fun setupResetButton()
 	{
-		// Setup the click listener
-		button.setOnClickListener {
+		// Click listener
+		resetButton.setOnClickListener {
 
-			// Reset progress back to 0
-			progressIndicator.animateProgress(progressIndicator.progress, 0, 250)
+			// Clear the running starting animation flag
+			isRunningStartingAnimation = false
 
 			// Reset the timer
 			service?.resetCountdownTimer(timer)
-
-			// TODO: Figure out logic for when timer is reset, but the fragment is stil visible
-			// TODO: Should the service be stopped or not?
-			//// Clear the service stop listener
-			//service?.onActiveTimerServiceStoppedListener = null
-
-			//// Stop the service so the notification gets cleared
-			//service?.stopActiveTimerService()
+			service?.cleanup(timer)
 
 		}
 	}
 
 	/**
-	 * Setup the scan NFC views visibility.
+	 * Setup the resume button.
 	 */
-	private fun setupScanNfcVisibility(shouldBeVisible: Boolean)
+	@RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
+	private fun setupResumeButton()
 	{
-		if (shouldBeVisible)
-		{
-			scanNfcContainer.visibility = View.VISIBLE
-		}
-		else
-		{
-			scanNfcContainer.visibility = View.INVISIBLE
+		// Color
+		val contrastColor = calcContrastColor(sharedPreferences.themeColor)
+
+		resumeButton.setupBackgroundColor(sharedPreferences)
+		resumeButton.iconTint = ColorStateList.valueOf(contrastColor)
+
+		// Click listener
+		resumeButton.setOnClickListener {
+
+			// Set the visibility
+			setResumeVisibility()
+
+			// Resume the timer
+			if (service?.isTimerPaused(timer) == true)
+			{
+				service!!.startCountdownTimer(timer)
+				service!!.updateNotification(timer)
+			}
+			// Start the timer
+			else
+			{
+				val context = requireContext()
+
+				NacActiveTimerService.startTimerService(context, timer)
+				NacActiveTimerService.bindToService(context, NacActiveTimerService::class.java, serviceConnection)
+			}
+
 		}
 	}
 
 	/**
 	 * Setup the stop button.
 	 */
-	private fun setupStopButton(sharedPreferences: NacSharedPreferences)
+	private fun setupStopButton()
 	{
-		// Setup color
+		// Color
 		val contrastColor = calcContrastColor(sharedPreferences.themeColor)
 
 		stopButton.setupBackgroundColor(sharedPreferences)
 		stopButton.iconTint = ColorStateList.valueOf(contrastColor)
 
-		// Setup the click listener to dismiss the service
+		// Click listener
 		stopButton.setOnClickListener {
 			dismissTimerService(false)
 		}
+	}
+
+	/**
+	 * Start the strobing effect color animators.
+	 */
+	private fun startTimerRingingAnimation()
+	{
+		// Get the colors
+		val context = requireContext()
+		val red = ContextCompat.getColor(context, R.color.red_lighter)
+
+		// Change the progress indicator
+		progressIndicator.indicatorDirection = CircularProgressIndicator.INDICATOR_DIRECTION_COUNTERCLOCKWISE
+		progressIndicator.isIndeterminate = true
+		progressIndicator.setIndicatorColor(red)
+		progressIndicator.setIndeterminateAnimatorDurationScale(1.4f)
+
+		// Change the text color
+		hourTextView.setTextColor(red)
+		minuteTextView.setTextColor(red)
+		secondsTextView.setTextColor(red)
+		hourUnits.setTextColor(red)
+		minuteUnits.setTextColor(red)
+		secondsUnits.setTextColor(red)
+
+		// Start the chronometer and animator
+		chronometer.start()
 	}
 
 	/**
@@ -632,39 +766,11 @@ class NacActiveTimerFragment
 	 */
 	private fun updateHourMinuteSecondsTextViews(secUntilFinished: Long)
 	{
-		// Get the hour, minutes, and seconds to display
-		val (hour, minute, seconds) = NacCalendar.getTimerHourMinuteSecondsZeroPadded(secUntilFinished)
-
-		// Update the hours
-		if (hour.isNotEmpty())
-		{
-			hourTextView.text = hour
-			hourTextView.visibility = View.VISIBLE
-			hourUnits.visibility = View.VISIBLE
-		}
-		// Hide the hours
-		else
-		{
-			hourTextView.visibility = View.GONE
-			hourUnits.visibility = View.GONE
-		}
-
-		// Update the minutes
-		if (minute.isNotEmpty())
-		{
-			minuteTextView.text = minute
-			minuteTextView.visibility = View.VISIBLE
-			minuteUnits.visibility = View.VISIBLE
-		}
-		// Hide the minutes
-		else
-		{
-			minuteTextView.visibility = View.GONE
-			minuteUnits.visibility = View.GONE
-		}
-
-		// Update the seconds. These are always visible
-		secondsTextView.text = seconds
+		updateHourMinuteSecondsTextViews(
+			hourTextView, hourUnits,
+			minuteTextView, minuteUnits,
+			secondsTextView,
+			secUntilFinished)
 	}
 
 }

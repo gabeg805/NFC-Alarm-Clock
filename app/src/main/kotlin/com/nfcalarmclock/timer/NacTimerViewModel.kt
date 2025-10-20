@@ -61,6 +61,15 @@ class NacTimerViewModel @Inject constructor(
 	suspend fun getAllTimers(): List<NacTimer> = timerRepository.getAllTimers()
 
 	/**
+	 * Whether the table has a matching timer or not.
+	 *
+	 * @param id The ID of the timer to find.
+	 *
+	 * @return The number of timers that match the ID. Should be either 0 or 1.
+	 */
+	suspend fun hasTimer(id: Long): Boolean = timerRepository.hasTimer(id)
+
+	/**
 	 * Insert a timer into the database.
 	 *
 	 * @param timer The timer to insert.

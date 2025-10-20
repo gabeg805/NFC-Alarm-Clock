@@ -1,13 +1,16 @@
 package com.nfcalarmclock.timer.card
 
 import android.view.View
+import android.widget.ImageView
 import android.widget.TextView
 import com.google.android.material.button.MaterialButton
+import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.nfcalarmclock.R
 import com.nfcalarmclock.card.NacBaseCardHolder
 import com.nfcalarmclock.system.NacCalendar
 import com.nfcalarmclock.timer.db.NacTimer
 import com.nfcalarmclock.view.performHapticFeedback
+import com.nfcalarmclock.view.updateHourMinuteSecondsTextViews
 
 /**
  * Timer ViewHolder for a CardView.
@@ -20,11 +23,11 @@ class NacTimerCardHolder(
 {
 
 	/**
-	 * Listener for editing the timer.
+	 * Listener for when the timer is clicked.
 	 */
-	fun interface OnEditTimerClickedListener
+	fun interface OnTimerClickedListener
 	{
-		fun onEditTimer(timer: NacTimer)
+		fun onTimerClicked(timer: NacTimer)
 	}
 
 	/**
@@ -52,9 +55,22 @@ class NacTimerCardHolder(
 	}
 
 	/**
+	 * Listener for when the stop timer button is clicked.
+	 */
+	fun interface OnStopTimerClickedListener
+	{
+		fun onStopTimer(timer: NacTimer)
+	}
+
+	/**
 	 * Timer.
 	 */
 	var timer: NacTimer? = null
+
+	/**
+	 * Circular progress indicator.
+	 */
+	val progressIndicator: CircularProgressIndicator = root.findViewById(R.id.timer_progress)
 
 	/**
 	 * Hour textview.
@@ -69,7 +85,7 @@ class NacTimerCardHolder(
 	/**
 	 * Second textview.
 	 */
-	private val secondsTextView: TextView = root.findViewById(R.id.timer_seconds)
+	val secondsTextView: TextView = root.findViewById(R.id.timer_seconds)
 
 	/**
 	 * Hour units textview.
@@ -89,22 +105,32 @@ class NacTimerCardHolder(
 	/**
 	 * Start button.
 	 */
-	private val startButton: MaterialButton = root.findViewById(R.id.timer_start_button)
+	val startButton: MaterialButton = root.findViewById(R.id.timer_start_button)
 
 	/**
 	 * Pause button.
 	 */
-	private val pauseButton: MaterialButton = root.findViewById(R.id.timer_pause_button)
+	val pauseButton: MaterialButton = root.findViewById(R.id.timer_pause_button)
 
 	/**
 	 * Reset button.
 	 */
-	private val resetButton: MaterialButton = root.findViewById(R.id.timer_reset_button)
+	val resetButton: MaterialButton = root.findViewById(R.id.timer_reset_button)
+
+	/**
+	 * Stop button.
+	 */
+	val stopButton: MaterialButton = root.findViewById(R.id.timer_stop_button)
+
+	/**
+	 * Scan NFC tag icon.
+	 */
+	val scanNfcTagIcon: ImageView = root.findViewById(R.id.timer_scan_nfc_icon)
 
 	/**
 	 * Listener for editing the timer.
 	 */
-	var onEditTimerClickedListener: OnEditTimerClickedListener? = null
+	var onTimerClickedListener: OnTimerClickedListener? = null
 
 	/**
 	 * Listener for when the start timer button is clicked.
@@ -120,6 +146,11 @@ class NacTimerCardHolder(
 	 * Listener for when the reset timer button is clicked.
 	 */
 	var onResetTimerClickedListener: OnResetTimerClickedListener? = null
+
+	/**
+	 * Listener for when the stop timer button is clicked.
+	 */
+	var onStopTimerClickedListener: OnStopTimerClickedListener? = null
 
 	/**
 	 * Constructor.
@@ -151,6 +182,7 @@ class NacTimerCardHolder(
 	 */
 	override fun initColors()
 	{
+		progressIndicator.setIndicatorColor(sharedPreferences.themeColor)
 		summaryName.setTextColor(sharedPreferences.nameColor)
 	}
 
@@ -162,57 +194,41 @@ class NacTimerCardHolder(
 		// List of all the views that need the same on click listener for the card
 		val allCardViews = listOf(cardView)
 
-		// Call the edit timer listener when one of the views that handles that is clicked
+		// Call the timer clicked listener when one of the views is clicked
 		for (view in allCardViews)
 		{
 			view.setOnClickListener {
-
-				// Call the listener
-				onEditTimerClickedListener?.onEditTimer(timer!!)
-
-				// Haptic feedback
 				view.performHapticFeedback()
-
+				onTimerClickedListener?.onTimerClicked(timer!!)
 			}
 		}
 
 		// Start clicked
 		startButton.setOnClickListener {
-
-			// Show the pause and reset buttons. Hide the start button
-			startButton.visibility = View.INVISIBLE
-			pauseButton.visibility = View.VISIBLE
-			resetButton.visibility = View.VISIBLE
-
-			// Call the listener
+			it.performHapticFeedback()
+			setResumeVisibility()
 			onStartTimerClickedListener?.onStartTimer(timer!!)
-
 		}
 
 		// Pause clicked
 		pauseButton.setOnClickListener {
-
-			// Show the start and reset buttons. Hide the pause button
-			startButton.visibility = View.VISIBLE
-			pauseButton.visibility = View.INVISIBLE
-			resetButton.visibility = View.VISIBLE
-
-			// Call the listener
+			it.performHapticFeedback()
+			setPauseVisibility()
 			onPauseTimerClickedListener?.onPauseTimer(timer!!)
-
 		}
 
 		// Reset clicked
 		resetButton.setOnClickListener {
-
-			// Show the start. Hide the pause and reset buttons
-			startButton.visibility = View.VISIBLE
-			pauseButton.visibility = View.INVISIBLE
-			resetButton.visibility = View.GONE
-
-			// Call the listener
+			it.performHapticFeedback()
+			setResetVisibility()
 			onResetTimerClickedListener?.onResetTimer(timer!!)
+		}
 
+		// Stop clicked
+		stopButton.setOnClickListener {
+			it.performHapticFeedback()
+			setStopVisibility()
+			onStopTimerClickedListener?.onStopTimer(timer!!)
 		}
 	}
 
@@ -259,7 +275,176 @@ class NacTimerCardHolder(
 		summaryName.text = timer!!.name
 		summaryName.visibility = if (timer!!.name.isNotEmpty()) View.VISIBLE else View.GONE
 
-		// TODO: Start/pause/reset visibility
+		// Set the button visibility
+		setResetVisibility()
+
+		// Set the progress
+		progressIndicator.progress = 0
+	}
+
+	/**
+	 * Set the visibility of views when timer is paused.
+	 */
+	fun setPauseVisibility()
+	{
+		// Show the start button
+		if (startButton.visibility != View.VISIBLE)
+		{
+			startButton.visibility = View.VISIBLE
+		}
+
+		// Hide the pause button
+		if (pauseButton.visibility != View.INVISIBLE)
+		{
+			pauseButton.visibility = View.INVISIBLE
+		}
+
+		// Show the reset button
+		if (resetButton.visibility != View.VISIBLE)
+		{
+			resetButton.visibility = View.VISIBLE
+		}
+
+		// Hide the scan NFC tag icon
+		if (scanNfcTagIcon.visibility != View.INVISIBLE)
+		{
+			scanNfcTagIcon.visibility = View.INVISIBLE
+		}
+
+		// Hide the stop button
+		if (stopButton.visibility != View.INVISIBLE)
+		{
+			stopButton.visibility = View.INVISIBLE
+		}
+	}
+
+	/**
+	 * Set the visibility of views when timer is reset.
+	 */
+	fun setResetVisibility()
+	{
+		// Show the start button
+		if (startButton.visibility != View.VISIBLE)
+		{
+			startButton.visibility = View.VISIBLE
+		}
+
+		// Hide the pause button
+		if (pauseButton.visibility != View.INVISIBLE)
+		{
+			pauseButton.visibility = View.INVISIBLE
+		}
+
+		// Hide the reset button
+		if (resetButton.visibility != View.GONE)
+		{
+			resetButton.visibility = View.GONE
+		}
+
+		// Hide the scan NFC tag icon
+		if (scanNfcTagIcon.visibility != View.INVISIBLE)
+		{
+			scanNfcTagIcon.visibility = View.INVISIBLE
+		}
+
+		// Hide the stop button
+		if (stopButton.visibility != View.INVISIBLE)
+		{
+			stopButton.visibility = View.INVISIBLE
+		}
+	}
+
+	/**
+	 * Set the visibility of views when timer is started or resumed.
+	 */
+	fun setResumeVisibility()
+	{
+		// Hide the start button
+		if (startButton.visibility != View.INVISIBLE)
+		{
+			startButton.visibility = View.INVISIBLE
+		}
+
+		// Show the pause button
+		if (pauseButton.visibility != View.VISIBLE)
+		{
+			pauseButton.visibility = View.VISIBLE
+		}
+
+		// Show the reset button
+		if (resetButton.visibility != View.VISIBLE)
+		{
+			resetButton.visibility = View.VISIBLE
+		}
+
+		// Hide the scan NFC tag icon
+		if (scanNfcTagIcon.visibility != View.INVISIBLE)
+		{
+			scanNfcTagIcon.visibility = View.INVISIBLE
+		}
+
+		// Hide the stop button
+		if (stopButton.visibility != View.INVISIBLE)
+		{
+			stopButton.visibility = View.INVISIBLE
+		}
+	}
+
+	/**
+	 * Set the visibility of views when timer is going off and should be stopped.
+	 */
+	fun setStopVisibility()
+	{
+		// Hide the start button
+		if (startButton.visibility != View.INVISIBLE)
+		{
+			startButton.visibility = View.INVISIBLE
+		}
+
+		// Hide the pause button
+		if (pauseButton.visibility != View.INVISIBLE)
+		{
+			pauseButton.visibility = View.INVISIBLE
+		}
+
+		// Hide the reset button
+		if (resetButton.visibility != View.INVISIBLE)
+		{
+			resetButton.visibility = View.INVISIBLE
+		}
+
+		// Timer requires NFC
+		if (timer!!.shouldUseNfc)
+		{
+			// Show the scan NFC tag icon
+			if (scanNfcTagIcon.visibility != View.VISIBLE)
+			{
+				scanNfcTagIcon.visibility = View.VISIBLE
+			}
+		}
+		// No NFC needed
+		else
+		{
+			// Show the stop button
+			if (stopButton.visibility != View.VISIBLE)
+			{
+				stopButton.visibility = View.VISIBLE
+			}
+		}
+	}
+
+	/**
+	 * Update the hour, minute, and seconds textviews based on the milliseconds until
+	 * finished.
+	 */
+	fun updateHourMinuteSecondsTextViews(secUntilFinished: Long)
+	{
+		updateHourMinuteSecondsTextViews(
+			hourTextView, hourUnits,
+			minuteTextView, minuteUnits,
+			secondsTextView,
+			secUntilFinished
+		)
 	}
 
 }

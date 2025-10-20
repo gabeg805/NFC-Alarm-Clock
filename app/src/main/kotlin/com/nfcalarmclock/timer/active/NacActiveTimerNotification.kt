@@ -178,17 +178,6 @@ class NacActiveTimerNotification(
 			.setOnlyAlertOnce(true)
 			.setShowWhen(true)
 			.setSound(null)
-
-		// Check if NFC does not need to be used to dismiss the timer
-		// Note: This evaluates to False on the emulator because the emulator
-		// is unable to use NFC
-		//if (!shouldUseNfc)
-		//{
-		//	// Add the stop button to the notification
-		//	val stop = context.getString(R.string.action_timer_stop)
-
-		//	builder = builder.addAction(R.drawable.stop_filled_32, stop, dismissPendingIntent)
-		//}
 	}
 
 	/**

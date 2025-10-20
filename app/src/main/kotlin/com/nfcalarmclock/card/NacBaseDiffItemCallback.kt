@@ -31,7 +31,8 @@ class NacBaseDiffItemCallback<T: NacAlarm>
 	{
 		// NOTE: if you use equals, your object must properly override Object#equals()
 		// Incorrectly returning false here will result in too many animations.
-		return oldItem.equals(newItem)
+		// This will call the Object.equals() method.
+		return oldItem == newItem
 	}
 
 }
