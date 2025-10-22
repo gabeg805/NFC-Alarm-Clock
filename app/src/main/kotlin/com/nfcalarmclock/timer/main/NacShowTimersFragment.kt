@@ -34,6 +34,8 @@ import com.nfcalarmclock.alarm.db.NacNextAlarm
 import com.nfcalarmclock.card.NacBaseCardAdapter
 import com.nfcalarmclock.card.NacBaseCardTouchHelperCallback
 import com.nfcalarmclock.card.NacCardLayoutManager
+import com.nfcalarmclock.nfc.NFC_WAS_SCANNED_BUNDLE_NAME
+import com.nfcalarmclock.nfc.NacNfc
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.NacBundle.BUNDLE_INTENT_ACTION
 import com.nfcalarmclock.system.NacCalendar
@@ -95,7 +97,6 @@ class NacShowTimersFragment
 	 * Live data from the view model cannot be sorted, hence the need for this.
 	 */
 	private lateinit var timerCardAdapterLiveData: MutableLiveData<List<NacTimer>>
-	//private lateinit var timerCardAdapterLiveData: NacCardAdapterLiveData
 
 	/**
 	 * Timer card touch helper.
@@ -238,6 +239,135 @@ class NacShowTimersFragment
 		override fun onServiceDisconnected(className: ComponentName) {}
 	}
 
+	/**
+	 * Add a timer to the database.
+	 *
+	 * @param timer A timer.
+	 * @param onInsertListener Listener to call after the timer is inserted and has an ID.
+	 */
+	private fun addTimer(
+		timer: NacTimer,
+		messageId: Int? = null,
+		onInsertListener: () -> Unit = {})
+	{
+		// Insert timer
+		lifecycleScope.launch {
+			timerViewModel.insert(timer) {
+
+				// Countdown timer change listener
+				service?.addOnCountdownTimerChangedListener(timer.id, onCountdownTimerChangedListener)
+
+				// Show the snackbar
+				if (messageId != null)
+				{
+					val message = getString(messageId)
+					val action = getString(R.string.action_undo)
+
+					showSnackbar(
+						message, action,
+						onClickListener = {
+							// Undo the insert. This will delete the timer
+							deleteTimer(timer)
+						})
+				}
+
+				// Call the listener
+				onInsertListener()
+
+			}
+		}
+	}
+
+	/**
+	 * Add a timer that was created from the SET_TIMER intent.
+	 */
+	private fun addTimerFromSetTimerIntent(timer: NacTimer)
+	{
+		println("addTimerFromSetTimerIntent()")
+		addTimer(timer, onInsertListener = {
+			println("Hello added timer from set timer intent")
+
+			// Navigate to the edit timer fragment
+			findNavController().navigate(R.id.nacEditTimerFragment, timer.toBundle())
+		})
+	}
+
+	/**
+	 * Copy a timer and add it to the database.
+	 *
+	 * @param timer A timer.
+	 */
+	private fun copyTimer(timer: NacTimer)
+	{
+		// Create a copy of the timer
+		val copiedTimer = timer.copy()
+
+		// Add the copied timer
+		addTimer(copiedTimer, R.string.message_timer_copy)
+	}
+
+	/**
+	 * Delete a timer from the database.
+	 *
+	 * @param timer A timer.
+	 */
+	private fun deleteTimer(timer: NacTimer)
+	{
+		// Get the local media path
+		val localMediaPath = timer.localMediaPath
+
+		// Remove the countdown timer change listener
+		service?.removeOnCountdownTimerChangedListener(timer.id, onCountdownTimerChangedListener)
+
+		// Delete the alarm, save the stats, and cancel the alarm
+		timerViewModel.delete(timer)
+
+		// Show the snackbar
+		val message = getString(R.string.message_timer_delete)
+		val action = getString(R.string.action_undo)
+
+		showSnackbar(message, action,
+			onClickListener = {
+				// Undo the delete. This will restore the timer
+				restoreTimer(timer)
+			},
+			onDismissListener = { event ->
+
+				// Check if the snackbar was not dismissed via timeout
+				// or if the local media path is empty
+				// or if the local media path is equal to the shared preference path
+				if ((event != BaseTransientBottomBar.BaseCallback.DISMISS_EVENT_TIMEOUT)
+					|| localMediaPath.isEmpty()
+					|| (localMediaPath == sharedPreferences.localMediaPath))
+				{
+					// Do nothing
+					return@showSnackbar
+				}
+
+				// Check if the local media path is empty or if it is equal to the shared
+				// preference local media path
+				// TODO: Generalize this or maybe not do this and just delete this logic?
+				lifecycleScope.launch {
+
+					// Check if no alarms are using the local media path
+					val noMatchingMedia = timerViewModel.getAllTimers()
+						.all { it.localMediaPath != localMediaPath }
+
+					if (noMatchingMedia)
+					{
+						// Delete the local media
+						val file = File(localMediaPath)
+						file.delete()
+					}
+
+				}
+			})
+	}
+
+	/**
+	 * Initialize the timer card, updating components depending on what state it is in in
+	 * the service.
+	 */
 	fun initTimerCard(card: NacTimerCardHolder)
 	{
 		// Get the progress and seconds
@@ -287,6 +417,9 @@ class NacShowTimersFragment
 		}
 	}
 
+	/**
+	 * @see initTimerCard
+	 */
 	fun initTimerCard(timer: NacTimer)
 	{
 		// Get the card
@@ -300,136 +433,6 @@ class NacShowTimersFragment
 
 		initTimerCard(card)
 	}
-
-	/**
-	 * Add a timer to the database.
-	 *
-	 * TODO: Do this for android.intent.action.SET_TIMER
-	 *
-	 * @param timer A timer.
-	 * @param onInsertListener Listener to call after the timer is inserted and has an ID.
-	 */
-	private fun addTimer(
-		timer: NacTimer,
-		messageId: Int,
-		onInsertListener: () -> Unit = {})
-	{
-		// Insert timer
-		lifecycleScope.launch {
-			timerViewModel.insert(timer) {
-
-				// Countdown timer change listener
-				service?.addOnCountdownTimerChangedListener(timer.id, onCountdownTimerChangedListener)
-
-				// Show the snackbar
-				val message = getString(messageId)
-				val action = getString(R.string.action_undo)
-
-				showSnackbar(message, action,
-					onClickListener = {
-						// Undo the insert. This will delete the timer
-						deleteTimer(timer)
-					})
-
-				// Call the listener
-				onInsertListener()
-
-			}
-		}
-	}
-
-	/**
-	 * Copy a timer and add it to the database.
-	 *
-	 * @param timer A timer.
-	 */
-	private fun copyTimer(timer: NacTimer)
-	{
-		// Create a copy of the timer
-		val copiedTimer = timer.copy()
-
-		// Add the copied timer. When it is added, it will be interacted with but most
-		// likely will not be scrolled as it is probably already on screen. This is
-		// because the index of the copied alarm is right after the original alarm
-		addTimer(copiedTimer, R.string.message_timer_copy) {
-			//recentlyAddedAlarmIds.add(copiedTimer.id)
-			//recentlyCopiedAlarmIds = Pair(timer.id, copiedTimer.id)
-		}
-	}
-
-	/**
-	 * Delete a timer from the database.
-	 *
-	 * @param timer A timer.
-	 */
-	private fun deleteTimer(timer: NacTimer)
-	{
-		// Get the local media path
-		val localMediaPath = timer.localMediaPath
-
-		// Remove the countdown timer change listener
-		service?.removeOnCountdownTimerChangedListener(timer.id, onCountdownTimerChangedListener)
-
-		// Delete the alarm, save the stats, and cancel the alarm
-		timerViewModel.delete(timer)
-
-		// Remove the alarm id in the recently added list. If it is not present, this
-		// will not do anything
-		// TODO: Recent jank
-		//recentlyAddedAlarmIds.remove(timer.id)
-
-		// Show the snackbar
-		val message = getString(R.string.message_timer_delete)
-		val action = getString(R.string.action_undo)
-
-		showSnackbar(message, action,
-			onClickListener = {
-				// Undo the delete. This will restore the timer
-				restoreTimer(timer)
-			},
-			onDismissListener = { event ->
-
-				// Check if the snackbar was not dismissed via timeout
-				// or if the local media path is empty
-				// or if the local media path is equal to the shared preference path
-				if ((event != BaseTransientBottomBar.BaseCallback.DISMISS_EVENT_TIMEOUT)
-					|| localMediaPath.isEmpty()
-					|| (localMediaPath == sharedPreferences.localMediaPath))
-				{
-					// Do nothing
-					return@showSnackbar
-				}
-
-				// Check if the local media path is empty or if it is equal to the shared
-				// preference local media path
-				// TODO: Generalize this or maybe not do this and just delete this logic?
-				lifecycleScope.launch {
-
-					// Check if no alarms are using the local media path
-					val noMatchingMedia = timerViewModel.getAllTimers()
-						.all { it.localMediaPath != localMediaPath }
-
-					if (noMatchingMedia)
-					{
-						// Delete the local media
-						val file = File(localMediaPath)
-						file.delete()
-					}
-
-				}
-			})
-	}
-
-	/**
-	 * Add an alarm that was created from the SET_ALARM intent.
-	 * TODO: See AlarmManager and android.intent.action.SET_TIMER
-	 */
-	//private fun addAlarmFromSetAlarmIntent(alarm: NacAlarm)
-	//{
-	//	addAlarm(alarm) {
-	//		recentlyAddedAlarmIds.add(alarm.id)
-	//	}
-	//}
 
 	/**
 	 * Called to create the root view.
@@ -461,8 +464,8 @@ class NacShowTimersFragment
 		// Add alarm that was created from the SET_ALARM intent
 		if ((action == AlarmClock.ACTION_SET_TIMER) && (timer != null))
 		{
-			// TODO: Add a timer from this jank
-			//addAlarmFromSetAlarmIntent(timer)
+			println("Show timers addTimerFromSetTimerIntent()")
+			addTimerFromSetTimerIntent(timer)
 		}
 	}
 
@@ -712,31 +715,6 @@ class NacShowTimersFragment
 			// Update the alarm adapter
 			timerCardAdapter.submitList(timers)
 
-			//// Scroll down to any newly added alarms
-			//if (recentlyAddedAlarmIds.isNotEmpty())
-			//{
-			//	// Find the index of the of first recently added alarm
-			//	val id = recentlyAddedAlarmIds.first()
-
-			//	// Clear the alarm IDs if there was a recently copied alarm
-			//	if (id == recentlyCopiedAlarmIds?.second)
-			//	{
-			//		recentlyCopiedAlarmIds = null
-			//	}
-
-			//	// Find the first and last currently visible indices
-			//	val linearLayoutManager = recyclerView.layoutManager as LinearLayoutManager
-			//	val firstIndex = linearLayoutManager.findFirstCompletelyVisibleItemPosition()
-			//	val lastIndex = linearLayoutManager.findLastCompletelyVisibleItemPosition()
-			//	val index = alarms.indexOfFirst { it.id == id }
-
-			//	// Scroll down to that alarm card if it is not visible
-			//	if ((index < firstIndex) || (index > lastIndex))
-			//	{
-			//		recyclerView.smoothScrollToPosition(index)
-			//	}
-			//}
-
 		}
 
 		// TODO: Do I want an alarm intent watcher and timer intent watcher?
@@ -750,19 +728,37 @@ class NacShowTimersFragment
 				//  NFC was scanned, posting the intent value, checking the alarm view model
 				//  for an active jank, and then starting the alarm activity/service?
 				// Get the active timer
-				val activeTimer = timerViewModel.getActiveTimer()
-				println("Show timers active timer check : ${activeTimer != null}")
+				val allActiveTimers = timerViewModel.getAllActiveTimers()
+				println("Show timers active timer check : $allActiveTimers")
 
-				// Check if the active alarm is not null
-				// here and then add checks to make sure it is safe to pass into these start
-				// activity/service functions
-				if (activeTimer != null)
-				{
-					println("Navigate to active timer fragment yo")
+				println("Navigate to active timer fragment yo")
+				allActiveTimers.forEach { t ->
 
-					// TODO: Is this necessary or do I need to popBackStack()?
-					//// Finish the main activity
-					//finish()
+					val intentNfcId = NacNfc.parseId(intent)
+					val nfcTagIdList = t.nfcTagIdList
+
+					if (nfcTagIdList.contains(intentNfcId))
+					{
+						println("Timer : ${t.id} contains NFC tag : $intentNfcId")
+						if (nfcTagIdList.size == 1)
+						{
+							println("ONLY 1 NFC required for this timer! Dismiss this jank")
+							NacActiveTimerService.dismissTimerServiceWithNfc(requireContext(), t)
+						}
+						else
+						{
+							println("Timer NEEDS more than 1 nFC jakn : $nfcTagIdList")
+							val bundle = t.toBundle()
+								.apply {
+									putBoolean(NFC_WAS_SCANNED_BUNDLE_NAME, true)
+								}
+
+							findNavController().navigate(R.id.nacActiveTimerFragment, bundle)
+						}
+
+						return@launch
+					}
+
 				}
 
 			}

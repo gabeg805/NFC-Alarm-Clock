@@ -20,6 +20,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.activealarm.NacWakeupProcess
+import com.nfcalarmclock.nfc.shouldUseNfc
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.NacCalendar
 import com.nfcalarmclock.system.addTimer
@@ -34,7 +35,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Calendar
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 import kotlin.math.ceil
 
@@ -891,7 +891,7 @@ class NacActiveTimerService
 					// NFC does not need to be used to dismiss the timer
 					// Note: This evaluates to False on the emulator because the emulator
 					// is unable to use NFC
-					if (!notificationBuilder.shouldUseNfc)
+					if (!timer.shouldUseNfc(this@NacActiveTimerService, sharedPreferences))
 					{
 						addAction(R.drawable.stop_32, R.string.action_timer_stop, notificationBuilder.dismissPendingIntent)
 					}
@@ -929,7 +929,15 @@ class NacActiveTimerService
 		}
 
 		// Amount of time until the timer is automatically dismissed
-		val delay = timer.autoDismissTime*1000L - 750
+		val delay = if (timer.shouldUseNfc)
+		{
+			60000L - 750
+		}
+		else
+		{
+			timer.autoDismissTime*1000L - 750
+		}
+		//val delay = timer.autoDismissTime*1000L - 750
 		//val delay = TimeUnit.SECONDS.toMillis(30) - 750
 		println("Auto dismiss delay : $delay")
 

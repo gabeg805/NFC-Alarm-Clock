@@ -43,9 +43,9 @@ class NacTimerRepository @Inject constructor(
 	suspend fun delete(timer: NacTimer): Int = timerDao.delete(timer)
 
 	/**
-	 * An active timer.
+	 * All active timer.
 	 */
-	suspend fun getActiveTimer(): NacTimer? = timerDao.getActiveTimer()
+	suspend fun getAllActiveTimers(): List<NacTimer> = timerDao.getAllActiveTimers() ?: emptyList()
 
 	/**
 	 * All timers in the database.

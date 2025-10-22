@@ -27,7 +27,7 @@ import com.nfcalarmclock.BuildConfig
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.NacAlarmViewModel
 import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmActivity
-import com.nfcalarmclock.alarm.options.nfc.NacNfc
+import com.nfcalarmclock.nfc.NacNfc
 import com.nfcalarmclock.ratemyapp.NacRateMyApp
 import com.nfcalarmclock.settings.NacMainSettingActivity
 import com.nfcalarmclock.shared.NacSharedPreferences
@@ -36,6 +36,7 @@ import com.nfcalarmclock.system.NacNfcIntent
 import com.nfcalarmclock.system.disableActivityAlias
 import com.nfcalarmclock.system.getDeviceProtectedStorageContext
 import com.nfcalarmclock.system.getSetAlarm
+import com.nfcalarmclock.system.getSetTimer
 import com.nfcalarmclock.system.permission.NacPermissionRequestManager
 import com.nfcalarmclock.system.registerMyReceiver
 import com.nfcalarmclock.system.scheduler.NacScheduler
@@ -142,16 +143,39 @@ class NacMainActivity
 		// Get the alarm from the intent
 		val alarm = intent.getSetAlarm(this)
 
-		// Check if the alarm is not null
+		// Navigate to the show alarms fragment with that alarm
 		if (alarm != null)
 		{
 			// Create a bundle with the alarm and intent action
-			val bundle = alarm.toBundle().apply {
-				putString(BUNDLE_INTENT_ACTION, intent.action)
-			}
+			val bundle = alarm.toBundle()
+				.apply {
+					putString(BUNDLE_INTENT_ACTION, intent.action)
+				}
 
-			// Navigate to the show alarms fragment
+			// Navigate to the fragment
 			navController.navigate(R.id.nacShowAlarmsFragment, bundle)
+		}
+	}
+
+	/**
+	 * Add a timer that was created from the SET_TIMER intent.
+	 */
+	private fun addTimerFromSetTimerIntent()
+	{
+		// Get the timer from the intent
+		val timer = intent.getSetTimer(this)
+
+		// Navigate to the show timers fragment with that timer
+		if (timer != null)
+		{
+			// Create a bundle with the timer and intent action
+			val bundle = timer.toBundle()
+				.apply {
+					putString(BUNDLE_INTENT_ACTION, intent.action)
+				}
+
+			// Navigate to the fragment
+			navController.navigate(R.id.nacShowTimersFragment, bundle)
 		}
 	}
 
@@ -382,6 +406,13 @@ class NacMainActivity
 			addAlarmFromSetAlarmIntent()
 		}
 
+		// Add timer that was created from the SET_TIMER intent
+		if (intent.action == AlarmClock.ACTION_SET_TIMER)
+		{
+			println("addTimerFromSetTimerIntent()")
+			addTimerFromSetTimerIntent()
+		}
+
 		// Check if the main activity should be refreshed
 		if (sharedPreferences.shouldRefreshMainActivity)
 		{
@@ -468,22 +499,8 @@ class NacMainActivity
 						// 1+ timers.
 						else
 						{
-							// Get an active timer, if present
-							val activeTimer = timerViewModel.getActiveTimer()
-
-							// Show active timer
-							if (activeTimer != null)
-							{
-								println("Showing active timer")
-								navController.navigate(R.id.nacShowTimersFragment)
-								//navController.navigate(R.id.nacActiveTimerFragment, activeTimer.toBundle())
-							}
-							// Show list of timers
-							else
-							{
-								println("Showing list of timers")
-								navController.navigate(R.id.nacShowTimersFragment)
-							}
+							println("Showing list of timers")
+							navController.navigate(R.id.nacShowTimersFragment)
 						}
 					}
 					true

@@ -2,6 +2,12 @@
 TODO
 ----
 
+* When active alarm or timer is left. Then "nfcTags" has to get reinitialized
+  and probably gets cleared. May need to save the current progress in
+  onSavedInstanceState() or whatever it is called.
+
+* MissedNotification, snackbar, media activity, NFC. Maybe consolidating some stuff that can be classes?
+
 * Make sure to grep all TODO even layout resources before production
 
 * How will scanning NFC work using fragments instead of activities now?
@@ -27,13 +33,6 @@ TODO
   Etta James I'd rather go blind. When I cam eback to main activity, the alarm
   card was colored like it was expanded but it was not actually expanded. It
   should have been expanded.
-
-* Test alarms at the same time one more time, and just make sure you do not
-  need to show the notification that was being done when restarting service.
-
-* When browsing music, clicking on the media button and having the media
-  activity open up for the first time, the music order gets all jumbled. Need
-  to figure out why this is.
 
 * Alarm was not acting like a full screen intent in Android 15. Why is that?
 

@@ -12,9 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.media3.common.util.UnstableApi
 import androidx.navigation.NavDeepLinkBuilder
 import com.nfcalarmclock.R
-import com.nfcalarmclock.alarm.options.nfc.NacNfc
 import com.nfcalarmclock.main.NacMainActivity
-import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.toBundle
 import com.nfcalarmclock.timer.db.NacTimer
 import com.nfcalarmclock.view.notification.NacBaseNotificationBuilder
@@ -148,12 +146,6 @@ class NacActiveTimerNotification(
 	 * @see NacBaseNotificationBuilder.smallIcon
 	 */
 	override val smallIcon: Int = R.drawable.hourglass_empty_32
-
-	/**
-	 * Whether the timer should use NFC or not.
-	 */
-	val shouldUseNfc: Boolean
-		get() = NacNfc.exists(context) && (timer?.shouldUseNfc == true) && NacSharedPreferences(context).shouldShowNfcButton
 
 	/**
 	 * Constructor.

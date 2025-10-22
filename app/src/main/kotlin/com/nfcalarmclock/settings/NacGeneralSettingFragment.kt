@@ -18,7 +18,7 @@ import com.nfcalarmclock.alarm.options.NacAlarmOptionsDialog
 import com.nfcalarmclock.alarm.options.dismissoptions.NacDismissOptionsDialog
 import com.nfcalarmclock.alarm.options.mediapicker.NacMediaPickerActivity
 import com.nfcalarmclock.alarm.options.name.NacNameDialog
-import com.nfcalarmclock.alarm.options.nfc.NacNfcTagViewModel
+import com.nfcalarmclock.nfc.NacNfcTagViewModel
 import com.nfcalarmclock.alarm.options.snoozeoptions.NacSnoozeOptionsDialog
 import com.nfcalarmclock.card.NacCardPreference
 import com.nfcalarmclock.settings.preference.NacCheckboxPreference

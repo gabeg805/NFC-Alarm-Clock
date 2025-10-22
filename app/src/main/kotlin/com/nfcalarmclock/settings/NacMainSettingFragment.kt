@@ -9,7 +9,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.preference.Preference
 import com.nfcalarmclock.R
-import com.nfcalarmclock.alarm.options.nfc.NacNfcTagSettingFragment
+import com.nfcalarmclock.settings.nfc.NacNfcTagSettingFragment
 import com.nfcalarmclock.settings.importexport.NacExportManager
 import com.nfcalarmclock.settings.importexport.NacImportExportDialog
 import com.nfcalarmclock.settings.importexport.NacImportManager

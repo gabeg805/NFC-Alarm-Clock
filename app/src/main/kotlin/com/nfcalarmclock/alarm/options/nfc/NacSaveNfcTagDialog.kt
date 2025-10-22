@@ -10,7 +10,8 @@ import com.google.android.material.textfield.TextInputLayout
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.NacGenericAlarmOptionsDialog
-import com.nfcalarmclock.alarm.options.nfc.db.NacNfcTag
+import com.nfcalarmclock.nfc.db.NacNfcTag
+import com.nfcalarmclock.nfc.NacNfcTagViewModel
 import com.nfcalarmclock.util.NacUtility
 import com.nfcalarmclock.view.calcAlpha
 import com.nfcalarmclock.view.setupInputLayoutColor

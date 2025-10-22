@@ -65,12 +65,12 @@ import com.nfcalarmclock.alarm.options.dismissoptions.NacDismissEarlyService
 import com.nfcalarmclock.alarm.options.dismissoptions.NacDismissOptionsDialog
 import com.nfcalarmclock.alarm.options.mediapicker.NacMediaPickerActivity
 import com.nfcalarmclock.alarm.options.name.NacNameDialog
-import com.nfcalarmclock.alarm.options.nfc.NacNfcTagViewModel
 import com.nfcalarmclock.alarm.options.snoozeoptions.NacSnoozeOptionsDialog
 import com.nfcalarmclock.alarm.options.upcomingreminder.NacUpcomingReminderService
 import com.nfcalarmclock.card.NacBaseCardAdapter
 import com.nfcalarmclock.card.NacBaseCardTouchHelperCallback
 import com.nfcalarmclock.card.NacCardLayoutManager
+import com.nfcalarmclock.nfc.NacNfcTagViewModel
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.statistics.NacAlarmStatisticViewModel
 import com.nfcalarmclock.system.NacBundle.BUNDLE_INTENT_ACTION
@@ -1451,108 +1451,110 @@ class NacShowAlarmsFragment
 		snackbar.setAction(action, onClickListener ?: View.OnClickListener { })
 		snackbar.setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
 
-		// Add callback if listener is set
-		if (!shouldReuseSnackbar)
-		{
-			//// Listener when the snackbar is being drawn and thus when it is moving up and down
-			//snackbar.view.viewTreeObserver.addOnPreDrawListener(object: ViewTreeObserver.OnPreDrawListener
-			//{
+		//// Add callback if listener is set
+		//if (!shouldReuseSnackbar)
+		//{
+		//	// Listener when the snackbar is being drawn and thus when it is moving up and down
+		//	snackbar.view.viewTreeObserver.addOnPreDrawListener(object: ViewTreeObserver.OnPreDrawListener
+		//	{
 
-			//	/**
-			//	 * Called when the view tree is about to be drawn.
-			//	 */
-			//	override fun onPreDraw(): Boolean
-			//	{
-			//		// Get the current Y position
-			//		val y = snackbar.view.y
+		//		/**
+		//		 * Called when the view tree is about to be drawn.
+		//		 */
+		//		override fun onPreDraw(): Boolean
+		//		{
+		//			// Get the current Y position
+		//			val y = snackbar.view.y
+		//			println("onPreDraw() : $y")
 
-			//		// Do nothing when the snackbar has not been shown yet
-			//		if (prevSnackbarY == 0f)
-			//		{
-			//			return true
-			//		}
-			//		// Snackbar is moving down
-			//		else if (prevSnackbarY < y)
-			//		{
-			//			// Animate the FAB moving back to its original position
-			//			floatingActionButton.animate()
-			//				.apply {
-			//					translationY(0f)
-			//					duration = 250
-			//				}
-			//				.start()
+		//			// Do nothing when the snackbar has not been shown yet
+		//			if (prevSnackbarY == 0f)
+		//			{
+		//				return true
+		//			}
+		//			// Snackbar is moving down
+		//			else if (prevSnackbarY < y)
+		//			{
+		//				// Animate the FAB moving back to its original position
+		//				floatingActionButton.animate()
+		//					.apply {
+		//						translationY(0f)
+		//						duration = 250
+		//					}
+		//					.start()
 
-			//			// Remove the listener
-			//			snackbar.view.viewTreeObserver.removeOnPreDrawListener(this)
-			//		}
-			//		// Snackbar is moving up. Update the previous Y position to compare
-			//		// later
-			//		else
-			//		{
-			//			prevSnackbarY = y
-			//		}
+		//				// Remove the listener
+		//				snackbar.view.viewTreeObserver.removeOnPreDrawListener(this)
+		//			}
+		//			// Snackbar is moving up. Update the previous Y position to compare
+		//			// later
+		//			else
+		//			{
+		//				println("Prev snackbar Y : $y")
+		//				prevSnackbarY = y
+		//			}
 
-			//		return true
-			//	}
+		//			return true
+		//		}
 
-			//})
+		//	})
 
-			//// Listener for when the snackbar is starting to change and become visible.
-			//// This means the view has been measured and has a height, so the animation
-			//// of the FAB can be started at the same time since now it is known how much
-			//// to animate the FAB's Y position by
-			//snackbar.view.addOnLayoutChangeListener { view, _, _, _, _, _, _, _, _ ->
+		//	// Listener for when the snackbar is starting to change and become visible.
+		//	// This means the view has been measured and has a height, so the animation
+		//	// of the FAB can be started at the same time since now it is known how much
+		//	// to animate the FAB's Y position by
+		//	snackbar.view.addOnLayoutChangeListener { view, _, _, _, _, _, _, _, _ ->
 
-			//	/**
-			//	 * Called when the view layout has changed.
-			//	 */
-			//	// Get the height of the snackbar
-			//	val height = view.height.toFloat()
+		//		/**
+		//		 * Called when the view layout has changed.
+		//		 */
+		//		// Get the height of the snackbar
+		//		val height = view.height.toFloat()
 
-			//	// Animate the FAB moving up
-			//	floatingActionButton.animate()
-			//		.apply {
-			//			translationY(-height)
-			//			duration = 250
-			//		}
-			//		.start()
+		//		// Animate the FAB moving up
+		//		floatingActionButton.animate()
+		//			.apply {
+		//				translationY(-height)
+		//				duration = 250
+		//			}
+		//			.start()
 
-			//	// Snackbar was already being shown. Update the Y position to the
-			//	// snackbar's current Y position in case its height changed
-			//	if (prevSnackbarY > 0)
-			//	{
-			//		prevSnackbarY = view.y
-			//	}
-			//}
+		//		// Snackbar was already being shown. Update the Y position to the
+		//		// snackbar's current Y position in case its height changed
+		//		if (prevSnackbarY > 0)
+		//		{
+		//			prevSnackbarY = view.y
+		//		}
+		//	}
 
-			//// Add the normal show/dismiss callback
-			//snackbar.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>()
-			//{
+		//	// Add the normal show/dismiss callback
+		//	snackbar.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>()
+		//	{
 
-			//	/**
-			//	 * Called when the snackbar is shown.
-			//	 */
-			//	override fun onShown(transientBottomBar: Snackbar?)
-			//	{
-			//		// The snackbar is visible now, so get its starting Y position
-			//		prevSnackbarY = snackbar.view.y
-			//	}
+		//		/**
+		//		 * Called when the snackbar is shown.
+		//		 */
+		//		override fun onShown(transientBottomBar: Snackbar?)
+		//		{
+		//			// The snackbar is visible now, so get its starting Y position
+		//			prevSnackbarY = snackbar.view.y
+		//		}
 
-			//	/**
-			//	 * Called when the snackbar has been dismissed.
-			//	 */
-			//	override fun onDismissed(transientBottomBar: Snackbar?, event: Int)
-			//	{
-			//		// Call the listener
-			//		onDismissListener(event)
+		//		/**
+		//		 * Called when the snackbar has been dismissed.
+		//		 */
+		//		override fun onDismissed(transientBottomBar: Snackbar?, event: Int)
+		//		{
+		//			// Call the listener
+		//			onDismissListener(event)
 
-			//		// Reset the values of the FAB and snackbar
-			//		floatingActionButton.translationY = 0f
-			//		prevSnackbarY = 0f
-			//	}
+		//			// Reset the values of the FAB and snackbar
+		//			floatingActionButton.translationY = 0f
+		//			prevSnackbarY = 0f
+		//		}
 
-			//})
-		}
+		//	})
+		//}
 
 		// Show the snackbar
 		snackbar.show()

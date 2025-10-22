@@ -1,8 +1,8 @@
-package com.nfcalarmclock.alarm.options.nfc
+package com.nfcalarmclock.nfc
 
 import androidx.lifecycle.LiveData
-import com.nfcalarmclock.alarm.options.nfc.db.NacNfcTag
-import com.nfcalarmclock.alarm.options.nfc.db.NacNfcTagDao
+import com.nfcalarmclock.nfc.db.NacNfcTag
+import com.nfcalarmclock.nfc.db.NacNfcTagDao
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

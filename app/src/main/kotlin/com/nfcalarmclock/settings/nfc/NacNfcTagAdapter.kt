@@ -1,11 +1,11 @@
-package com.nfcalarmclock.alarm.options.nfc
+package com.nfcalarmclock.settings.nfc
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import com.nfcalarmclock.R
-import com.nfcalarmclock.alarm.options.nfc.db.NacNfcTag
+import com.nfcalarmclock.nfc.db.NacNfcTag
 import com.nfcalarmclock.shared.NacSharedPreferences
 
 /**

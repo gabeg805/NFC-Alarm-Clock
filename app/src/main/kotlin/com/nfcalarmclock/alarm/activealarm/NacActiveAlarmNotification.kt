@@ -12,7 +12,7 @@ import androidx.core.content.ContextCompat
 import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.alarm.options.nfc.NacNfc
+import com.nfcalarmclock.nfc.NacNfc
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.NacCalendar
 import com.nfcalarmclock.view.notification.NacBaseNotificationBuilder

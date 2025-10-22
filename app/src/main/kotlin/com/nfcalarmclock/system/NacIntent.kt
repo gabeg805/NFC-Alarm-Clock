@@ -128,18 +128,19 @@ fun Intent.getMediaBundle(): Bundle
  */
 fun Intent.getSetAlarm(context: Context): NacAlarm?
 {
-	// Check if the intent action is NOT for a SET_ALARM intent
+	// Intent action is not for setting an alarm
 	if (this.action != AlarmClock.ACTION_SET_ALARM)
 	{
 		return null
 	}
 
+	// Prepare to set the alarm
 	val shared = NacSharedPreferences(context)
 	val alarm = NacAlarm.build(shared)
 	val calendar = Calendar.getInstance()
 	var isSet = false
 
-	// Check if the HOUR is in the intent
+	// Hour
 	if (this.hasExtra(AlarmClock.EXTRA_HOUR))
 	{
 		val hour = this.getIntExtra(AlarmClock.EXTRA_HOUR,
@@ -150,7 +151,7 @@ fun Intent.getSetAlarm(context: Context): NacAlarm?
 		alarm.hour = hour
 	}
 
-	// Check if the MINUTES is in the intent
+	// Minutes
 	if (this.hasExtra(AlarmClock.EXTRA_MINUTES))
 	{
 		val minute = this.getIntExtra(AlarmClock.EXTRA_MINUTES,
@@ -161,7 +162,7 @@ fun Intent.getSetAlarm(context: Context): NacAlarm?
 		alarm.minute = minute
 	}
 
-	// Check if the MESSAGE (Name) is in the intent
+	// Message (name of the alarm)
 	if (this.hasExtra(AlarmClock.EXTRA_MESSAGE))
 	{
 		val name = this.getStringExtra(AlarmClock.EXTRA_MESSAGE)
@@ -171,7 +172,7 @@ fun Intent.getSetAlarm(context: Context): NacAlarm?
 		alarm.name = name ?: ""
 	}
 
-	// Check if the DAYS is in the intent
+	// Days
 	if (this.hasExtra(AlarmClock.EXTRA_DAYS))
 	{
 		val extraDays = this.getIntegerArrayListExtra(AlarmClock.EXTRA_DAYS)
@@ -191,7 +192,7 @@ fun Intent.getSetAlarm(context: Context): NacAlarm?
 		alarm.days = days
 	}
 
-	// Check if the RINGTONE is in the intent
+	// Ringtone
 	if (this.hasExtra(AlarmClock.EXTRA_RINGTONE))
 	{
 		// Get the ringtone
@@ -208,7 +209,7 @@ fun Intent.getSetAlarm(context: Context): NacAlarm?
 			alarm.mediaArtist, alarm.mediaTitle, alarm.mediaType)
 	}
 
-	// Check if the VIBRATE is in the intent
+	// Vibrate
 	if (this.hasExtra(AlarmClock.EXTRA_VIBRATE))
 	{
 		val defaultVibrate = true
@@ -221,10 +222,54 @@ fun Intent.getSetAlarm(context: Context): NacAlarm?
 	}
 
 	//getBooleanExtra(AlarmClock.EXTRA_SKIP_UI);
-	// Check if one or more alarm attributes were set
+	// One or more attributes were set
 	return if (isSet)
 	{
 		alarm
+	}
+	else
+	{
+		null
+	}
+}
+
+/**
+ * Get the timer that was specified using the SET_TIMER action.
+ *
+ * @return The timer that was specified using the SET_TIMER action.
+ */
+fun Intent.getSetTimer(context: Context): NacTimer?
+{
+	// Intent action is not for a setting a timer
+	if (this.action != AlarmClock.ACTION_SET_TIMER)
+	{
+		return null
+	}
+
+	// Prepare to set the timer
+	val shared = NacSharedPreferences(context)
+	val timer = NacTimer.build(shared)
+	var isSet = false
+
+	// Length (duration of the timer
+	if (this.hasExtra(AlarmClock.EXTRA_LENGTH))
+	{
+		timer.duration = this.getIntExtra(AlarmClock.EXTRA_LENGTH, 0).toLong()
+		isSet = true
+	}
+
+	// Message (name of the timer)
+	if (this.hasExtra(AlarmClock.EXTRA_MESSAGE))
+	{
+		timer.name = this.getStringExtra(AlarmClock.EXTRA_MESSAGE) ?: ""
+		isSet = true
+	}
+
+	//getBooleanExtra(AlarmClock.EXTRA_SKIP_UI);
+	// One or more attributes were set
+	return if (isSet)
+	{
+		timer
 	}
 	else
 	{
@@ -267,9 +312,16 @@ object NacNfcIntent
 	/**
 	 * The NFC intent LiveData that is publically available.
 	 */
+	var lastValue: Intent? = null
+		private	set
+
+	/**
+	 * The NFC intent LiveData that is publically available.
+	 */
 	fun update(newIntent: Intent)
 	{
 		mutableLiveData.value = newIntent
+		lastValue = newIntent
 	}
 
 }

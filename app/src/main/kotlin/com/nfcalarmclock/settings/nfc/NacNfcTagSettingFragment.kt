@@ -1,4 +1,4 @@
-package com.nfcalarmclock.alarm.options.nfc
+package com.nfcalarmclock.settings.nfc
 
 import android.os.Bundle
 import android.view.View
@@ -10,9 +10,12 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.NacAlarmViewModel
-import com.nfcalarmclock.alarm.options.nfc.db.NacNfcTag
-import com.nfcalarmclock.system.scheduler.NacScheduler
+import com.nfcalarmclock.alarm.options.nfc.NacDeleteNfcTagDialog
+import com.nfcalarmclock.nfc.NacNfcTagViewModel
+import com.nfcalarmclock.alarm.options.nfc.NacRenameNfcTagDialog
+import com.nfcalarmclock.nfc.db.NacNfcTag
 import com.nfcalarmclock.shared.NacSharedPreferences
+import com.nfcalarmclock.system.scheduler.NacScheduler
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -69,8 +72,10 @@ class NacNfcTagSettingFragment
 		// Set views
 		recyclerView = root.findViewById(R.id.nfc_tag_list_view)
 		nfcTagAdapter = NacNfcTagAdapter(sharedPreferences)
-		val dividerItemDecoration = DividerItemDecoration(context,
-			LinearLayoutManager.VERTICAL)
+		val dividerItemDecoration = DividerItemDecoration(
+			context,
+			LinearLayoutManager.VERTICAL
+		)
 
 		// Setup ListView
 		recyclerView.adapter = nfcTagAdapter
@@ -124,7 +129,7 @@ class NacNfcTagSettingFragment
 				}
 
 				// Show the dialog
-				deleteNfcTagDialog.show(childFragmentManager, NacDeleteNfcTagDialog.TAG)
+				deleteNfcTagDialog.show(childFragmentManager, NacDeleteNfcTagDialog.Companion.TAG)
 			}
 
 			/**
@@ -154,7 +159,7 @@ class NacNfcTagSettingFragment
 				}
 
 				// Show the dialog
-				renameNfcTagDialog.show(childFragmentManager, NacRenameNfcTagDialog.TAG)
+				renameNfcTagDialog.show(childFragmentManager, NacRenameNfcTagDialog.Companion.TAG)
 			}
 
 		}

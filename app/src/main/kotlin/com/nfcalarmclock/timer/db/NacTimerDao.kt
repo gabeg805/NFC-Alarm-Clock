@@ -6,7 +6,6 @@ import androidx.room.Delete
 import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Update
-import com.nfcalarmclock.alarm.db.NacAlarm
 
 /**
  * Data access object for timers.
@@ -46,8 +45,8 @@ interface NacTimerDao
 	 *
 	 * @return An active timer.
 	 */
-	@Query("SELECT * FROM timer WHERE is_active=1 ORDER BY id ASC LIMIT 1")
-	suspend fun getActiveTimer(): NacTimer?
+	@Query("SELECT * FROM timer WHERE is_active=1 ORDER BY id ASC")
+	suspend fun getAllActiveTimers(): List<NacTimer>?
 
 	/**
 	 * Get all timers.

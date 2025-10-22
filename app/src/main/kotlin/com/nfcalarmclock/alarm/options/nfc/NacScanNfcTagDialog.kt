@@ -13,6 +13,8 @@ import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.NacGenericAlarmOptionsDialog
 import com.nfcalarmclock.alarm.options.navigate
+import com.nfcalarmclock.nfc.NacNfc
+import com.nfcalarmclock.nfc.NacNfcTagViewModel
 import com.nfcalarmclock.system.addAlarm
 import com.nfcalarmclock.system.getAlarm
 import dagger.hilt.android.AndroidEntryPoint

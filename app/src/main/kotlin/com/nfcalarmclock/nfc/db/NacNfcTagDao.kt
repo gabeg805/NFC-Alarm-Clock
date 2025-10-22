@@ -1,4 +1,4 @@
-package com.nfcalarmclock.alarm.options.nfc.db
+package com.nfcalarmclock.nfc.db
 
 import androidx.lifecycle.LiveData
 import androidx.room.Dao

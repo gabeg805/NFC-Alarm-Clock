@@ -1,8 +1,8 @@
-package com.nfcalarmclock.alarm.options.nfc
+package com.nfcalarmclock.settings.nfc
 
 import android.view.View
 import android.widget.TextView
-import androidx.recyclerview.widget.RecyclerView.ViewHolder
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButton
 import com.nfcalarmclock.R
 
@@ -17,7 +17,7 @@ class NacNfcTagViewHolder(
 	val root: View
 
 	// Constructor
-) : ViewHolder(root)
+) : RecyclerView.ViewHolder(root)
 {
 
 	/**

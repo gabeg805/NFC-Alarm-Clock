@@ -3,7 +3,7 @@ package com.nfcalarmclock.alarm.activealarm
 import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.alarm.options.nfc.NacNfc
+import com.nfcalarmclock.nfc.NacNfc
 import com.nfcalarmclock.shared.NacSharedPreferences
 
 abstract class NacActiveAlarmLayoutHandler(

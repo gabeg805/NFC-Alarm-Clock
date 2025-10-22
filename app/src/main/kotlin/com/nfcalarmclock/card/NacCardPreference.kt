@@ -7,7 +7,7 @@ import androidx.preference.PreferenceViewHolder
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.card.NacAlarmCardHolder
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.alarm.options.nfc.db.NacNfcTag
+import com.nfcalarmclock.nfc.db.NacNfcTag
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.daysToValue
 import com.nfcalarmclock.view.calcAlpha
