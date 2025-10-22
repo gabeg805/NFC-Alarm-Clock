@@ -13,7 +13,7 @@ import com.nfcalarmclock.system.scheduler.NacScheduler
 import com.nfcalarmclock.system.NacCalendar
 import com.nfcalarmclock.system.addAlarm
 import com.nfcalarmclock.system.getAlarm
-import com.nfcalarmclock.util.media.NacAudioAttributes
+import com.nfcalarmclock.system.media.NacAudioAttributes
 import java.util.Calendar
 
 class NacUpcomingReminderService

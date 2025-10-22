@@ -30,7 +30,7 @@ import com.nfcalarmclock.system.getAlarm
 import com.nfcalarmclock.system.registerMyReceiver
 import com.nfcalarmclock.system.triggers.shutdown.NacShutdownBroadcastReceiver
 import com.nfcalarmclock.system.unregisterMyReceiver
-import com.nfcalarmclock.util.NacUtility.quickToast
+import com.nfcalarmclock.view.quickToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 

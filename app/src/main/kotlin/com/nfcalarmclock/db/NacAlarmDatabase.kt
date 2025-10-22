@@ -45,10 +45,10 @@ import com.nfcalarmclock.statistics.db.NacAlarmMissedStatisticDao
 import com.nfcalarmclock.statistics.db.NacAlarmSnoozedStatistic
 import com.nfcalarmclock.statistics.db.NacAlarmSnoozedStatisticDao
 import com.nfcalarmclock.statistics.db.NacStatisticTypeConverters
-import com.nfcalarmclock.util.NacUtility
 import com.nfcalarmclock.system.getDeviceProtectedStorageContext
 import com.nfcalarmclock.timer.db.NacTimer
 import com.nfcalarmclock.timer.db.NacTimerDao
+import com.nfcalarmclock.view.quickToast
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -673,7 +673,7 @@ abstract class NacAlarmDatabase
 				importDb.close()
 
 				// Show success message
-				NacUtility.quickToast(context, R.string.message_import_completed)
+				quickToast(context, R.string.message_import_completed)
 
 				// Delete the database file
 				dbFile.delete()

@@ -16,7 +16,7 @@ import com.google.android.material.textfield.TextInputLayout
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.NacGenericAlarmOptionsDialog
-import com.nfcalarmclock.util.media.NacAudioAttributes
+import com.nfcalarmclock.system.media.NacAudioAttributes
 import com.nfcalarmclock.view.calcAlpha
 import com.nfcalarmclock.view.setTextFromIndex
 import com.nfcalarmclock.view.setupCheckBoxColor

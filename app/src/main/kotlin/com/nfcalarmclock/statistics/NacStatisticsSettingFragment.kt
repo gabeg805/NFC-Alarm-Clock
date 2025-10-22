@@ -18,7 +18,7 @@ import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.statistics.db.NacAlarmStatistic
 import com.nfcalarmclock.system.file.zipFiles
 import com.nfcalarmclock.system.NacCalendar
-import com.nfcalarmclock.util.NacUtility.quickToast
+import com.nfcalarmclock.view.quickToast
 import com.nfcalarmclock.view.calcContrastColor
 import com.nfcalarmclock.view.setupThemeColor
 import dagger.hilt.android.AndroidEntryPoint

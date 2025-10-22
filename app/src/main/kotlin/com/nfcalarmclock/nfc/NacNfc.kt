@@ -14,8 +14,8 @@ import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.nfc.NacNfcTagDismissOrder
 import com.nfcalarmclock.nfc.db.NacNfcTag
 import com.nfcalarmclock.shared.NacSharedPreferences
-import com.nfcalarmclock.util.NacUtility
-import com.nfcalarmclock.util.NacUtility.quickToast
+import com.nfcalarmclock.view.quickToast
+import com.nfcalarmclock.view.toast
 
 /**
  * Tag name for putting and getting whether an NFC tag was scanned from a bundle.
@@ -382,10 +382,9 @@ object NacNfc
 		}
 
 		val settings = Intent(Settings.ACTION_NFC_SETTINGS)
-		val message = context.getString(R.string.message_nfc_request)
 
 		// Prompt the user to enable NFC
-		NacUtility.toast(context, message)
+		toast(context, R.string.message_nfc_request)
 		context.startActivity(settings)
 	}
 

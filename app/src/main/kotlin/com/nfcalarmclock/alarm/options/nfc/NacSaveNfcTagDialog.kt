@@ -12,8 +12,8 @@ import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.NacGenericAlarmOptionsDialog
 import com.nfcalarmclock.nfc.db.NacNfcTag
 import com.nfcalarmclock.nfc.NacNfcTagViewModel
-import com.nfcalarmclock.util.NacUtility
 import com.nfcalarmclock.view.calcAlpha
+import com.nfcalarmclock.view.quickToast
 import com.nfcalarmclock.view.setupInputLayoutColor
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -70,7 +70,7 @@ open class NacSaveNfcTagDialog
 			if (it.name == nfcName)
 			{
 				// Show toast
-				NacUtility.quickToast(requireContext(), R.string.error_message_nfc_name_exists)
+				quickToast(requireContext(), R.string.error_message_nfc_name_exists)
 				throw IllegalStateException()
 			}
 			// Check that the NFC ID does not already exist
@@ -80,7 +80,7 @@ open class NacSaveNfcTagDialog
 				val msg = getString(R.string.error_message_nfc_id_exists, it.name)
 
 				// Show toast
-				NacUtility.quickToast(requireContext(), msg)
+				quickToast(requireContext(), msg)
 				throw IllegalStateException()
 			}
 

@@ -1,4 +1,4 @@
-package com.nfcalarmclock.util.media
+package com.nfcalarmclock.system.media
 
 import android.content.Context
 import android.database.Cursor
@@ -17,12 +17,12 @@ import com.nfcalarmclock.system.file.NacFileTree.Companion.getFiles
 import com.nfcalarmclock.system.file.basename
 import com.nfcalarmclock.system.file.strip
 import com.nfcalarmclock.system.file.toRelativeDirname
-import com.nfcalarmclock.util.NacUtility.quickToast
+import com.nfcalarmclock.view.quickToast
 import com.nfcalarmclock.system.getDeviceProtectedStorageContext
-import com.nfcalarmclock.util.media.NacMedia.TYPE_DIRECTORY
-import com.nfcalarmclock.util.media.NacMedia.TYPE_FILE
-import com.nfcalarmclock.util.media.NacMedia.TYPE_NONE
-import com.nfcalarmclock.util.media.NacMedia.TYPE_RINGTONE
+import com.nfcalarmclock.system.media.NacMedia.TYPE_DIRECTORY
+import com.nfcalarmclock.system.media.NacMedia.TYPE_FILE
+import com.nfcalarmclock.system.media.NacMedia.TYPE_NONE
+import com.nfcalarmclock.system.media.NacMedia.TYPE_RINGTONE
 import java.io.File
 import java.io.FileNotFoundException
 import java.util.Locale

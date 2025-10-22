@@ -28,7 +28,8 @@ import com.nfcalarmclock.system.disableActivityAlias
 import com.nfcalarmclock.system.enableActivityAlias
 import com.nfcalarmclock.system.getAlarm
 import com.nfcalarmclock.system.scheduler.NacScheduler
-import com.nfcalarmclock.util.NacUtility
+import com.nfcalarmclock.view.quickToast
+import com.nfcalarmclock.view.toast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -362,7 +363,7 @@ class NacActiveAlarmService
 					lifecycleScope.launch {
 						withContext(Dispatchers.Main)
 						{
-							NacUtility.quickToast(this@NacActiveAlarmService, R.string.error_message_snooze)
+							quickToast(this@NacActiveAlarmService, R.string.error_message_snooze)
 						}
 					}
 				}
@@ -397,7 +398,7 @@ class NacActiveAlarmService
 		{
 			// Show toast that the alarm was snoozed/dismissed and stop the service
 			withContext(Dispatchers.Main) {
-				NacUtility.quickToast(this@NacActiveAlarmService, messageId)
+				quickToast(this@NacActiveAlarmService, messageId)
 				stopActiveAlarmService()
 			}
 		}
@@ -490,7 +491,7 @@ class NacActiveAlarmService
 			// Check if not allowed to start foreground service
 			if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) && (e is ForegroundServiceStartNotAllowedException))
 			{
-				NacUtility.toast(this, R.string.error_message_unable_to_start_foreground_service)
+				toast(this, R.string.error_message_unable_to_start_foreground_service)
 			}
 		}
 	}
@@ -513,7 +514,7 @@ class NacActiveAlarmService
 			// Check if not allowed to start foreground service
 			if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) && (e is ForegroundServiceStartNotAllowedException))
 			{
-				NacUtility.toast(this, R.string.error_message_unable_to_start_foreground_service)
+				toast(this, R.string.error_message_unable_to_start_foreground_service)
 			}
 		}
 	}

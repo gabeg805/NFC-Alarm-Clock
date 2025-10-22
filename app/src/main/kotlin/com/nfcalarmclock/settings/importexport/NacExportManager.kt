@@ -12,8 +12,8 @@ import com.nfcalarmclock.db.NacAlarmDatabase
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.file.zipFiles
 import com.nfcalarmclock.system.NacCalendar
-import com.nfcalarmclock.util.NacUtility
 import com.nfcalarmclock.system.getDeviceProtectedStorageContext
+import com.nfcalarmclock.view.quickToast
 import kotlinx.coroutines.launch
 import java.io.File
 import java.io.OutputStream
@@ -77,7 +77,7 @@ class NacExportManager(fragment: Fragment)
 			zipFiles(outputStream, files)
 
 			// Show success message
-			NacUtility.quickToast(context, R.string.message_export_completed)
+			quickToast(context, R.string.message_export_completed)
 
 		}
 	}
@@ -99,7 +99,7 @@ class NacExportManager(fragment: Fragment)
 			// Check if stream is not valid and show message if it is not
 			if (it == null)
 			{
-				NacUtility.quickToast(context, R.string.error_message_unable_to_open_import_export_stream)
+				quickToast(context, R.string.error_message_unable_to_open_import_export_stream)
 			}
 
 		}

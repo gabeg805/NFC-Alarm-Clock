@@ -48,7 +48,7 @@ import com.nfcalarmclock.timer.card.NacTimerCardAdapter
 import com.nfcalarmclock.timer.card.NacTimerCardHolder
 import com.nfcalarmclock.timer.card.NacTimerCardTouchHelper
 import com.nfcalarmclock.timer.db.NacTimer
-import com.nfcalarmclock.util.NacUtility.quickToast
+import com.nfcalarmclock.view.quickToast
 import com.nfcalarmclock.view.animateProgress
 import com.nfcalarmclock.view.performHapticFeedback
 import com.nfcalarmclock.view.toSpannedString

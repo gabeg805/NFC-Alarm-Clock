@@ -14,8 +14,8 @@ import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.daysToValue
 import com.nfcalarmclock.system.toDays
-import com.nfcalarmclock.util.media.getMediaTitle
-import com.nfcalarmclock.util.media.getMediaType
+import com.nfcalarmclock.system.media.getMediaTitle
+import com.nfcalarmclock.system.media.getMediaType
 
 /**
  * NFC Alarm Clock database.

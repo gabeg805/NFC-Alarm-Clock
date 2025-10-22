@@ -9,7 +9,7 @@ import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.system.NacCalendar
 import com.nfcalarmclock.system.getDeviceProtectedStorageContext
-import com.nfcalarmclock.util.media.NacMedia
+import com.nfcalarmclock.system.media.NacMedia
 import java.io.BufferedReader
 import java.io.File
 import java.io.InputStreamReader

@@ -11,7 +11,7 @@ import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.system.addAlarm
 import com.nfcalarmclock.system.getAlarm
-import com.nfcalarmclock.util.NacUtility
+import com.nfcalarmclock.view.toast
 
 /**
  * Service to show the dismiss early notification.
@@ -61,7 +61,7 @@ class NacDismissEarlyService
 					// Check if not allowed to start foreground service
 					if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) && (e is ForegroundServiceStartNotAllowedException))
 					{
-						NacUtility.toast(this, R.string.error_message_unable_to_start_foreground_service)
+						toast(this, R.string.error_message_unable_to_start_foreground_service)
 					}
 				}
 			}

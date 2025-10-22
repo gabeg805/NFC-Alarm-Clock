@@ -24,10 +24,10 @@ import com.nfcalarmclock.system.getRecursivelyPlayMedia
 import com.nfcalarmclock.system.getShuffleMedia
 import com.nfcalarmclock.system.mediaplayer.NacMediaPlayer
 import com.nfcalarmclock.system.scheduler.NacScheduler
-import com.nfcalarmclock.util.NacUtility
-import com.nfcalarmclock.util.media.NacMedia
-import com.nfcalarmclock.util.media.copyMediaToDeviceEncryptedStorage
-import com.nfcalarmclock.util.media.doesDeviceHaveFreeSpace
+import com.nfcalarmclock.system.media.NacMedia
+import com.nfcalarmclock.system.media.copyMediaToDeviceEncryptedStorage
+import com.nfcalarmclock.system.media.doesDeviceHaveFreeSpace
+import com.nfcalarmclock.view.quickToast
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -314,7 +314,7 @@ open class NacMediaPickerFragment
 		if (!path.startsWith("content://"))
 		{
 			// Show an error toast
-			NacUtility.quickToast(requireContext(), R.string.error_message_play_audio)
+			quickToast(requireContext(), R.string.error_message_play_audio)
 			return
 		}
 

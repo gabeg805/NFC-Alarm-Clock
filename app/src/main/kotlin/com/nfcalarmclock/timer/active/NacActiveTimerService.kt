@@ -29,7 +29,8 @@ import com.nfcalarmclock.system.enableActivityAlias
 import com.nfcalarmclock.system.getTimer
 import com.nfcalarmclock.timer.NacTimerRepository
 import com.nfcalarmclock.timer.db.NacTimer
-import com.nfcalarmclock.util.NacUtility
+import com.nfcalarmclock.view.quickToast
+import com.nfcalarmclock.view.toast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -347,7 +348,7 @@ class NacActiveTimerService
 
 			// Show toast that the timer was dismissed and stop the service
 			withContext(Dispatchers.Main) {
-				NacUtility.quickToast(this@NacActiveTimerService, R.string.message_timer_dismiss)
+				quickToast(this@NacActiveTimerService, R.string.message_timer_dismiss)
 				// TODO: Is this present in the alarm service? Maybe need to move it outside of the context? Maybe even outside of the lifescycle scope?
 				//stopActiveTimerService()
 			}
@@ -686,7 +687,7 @@ class NacActiveTimerService
 			// Check if not allowed to start foreground service
 			if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) && (e is ForegroundServiceStartNotAllowedException))
 			{
-				NacUtility.toast(this, R.string.error_message_unable_to_start_foreground_service)
+				toast(this, R.string.error_message_unable_to_start_foreground_service)
 			}
 		}
 

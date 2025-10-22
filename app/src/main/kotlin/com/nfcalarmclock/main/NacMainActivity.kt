@@ -6,7 +6,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.provider.AlarmClock
@@ -15,7 +14,6 @@ import androidx.activity.viewModels
 import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import androidx.core.graphics.ColorUtils
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
@@ -44,11 +42,11 @@ import com.nfcalarmclock.system.toBundle
 import com.nfcalarmclock.system.triggers.shutdown.NacShutdownBroadcastReceiver
 import com.nfcalarmclock.system.unregisterMyReceiver
 import com.nfcalarmclock.timer.NacTimerViewModel
-import com.nfcalarmclock.util.media.buildLocalMediaPath
-import com.nfcalarmclock.util.media.copyMediaToDeviceEncryptedStorage
-import com.nfcalarmclock.util.media.getMediaArtist
-import com.nfcalarmclock.util.media.getMediaTitle
-import com.nfcalarmclock.util.media.getMediaType
+import com.nfcalarmclock.system.media.buildLocalMediaPath
+import com.nfcalarmclock.system.media.copyMediaToDeviceEncryptedStorage
+import com.nfcalarmclock.system.media.getMediaArtist
+import com.nfcalarmclock.system.media.getMediaTitle
+import com.nfcalarmclock.system.media.getMediaType
 import com.nfcalarmclock.view.setupRippleColor
 import com.nfcalarmclock.view.setupThemeColor
 import com.nfcalarmclock.whatsnew.NacWhatsNewDialog

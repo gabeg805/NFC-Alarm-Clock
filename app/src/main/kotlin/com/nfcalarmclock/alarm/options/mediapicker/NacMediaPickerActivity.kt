@@ -18,7 +18,7 @@ import com.google.android.material.tabs.TabLayout.OnTabSelectedListener
 import com.google.android.material.tabs.TabLayoutMediator
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.util.media.NacMedia
+import com.nfcalarmclock.system.media.NacMedia
 import com.nfcalarmclock.alarm.options.mediapicker.music.NacMusicPickerFragment
 import com.nfcalarmclock.alarm.options.mediapicker.ringtone.NacRingtonePickerFragment
 import com.nfcalarmclock.system.permission.readmediaaudio.NacReadMediaAudioPermission
@@ -32,10 +32,10 @@ import com.nfcalarmclock.system.getMediaTitle
 import com.nfcalarmclock.system.getMediaType
 import com.nfcalarmclock.system.getRecursivelyPlayMedia
 import com.nfcalarmclock.system.getShuffleMedia
-import com.nfcalarmclock.util.media.isMediaDirectory
-import com.nfcalarmclock.util.media.isMediaFile
-import com.nfcalarmclock.util.media.isMediaNone
-import com.nfcalarmclock.util.media.isMediaRingtone
+import com.nfcalarmclock.system.media.isMediaDirectory
+import com.nfcalarmclock.system.media.isMediaFile
+import com.nfcalarmclock.system.media.isMediaNone
+import com.nfcalarmclock.system.media.isMediaRingtone
 import dagger.hilt.android.AndroidEntryPoint
 
 /**

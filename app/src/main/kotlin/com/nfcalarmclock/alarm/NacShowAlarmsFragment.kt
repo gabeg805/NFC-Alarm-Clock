@@ -13,7 +13,6 @@ import android.view.LayoutInflater
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
 import androidx.annotation.OptIn
 import androidx.core.content.ContextCompat
 import androidx.core.view.MenuCompat
@@ -81,7 +80,7 @@ import com.nfcalarmclock.system.getAlarm
 import com.nfcalarmclock.system.registerMyReceiver
 import com.nfcalarmclock.system.scheduler.NacScheduler
 import com.nfcalarmclock.system.unregisterMyReceiver
-import com.nfcalarmclock.util.NacUtility.quickToast
+import com.nfcalarmclock.view.quickToast
 import com.nfcalarmclock.view.performHapticFeedback
 import com.nfcalarmclock.view.toSpannedString
 import com.nfcalarmclock.widget.refreshAppWidgets

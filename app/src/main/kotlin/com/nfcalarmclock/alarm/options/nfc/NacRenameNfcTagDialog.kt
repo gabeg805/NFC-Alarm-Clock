@@ -10,8 +10,8 @@ import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import com.nfcalarmclock.R
 import com.nfcalarmclock.nfc.db.NacNfcTag
-import com.nfcalarmclock.util.NacUtility
 import com.nfcalarmclock.view.dialog.NacBottomSheetDialogFragment
+import com.nfcalarmclock.view.quickToast
 import com.nfcalarmclock.view.setupInputLayoutColor
 
 /**
@@ -98,7 +98,7 @@ class NacRenameNfcTagDialog
 			if (allNfcTags.any { it.name == name })
 			{
 				// Show an error toast
-				NacUtility.quickToast(requireContext(), R.string.error_message_nfc_name_exists)
+				quickToast(requireContext(), R.string.error_message_nfc_name_exists)
 				return@setupPrimaryButton
 			}
 

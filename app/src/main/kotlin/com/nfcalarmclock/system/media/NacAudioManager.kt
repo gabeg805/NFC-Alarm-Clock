@@ -1,4 +1,4 @@
-package com.nfcalarmclock.util.media
+package com.nfcalarmclock.system.media
 
 import android.content.Context
 import android.media.AudioFocusRequest

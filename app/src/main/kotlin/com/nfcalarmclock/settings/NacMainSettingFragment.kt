@@ -15,7 +15,7 @@ import com.nfcalarmclock.settings.importexport.NacImportExportDialog
 import com.nfcalarmclock.settings.importexport.NacImportManager
 import com.nfcalarmclock.statistics.NacStatisticsSettingFragment
 import com.nfcalarmclock.support.NacSupportSetting
-import com.nfcalarmclock.util.NacUtility
+import com.nfcalarmclock.view.quickToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -271,7 +271,7 @@ class NacMainSettingFragment
 				{
 
 					 // Show a toast saying thank you
-					 NacUtility.quickToast(fragmentActivity, R.string.message_support_thank_you)
+					quickToast(fragmentActivity, R.string.message_support_thank_you)
 
 					// Save that the app was supported in shared preferences
 					sharedPreferences!!.wasAppSupported = true

@@ -14,9 +14,9 @@ import com.nfcalarmclock.alarm.options.vibrate.NacVibrator
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.mediaplayer.NacMediaPlayer
 import com.nfcalarmclock.system.getDeviceProtectedStorageContext
-import com.nfcalarmclock.util.media.NacAudioAttributes
-import com.nfcalarmclock.util.media.NacAudioManager
-import com.nfcalarmclock.util.media.isMediaDirectory
+import com.nfcalarmclock.system.media.NacAudioAttributes
+import com.nfcalarmclock.system.media.NacAudioManager
+import com.nfcalarmclock.system.media.isMediaDirectory
 
 /**
  * Actions to take upon waking up, such as enabling NFC, playing music, etc.

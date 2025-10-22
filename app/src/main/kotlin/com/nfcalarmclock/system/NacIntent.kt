@@ -10,10 +10,10 @@ import androidx.lifecycle.MutableLiveData
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.timer.db.NacTimer
-import com.nfcalarmclock.util.media.buildLocalMediaPath
-import com.nfcalarmclock.util.media.getMediaArtist
-import com.nfcalarmclock.util.media.getMediaTitle
-import com.nfcalarmclock.util.media.getMediaType
+import com.nfcalarmclock.system.media.buildLocalMediaPath
+import com.nfcalarmclock.system.media.getMediaArtist
+import com.nfcalarmclock.system.media.getMediaTitle
+import com.nfcalarmclock.system.media.getMediaType
 import java.util.Calendar
 
 /**

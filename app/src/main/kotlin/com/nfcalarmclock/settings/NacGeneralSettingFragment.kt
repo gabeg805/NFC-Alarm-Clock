@@ -32,7 +32,7 @@ import com.nfcalarmclock.system.getMediaTitle
 import com.nfcalarmclock.system.getMediaType
 import com.nfcalarmclock.system.getRecursivelyPlayMedia
 import com.nfcalarmclock.system.getShuffleMedia
-import com.nfcalarmclock.util.media.buildLocalMediaPath
+import com.nfcalarmclock.system.media.buildLocalMediaPath
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 

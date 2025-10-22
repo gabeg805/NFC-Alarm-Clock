@@ -14,7 +14,7 @@ import com.nfcalarmclock.system.NacBundle.RECURSIVELY_PLAY_MEDIA_KEY
 import com.nfcalarmclock.system.NacBundle.SHUFFLE_MEDIA_KEY
 import com.nfcalarmclock.system.NacBundle.TIMER_PARCEL_NAME
 import com.nfcalarmclock.timer.db.NacTimer
-import com.nfcalarmclock.util.media.NacAudioAttributes
+import com.nfcalarmclock.system.media.NacAudioAttributes
 
 /**
  * Add an alarm to a bundle.

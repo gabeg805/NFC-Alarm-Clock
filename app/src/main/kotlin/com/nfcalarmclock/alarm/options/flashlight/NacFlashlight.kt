@@ -9,7 +9,7 @@ import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import com.nfcalarmclock.R
-import com.nfcalarmclock.util.NacUtility.toast
+import com.nfcalarmclock.view.toast
 
 /**
  * Find the first available camera ID.

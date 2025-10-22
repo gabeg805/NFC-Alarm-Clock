@@ -5,8 +5,10 @@ import android.animation.AnimatorInflater
 import android.content.Context
 import android.content.res.ColorStateList
 import android.view.View
+import android.view.View.MeasureSpec
 import android.view.View.OnCreateContextMenuListener
 import android.view.ViewGroup
+import android.view.ViewGroup.MarginLayoutParams
 import android.view.animation.AccelerateInterpolator
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -25,8 +27,7 @@ import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmService.Companion.start
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.nfc.db.NacNfcTag
 import com.nfcalarmclock.system.NacCalendar.Day
-import com.nfcalarmclock.util.NacUtility.getHeight
-import com.nfcalarmclock.util.NacUtility.quickToast
+import com.nfcalarmclock.view.quickToast
 import com.nfcalarmclock.view.dayofweek.NacDayOfWeek
 import com.nfcalarmclock.view.dayofweek.NacDayOfWeek.OnWeekChangedListener
 import com.nfcalarmclock.view.performHapticFeedback
@@ -840,6 +841,27 @@ class NacAlarmCardHolder(root: View)
 
 		// Start the animator
 		cardAnimator.start()
+	}
+
+	/**
+	 * Determine the height of the view.
+	 *
+	 * @param  view  The view.
+	 *
+	 * @return The height of the view.
+	 */
+	private fun getHeight(view: View): Int
+	{
+		// Measure the view
+		view.measure(MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED),
+			MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED))
+
+		// Calculate the height, including the margins
+		val lp = view.layoutParams as MarginLayoutParams
+		val margins = lp.topMargin + lp.bottomMargin
+		val height = view.measuredHeight
+
+		return height + margins
 	}
 
 	/**

@@ -12,7 +12,7 @@ import com.nfcalarmclock.system.permission.postnotifications.NacPostNotification
 import com.nfcalarmclock.system.permission.readmediaaudio.NacReadMediaAudioPermission
 import com.nfcalarmclock.system.permission.scheduleexactalarm.NacScheduleExactAlarmPermission
 import com.nfcalarmclock.system.permission.systemalertwindow.NacSystemAlertWindowPermission
-import com.nfcalarmclock.util.NacUtility.quickToast
+import com.nfcalarmclock.view.quickToast
 import com.nfcalarmclock.whatsnew.NacWhatsNewDialog
 
 /**

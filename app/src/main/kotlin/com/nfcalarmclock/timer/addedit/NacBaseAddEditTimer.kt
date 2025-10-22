@@ -33,7 +33,7 @@ import com.nfcalarmclock.timer.NacTimerViewModel
 import com.nfcalarmclock.timer.active.NacActiveTimerService
 import com.nfcalarmclock.timer.db.NacTimer
 import com.nfcalarmclock.timer.options.NacTimerOptionsDialog
-import com.nfcalarmclock.util.media.NacMedia
+import com.nfcalarmclock.system.media.NacMedia
 import com.nfcalarmclock.view.calcContrastColor
 import com.nfcalarmclock.view.performHapticFeedback
 import com.nfcalarmclock.view.setupBackgroundColor

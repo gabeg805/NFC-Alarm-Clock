@@ -10,7 +10,7 @@ import com.nfcalarmclock.R
 import com.nfcalarmclock.db.NacAlarmDatabase
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.file.unzipFile
-import com.nfcalarmclock.util.NacUtility
+import com.nfcalarmclock.view.quickToast
 import java.io.File
 import java.io.InputStream
 
@@ -53,7 +53,7 @@ class NacImportManager(fragment: Fragment)
 			// Check if stream is not valid and show message if it is not
 			if (it == null)
 			{
-				NacUtility.quickToast(context, R.string.error_message_unable_to_open_import_export_stream)
+				quickToast(context, R.string.error_message_unable_to_open_import_export_stream)
 			}
 
 		}

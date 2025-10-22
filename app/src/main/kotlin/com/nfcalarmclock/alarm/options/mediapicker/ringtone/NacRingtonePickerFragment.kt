@@ -18,10 +18,10 @@ import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.addMediaInfo
 import com.nfcalarmclock.system.getDeviceProtectedStorageContext
 import com.nfcalarmclock.system.toBundle
-import com.nfcalarmclock.util.media.NacMedia
-import com.nfcalarmclock.util.media.buildLocalMediaPath
-import com.nfcalarmclock.util.media.getMediaArtist
-import com.nfcalarmclock.util.media.getMediaTitle
+import com.nfcalarmclock.system.media.NacMedia
+import com.nfcalarmclock.system.media.buildLocalMediaPath
+import com.nfcalarmclock.system.media.getMediaArtist
+import com.nfcalarmclock.system.media.getMediaTitle
 
 /**
  * Display a dialog that shows a list of alarm ringtones.

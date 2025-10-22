@@ -4,10 +4,10 @@ import android.content.Context
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import com.nfcalarmclock.R
-import com.nfcalarmclock.util.NacUtility
-import com.nfcalarmclock.util.media.NacAudioAttributes
-import com.nfcalarmclock.util.media.NacAudioManager
+import com.nfcalarmclock.system.media.NacAudioAttributes
+import com.nfcalarmclock.system.media.NacAudioManager
 import com.nfcalarmclock.system.toBundle
+import com.nfcalarmclock.view.quickToast
 import java.util.Locale
 
 /**
@@ -251,7 +251,7 @@ class NacTextToSpeech(
 			if (!NacAudioManager.requestFocusGainTransient(context, null, attrs))
 			{
 				// Show toast
-				NacUtility.quickToast(context, R.string.error_message_text_to_speech_audio_focus)
+				quickToast(context, R.string.error_message_text_to_speech_audio_focus)
 
 				// Clear the buffer, just in case
 				clearBuffer()

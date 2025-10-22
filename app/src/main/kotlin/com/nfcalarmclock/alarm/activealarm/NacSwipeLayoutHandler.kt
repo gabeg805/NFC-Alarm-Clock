@@ -26,10 +26,10 @@ import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.system.NacCalendar
 import com.nfcalarmclock.system.createTimeTickReceiver
 import com.nfcalarmclock.system.getDeviceProtectedStorageContext
-import com.nfcalarmclock.util.media.directQueryMediaMetadata
-import com.nfcalarmclock.util.media.getMediaArtist
-import com.nfcalarmclock.util.media.getMediaTitle
-import com.nfcalarmclock.util.media.isLocalMediaPath
+import com.nfcalarmclock.system.media.directQueryMediaMetadata
+import com.nfcalarmclock.system.media.getMediaArtist
+import com.nfcalarmclock.system.media.getMediaTitle
+import com.nfcalarmclock.system.media.isLocalMediaPath
 import com.nfcalarmclock.system.registerMyReceiver
 import com.nfcalarmclock.system.unregisterMyReceiver
 import com.nfcalarmclock.view.calcContrastColor
