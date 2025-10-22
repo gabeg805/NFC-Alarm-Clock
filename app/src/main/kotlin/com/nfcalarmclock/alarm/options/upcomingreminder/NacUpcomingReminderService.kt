@@ -1,23 +1,27 @@
 package com.nfcalarmclock.alarm.options.upcomingreminder
 
-import android.app.Service
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.IBinder
+import androidx.annotation.OptIn
 import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.tts.NacTextToSpeech
 import com.nfcalarmclock.alarm.options.tts.NacTranslate
-import com.nfcalarmclock.system.scheduler.NacScheduler
 import com.nfcalarmclock.system.NacCalendar
+import com.nfcalarmclock.system.NacLifecycleService
 import com.nfcalarmclock.system.addAlarm
 import com.nfcalarmclock.system.getAlarm
 import com.nfcalarmclock.system.media.NacAudioAttributes
+import com.nfcalarmclock.system.scheduler.NacScheduler
 import java.util.Calendar
 
+/**
+ * Upcoming reminder service.
+ */
+@OptIn(UnstableApi::class)
 class NacUpcomingReminderService
-	: Service()
+	: NacLifecycleService()
 {
 
 	/**
@@ -42,6 +46,9 @@ class NacUpcomingReminderService
 	 */
 	override fun onBind(intent: Intent): IBinder?
 	{
+		// Super
+		super.onBind(intent)
+
 		return null
 	}
 
@@ -51,6 +58,9 @@ class NacUpcomingReminderService
 	@UnstableApi
 	override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int
 	{
+		// Super
+		super.onStartCommand(intent, flags, startId)
+
 		// Attempt to get the alarm from the intent
 		val alarm = intent?.getAlarm()
 
@@ -68,14 +78,19 @@ class NacUpcomingReminderService
 				}
 
 				// Stop the service
-				stopReminderService()
+				stopThisService()
 			}
 
 			// Normal path for the service
 			else ->
 			{
-				// Show the notification
-				showReminderNotification(alarm)
+				// Create the reminder notification
+				val notification = NacUpcomingReminderNotification(this, alarm)
+
+				// Start the service in the foreground
+				showForegroundNotification {
+					startForeground(notification.id, notification.build())
+				}
 
 				// Check if alarm is not null
 				if (alarm != null)
@@ -168,18 +183,6 @@ class NacUpcomingReminderService
 	}
 
 	/**
-	 * Show the reminder notification.
-	 */
-	private fun showReminderNotification(alarm: NacAlarm?)
-	{
-		// Create the reminder notification
-		val notification = NacUpcomingReminderNotification(this, alarm)
-
-		// Start the service in the foreground
-		startForeground(notification.id, notification.build())
-	}
-
-	/**
 	 * Start the reminder process.
 	 */
 	private fun startReminderProcess(alarm: NacAlarm)
@@ -203,27 +206,6 @@ class NacUpcomingReminderService
 			// Schedule the next reminder
 			NacScheduler.addUpcomingReminder(this, alarm, nextReminderCal)
 		}
-	}
-
-	/**
-	 * Stop the service.
-	 */
-	@Suppress("deprecation")
-	private fun stopReminderService()
-	{
-		// Stop the foreground service using the updated form of
-		// stopForeground() for API >= 33
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-		{
-			super.stopForeground(STOP_FOREGROUND_REMOVE)
-		}
-		else
-		{
-			super.stopForeground(true)
-		}
-
-		// Stop the service
-		super.stopSelf()
 	}
 
 	companion object

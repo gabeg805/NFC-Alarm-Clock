@@ -23,6 +23,7 @@ import com.nfcalarmclock.alarm.activealarm.NacWakeupProcess
 import com.nfcalarmclock.nfc.shouldUseNfc
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.NacCalendar
+import com.nfcalarmclock.system.NacLifecycleService
 import com.nfcalarmclock.system.addTimer
 import com.nfcalarmclock.system.disableActivityAlias
 import com.nfcalarmclock.system.enableActivityAlias
@@ -45,7 +46,7 @@ import kotlin.math.ceil
 @UnstableApi
 @AndroidEntryPoint
 class NacActiveTimerService
-	: LifecycleService()
+	: NacLifecycleService()
 {
 
 	/**
@@ -286,7 +287,7 @@ class NacActiveTimerService
 		if (allTimers.isEmpty())
 		{
 			println("STOPPING ACTIVE YO VERY COOL")
-			stopActiveTimerService()
+			stopThisService()
 		}
 		// Close the notification and if this is the foreground notification, make
 		// another timer the foreground notification
@@ -349,8 +350,6 @@ class NacActiveTimerService
 			// Show toast that the timer was dismissed and stop the service
 			withContext(Dispatchers.Main) {
 				quickToast(this@NacActiveTimerService, R.string.message_timer_dismiss)
-				// TODO: Is this present in the alarm service? Maybe need to move it outside of the context? Maybe even outside of the lifescycle scope?
-				//stopActiveTimerService()
 			}
 
 		}
@@ -550,7 +549,7 @@ class NacActiveTimerService
 			}
 
 			// The default case if things go wrong
-			else -> stopActiveTimerService()
+			else -> stopThisService()
 
 		}
 
@@ -665,8 +664,9 @@ class NacActiveTimerService
 		// Create the active timer notification
 		val notification = NacActiveTimerNotification(this, timer)
 
-		try
-		{
+		// Show the notification
+		showForegroundNotification {
+
 			// Service barely beginning to run. Start the service in the foreground
 			if (foregroundNotificationId == 0)
 			{
@@ -681,14 +681,7 @@ class NacActiveTimerService
 				val notificationmanager = NotificationManagerCompat.from(this)
 				notificationmanager.notify(notification.id, notification.build())
 			}
-		}
-		catch (e: Exception)
-		{
-			// Check if not allowed to start foreground service
-			if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) && (e is ForegroundServiceStartNotAllowedException))
-			{
-				toast(this, R.string.error_message_unable_to_start_foreground_service)
-			}
+
 		}
 
 		// Save the show when time for the notification
@@ -720,8 +713,6 @@ class NacActiveTimerService
 
 	/**
 	 * Start the countdown timer.
-	 *
-	 * TODO: Count up when ringing.
 	 */
 	fun startCountdownTimer(timer: NacTimer)
 	{
@@ -787,16 +778,8 @@ class NacActiveTimerService
 				// Change the seconds in the notification to 0
 				updateNotification(timer)
 
-				// Get the power manager and timeout for the wakelock
-				val powerManager = getSystemService(POWER_SERVICE) as PowerManager
-				val timeout = timer.autoDismissTime * 1000L
-
-				// Acquire the wakelock
-				val wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
-					WAKELOCK_TAG)
-				wakeLock!!.acquire(timeout)
-
-				// Add the wakelock to the hashmap
+				// Acquire the wakelock and add it to the hashmap
+				val wakeLock = acquireWakeLock(timer.autoDismissTime)
 				allWakeLocks.put(timer.id, wakeLock)
 
 				// Wait for auto dismiss
@@ -819,36 +802,6 @@ class NacActiveTimerService
 
 		// Add the countdown timer to the hashmap
 		allCountdownTimers.put(timer.id, countdownTimer)
-	}
-
-	/**
-	 * Stop the service.
-	 */
-	@Suppress("deprecation")
-	fun stopActiveTimerService()
-	{
-		println("stopActiveTimerService()")
-		//// Call the listener
-		//allTimers.forEach { timer ->
-		//	println("Calling stop active timer service : ${timer.id}")
-		//	allOnServiceStoppedListeners[timer.id]?.forEach { listener ->
-		//		listener.onServiceStopped(timer)
-		//	}
-		//}
-
-		// Stop the foreground service using the updated form of
-		// stopForeground() for API >= 33
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-		{
-			super.stopForeground(STOP_FOREGROUND_REMOVE)
-		}
-		else
-		{
-			super.stopForeground(true)
-		}
-
-		// Stop the service
-		super.stopSelf()
 	}
 
 	/**
@@ -932,14 +885,13 @@ class NacActiveTimerService
 		// Amount of time until the timer is automatically dismissed
 		val delay = if (timer.shouldUseNfc)
 		{
-			60000L - 750
+			60000L
 		}
 		else
 		{
-			timer.autoDismissTime*1000L - 750
+			timer.autoDismissTime*1000L
 		}
 		//val delay = timer.autoDismissTime*1000L - 750
-		//val delay = TimeUnit.SECONDS.toMillis(30) - 750
 		println("Auto dismiss delay : $delay")
 
 		// Create the handler

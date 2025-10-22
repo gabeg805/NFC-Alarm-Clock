@@ -1,23 +1,25 @@
 package com.nfcalarmclock.alarm.options.dismissoptions
 
 import android.app.ForegroundServiceStartNotAllowedException
-import android.app.Service
 import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.IBinder
+import androidx.annotation.OptIn
 import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.system.NacLifecycleService
 import com.nfcalarmclock.system.addAlarm
 import com.nfcalarmclock.system.getAlarm
 import com.nfcalarmclock.view.toast
 
 /**
- * Service to show the dismiss early notification.
+ * Dismiss early notification service.
  */
+@OptIn(UnstableApi::class)
 class NacDismissEarlyService
-	: Service()
+	: NacLifecycleService()
 {
 
 	/**
@@ -25,6 +27,9 @@ class NacDismissEarlyService
 	 */
 	override fun onBind(intent: Intent): IBinder?
 	{
+		// Super
+		super.onBind(intent)
+
 		return null
 	}
 
@@ -35,6 +40,9 @@ class NacDismissEarlyService
 	@UnstableApi
 	override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int
 	{
+		// Super
+		super.onStartCommand(intent, flags, startId)
+
 		// Attempt to get the alarm from the intent
 		val alarm = intent?.getAlarm()
 
@@ -43,7 +51,7 @@ class NacDismissEarlyService
 		{
 
 			// Clear the notification by stopping the service
-			ACTION_STOP_SERVICE -> stopDismissEarlyService()
+			ACTION_STOP_SERVICE -> stopThisService()
 
 			// Normal. Show the notification
 			else ->
@@ -51,45 +59,15 @@ class NacDismissEarlyService
 				// Create the reminder notification
 				val notification = NacDismissEarlyNotification(this, alarm)
 
-				try
-				{
-					// Start the service in the foreground
+				// Start the service in the foreground
+				showForegroundNotification {
 					startForeground(notification.id, notification.build())
-				}
-				catch (e: Exception)
-				{
-					// Check if not allowed to start foreground service
-					if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) && (e is ForegroundServiceStartNotAllowedException))
-					{
-						toast(this, R.string.error_message_unable_to_start_foreground_service)
-					}
 				}
 			}
 
 		}
 
 		return START_NOT_STICKY
-	}
-
-	/**
-	 * Stop the service.
-	 */
-	@Suppress("deprecation")
-	fun stopDismissEarlyService()
-	{
-		// Stop the foreground service using the updated form of
-		// stopForeground() for API >= 33
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-		{
-			super.stopForeground(STOP_FOREGROUND_REMOVE)
-		}
-		else
-		{
-			super.stopForeground(true)
-		}
-
-		// Stop the service
-		super.stopSelf()
 	}
 
 	companion object

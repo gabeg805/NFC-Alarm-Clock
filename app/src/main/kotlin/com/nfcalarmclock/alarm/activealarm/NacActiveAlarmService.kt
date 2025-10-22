@@ -7,11 +7,9 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Handler
-import android.os.PowerManager
 import android.os.PowerManager.WakeLock
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationManagerCompat
-import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.BuildConfig
@@ -23,6 +21,7 @@ import com.nfcalarmclock.alarm.options.missedalarm.NacMissedAlarmNotification
 import com.nfcalarmclock.alarm.options.upcomingreminder.NacUpcomingReminderService
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.statistics.NacAlarmStatisticRepository
+import com.nfcalarmclock.system.NacLifecycleService
 import com.nfcalarmclock.system.addAlarm
 import com.nfcalarmclock.system.disableActivityAlias
 import com.nfcalarmclock.system.enableActivityAlias
@@ -44,7 +43,7 @@ import javax.inject.Inject
 @UnstableApi
 @AndroidEntryPoint
 class NacActiveAlarmService
-	: LifecycleService()
+	: NacLifecycleService()
 {
 
 	/**
@@ -228,10 +227,10 @@ class NacActiveAlarmService
 		// activity
 		enableActivityAlias(this)
 
-		// Set the previous app version if it has not been set yet
+		// Set the previous app version as the current version, if it is not set
 		if (sharedPreferences.previousAppVersion.isEmpty())
 		{
-			setupAppVersion()
+			sharedPreferences.previousAppVersion = BuildConfig.VERSION_NAME
 		}
 	}
 
@@ -340,7 +339,7 @@ class NacActiveAlarmService
 			}
 
 			// Stop the service
-			ACTION_STOP_SERVICE -> stopActiveAlarmService()
+			ACTION_STOP_SERVICE -> stopThisService()
 
 			// Dismiss
 			ACTION_DISMISS_ALARM -> dismiss()
@@ -370,7 +369,7 @@ class NacActiveAlarmService
 			}
 
 			// The default case if things go wrong
-			else -> stopActiveAlarmService()
+			else -> stopThisService()
 
 		}
 
@@ -399,7 +398,7 @@ class NacActiveAlarmService
 			// Show toast that the alarm was snoozed/dismissed and stop the service
 			withContext(Dispatchers.Main) {
 				quickToast(this@NacActiveAlarmService, messageId)
-				stopActiveAlarmService()
+				stopThisService()
 			}
 		}
 	}
@@ -437,7 +436,7 @@ class NacActiveAlarmService
 		if (isNewServiceStarted(intentAlarm, intentAction))
 		{
 			// Alarms are equal. Set the action to indicate this
-			if (intentAlarm!!.equals(alarm))
+			if (intentAlarm!! == alarm)
 			{
 				intentAction = ACTION_EQUAL_ALARMS
 				return
@@ -463,15 +462,6 @@ class NacActiveAlarmService
 	}
 
 	/**
-	 * Setup the app version.
-	 */
-	private fun setupAppVersion()
-	{
-		// Set the previous app version as the current version
-		sharedPreferences.previousAppVersion = BuildConfig.VERSION_NAME
-	}
-
-	/**
 	 * Show the notification.
 	 *
 	 * Note: This can still be run with a null alarm.
@@ -481,18 +471,9 @@ class NacActiveAlarmService
 		// Create the active alarm notification
 		val notification = NacActiveAlarmNotification(this, alarm)
 
-		try
-		{
-			// Start the service in the foreground
+		// Start the service in the foreground
+		showForegroundNotification {
 			startForeground(NacActiveAlarmNotification.ID, notification.build())
-		}
-		catch (e: Exception)
-		{
-			// Check if not allowed to start foreground service
-			if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) && (e is ForegroundServiceStartNotAllowedException))
-			{
-				toast(this, R.string.error_message_unable_to_start_foreground_service)
-			}
 		}
 	}
 
@@ -504,18 +485,9 @@ class NacActiveAlarmService
 		// Create the active alarm notification
 		val notification = NacSkipAlarmNotification(this, alarm)
 
-		try
-		{
-			// Start the service in the foreground
+		// Start the service in the foreground
+		showForegroundNotification {
 			startForeground(NacSkipAlarmNotification.ID, notification.build())
-		}
-		catch (e: Exception)
-		{
-			// Check if not allowed to start foreground service
-			if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) && (e is ForegroundServiceStartNotAllowedException))
-			{
-				toast(this, R.string.error_message_unable_to_start_foreground_service)
-			}
 		}
 	}
 
@@ -561,14 +533,8 @@ class NacActiveAlarmService
 		// Cleanup any resources
 		cleanup()
 
-		// Get the power manager and timeout for the wakelock
-		val powerManager = getSystemService(POWER_SERVICE) as PowerManager
-		val timeout = alarm!!.autoDismissTime * 1000L
-
 		// Acquire the wakelock
-		wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
-			WAKELOCK_TAG)
-		wakeLock!!.acquire(timeout)
+		wakeLock = acquireWakeLock(alarm!!.autoDismissTime)
 
 		// Start the alarm activity
 		NacActiveAlarmActivity.startAlarmActivity(this, alarm!!)
@@ -594,27 +560,6 @@ class NacActiveAlarmService
 
 			alarmRepository.update(alarm!!)
 		}
-	}
-
-	/**
-	 * Stop the service.
-	 */
-	@Suppress("deprecation")
-	private fun stopActiveAlarmService()
-	{
-		// Stop the foreground service using the updated form of
-		// stopForeground() for API >= 33
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-		{
-			super.stopForeground(STOP_FOREGROUND_REMOVE)
-		}
-		else
-		{
-			super.stopForeground(true)
-		}
-
-		// Stop the service
-		super.stopSelf()
 	}
 
 	/**
