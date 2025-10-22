@@ -21,7 +21,7 @@ import com.android.billingclient.api.QueryProductDetailsParams
 import com.android.billingclient.api.QueryProductDetailsResult
 import com.google.common.collect.ImmutableList
 import com.nfcalarmclock.R
-import com.nfcalarmclock.util.NacUtility
+import com.nfcalarmclock.view.quickToast
 import kotlinx.coroutines.launch
 
 /**
@@ -281,7 +281,7 @@ class NacSupportSetting(
 		fragmentActivity.lifecycleScope.launch {
 
 			// Show a toast indicating there was an error
-			NacUtility.quickToast(fragmentActivity, R.string.error_message_google_play_billing)
+			quickToast(fragmentActivity, R.string.error_message_google_play_billing)
 
 		}
 	}

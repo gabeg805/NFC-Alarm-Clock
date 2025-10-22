@@ -9,6 +9,9 @@ import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmService.Companion.WAKELOCK_TAG
 import com.nfcalarmclock.view.toast
 
+/**
+ * Generic lifecycle service.
+ */
 @UnstableApi
 abstract class NacLifecycleService
 	: LifecycleService()

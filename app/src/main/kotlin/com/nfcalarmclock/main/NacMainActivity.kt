@@ -626,6 +626,7 @@ class NacMainActivity
 		// Attempt to show the What's new dialog
 		else if (shouldShowWhatsNewDialog && delayCounter == 0)
 		{
+			println("Should show whats new dialog and delay counter == 0")
 			// Show the What's New dialog
 			NacWhatsNewDialog.show(supportFragmentManager,
 				listener = {

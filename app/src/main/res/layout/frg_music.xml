@@ -1,70 +1,94 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout
+<androidx.constraintlayout.widget.ConstraintLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent">
 
-	<LinearLayout
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		android:orientation="vertical">
+	<!-- Loading circle -->
+	<com.google.android.material.progressindicator.CircularProgressIndicator
+		android:id="@+id/loading_circle"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:indeterminate="true"
+		android:progress="0"
+		app:indicatorDirectionCircular="clockwise"
+		app:indicatorColor="@color/white"
+		app:indicatorSize="80dp"
+		app:trackColor="@color/gray"
+		app:trackThickness="6dp"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		/>
 
-		<!-- File path -->
-		<TextView
-			android:id="@+id/path"
+	<!-- File path -->
+	<TextView
+		android:id="@+id/path"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:paddingTop="@dimen/nudge"
+		android:paddingBottom="@dimen/nudge"
+		android:paddingStart="@dimen/tiny"
+		android:paddingEnd="@dimen/tiny"
+		android:singleLine="true"
+		android:ellipsize="start"
+		android:textStyle="italic"
+		android:textSize="@dimen/tsz_small"
+		android:text=""
+		app:layout_constraintTop_toTopOf="parent"
+		/>
+
+	<!-- Separator -->
+	<View
+		android:id="@+id/path_separator"
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/line"
+		android:layout_marginBottom="@dimen/tiny"
+		android:background="@color/gray_light"
+		app:layout_constraintTop_toBottomOf="@id/path"
+		/>
+
+	<!-- Container for files and stuff -->
+	<ScrollView
+		android:id="@+id/scrollview"
+		android:layout_width="match_parent"
+		android:layout_height="0dp"
+		app:layout_constraintTop_toBottomOf="@id/path_separator"
+		app:layout_constraintBottom_toTopOf="@id/action_buttons">
+
+		<LinearLayout
+			android:id="@+id/container"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:paddingTop="@dimen/nudge"
-			android:paddingBottom="@dimen/nudge"
-			android:paddingStart="@dimen/tiny"
-			android:paddingEnd="@dimen/tiny"
-			android:singleLine="true"
-			android:ellipsize="start"
-			android:textStyle="italic"
-			android:textSize="@dimen/tsz_small"
-			android:text=""
+			android:orientation="vertical"
+			android:scrollbars="vertical"
+			app:layout_constraintTop_toTopOf="parent"
 			/>
+	</ScrollView>
 
-		<!-- Separator -->
-		<View
-			android:layout_width="match_parent"
-			android:layout_height="@dimen/line"
-			android:layout_marginBottom="@dimen/tiny"
-			android:background="@color/gray_light"
-			/>
-
-		<!-- Container for files and stuff -->
-		<ScrollView
-			android:id="@+id/scrollview"
-			android:layout_width="match_parent"
-			android:layout_height="0dp"
-			android:layout_weight="1">
-
-			<LinearLayout
-				android:id="@+id/container"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:orientation="vertical"
-				android:scrollbars="vertical">
-			</LinearLayout>
-
-		</ScrollView>
-
-		<!-- Action buttons -->
-		<include layout="@layout/frg_buttons" />
-	</LinearLayout>
+	<!-- Action buttons -->
+	<include
+		layout="@layout/frg_buttons"
+		android:id="@+id/action_buttons"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		app:layout_constraintBottom_toBottomOf="parent"
+		/>
 
 	<!-- Floating action button -->
 	<com.google.android.material.floatingactionbutton.FloatingActionButton
-		android:contentDescription="@string/cd_fab_launch_system_file_browser"
 		android:id="@+id/fab_launch_file_browser"
+		android:contentDescription="@string/cd_fab_launch_system_file_browser"
 		android:layout_width="@dimen/isz_attention"
 		android:layout_height="@dimen/isz_attention"
-		android:layout_gravity="bottom|end"
 		android:layout_marginBottom="@dimen/file_browser_fab"
 		android:layout_marginEnd="@dimen/xxxlarge"
 		android:visibility="visible"
 		android:src="@drawable/launch_32"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
 		/>
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

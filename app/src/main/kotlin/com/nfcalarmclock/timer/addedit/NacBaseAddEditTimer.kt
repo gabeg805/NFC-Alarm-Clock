@@ -20,7 +20,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.button.MaterialButton
 import com.nfcalarmclock.R
@@ -28,12 +27,12 @@ import com.nfcalarmclock.alarm.options.dismissoptions.NacDismissOptionsDialog
 import com.nfcalarmclock.alarm.options.name.NacNameDialog
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.NacCalendar
+import com.nfcalarmclock.system.media.NacMedia
 import com.nfcalarmclock.system.toBundle
 import com.nfcalarmclock.timer.NacTimerViewModel
 import com.nfcalarmclock.timer.active.NacActiveTimerService
 import com.nfcalarmclock.timer.db.NacTimer
 import com.nfcalarmclock.timer.options.NacTimerOptionsDialog
-import com.nfcalarmclock.system.media.NacMedia
 import com.nfcalarmclock.view.calcContrastColor
 import com.nfcalarmclock.view.performHapticFeedback
 import com.nfcalarmclock.view.setupBackgroundColor
@@ -41,17 +40,13 @@ import com.nfcalarmclock.view.setupRippleColor
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
+/**
+ * Base class to add or edit a timer.
+ */
 @AndroidEntryPoint
 abstract class NacBaseAddEditTimer
 	: Fragment()
 {
-
-	/**
-	 * Navigation controller.
-	 */
-	protected val navController by lazy {
-		(childFragmentManager.findFragmentById(R.id.options_content) as NavHostFragment).navController
-	}
 
 	/**
 	 * Timer view model.
@@ -412,13 +407,8 @@ abstract class NacBaseAddEditTimer
 		// Setup more button click
 		moreButton.setOnClickListener {
 			println("SCROLLING DOWN")
-			requireView().findViewById<ScrollView>(R.id.timer_scrollview).fullScroll(ScrollView.FOCUS_DOWN)
-			//NacTimerCardOptionsDialog.navigate(navController, timer)
-			//	?.observe(viewLifecycleOwner) { t ->
-			//		println("EHHLOOOOOOOOOOOOOOOOO")
-			//		t.print()
-			//		timer = t
-			//	}
+			val scrollView: ScrollView = view.findViewById(R.id.timer_scrollview)
+			scrollView.fullScroll(ScrollView.FOCUS_DOWN)
 		}
 	}
 
@@ -597,6 +587,7 @@ abstract class NacBaseAddEditTimer
 			NacDismissOptionsDialog.create(
 				timer,
 				onSaveAlarmListener = {
+					println("Save the timer! TODO: Update the logic here")
 					// TODO: Add this logic
 					//updateAlarm(it)
 				})

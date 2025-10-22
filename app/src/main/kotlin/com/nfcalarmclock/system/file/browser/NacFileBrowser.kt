@@ -393,6 +393,7 @@ class NacFileBrowser(
 		lifecycleOwner.lifecycleScope.launch {
 
 			 viewModel.currentMetadata.collect { metadata ->
+				 println("Current metadata collect : $metadata")
 
 				  // Check if metadata is null
 				  if (metadata == null)
@@ -442,6 +443,7 @@ class NacFileBrowser(
 		viewModel.clear()
 
 		// Show the listing at the new directory
+		println("Showing : $dir")
 		viewModel.show(dir) {
 
 			// Call the unit

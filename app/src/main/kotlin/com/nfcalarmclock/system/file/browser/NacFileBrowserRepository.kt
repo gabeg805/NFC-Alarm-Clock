@@ -115,6 +115,7 @@ class NacFileBrowserRepository
 	 */
 	suspend fun clear()
 	{
+		println("Repo cloear")
 		// Clear the file listing
 		_currentMetadata.emit(null)
 	}
@@ -124,6 +125,7 @@ class NacFileBrowserRepository
 	 */
 	suspend fun show(context: Context, path: String)
 	{
+		println("Repo show : $path | Is scanning? $isScanning")
 		// Wait until scanning is complete
 		while (isScanning)
 		{
@@ -137,6 +139,7 @@ class NacFileBrowserRepository
 			{
 			}
 		}
+		println("Finally through is scanning check")
 
 		// Not at the root level so add the previous directory to the listing.
 		// Note: An empty path indicates the root level
