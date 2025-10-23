@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.mediapicker.NacMediaPickerFragment
@@ -380,6 +381,7 @@ class NacMusicPickerFragment
 	{
 		println("setupFileBrowser()")
 		// Create and set the file browser
+		val circularProgressIndicator: CircularProgressIndicator = root.findViewById(R.id.loading_circular_progress)
 		val container: LinearLayout = root.findViewById(R.id.container)
 		fileBrowser = NacFileBrowser(this, container)
 		println("After creating the file browser")
@@ -395,6 +397,9 @@ class NacMusicPickerFragment
 		fileBrowser!!.onBrowserClickedListener = this
 		println("Fragment show : $dir")
 		fileBrowser!!.show(dir) {
+
+			// Hide the loading circle
+			circularProgressIndicator.visibility = View.GONE
 
 			// Select the item once it is done being shown
 			println("Fragment select : $name")
@@ -415,7 +420,8 @@ class NacMusicPickerFragment
 		}
 
 		// Get the views
-		val shared = NacSharedPreferences(requireContext())
+		val context = requireContext()
+		val shared = NacSharedPreferences(context)
 		val fab: FloatingActionButton = root.findViewById(R.id.fab_launch_file_browser)
 
 		// Setup the floating action button
@@ -433,7 +439,7 @@ class NacMusicPickerFragment
 			catch (_: ActivityNotFoundException)
 			{
 				// Show error toast
-				quickToast(requireContext(), R.string.error_message_unable_to_launch_media_picker)
+				quickToast(context, R.string.error_message_unable_to_launch_media_picker)
 			}
 
 		}

@@ -1,7 +1,6 @@
 package com.nfcalarmclock.alarm.activealarm
 
 import android.Manifest
-import android.app.ForegroundServiceStartNotAllowedException
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -28,7 +27,6 @@ import com.nfcalarmclock.system.enableActivityAlias
 import com.nfcalarmclock.system.getAlarm
 import com.nfcalarmclock.system.scheduler.NacScheduler
 import com.nfcalarmclock.view.quickToast
-import com.nfcalarmclock.view.toast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch

@@ -241,7 +241,6 @@ fun NacAlarm.toDayString(
 	{
 		// Today or tomorrow
 		val oneTime = this.toOneTimeString(context)
-		println("No days : $oneTime")
 
 		// Alarm will not repeat
 		if (!this.shouldRepeat)
@@ -252,7 +251,6 @@ fun NacAlarm.toDayString(
 
 		// Repeat frequency string
 		val repeatFrequency = this.toRepeatFrequencyString(context)
-		println("No days repeat : $repeatFrequency")
 
 		// Check the repeat frequency units
 		return when (this.repeatFrequencyUnits)
@@ -330,13 +328,11 @@ fun NacAlarm.toDayString(
 			}
 		}
 
-		println("Days : $days | Repeat? ${this.shouldRepeat} | ${this.repeatFrequencyUnits} | ${this.repeatFrequency}")
 		// Alarm should be repeat at a frequency that is NOT just every 1 week (which is the norm)
 		if (this.shouldRepeat && !((this.repeatFrequencyUnits == 4) && (this.repeatFrequency == 1)))
 		{
 			// Get the repeat frequency string
 			val repeatFrequency = this.toRepeatFrequencyString(context)
-			println("Jank : $repeatFrequency")
 
 			// Combine the date and repeat frequency string
 			return "$days \u2027 $repeatFrequency"
@@ -474,7 +470,6 @@ object NacCalendar
 		// check runs first, then the calendar could be ahead by 1 week
 		if ((alarm.repeatFrequencyUnits == 4) && (alarm.repeatFrequency != 1) && !alarm.repeatFrequencyDaysToRunBeforeStarting.contains(day))
 		{
-			println("Hello alarmDayToCalendar() : ${alarmCalendar.before(now)} | ${alarm.repeatFrequencyUnits} | ${alarm.repeatFrequency} | $day")
 			// Alarm will occur in X weeks
 			alarmCalendar.add(alarm.repeatFrequencyUnits.toCalendarField(), alarm.repeatFrequency)
 		}

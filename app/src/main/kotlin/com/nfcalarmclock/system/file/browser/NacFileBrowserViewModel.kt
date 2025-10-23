@@ -5,6 +5,7 @@ import android.content.Context
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.nfcalarmclock.system.file.NacFile
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.launch
 
 /**
@@ -22,7 +23,7 @@ class NacFileBrowserViewModel(app: Application)
 	/**
 	 * Current metadata added to the repository.
 	 */
-	val currentMetadata = repository.currentMetadata
+	val currentMetadata: SharedFlow<NacFile.Metadata?> = repository.currentMetadata
 
 	/**
 	 * Constructor.

@@ -665,14 +665,14 @@ class NacActiveTimerFragment
 		lifecycleScope.launch {
 
 			println("SETTING up timer NFC Tags")
-			// Save a variable off that checks if the NFC tags list has been initialized yet
-			val isFirstTimeInitializingNfcTags = (nfcTags == null)
 
 			// Get the list of NFC tags that can be used to dismiss the timer, and
 			// order them based on how the user wants them ordered
-			nfcTags = timer.getNfcTagsForDismissing(nfcTagViewModel,
-				isFirstTimeInitializingNfcTags = isFirstTimeInitializingNfcTags)
-			println("NFC Tags : $nfcTags")
+			if (nfcTags == null)
+			{
+				nfcTags = timer.getNfcTagsForDismissing(nfcTagViewModel)
+				println("NFC Tags : $nfcTags")
+			}
 
 			// Get the names of the NFC tags that can dismiss the timer
 			val nfcTagNames = timer.getNfcTagNamesForDismissing(nfcTags!!)

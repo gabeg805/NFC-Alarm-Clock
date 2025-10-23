@@ -243,14 +243,13 @@ class NacActiveAlarmActivity
 			// Setup NFC tag
 			lifecycleScope.launch {
 
-				// Save a variable off that checks if the NFC tags list has been initialized yet
-				val isFirstTimeInitializingNfcTags = (nfcTags == null)
-
 				// Get the list of NFC tags that can be used to dismiss the alarm, and
 				// order them based on how the user wants them ordered
-				nfcTags = alarm!!.getNfcTagsForDismissing(nfcTagViewModel,
-					isFirstTimeInitializingNfcTags = isFirstTimeInitializingNfcTags)
-				println("NFC Tags : $nfcTags")
+				if (nfcTags == null)
+				{
+					nfcTags = alarm!!.getNfcTagsForDismissing(nfcTagViewModel)
+					println("NFC Tags : $nfcTags")
+				}
 
 				// Get the names of the NFC tags that can dismiss the alarm
 				val nfcTagNames = alarm!!.getNfcTagNamesForDismissing(nfcTags!!)

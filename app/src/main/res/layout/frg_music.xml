@@ -7,16 +7,13 @@
 
 	<!-- Loading circle -->
 	<com.google.android.material.progressindicator.CircularProgressIndicator
-		android:id="@+id/loading_circle"
+		style="@style/Timer.CircularProgressIndicator"
+		android:id="@+id/loading_circular_progress"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:indeterminate="true"
-		android:progress="0"
-		app:indicatorDirectionCircular="clockwise"
 		app:indicatorColor="@color/white"
 		app:indicatorSize="80dp"
-		app:trackColor="@color/gray"
-		app:trackThickness="6dp"
 		app:layout_constraintTop_toTopOf="parent"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintStart_toStartOf="parent"

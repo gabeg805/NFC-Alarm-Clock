@@ -29,8 +29,7 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.nfcalarmclock.R
-import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.alarm.db.NacNextAlarm
+import com.nfcalarmclock.alarm.options.nfc.NacNfcTagDismissOrder
 import com.nfcalarmclock.card.NacBaseCardAdapter
 import com.nfcalarmclock.card.NacBaseCardTouchHelperCallback
 import com.nfcalarmclock.card.NacCardLayoutManager
@@ -38,7 +37,6 @@ import com.nfcalarmclock.nfc.NFC_WAS_SCANNED_BUNDLE_NAME
 import com.nfcalarmclock.nfc.NacNfc
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.NacBundle.BUNDLE_INTENT_ACTION
-import com.nfcalarmclock.system.NacCalendar
 import com.nfcalarmclock.system.NacNfcIntent
 import com.nfcalarmclock.system.getTimer
 import com.nfcalarmclock.system.toBundle
@@ -48,9 +46,9 @@ import com.nfcalarmclock.timer.card.NacTimerCardAdapter
 import com.nfcalarmclock.timer.card.NacTimerCardHolder
 import com.nfcalarmclock.timer.card.NacTimerCardTouchHelper
 import com.nfcalarmclock.timer.db.NacTimer
-import com.nfcalarmclock.view.quickToast
 import com.nfcalarmclock.view.animateProgress
 import com.nfcalarmclock.view.performHapticFeedback
+import com.nfcalarmclock.view.quickToast
 import com.nfcalarmclock.view.toSpannedString
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -222,6 +220,8 @@ class NacShowTimersFragment
 			val binder = serviceBinder as NacActiveTimerService.NacLocalBinder
 			service = binder.getService()
 			println("Show timers SERVICE IS NOW CONNECTED")
+			// TODO: Init timer card is being called twice
+			// TODO: Null pointer exception when screen turns off and then on again and onTick() is called again? Line 150 in Active timer from show timers.... weird
 
 			// Initialize each timer being used by the service
 			service!!.allTimersReadOnly.forEach { timer ->
@@ -319,7 +319,7 @@ class NacShowTimersFragment
 		// Remove the countdown timer change listener
 		service?.removeOnCountdownTimerChangedListener(timer.id, onCountdownTimerChangedListener)
 
-		// Delete the alarm, save the stats, and cancel the alarm
+		// Delete the timer
 		timerViewModel.delete(timer)
 
 		// Show the snackbar
@@ -407,7 +407,15 @@ class NacShowTimersFragment
 			// Update the views
 			card.updateHourMinuteSecondsTextViews(secUntilFinished)
 			card.setResumeVisibility()
-			card.progressIndicator.progress = progress
+
+			if (isRunningStartingAnimation[card.timer!!.id] == true)
+			{
+				println("HELLOOOOOO Still running the starting animation for : ${card.timer!!.id}")
+			}
+			else
+			{
+				card.progressIndicator.progress = progress
+			}
 		}
 		// Normal, not doing anything
 		else
@@ -456,12 +464,12 @@ class NacShowTimersFragment
 		// Super
 		super.onResume()
 
-		// Get the intent action and alarm from the fragment arguments bundle. These
+		// Get the intent action and timer from the fragment arguments bundle. These
 		// could be null, but if an action occurred, they will not be
 		val action = arguments?.getString(BUNDLE_INTENT_ACTION)
 		val timer = arguments?.getTimer()
 
-		// Add alarm that was created from the SET_ALARM intent
+		// Add timer that was created from the SET_TIMER intent
 		if ((action == AlarmClock.ACTION_SET_TIMER) && (timer != null))
 		{
 			println("Show timers addTimerFromSetTimerIntent()")
@@ -521,13 +529,13 @@ class NacShowTimersFragment
 				// Haptic feedback
 				view.performHapticFeedback()
 
-				// Reset the view on the alarm that was swiped
+				// Reset the view on the timer that was swiped
 				timerCardAdapter.notifyItemChanged(index)
 
-				// Check if the max number of alarms was created
+				// Check if the max number of timers was created
 				if (hasCreatedMaxTimers)
 				{
-					// Show toast that the max number of alarms were created
+					// Show toast that the max number of timers were created
 					quickToast(requireContext(), R.string.error_message_max_timers)
 					return
 				}
@@ -549,7 +557,7 @@ class NacShowTimersFragment
 
 		// Setup
 		setupLiveDataObservers()
-		setupAlarmCardAdapter()
+		setupTimerCardAdapter()
 		setupRecyclerView()
 		setupFloatingActionButton()
 	}
@@ -565,10 +573,160 @@ class NacShowTimersFragment
 	}
 
 	/**
-	 * Setup the alarm card adapter.
+	 * Setup the floating action button.
+	 */
+	private fun setupFloatingActionButton()
+	{
+		// Set the click listener
+		floatingActionButton.setOnClickListener { view: View ->
+
+			// Haptic feedback so that the user knows the action was received
+			view.performHapticFeedback()
+
+			// Max number of timers reached
+			if (hasCreatedMaxTimers)
+			{
+				// Show a toast that the max number of timers was created
+				quickToast(requireContext(), R.string.error_message_max_timers)
+				return@setOnClickListener
+			}
+
+			// Navigate to add timer fragment
+			findNavController().navigate(R.id.nacAddTimerFragment)
+		}
+	}
+
+	/**
+	 * Setup LiveData observers.
+	 */
+	private fun setupLiveDataObservers()
+	{
+		// Observer is called when list of all timers changes. Including when the app
+		// starts and the list is initially empty
+		timerViewModel.allTimers.observe(viewLifecycleOwner) { timers ->
+
+			// Sort timers by duration. No need to move around timers if they become
+			// active. It just gets confusing as a user if they move around
+			timerCardAdapterLiveData.value = timers.sortedBy { it.duration }
+
+			// Navigate to the add timer fragment when there are no timers
+			lifecycleScope.launch {
+				println("Timers size : ${timers.size} | Count : ${timerViewModel.count()}")
+
+				if (timerViewModel.count() == 0)
+				{
+					println("GOING TO ADD TIMERS")
+					findNavController().navigate(R.id.nacAddTimerFragment)
+				}
+
+			}
+
+		}
+
+		// Observe any changes to the timers in the adapter
+		timerCardAdapterLiveData.observe(viewLifecycleOwner) { timers ->
+
+			// Update the timer adapter
+			timerCardAdapter.submitList(timers)
+
+		}
+
+		// TODO: Do I want an alarm intent watcher and timer intent watcher?
+		// NFC intent
+		nfcIntentLiveData.observe(viewLifecycleOwner) { intent ->
+
+			println("Show timers new NFC intent! ${intent.action}")
+			lifecycleScope.launch {
+
+				// TODO: If this logic is not here, what is the timing between seeing that
+				//  NFC was scanned, posting the intent value, checking the alarm view model
+				//  for an active jank, and then starting the alarm activity/service?
+				// Get the active timer
+				val allActiveTimers = timerViewModel.getAllActiveTimers()
+				println("Show timers active timer check : $allActiveTimers")
+
+				println("Navigate to active timer fragment yo")
+				allActiveTimers.forEach { t ->
+
+					if (!t.shouldUseNfc)
+					{
+						return@forEach
+					}
+
+					if (t.nfcTagDismissOrder == NacNfcTagDismissOrder.ANY)
+					{
+						println("Timer can dismiss using ANY NFC tags")
+						NacActiveTimerService.dismissTimerServiceWithNfc(requireContext(), t)
+						return@launch
+					}
+
+					val intentNfcId = NacNfc.parseId(intent)
+					val nfcTagIdList = t.nfcTagIdList
+
+					if (nfcTagIdList.contains(intentNfcId))
+					{
+						println("Timer : ${t.id} contains NFC tag : $intentNfcId")
+						if (nfcTagIdList.size == 1)
+						{
+							println("ONLY 1 NFC required for this timer! Dismiss this jank")
+							NacActiveTimerService.dismissTimerServiceWithNfc(requireContext(), t)
+						}
+						else
+						{
+							println("Timer NEEDS more than 1 nFC jakn : $nfcTagIdList")
+							val bundle = t.toBundle()
+								.apply {
+									putBoolean(NFC_WAS_SCANNED_BUNDLE_NAME, true)
+								}
+
+							findNavController().navigate(R.id.nacActiveTimerFragment, bundle)
+						}
+
+						return@launch
+					}
+
+				}
+
+			}
+
+		}
+	}
+
+	/**
+	 * Setup the recycler view.
+	 */
+	private fun setupRecyclerView()
+	{
+		// Get the context
+		val context = requireContext()
+
+		// Create the divider drawable
+		val padding = resources.getDimensionPixelSize(R.dimen.medium)
+		val drawable = ContextCompat.getDrawable(context, R.drawable.card_divider)
+		val divider = InsetDrawable(drawable, padding, 0, padding, 0)
+		//val divider = InsetDrawable(drawable, 0, 0, 0, 0)
+
+		// Create the item decoration
+		val decoration = DividerItemDecoration(context, LinearLayoutManager.VERTICAL)
+
+		// Set the divider on the decoration
+		decoration.setDrawable(divider)
+
+		// Add the decoration to the recycler view. This will divide every item by this
+		// decoration
+		recyclerView.addItemDecoration(decoration)
+
+		// Setup everything else
+		recyclerView.adapter = timerCardAdapter
+		recyclerView.layoutManager = NacCardLayoutManager(context)
+		recyclerView.setHasFixedSize(true)
+	}
+
+	/**
+	 * Setup the timer card adapter.
 	 */
 	@RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
-	private fun setupAlarmCardAdapter()
+	private fun setupTimerCardAdapter()
 	{
 		// Bound view holder
 		timerCardAdapter.onViewHolderBoundListener = NacBaseCardAdapter.OnViewHolderBoundListener { card, index ->
@@ -668,158 +826,6 @@ class NacShowTimersFragment
 
 		// Attach the recycler view to the touch helper
 		timerCardTouchHelper.attachToRecyclerView(recyclerView)
-	}
-
-	/**
-	 * Setup the floating action button.
-	 */
-	private fun setupFloatingActionButton()
-	{
-		// Set the click listener
-		floatingActionButton.setOnClickListener { view: View ->
-
-			// Haptic feedback so that the user knows the action was received
-			view.performHapticFeedback()
-
-			// Max number of alarms reached
-			if (hasCreatedMaxTimers)
-			{
-				// Show a toast that the max number of alarms was created
-				quickToast(requireContext(), R.string.error_message_max_timers)
-				return@setOnClickListener
-			}
-
-			// Navigate to add timer fragment
-			findNavController().navigate(R.id.nacAddTimerFragment)
-		}
-	}
-
-	/**
-	 * Setup LiveData observers.
-	 */
-	private fun setupLiveDataObservers()
-	{
-		// Observer is called when list of all alarms changes. Including when the app
-		// starts and the list is initially empty
-		timerViewModel.allTimers.observe(viewLifecycleOwner) { timers ->
-
-			// Sort timers by duration. No need to move around timers if they become
-			// active. It just gets confusing as a user if they move around
-			timerCardAdapterLiveData.value = timers.sortedBy { it.duration }
-
-		}
-
-		// Observe any changes to the alarms in the adapter
-		timerCardAdapterLiveData.observe(viewLifecycleOwner) { timers ->
-
-			// Update the alarm adapter
-			timerCardAdapter.submitList(timers)
-
-		}
-
-		// TODO: Do I want an alarm intent watcher and timer intent watcher?
-		// NFC intent
-		nfcIntentLiveData.observe(viewLifecycleOwner) { intent ->
-
-			println("Show timers new NFC intent! ${intent.action}")
-			lifecycleScope.launch {
-
-				// TODO: If this logic is not here, what is the timing between seeing that
-				//  NFC was scanned, posting the intent value, checking the alarm view model
-				//  for an active jank, and then starting the alarm activity/service?
-				// Get the active timer
-				val allActiveTimers = timerViewModel.getAllActiveTimers()
-				println("Show timers active timer check : $allActiveTimers")
-
-				println("Navigate to active timer fragment yo")
-				allActiveTimers.forEach { t ->
-
-					val intentNfcId = NacNfc.parseId(intent)
-					val nfcTagIdList = t.nfcTagIdList
-
-					if (nfcTagIdList.contains(intentNfcId))
-					{
-						println("Timer : ${t.id} contains NFC tag : $intentNfcId")
-						if (nfcTagIdList.size == 1)
-						{
-							println("ONLY 1 NFC required for this timer! Dismiss this jank")
-							NacActiveTimerService.dismissTimerServiceWithNfc(requireContext(), t)
-						}
-						else
-						{
-							println("Timer NEEDS more than 1 nFC jakn : $nfcTagIdList")
-							val bundle = t.toBundle()
-								.apply {
-									putBoolean(NFC_WAS_SCANNED_BUNDLE_NAME, true)
-								}
-
-							findNavController().navigate(R.id.nacActiveTimerFragment, bundle)
-						}
-
-						return@launch
-					}
-
-				}
-
-			}
-
-		}
-	}
-
-	/**
-	 * Setup the recycler view.
-	 */
-	private fun setupRecyclerView()
-	{
-		// Get the context
-		val context = requireContext()
-
-		// Create the divider drawable
-		val padding = resources.getDimensionPixelSize(R.dimen.medium)
-		val drawable = ContextCompat.getDrawable(context, R.drawable.card_divider)
-		val divider = InsetDrawable(drawable, padding, 0, padding, 0)
-		//val divider = InsetDrawable(drawable, 0, 0, 0, 0)
-
-		// Create the item decoration
-		val decoration = DividerItemDecoration(context, LinearLayoutManager.VERTICAL)
-
-		// Set the divider on the decoration
-		decoration.setDrawable(divider)
-
-		// Add the decoration to the recycler view. This will divide every item by this
-		// decoration
-		recyclerView.addItemDecoration(decoration)
-
-		// Setup everything else
-		recyclerView.adapter = timerCardAdapter
-		recyclerView.layoutManager = NacCardLayoutManager(context)
-		recyclerView.setHasFixedSize(true)
-	}
-
-	/**
-	 * Show a snackbar for an alarm.
-	 */
-	private fun showAlarmSnackbar(alarm: NacAlarm? = null, nextAlarm: NacNextAlarm? = null)
-	{
-		// Get the context
-		val context = requireContext()
-
-		// Get the message and action text
-		val action = getString(R.string.action_alarm_dismiss)
-		val message = if (alarm != null)
-		{
-			// When the given alarm will run
-			NacCalendar.Message.getWillRun(context, alarm, sharedPreferences.nextAlarmFormat)
-		}
-		else
-		{
-			// When the next alarm will run
-			val next = nextAlarm ?: NacCalendar.getNextAlarm(timerCardAdapter.currentList)
-			NacCalendar.Message.getNext(context, next?.calendar, sharedPreferences.nextAlarmFormat)
-		}
-
-		// Show the snackbar
-		showSnackbar(message, action)
 	}
 
 	/**

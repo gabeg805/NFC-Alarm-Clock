@@ -20,6 +20,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.button.MaterialButton
 import com.nfcalarmclock.R
@@ -47,6 +48,13 @@ import kotlinx.coroutines.launch
 abstract class NacBaseAddEditTimer
 	: Fragment()
 {
+
+	/**
+	 * Navigation controller.
+	 */
+	private val navController by lazy {
+		(childFragmentManager.findFragmentById(R.id.options_content) as NavHostFragment).navController
+	}
 
 	/**
 	 * Timer view model.
@@ -138,9 +146,6 @@ abstract class NacBaseAddEditTimer
 	 */
 	private fun navigateTo(destinationId: Int)
 	{
-		// Get the navigation controller
-		val navController = findNavController()
-
 		// Navigate to the destination
 		NacTimerOptionsDialog.navigateTo(navController, destinationId, timer)
 			?.observe(viewLifecycleOwner) { t ->
@@ -406,7 +411,6 @@ abstract class NacBaseAddEditTimer
 
 		// Setup more button click
 		moreButton.setOnClickListener {
-			println("SCROLLING DOWN")
 			val scrollView: ScrollView = view.findViewById(R.id.timer_scrollview)
 			scrollView.fullScroll(ScrollView.FOCUS_DOWN)
 		}

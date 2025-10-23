@@ -121,8 +121,7 @@ fun NacAlarm.canDismissWithScannedNfc(nfcId: String, nfcTags: MutableList<NacNfc
  * @return The list of NFC tags that can be used to dismiss this alarm.
  */
 suspend fun NacAlarm.getNfcTagsForDismissing(
-	nfcTagViewModel: NacNfcTagViewModel,
-	isFirstTimeInitializingNfcTags: Boolean
+	nfcTagViewModel: NacNfcTagViewModel
 ): MutableList<NacNfcTag>
 {
 	// Get the NFC tags
@@ -131,11 +130,8 @@ suspend fun NacAlarm.getNfcTagsForDismissing(
 		?.toMutableList()
 		?: mutableListOf()
 
-	// Random. Randomize the list and then show the first NFC tag
+	// Random dismiss order so shuffle the list
 	if (this.nfcTagDismissOrder == NacNfcTagDismissOrder.RANDOM)
-
-	// Shuffle the list if this is the first time initializing the NFC tags list
-	if (isFirstTimeInitializingNfcTags)
 	{
 		nfcTags.shuffle()
 	}

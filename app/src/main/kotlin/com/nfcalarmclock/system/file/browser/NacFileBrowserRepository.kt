@@ -8,10 +8,10 @@ import com.nfcalarmclock.system.media.getMediaDuration
 import com.nfcalarmclock.system.media.getMediaArtist
 import com.nfcalarmclock.system.media.getMediaTitle
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.withContext
-import java.util.concurrent.TimeUnit
 
 /**
  * File browser repository.
@@ -25,12 +25,15 @@ class NacFileBrowserRepository
 	val fileTree: NacFileTree = NacFileTree("")
 
 	/**
-	 * Current metadata.
+	 * Current metadata that is private so that it cannot be modified outside of this
+	 * class.
 	 */
 	private val _currentMetadata: MutableSharedFlow<NacFile.Metadata?> =
 		MutableSharedFlow(replay = 1)
 
-	// Public metadata that is not modifiable
+	/**
+	 * Current metadata (public).
+	 */
 	val currentMetadata: SharedFlow<NacFile.Metadata?> = _currentMetadata
 
 	/**
@@ -96,21 +99,6 @@ class NacFileBrowserRepository
 	}
 
 	/**
-	 * Scan the file tree.
-	 */
-	fun scan(context: Context)
-	{
-		// Set scanning flag
-		isScanning = true
-
-		// Scan the file tree
-		fileTree.scan(context)
-
-		// Disable scanning flag
-		isScanning = false
-	}
-
-	/**
 	 * Clear the file listing.
 	 */
 	suspend fun clear()
@@ -121,53 +109,77 @@ class NacFileBrowserRepository
 	}
 
 	/**
+	 * Scan the file tree.
+	 */
+	//fun scan(context: Context)
+	suspend fun scan(context: Context)
+	{
+		// TODO: Test also clicking on a big directory that takes a while to load/draw?
+		withContext(Dispatchers.IO)
+		{
+			// Set scanning flag
+			isScanning = true
+
+			// Scan the file tree
+			//Thread.sleep(2000)
+			Thread.sleep(2000)
+			fileTree.scan(context)
+
+			// Disable scanning flag
+			isScanning = false
+		}
+	}
+
+	/**
 	 * Show the contents of the file listing and tree.
 	 */
 	suspend fun show(context: Context, path: String)
 	{
 		println("Repo show : $path | Is scanning? $isScanning")
-		// Wait until scanning is complete
-		while (isScanning)
-		{
-			try
+		withContext(Dispatchers.IO) {
+
+			// Wait until scanning is complete
+			while (isScanning)
 			{
-				withContext(Dispatchers.IO) {
-					TimeUnit.MILLISECONDS.sleep(50)
+				try
+				{
+					delay(100)
+				}
+				catch (_: InterruptedException)
+				{
 				}
 			}
-			catch (_: InterruptedException)
+			println("Finally through is scanning check")
+
+			// Not at the root level so add the previous directory to the listing.
+			// Note: An empty path indicates the root level
+			if (path.isNotEmpty())
 			{
-			}
-		}
-		println("Finally through is scanning check")
+				val metadata = NacFile.Metadata(path, NacFile.PREVIOUS_DIRECTORY)
 
-		// Not at the root level so add the previous directory to the listing.
-		// Note: An empty path indicates the root level
-		if (path.isNotEmpty())
-		{
-			val metadata = NacFile.Metadata(path, NacFile.PREVIOUS_DIRECTORY)
-
-			addDirectory(context, metadata)
-		}
-
-		// Iterate over each file at the given path
-		for (metadata in fileTree.lsSort(path))
-		{
-
-			// Add a directory
-			if (metadata.isDirectory)
-			{
 				addDirectory(context, metadata)
 			}
-			// Add a file
-			else if (metadata.isFile)
-			{
-				addFile(context, metadata)
-			}
-		}
 
-		// Change directory to the new path
-		fileTree.cd(path)
+			// Iterate over each file at the given path
+			for (metadata in fileTree.lsSort(path))
+			{
+
+				// Add a directory
+				if (metadata.isDirectory)
+				{
+					addDirectory(context, metadata)
+				}
+				// Add a file
+				else if (metadata.isFile)
+				{
+					addFile(context, metadata)
+				}
+			}
+
+			// Change directory to the new path
+			fileTree.cd(path)
+
+		}
 	}
 
 }

@@ -17,6 +17,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
+import androidx.navigation.NavDeepLinkBuilder
 import androidx.navigation.fragment.NavHostFragment
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -488,18 +489,21 @@ class NacMainActivity
 				{
 					lifecycleScope.launch {
 
-						// No timers. Have user add a timer
-						if (timerViewModel.count() == 0)
-						{
-							println("Showing add a single timer")
-							navController.navigate(R.id.nacAddTimerFragment)
-						}
-						// 1+ timers.
-						else
-						{
-							println("Showing list of timers")
-							navController.navigate(R.id.nacShowTimersFragment)
-						}
+						println("Showing list of timers")
+						navController.navigate(R.id.nacShowTimersFragment)
+
+						//// No timers. Have user add a timer
+						//if (timerViewModel.count() == 0)
+						//{
+						//	println("Showing add a single timer")
+						//	navController.navigate(R.id.nacAddTimerFragment)
+						//}
+						//// 1+ timers.
+						//else
+						//{
+						//	println("Showing list of timers")
+						//	navController.navigate(R.id.nacShowTimersFragment)
+						//}
 					}
 					true
 				}

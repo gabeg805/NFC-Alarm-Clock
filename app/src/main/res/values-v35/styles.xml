@@ -3,6 +3,7 @@
 
 	<style name="AppTheme" parent="BaseAppTheme">
 		<item name="android:windowOptOutEdgeToEdgeEnforcement">true</item>
+		<item name="android:navigationBarColor">@color/black</item>
 	</style>
 
 </resources>
