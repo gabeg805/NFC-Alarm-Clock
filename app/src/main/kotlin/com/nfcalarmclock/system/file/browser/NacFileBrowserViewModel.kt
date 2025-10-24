@@ -32,9 +32,7 @@ class NacFileBrowserViewModel(app: Application)
 	{
 		// Scan the repository
 		viewModelScope.launch {
-			println("SCANNING")
 			repository.scan(app)
-			println("DONE SCANNING")
 		}
 	}
 
@@ -65,7 +63,6 @@ class NacFileBrowserViewModel(app: Application)
 	fun clear()
 	{
 		viewModelScope.launch {
-			println("View model cloear")
 			repository.clear()
 		}
 	}
@@ -80,7 +77,6 @@ class NacFileBrowserViewModel(app: Application)
 		viewModelScope.launch {
 
 			// Show the listing
-			println("View model show : $path")
 			repository.show(context, path)
 
 			// Call the unit

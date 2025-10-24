@@ -1,18 +1,14 @@
 package com.nfcalarmclock.alarm.options.dismissoptions
 
-import android.app.ForegroundServiceStartNotAllowedException
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.IBinder
 import androidx.annotation.OptIn
 import androidx.media3.common.util.UnstableApi
-import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.system.NacLifecycleService
 import com.nfcalarmclock.system.addAlarm
 import com.nfcalarmclock.system.getAlarm
-import com.nfcalarmclock.view.toast
 
 /**
  * Dismiss early notification service.

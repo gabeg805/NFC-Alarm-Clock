@@ -379,12 +379,10 @@ class NacMusicPickerFragment
 	 */
 	private fun setupFileBrowser(root: View)
 	{
-		println("setupFileBrowser()")
 		// Create and set the file browser
 		val circularProgressIndicator: CircularProgressIndicator = root.findViewById(R.id.loading_circular_progress)
 		val container: LinearLayout = root.findViewById(R.id.container)
 		fileBrowser = NacFileBrowser(this, container)
-		println("After creating the file browser")
 
 		// Directory to show in the textview and the ame of the file to select
 		// in the file browser
@@ -395,14 +393,12 @@ class NacMusicPickerFragment
 
 		// Setup the file browser
 		fileBrowser!!.onBrowserClickedListener = this
-		println("Fragment show : $dir")
 		fileBrowser!!.show(dir) {
 
 			// Hide the loading circle
 			circularProgressIndicator.visibility = View.GONE
 
 			// Select the item once it is done being shown
-			println("Fragment select : $name")
 			fileBrowser!!.select(requireContext(), name)
 
 		}

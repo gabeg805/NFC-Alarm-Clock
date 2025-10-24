@@ -220,7 +220,8 @@ class NacActiveAlarmActivity
 		super.onResume()
 
 		// NFC tag was scanned so check if it is able to dismiss the alarm
-		if (NacNfc.wasScanned(intent) && NacNfc.canDismissWithScannedNfc(this, alarm, intent, nfcTags))
+		//if (NacNfc.wasScanned(intent) && NacNfc.canDismissWithScannedNfc(this, alarm, intent, nfcTags))
+		if (NacNfc.wasScanned(intent) && NacNfc.canDismissWithScannedNfc(this, alarm, NacNfc.parseId(intent), nfcTags))
 		{
 			// Dismiss the alarm service with NFC
 			NacActiveAlarmService.dismissAlarmServiceWithNfc(this, alarm!!)

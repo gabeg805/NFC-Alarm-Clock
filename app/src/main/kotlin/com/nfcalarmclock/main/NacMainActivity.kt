@@ -17,7 +17,6 @@ import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
-import androidx.navigation.NavDeepLinkBuilder
 import androidx.navigation.fragment.NavHostFragment
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -26,16 +25,22 @@ import com.nfcalarmclock.BuildConfig
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.NacAlarmViewModel
 import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmActivity
+import com.nfcalarmclock.alarm.options.nfc.NacNfcTagDismissOrder
 import com.nfcalarmclock.nfc.NacNfc
+import com.nfcalarmclock.nfc.SCANNED_NFC_TAG_ID_BUNDLE_NAME
 import com.nfcalarmclock.ratemyapp.NacRateMyApp
 import com.nfcalarmclock.settings.NacMainSettingActivity
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.NacBundle.BUNDLE_INTENT_ACTION
-import com.nfcalarmclock.system.NacNfcIntent
 import com.nfcalarmclock.system.disableActivityAlias
 import com.nfcalarmclock.system.getDeviceProtectedStorageContext
 import com.nfcalarmclock.system.getSetAlarm
 import com.nfcalarmclock.system.getSetTimer
+import com.nfcalarmclock.system.media.buildLocalMediaPath
+import com.nfcalarmclock.system.media.copyMediaToDeviceEncryptedStorage
+import com.nfcalarmclock.system.media.getMediaArtist
+import com.nfcalarmclock.system.media.getMediaTitle
+import com.nfcalarmclock.system.media.getMediaType
 import com.nfcalarmclock.system.permission.NacPermissionRequestManager
 import com.nfcalarmclock.system.registerMyReceiver
 import com.nfcalarmclock.system.scheduler.NacScheduler
@@ -43,11 +48,7 @@ import com.nfcalarmclock.system.toBundle
 import com.nfcalarmclock.system.triggers.shutdown.NacShutdownBroadcastReceiver
 import com.nfcalarmclock.system.unregisterMyReceiver
 import com.nfcalarmclock.timer.NacTimerViewModel
-import com.nfcalarmclock.system.media.buildLocalMediaPath
-import com.nfcalarmclock.system.media.copyMediaToDeviceEncryptedStorage
-import com.nfcalarmclock.system.media.getMediaArtist
-import com.nfcalarmclock.system.media.getMediaTitle
-import com.nfcalarmclock.system.media.getMediaType
+import com.nfcalarmclock.timer.active.NacActiveTimerService
 import com.nfcalarmclock.view.setupRippleColor
 import com.nfcalarmclock.view.setupThemeColor
 import com.nfcalarmclock.whatsnew.NacWhatsNewDialog
@@ -371,31 +372,54 @@ class NacMainActivity
 		super.onResume()
 		println("Main activity onResume()")
 
-		// An NFC tag was scanned to open up the main activity
-		if (NacNfc.wasScanned(intent))
-		{
-			println("Updating NFC intent")
-			NacNfcIntent.update(intent)
-		}
-		else
-		{
-			lifecycleScope.launch {
+		lifecycleScope.launch {
 
+			// Get any active alarm or timer
+			val activeAlarm = alarmViewModel.getActiveAlarm()
+
+			// An NFC tag was scanned to open up the main activity
+			if (NacNfc.wasScanned(intent))
+			{
+				println("Updating NFC intent. Current destination : ${navController.currentDestination}")
+				//NacNfcIntent.update(intent)
+
+				// Active alarm
+				if (activeAlarm != null)
+				{
+					println("Attempt to dismiss alarm with NFC")
+					// Try to dismiss with NFC
+					NacActiveAlarmActivity.startAlarmActivity(this@NacMainActivity, intent, activeAlarm)
+				}
+				// Active timer(s)
+				else if (timerViewModel.countActive() > 0)
+				{
+					// Put the ID of the NFC tag that was scanned in a bundle
+					val nfcId = NacNfc.parseId(intent)
+					val bundle = Bundle().apply { putString(SCANNED_NFC_TAG_ID_BUNDLE_NAME, nfcId) }
+
+					// Navigate to show timers passing in the NFC tag ID
+					navController.navigate(R.id.nacShowTimersFragment, bundle)
+				}
+				// Start a timer from an NFC tag
+				else
+				{
+					println("Start a timer from an NFC tag?")
+				}
+			}
+			else
+			{
 				// TODO: If this logic is not here, what is the timing between seeing that
 				//  NFC was scanned, posting the intent value, checking the alarm view model
 				//  for an active jank, and then starting the alarm activity/service?
-				// Get any active alarm or timer
-				val activeAlarm = alarmViewModel.getActiveAlarm()
 
 				// Show the active alarm activity
 				if (activeAlarm != null)
 				{
-					println("Main activity start the active alarm activity : ${activeAlarm.id}")
-					// TODO: Do I even need to do this? The alarm service would already be running?
+					println("Main activity and NFC was NOT scanned. Start the active alarm activity : ${activeAlarm.id}")
 					NacActiveAlarmActivity.startAlarmActivity(this@NacMainActivity, activeAlarm)
 				}
-
 			}
+
 		}
 
 		// Add alarm that was created from the SET_ALARM intent

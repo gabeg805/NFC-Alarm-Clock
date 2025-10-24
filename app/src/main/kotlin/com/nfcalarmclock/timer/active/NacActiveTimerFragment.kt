@@ -10,12 +10,10 @@ import android.os.IBinder
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Chronometer
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresPermission
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.LiveData
@@ -25,9 +23,9 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.nfcalarmclock.R
-import com.nfcalarmclock.nfc.NFC_WAS_SCANNED_BUNDLE_NAME
 import com.nfcalarmclock.nfc.NacNfc
 import com.nfcalarmclock.nfc.NacNfcTagViewModel
+import com.nfcalarmclock.nfc.SCANNED_NFC_TAG_ID_BUNDLE_NAME
 import com.nfcalarmclock.nfc.db.NacNfcTag
 import com.nfcalarmclock.nfc.getNfcTagNamesForDismissing
 import com.nfcalarmclock.nfc.getNfcTagsForDismissing
@@ -38,6 +36,7 @@ import com.nfcalarmclock.timer.db.NacTimer
 import com.nfcalarmclock.view.animateProgress
 import com.nfcalarmclock.view.calcContrastColor
 import com.nfcalarmclock.view.setupBackgroundColor
+import com.nfcalarmclock.view.startTimerRingingAnimation
 import com.nfcalarmclock.view.updateHourMinuteSecondsTextViews
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -152,11 +151,6 @@ class NacActiveTimerFragment
 	private lateinit var add1mButton: MaterialButton
 
 	/**
-	 * Chronometer to count up when the timer rings.
-	 */
-	private lateinit var chronometer: Chronometer
-
-	/**
 	 * Active timer service.
 	 */
 	private var service: NacActiveTimerService? = null
@@ -262,6 +256,18 @@ class NacActiveTimerFragment
 		}
 
 	/**
+	 * Listener for when the countup handler ticks.
+	 */
+	private val onCountupTickListener: NacActiveTimerService.OnCountupTickListener = NacActiveTimerService.OnCountupTickListener { timer, secOfRinging ->
+
+		println("On countup tick : $secOfRinging")
+
+		// Update the time
+		updateHourMinuteSecondsTextViews(secOfRinging)
+
+	}
+
+	/**
 	 * Connection to the active timer service.
 	 */
 	private val serviceConnection = object : ServiceConnection
@@ -302,15 +308,16 @@ class NacActiveTimerFragment
 				{
 					println("YO : ${timer.id} | RINGING")
 
-					// Initialize the seconds to be 0
-					secondsTextView.text = resources.getString(R.string.number0)
+					// Get the seconds that the timer has been ringing
+					val secOfRinging = service!!.getSecOfRinging(timer)
+
+					// Update the views
+					updateHourMinuteSecondsTextViews(secOfRinging)
+					setScanNfcVisibility(timer.shouldUseNfc)
+					setStopVisibility()
 
 					// Start the timer ringing animation
 					startTimerRingingAnimation()
-
-					// Set the visibility
-					setScanNfcVisibility(timer.shouldUseNfc)
-					setStopVisibility()
 				}
 				// Paused
 				else if (service!!.isTimerPaused(timer))
@@ -351,6 +358,9 @@ class NacActiveTimerFragment
 
 			// Countdown timer change listener
 			service!!.addOnCountdownTimerChangedListener(timer.id, onCountdownTimerChangedListener)
+
+			// Countup tick listener
+			service!!.addOnCountupTickListener(timer.id, onCountupTickListener)
 		}
 
 		override fun onServiceDisconnected(className: ComponentName) {}
@@ -359,13 +369,14 @@ class NacActiveTimerFragment
 	/**
 	 * Attempt to dismiss the timer with a scanned NFC tag.
 	 */
-	private fun attemptDismissWithScannedNfc(intent: Intent)
+	//private fun attemptDismissWithScannedNfc(intent: Intent)
+	private fun attemptDismissWithScannedNfc(nfcId: String)
 	{
 		val context = requireContext()
-		println("attemptDismissWithScannedNfc()")
+		println("attemptDismissWithScannedNfc() : $nfcId")
 
 		// NFC tag was scanned so check if it is able to dismiss the timer
-		if (NacNfc.canDismissWithScannedNfc(context, timer, intent, nfcTags))
+		if (NacNfc.canDismissWithScannedNfc(context, timer, nfcId, nfcTags))
 		{
 			println("NFC PASSED SCAN CHECK DISMISS THIS YO")
 			// Dismiss the service
@@ -408,6 +419,34 @@ class NacActiveTimerFragment
 	}
 
 	/**
+	 * Fragment resumed.
+	 */
+	override fun onResume()
+	{
+		// Super
+		super.onResume()
+
+		//setupObserveNfcIntentLiveData()
+		// Attempt to get the ID of an NFC tag that was scanned
+		val nfcId = arguments?.getString(SCANNED_NFC_TAG_ID_BUNDLE_NAME)
+
+		// NFC was scanned before launching this fragment
+		if (nfcId != null)
+		{
+			println("NFC was scanned before the active timer was launched! $nfcId")
+			attemptDismissWithScannedNfc(nfcId)
+			//if (NacNfcIntent.lastValue == null)
+			//{
+			//	println("THE LAST VALUE IS NULL WHAT THE HECK")
+			//}
+			//else
+			//{
+			//	attemptDismissWithScannedNfc(NacNfcIntent.lastValue!!)
+			//}
+		}
+	}
+
+	/**
 	 * Fragment started.
 	 */
 	override fun onStart()
@@ -438,6 +477,7 @@ class NacActiveTimerFragment
 		// Clear the service listeners
 		service?.removeOnServiceStoppedListener(timer.id, onServiceStoppedListener)
 		service?.removeOnCountdownTimerChangedListener(timer.id, onCountdownTimerChangedListener)
+		service?.removeOnCountupTickListener(timer.id, onCountupTickListener)
 	}
 
 	/**
@@ -488,7 +528,6 @@ class NacActiveTimerFragment
 		add5sButton = view.findViewById(R.id.timer_add_5s)
 		add30sButton = view.findViewById(R.id.timer_add_30s)
 		add1mButton = view.findViewById(R.id.timer_add_1m)
-		chronometer = view.findViewById(R.id.timer_chronometer)
 
 		// Setup back press
 		requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)
@@ -503,9 +542,7 @@ class NacActiveTimerFragment
 		setScanNfcVisibility(false)
 		setupAddTimeButtons()
 		setupProgressIndicator()
-		setupChronometer()
 		setupNfcTags()
-		setupObserveNfcIntentLiveData()
 	}
 
 	/**
@@ -603,25 +640,6 @@ class NacActiveTimerFragment
 	}
 
 	/**
-	 * Setup the chronometer.
-	 */
-	private fun setupChronometer()
-	{
-		// Tick listener
-		chronometer.onChronometerTickListener = Chronometer.OnChronometerTickListener {
-
-			// Get the elapsed time
-			val now = System.currentTimeMillis()
-			val elapsed = (now - service!!.timerRingingStartTimeMillis[timer.id]!!) / 1000
-			println("Elapsed time : $elapsed")
-
-			// Update the time
-			updateHourMinuteSecondsTextViews(elapsed)
-
-		}
-	}
-
-	/**
 	 * Setup the visibility of the hour and minute textviews. The seconds should always
 	 * be visible.
 	 */
@@ -688,25 +706,29 @@ class NacActiveTimerFragment
 	 */
 	private fun setupObserveNfcIntentLiveData()
 	{
+		// Attempt to get the ID of an NFC tag that was scanned
+		val nfcId = arguments?.getString(SCANNED_NFC_TAG_ID_BUNDLE_NAME)
+
 		// NFC was scanned before launching this fragment
-		if (arguments?.getBoolean(NFC_WAS_SCANNED_BUNDLE_NAME) == true)
+		if (nfcId != null)
 		{
-			println("NFC was scanned before the active timer was launched!")
-			if (NacNfcIntent.lastValue == null)
-			{
-				println("THE LAST VALUE IS NULL WHAT THE HECK")
-			}
-			else
-			{
-				attemptDismissWithScannedNfc(NacNfcIntent.lastValue!!)
-			}
+			println("NFC was scanned before the active timer was launched! $nfcId")
+			attemptDismissWithScannedNfc(nfcId)
+			//if (NacNfcIntent.lastValue == null)
+			//{
+			//	println("THE LAST VALUE IS NULL WHAT THE HECK")
+			//}
+			//else
+			//{
+			//	attemptDismissWithScannedNfc(NacNfcIntent.lastValue!!)
+			//}
 		}
 
-		// Livedata observer
-		nfcIntentLiveData.observe(viewLifecycleOwner) { intent ->
-			println("OBSERVED LIFE DATA CHANGE!")
-			attemptDismissWithScannedNfc(intent)
-		}
+		//// Livedata observer
+		//nfcIntentLiveData.observe(viewLifecycleOwner) { intent ->
+		//	println("OBSERVED LIFE DATA CHANGE!")
+		//	attemptDismissWithScannedNfc(intent)
+		//}
 	}
 
 	/**
@@ -814,30 +836,19 @@ class NacActiveTimerFragment
 	}
 
 	/**
-	 * Start the strobing effect color animators.
+	 * Start the timer ringing animation.
 	 */
 	private fun startTimerRingingAnimation()
 	{
 		// Get the colors
 		val context = requireContext()
-		val red = ContextCompat.getColor(context, R.color.red_lighter)
 
-		// Change the progress indicator
-		progressIndicator.indicatorDirection = CircularProgressIndicator.INDICATOR_DIRECTION_COUNTERCLOCKWISE
-		progressIndicator.isIndeterminate = true
-		progressIndicator.setIndicatorColor(red)
-		progressIndicator.setIndeterminateAnimatorDurationScale(1.4f)
-
-		// Change the text color
-		hourTextView.setTextColor(red)
-		minuteTextView.setTextColor(red)
-		secondsTextView.setTextColor(red)
-		hourUnits.setTextColor(red)
-		minuteUnits.setTextColor(red)
-		secondsUnits.setTextColor(red)
-
-		// Start the chronometer and animator
-		chronometer.start()
+		// Start the timer ringing animation
+		startTimerRingingAnimation(
+			context, progressIndicator,
+			hourTextView, hourUnits,
+			minuteTextView, minuteUnits,
+			secondsTextView, secondsUnits)
 	}
 
 	/**

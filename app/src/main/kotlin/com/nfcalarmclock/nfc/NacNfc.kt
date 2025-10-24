@@ -23,6 +23,11 @@ import com.nfcalarmclock.view.toast
 const val NFC_WAS_SCANNED_BUNDLE_NAME = "NacNfcWasScannedBundle"
 
 /**
+ * Bundle name for ID of an NFC tag that was scanned.
+ */
+const val SCANNED_NFC_TAG_ID_BUNDLE_NAME = "NacNfcWasScannedBundle"
+
+/**
  * Check if the alarm can be dismissed with the scanned NFC tag.
  *
  * @return True if the alarm can be dismissed with the scanned NFC tag, and False
@@ -192,25 +197,26 @@ object NacNfc
 	 * @return True if the alarm can be dismissed with the scanned NFC tag, and False
 	 *         otherwise.
 	 */
+	//intent: Intent,
 	fun canDismissWithScannedNfc(
 		context: Context,
 		alarm: NacAlarm?,
-		intent: Intent,
+		nfcId: String?,
 		nfcTags: MutableList<NacNfcTag>?
 	): Boolean
 	{
 		// Get the NFC ID from the intent
 		val sharedPreferences = NacSharedPreferences(context)
-		val intentNfcId = parseId(intent)
+		//val intentNfcId = parseId(intent)
 
 		// Alarm and NFC ID are present
-		if ((alarm != null) && (intentNfcId != null))
+		if ((alarm != null) && (nfcId != null))
 		{
 			// NFC can be shown which means it should be checked
 			if (sharedPreferences.shouldShowNfcButton)
 			{
 				// Check if the scanned NFC tag can be used to dismiss the alarm
-				val status = alarm.canDismissWithScannedNfc(intentNfcId, nfcTags!!)
+				val status = alarm.canDismissWithScannedNfc(nfcId, nfcTags!!)
 
 				when (status)
 				{

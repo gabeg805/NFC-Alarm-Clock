@@ -6,7 +6,6 @@ import android.os.PowerManager
 import androidx.lifecycle.LifecycleService
 import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.R
-import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmService.Companion.WAKELOCK_TAG
 import com.nfcalarmclock.view.toast
 
 /**
@@ -24,15 +23,14 @@ abstract class NacLifecycleService
 	 *
 	 * @return The acquired wakelock.
 	 */
-	protected fun acquireWakeLock(timeoutSec: Int): PowerManager.WakeLock
+	protected fun acquireWakeLock(timeoutSec: Int, wakeLockTag: String): PowerManager.WakeLock
 	{
 		// Get the power manager and timeout for the wakelock
 		val powerManager = getSystemService(POWER_SERVICE) as PowerManager
 		val timeout = timeoutSec * 1000L
 
 		// Acquire the wakelock
-		val wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK,
-			WAKELOCK_TAG)
+		val wakeLock = powerManager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, wakeLockTag)
 		wakeLock!!.acquire(timeout)
 
 		return wakeLock

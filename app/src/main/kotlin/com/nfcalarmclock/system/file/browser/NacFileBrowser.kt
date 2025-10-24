@@ -355,7 +355,7 @@ class NacFileBrowser(
 	/**
 	 * Set the currently selected file.
 	 *
-	 * @param  view  The view to highlight.
+	 * @param view The view to highlight.
 	 */
 	fun select(context: Context, view: View?)
 	{
@@ -392,40 +392,39 @@ class NacFileBrowser(
 		// Observe the view model data
 		lifecycleOwner.lifecycleScope.launch {
 
-			 viewModel.currentMetadata.collect { metadata ->
-				 println("Current metadata collect : $metadata")
+			viewModel.currentMetadata.collect { metadata ->
 
-				  // Check if metadata is null
-				  if (metadata == null)
-				  {
-					  // Clear the listing and then stop
-					  clear()
-					  return@collect
-				  }
+				// Check if metadata is null
+				if (metadata == null)
+				{
+					// Clear the listing and then stop
+					clear()
+					return@collect
+				}
 
-				  // Define an entry
-				  val entry: View = if (metadata.isDirectory)
-				  {
-					  // Add a directory
-					  addDirectory(inflater, container, metadata)
-				  }
-				  else if (metadata.isFile)
-				  {
-					  // Add a file
-					  addFile(inflater, container, metadata)
-				  }
-				  else
-				  {
-					  // Entry is not defined so skip to the next item in the listing
-					  return@collect
-				  }
+				// Define an entry
+				val entry: View = if (metadata.isDirectory)
+				{
+					// Add a directory
+					addDirectory(inflater, container, metadata)
+				}
+				else if (metadata.isFile)
+				{
+					// Add a file
+					addFile(inflater, container, metadata)
+				}
+				else
+				{
+					// Entry is not defined so skip to the next item in the listing
+					return@collect
+				}
 
-				  // Add metadata to the view and set the click listener
-				  entry.tag = metadata
-				  entry.setOnClickListener(this@NacFileBrowser)
+				// Add metadata to the view and set the click listener
+				entry.tag = metadata
+				entry.setOnClickListener(this@NacFileBrowser)
 
-				  // Add the entry to the file browser
-				  container.addView(entry)
+				// Add the entry to the file browser
+				container.addView(entry)
 
 			 }
 
@@ -435,7 +434,7 @@ class NacFileBrowser(
 	/**
 	 * Show the directory contents at the given path.
 	 *
-	 * @param  dir  The path of the directory to show.
+	 * @param dir The path of the directory to show.
 	 */
 	fun show(dir: String, unit: () -> Unit = {})
 	{
@@ -443,7 +442,6 @@ class NacFileBrowser(
 		viewModel.clear()
 
 		// Show the listing at the new directory
-		println("Showing : $dir")
 		viewModel.show(dir) {
 
 			// Call the unit

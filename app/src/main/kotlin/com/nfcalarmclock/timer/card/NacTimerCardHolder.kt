@@ -1,5 +1,6 @@
 package com.nfcalarmclock.timer.card
 
+import android.content.Context
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -10,6 +11,7 @@ import com.nfcalarmclock.card.NacBaseCardHolder
 import com.nfcalarmclock.system.NacCalendar
 import com.nfcalarmclock.timer.db.NacTimer
 import com.nfcalarmclock.view.performHapticFeedback
+import com.nfcalarmclock.view.startTimerRingingAnimation
 import com.nfcalarmclock.view.updateHourMinuteSecondsTextViews
 
 /**
@@ -96,6 +98,11 @@ class NacTimerCardHolder(
 	 * Minute units textview.
 	 */
 	private val minuteUnits: TextView = root.findViewById(R.id.timer_minute_units)
+
+	/**
+	 * Seconds units textview.
+	 */
+	private val secondsUnits: TextView = root.findViewById(R.id.timer_seconds_units)
 
 	/**
 	 * Summary view containing the days to repeat.
@@ -431,6 +438,18 @@ class NacTimerCardHolder(
 				stopButton.visibility = View.VISIBLE
 			}
 		}
+	}
+
+	/**
+	 * Start the timer ringing animation.
+	 */
+	fun startTimerRingingAnimation(context: Context)
+	{
+		startTimerRingingAnimation(
+			context, progressIndicator,
+			hourTextView, hourUnits,
+			minuteTextView, minuteUnits,
+			secondsTextView, secondsUnits)
 	}
 
 	/**

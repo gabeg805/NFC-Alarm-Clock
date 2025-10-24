@@ -35,6 +35,13 @@ class NacTimerViewModel @Inject constructor(
 	suspend fun count(): Int = timerRepository.count()
 
 	/**
+	 * Count the number of active timers.
+	 *
+	 * @return The number of active timers in the table.
+	 */
+	suspend fun countActive(): Int = timerRepository.countActive()
+
+	/**
 	 * Delete a timer from the database.
 	 *
 	 * @param timer Timer to delete.

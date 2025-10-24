@@ -36,6 +36,13 @@ class NacTimerRepository @Inject constructor(
 	suspend fun count(): Int = timerDao.count()
 
 	/**
+	 * Count the number of active timers.
+	 *
+	 * @return The number of active timers in the table.
+	 */
+	suspend fun countActive(): Int = timerDao.countActive()
+
+	/**
 	 * Delete a timer, asynchronously, from the database.
 	 *
 	 * @return The number of rows deleted.

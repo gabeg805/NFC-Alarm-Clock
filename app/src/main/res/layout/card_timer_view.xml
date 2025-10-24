@@ -170,8 +170,8 @@
 		<ImageView
 			android:id="@+id/timer_scan_nfc_icon"
 			android:contentDescription="@string/cd_scan_nfc"
-			android:layout_width="@dimen/isz_large"
-			android:layout_height="@dimen/isz_large"
+			android:layout_width="@dimen/isz_medium"
+			android:layout_height="@dimen/isz_medium"
 			android:layout_marginBottom="@dimen/normal"
 			android:src="@drawable/tap_and_play"
 			android:visibility="invisible"

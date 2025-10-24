@@ -33,8 +33,8 @@ import com.nfcalarmclock.alarm.options.nfc.NacNfcTagDismissOrder
 import com.nfcalarmclock.card.NacBaseCardAdapter
 import com.nfcalarmclock.card.NacBaseCardTouchHelperCallback
 import com.nfcalarmclock.card.NacCardLayoutManager
-import com.nfcalarmclock.nfc.NFC_WAS_SCANNED_BUNDLE_NAME
 import com.nfcalarmclock.nfc.NacNfc
+import com.nfcalarmclock.nfc.SCANNED_NFC_TAG_ID_BUNDLE_NAME
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.NacBundle.BUNDLE_INTENT_ACTION
 import com.nfcalarmclock.system.NacNfcIntent
@@ -53,9 +53,15 @@ import com.nfcalarmclock.view.toSpannedString
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.io.File
+import kotlin.collections.contains
 
 /**
  * Show all timers.
+ *
+ * TODO: Need to count up in show timers.
+ * TODO: Need to count up in the notification.
+ * TODO: Show alarms get the NFC intent when scanning while the activity is not in view.
+ * TODO: Change the color of red being used.
  */
 @UnstableApi
 @AndroidEntryPoint
@@ -155,7 +161,13 @@ class NacShowTimersFragment
 				card.secondsTextView.text = resources.getString(R.string.number0)
 				card.progressIndicator.animateProgress(card.progressIndicator.progress, 0, 250,
 					onEnd = {
+
+						// Start the timer ringing animation
+						card.startTimerRingingAnimation(requireContext())
+
+						// Set the visibility
 						card.setStopVisibility()
+
 					})
 
 			}
@@ -193,6 +205,7 @@ class NacShowTimersFragment
 				// Get the card
 				val card = recyclerView.findViewHolderForItemId(timer.id) as NacTimerCardHolder? ?: return
 
+				// Starting animation is still running. Do nothing yet
 				if (isRunningStartingAnimation[timer.id] == true)
 				{
 					println("Still running the starting animation for : ${timer.id}")
@@ -210,6 +223,21 @@ class NacShowTimersFragment
 		}
 
 	/**
+	 * Listener for when the countup handler ticks.
+	 */
+	private val onCountupTickListener: NacActiveTimerService.OnCountupTickListener = NacActiveTimerService.OnCountupTickListener { timer, secOfRinging ->
+
+		println("On countup yoyoyo : $secOfRinging")
+
+		// Get the card
+		val card = recyclerView.findViewHolderForItemId(timer.id) as NacTimerCardHolder? ?: return@OnCountupTickListener
+
+		// Update the time
+		card.updateHourMinuteSecondsTextViews(secOfRinging)
+
+	}
+
+	/**
 	 * Connection to the active timer service.
 	 */
 	private val serviceConnection = object : ServiceConnection
@@ -220,7 +248,6 @@ class NacShowTimersFragment
 			val binder = serviceBinder as NacActiveTimerService.NacLocalBinder
 			service = binder.getService()
 			println("Show timers SERVICE IS NOW CONNECTED")
-			// TODO: Init timer card is being called twice
 			// TODO: Null pointer exception when screen turns off and then on again and onTick() is called again? Line 150 in Active timer from show timers.... weird
 
 			// Initialize each timer being used by the service
@@ -232,6 +259,7 @@ class NacShowTimersFragment
 			lifecycleScope.launch {
 				timerViewModel.getAllTimers().forEach {
 					service!!.addOnCountdownTimerChangedListener(it.id, onCountdownTimerChangedListener)
+					service!!.addOnCountupTickListener(it.id, onCountupTickListener)
 				}
 			}
 		}
@@ -256,6 +284,7 @@ class NacShowTimersFragment
 
 				// Countdown timer change listener
 				service?.addOnCountdownTimerChangedListener(timer.id, onCountdownTimerChangedListener)
+				service?.addOnCountupTickListener(timer.id, onCountupTickListener)
 
 				// Show the snackbar
 				if (messageId != null)
@@ -316,8 +345,9 @@ class NacShowTimersFragment
 		// Get the local media path
 		val localMediaPath = timer.localMediaPath
 
-		// Remove the countdown timer change listener
+		// Remove the countdown/up timer change listeners
 		service?.removeOnCountdownTimerChangedListener(timer.id, onCountdownTimerChangedListener)
+		service?.removeOnCountupTickListener(timer.id, onCountupTickListener)
 
 		// Delete the timer
 		timerViewModel.delete(timer)
@@ -379,8 +409,13 @@ class NacShowTimersFragment
 		{
 			println("Card : ${card.timer!!.id} | RINGING")
 
-			card.secondsTextView.text = resources.getString(R.string.number0)
+			// Get the seconds that the timer has been ringing
+			val secOfRinging = service!!.getSecOfRinging(card.timer!!)
+
+			// Update the views and start the timer ringing animation
+			card.updateHourMinuteSecondsTextViews(secOfRinging)
 			card.setStopVisibility()
+			card.startTimerRingingAnimation(requireContext())
 		}
 		// Paused
 		else if (service?.isTimerPaused(card.timer!!) == true)
@@ -475,6 +510,92 @@ class NacShowTimersFragment
 			println("Show timers addTimerFromSetTimerIntent()")
 			addTimerFromSetTimerIntent(timer)
 		}
+
+		// Attempt to get the ID of an NFC tag that was scanned
+		val nfcId = arguments?.getString(SCANNED_NFC_TAG_ID_BUNDLE_NAME)
+
+		// NFC was scanned before launching this fragment
+		if (nfcId != null)
+		{
+			println("NFC was scanned in onResume() of show timers! $nfcId")
+			attemptDismissWithScannedNfc(nfcId)
+		}
+	}
+
+	private fun attemptDismissWithScannedNfc(nfcId: String)
+	{
+		lifecycleScope.launch {
+
+			// Get all the active timers
+			val context = requireContext()
+			val allActiveTimers = timerViewModel.getAllActiveTimers()
+			var nonNfcTimer: NacTimer? = null
+			var anyNfcTimer: NacTimer? = null
+
+			println("Iterate over each active timer")
+			allActiveTimers.forEach { t ->
+
+				// Timer does not use NFC so ignore
+				if (!t.shouldUseNfc)
+				{
+					nonNfcTimer = nonNfcTimer ?: t
+					println("Timer maybe using non NFC : ${nonNfcTimer.id}")
+					return@forEach
+				}
+
+				// Timer can use any NFC tag to dismiss
+				if (t.nfcTagDismissOrder == NacNfcTagDismissOrder.ANY)
+				{
+					anyNfcTimer = anyNfcTimer ?: t
+					println("Timer can dismiss using ANY NFC tags : ${anyNfcTimer.id}")
+					return@forEach
+				}
+
+				// Parse the NFC ID and acceptable NFC tags that can be used to dismiss the timer
+				val nfcTagIdList = t.nfcTagIdList
+
+				// NFC tag list contains the NFC tag that was scanned
+				if (nfcTagIdList.contains(nfcId))
+				{
+					println("Timer : ${t.id} contains NFC tag : $nfcId")
+					if (nfcTagIdList.size == 1)
+					{
+						println("ONLY 1 NFC required for this timer! Dismiss this jank")
+						NacActiveTimerService.dismissTimerServiceWithNfc(context, t)
+					}
+					else
+					{
+						println("Timer NEEDS more than 1 nFC jakn : $nfcTagIdList")
+						val bundle = t.toBundle()
+							.apply {
+								putString(SCANNED_NFC_TAG_ID_BUNDLE_NAME, nfcId)
+							}
+
+						// Navigate to the active timer and try to dismiss with this NFC tag
+						findNavController().navigate(R.id.nacActiveTimerFragment, bundle)
+					}
+
+					return@launch
+				}
+
+			}
+
+			// None of the timers had an NFC tag list that contained the scanned NFC tag.
+			// Now try dismiss one of the timers that accepts any NFC tag to dismiss
+			if (anyNfcTimer != null)
+			{
+				println("DISMISSING ANY NFC TIMER : ${anyNfcTimer.id}")
+				NacActiveTimerService.dismissTimerServiceWithNfc(context, anyNfcTimer)
+			}
+
+			// As a last resort, try to dismiss one of the timers that does not even use
+			// NFC, but NFC is still accepted to dismiss if a user wants to
+			if (nonNfcTimer != null)
+			{
+				println("DISMISSING NON NFC TIMER : ${nonNfcTimer.id}")
+				NacActiveTimerService.dismissTimerServiceWithNfc(context, nonNfcTimer)
+			}
+		}
 	}
 
 	/**
@@ -504,6 +625,7 @@ class NacShowTimersFragment
 
 		// Clear the service listeners
 		service?.removeAllMatchingOnCountdownTimerChangedListener(onCountdownTimerChangedListener)
+		service?.removeAllMatchingOnCountupTickListener(onCountupTickListener)
 	}
 
 	/**
@@ -631,65 +753,65 @@ class NacShowTimersFragment
 
 		}
 
-		// TODO: Do I want an alarm intent watcher and timer intent watcher?
-		// NFC intent
-		nfcIntentLiveData.observe(viewLifecycleOwner) { intent ->
+		//// TODO: Do I want an alarm intent watcher and timer intent watcher?
+		//// NFC intent
+		//nfcIntentLiveData.observe(viewLifecycleOwner) { intent ->
 
-			println("Show timers new NFC intent! ${intent.action}")
-			lifecycleScope.launch {
+		//	println("Show timers new NFC intent! ${intent.action}")
+		//	lifecycleScope.launch {
 
-				// TODO: If this logic is not here, what is the timing between seeing that
-				//  NFC was scanned, posting the intent value, checking the alarm view model
-				//  for an active jank, and then starting the alarm activity/service?
-				// Get the active timer
-				val allActiveTimers = timerViewModel.getAllActiveTimers()
-				println("Show timers active timer check : $allActiveTimers")
+		//		// TODO: If this logic is not here, what is the timing between seeing that
+		//		//  NFC was scanned, posting the intent value, checking the alarm view model
+		//		//  for an active jank, and then starting the alarm activity/service?
+		//		// Get the active timer
+		//		val allActiveTimers = timerViewModel.getAllActiveTimers()
+		//		println("Show timers active timer check : $allActiveTimers")
 
-				println("Navigate to active timer fragment yo")
-				allActiveTimers.forEach { t ->
+		//		println("Navigate to active timer fragment yo")
+		//		allActiveTimers.forEach { t ->
 
-					if (!t.shouldUseNfc)
-					{
-						return@forEach
-					}
+		//			if (!t.shouldUseNfc)
+		//			{
+		//				return@forEach
+		//			}
 
-					if (t.nfcTagDismissOrder == NacNfcTagDismissOrder.ANY)
-					{
-						println("Timer can dismiss using ANY NFC tags")
-						NacActiveTimerService.dismissTimerServiceWithNfc(requireContext(), t)
-						return@launch
-					}
+		//			if (t.nfcTagDismissOrder == NacNfcTagDismissOrder.ANY)
+		//			{
+		//				println("Timer can dismiss using ANY NFC tags")
+		//				NacActiveTimerService.dismissTimerServiceWithNfc(requireContext(), t)
+		//				return@launch
+		//			}
 
-					val intentNfcId = NacNfc.parseId(intent)
-					val nfcTagIdList = t.nfcTagIdList
+		//			val intentNfcId = NacNfc.parseId(intent)
+		//			val nfcTagIdList = t.nfcTagIdList
 
-					if (nfcTagIdList.contains(intentNfcId))
-					{
-						println("Timer : ${t.id} contains NFC tag : $intentNfcId")
-						if (nfcTagIdList.size == 1)
-						{
-							println("ONLY 1 NFC required for this timer! Dismiss this jank")
-							NacActiveTimerService.dismissTimerServiceWithNfc(requireContext(), t)
-						}
-						else
-						{
-							println("Timer NEEDS more than 1 nFC jakn : $nfcTagIdList")
-							val bundle = t.toBundle()
-								.apply {
-									putBoolean(NFC_WAS_SCANNED_BUNDLE_NAME, true)
-								}
+		//			if (nfcTagIdList.contains(intentNfcId))
+		//			{
+		//				println("Timer : ${t.id} contains NFC tag : $intentNfcId")
+		//				if (nfcTagIdList.size == 1)
+		//				{
+		//					println("ONLY 1 NFC required for this timer! Dismiss this jank")
+		//					NacActiveTimerService.dismissTimerServiceWithNfc(requireContext(), t)
+		//				}
+		//				else
+		//				{
+		//					println("Timer NEEDS more than 1 nFC jakn : $nfcTagIdList")
+		//					val bundle = t.toBundle()
+		//						.apply {
+		//							putBoolean(NFC_WAS_SCANNED_BUNDLE_NAME, true)
+		//						}
 
-							findNavController().navigate(R.id.nacActiveTimerFragment, bundle)
-						}
+		//					findNavController().navigate(R.id.nacActiveTimerFragment, bundle)
+		//				}
 
-						return@launch
-					}
+		//				return@launch
+		//			}
 
-				}
+		//		}
 
-			}
+		//	}
 
-		}
+		//}
 	}
 
 	/**
@@ -730,6 +852,15 @@ class NacShowTimersFragment
 	{
 		// Bound view holder
 		timerCardAdapter.onViewHolderBoundListener = NacBaseCardAdapter.OnViewHolderBoundListener { card, index ->
+
+			// Timer was just started so do a little circular animation from 0% to 100%
+			// on the first tick and then reset the running animation flag
+			if (isRunningStartingAnimation[card.timer!!.id] == true)
+			{
+				card.progressIndicator.animateProgress(0, 100, 500, onEnd = {
+					isRunningStartingAnimation[card.timer!!.id] = false
+				})
+			}
 
 			// Initialize the card if the service has been bound
 			if (service?.isUsingTimer(card.timer!!) == true)
@@ -775,12 +906,6 @@ class NacShowTimersFragment
 				{
 					// Set the flag that the animation is running
 					isRunningStartingAnimation[timer.id] = true
-
-					// Do a little circular animation from 0% to 100% on the first tick
-					// and then reset the running animation flag
-					card.progressIndicator.animateProgress(0, 100, 500, onEnd = {
-						isRunningStartingAnimation[timer.id] = false
-					})
 
 					// Start the service
 					val context = requireContext()

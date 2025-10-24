@@ -725,82 +725,6 @@ object NacCalendar
 	}
 
 	/**
-	 * Get the hour, minutes and seconds of a timer, and zero pad them where necessary.
-	 *
-	 * @return The hour, minutes and seconds of a timer, and zero pad them where necessary.
-	 */
-	fun getTimerHourMinuteSecondsZeroPadded(duration: Long): Triple<String, String, String>
-	{
-		// Get the hour, minute, and seconds values
-		val hour = duration / 3600
-		val minute = duration / 60
-		val seconds = duration % 60
-		var hourString = hour.toString()
-		var minuteString = minute.toString()
-		var secondsString = seconds.toString()
-
-		// Minutes needs to be zero padded
-		if (hour > 0)
-		{
-			minuteString = minuteString.padStart(2, '0')
-		}
-		// Do not need the hour string
-		else
-		{
-			hourString = ""
-		}
-
-		// Seconds needs to be zero padded
-		if ((hour > 0) || (minute > 0))
-		{
-			secondsString = secondsString.padStart(2, '0')
-		}
-		// Do not need the minute string
-		else
-		{
-			minuteString = ""
-		}
-
-		// Return each component (hour, minute, and seconds) of the timer, zero padded
-		// where necessary
-		return Triple(hourString, minuteString, secondsString)
-	}
-
-	/**
-	 * The full time until the timer rings string, #h #m #s.
-	 *
-	 * @return The full time until the timer rings string, #h #m #s.
-	 */
-	fun getFullTimeUntilTimer(context: Context, secUntilFinished: Long): String
-	{
-		// Get the hour, minutes, and seconds to display
-		val (hour, minute, seconds) = getTimerHourMinuteSecondsZeroPadded(secUntilFinished)
-
-		// Get the hour, minute, and seconds letters
-		val h = context.resources.getString(R.string.letter_h)
-		val m = context.resources.getString(R.string.letter_m)
-		val s = context.resources.getString(R.string.letter_s)
-
-		// Show hours, minutes, and seconds
-		return if (hour.isNotEmpty())
-		{
-			"$hour$h $minute$m $seconds$s"
-		}
-		// Show minutes and seconds
-		else if (minute.isNotEmpty())
-		{
-
-			"$minute$m $seconds$s"
-		}
-		// Only show seconds
-		else
-		{
-
-			"$seconds$s"
-		}
-	}
-
-	/**
 	 * The full time string, EEE, HH:MM AM/PM.
 	 *
 	 * @return The full time string, EEE, HH:MM AM/PM.
@@ -1018,6 +942,82 @@ object NacCalendar
 		cal.set(Calendar.MILLISECOND, 0)
 
 		return cal
+	}
+
+	/**
+	 * The full time to display in the timer, in the format of #h #m #s.
+	 *
+	 * @return The full time to display in the timer, in the format of #h #m #s.
+	 */
+	fun getTimerFullTime(context: Context, secUntilFinished: Long): String
+	{
+		// Get the hour, minutes, and seconds to display
+		val (hour, minute, seconds) = getTimerHourMinuteSecondsZeroPadded(secUntilFinished)
+
+		// Get the hour, minute, and seconds letters
+		val h = context.resources.getString(R.string.letter_h)
+		val m = context.resources.getString(R.string.letter_m)
+		val s = context.resources.getString(R.string.letter_s)
+
+		// Show hours, minutes, and seconds
+		return if (hour.isNotEmpty())
+		{
+			"$hour$h $minute$m $seconds$s"
+		}
+		// Show minutes and seconds
+		else if (minute.isNotEmpty())
+		{
+
+			"$minute$m $seconds$s"
+		}
+		// Only show seconds
+		else
+		{
+
+			"$seconds$s"
+		}
+	}
+
+	/**
+	 * Get the hour, minutes and seconds of a timer, and zero pad them where necessary.
+	 *
+	 * @return The hour, minutes and seconds of a timer, and zero pad them where necessary.
+	 */
+	fun getTimerHourMinuteSecondsZeroPadded(duration: Long): Triple<String, String, String>
+	{
+		// Get the hour, minute, and seconds values
+		val hour = duration / 3600
+		val minute = duration / 60
+		val seconds = duration % 60
+		var hourString = hour.toString()
+		var minuteString = minute.toString()
+		var secondsString = seconds.toString()
+
+		// Minutes needs to be zero padded
+		if (hour > 0)
+		{
+			minuteString = minuteString.padStart(2, '0')
+		}
+		// Do not need the hour string
+		else
+		{
+			hourString = ""
+		}
+
+		// Seconds needs to be zero padded
+		if ((hour > 0) || (minute > 0))
+		{
+			secondsString = secondsString.padStart(2, '0')
+		}
+		// Do not need the minute string
+		else
+		{
+			minuteString = ""
+		}
+
+		// Return each component (hour, minute, and seconds) of the timer, zero padded
+		// where necessary
+		return Triple(hourString, minuteString, secondsString)
 	}
 
 	/**

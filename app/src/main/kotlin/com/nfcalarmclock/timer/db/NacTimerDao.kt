@@ -31,6 +31,14 @@ interface NacTimerDao
 	suspend fun count(): Int
 
 	/**
+	 * Count the number of active timers.
+	 *
+	 * @return The number of active timers in the table.
+	 */
+	@Query("SELECT COUNT(id) FROM timer WHERE is_active=1")
+	suspend fun countActive(): Int
+
+	/**
 	 * Delete a timer.
 	 *
 	 * @param timer Timer to delete.

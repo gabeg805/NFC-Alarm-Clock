@@ -103,7 +103,6 @@ class NacFileBrowserRepository
 	 */
 	suspend fun clear()
 	{
-		println("Repo cloear")
 		// Clear the file listing
 		_currentMetadata.emit(null)
 	}
@@ -111,18 +110,14 @@ class NacFileBrowserRepository
 	/**
 	 * Scan the file tree.
 	 */
-	//fun scan(context: Context)
 	suspend fun scan(context: Context)
 	{
-		// TODO: Test also clicking on a big directory that takes a while to load/draw?
 		withContext(Dispatchers.IO)
 		{
 			// Set scanning flag
 			isScanning = true
 
 			// Scan the file tree
-			//Thread.sleep(2000)
-			Thread.sleep(2000)
 			fileTree.scan(context)
 
 			// Disable scanning flag
@@ -135,7 +130,6 @@ class NacFileBrowserRepository
 	 */
 	suspend fun show(context: Context, path: String)
 	{
-		println("Repo show : $path | Is scanning? $isScanning")
 		withContext(Dispatchers.IO) {
 
 			// Wait until scanning is complete
@@ -149,7 +143,6 @@ class NacFileBrowserRepository
 				{
 				}
 			}
-			println("Finally through is scanning check")
 
 			// Not at the root level so add the previous directory to the listing.
 			// Note: An empty path indicates the root level

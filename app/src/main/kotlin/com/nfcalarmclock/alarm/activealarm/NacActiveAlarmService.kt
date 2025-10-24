@@ -532,7 +532,7 @@ class NacActiveAlarmService
 		cleanup()
 
 		// Acquire the wakelock
-		wakeLock = acquireWakeLock(alarm!!.autoDismissTime)
+		wakeLock = acquireWakeLock(alarm!!.autoDismissTime, WAKELOCK_TAG)
 
 		// Start the alarm activity
 		NacActiveAlarmActivity.startAlarmActivity(this, alarm!!)

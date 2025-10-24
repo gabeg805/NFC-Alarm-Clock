@@ -385,6 +385,37 @@ fun TextInputLayout.setupInputLayoutColor(
 //}
 
 /**
+ * Start a timer ringing animation.
+ */
+fun startTimerRingingAnimation(
+	context: Context,
+	circularProgressIndicator: CircularProgressIndicator,
+	hourTextView: TextView,
+	hourUnits: TextView,
+	minuteTextView: TextView,
+	minuteUnits: TextView,
+	secondsTextView: TextView,
+	secondsUnits: TextView)
+{
+	// Get the color
+	val red = ContextCompat.getColor(context, R.color.red_light)
+
+	// Change the progress indicator
+	circularProgressIndicator.indicatorDirection = CircularProgressIndicator.INDICATOR_DIRECTION_COUNTERCLOCKWISE
+	circularProgressIndicator.isIndeterminate = true
+	circularProgressIndicator.setIndicatorColor(red)
+	circularProgressIndicator.setIndeterminateAnimatorDurationScale(1.4f)
+
+	// Change the text color
+	hourTextView.setTextColor(red)
+	minuteTextView.setTextColor(red)
+	secondsTextView.setTextColor(red)
+	hourUnits.setTextColor(red)
+	minuteUnits.setTextColor(red)
+	secondsUnits.setTextColor(red)
+}
+
+/**
  * Update the hour, minute, and seconds textviews based on the milliseconds until
  * finished.
  */
