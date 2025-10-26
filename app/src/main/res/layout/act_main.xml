@@ -8,47 +8,46 @@
 
 	<androidx.constraintlayout.widget.ConstraintLayout
 		android:layout_width="match_parent"
-		android:layout_height="wrap_content">
-
-	<androidx.coordinatorlayout.widget.CoordinatorLayout
-		android:id="@+id/coordinator_layout"
-		android:layout_width="match_parent"
-		android:layout_height="match_parent"
-		app:layout_constraintTop_toTopOf="parent"
-		app:layout_constraintBottom_toBottomOf="parent">
-		<!--
-		TODO: Put this somewhere?
-		android:fitsSystemWindows="true"
-		-->
+		android:layout_height="match_parent">
 
 		<!-- Toolbar -->
 		<com.google.android.material.appbar.AppBarLayout
+			android:id="@+id/tb_app_bar_layout"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:backgroundTint="@color/gray_dark">
+			app:layout_constraintTop_toTopOf="parent">
 
 			<com.google.android.material.appbar.MaterialToolbar
 				android:id="@+id/tb_top_bar"
 				android:layout_width="match_parent"
-				android:layout_height="?attr/actionBarSize"
+				android:layout_height="@dimen/top_bar_height"
+				android:background="@color/black"
 				app:title="@string/app_name"
 				app:menu="@menu/menu_action_bar"
-				app:layout_scrollFlags="scroll|enterAlways|snap"
-				style="@style/Toolbar"
 				/>
 		</com.google.android.material.appbar.AppBarLayout>
 
-		<!-- Navigation host -->
-		<!-- Note: Add layout_behavior and commented out one in new fragment show alarms -->
-		<androidx.fragment.app.FragmentContainerView
-			android:id="@+id/hello_content"
+		<!-- Coordinator layout -->
+		<androidx.coordinatorlayout.widget.CoordinatorLayout
+			android:id="@+id/coordinator_layout"
 			android:layout_width="match_parent"
-			android:layout_height="match_parent"
-			android:name="androidx.navigation.fragment.NavHostFragment"
-			app:defaultNavHost="true"
-			app:layout_behavior="@string/appbar_scrolling_view_behavior"
-			app:navGraph="@navigation/nav_main_fragments"
-			/>
+			android:layout_height="0dp"
+			app:layout_constraintTop_toBottomOf="@id/tb_app_bar_layout"
+			app:layout_constraintBottom_toBottomOf="parent">
+			<!--
+			TODO: Put this somewhere?
+			android:fitsSystemWindows="true"
+			-->
+
+			<!-- Navigation host -->
+			<androidx.fragment.app.FragmentContainerView
+				android:id="@+id/hello_content"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:name="androidx.navigation.fragment.NavHostFragment"
+				app:defaultNavHost="true"
+				app:navGraph="@navigation/nav_main_fragments"
+				/>
 
 			<!-- Floating action button -->
 			<com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -56,31 +55,28 @@
 				android:contentDescription="@string/cd_fab_add_alarm"
 				android:layout_width="@dimen/isz_attention"
 				android:layout_height="@dimen/isz_attention"
-				android:layout_marginBottom="@dimen/fab_margin"
-				android:layout_gravity="bottom|center"
+				android:layout_marginBottom="100dp"
+				app:layout_anchor="@id/bottom_navigation"
+				app:layout_anchorGravity="center_horizontal"
 				android:src="@drawable/plus"
 				/>
-	</androidx.coordinatorlayout.widget.CoordinatorLayout>
 
-		<!-- Bottom navigation -->
-		<!--
-		app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
-		-->
-		<com.google.android.material.bottomnavigation.BottomNavigationView
-			android:id="@+id/bottom_navigation"
-			android:layout_width="match_parent"
-			android:layout_height="@dimen/bottom_nav_height"
-			android:layout_gravity="bottom"
-			android:minHeight="@dimen/bottom_nav_height"
-			app:backgroundTint="@color/black"
-			app:itemIconSize="@dimen/isz_normal"
-			app:itemPaddingTop="@dimen/small"
-			app:itemPaddingBottom="@dimen/small"
-			app:layout_behavior="com.google.android.material.behavior.HideBottomViewOnScrollBehavior"
-			app:menu="@menu/menu_bottom_navigation"
-			app:layout_constraintBottom_toBottomOf="parent"
-			/>
+			<!-- Bottom navigation -->
+			<com.google.android.material.bottomnavigation.BottomNavigationView
+				android:id="@+id/bottom_navigation"
+				android:layout_width="match_parent"
+				android:layout_height="@dimen/bottom_nav_height"
+				android:layout_gravity="bottom"
+				android:minHeight="@dimen/bottom_nav_height"
+				app:backgroundTint="@color/black"
+				app:itemIconSize="@dimen/isz_normal"
+				app:itemPaddingTop="@dimen/tiny"
+				app:itemPaddingBottom="@dimen/nudge"
+				app:menu="@menu/menu_bottom_navigation"
+				app:layout_behavior="@string/hide_bottom_view_on_scroll_behavior"
+				app:layout_constraintBottom_toBottomOf="parent"
+				/>
+		</androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 	</androidx.constraintlayout.widget.ConstraintLayout>
-
 </androidx.core.view.insets.ProtectionLayout>

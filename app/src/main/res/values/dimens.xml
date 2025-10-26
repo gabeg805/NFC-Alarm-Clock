@@ -51,7 +51,8 @@
 	<dimen name="radius_day_filled">16dp</dimen>
 	<dimen name="radius_day_outlined">16dp</dimen>
 	<dimen name="fab_margin">100dp</dimen>
-	<dimen name="bottom_nav_height">76dp</dimen>
+	<dimen name="top_bar_height">64dp</dimen>
+	<dimen name="bottom_nav_height">64dp</dimen>
 	<dimen name="action_row_height">84dp</dimen>
 	<dimen name="action_row_landscape_width">420dp</dimen>
 

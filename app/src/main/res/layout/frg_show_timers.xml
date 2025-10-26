@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	android:orientation="vertical"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:layout_marginBottom="@dimen/bottom_nav_height">
+	android:orientation="vertical">
 
 	<!-- Timer list -->
 	<androidx.recyclerview.widget.RecyclerView
@@ -12,9 +11,9 @@
 		android:contentDescription="@string/cd_timer_list"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
+		android:paddingBottom="@dimen/bottom_nav_height"
 		android:clipToPadding="false"
 		android:descendantFocusability="blocksDescendants"
-		android:paddingBottom="@dimen/isz_attention"
 		android:scrollbars="vertical"
 		/>
 

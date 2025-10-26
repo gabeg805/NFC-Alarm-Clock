@@ -68,11 +68,16 @@ class NacMainActivity
 {
 
 	/**
+	 * Nav host fragment.
+	 */
+	private val navHostFragment by lazy {
+		supportFragmentManager.findFragmentById(R.id.hello_content) as NavHostFragment
+	}
+
+	/**
 	 * Navigation controller.
 	 */
-	private val navController by lazy {
-		(supportFragmentManager.findFragmentById(R.id.hello_content) as NavHostFragment).navController
-	}
+	private val navController by lazy { navHostFragment.navController }
 
 	/**
 	 * Alarm view model.
@@ -442,25 +447,36 @@ class NacMainActivity
 					val bundle = Bundle().apply { putString(SCANNED_NFC_TAG_ID_BUNDLE_NAME, nfcId) }
 					val destinationId = navController.currentDestination?.id
 
+					val currentFragment = navHostFragment.childFragmentManager.primaryNavigationFragment
+					println("Current fragment : $currentFragment")
+
+					//if (currentFragment is NacShowTimersFragment || currentFragment is NacActiveTimerFragment)
+					//if (currentFragment is NacShowTimersFragment)
+					//{
+					//	currentFragment.attemptDismissWithScannedNfc(nfcId)
+					//}
+
 					when (destinationId)
 					{
 
 						// Show timers
 						R.id.nacShowTimersFragment ->
 						{
-							val fragment = supportFragmentManager.findFragmentById(destinationId) as NacShowTimersFragment?
+							//val fragment = supportFragmentManager.findFragmentById(destinationId) as NacShowTimersFragment?
+							val fragment = currentFragment as NacShowTimersFragment
 
 							println("Attempting to dismiss jank show timers instead of navigate : $nfcId")
-							fragment?.attemptDismissWithScannedNfc(nfcId)
+							fragment.attemptDismissWithScannedNfc(nfcId)
 						}
 
 						// Active timer
 						R.id.nacActiveTimerFragment ->
 						{
-							val fragment = supportFragmentManager.findFragmentById(destinationId) as NacActiveTimerFragment?
+							//val fragment = supportFragmentManager.findFragmentById(destinationId) as NacActiveTimerFragment?
+							val fragment = currentFragment as NacActiveTimerFragment
 
 							println("Attempting to dismiss jank active timer instead of navigate : $nfcId")
-							fragment?.attemptDismissWithScannedNfc(nfcId)
+							fragment.attemptDismissWithScannedNfc(nfcId)
 						}
 
 						// Something else
@@ -468,7 +484,7 @@ class NacMainActivity
 						{
 							println("Navigate to show timers with the bundle : $nfcId")
 							// Navigate to show timers passing in the NFC tag ID
-							navController.navigate(R.id.nacShowTimersFragment, bundle)
+							navController.navigate(R.id.action_global_nacShowTimersFragment, bundle)
 						}
 
 					}

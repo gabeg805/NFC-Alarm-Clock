@@ -174,17 +174,6 @@ class NacActiveTimerFragment
 	}
 
 	/**
-	 * Listener for when the service is stopped.
-	 */
-	private val onServiceStoppedListener: NacActiveTimerService.OnServiceStoppedListener =
-		NacActiveTimerService.OnServiceStoppedListener {
-			println("THIS JANK IS GETTING STOPPED RIGHT NOW. NEED TO DO SOMETHING")
-
-			// Navigate back to show timers
-			findNavController().popBackStack(R.id.nacShowTimersFragment, false)
-		}
-
-	/**
 	 * Listener for when the countdown timer changes.
 	 */
 	private val onCountdownTimerChangedListener: NacActiveTimerService.OnCountdownTimerChangedListener =
@@ -258,6 +247,17 @@ class NacActiveTimerFragment
 		updateHourMinuteSecondsTextViews(secOfRinging)
 
 	}
+
+	/**
+	 * Listener for when the service is stopped.
+	 */
+	private val onServiceStoppedListener: NacActiveTimerService.OnServiceStoppedListener =
+		NacActiveTimerService.OnServiceStoppedListener {
+			println("THIS JANK IS GETTING STOPPED RIGHT NOW. NEED TO DO SOMETHING")
+
+			// Navigate back to show timers
+			findNavController().popBackStack(R.id.nacShowTimersFragment, false)
+		}
 
 	/**
 	 * Connection to the active timer service.
@@ -345,13 +345,9 @@ class NacActiveTimerFragment
 			pauseButton.visibility = if (service!!.isTimerPaused(timer) || service!!.isTimerRinging(timer)) View.INVISIBLE else View.VISIBLE
 			stopButton.visibility = if (service!!.isTimerRinging(timer) && !timer.shouldUseNfc) View.VISIBLE else View.INVISIBLE
 
-			// Active timer service is stopped listener
+			// Add the listeners
 			service!!.addOnServiceStoppedListener(timer.id, onServiceStoppedListener)
-
-			// Countdown timer change listener
 			service!!.addOnCountdownTimerChangedListener(timer.id, onCountdownTimerChangedListener)
-
-			// Countup tick listener
 			service!!.addOnCountupTickListener(timer.id, onCountupTickListener)
 		}
 
@@ -603,7 +599,6 @@ class NacActiveTimerFragment
 		pauseButton.visibility = View.INVISIBLE
 		stopButton.visibility = if (timer.shouldUseNfc) View.INVISIBLE else View.VISIBLE
 		resetButton.visibility = View.INVISIBLE
-		//resetButton.visibility = if (timer.shouldUseNfc) View.INVISIBLE else View.VISIBLE
 
 		// Hide the add time buttons as the timer is no longer running
 		add5sButton.visibility = View.INVISIBLE

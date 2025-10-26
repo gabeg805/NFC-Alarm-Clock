@@ -23,6 +23,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.RecyclerView.OnScrollListener
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
@@ -173,8 +174,9 @@ class NacShowTimersFragment
 					onEnd = {
 
 						// Update the views
-						card.updateHourMinuteSecondsTextViews(secUntilFinished)
 						card.setResetVisibility()
+						card.updateHourMinuteSecondsTextViews(secUntilFinished)
+						card.resetTimerRingingAnimation(requireContext())
 
 					})
 			}
@@ -218,6 +220,20 @@ class NacShowTimersFragment
 	}
 
 	/**
+	 * Listener for when the service is stopped.
+	 */
+	private val onServiceStoppedListener: NacActiveTimerService.OnServiceStoppedListener =
+		NacActiveTimerService.OnServiceStoppedListener { timer ->
+			println("YOYOYOYO JANK STOPPED NOW")
+
+			// Get the card
+			val card = recyclerView.findViewHolderForItemId(timer.id) as NacTimerCardHolder? ?: return@OnServiceStoppedListener
+
+			println("REeseting the timer animation jank")
+			card.resetTimerRingingAnimation(requireContext())
+		}
+
+	/**
 	 * Connection to the active timer service.
 	 */
 	private val serviceConnection = object : ServiceConnection
@@ -238,6 +254,7 @@ class NacShowTimersFragment
 			// Add a countdown timer change listener for each timer in the table
 			lifecycleScope.launch {
 				timerViewModel.getAllTimers().forEach {
+					service!!.addOnServiceStoppedListener(it.id, onServiceStoppedListener)
 					service!!.addOnCountdownTimerChangedListener(it.id, onCountdownTimerChangedListener)
 					service!!.addOnCountupTickListener(it.id, onCountupTickListener)
 				}
@@ -754,6 +771,37 @@ class NacShowTimersFragment
 		recyclerView.adapter = timerCardAdapter
 		recyclerView.layoutManager = NacCardLayoutManager(context)
 		recyclerView.setHasFixedSize(true)
+
+		// Show/hide the FAB on scroll
+		recyclerView.addOnScrollListener(object : OnScrollListener()
+		{
+
+			/**
+			 * Scrolled.
+			 */
+			override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int)
+			{
+				super.onScrolled(recyclerView, dx, dy)
+
+				if (dy > 0)
+				{
+					// Scroll Down
+					if (floatingActionButton.isShown)
+					{
+						floatingActionButton.hide()
+					}
+				}
+				else if (dy < 0)
+				{
+					// Scroll Up
+					if (!floatingActionButton.isShown)
+					{
+						floatingActionButton.show()
+					}
+				}
+			}
+
+		})
 	}
 
 	/**
@@ -777,6 +825,7 @@ class NacShowTimersFragment
 			// Initialize the card if the service has been bound
 			if (service?.isUsingTimer(card.timer!!) == true)
 			{
+				println("SERVICE STILL USING TIMER")
 				initTimerCard(card)
 			}
 
@@ -849,16 +898,13 @@ class NacShowTimersFragment
 			// Stop timer listener
 			card.onStopTimerClickedListener = NacTimerCardHolder.OnStopTimerClickedListener { timer ->
 
-				// Get the context
-				val context = requireContext()
-
 				// Dismiss the timer
 				service?.dismiss(timer)
 
 				// Update views back to normal
 				card.setResetVisibility()
 				card.updateHourMinuteSecondsTextViews(timer.duration)
-				card.resetTimerRingingAnimation(context)
+				card.resetTimerRingingAnimation(requireContext())
 				card.progressIndicator.animateProgress(card.progressIndicator.progress, 0, 250)
 
 			}

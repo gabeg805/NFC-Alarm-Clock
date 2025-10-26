@@ -4,14 +4,14 @@
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:orientation="vertical"
-	android:layout_marginBottom="@dimen/bottom_nav_height">
+	android:orientation="vertical">
 
 	<!-- Tab layout -->
 	<com.google.android.material.tabs.TabLayout
 		android:id="@+id/tab_layout"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
+		app:tabTextAppearance="@style/My.TabLayout"
 		app:tabBackground="?attr/colorCard"
 		app:tabMode="fixed"
 		app:tabGravity="fill">

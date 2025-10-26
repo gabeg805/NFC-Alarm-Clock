@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
+<androidx.core.widget.NestedScrollView
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:id="@+id/timer_scrollview"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:layout_marginBottom="@dimen/bottom_nav_height"
 	android:fillViewport="true">
 
 	<androidx.constraintlayout.widget.ConstraintLayout
@@ -456,4 +455,4 @@
 
 	</androidx.constraintlayout.widget.ConstraintLayout>
 
-</ScrollView>
+</androidx.core.widget.NestedScrollView>

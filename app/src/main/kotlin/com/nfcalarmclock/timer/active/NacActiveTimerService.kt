@@ -37,6 +37,16 @@ import javax.inject.Inject
 import kotlin.math.ceil
 
 /**
+ * Action (buttons) that the active timer notification can have.
+ */
+enum class NacActiveTimerNotifcationAction
+{
+	PAUSE,
+	RESUME,
+	STOP
+}
+
+/**
  * Service to allow a timer to be run.
  */
 @UnstableApi
@@ -109,6 +119,11 @@ class NacActiveTimerService
 	private val allTimers: MutableList<NacTimer> = arrayListOf()
 
 	/**
+	 * Active timer notifications. One for each timer.
+	 */
+	private val allNotifications: HashMap<Long, NacActiveTimerNotification> = hashMapOf()
+
+	/**
 	 * Wakelocks. One for each timer.
 	 */
 	private val allWakeLocks: HashMap<Long, WakeLock> = hashMapOf()
@@ -129,19 +144,14 @@ class NacActiveTimerService
 	private val allAutoDismissHandlers: HashMap<Long, Handler> = hashMapOf()
 
 	/**
-	 * Time at which to show when the notification was shown. One for each timer.
+	 * The time that a timer started ringing, in milliseconds.
 	 */
-	private val allNotificationShowWhenTime: HashMap<Long, Long> = hashMapOf()
+	val allTimerRingingCountupHandlers: HashMap<Long, Handler> = hashMapOf()
 
 	/**
-	 * Notification ID of the foreground notification.
+	 * The time that a timer started ringing, in milliseconds. One for each timer.
 	 */
-	private var foregroundNotificationId: Int = 0
-
-	/**
-	 * Whether the service is bound or not.
-	 */
-	private var isBound : Boolean = false
+	val allTimerRingingStartTimeMillis: HashMap<Long, Long> = hashMapOf()
 
 	/**
 	 * Total duration of the timer, in milliseconds. One for each timer.
@@ -152,6 +162,16 @@ class NacActiveTimerService
 	 * Milliseconds until the countdown finishes.
 	 */
 	private var allMillisUntilFinished: HashMap<Long, Long> = hashMapOf()
+
+	/**
+	 * Time at which to show when the notification was shown. One for each timer.
+	 */
+	private val allNotificationShowWhenTime: HashMap<Long, Long> = hashMapOf()
+
+	/**
+	 * Time at which to show when the notification was shown. One for each timer.
+	 */
+	private val allNotificationCurrentActions: HashMap<Long, NacActiveTimerNotifcationAction> = hashMapOf()
 
 	/**
 	 * Whether this is the first tick of the countdown timer, while being connected to
@@ -176,20 +196,20 @@ class NacActiveTimerService
 	var allOnCountupTickListeners: HashMap<Long, MutableList<OnCountupTickListener>> = hashMapOf()
 
 	/**
-	 * The time that a timer started ringing, in milliseconds.
-	 */
-	val allTimerRingingCountupHandlers: HashMap<Long, Handler> = hashMapOf()
-
-	/**
-	 * The time that a timer started ringing, in milliseconds.
-	 */
-	val timerRingingStartTimeMillis: HashMap<Long, Long> = hashMapOf()
-
-	/**
 	 * Read only list of the timers being used by the service.
 	 */
 	val allTimersReadOnly: List<NacTimer>
 		get() = allTimers
+
+	/**
+	 * Notification ID of the foreground notification.
+	 */
+	private var foregroundNotificationId: Int = 0
+
+	/**
+	 * Whether the service is bound or not.
+	 */
+	private var isBound : Boolean = false
 
 	/**
 	 * Add a listener for when the service is stopped, such as when the stop button or
@@ -269,6 +289,75 @@ class NacActiveTimerService
 	}
 
 	/**
+	 * Build the notification.
+	 *
+	 * This will reuse a previous notification builder when possible and will update
+	 * the action buttons as well.
+	 */
+	@RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
+	private fun buildNotification(
+		timer: NacTimer,
+		timeInSec: Long
+	): NacActiveTimerNotification
+	{
+		// Get the notification builder, the current action, and the full time
+		var notification = allNotifications[timer.id] ?: NacActiveTimerNotification(this, timer)
+		val currentAction = allNotificationCurrentActions[timer.id]
+		val fullTime = NacCalendar.getTimerFullTime(this, timeInSec)
+
+		// Update the notification builder
+		notification = (notification.setContentTitle(fullTime)
+			.setWhen(allNotificationShowWhenTime[timer.id]!!) as NacActiveTimerNotification)
+			.apply {
+				// Timer is counting down
+				if (allMillisUntilFinished[timer.id]!! > 0)
+				{
+					// Paused
+					if (allCountdownTimers[timer.id] == null)
+					{
+						if (currentAction != NacActiveTimerNotifcationAction.RESUME)
+						{
+							println("...adding resume")
+							allNotificationCurrentActions[timer.id] = NacActiveTimerNotifcationAction.RESUME
+							clearActions()
+							addAction(R.drawable.play, R.string.action_timer_resume, notification.resumePendingIntent)
+						}
+					}
+					// Resumed and counting down
+					else
+					{
+						if (currentAction != NacActiveTimerNotifcationAction.PAUSE)
+						{
+							println("...adding pause")
+							allNotificationCurrentActions[timer.id] = NacActiveTimerNotifcationAction.PAUSE
+							clearActions()
+							addAction(R.drawable.pause_32, R.string.action_timer_pause, notification.pausePendingIntent)
+						}
+					}
+				}
+				// Timer has reached 0 and the sound and everything is going off
+				else
+				{
+					// NFC does not need to be used to dismiss the timer
+					// Note: This evaluates to False on the emulator because the emulator
+					// is unable to use NFC
+					if (!timer.shouldUseNfc(this@NacActiveTimerService, sharedPreferences))
+					{
+						if (currentAction != NacActiveTimerNotifcationAction.STOP)
+						{
+							println("...adding stop")
+							allNotificationCurrentActions[timer.id] = NacActiveTimerNotifcationAction.STOP
+							clearActions()
+							addAction(R.drawable.stop_32, R.string.action_timer_stop, notification.dismissPendingIntent)
+						}
+					}
+				}
+			}
+
+		return notification
+	}
+
+	/**
 	 * Add time to the countdown.
 	 */
 	fun cancelCountdownTimer(timer: NacTimer)
@@ -281,6 +370,8 @@ class NacActiveTimerService
 
 		// Set it to null to indicate that the timer is not running
 		allCountdownTimers[timer.id] = null
+
+		// TODO: Remove the notification?
 	}
 
 	/**
@@ -308,13 +399,18 @@ class NacActiveTimerService
 		}
 
 		// Remove the items from the hashmaps
-		allWakeupProcesses.remove(timer.id)
+		allIsFirstTick.remove(timer.id)
+		allNotificationCurrentActions.remove(timer.id)
+		allNotificationShowWhenTime.remove(timer.id)
+		allMillisUntilFinished.remove(timer.id)
+		allTotalDurationMillis.remove(timer.id)
+		allTimerRingingStartTimeMillis.remove(timer.id)
 		allTimerRingingCountupHandlers.remove(timer.id)
 		allAutoDismissHandlers.remove(timer.id)
+		allWakeupProcesses.remove(timer.id)
 		allWakeLocks.remove(timer.id)
-		allIsFirstTick.remove(timer.id)
+		allNotifications.remove(timer.id)
 		allTimers.removeIf { it.id == timer.id }
-
 
 		// Stop the service if no more timers are active
 		if (allTimers.isEmpty())
@@ -326,23 +422,23 @@ class NacActiveTimerService
 		// another timer the foreground notification
 		else
 		{
-			val notification = NacActiveTimerNotification(this, timer)
-			val notificationManagerCompat = NotificationManagerCompat.from(this)
+			val notificationId = NacActiveTimerNotification.calcId(timer)
 
 			// Have another timer be the foreground notification. Since the current timer
 			// is the foreground notification, making another timer take its place will
 			// naturally close the notification (by replacing it)
-			if (notification.id == foregroundNotificationId)
+			if (notificationId == foregroundNotificationId)
 			{
 				val newForegroundTimer = allTimers.first { it.id != timer.id }
-				println("Closing the foreground jank notification : ${notification.id} | ${newForegroundTimer.id}")
+				println("Closing the foreground jank notification : $notificationId | ${newForegroundTimer.id}")
 				updateNotification(newForegroundTimer, foreground = true)
 			}
 			// Close the notification
 			else
 			{
-				println("Normal closing the notification : ${notification.id}")
-				notificationManagerCompat.cancel(notification.id)
+				println("Normal closing the notification : $notificationId")
+				val notificationManagerCompat = NotificationManagerCompat.from(this)
+				notificationManagerCompat.cancel(notificationId)
 			}
 		}
 	}
@@ -408,7 +504,7 @@ class NacActiveTimerService
 	{
 		val now = System.currentTimeMillis()
 
-		return (now - timerRingingStartTimeMillis[timer.id]!!) / 1000
+		return (now - allTimerRingingStartTimeMillis[timer.id]!!) / 1000
 	}
 
 	/**
@@ -558,9 +654,6 @@ class NacActiveTimerService
 			return START_NOT_STICKY
 		}
 
-		// Show active timer notification
-		showActiveTimerNotification(timer)
-
 		// Check the intent action
 		when (intent.action)
 		{
@@ -568,6 +661,14 @@ class NacActiveTimerService
 			// Start the service
 			ACTION_START_SERVICE ->
 			{
+				// Set the total duration and millis needed to finish
+				allTotalDurationMillis[timer.id] = timer.duration*1000
+				allMillisUntilFinished[timer.id] = allTotalDurationMillis[timer.id]!!
+
+				// Show the notification
+				showActiveTimerNotification(timer)
+
+				// Start the service
 				startActiveTimerService(timer)
 				return START_STICKY
 			}
@@ -722,34 +823,22 @@ class NacActiveTimerService
 	@SuppressLint("MissingPermission")
 	private fun showActiveTimerNotification(timer: NacTimer)
 	{
-		// Create the active timer notification
-		val notification = NacActiveTimerNotification(this, timer)
-
-		// Show the notification
-		showForegroundNotification {
-
-			// Service barely beginning to run. Start the service in the foreground
-			if (foregroundNotificationId == 0)
-			{
-				println("FOREGROUND")
-				startForeground(notification.id, notification.build())
-				foregroundNotificationId = notification.id
-			}
-			// Service is already running in the foreground. Create a new notification
-			else
-			{
-				println("NOTIFY")
-				val notificationmanager = NotificationManagerCompat.from(this)
-				notificationmanager.notify(notification.id, notification.build())
-			}
-
-		}
-
-		// Save the show when time for the notification
-		if (timer.id !in allNotificationShowWhenTime)
+		// Notification already is shown for this timer
+		if (timer.id in allNotifications)
 		{
-			allNotificationShowWhenTime[timer.id] = Calendar.getInstance().timeInMillis
+			println("NOT SHOWING NOTIFICATION BECAUSE ALREADY BEING SHOWN")
+			return
 		}
+
+		// Save when the notification is shown
+		allNotificationShowWhenTime[timer.id] = Calendar.getInstance().timeInMillis
+
+		// Create the active timer notification
+		val notification = updateNotification(timer, timer.duration)
+
+		// Save the notification and when it was shown
+		allNotifications[timer.id] = notification
+		//allNotificationShowWhenTime[timer.id] = Calendar.getInstance().timeInMillis
 	}
 
 	/**
@@ -759,10 +848,6 @@ class NacActiveTimerService
 	private fun startActiveTimerService(timer: NacTimer)
 	{
 		println("startActiveTimerService()")
-		// Set the total duration and millis needed to finish
-		allTotalDurationMillis[timer.id] = timer.duration*1000
-		allMillisUntilFinished[timer.id] = allTotalDurationMillis[timer.id]!!
-
 		// Set the active flag and update the timer in the database
 		lifecycleScope.launch {
 			timer.isActive = true
@@ -870,8 +955,8 @@ class NacActiveTimerService
 	private fun startCountupTimerRinging(timer: NacTimer)
 	{
 		// Set the time at which the timer started ringing
-		timerRingingStartTimeMillis[timer.id] = System.currentTimeMillis()
-		println("Start count up time : ${timerRingingStartTimeMillis[timer.id]}")
+		allTimerRingingStartTimeMillis[timer.id] = System.currentTimeMillis()
+		println("Start count up time : ${allTimerRingingStartTimeMillis[timer.id]}")
 
 		// Create a handler that will run every second and add it to the hashmap
 		allTimerRingingCountupHandlers[timer.id] = Handler(mainLooper)
@@ -919,58 +1004,35 @@ class NacActiveTimerService
 	fun updateNotification(
 		timer: NacTimer,
 		timeInSec: Long = getSecUntilFinished(timer),
-		foreground: Boolean = false)
+		foreground: Boolean = false
+	): NacActiveTimerNotification
 	{
-		// Get the new title
-		val newTitle = NacCalendar.getTimerFullTime(this, timeInSec)
+		// Create/get the notification
+		val notification = buildNotification(timer, timeInSec)
 
-		// Get the notification manager and builder
-		val notificationManagerCompat = NotificationManagerCompat.from(this)
-		val notificationBuilder = NacActiveTimerNotification(this, timer)
+		// Show/update the notification
+		showForegroundNotification {
 
-		// Create the notification
-		val notification = (notificationBuilder.setContentTitle(newTitle)
-			.setWhen(allNotificationShowWhenTime[timer.id]!!) as NacActiveTimerNotification)
-			.apply {
-				// Timer is counting down
-				if (allMillisUntilFinished[timer.id]!! > 0)
-				{
-					// Paused
-					if (allCountdownTimers[timer.id] == null)
-					{
-						addAction(R.drawable.play, R.string.action_timer_resume, notificationBuilder.resumePendingIntent)
-					}
-					// Resumed and counting down
-					else
-					{
-						addAction(R.drawable.pause_32, R.string.action_timer_pause, notificationBuilder.pausePendingIntent)
-					}
-				}
-				// Timer has reached 0 and the sound and everything is going off
-				else
-				{
-					// NFC does not need to be used to dismiss the timer
-					// Note: This evaluates to False on the emulator because the emulator
-					// is unable to use NFC
-					if (!timer.shouldUseNfc(this@NacActiveTimerService, sharedPreferences))
-					{
-						addAction(R.drawable.stop_32, R.string.action_timer_stop, notificationBuilder.dismissPendingIntent)
-					}
-				}
+			// Service barely beginning to run or the foreground notification was
+			// dismissed. Start/keep the service in the foreground
+			if ((foregroundNotificationId == 0) || foreground)
+			{
+				println("FOREGROUND")
+				startForeground(notification.id, notification.build())
+				foregroundNotificationId = notification.id
 			}
-			.build()
+			// Service is already running in the foreground. Create a new notification
+			else
+			{
+				println("NOTIFY")
+				val notificationManagerCompat = NotificationManagerCompat.from(this)
+				notificationManagerCompat.notify(notification.id, notification.build())
+			}
 
-		// Update the notification
-		if (foreground)
-		{
-			println("FOREGROUND JANK BRO")
-			startForeground(notificationBuilder.id, notification)
-			foregroundNotificationId = notificationBuilder.id
 		}
-		else
-		{
-			notificationManagerCompat.notify(notificationBuilder.id, notification)
-		}
+
+		// Return the notification builder
+		return notification
 	}
 
 	/**

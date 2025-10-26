@@ -33,7 +33,7 @@ class NacActiveTimerNotification(
 	 * @see NacBaseNotificationBuilder.id
 	 */
 	public override val id: Int
-		get() = BASE_ID + (timer?.id?.toInt() ?: 0)
+		get() = calcId(timer)
 
 	/**
 	 * @see NacBaseNotificationBuilder.channelName
@@ -74,7 +74,7 @@ class NacActiveTimerNotification(
 			// Generic "Timer"
 			else
 			{
-				context.resources.getString(R.string.word_timer)
+				context.resources.getString(R.string.word_timers)
 			}
 		}
 
@@ -197,6 +197,14 @@ class NacActiveTimerNotification(
 		 * Notification ID.
 		 */
 		const val BASE_ID = 1069
+
+		/**
+		 * Calculate the ID.
+		 */
+		fun calcId(timer: NacTimer?): Int
+		{
+			return BASE_ID + (timer?.id?.toInt() ?: 0)
+		}
 
 	}
 

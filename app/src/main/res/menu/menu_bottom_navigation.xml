@@ -6,7 +6,7 @@
 		android:id="@+id/bottom_navigation_alarm"
 		android:enabled="true"
 		android:icon="@drawable/alarm"
-		android:title="@string/word_alarm"
+		android:title="@string/word_alarms"
 		/>
 
 	<!-- Timer -->
@@ -14,7 +14,7 @@
 		android:id="@+id/bottom_navigation_timer"
 		android:enabled="true"
 		android:icon="@drawable/hourglass_empty_32"
-		android:title="@string/word_timer"
+		android:title="@string/word_timers"
 		/>
 
 </menu>

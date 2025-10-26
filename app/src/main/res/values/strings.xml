@@ -38,7 +38,8 @@
 	<string name="word_version">Version</string>
 	<string name="word_of">of</string>
 	<string name="word_alarm">Alarm</string>
-	<string name="word_timer">Timer</string>
+	<string name="word_alarms">Alarms</string>
+	<string name="word_timers">Timers</string>
 	<string name="word_reminder">Reminder</string>
 	<string name="word_more">More</string>
 	<string name="letter_h">h</string>

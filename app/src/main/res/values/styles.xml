@@ -93,9 +93,11 @@
 	<!--
 	<style name="Toolbar" parent="@style/Widget.MaterialComponents.Toolbar.Primary">
 	-->
+	<!--
 	<style name="Toolbar" parent="@style/Widget.Material3.Toolbar">
 		<item name="android:background">@color/black</item>
 	</style>
+	-->
 
 	<!-- Widget base style -->
 	<style name="Widget" />
@@ -210,6 +212,12 @@
 
 	<style name="Widget.SnackbarButton" parent="Widget.Material3.Button.TextButton.Snackbar">
 		<item name="android:textColor">?attr/colorAccent</item>
+	</style>
+
+	<!-- Tab layout -->
+	<style name="My.TabLayout" parent="Widget.Material3.TabLayout">
+		<item name="android:textAllCaps">true</item>
+		<item name="android:textSize">@dimen/tsz_small</item>
 	</style>
 
 	<!-- NacDayButton -->

@@ -2,14 +2,13 @@ package com.nfcalarmclock.timer.addedit
 
 import android.content.res.ColorStateList
 import android.os.Bundle
-import android.util.TypedValue
+import android.util.DisplayMetrics
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
-import android.widget.ScrollView
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.TextView
@@ -18,6 +17,7 @@ import androidx.core.view.doOnLayout
 import androidx.core.view.doOnNextLayout
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
+import androidx.core.widget.NestedScrollView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -86,7 +86,7 @@ abstract class NacBaseAddEditTimer
 	/**
 	 * Scrollview.
 	 */
-	protected lateinit var scrollView: ScrollView
+	protected lateinit var scrollView: NestedScrollView
 
 	/**
 	 * Hour textview.
@@ -112,6 +112,11 @@ abstract class NacBaseAddEditTimer
 	 * Media button.
 	 */
 	protected lateinit var mediaButton: MaterialButton
+
+	/**
+	 * Whether to scroll the scrollview up or not.
+	 */
+	protected var shouldScrollUp: Boolean = true
 
 	/**
 	 * Append the time to the timer.
@@ -142,6 +147,49 @@ abstract class NacBaseAddEditTimer
 
 		// Haptic feedback
 		view?.performHapticFeedback()
+	}
+
+	/**
+	 * Delay scrolling down.
+	 *
+	 * This happens after picking media so scrolling down ensures that those more option
+	 * views are shown again.
+	 */
+	private fun delayScrollingDown()
+	{
+		scrollView.doOnNextLayout{
+
+			lifecycleScope.launch {
+				println("Delaying scorlling downtown")
+				var i = 0
+				do
+				{
+					delay(150)
+					i++
+				} while (!moreOptionsContainer.isVisible && (i < 3))
+
+				println("Scorlling downtown")
+				scrollView.fullScroll(View.FOCUS_DOWN)
+				shouldScrollUp = true
+			}
+
+		}
+	}
+
+	/**
+	 * Delay scrolling up.
+	 *
+	 * This happens after the more options container is shown to ensure that the bottom
+	 * navigation view is shown.
+	 */
+	private fun delayScrollingUp()
+	{
+		moreOptionsContainer.doOnNextLayout {
+			scrollView.scrollTo(0, 1)
+			scrollView.fullScroll(View.FOCUS_UP)
+			println("YOOOOOO")
+
+		}
 	}
 
 	/**
@@ -256,7 +304,7 @@ abstract class NacBaseAddEditTimer
 		setupVolume(volumeSeekBar, volumeImageView)
 		setupName(nameButton)
 		setupOptionsSection(view)
-		setupMediaPickedObserver()
+		setupMediaPickerObserver()
 	}
 
 	/**
@@ -472,7 +520,7 @@ abstract class NacBaseAddEditTimer
 	/**
 	 * Setup an observer for when media is picked in the media picker.
 	 */
-	private fun setupMediaPickedObserver()
+	private fun setupMediaPickerObserver()
 	{
 		// Set the observer for the media picker
 		println("Set the fragment result listener")
@@ -482,6 +530,7 @@ abstract class NacBaseAddEditTimer
 			?.observe(viewLifecycleOwner) { result ->
 
 				println("Found bundle! $result")
+				shouldScrollUp = false
 				val context = requireContext()
 				timer.mediaPath = result.getMediaPath()
 				timer.mediaArtist = result.getMediaArtist()
@@ -495,23 +544,8 @@ abstract class NacBaseAddEditTimer
 				// Set the media message
 				setMediaMessageAndAlpha()
 
-				//lifecycleScope.launch {
-				scrollView.doOnNextLayout{
-
-					lifecycleScope.launch {
-						println("Delaying scorlling downtown")
-						var i = 0
-						do
-						{
-							delay(150)
-							i++
-						} while (!moreOptionsContainer.isVisible && (i < 3))
-
-						println("Scorlling downtown")
-						scrollView.fullScroll(ScrollView.FOCUS_DOWN)
-					}
-
-				}
+				// Scroll down
+				delayScrollingDown()
 
 			}
 	}
@@ -527,7 +561,7 @@ abstract class NacBaseAddEditTimer
 
 		// Setup more button click
 		moreButton.setOnClickListener {
-			scrollView.fullScroll(ScrollView.FOCUS_DOWN)
+			scrollView.fullScroll(View.FOCUS_DOWN)
 		}
 	}
 
@@ -544,17 +578,9 @@ abstract class NacBaseAddEditTimer
 		val numberpadContainer: RelativeLayout = view.findViewById(R.id.timer_numberpad_container)
 		val moreOptionsDivider: View = view.findViewById(R.id.timer_more_options_divider)
 
-		scrollView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-			val tv = TypedValue()
-			var actionBarHeight = 0
-			if (requireActivity().theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
-				actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, resources.displayMetrics)
-			}
-
-			val bottomNavHeight = resources.getDimension(R.dimen.bottom_nav_height).toInt()
-			bottomMargin = actionBarHeight + bottomNavHeight
-			println("Final : $bottomMargin | Action bar : $actionBarHeight | BottomNav : $bottomNavHeight")
-		}
+		//px / ((float) context.getResources().getDisplayMetrics().densityDpi / DisplayMetrics.DENSITY_DEFAULT)
+		val pxToDp = 1f * resources.displayMetrics.densityDpi / DisplayMetrics.DENSITY_DEFAULT
+		val screenY = resources.displayMetrics.heightPixels
 
 		// More options container is already visible so do nothing
 		if (moreOptionsContainer.isVisible)
@@ -575,8 +601,9 @@ abstract class NacBaseAddEditTimer
 
 			hourTextView.getLocationOnScreen(hourLocation)
 			numberpadContainer.getLocationOnScreen(numberpadContainerLocation)
-			println("Hour loc : ${hourLocation[0]} | ${hourLocation[1]}")
-			println("Num  loc : ${numberpadContainerLocation[0]} | ${numberpadContainerLocation[1]}")
+			println("Screen Y : $screenY | PxToDp : $pxToDp")
+			println("Hour loc : ${hourLocation[1]}")
+			println("Num  loc : ${numberpadContainerLocation[1]}")
 
 			// Update the top and bottom margins to match the current spacing of the
 			// views while the more options container is invisible. That way, when making
@@ -585,16 +612,22 @@ abstract class NacBaseAddEditTimer
 			hourTextView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
 
 				// Set the new margin
-				val normalDimen = resources.getDimension(R.dimen.normal).toInt()
-				//bottomMargin = (numberpadContainerLocation[1] - hourLocation[1]) / 2
-				bottomMargin = (numberpadContainerLocation[1] - hourLocation[1] - normalDimen) / 2
+				val smallDimen = resources.getDimension(R.dimen.small).toInt()
+				val bottomNavHeight = resources.getDimension(R.dimen.bottom_nav_height).toInt()
+				bottomMargin = (numberpadContainerLocation[1] - hourLocation[1] - bottomNavHeight + 2*smallDimen) / 2
 				topMargin = bottomMargin
-				println("Bottom : $bottomMargin | Tiny : $normalDimen")
+				println("Bottom : $bottomMargin | Dimen : $bottomNavHeight | Tiny : $smallDimen")
 
 				// Make the more options container visible
 				moreOptionsContainer.visibility = View.VISIBLE
 				moreOptionsDivider.visibility = View.VISIBLE
 
+				println("HELLLOOOOOO")
+				// Scroll up to
+				if (shouldScrollUp)
+				{
+					delayScrollingUp()
+				}
 			}
 
 		}

@@ -34,6 +34,7 @@ import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.android.material.slider.Slider
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
+import com.google.android.material.tabs.TabLayout
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputLayout
 import com.nfcalarmclock.R
@@ -41,15 +42,17 @@ import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.NacCalendar
 
 /**
- * Setup the ripple color of a BottomNavigationView.
+ * Get the ripple color.
+ *
+ * @return The ripple color.
  */
-fun BottomNavigationView.setupRippleColor(sharedPreferences: NacSharedPreferences, themeColor: Int = sharedPreferences.themeColor)
+fun getRippleColor(color: Int): ColorStateList
 {
 	// Blend the theme color
-	val blendedColor = ColorUtils.blendARGB(themeColor, Color.TRANSPARENT, 0.6f)
+	val blendedColor = ColorUtils.blendARGB(color, Color.TRANSPARENT, 0.6f)
 
-	// Set the ripple color
-	this.itemRippleColor = ColorStateList.valueOf(blendedColor)
+	// Return the ripple color
+	return ColorStateList.valueOf(blendedColor)
 }
 
 /**
@@ -282,15 +285,23 @@ fun Slider.setupProgressAndThumbColor(sharedPreferences: NacSharedPreferences)
 }
 
 /**
+ * Setup the ripple color of a BottomNavigationView.
+ */
+fun BottomNavigationView.setupRippleColor(
+	sharedPreferences: NacSharedPreferences,
+	themeColor: Int = sharedPreferences.themeColor)
+{
+	this.itemRippleColor = getRippleColor(themeColor)
+}
+
+/**
  * Setup the ripple color of a MaterialButton.
  */
-fun MaterialButton.setupRippleColor(sharedPreferences: NacSharedPreferences, themeColor: Int = sharedPreferences.themeColor)
+fun MaterialButton.setupRippleColor(
+	sharedPreferences: NacSharedPreferences,
+	themeColor: Int = sharedPreferences.themeColor)
 {
-	// Blend the theme color
-	val blendedColor = ColorUtils.blendARGB(themeColor, Color.TRANSPARENT, 0.6f)
-
-	// Set the ripple color
-	this.rippleColor = ColorStateList.valueOf(blendedColor)
+	this.rippleColor = getRippleColor(themeColor)
 }
 
 /**
@@ -309,14 +320,6 @@ fun MaterialButton.setupThemeColor(sharedPreferences: NacSharedPreferences, them
 }
 
 /**
- * Setup the stroke color of a MaterialButton.
- */
-//fun MaterialButton.setupStrokeColor(sharedPreferences: NacSharedPreferences)
-//{
-//	this.strokeColor = ColorStateList.valueOf(sharedPreferences.themeColor)
-//}
-
-/**
  * Setup the background color of a FloatingActionButton.
  */
 fun FloatingActionButton.setupThemeColor(sharedPreferences: NacSharedPreferences)
@@ -328,6 +331,16 @@ fun FloatingActionButton.setupThemeColor(sharedPreferences: NacSharedPreferences
 	// Set the color
 	this.backgroundTintList = ColorStateList.valueOf(themeColor)
 	this.imageTintList = ColorStateList.valueOf(contrastColor)
+}
+
+/**
+ * Setup the background color of a FloatingActionButton.
+ */
+fun TabLayout.setupThemeColor(sharedPreferences: NacSharedPreferences)
+{
+	this.setSelectedTabIndicatorColor(sharedPreferences.themeColor)
+	this.setTabTextColors(Color.LTGRAY, sharedPreferences.themeColor)
+	this.tabRippleColor = getRippleColor(sharedPreferences.themeColor)
 }
 
 /**

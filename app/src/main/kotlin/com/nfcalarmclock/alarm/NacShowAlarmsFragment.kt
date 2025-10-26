@@ -662,7 +662,7 @@ class NacShowAlarmsFragment
 					{
 
 						/**
-						 * Called when the scroll state is changed.
+						 * Scroll state is changed.
 						 */
 						override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int)
 						{
@@ -1195,6 +1195,37 @@ class NacShowAlarmsFragment
 		recyclerView.adapter = alarmCardAdapter
 		recyclerView.layoutManager = NacCardLayoutManager(context)
 		recyclerView.setHasFixedSize(true)
+
+		// Show/hide the FAB on scroll
+		recyclerView.addOnScrollListener(object : OnScrollListener()
+		{
+
+			/**
+			 * Scrolled.
+			 */
+			override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int)
+			{
+				super.onScrolled(recyclerView, dx, dy)
+
+				if (dy > 0)
+				{
+					// Scroll Down
+					if (floatingActionButton.isShown)
+					{
+						floatingActionButton.hide()
+					}
+				}
+				else if (dy < 0)
+				{
+					// Scroll Up
+					if (!floatingActionButton.isShown)
+					{
+						floatingActionButton.show()
+					}
+				}
+			}
+
+		})
 	}
 
 	/**

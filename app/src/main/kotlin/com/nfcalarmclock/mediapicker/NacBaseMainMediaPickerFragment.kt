@@ -1,6 +1,7 @@
 package com.nfcalarmclock.mediapicker
 
 import android.content.pm.PackageManager
+import android.content.res.ColorStateList
 import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -33,6 +34,7 @@ import com.nfcalarmclock.system.media.isMediaFile
 import com.nfcalarmclock.system.media.isMediaNone
 import com.nfcalarmclock.system.media.isMediaRingtone
 import com.nfcalarmclock.system.permission.readmediaaudio.NacReadMediaAudioPermission
+import com.nfcalarmclock.view.setupThemeColor
 
 /**
  * Base main media picker fragment that will contain the child fragments.
@@ -504,12 +506,10 @@ abstract class NacBaseMainMediaPickerFragment<T: NacAlarm>
 	{
 		// Get the shared preferences and default color
 		val context = requireContext()
-		val shared = NacSharedPreferences(context)
-		val defaultColor = resources.getInteger(R.integer.default_color)
+		val sharedPreferences = NacSharedPreferences(context)
 
-		// Set the color
-		tabLayout.setSelectedTabIndicatorColor(shared.themeColor)
-		tabLayout.setTabTextColors(defaultColor, shared.themeColor)
+		// Setup
+		tabLayout.setupThemeColor(sharedPreferences)
 	}
 
 	/**
