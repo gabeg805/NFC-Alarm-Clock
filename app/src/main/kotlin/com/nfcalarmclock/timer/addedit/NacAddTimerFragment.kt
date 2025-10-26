@@ -33,10 +33,16 @@ class NacAddTimerFragment
 					println("Trying to go back to alarms")
 					findNavController().popBackStack(R.id.nacShowAlarmsFragment, false)
 				}
+				else
+				{
+					println("Going backwards")
+					findNavController().popBackStack()
+				}
 
 			}
 		}
 	}
+
 
 	/**
 	 * Initialize the timer that will be used in the fragment.
@@ -44,6 +50,16 @@ class NacAddTimerFragment
 	override fun initTimer()
 	{
 		timer = NacTimer.build(sharedPreferences)
+	}
+
+	/**
+	 * Navigate to the media picker.
+	 */
+	override fun navigateToMediaPicker(bundle: Bundle)
+	{
+		println("Navigating add timer to main media timer")
+		// Navigate to the media picker
+		findNavController().navigate(R.id.action_nacAddTimerFragment_to_nacTimerMainMediaPickerFragment, bundle)
 	}
 
 	/**
@@ -65,6 +81,7 @@ class NacAddTimerFragment
 	{
 		// Super
 		super.onViewCreated(view, savedInstanceState)
+		println("Addtimer : onViewCreated()")
 
 		// Setup back press
 		requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)

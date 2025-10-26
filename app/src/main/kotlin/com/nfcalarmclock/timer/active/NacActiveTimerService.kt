@@ -758,6 +758,7 @@ class NacActiveTimerService
 	@UnstableApi
 	private fun startActiveTimerService(timer: NacTimer)
 	{
+		println("startActiveTimerService()")
 		// Set the total duration and millis needed to finish
 		allTotalDurationMillis[timer.id] = timer.duration*1000
 		allMillisUntilFinished[timer.id] = allTotalDurationMillis[timer.id]!!

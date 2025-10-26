@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.IntentFilter
 import android.graphics.drawable.InsetDrawable
-import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.os.Parcelable
@@ -21,10 +20,10 @@ import androidx.core.view.isNotEmpty
 import androidx.core.view.size
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -34,7 +33,6 @@ import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textview.MaterialTextView
 import com.nfcalarmclock.R
-import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmActivity
 import com.nfcalarmclock.alarm.card.NacAlarmCardAdapter
 import com.nfcalarmclock.alarm.card.NacAlarmCardAdapterLiveData
 import com.nfcalarmclock.alarm.card.NacAlarmCardHolder
@@ -62,31 +60,30 @@ import com.nfcalarmclock.alarm.options.NacAlarmOptionsDialog
 import com.nfcalarmclock.alarm.options.dateandtime.NacDateAndTimePickerDialog
 import com.nfcalarmclock.alarm.options.dismissoptions.NacDismissEarlyService
 import com.nfcalarmclock.alarm.options.dismissoptions.NacDismissOptionsDialog
-import com.nfcalarmclock.alarm.options.mediapicker.NacMediaPickerActivity
 import com.nfcalarmclock.alarm.options.name.NacNameDialog
 import com.nfcalarmclock.alarm.options.snoozeoptions.NacSnoozeOptionsDialog
 import com.nfcalarmclock.alarm.options.upcomingreminder.NacUpcomingReminderService
 import com.nfcalarmclock.card.NacBaseCardAdapter
 import com.nfcalarmclock.card.NacBaseCardTouchHelperCallback
 import com.nfcalarmclock.card.NacCardLayoutManager
+import com.nfcalarmclock.main.NacMainActivity
 import com.nfcalarmclock.nfc.NacNfcTagViewModel
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.statistics.NacAlarmStatisticViewModel
 import com.nfcalarmclock.system.NacBundle.BUNDLE_INTENT_ACTION
 import com.nfcalarmclock.system.NacCalendar
-import com.nfcalarmclock.system.NacNfcIntent
 import com.nfcalarmclock.system.createTimeTickReceiver
 import com.nfcalarmclock.system.getAlarm
 import com.nfcalarmclock.system.registerMyReceiver
 import com.nfcalarmclock.system.scheduler.NacScheduler
+import com.nfcalarmclock.system.toBundle
 import com.nfcalarmclock.system.unregisterMyReceiver
-import com.nfcalarmclock.view.quickToast
 import com.nfcalarmclock.view.performHapticFeedback
-import com.nfcalarmclock.view.toSpannedString
+import com.nfcalarmclock.view.quickToast
+import com.nfcalarmclock.view.showSnackbar
 import com.nfcalarmclock.widget.refreshAppWidgets
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import java.io.File
 import java.util.Calendar
 
 /**
@@ -158,11 +155,6 @@ class NacShowAlarmsFragment
 	private lateinit var alarmCardTouchHelper: NacAlarmCardTouchHelper
 
 	/**
-	 * NFC intent LiveData.
-	 */
-	private val nfcIntentLiveData: LiveData<Intent> = NacNfcIntent.liveData
-
-	/**
 	 * Receiver for the time tick intent. This is called when the time increments
 	 * every minute.
 	 */
@@ -204,11 +196,6 @@ class NacShowAlarmsFragment
 	private var currentSnackbar: Snackbar? = null
 
 	/**
-	 * Previous Y position of the current snackbar.
-	 */
-	private var prevSnackbarY: Float = 0f
-
-	/**
 	 * Saved state of the recyclerview so that it does not change scroll position when
 	 * disabling/enabling or changing the time. Anything that causes a sort to occur.
 	 */
@@ -236,11 +223,12 @@ class NacShowAlarmsFragment
 	/**
 	 * Add an alarm to the database.
 	 *
-	 * @param alarm    An alarm.
+	 * @param alarm An alarm.
 	 * @param onInsertListener Listener to call after the alarm is inserted and has an ID.
 	 */
 	private fun addAlarm(
 		alarm: NacAlarm,
+		messageId: Int? = null,
 		onInsertListener: () -> Unit = {})
 	{
 		lifecycleScope.launch {
@@ -248,16 +236,33 @@ class NacShowAlarmsFragment
 			// Insert alarm
 			alarmViewModel.insert(alarm) {
 
-				// Schedule the alarm and call the listener
+				// Save the statistics
+				statisticViewModel.insertCreated()
+
+				// Schedule the alarm
 				NacScheduler.update(requireContext(), alarm)
+
+				// Show the snackbar
+				if (messageId != null)
+				{
+					val message = getString(messageId)
+					val action = getString(R.string.action_undo)
+
+					showSnackbar(
+						currentSnackbar, floatingActionButton,
+						message, action, sharedPreferences.themeColor,
+						onClickListener = {
+							// Undo the insert. This will delete the alarm
+							deleteAlarm(alarm)
+						})
+				}
+
+				// Call the listener
 				onInsertListener()
 
 			}
 
 		}
-
-		// Save the statistics
-		statisticViewModel.insertCreated()
 	}
 
 	/**
@@ -293,7 +298,7 @@ class NacShowAlarmsFragment
 	/**
 	 * Copy an alarm and add it to the database.
 	 *
-	 * @param  alarm  An alarm.
+	 * @param alarm An alarm.
 	 */
 	private fun copyAlarm(alarm: NacAlarm)
 	{
@@ -303,26 +308,16 @@ class NacShowAlarmsFragment
 		// Add the copied alarm. When it is added, it will be interacted with but most
 		// likely will not be scrolled as it is probably already on screen. This is
 		// because the index of the copied alarm is right after the original alarm
-		addAlarm(copiedAlarm) {
+		addAlarm(copiedAlarm, R.string.message_alarm_copy) {
 			recentlyAddedAlarmIds.add(copiedAlarm.id)
 			recentlyCopiedAlarmIds = Pair(alarm.id, copiedAlarm.id)
 		}
-
-		// Show the snackbar
-		val message = getString(R.string.message_alarm_copy)
-		val action = getString(R.string.action_undo)
-
-		showSnackbar(message, action,
-			onClickListener = {
-				// Undo the copy. This will delete the alarm
-				deleteAlarm(copiedAlarm)
-			})
 	}
 
 	/**
 	 * Delete an alarm from the database.
 	 *
-	 * @param  alarm  An alarm.
+	 * @param alarm An alarm.
 	 */
 	private fun deleteAlarm(alarm: NacAlarm)
 	{
@@ -342,40 +337,27 @@ class NacShowAlarmsFragment
 		val message = getString(R.string.message_alarm_delete)
 		val action = getString(R.string.action_undo)
 
-		showSnackbar(message, action,
+		showSnackbar(
+			currentSnackbar, floatingActionButton,
+			message, action, sharedPreferences.themeColor,
 			onClickListener = {
 				// Undo the delete. This will restore the alarm
 				restoreAlarm(alarm)
 			},
 			onDismissListener = { event ->
 
-				// Check if the snackbar was not dismissed via timeout
-				// or if the local media path is empty
-				// or if the local media path is equal to the shared preference path
-				if ((event != BaseTransientBottomBar.BaseCallback.DISMISS_EVENT_TIMEOUT)
-					|| localMediaPath.isEmpty()
-					|| (localMediaPath == sharedPreferences.localMediaPath))
+				// Snackbar was not dismissed via timeout
+				if (event != BaseTransientBottomBar.BaseCallback.DISMISS_EVENT_TIMEOUT)
 				{
-					// Do nothing
 					return@showSnackbar
 				}
 
-				// Check if the local media path is empty or if it is equal to the shared
-				// preference local media path
+				// Cleanup media file
 				lifecycleScope.launch {
-
-					// Check if no alarms are using the local media path
-					val noMatchingMedia = alarmViewModel.getAllAlarms()
-						.all { it.localMediaPath != localMediaPath }
-
-					if (noMatchingMedia)
-					{
-						// Delete the local media
-						val file = File(localMediaPath)
-						file.delete()
-					}
-
+					(requireActivity() as NacMainActivity).cleanupMediaFileAfterDelete(
+						localMediaPath, alarmViewModel.getAllAlarms())
 				}
+
 			})
 	}
 
@@ -576,30 +558,11 @@ class NacShowAlarmsFragment
 	/**
 	 * Restore an alarm and add it back to the database.
 	 *
-	 * @param  alarm  An alarm.
+	 * @param alarm An alarm.
 	 */
 	private fun restoreAlarm(alarm: NacAlarm)
 	{
-		lifecycleScope.launch {
-
-			// Insert the alarm
-			// Save the statistics
-			// Reschedule the alarm
-			alarmViewModel.insert(alarm)
-			statisticViewModel.insertCreated()
-			NacScheduler.update(requireContext(), alarm)
-
-			// Show the snackbar
-			val message = getString(R.string.message_alarm_restore)
-			val action = getString(R.string.action_undo)
-
-			showSnackbar(message, action,
-				onClickListener = {
-					// Undo the restore. This will delete the alarm
-					deleteAlarm(alarm)
-				})
-
-		}
+		addAlarm(alarm, R.string.message_alarm_restore)
 	}
 
 	/**
@@ -839,11 +802,9 @@ class NacShowAlarmsFragment
 			// Media
 			card.onCardMediaClickedListener = OnCardMediaClickedListener { _, alarm ->
 
-				// Create an intent for the media activity with the alarm attached
-				val intent = NacMediaPickerActivity.getStartIntentWithAlarm(context, alarm)
-
-				// Start the activity
-				startActivity(intent)
+				// Navigate to the media picker
+				println("Navigating to media picker jank")
+				findNavController().navigate(R.id.action_nacShowAlarmsFragment_to_nacAlarmMainMediaPickerFragment, alarm.toBundle())
 
 			}
 
@@ -1121,7 +1082,7 @@ class NacShowAlarmsFragment
 				// Compare the previous and current timezone ID and alarm time. This will
 				// indicate if the next alarm changed or not
 				if ((preTimeZoneId != sharedPreferences.appNextAlarmTimezoneId)
-					|| (preAlarmTimeMillis !=  sharedPreferences.appNextAlarmTimeMillis))
+					|| (preAlarmTimeMillis != sharedPreferences.appNextAlarmTimeMillis))
 				{
 					// Refresh widgets
 					refreshAppWidgets(requireContext())
@@ -1205,51 +1166,6 @@ class NacShowAlarmsFragment
 		nfcTagViewModel.allNfcTags.observe(viewLifecycleOwner) {
 			sharedPreferences.shouldShowManageNfcTagsPreference = it.isNotEmpty()
 		}
-
-		// TODO: Do I want an alarm intent watcher and timer intent watcher?
-		// NFC intent
-		nfcIntentLiveData.observe(viewLifecycleOwner) { intent ->
-
-			println("Show alarms new NFC intent! ${intent.action}")
-			lifecycleScope.launch {
-
-				// TODO: If this logic is not here, what is the timing between seeing that
-				//  NFC was scanned, posting the intent value, checking the alarm view model
-				//  for an active jank, and then starting the alarm activity/service?
-				// Get the active alarm
-				val activeAlarm = alarmViewModel.getActiveAlarm()
-				println("Show alarms active alarm check livedata: ${activeAlarm != null}")
-
-				// Check if the active alarm is not null
-				// here and then add checks to make sure it is safe to pass into these start
-				// activity/service functions
-				if (activeAlarm != null)
-				{
-					// Remove the grant URI permissions in the untrusted intent
-					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-					{
-						intent.removeFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-						intent.removeFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-					}
-
-					// Check that the nested intent does not grant URI permissions
-					if (((intent.flags and Intent.FLAG_GRANT_READ_URI_PERMISSION) == 0) &&
-						((intent.flags and Intent.FLAG_GRANT_WRITE_URI_PERMISSION) == 0))
-					{
-						println("Show alarms start alarm activity")
-						// Start the alarm activity with the intent containing the NFC tag
-						// information in order to dismiss this alarm
-						NacActiveAlarmActivity.startAlarmActivity(requireContext(), intent, activeAlarm)
-					}
-
-					// TODO: Is this necessary or do I need to popBackStack()?
-					//// Finish the main activity
-					//finish()
-				}
-
-			}
-
-		}
 	}
 
 	/**
@@ -1287,7 +1203,7 @@ class NacShowAlarmsFragment
 	 * Note: This is only done if this is not the app's first time running and
 	 *       the statistics table was not created yet, so it should be started.
 	 *
-	 * @param  alarms  List of alarms.
+	 * @param alarms List of alarms.
 	 */
 	private fun setupStatistics(alarms: List<NacAlarm>)
 	{
@@ -1358,7 +1274,9 @@ class NacShowAlarmsFragment
 		}
 
 		// Show the snackbar
-		showSnackbar(message, action)
+		showSnackbar(
+			currentSnackbar, floatingActionButton,
+			message, action, sharedPreferences.themeColor)
 	}
 
 	/**
@@ -1415,151 +1333,6 @@ class NacShowAlarmsFragment
 			// collapsed, the collapsed logic can be run
 			recentlyUpdatedAlarmIds.add(alarm.id)
 		}
-	}
-
-	/**
-	 * Show a snackbar.
-	 */
-	private fun showSnackbar(
-		message: String,
-		action: String,
-		onClickListener: View.OnClickListener? = null,
-		onDismissListener: (Int) -> Unit = {})
-	{
-		// Check if there is a normal "Dismiss" snackbar that is currently shown, in
-		// which case it will be reused
-		val shouldReuseSnackbar = (currentSnackbar?.isShown == true) && (onClickListener == null)
-
-		// Check if there is a normal "Dismiss" snackbar that is currently shown
-		val snackbar = if (shouldReuseSnackbar)
-		{
-			// Reuse the snackbar
-			currentSnackbar!!.setText(message.toSpannedString())
-			currentSnackbar!!.show()
-			currentSnackbar!!
-		}
-		else
-		{
-			// Create the snackbar
-			Snackbar.make(floatingActionButton, message.toSpannedString(),
-				Snackbar.LENGTH_LONG)
-		}
-
-		// Setup the snackbar
-		snackbar.setActionTextColor(sharedPreferences.themeColor)
-		snackbar.setAction(action, onClickListener ?: View.OnClickListener { })
-		snackbar.setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
-
-		//// Add callback if listener is set
-		//if (!shouldReuseSnackbar)
-		//{
-		//	// Listener when the snackbar is being drawn and thus when it is moving up and down
-		//	snackbar.view.viewTreeObserver.addOnPreDrawListener(object: ViewTreeObserver.OnPreDrawListener
-		//	{
-
-		//		/**
-		//		 * Called when the view tree is about to be drawn.
-		//		 */
-		//		override fun onPreDraw(): Boolean
-		//		{
-		//			// Get the current Y position
-		//			val y = snackbar.view.y
-		//			println("onPreDraw() : $y")
-
-		//			// Do nothing when the snackbar has not been shown yet
-		//			if (prevSnackbarY == 0f)
-		//			{
-		//				return true
-		//			}
-		//			// Snackbar is moving down
-		//			else if (prevSnackbarY < y)
-		//			{
-		//				// Animate the FAB moving back to its original position
-		//				floatingActionButton.animate()
-		//					.apply {
-		//						translationY(0f)
-		//						duration = 250
-		//					}
-		//					.start()
-
-		//				// Remove the listener
-		//				snackbar.view.viewTreeObserver.removeOnPreDrawListener(this)
-		//			}
-		//			// Snackbar is moving up. Update the previous Y position to compare
-		//			// later
-		//			else
-		//			{
-		//				println("Prev snackbar Y : $y")
-		//				prevSnackbarY = y
-		//			}
-
-		//			return true
-		//		}
-
-		//	})
-
-		//	// Listener for when the snackbar is starting to change and become visible.
-		//	// This means the view has been measured and has a height, so the animation
-		//	// of the FAB can be started at the same time since now it is known how much
-		//	// to animate the FAB's Y position by
-		//	snackbar.view.addOnLayoutChangeListener { view, _, _, _, _, _, _, _, _ ->
-
-		//		/**
-		//		 * Called when the view layout has changed.
-		//		 */
-		//		// Get the height of the snackbar
-		//		val height = view.height.toFloat()
-
-		//		// Animate the FAB moving up
-		//		floatingActionButton.animate()
-		//			.apply {
-		//				translationY(-height)
-		//				duration = 250
-		//			}
-		//			.start()
-
-		//		// Snackbar was already being shown. Update the Y position to the
-		//		// snackbar's current Y position in case its height changed
-		//		if (prevSnackbarY > 0)
-		//		{
-		//			prevSnackbarY = view.y
-		//		}
-		//	}
-
-		//	// Add the normal show/dismiss callback
-		//	snackbar.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>()
-		//	{
-
-		//		/**
-		//		 * Called when the snackbar is shown.
-		//		 */
-		//		override fun onShown(transientBottomBar: Snackbar?)
-		//		{
-		//			// The snackbar is visible now, so get its starting Y position
-		//			prevSnackbarY = snackbar.view.y
-		//		}
-
-		//		/**
-		//		 * Called when the snackbar has been dismissed.
-		//		 */
-		//		override fun onDismissed(transientBottomBar: Snackbar?, event: Int)
-		//		{
-		//			// Call the listener
-		//			onDismissListener(event)
-
-		//			// Reset the values of the FAB and snackbar
-		//			floatingActionButton.translationY = 0f
-		//			prevSnackbarY = 0f
-		//		}
-
-		//	})
-		//}
-
-		// Show the snackbar
-		snackbar.show()
-
-		// Set the current snackbar
-		currentSnackbar = snackbar.takeIf { onClickListener == null }
 	}
 
 	/**

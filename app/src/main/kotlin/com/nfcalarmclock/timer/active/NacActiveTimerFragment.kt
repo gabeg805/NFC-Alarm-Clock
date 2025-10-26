@@ -2,7 +2,6 @@ package com.nfcalarmclock.timer.active
 
 import android.Manifest
 import android.content.ComponentName
-import android.content.Intent
 import android.content.ServiceConnection
 import android.content.res.ColorStateList
 import android.os.Bundle
@@ -16,7 +15,6 @@ import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresPermission
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
 import androidx.navigation.fragment.findNavController
@@ -30,7 +28,6 @@ import com.nfcalarmclock.nfc.db.NacNfcTag
 import com.nfcalarmclock.nfc.getNfcTagNamesForDismissing
 import com.nfcalarmclock.nfc.getNfcTagsForDismissing
 import com.nfcalarmclock.shared.NacSharedPreferences
-import com.nfcalarmclock.system.NacNfcIntent
 import com.nfcalarmclock.system.getTimer
 import com.nfcalarmclock.timer.db.NacTimer
 import com.nfcalarmclock.view.animateProgress
@@ -154,11 +151,6 @@ class NacActiveTimerFragment
 	 * Active timer service.
 	 */
 	private var service: NacActiveTimerService? = null
-
-	/**
-	 * NFC intent LiveData.
-	 */
-	private val nfcIntentLiveData: LiveData<Intent> = NacNfcIntent.liveData
 
 	/**
 	 * List of NFC tags.
@@ -369,8 +361,7 @@ class NacActiveTimerFragment
 	/**
 	 * Attempt to dismiss the timer with a scanned NFC tag.
 	 */
-	//private fun attemptDismissWithScannedNfc(intent: Intent)
-	private fun attemptDismissWithScannedNfc(nfcId: String)
+	fun attemptDismissWithScannedNfc(nfcId: String)
 	{
 		val context = requireContext()
 		println("attemptDismissWithScannedNfc() : $nfcId")
@@ -426,7 +417,6 @@ class NacActiveTimerFragment
 		// Super
 		super.onResume()
 
-		//setupObserveNfcIntentLiveData()
 		// Attempt to get the ID of an NFC tag that was scanned
 		val nfcId = arguments?.getString(SCANNED_NFC_TAG_ID_BUNDLE_NAME)
 
@@ -435,14 +425,6 @@ class NacActiveTimerFragment
 		{
 			println("NFC was scanned before the active timer was launched! $nfcId")
 			attemptDismissWithScannedNfc(nfcId)
-			//if (NacNfcIntent.lastValue == null)
-			//{
-			//	println("THE LAST VALUE IS NULL WHAT THE HECK")
-			//}
-			//else
-			//{
-			//	attemptDismissWithScannedNfc(NacNfcIntent.lastValue!!)
-			//}
 		}
 	}
 
@@ -699,36 +681,6 @@ class NacActiveTimerFragment
 			// Set the name of the NFC tags that are needed to dismiss the timer
 			scanNfcTextView.text = nfcTagNames ?: resources.getString(R.string.title_scan_nfc_tag)
 		}
-	}
-
-	/**
-	 * Setup the observer for the NFC intent LiveData.
-	 */
-	private fun setupObserveNfcIntentLiveData()
-	{
-		// Attempt to get the ID of an NFC tag that was scanned
-		val nfcId = arguments?.getString(SCANNED_NFC_TAG_ID_BUNDLE_NAME)
-
-		// NFC was scanned before launching this fragment
-		if (nfcId != null)
-		{
-			println("NFC was scanned before the active timer was launched! $nfcId")
-			attemptDismissWithScannedNfc(nfcId)
-			//if (NacNfcIntent.lastValue == null)
-			//{
-			//	println("THE LAST VALUE IS NULL WHAT THE HECK")
-			//}
-			//else
-			//{
-			//	attemptDismissWithScannedNfc(NacNfcIntent.lastValue!!)
-			//}
-		}
-
-		//// Livedata observer
-		//nfcIntentLiveData.observe(viewLifecycleOwner) { intent ->
-		//	println("OBSERVED LIFE DATA CHANGE!")
-		//	attemptDismissWithScannedNfc(intent)
-		//}
 	}
 
 	/**

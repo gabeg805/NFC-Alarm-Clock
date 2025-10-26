@@ -52,7 +52,7 @@ class NacTimerRepository @Inject constructor(
 	/**
 	 * All active timer.
 	 */
-	suspend fun getAllActiveTimers(): List<NacTimer> = timerDao.getAllActiveTimers() ?: emptyList()
+	suspend fun getAllActiveTimers(): List<NacTimer> = timerDao.getAllActiveTimers()
 
 	/**
 	 * All timers in the database.

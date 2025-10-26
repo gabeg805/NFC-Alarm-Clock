@@ -3,7 +3,6 @@ package com.nfcalarmclock.timer.main
 import android.Manifest
 import android.annotation.SuppressLint
 import android.content.ComponentName
-import android.content.Intent
 import android.content.ServiceConnection
 import android.graphics.drawable.InsetDrawable
 import android.os.Bundle
@@ -17,7 +16,6 @@ import androidx.annotation.RequiresPermission
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
@@ -33,11 +31,10 @@ import com.nfcalarmclock.alarm.options.nfc.NacNfcTagDismissOrder
 import com.nfcalarmclock.card.NacBaseCardAdapter
 import com.nfcalarmclock.card.NacBaseCardTouchHelperCallback
 import com.nfcalarmclock.card.NacCardLayoutManager
-import com.nfcalarmclock.nfc.NacNfc
+import com.nfcalarmclock.main.NacMainActivity
 import com.nfcalarmclock.nfc.SCANNED_NFC_TAG_ID_BUNDLE_NAME
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.NacBundle.BUNDLE_INTENT_ACTION
-import com.nfcalarmclock.system.NacNfcIntent
 import com.nfcalarmclock.system.getTimer
 import com.nfcalarmclock.system.toBundle
 import com.nfcalarmclock.timer.NacTimerViewModel
@@ -49,19 +46,12 @@ import com.nfcalarmclock.timer.db.NacTimer
 import com.nfcalarmclock.view.animateProgress
 import com.nfcalarmclock.view.performHapticFeedback
 import com.nfcalarmclock.view.quickToast
-import com.nfcalarmclock.view.toSpannedString
+import com.nfcalarmclock.view.showSnackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import java.io.File
-import kotlin.collections.contains
 
 /**
  * Show all timers.
- *
- * TODO: Need to count up in show timers.
- * TODO: Need to count up in the notification.
- * TODO: Show alarms get the NFC intent when scanning while the activity is not in view.
- * TODO: Change the color of red being used.
  */
 @UnstableApi
 @AndroidEntryPoint
@@ -108,11 +98,6 @@ class NacShowTimersFragment
 	private lateinit var timerCardTouchHelper: NacTimerCardTouchHelper
 
 	/**
-	 * NFC intent LiveData.
-	 */
-	private val nfcIntentLiveData: LiveData<Intent> = NacNfcIntent.liveData
-
-	/**
 	 * Active timer service.
 	 */
 	private var service: NacActiveTimerService? = null
@@ -121,11 +106,6 @@ class NacShowTimersFragment
 	 * The current snackbar being used.
 	 */
 	private var currentSnackbar: Snackbar? = null
-
-	/**
-	 * Previous Y position of the current snackbar.
-	 */
-	private var prevSnackbarY: Float = 0f
 
 	/**
 	 * Whether the circular progress animation is running for a timer or not.
@@ -278,8 +258,9 @@ class NacShowTimersFragment
 		messageId: Int? = null,
 		onInsertListener: () -> Unit = {})
 	{
-		// Insert timer
 		lifecycleScope.launch {
+
+			// Insert timer
 			timerViewModel.insert(timer) {
 
 				// Countdown timer change listener
@@ -293,7 +274,8 @@ class NacShowTimersFragment
 					val action = getString(R.string.action_undo)
 
 					showSnackbar(
-						message, action,
+						currentSnackbar, floatingActionButton,
+						message, action, sharedPreferences.themeColor,
 						onClickListener = {
 							// Undo the insert. This will delete the timer
 							deleteTimer(timer)
@@ -304,6 +286,7 @@ class NacShowTimersFragment
 				onInsertListener()
 
 			}
+
 		}
 	}
 
@@ -319,6 +302,85 @@ class NacShowTimersFragment
 			// Navigate to the edit timer fragment
 			findNavController().navigate(R.id.nacEditTimerFragment, timer.toBundle())
 		})
+	}
+
+	/**
+	 * Attempt to dismiss the timer with a scanned NFC tag.
+	 */
+	fun attemptDismissWithScannedNfc(nfcId: String)
+	{
+		lifecycleScope.launch {
+
+			// Get all the active timers
+			val context = requireContext()
+			val allActiveTimers = timerViewModel.getAllActiveTimers()
+			var nonNfcTimer: NacTimer? = null
+			var anyNfcTimer: NacTimer? = null
+
+			println("Iterate over each active timer")
+			allActiveTimers.forEach { t ->
+
+				// Timer does not use NFC so ignore
+				if (!t.shouldUseNfc)
+				{
+					nonNfcTimer = nonNfcTimer ?: t
+					println("Timer maybe using non NFC : ${nonNfcTimer.id}")
+					return@forEach
+				}
+
+				// Timer can use any NFC tag to dismiss
+				if (t.nfcTagDismissOrder == NacNfcTagDismissOrder.ANY)
+				{
+					anyNfcTimer = anyNfcTimer ?: t
+					println("Timer can dismiss using ANY NFC tags : ${anyNfcTimer.id}")
+					return@forEach
+				}
+
+				// Parse the NFC ID and acceptable NFC tags that can be used to dismiss the timer
+				val nfcTagIdList = t.nfcTagIdList
+
+				// NFC tag list contains the NFC tag that was scanned
+				if (nfcTagIdList.contains(nfcId))
+				{
+					println("Timer : ${t.id} contains NFC tag : $nfcId")
+					if (nfcTagIdList.size == 1)
+					{
+						println("ONLY 1 NFC required for this timer! Dismiss this jank")
+						NacActiveTimerService.dismissTimerServiceWithNfc(context, t)
+					}
+					else
+					{
+						println("Timer NEEDS more than 1 nFC jakn : $nfcTagIdList")
+						val bundle = t.toBundle()
+							.apply {
+								putString(SCANNED_NFC_TAG_ID_BUNDLE_NAME, nfcId)
+							}
+
+						// Navigate to the active timer and try to dismiss with this NFC tag
+						findNavController().navigate(R.id.nacActiveTimerFragment, bundle)
+					}
+
+					return@launch
+				}
+
+			}
+
+			// None of the timers had an NFC tag list that contained the scanned NFC tag.
+			// Now try dismiss one of the timers that accepts any NFC tag to dismiss
+			if (anyNfcTimer != null)
+			{
+				println("DISMISSING ANY NFC TIMER : ${anyNfcTimer.id}")
+				NacActiveTimerService.dismissTimerServiceWithNfc(context, anyNfcTimer)
+			}
+
+			// As a last resort, try to dismiss one of the timers that does not even use
+			// NFC, but NFC is still accepted to dismiss if a user wants to
+			if (nonNfcTimer != null)
+			{
+				println("DISMISSING NON NFC TIMER : ${nonNfcTimer.id}")
+				NacActiveTimerService.dismissTimerServiceWithNfc(context, nonNfcTimer)
+			}
+		}
 	}
 
 	/**
@@ -356,41 +418,27 @@ class NacShowTimersFragment
 		val message = getString(R.string.message_timer_delete)
 		val action = getString(R.string.action_undo)
 
-		showSnackbar(message, action,
+		showSnackbar(
+			currentSnackbar, floatingActionButton,
+			message, action, sharedPreferences.themeColor,
 			onClickListener = {
 				// Undo the delete. This will restore the timer
 				restoreTimer(timer)
 			},
 			onDismissListener = { event ->
 
-				// Check if the snackbar was not dismissed via timeout
-				// or if the local media path is empty
-				// or if the local media path is equal to the shared preference path
-				if ((event != BaseTransientBottomBar.BaseCallback.DISMISS_EVENT_TIMEOUT)
-					|| localMediaPath.isEmpty()
-					|| (localMediaPath == sharedPreferences.localMediaPath))
+				// Snackbar was not dismissed via timeout
+				if (event != BaseTransientBottomBar.BaseCallback.DISMISS_EVENT_TIMEOUT)
 				{
-					// Do nothing
 					return@showSnackbar
 				}
 
-				// Check if the local media path is empty or if it is equal to the shared
-				// preference local media path
-				// TODO: Generalize this or maybe not do this and just delete this logic?
+				// Cleanup media file
 				lifecycleScope.launch {
-
-					// Check if no alarms are using the local media path
-					val noMatchingMedia = timerViewModel.getAllTimers()
-						.all { it.localMediaPath != localMediaPath }
-
-					if (noMatchingMedia)
-					{
-						// Delete the local media
-						val file = File(localMediaPath)
-						file.delete()
-					}
-
+					(requireActivity() as NacMainActivity).cleanupMediaFileAfterDelete(
+						localMediaPath, timerViewModel.getAllTimers())
 				}
+
 			})
 	}
 
@@ -519,82 +567,6 @@ class NacShowTimersFragment
 		{
 			println("NFC was scanned in onResume() of show timers! $nfcId")
 			attemptDismissWithScannedNfc(nfcId)
-		}
-	}
-
-	private fun attemptDismissWithScannedNfc(nfcId: String)
-	{
-		lifecycleScope.launch {
-
-			// Get all the active timers
-			val context = requireContext()
-			val allActiveTimers = timerViewModel.getAllActiveTimers()
-			var nonNfcTimer: NacTimer? = null
-			var anyNfcTimer: NacTimer? = null
-
-			println("Iterate over each active timer")
-			allActiveTimers.forEach { t ->
-
-				// Timer does not use NFC so ignore
-				if (!t.shouldUseNfc)
-				{
-					nonNfcTimer = nonNfcTimer ?: t
-					println("Timer maybe using non NFC : ${nonNfcTimer.id}")
-					return@forEach
-				}
-
-				// Timer can use any NFC tag to dismiss
-				if (t.nfcTagDismissOrder == NacNfcTagDismissOrder.ANY)
-				{
-					anyNfcTimer = anyNfcTimer ?: t
-					println("Timer can dismiss using ANY NFC tags : ${anyNfcTimer.id}")
-					return@forEach
-				}
-
-				// Parse the NFC ID and acceptable NFC tags that can be used to dismiss the timer
-				val nfcTagIdList = t.nfcTagIdList
-
-				// NFC tag list contains the NFC tag that was scanned
-				if (nfcTagIdList.contains(nfcId))
-				{
-					println("Timer : ${t.id} contains NFC tag : $nfcId")
-					if (nfcTagIdList.size == 1)
-					{
-						println("ONLY 1 NFC required for this timer! Dismiss this jank")
-						NacActiveTimerService.dismissTimerServiceWithNfc(context, t)
-					}
-					else
-					{
-						println("Timer NEEDS more than 1 nFC jakn : $nfcTagIdList")
-						val bundle = t.toBundle()
-							.apply {
-								putString(SCANNED_NFC_TAG_ID_BUNDLE_NAME, nfcId)
-							}
-
-						// Navigate to the active timer and try to dismiss with this NFC tag
-						findNavController().navigate(R.id.nacActiveTimerFragment, bundle)
-					}
-
-					return@launch
-				}
-
-			}
-
-			// None of the timers had an NFC tag list that contained the scanned NFC tag.
-			// Now try dismiss one of the timers that accepts any NFC tag to dismiss
-			if (anyNfcTimer != null)
-			{
-				println("DISMISSING ANY NFC TIMER : ${anyNfcTimer.id}")
-				NacActiveTimerService.dismissTimerServiceWithNfc(context, anyNfcTimer)
-			}
-
-			// As a last resort, try to dismiss one of the timers that does not even use
-			// NFC, but NFC is still accepted to dismiss if a user wants to
-			if (nonNfcTimer != null)
-			{
-				println("DISMISSING NON NFC TIMER : ${nonNfcTimer.id}")
-				NacActiveTimerService.dismissTimerServiceWithNfc(context, nonNfcTimer)
-			}
 		}
 	}
 
@@ -752,66 +724,6 @@ class NacShowTimersFragment
 			timerCardAdapter.submitList(timers)
 
 		}
-
-		//// TODO: Do I want an alarm intent watcher and timer intent watcher?
-		//// NFC intent
-		//nfcIntentLiveData.observe(viewLifecycleOwner) { intent ->
-
-		//	println("Show timers new NFC intent! ${intent.action}")
-		//	lifecycleScope.launch {
-
-		//		// TODO: If this logic is not here, what is the timing between seeing that
-		//		//  NFC was scanned, posting the intent value, checking the alarm view model
-		//		//  for an active jank, and then starting the alarm activity/service?
-		//		// Get the active timer
-		//		val allActiveTimers = timerViewModel.getAllActiveTimers()
-		//		println("Show timers active timer check : $allActiveTimers")
-
-		//		println("Navigate to active timer fragment yo")
-		//		allActiveTimers.forEach { t ->
-
-		//			if (!t.shouldUseNfc)
-		//			{
-		//				return@forEach
-		//			}
-
-		//			if (t.nfcTagDismissOrder == NacNfcTagDismissOrder.ANY)
-		//			{
-		//				println("Timer can dismiss using ANY NFC tags")
-		//				NacActiveTimerService.dismissTimerServiceWithNfc(requireContext(), t)
-		//				return@launch
-		//			}
-
-		//			val intentNfcId = NacNfc.parseId(intent)
-		//			val nfcTagIdList = t.nfcTagIdList
-
-		//			if (nfcTagIdList.contains(intentNfcId))
-		//			{
-		//				println("Timer : ${t.id} contains NFC tag : $intentNfcId")
-		//				if (nfcTagIdList.size == 1)
-		//				{
-		//					println("ONLY 1 NFC required for this timer! Dismiss this jank")
-		//					NacActiveTimerService.dismissTimerServiceWithNfc(requireContext(), t)
-		//				}
-		//				else
-		//				{
-		//					println("Timer NEEDS more than 1 nFC jakn : $nfcTagIdList")
-		//					val bundle = t.toBundle()
-		//						.apply {
-		//							putBoolean(NFC_WAS_SCANNED_BUNDLE_NAME, true)
-		//						}
-
-		//					findNavController().navigate(R.id.nacActiveTimerFragment, bundle)
-		//				}
-
-		//				return@launch
-		//			}
-
-		//		}
-
-		//	}
-
-		//}
 	}
 
 	/**
@@ -937,13 +849,17 @@ class NacShowTimersFragment
 			// Stop timer listener
 			card.onStopTimerClickedListener = NacTimerCardHolder.OnStopTimerClickedListener { timer ->
 
-				// Update views back to normal
-				card.setResetVisibility()
-				card.updateHourMinuteSecondsTextViews(timer.duration)
-				card.progressIndicator.animateProgress(card.progressIndicator.progress, 0, 250)
+				// Get the context
+				val context = requireContext()
 
 				// Dismiss the timer
 				service?.dismiss(timer)
+
+				// Update views back to normal
+				card.setResetVisibility()
+				card.updateHourMinuteSecondsTextViews(timer.duration)
+				card.resetTimerRingingAnimation(context)
+				card.progressIndicator.animateProgress(card.progressIndicator.progress, 0, 250)
 
 			}
 
@@ -951,149 +867,6 @@ class NacShowTimersFragment
 
 		// Attach the recycler view to the touch helper
 		timerCardTouchHelper.attachToRecyclerView(recyclerView)
-	}
-
-	/**
-	 * Show a snackbar.
-	 */
-	private fun showSnackbar(
-		message: String,
-		action: String,
-		onClickListener: View.OnClickListener? = null,
-		onDismissListener: (Int) -> Unit = {})
-	{
-		// Check if there is a normal "Dismiss" snackbar that is currently shown, in
-		// which case it will be reused
-		val shouldReuseSnackbar = (currentSnackbar?.isShown == true) && (onClickListener == null)
-
-		// Check if there is a normal "Dismiss" snackbar that is currently shown
-		val snackbar = if (shouldReuseSnackbar)
-		{
-			// Reuse the snackbar
-			currentSnackbar!!.setText(message.toSpannedString())
-			currentSnackbar!!.show()
-			currentSnackbar!!
-		}
-		else
-		{
-			// Create the snackbar
-			Snackbar.make(floatingActionButton, message.toSpannedString(),
-				Snackbar.LENGTH_LONG)
-		}
-
-		// Setup the snackbar
-		snackbar.setActionTextColor(sharedPreferences.themeColor)
-		snackbar.setAction(action, onClickListener ?: View.OnClickListener { })
-		snackbar.setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
-
-		// Add callback if listener is set
-		if (!shouldReuseSnackbar)
-		{
-			//// Listener when the snackbar is being drawn and thus when it is moving up and down
-			//snackbar.view.viewTreeObserver.addOnPreDrawListener(object: ViewTreeObserver.OnPreDrawListener
-			//{
-
-			//	/**
-			//	 * Called when the view tree is about to be drawn.
-			//	 */
-			//	override fun onPreDraw(): Boolean
-			//	{
-			//		// Get the current Y position
-			//		val y = snackbar.view.y
-
-			//		// Do nothing when the snackbar has not been shown yet
-			//		if (prevSnackbarY == 0f)
-			//		{
-			//			return true
-			//		}
-			//		// Snackbar is moving down
-			//		else if (prevSnackbarY < y)
-			//		{
-			//			// Animate the FAB moving back to its original position
-			//			floatingActionButton.animate()
-			//				.apply {
-			//					translationY(0f)
-			//					duration = 250
-			//				}
-			//				.start()
-
-			//			// Remove the listener
-			//			snackbar.view.viewTreeObserver.removeOnPreDrawListener(this)
-			//		}
-			//		// Snackbar is moving up. Update the previous Y position to compare
-			//		// later
-			//		else
-			//		{
-			//			prevSnackbarY = y
-			//		}
-
-			//		return true
-			//	}
-
-			//})
-
-			//// Listener for when the snackbar is starting to change and become visible.
-			//// This means the view has been measured and has a height, so the animation
-			//// of the FAB can be started at the same time since now it is known how much
-			//// to animate the FAB's Y position by
-			//snackbar.view.addOnLayoutChangeListener { view, _, _, _, _, _, _, _, _ ->
-
-			//	/**
-			//	 * Called when the view layout has changed.
-			//	 */
-			//	// Get the height of the snackbar
-			//	val height = view.height.toFloat()
-
-			//	// Animate the FAB moving up
-			//	floatingActionButton.animate()
-			//		.apply {
-			//			translationY(-height)
-			//			duration = 250
-			//		}
-			//		.start()
-
-			//	// Snackbar was already being shown. Update the Y position to the
-			//	// snackbar's current Y position in case its height changed
-			//	if (prevSnackbarY > 0)
-			//	{
-			//		prevSnackbarY = view.y
-			//	}
-			//}
-
-			//// Add the normal show/dismiss callback
-			//snackbar.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>()
-			//{
-
-			//	/**
-			//	 * Called when the snackbar is shown.
-			//	 */
-			//	override fun onShown(transientBottomBar: Snackbar?)
-			//	{
-			//		// The snackbar is visible now, so get its starting Y position
-			//		prevSnackbarY = snackbar.view.y
-			//	}
-
-			//	/**
-			//	 * Called when the snackbar has been dismissed.
-			//	 */
-			//	override fun onDismissed(transientBottomBar: Snackbar?, event: Int)
-			//	{
-			//		// Call the listener
-			//		onDismissListener(event)
-
-			//		// Reset the values of the FAB and snackbar
-			//		floatingActionButton.translationY = 0f
-			//		prevSnackbarY = 0f
-			//	}
-
-			//})
-		}
-
-		// Show the snackbar
-		snackbar.show()
-
-		// Set the current snackbar
-		currentSnackbar = snackbar.takeIf { onClickListener == null }
 	}
 
 }

@@ -12,7 +12,7 @@
 	</style>
 
 	<style name="Timer.CardCircularProgressIndicator" parent="Timer.CircularProgressIndicator">
-		<item name="indicatorSize">220dp</item>
+		<item name="indicatorSize">260dp</item>
 	</style>
 
 	<style name="Timer.ActiveCircularProgressIndicator" parent="Timer.CircularProgressIndicator">
@@ -30,7 +30,7 @@
 	</style>
 
 	<style name="Timer.CardTimeText" parent="Timer.AddTimeText">
-		<item name="android:textSize">@dimen/tsz_xhuge</item>
+		<item name="android:textSize">@dimen/tsz_xxhuge</item>
 		<item name="android:textStyle">bold</item>
 		<item name="android:text">@string/number00</item>
 	</style>

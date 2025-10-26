@@ -5,22 +5,30 @@
 	android:id="@+id/nav_main_fragments"
 	app:startDestination="@id/nacShowAlarmsFragment">
 
+	<!-- Global actions -->
+	<action
+		android:id="@+id/action_global_nacShowAlarmsFragment"
+		app:destination="@id/nacShowAlarmsFragment"
+		app:popUpTo="@id/nacShowAlarmsFragment"
+		app:popUpToInclusive="true" />
+
+	<action
+		android:id="@+id/action_global_nacShowTimersFragment"
+		app:destination="@id/nacShowTimersFragment"
+		app:popUpTo="@id/nacShowAlarmsFragment"
+		app:popUpToInclusive="false" />
+
+	<!-- Show alarms -->
 	<fragment
 		android:id="@+id/nacShowAlarmsFragment"
 		android:name="com.nfcalarmclock.alarm.NacShowAlarmsFragment"
-		android:label="NacShowAlarmsFragment" />
-	<fragment
-		android:id="@+id/nacAddTimerFragment"
-		android:name="com.nfcalarmclock.timer.addedit.NacAddTimerFragment"
-		android:label="NacAddTimerFragment" >
+		android:label="NacShowAlarmsFragment" >
 		<action
-			android:id="@+id/action_nacAddTimerFragment_to_nacActiveTimerFragment"
-			app:destination="@id/nacActiveTimerFragment" />
+			android:id="@+id/action_nacShowAlarmsFragment_to_nacAlarmMainMediaPickerFragment"
+			app:destination="@id/nacAlarmMainMediaPickerFragment" />
 	</fragment>
-	<fragment
-		android:id="@+id/nacActiveTimerFragment"
-		android:name="com.nfcalarmclock.timer.active.NacActiveTimerFragment"
-		android:label="NacActiveTimerFragment" />
+
+	<!-- Show timers -->
 	<fragment
 		android:id="@+id/nacShowTimersFragment"
 		android:name="com.nfcalarmclock.timer.main.NacShowTimersFragment"
@@ -35,6 +43,21 @@
 			android:id="@+id/action_nacShowTimersFragment_to_nacEditTimerFragment"
 			app:destination="@id/nacEditTimerFragment" />
 	</fragment>
+
+	<!-- Add timer-->
+	<fragment
+		android:id="@+id/nacAddTimerFragment"
+		android:name="com.nfcalarmclock.timer.addedit.NacAddTimerFragment"
+		android:label="NacAddTimerFragment" >
+		<action
+			android:id="@+id/action_nacAddTimerFragment_to_nacActiveTimerFragment"
+			app:destination="@id/nacActiveTimerFragment" />
+		<action
+			android:id="@+id/action_nacAddTimerFragment_to_nacTimerMainMediaPickerFragment"
+			app:destination="@id/nacTimerMainMediaPickerFragment" />
+	</fragment>
+
+	<!-- Edit timer-->
 	<fragment
 		android:id="@+id/nacEditTimerFragment"
 		android:name="com.nfcalarmclock.timer.addedit.NacEditTimerFragment"
@@ -42,5 +65,25 @@
 		<action
 			android:id="@+id/action_nacEditTimerFragment_to_nacActiveTimerFragment"
 			app:destination="@id/nacActiveTimerFragment" />
+		<action
+			android:id="@+id/action_nacEditTimerFragment_to_nacTimerMainMediaPickerFragment"
+			app:destination="@id/nacTimerMainMediaPickerFragment" />
 	</fragment>
+
+	<!-- Active timer-->
+	<fragment
+		android:id="@+id/nacActiveTimerFragment"
+		android:name="com.nfcalarmclock.timer.active.NacActiveTimerFragment"
+		android:label="NacActiveTimerFragment" />
+
+	<!-- Media pickers -->
+	<fragment
+		android:id="@+id/nacAlarmMainMediaPickerFragment"
+		android:name="com.nfcalarmclock.alarm.options.mediapicker.NacAlarmMainMediaPickerFragment"
+		android:label="NacAlarmMainMediaPickerFragment" />
+	<fragment
+		android:id="@+id/nacTimerMainMediaPickerFragment"
+		android:name="com.nfcalarmclock.timer.options.mediapicker.NacTimerMainMediaPickerFragment"
+		android:label="NacTimerMainMediaPickerFragment" />
+
 </navigation>

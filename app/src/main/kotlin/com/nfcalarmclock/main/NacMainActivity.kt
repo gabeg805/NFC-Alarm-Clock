@@ -10,6 +10,7 @@ import android.os.Build
 import android.os.Bundle
 import android.provider.AlarmClock
 import android.view.Menu
+import android.view.View
 import androidx.activity.viewModels
 import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
@@ -25,7 +26,7 @@ import com.nfcalarmclock.BuildConfig
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.NacAlarmViewModel
 import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmActivity
-import com.nfcalarmclock.alarm.options.nfc.NacNfcTagDismissOrder
+import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.nfc.NacNfc
 import com.nfcalarmclock.nfc.SCANNED_NFC_TAG_ID_BUNDLE_NAME
 import com.nfcalarmclock.ratemyapp.NacRateMyApp
@@ -48,13 +49,15 @@ import com.nfcalarmclock.system.toBundle
 import com.nfcalarmclock.system.triggers.shutdown.NacShutdownBroadcastReceiver
 import com.nfcalarmclock.system.unregisterMyReceiver
 import com.nfcalarmclock.timer.NacTimerViewModel
-import com.nfcalarmclock.timer.active.NacActiveTimerService
+import com.nfcalarmclock.timer.active.NacActiveTimerFragment
+import com.nfcalarmclock.timer.main.NacShowTimersFragment
 import com.nfcalarmclock.view.setupRippleColor
 import com.nfcalarmclock.view.setupThemeColor
 import com.nfcalarmclock.whatsnew.NacWhatsNewDialog
 import com.nfcalarmclock.widget.refreshAppWidgets
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import java.io.File
 
 /**
  * The application's main activity.
@@ -230,6 +233,31 @@ class NacMainActivity
 	}
 
 	/**
+	 * Cleanup the media file that was being used extra media files in device encrypted storage that are not used by any
+	 * alarm.
+	 *
+	 * This will typically happen if an alarm changes the media that they are using for
+	 * an alarm.
+	 */
+	fun <T: NacAlarm> cleanupMediaFileAfterDelete(localMediaPath: String, allItems: List<T>)
+	{
+		// Local media path is empty or matches the default shared preference path
+		if (localMediaPath.isEmpty() || (localMediaPath == sharedPreferences.localMediaPath))
+		{
+			// Do nothing
+			return
+		}
+
+		// Ensure that no items are using the local media path
+		if (allItems.all { it.localMediaPath != localMediaPath })
+		{
+			// Delete the local media
+			val file = File(localMediaPath)
+			file.delete()
+		}
+	}
+
+	/**
 	 * Do the event to update and backup media info in all alarms starting at database
 	 * version 31.
 	 */
@@ -304,12 +332,13 @@ class NacMainActivity
 		// the main activity
 		disableActivityAlias(this)
 
-		// Cleanup any old zip files that were created when sending a
-		// statistics email
-		cleanupEmailZipFiles()
+		// Cleanup any extra media files in device encrypted storage and old zip files
+		// that were created when sending a statistics email
+		lifecycleScope.launch {
+			cleanupExtraMediaFilesInDeviceEncryptedStorage()
+			cleanupEmailZipFiles()
+		}
 
-		// Cleanup any extra media files in device encrypted storage
-		lifecycleScope.launch {  cleanupExtraMediaFilesInDeviceEncryptedStorage() }
 		//lifecycleScope.launch {
 		//	timerViewModel.allTimers.observe(this@NacMainActivity) { allTimers ->
 		//		allTimers.forEach {
@@ -381,24 +410,68 @@ class NacMainActivity
 			if (NacNfc.wasScanned(intent))
 			{
 				println("Updating NFC intent. Current destination : ${navController.currentDestination}")
-				//NacNfcIntent.update(intent)
 
 				// Active alarm
 				if (activeAlarm != null)
 				{
 					println("Attempt to dismiss alarm with NFC")
-					// Try to dismiss with NFC
-					NacActiveAlarmActivity.startAlarmActivity(this@NacMainActivity, intent, activeAlarm)
+					//// Try to dismiss with NFC
+					//NacActiveAlarmActivity.startAlarmActivity(this@NacMainActivity, intent, activeAlarm)
+					// Remove the grant URI permissions in the untrusted intent
+					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+					{
+						intent.removeFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+						intent.removeFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+					}
+
+					// Check that the nested intent does not grant URI permissions
+					if (((intent.flags and Intent.FLAG_GRANT_READ_URI_PERMISSION) == 0) &&
+						((intent.flags and Intent.FLAG_GRANT_WRITE_URI_PERMISSION) == 0))
+					{
+						println("Show alarms start alarm activity")
+						// Start the alarm activity with the intent containing the NFC tag
+						// information in order to dismiss this alarm
+						NacActiveAlarmActivity.startAlarmActivity(this@NacMainActivity, intent, activeAlarm)
+					}
 				}
 				// Active timer(s)
 				else if (timerViewModel.countActive() > 0)
 				{
 					// Put the ID of the NFC tag that was scanned in a bundle
-					val nfcId = NacNfc.parseId(intent)
+					val nfcId = NacNfc.parseId(intent)!!
 					val bundle = Bundle().apply { putString(SCANNED_NFC_TAG_ID_BUNDLE_NAME, nfcId) }
+					val destinationId = navController.currentDestination?.id
 
-					// Navigate to show timers passing in the NFC tag ID
-					navController.navigate(R.id.nacShowTimersFragment, bundle)
+					when (destinationId)
+					{
+
+						// Show timers
+						R.id.nacShowTimersFragment ->
+						{
+							val fragment = supportFragmentManager.findFragmentById(destinationId) as NacShowTimersFragment?
+
+							println("Attempting to dismiss jank show timers instead of navigate : $nfcId")
+							fragment?.attemptDismissWithScannedNfc(nfcId)
+						}
+
+						// Active timer
+						R.id.nacActiveTimerFragment ->
+						{
+							val fragment = supportFragmentManager.findFragmentById(destinationId) as NacActiveTimerFragment?
+
+							println("Attempting to dismiss jank active timer instead of navigate : $nfcId")
+							fragment?.attemptDismissWithScannedNfc(nfcId)
+						}
+
+						// Something else
+						else ->
+						{
+							println("Navigate to show timers with the bundle : $nfcId")
+							// Navigate to show timers passing in the NFC tag ID
+							navController.navigate(R.id.nacShowTimersFragment, bundle)
+						}
+
+					}
 				}
 				// Start a timer from an NFC tag
 				else
@@ -408,10 +481,6 @@ class NacMainActivity
 			}
 			else
 			{
-				// TODO: If this logic is not here, what is the timing between seeing that
-				//  NFC was scanned, posting the intent value, checking the alarm view model
-				//  for an active jank, and then starting the alarm activity/service?
-
 				// Show the active alarm activity
 				if (activeAlarm != null)
 				{
@@ -486,9 +555,10 @@ class NacMainActivity
 		bottomNavigation.itemActiveIndicatorColor = ColorStateList.valueOf(gray)
 		bottomNavigation.setupRippleColor(sharedPreferences)
 
-		// Bottom navigation item selected listener
+		// Item selected listener
 		bottomNavigation.setOnItemSelectedListener { item ->
 
+			println("Item selected : $item")
 			// User did not selected a bottom navigation item so do not navigate anywhere
 			if (!wasBottomNavigationSelectedByUser)
 			{
@@ -504,31 +574,17 @@ class NacMainActivity
 				// Alarm
 				R.id.bottom_navigation_alarm ->
 				{
-					navController.navigate(R.id.nacShowAlarmsFragment)
+					println("Showing list of alarms")
+					navController.navigate(R.id.action_global_nacShowAlarmsFragment)
 					true
 				}
 
 				// Timer
 				R.id.bottom_navigation_timer ->
 				{
-					lifecycleScope.launch {
 
-						println("Showing list of timers")
-						navController.navigate(R.id.nacShowTimersFragment)
-
-						//// No timers. Have user add a timer
-						//if (timerViewModel.count() == 0)
-						//{
-						//	println("Showing add a single timer")
-						//	navController.navigate(R.id.nacAddTimerFragment)
-						//}
-						//// 1+ timers.
-						//else
-						//{
-						//	println("Showing list of timers")
-						//	navController.navigate(R.id.nacShowTimersFragment)
-						//}
-					}
+					println("Showing list of timers")
+					navController.navigate(R.id.action_global_nacShowTimersFragment)
 					true
 				}
 
@@ -536,6 +592,12 @@ class NacMainActivity
 				else -> false
 			}
 
+		}
+
+		// Reselected listener. Do nothing so that the backstack does not get more
+		// destinations added to it
+		bottomNavigation.setOnItemReselectedListener {
+			println("HELLO")
 		}
 	}
 
@@ -596,23 +658,6 @@ class NacMainActivity
 	{
 		// Set the color
 		floatingActionButton.setupThemeColor(sharedPreferences)
-
-		// Change the visibility based on the current destination
-		navController.addOnDestinationChangedListener { _, destination, _ ->
-			when (destination.id)
-			{
-
-				// Show alarms
-				R.id.nacShowAlarmsFragment -> floatingActionButton.show()
-
-				// Show timers
-				R.id.nacShowTimersFragment -> floatingActionButton.show()
-
-				// Unknown
-				else -> floatingActionButton.hide()
-
-			}
-		}
 	}
 
 	/**
@@ -694,23 +739,91 @@ class NacMainActivity
 	 */
 	private fun setupNavController()
 	{
+
+		// Change the visibility based on the current destination
+		navController.addOnDestinationChangedListener { _, destination, _ ->
+		}
+
 		// Destination changed listener
 		navController.addOnDestinationChangedListener { controller, destination, arguments ->
 
-			// Update the flag indicating that this change was not done by a user
-			wasBottomNavigationSelectedByUser = false
+			println("Changeing destination : ${destination.label}")
 
-			// Change the bottom navigation view selected item based on the destination
-			println("Changeing bottom nav id : $destination")
-			when (destination.id)
+			// Set the bottom navigation visibility based on the current destination
+			bottomNavigation.visibility = if ((destination.id == R.id.nacAlarmMainMediaPickerFragment) || (destination.id == R.id.nacTimerMainMediaPickerFragment))
 			{
-				// Alarm
-				R.id.nacShowAlarmsFragment -> bottomNavigation.selectedItemId = R.id.bottom_navigation_alarm
-
+				println("Hiding bottom nav media")
+				// Media picker
+				View.GONE
+			}
+			else
+			{
+				println("SHOWING bottom nav")
 				// Everything else
-				else -> bottomNavigation.selectedItemId = R.id.bottom_navigation_timer
+				View.VISIBLE
 			}
 
+			//// Bottom navigation visibility
+			//when (destination.id)
+			//{
+			//	// Alarm media picker
+			//	R.id.nacAlarmMainMediaPickerFragment ->
+			//	{
+			//		println("Hiding bottom nav alarm media")
+			//		bottomNavigation.visibility = View.GONE
+			//	}
+
+			//	// Timer media picker
+			//	R.id.nacTimerMainMediaPickerFragment ->
+			//	{
+			//		println("Hiding bottom nav timer media")
+			//		bottomNavigation.visibility = View.GONE
+			//	}
+
+
+			//	// Everything else
+			//	else ->
+			//	{
+			//		println("SHOWING bottom nav")
+			//		bottomNavigation.visibility = View.VISIBLE
+			//	}
+			//}
+
+			// Floating action button visibility
+			when (destination.id)
+			{
+				// Show alarms
+				R.id.nacShowAlarmsFragment -> floatingActionButton.show()
+
+				// Show timers
+				R.id.nacShowTimersFragment -> floatingActionButton.show()
+
+				// Everything else
+				else -> floatingActionButton.hide()
+			}
+
+			// Get the bottom navigation ID to go to
+			val bottomNavId = when (destination.id)
+			{
+				// Alarm
+				R.id.nacShowAlarmsFragment -> R.id.bottom_navigation_alarm
+
+				// Everything else
+				else -> R.id.bottom_navigation_timer
+			}
+
+			// Navigate to that ID. Update the flag indicating that this change was not
+			// done by a user
+			if (bottomNavigation.selectedItemId != bottomNavId)
+			{
+				wasBottomNavigationSelectedByUser = false
+				bottomNavigation.selectedItemId = bottomNavId
+			}
+			// Already at the place
+			else
+			{
+				println("ALREADY THERE")
+			}
 		}
 	}
 

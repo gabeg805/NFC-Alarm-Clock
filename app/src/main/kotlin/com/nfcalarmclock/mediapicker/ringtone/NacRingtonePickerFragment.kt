@@ -1,4 +1,4 @@
-package com.nfcalarmclock.alarm.options.mediapicker.ringtone
+package com.nfcalarmclock.mediapicker.ringtone
 
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -9,26 +9,23 @@ import android.view.ViewGroup
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.core.net.toUri
-import androidx.fragment.app.Fragment
 import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.alarm.options.mediapicker.NacMediaPickerFragment
+import com.nfcalarmclock.mediapicker.NacBaseChildMediaPickerFragment
 import com.nfcalarmclock.shared.NacSharedPreferences
-import com.nfcalarmclock.system.addMediaInfo
 import com.nfcalarmclock.system.getDeviceProtectedStorageContext
-import com.nfcalarmclock.system.toBundle
 import com.nfcalarmclock.system.media.NacMedia
 import com.nfcalarmclock.system.media.buildLocalMediaPath
 import com.nfcalarmclock.system.media.getMediaArtist
 import com.nfcalarmclock.system.media.getMediaTitle
 
 /**
- * Display a dialog that shows a list of alarm ringtones.
+ * Pick a ringtone.
  */
 @UnstableApi
-class NacRingtonePickerFragment
-	: NacMediaPickerFragment()
+abstract class NacRingtonePickerFragment<T: NacAlarm>
+	: NacBaseChildMediaPickerFragment<T>()
 {
 
 	/**
@@ -86,7 +83,7 @@ class NacRingtonePickerFragment
 	 * Called when the view will be created.
 	 */
 	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-		savedInstanceState: Bundle?): View?
+							  savedInstanceState: Bundle?): View?
 	{
 		return inflater.inflate(R.layout.frg_ringtone, container, false)
 	}
@@ -134,7 +131,8 @@ class NacRingtonePickerFragment
 	/**
 	 * Set the radio button's color state list.
 	 */
-	private fun setRadioButtonColor(shared: NacSharedPreferences,
+	private fun setRadioButtonColor(
+		shared: NacSharedPreferences,
 		radioButton: RadioButton)
 	{
 		// Get the colors for the boolean states
@@ -180,47 +178,6 @@ class NacRingtonePickerFragment
 				button.isChecked = true
 			}
 		}
-	}
-
-	companion object
-	{
-
-		/**
-		 * Create a new instance of this fragment.
-		 */
-		fun newInstance(alarm: NacAlarm?): Fragment
-		{
-			// Create the fragment
-			val fragment: Fragment = NacRingtonePickerFragment()
-
-			// Add the bundle to the fragment
-			fragment.arguments = alarm?.toBundle() ?: Bundle()
-
-			return fragment
-		}
-
-		/**
-		 * Create a new instance of this fragment.
-		 */
-		fun newInstance(
-			mediaPath: String,
-			mediaArtist: String,
-			mediaTitle: String,
-			mediaType: Int,
-			shuffleMedia: Boolean,
-			recursivelyPlayMedia: Boolean
-		): Fragment
-		{
-			// Create the fragment
-			val fragment: Fragment = NacRingtonePickerFragment()
-
-			// Add the bundle to the fragment
-			fragment.arguments = Bundle().addMediaInfo(mediaPath, mediaArtist, mediaTitle,
-				mediaType, shuffleMedia, recursivelyPlayMedia)
-
-			return fragment
-		}
-
 	}
 
 }

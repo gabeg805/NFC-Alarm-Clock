@@ -22,11 +22,6 @@ import java.util.Calendar
 const val ALARM_BUNDLE_NAME = "NacAlarmBundle"
 
 /**
- * Tag name for retrieving a media path from a bundle.
- */
-const val MEDIA_BUNDLE_NAME = "NacMediaBundle"
-
-/**
  * Tag name for retrieving a NacTimer from a bundle.
  */
 const val TIMER_BUNDLE_NAME = "NacTimerBundle"
@@ -45,35 +40,6 @@ fun Intent.addAlarm(alarm: NacAlarm?): Intent
 
 	// Add the bundle to the intent
 	this.putExtra(ALARM_BUNDLE_NAME, bundle)
-
-	return this
-}
-
-/**
- * Add a media information to an intent.
- *
- * @param mediaPath A media path.
- * @param shuffleMedia Whether to shuffle media or not.
- * @param recursivelyPlayMedia Whether to recursively play media or not.
- *
- * @return The intent that was passed in with the media path and how to
- *         play the media inside a bundle in that intent.
- */
-fun Intent.addMediaInfo(
-	mediaPath: String,
-	mediaArtist: String,
-	mediaTitle: String,
-	mediaType: Int,
-	shuffleMedia: Boolean,
-	recursivelyPlayMedia: Boolean
-): Intent
-{
-	// Create a bundle with the media
-	val bundle = Bundle().addMediaInfo(mediaPath, mediaArtist, mediaTitle, mediaType,
-		shuffleMedia, recursivelyPlayMedia)
-
-	// Add the bundle to the intent
-	this.putExtra(MEDIA_BUNDLE_NAME, bundle)
 
 	return this
 }
@@ -108,17 +74,6 @@ fun Intent.getAlarm(): NacAlarm?
 
 	// Get the alarm from the bundle
 	return bundle?.getAlarm()
-}
-
-/**
- * Get the media bundle from an intent.
- *
- * @return The media bundle from an intent.
- */
-fun Intent.getMediaBundle(): Bundle
-{
-	// Get the bundle from the intent
-	return this.getBundleExtra(MEDIA_BUNDLE_NAME) ?: Bundle()
 }
 
 /**

@@ -133,11 +133,13 @@
 			/>
 
 		<!-- Media activity -->
+		<!--
 		<activity
 			android:name=".alarm.options.mediapicker.NacMediaPickerActivity"
 			android:exported="false"
 			android:launchMode="singleInstance"
 			/>
+			-->
 
 		<!-- Active alarm service (show notification and call alarm activity) -->
 		<service

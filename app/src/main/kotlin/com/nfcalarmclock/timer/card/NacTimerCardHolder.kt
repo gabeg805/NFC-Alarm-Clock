@@ -11,6 +11,7 @@ import com.nfcalarmclock.card.NacBaseCardHolder
 import com.nfcalarmclock.system.NacCalendar
 import com.nfcalarmclock.timer.db.NacTimer
 import com.nfcalarmclock.view.performHapticFeedback
+import com.nfcalarmclock.view.resetTimerRingingAnimation
 import com.nfcalarmclock.view.startTimerRingingAnimation
 import com.nfcalarmclock.view.updateHourMinuteSecondsTextViews
 
@@ -287,6 +288,18 @@ class NacTimerCardHolder(
 
 		// Set the progress
 		progressIndicator.progress = 0
+	}
+
+	/**
+	 * Reset the timer ringing animation.
+	 */
+	fun resetTimerRingingAnimation(context: Context)
+	{
+		resetTimerRingingAnimation(
+			context, progressIndicator,
+			hourTextView, hourUnits,
+			minuteTextView, minuteUnits,
+			secondsTextView, secondsUnits)
 	}
 
 	/**

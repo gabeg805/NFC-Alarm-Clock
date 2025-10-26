@@ -7,37 +7,44 @@
 	android:orientation="horizontal"
 	tools:ignore="ButtonOrder">
 
-	<Button
+	<!-- Clear -->
+	<com.google.android.material.button.MaterialButton
 		android:id="@+id/clear"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:background="?android:attr/selectableItemBackground"
+		android:textAllCaps="true"
+		android:textSize="@dimen/tsz_normal"
 		android:text="@string/action_clear"
-		android:textSize="@dimen/tsz_small"
 		/>
 
+	<!-- Spacer -->
 	<View
 		android:layout_width="0dp"
 		android:layout_height="match_parent"
 		android:layout_weight="1"
 		/>
 
-	<Button
+	<!-- Cancel -->
+	<com.google.android.material.button.MaterialButton
 		android:id="@+id/cancel"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:background="?android:attr/selectableItemBackground"
+		android:textAllCaps="true"
+		android:textSize="@dimen/tsz_normal"
 		android:text="@string/action_cancel"
-		android:textSize="@dimen/tsz_small"
 		/>
 
-	<Button
+	<!-- OK -->
+	<com.google.android.material.button.MaterialButton
 		android:id="@+id/ok"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:background="?android:attr/selectableItemBackground"
+		android:textAllCaps="true"
+		android:textSize="@dimen/tsz_normal"
 		android:text="@string/action_ok"
-		android:textSize="@dimen/tsz_small"
 		/>
 
 </LinearLayout>

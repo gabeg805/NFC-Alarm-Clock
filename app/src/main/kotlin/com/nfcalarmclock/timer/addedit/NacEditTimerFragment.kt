@@ -4,6 +4,8 @@ import android.os.Bundle
 import android.view.View
 import androidx.annotation.OptIn
 import androidx.media3.common.util.UnstableApi
+import androidx.navigation.fragment.findNavController
+import com.nfcalarmclock.R
 import com.nfcalarmclock.system.getTimer
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -21,6 +23,16 @@ class NacEditTimerFragment
 	override fun initTimer()
 	{
 		timer = requireArguments().getTimer()!!
+	}
+
+	/**
+	 * Navigate to the media picker.
+	 */
+	override fun navigateToMediaPicker(bundle: Bundle)
+	{
+		println("Navigating edit timer to main media timer")
+		// Navigate to the media picker
+		findNavController().navigate(R.id.action_nacEditTimerFragment_to_nacTimerMainMediaPickerFragment, bundle)
 	}
 
 	/**

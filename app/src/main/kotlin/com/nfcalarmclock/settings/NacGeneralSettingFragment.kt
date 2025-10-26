@@ -1,32 +1,27 @@
 package com.nfcalarmclock.settings
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.view.View
-import androidx.activity.result.ActivityResultLauncher
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.OptIn
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
+import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import androidx.preference.PreferenceManager
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.options.NacAlarmOptionsDialog
 import com.nfcalarmclock.alarm.options.dismissoptions.NacDismissOptionsDialog
-import com.nfcalarmclock.alarm.options.mediapicker.NacMediaPickerActivity
 import com.nfcalarmclock.alarm.options.name.NacNameDialog
-import com.nfcalarmclock.nfc.NacNfcTagViewModel
 import com.nfcalarmclock.alarm.options.snoozeoptions.NacSnoozeOptionsDialog
 import com.nfcalarmclock.card.NacCardPreference
+import com.nfcalarmclock.nfc.NacNfcTagViewModel
 import com.nfcalarmclock.settings.preference.NacCheckboxPreference
 import com.nfcalarmclock.system.addMediaInfo
 import com.nfcalarmclock.system.daysToValue
 import com.nfcalarmclock.system.getDeviceProtectedStorageContext
 import com.nfcalarmclock.system.getMediaArtist
-import com.nfcalarmclock.system.getMediaBundle
 import com.nfcalarmclock.system.getMediaPath
 import com.nfcalarmclock.system.getMediaTitle
 import com.nfcalarmclock.system.getMediaType
@@ -43,11 +38,6 @@ import kotlinx.coroutines.launch
 class NacGeneralSettingFragment
 	: NacGenericSettingFragment()
 {
-
-	/**
-	 * Activity result launcher, used to get results from a finished activity.
-	 */
-	private var activityLauncher: ActivityResultLauncher<Intent>? = null
 
 	/**
 	 * NFC tag view model.
@@ -142,45 +132,43 @@ class NacGeneralSettingFragment
 			pref.allNfcTags = nfcTagViewModel.getAllNfcTags()
 		}
 
-		// Define the activity launcher
-		activityLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+		// Set the observer for the media picker
+		println("Set the fragment result listener")
+		findNavController().currentBackStackEntry
+			?.savedStateHandle
+			?.getLiveData<Bundle>("YOYOYO")
+			?.observe(viewLifecycleOwner) { result ->
 
-			// Check that the result was OK
-			if (result.resultCode == Activity.RESULT_OK)
-			{
-				// Get the media bundle from the activity result data, and the media
-				// path from the bundle
-				val bundle = result.data?.getMediaBundle() ?: Bundle()
-				val mediaPath = bundle.getMediaPath()
-
+				println("Found bundle! $result")
 				// Save the media info for this preference
-				sharedPreferences!!.mediaPath = mediaPath
-				sharedPreferences!!.mediaArtist = bundle.getMediaArtist()
-				sharedPreferences!!.mediaTitle = bundle.getMediaTitle()
-				sharedPreferences!!.mediaType = bundle.getMediaType()
+				val context = requireContext()
+				sharedPreferences!!.mediaPath = result.getMediaPath()
+				sharedPreferences!!.mediaArtist = result.getMediaArtist()
+				sharedPreferences!!.mediaTitle = result.getMediaTitle()
+				sharedPreferences!!.mediaType	= result.getMediaType()
 				sharedPreferences!!.localMediaPath = buildLocalMediaPath(
-					requireContext(),
+					context,
 					sharedPreferences!!.mediaArtist,
 					sharedPreferences!!.mediaTitle,
 					sharedPreferences!!.mediaType)
-				sharedPreferences!!.shouldShuffleMedia = bundle.getShuffleMedia()
-				sharedPreferences!!.recursivelyPlayMedia = bundle.getRecursivelyPlayMedia()
+				sharedPreferences!!.shouldShuffleMedia = result.getShuffleMedia()
+				sharedPreferences!!.recursivelyPlayMedia = result.getRecursivelyPlayMedia()
+				println("New timer media jank : ${sharedPreferences!!.mediaPath} | ${sharedPreferences!!.mediaArtist} | ${sharedPreferences!!.mediaTitle} | ${sharedPreferences!!.mediaType}")
 
 				// Update the card
-				pref.card.alarm!!.mediaPath = mediaPath
+				pref.card.alarm!!.mediaPath = sharedPreferences!!.mediaPath
 				pref.card.alarm!!.mediaArtist = sharedPreferences!!.mediaArtist
 				pref.card.alarm!!.mediaTitle = sharedPreferences!!.mediaTitle
 				pref.card.alarm!!.mediaType = sharedPreferences!!.mediaType
 				pref.card.setMediaButton()
-			}
 
-		}
+			}
 
 		// Media
 		pref.onCardMediaClickedListener = NacCardPreference.OnCardMediaClickedListener { alarm ->
 
-			// Create the intent and add the media to the intent
-			val intent = Intent(context, NacMediaPickerActivity::class.java)
+			// Create a bundle with the media info
+			val bundle = Bundle()
 				.addMediaInfo(
 					alarm.mediaPath,
 					alarm.mediaArtist,
@@ -189,8 +177,9 @@ class NacGeneralSettingFragment
 					alarm.shouldShuffleMedia,
 					alarm.shouldRecursivelyPlayMedia)
 
-			// Launch the intent
-			activityLauncher!!.launch(intent)
+			// Navigate to the media picker
+			// TODO: Need to make settings launch this jank
+			//findNavController().navigate(R.id.action_nacAddTimerFragment_to_nacTimerMainMediaPickerFragment, bundle)
 
 		}
 

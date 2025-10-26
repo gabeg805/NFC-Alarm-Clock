@@ -40,6 +40,7 @@
 	<dimen name="tsz_large">20sp</dimen>
 	<dimen name="tsz_huge">28sp</dimen>
 	<dimen name="tsz_xhuge">32sp</dimen>
+	<dimen name="tsz_xxhuge">36sp</dimen>
 	<dimen name="tsz_attention">40sp</dimen>
 	<dimen name="tsz_dummy">52sp</dimen>
 	<dimen name="tsz_widget">78sp</dimen>
@@ -49,6 +50,8 @@
 	<dimen name="radius">6dp</dimen>
 	<dimen name="radius_day_filled">16dp</dimen>
 	<dimen name="radius_day_outlined">16dp</dimen>
+	<dimen name="fab_margin">100dp</dimen>
+	<dimen name="bottom_nav_height">76dp</dimen>
 	<dimen name="action_row_height">84dp</dimen>
 	<dimen name="action_row_landscape_width">420dp</dimen>
 

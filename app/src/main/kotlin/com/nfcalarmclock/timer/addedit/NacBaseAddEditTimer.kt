@@ -2,6 +2,7 @@ package com.nfcalarmclock.timer.addedit
 
 import android.content.res.ColorStateList
 import android.os.Bundle
+import android.util.TypedValue
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,6 +15,7 @@ import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.TextView
 import androidx.annotation.OptIn
 import androidx.core.view.doOnLayout
+import androidx.core.view.doOnNextLayout
 import androidx.core.view.isVisible
 import androidx.core.view.updateLayoutParams
 import androidx.fragment.app.Fragment
@@ -28,7 +30,15 @@ import com.nfcalarmclock.alarm.options.dismissoptions.NacDismissOptionsDialog
 import com.nfcalarmclock.alarm.options.name.NacNameDialog
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.NacCalendar
+import com.nfcalarmclock.system.addMediaInfo
+import com.nfcalarmclock.system.getMediaArtist
+import com.nfcalarmclock.system.getMediaPath
+import com.nfcalarmclock.system.getMediaTitle
+import com.nfcalarmclock.system.getMediaType
+import com.nfcalarmclock.system.getRecursivelyPlayMedia
+import com.nfcalarmclock.system.getShuffleMedia
 import com.nfcalarmclock.system.media.NacMedia
+import com.nfcalarmclock.system.media.buildLocalMediaPath
 import com.nfcalarmclock.system.toBundle
 import com.nfcalarmclock.timer.NacTimerViewModel
 import com.nfcalarmclock.timer.active.NacActiveTimerService
@@ -36,9 +46,11 @@ import com.nfcalarmclock.timer.db.NacTimer
 import com.nfcalarmclock.timer.options.NacTimerOptionsDialog
 import com.nfcalarmclock.view.calcContrastColor
 import com.nfcalarmclock.view.performHapticFeedback
+import com.nfcalarmclock.view.quickToast
 import com.nfcalarmclock.view.setupBackgroundColor
 import com.nfcalarmclock.view.setupRippleColor
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 /**
@@ -72,6 +84,11 @@ abstract class NacBaseAddEditTimer
 	protected lateinit var sharedPreferences: NacSharedPreferences
 
 	/**
+	 * Scrollview.
+	 */
+	protected lateinit var scrollView: ScrollView
+
+	/**
 	 * Hour textview.
 	 */
 	protected lateinit var hourTextView: TextView
@@ -85,6 +102,16 @@ abstract class NacBaseAddEditTimer
 	 * Second textview.
 	 */
 	protected lateinit var secondsTextView: TextView
+
+	/**
+	 * More options container.
+	 */
+	protected lateinit var moreOptionsContainer: LinearLayout
+
+	/**
+	 * Media button.
+	 */
+	protected lateinit var mediaButton: MaterialButton
 
 	/**
 	 * Append the time to the timer.
@@ -110,6 +137,9 @@ abstract class NacBaseAddEditTimer
 		minuteTextView.text = newTime.substring(2, 4)
 		secondsTextView.text = newTime.substring(4, 6)
 
+		// Set the duration
+		setDuration()
+
 		// Haptic feedback
 		view?.performHapticFeedback()
 	}
@@ -131,6 +161,9 @@ abstract class NacBaseAddEditTimer
 		hourTextView.text = newTime.substring(0, 2)
 		minuteTextView.text = newTime.substring(2, 4)
 		secondsTextView.text = newTime.substring(4, 6)
+
+		// Set the duration
+		setDuration()
 
 		// Haptic feedback
 		view?.performHapticFeedback()
@@ -154,7 +187,12 @@ abstract class NacBaseAddEditTimer
 	}
 
 	/**
-	 * Called to create the root view.
+	 * Navigate to the media picker.
+	 */
+	abstract fun navigateToMediaPicker(bundle: Bundle)
+
+	/**
+	 * Create the view.
 	 */
 	override fun onCreateView(
 		inflater: LayoutInflater,
@@ -166,7 +204,7 @@ abstract class NacBaseAddEditTimer
 	}
 
 	/**
-	 * Called when the fragment is created.
+	 * View is created.
 	 */
 	@OptIn(UnstableApi::class)
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
@@ -183,20 +221,28 @@ abstract class NacBaseAddEditTimer
 		setupInitialMediaForTimer()
 
 		// Get the views
+		scrollView = view.findViewById(R.id.timer_scrollview)
 		hourTextView = view.findViewById(R.id.timer_hour)
 		minuteTextView = view.findViewById(R.id.timer_minute)
 		secondsTextView = view.findViewById(R.id.timer_seconds)
+		moreOptionsContainer = view.findViewById(R.id.timer_more_options_container)
+		mediaButton = view.findViewById(R.id.timer_media)
 		val repeatButton: MaterialButton = view.findViewById(R.id.timer_repeat)
 		val vibrateButton: MaterialButton = view.findViewById(R.id.timer_vibrate)
 		val nfcButton: MaterialButton = view.findViewById(R.id.timer_nfc)
 		val flashlightButton: MaterialButton = view.findViewById(R.id.timer_flashlight)
-		val mediaButton: MaterialButton = view.findViewById(R.id.timer_media)
 		val volumeImageView: ImageView = view.findViewById(R.id.timer_volume_icon)
 		val volumeSeekBar: SeekBar = view.findViewById(R.id.timer_volume_slider)
 		val nameButton: MaterialButton = view.findViewById(R.id.timer_name)
 
+		// Timer needs to be initialized
+		if (!this::timer.isInitialized)
+		{
+			println("INITING TIMER")
+			initTimer()
+		}
+
 		// Setup the views
-		initTimer()
 		setupHourMinuteSecondTextViews()
 		setupNumberPadButtons()
 		setupStartButton()
@@ -206,10 +252,11 @@ abstract class NacBaseAddEditTimer
 		setupVibrateButton(vibrateButton)
 		setupNfcButton(nfcButton)
 		setupFlashlightButton(flashlightButton)
-		setupMediaButton(mediaButton)
+		setupMediaButton()
 		setupVolume(volumeSeekBar, volumeImageView)
 		setupName(nameButton)
 		setupOptionsSection(view)
+		setupMediaPickedObserver()
 	}
 
 	/**
@@ -224,6 +271,28 @@ abstract class NacBaseAddEditTimer
 
 		// Set the duration
 		timer.duration = seconds + minute*60 + hour*3600
+	}
+
+	/**
+	 * Set the media message and alpha of the media view.
+	 */
+	protected fun setMediaMessageAndAlpha()
+	{
+		// Default message and alpha
+		val mediaTitle = timer.mediaTitle
+		var message = mediaTitle
+		var alpha = 1f
+
+		// No media selected
+		if (mediaTitle.isEmpty())
+		{
+			message = resources.getString(R.string.description_media)
+			alpha = 0.3f
+		}
+
+		// Set the text and alpha
+		mediaButton.text = message
+		mediaButton.alpha = alpha
 	}
 
 	/**
@@ -376,28 +445,75 @@ abstract class NacBaseAddEditTimer
 	/**
 	 * Setup the media button.
 	 */
-	private fun setupMediaButton(button: MaterialButton)
+	private fun setupMediaButton()
 	{
-		// Default message and alpha
-		val mediaTitle = timer.mediaTitle
-		var message = mediaTitle
-		var alpha = 1f
+		// Set the message and alpha
+		setMediaMessageAndAlpha()
 
-		// No media selected
-		if (mediaTitle.isEmpty())
-		{
-			message = resources.getString(R.string.description_media)
-			alpha = 0.3f
+		// Show the media picker
+		mediaButton.setOnClickListener {
+
+			// Create a bundle with the media info
+			val bundle = Bundle()
+				.addMediaInfo(
+					timer.mediaPath,
+					timer.mediaArtist,
+					timer.mediaTitle,
+					timer.mediaType,
+					timer.shouldShuffleMedia,
+					timer.shouldRecursivelyPlayMedia)
+
+			// Navigate to the media picker
+			navigateToMediaPicker(bundle)
+
 		}
+	}
 
-		// Set the text and alpha
-		button.text = message
-		button.alpha = alpha
+	/**
+	 * Setup an observer for when media is picked in the media picker.
+	 */
+	private fun setupMediaPickedObserver()
+	{
+		// Set the observer for the media picker
+		println("Set the fragment result listener")
+		findNavController().currentBackStackEntry
+			?.savedStateHandle
+			?.getLiveData<Bundle>("YOYOYO")
+			?.observe(viewLifecycleOwner) { result ->
 
-		// Show the media activity
-		button.setOnClickListener {
-			// TODO: How will this work with the fragment? Maybe need to do something in the navigation graph?
-		}
+				println("Found bundle! $result")
+				val context = requireContext()
+				timer.mediaPath = result.getMediaPath()
+				timer.mediaArtist = result.getMediaArtist()
+				timer.mediaTitle = result.getMediaTitle()
+				timer.mediaType	= result.getMediaType()
+				timer.localMediaPath = buildLocalMediaPath(context, timer.mediaArtist, timer.mediaTitle, timer.mediaType)
+				timer.shouldShuffleMedia = result.getShuffleMedia()
+				timer.shouldRecursivelyPlayMedia = result.getRecursivelyPlayMedia()
+				println("New timer media jank : ${timer.mediaPath} | ${timer.mediaArtist} | ${timer.mediaTitle} | ${timer.mediaType}")
+
+				// Set the media message
+				setMediaMessageAndAlpha()
+
+				//lifecycleScope.launch {
+				scrollView.doOnNextLayout{
+
+					lifecycleScope.launch {
+						println("Delaying scorlling downtown")
+						var i = 0
+						do
+						{
+							delay(150)
+							i++
+						} while (!moreOptionsContainer.isVisible && (i < 3))
+
+						println("Scorlling downtown")
+						scrollView.fullScroll(ScrollView.FOCUS_DOWN)
+					}
+
+				}
+
+			}
 	}
 
 	/**
@@ -411,7 +527,6 @@ abstract class NacBaseAddEditTimer
 
 		// Setup more button click
 		moreButton.setOnClickListener {
-			val scrollView: ScrollView = view.findViewById(R.id.timer_scrollview)
 			scrollView.fullScroll(ScrollView.FOCUS_DOWN)
 		}
 	}
@@ -426,9 +541,20 @@ abstract class NacBaseAddEditTimer
 	{
 		// Get the views
 		val view = requireView()
-		val scrollview: ScrollView = view.findViewById(R.id.timer_scrollview)
 		val numberpadContainer: RelativeLayout = view.findViewById(R.id.timer_numberpad_container)
-		val moreOptionsContainer: LinearLayout = view.findViewById(R.id.timer_more_options_container)
+		val moreOptionsDivider: View = view.findViewById(R.id.timer_more_options_divider)
+
+		scrollView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+			val tv = TypedValue()
+			var actionBarHeight = 0
+			if (requireActivity().theme.resolveAttribute(android.R.attr.actionBarSize, tv, true)) {
+				actionBarHeight = TypedValue.complexToDimensionPixelSize(tv.data, resources.displayMetrics)
+			}
+
+			val bottomNavHeight = resources.getDimension(R.dimen.bottom_nav_height).toInt()
+			bottomMargin = actionBarHeight + bottomNavHeight
+			println("Final : $bottomMargin | Action bar : $actionBarHeight | BottomNav : $bottomNavHeight")
+		}
 
 		// More options container is already visible so do nothing
 		if (moreOptionsContainer.isVisible)
@@ -436,9 +562,12 @@ abstract class NacBaseAddEditTimer
 			return
 		}
 
+		// Setup divider between the timer and more options
+		moreOptionsDivider.setupBackgroundColor(sharedPreferences)
+
 		// Remove constraint toptotopof from hour and determine what the padding should be
 		// After the hour textview has been laid out
-		scrollview.doOnLayout {
+		scrollView.doOnLayout {
 
 			// Get the location of the hour textview and numberpad container on screen
 			val hourLocation = IntArray(2)
@@ -446,6 +575,8 @@ abstract class NacBaseAddEditTimer
 
 			hourTextView.getLocationOnScreen(hourLocation)
 			numberpadContainer.getLocationOnScreen(numberpadContainerLocation)
+			println("Hour loc : ${hourLocation[0]} | ${hourLocation[1]}")
+			println("Num  loc : ${numberpadContainerLocation[0]} | ${numberpadContainerLocation[1]}")
 
 			// Update the top and bottom margins to match the current spacing of the
 			// views while the more options container is invisible. That way, when making
@@ -454,12 +585,15 @@ abstract class NacBaseAddEditTimer
 			hourTextView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
 
 				// Set the new margin
-				val tinyDimen = resources.getDimension(R.dimen.tiny).toInt()
-				bottomMargin = (numberpadContainerLocation[1] - hourLocation[1] - tinyDimen) / 2
+				val normalDimen = resources.getDimension(R.dimen.normal).toInt()
+				//bottomMargin = (numberpadContainerLocation[1] - hourLocation[1]) / 2
+				bottomMargin = (numberpadContainerLocation[1] - hourLocation[1] - normalDimen) / 2
 				topMargin = bottomMargin
+				println("Bottom : $bottomMargin | Tiny : $normalDimen")
 
 				// Make the more options container visible
 				moreOptionsContainer.visibility = View.VISIBLE
+				moreOptionsDivider.visibility = View.VISIBLE
 
 			}
 
@@ -565,6 +699,9 @@ abstract class NacBaseAddEditTimer
 			minuteTextView.text = doubleZero
 			secondsTextView.text = doubleZero
 
+			// Set the duration
+			setDuration()
+
 			true
 		}
 	}
@@ -639,9 +776,12 @@ abstract class NacBaseAddEditTimer
 		// On click listener
 		saveButton.setOnClickListener {
 
-			// Set the duration
-			setDuration()
-			println("Save set duration : ${timer.id} | ${timer.duration}")
+			// Duration not set
+			if (timer.duration == 0L)
+			{
+				quickToast(requireContext(), "Enter a duration")
+				return@setOnClickListener
+			}
 
 			// Update the timer and then go back to the show timers fragment
 			timerViewModel.update(timer) {
@@ -673,8 +813,12 @@ abstract class NacBaseAddEditTimer
 		// On click listener
 		startButton.setOnClickListener {
 
-			// Set the duration
-			setDuration()
+			// Duration not set
+			if (timer.duration == 0L)
+			{
+				quickToast(context, "Enter a duration")
+				return@setOnClickListener
+			}
 
 			// Save the timer
 			lifecycleScope.launch {

@@ -1,53 +1,42 @@
-package com.nfcalarmclock.alarm.options.mediapicker
+package com.nfcalarmclock.mediapicker
 
-import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.widget.Button
+import androidx.annotation.OptIn
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
 import androidx.media3.common.util.UnstableApi
+import androidx.navigation.fragment.findNavController
 import com.nfcalarmclock.R
-import com.nfcalarmclock.alarm.NacAlarmViewModel
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.addMediaInfo
-import com.nfcalarmclock.system.getAlarm
 import com.nfcalarmclock.system.getMediaArtist
 import com.nfcalarmclock.system.getMediaPath
 import com.nfcalarmclock.system.getMediaTitle
 import com.nfcalarmclock.system.getMediaType
 import com.nfcalarmclock.system.getRecursivelyPlayMedia
 import com.nfcalarmclock.system.getShuffleMedia
-import com.nfcalarmclock.system.mediaplayer.NacMediaPlayer
-import com.nfcalarmclock.system.scheduler.NacScheduler
 import com.nfcalarmclock.system.media.NacMedia
 import com.nfcalarmclock.system.media.copyMediaToDeviceEncryptedStorage
 import com.nfcalarmclock.system.media.doesDeviceHaveFreeSpace
+import com.nfcalarmclock.system.mediaplayer.NacMediaPlayer
 import com.nfcalarmclock.view.quickToast
-import dagger.hilt.android.AndroidEntryPoint
 
 /**
  * Media fragment for ringtones and music files.
  */
-@UnstableApi
-@AndroidEntryPoint
-open class NacMediaPickerFragment
+@OptIn(UnstableApi::class)
+abstract class NacBaseChildMediaPickerFragment<T: NacAlarm>
 	: Fragment()
 {
 
 	/**
-	 * Alarm view model.
+	 * Item.
 	 */
-	private val alarmViewModel: NacAlarmViewModel by viewModels()
-
-	/**
-	 * Alarm.
-	 */
-	private var alarm: NacAlarm? = null
+	protected var item: T? = null
 
 	/**
 	 * Media player.
@@ -60,13 +49,13 @@ open class NacMediaPickerFragment
 	var mediaPath: String = ""
 		get()
 		{
-			return alarm?.mediaPath ?: field
+			return item?.mediaPath ?: field
 		}
 		set(value)
 		{
-			if (alarm != null)
+			if (item != null)
 			{
-				alarm!!.mediaPath = value
+				item!!.mediaPath = value
 			}
 			else
 			{
@@ -80,13 +69,13 @@ open class NacMediaPickerFragment
 	var mediaArtist: String = ""
 		get()
 		{
-			return alarm?.mediaArtist ?: field
+			return item?.mediaArtist ?: field
 		}
 		set(value)
 		{
-			if (alarm != null)
+			if (item != null)
 			{
-				alarm!!.mediaArtist = value
+				item!!.mediaArtist = value
 			}
 			else
 			{
@@ -100,13 +89,13 @@ open class NacMediaPickerFragment
 	var mediaTitle: String = ""
 		get()
 		{
-			return alarm?.mediaTitle ?: field
+			return item?.mediaTitle ?: field
 		}
 		set(value)
 		{
-			if (alarm != null)
+			if (item != null)
 			{
-				alarm!!.mediaTitle = value
+				item!!.mediaTitle = value
 			}
 			else
 			{
@@ -120,13 +109,13 @@ open class NacMediaPickerFragment
 	var mediaType: Int = NacMedia.TYPE_NONE
 		get()
 		{
-			return alarm?.mediaType ?: field
+			return item?.mediaType ?: field
 		}
 		set(value)
 		{
-			if (alarm != null)
+			if (item != null)
 			{
-				alarm!!.mediaType = value
+				item!!.mediaType = value
 			}
 			else
 			{
@@ -140,13 +129,13 @@ open class NacMediaPickerFragment
 	var localMediaPath: String = ""
 		get()
 		{
-			return alarm?.localMediaPath ?: field
+			return item?.localMediaPath ?: field
 		}
 		set(value)
 		{
-			if (alarm != null)
+			if (item != null)
 			{
-				alarm!!.localMediaPath = value
+				item!!.localMediaPath = value
 			}
 			else
 			{
@@ -160,13 +149,13 @@ open class NacMediaPickerFragment
 	var shuffleMedia: Boolean = false
 		get()
 		{
-			return alarm?.shouldShuffleMedia ?: field
+			return item?.shouldShuffleMedia ?: field
 		}
 		set(value)
 		{
-			if (alarm != null)
+			if (item != null)
 			{
-				alarm!!.shouldShuffleMedia = value
+				item!!.shouldShuffleMedia = value
 			}
 			else
 			{
@@ -180,13 +169,13 @@ open class NacMediaPickerFragment
 	var recursivelyPlayMedia: Boolean = false
 		get()
 		{
-			return alarm?.shouldRecursivelyPlayMedia ?: field
+			return item?.shouldRecursivelyPlayMedia ?: field
 		}
 		set(value)
 		{
-			if (alarm != null)
+			if (item != null)
 			{
-				alarm!!.shouldRecursivelyPlayMedia = value
+				item!!.shouldRecursivelyPlayMedia = value
 			}
 			else
 			{
@@ -195,17 +184,39 @@ open class NacMediaPickerFragment
 		}
 
 	/**
-	 * Called when the Cancel button is clicked.
+	 * Copy the media to device encrypted storage.
 	 */
-	open fun onCancelClicked()
+	fun copyMediaToDeviceEncryptedStorage(deviceContext: Context)
 	{
-		requireActivity().finish()
+		// Device has enough free space
+		if (doesDeviceHaveFreeSpace(deviceContext))
+		{
+			// Copy the media to the local files/ directory, in device protected storage
+			copyMediaToDeviceEncryptedStorage(
+				deviceContext, mediaPath, mediaArtist,
+				mediaTitle, mediaType
+			)
+		}
+		// Not enough space
+		else
+		{
+			println("Not enough space to make a backup!")
+		}
 	}
 
 	/**
-	 * Called when the Clear button is clicked.
+	 * Cancel button is clicked.
 	 */
-	@UnstableApi
+	open fun onCancelClicked()
+	{
+		val x = findNavController().popBackStack()
+		println("Cancel clicked! $x")
+		//requireActivity().finish()
+	}
+
+	/**
+	 * Clear button is clicked.
+	 */
 	open fun onClearClicked()
 	{
 		// Clear the media that is being used
@@ -219,9 +230,8 @@ open class NacMediaPickerFragment
 	}
 
 	/**
-	 * Called when the fragment is created.
+	 * Fragment is created.
 	 */
-	@UnstableApi
 	override fun onCreate(savedInstanceState: Bundle?)
 	{
 		// Super
@@ -230,11 +240,11 @@ open class NacMediaPickerFragment
 		// Get the bundle
 		val bundle = arguments ?: Bundle()
 
-		// Set the alarm
-		alarm = bundle.getAlarm()
+		// Set the fragment item
+		setFragmentItem(bundle)
 
-		// Check if the alarm was not set
-		if (alarm == null)
+		// Item was not set
+		if (item == null)
 		{
 			// Set the media info
 			mediaPath = bundle.getMediaPath()
@@ -254,9 +264,8 @@ open class NacMediaPickerFragment
 	}
 
 	/**
-	 * Called when the fragment is destroyed.
+	 * Fragment is destroyed.
 	 */
-	@UnstableApi
 	override fun onDestroy()
 	{
 		// Super
@@ -267,45 +276,37 @@ open class NacMediaPickerFragment
 	}
 
 	/**
-	 * Called when the Ok button is clicked.
+	 * Ok button is clicked.
 	 */
 	open fun onOkClicked()
 	{
-		// Get the activity
-		val activity = requireActivity()
-
-		// Check if alarm is set
-		if (alarm != null)
+		// Item is set
+		if (item != null)
 		{
-			// Update the alarm for the activity
-			alarmViewModel.update(alarm!!)
-
-			// Reschedule the alarm
-			NacScheduler.update(activity, alarm!!)
+			saveFragmentItem()
 		}
-		// The media must be set
+		// Media must be set
 		else
 		{
-			// Create an intent with the media
-			val intent = Intent()
+			// Create an bundle with the media
+			val bundle = Bundle()
 				.addMediaInfo(mediaPath, mediaArtist, mediaTitle, mediaType,
 					shuffleMedia, recursivelyPlayMedia)
 
-			// Set the result of the activity with the media path as part of
-			// the intent
-			activity.setResult(Activity.RESULT_OK, intent)
+			// Save the result
+			println("Setting fragment result!")
+			findNavController().previousBackStackEntry?.savedStateHandle?.set("YOYOYO", bundle)
 		}
 
-		// Finish the activity
-		activity.finish()
+		// Go back to the previous fragment
+		findNavController().popBackStack()
 	}
 
 	/**
 	 * Play audio from the media player.
 	 *
-	 * @param  uri  The Uri of the content to play.
+	 * @param uri The Uri of the content to play.
 	 */
-	@UnstableApi
 	protected fun play(uri: Uri)
 	{
 		val path = uri.toString()
@@ -333,28 +334,18 @@ open class NacMediaPickerFragment
 	}
 
 	/**
-	 * Copy the media to device encrypted storage.
+	 * Save the fragment item.
 	 */
-	fun copyMediaToDeviceEncryptedStorage(deviceContext: Context)
-	{
-		// Device has enough free space
-		if (doesDeviceHaveFreeSpace(deviceContext))
-		{
-			// Copy the media to the local files/ directory, in device protected storage
-			copyMediaToDeviceEncryptedStorage(deviceContext, mediaPath, mediaArtist,
-				mediaTitle, mediaType)
-		}
-		// Not enough space
-		else
-		{
-			println("Not enough space to make a backup!")
-		}
-	}
+	protected abstract fun saveFragmentItem()
+
+	/**
+	 * Set the fragment item.
+	 */
+	abstract fun setFragmentItem(bundle: Bundle)
 
 	/**
 	 * Setup action buttons.
 	 */
-	@UnstableApi
 	protected fun setupActionButtons(root: View)
 	{
 		val shared = NacSharedPreferences(requireContext())

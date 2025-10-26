@@ -18,11 +18,6 @@ import com.nfcalarmclock.view.quickToast
 import com.nfcalarmclock.view.toast
 
 /**
- * Tag name for putting and getting whether an NFC tag was scanned from a bundle.
- */
-const val NFC_WAS_SCANNED_BUNDLE_NAME = "NacNfcWasScannedBundle"
-
-/**
  * Bundle name for ID of an NFC tag that was scanned.
  */
 const val SCANNED_NFC_TAG_ID_BUNDLE_NAME = "NacNfcWasScannedBundle"

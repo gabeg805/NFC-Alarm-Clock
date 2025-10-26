@@ -5,7 +5,7 @@
 	android:id="@+id/timer_scrollview"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:layout_marginBottom="?attr/actionBarSize"
+	android:layout_marginBottom="@dimen/bottom_nav_height"
 	android:fillViewport="true">
 
 	<androidx.constraintlayout.widget.ConstraintLayout
@@ -188,7 +188,7 @@
 			app:iconGravity="textStart"
 			app:iconSize="@dimen/isz_xxxlarge"
 			app:icon="@drawable/play"
-			app:layout_constraintBottom_toTopOf="@id/timer_more_options_container"
+			app:layout_constraintBottom_toTopOf="@id/timer_more_options_divider"
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintEnd_toEndOf="parent"
 			/>
@@ -228,6 +228,17 @@
 			app:layout_constraintTop_toTopOf="@id/timer_start_button"
 			app:layout_constraintBottom_toBottomOf="@id/timer_start_button"
 			app:layout_constraintEnd_toEndOf="parent"
+			/>
+
+		<!-- More options divider -->
+		<View
+			android:id="@+id/timer_more_options_divider"
+			android:layout_width="match_parent"
+			android:layout_height="@dimen/line"
+			android:alpha="0.75"
+			android:background="?attr/colorAccent"
+			android:visibility="gone"
+			app:layout_constraintBottom_toTopOf="@id/timer_more_options_container"
 			/>
 
 		<!-- More options container -->

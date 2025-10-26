@@ -1,4 +1,4 @@
-package com.nfcalarmclock.alarm.options.mediapicker.music
+package com.nfcalarmclock.mediapicker.music
 
 import android.app.AlertDialog
 import android.app.Dialog

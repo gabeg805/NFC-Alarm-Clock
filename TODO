@@ -2,6 +2,8 @@
 TODO
 ----
 
+* Change animation of one of the FABs to be popin and out
+
 * When active alarm or timer is left. Then "nfcTags" has to get reinitialized
   and probably gets cleared. May need to save the current progress in
   onSavedInstanceState() or whatever it is called.

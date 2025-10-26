@@ -1,4 +1,4 @@
-package com.nfcalarmclock.alarm.options.mediapicker.music
+package com.nfcalarmclock.mediapicker.music
 
 import android.content.ActivityNotFoundException
 import android.os.Build
@@ -14,52 +14,167 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.OptIn
 import androidx.annotation.RequiresApi
 import androidx.core.net.toUri
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.alarm.options.mediapicker.NacMediaPickerFragment
+import com.nfcalarmclock.mediapicker.music.NacDirectorySelectedWarningDialog
+import com.nfcalarmclock.mediapicker.NacBaseChildMediaPickerFragment
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.file.NacFile
-import com.nfcalarmclock.system.file.browser.NacFileBrowser
-import com.nfcalarmclock.system.file.browser.NacFileBrowser.OnBrowserClickedListener
-import com.nfcalarmclock.system.permission.readmediaaudio.NacReadMediaAudioPermission
-import com.nfcalarmclock.view.quickToast
-import com.nfcalarmclock.system.addMediaInfo
 import com.nfcalarmclock.system.file.basename
+import com.nfcalarmclock.system.file.browser.NacFileBrowser
 import com.nfcalarmclock.system.getDeviceProtectedStorageContext
 import com.nfcalarmclock.system.media.NacMedia
+import com.nfcalarmclock.system.media.buildLocalMediaPath
 import com.nfcalarmclock.system.media.copyDocumentToDeviceEncryptedStorageAndCheckMetadata
 import com.nfcalarmclock.system.media.directQueryMediaMetadata
 import com.nfcalarmclock.system.media.doesDeviceHaveFreeSpace
+import com.nfcalarmclock.system.media.getMediaArtist
 import com.nfcalarmclock.system.media.getMediaName
 import com.nfcalarmclock.system.media.getMediaRelativePath
+import com.nfcalarmclock.system.media.getMediaTitle
 import com.nfcalarmclock.system.media.isLocalMediaPath
 import com.nfcalarmclock.system.media.isMediaDirectory
 import com.nfcalarmclock.system.media.isMediaFile
-import com.nfcalarmclock.system.toBundle
-import com.nfcalarmclock.system.media.buildLocalMediaPath
-import com.nfcalarmclock.system.media.getMediaArtist
-import com.nfcalarmclock.system.media.getMediaTitle
+import com.nfcalarmclock.system.permission.readmediaaudio.NacReadMediaAudioPermission
+import com.nfcalarmclock.view.quickToast
 import com.nfcalarmclock.view.setupThemeColor
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 /**
- * Display a browser for the user to browse for music files.
+ * Pick a file/directory of music to play.
  */
 @UnstableApi
-class NacMusicPickerFragment
-
-	// Constructor
-	: NacMediaPickerFragment(),
-
-	// Interfaces
-	OnBrowserClickedListener
+abstract class NacMusicPickerFragment<T: NacAlarm>
+	: NacBaseChildMediaPickerFragment<T>()
 {
+
+	/**
+	 * Scroll view containing all the file browser contents.
+	 */
+	private var scrollView: ScrollView? = null
+
+	/**
+	 * Text view showing the current directory.
+	 */
+	private var directoryTextView: TextView? = null
+
+	/**
+	 * File browser.
+	 */
+	var fileBrowser: NacFileBrowser? = null
+		private set
+
+	/**
+	 * File browser thing.
+	 */
+	private val onBrowserClickedListener: NacFileBrowser.OnBrowserClickedListener = object : NacFileBrowser.OnBrowserClickedListener
+	{
+
+		/**
+		 * A directory is clicked in the file browser.
+		 */
+		@UnstableApi
+		override fun onDirectoryClicked(browser: NacFileBrowser, path: String)
+		{
+			// Build the path to show in the directory text view
+			val textPath = if (path.isNotEmpty())
+			{
+				"${path}/"
+			}
+			else
+			{
+				""
+			}
+
+			// Set the alarm media path
+			mediaPath = if(browser.previousDirectory.isNotEmpty())
+			{
+				"${textPath}${browser.previousDirectory}"
+			}
+			else
+			{
+				path
+			}
+
+			// Set the text path
+			directoryTextView!!.text = textPath
+
+			// Show the contents of the directory
+			browser.show(path)
+		}
+
+		/**
+		 * A directory is done being shown in the file browser.
+		 */
+		override fun onDoneShowing(browser: NacFileBrowser)
+		{
+			lifecycleScope.launch {
+
+				// Delay a little bit
+				delay(50)
+
+				// Check if the previous directory was clicked
+				if (browser.previousDirectory.isNotEmpty())
+				{
+					val context = requireContext()
+
+					// Select the view
+					browser.select(context, browser.previousDirectory)
+
+					// Make sure the selected view has been set
+					if (browser.selectedView != null)
+					{
+						// Get the location and offset of the view
+						val loc = IntArray(2)
+						val offset = 4 * directoryTextView!!.height
+
+						browser.selectedView!!.getLocationOnScreen(loc)
+
+						// Calculate the Y location
+						val y = if (offset <= loc[1]) loc[1] - offset else 0
+
+						// Scroll to the view's location
+						scrollView?.scrollTo(0, y)
+					}
+				}
+				else
+				{
+					// Scroll to the top
+					scrollView?.fullScroll(View.FOCUS_UP)
+				}
+
+			}
+		}
+
+		/**
+		 * A file is clicked in the file browser.
+		 */
+		@UnstableApi
+		override fun onFileClicked(browser: NacFileBrowser, metadata: NacFile.Metadata)
+		{
+			val uri = metadata.toExternalUri()
+
+			// File was selected
+			if (browser.isSelected)
+			{
+				// Play the file
+				play(uri)
+			}
+			// File was deselected
+			else
+			{
+				// Stop any media that is already playing
+				mediaPlayer?.exoPlayer?.stop()
+			}
+		}
+
+	}
+
 
 	/**
 	 * File chooser content.
@@ -123,22 +238,6 @@ class NacMusicPickerFragment
 	}
 
 	/**
-	 * Scroll view containing all the file browser contents.
-	 */
-	private var scrollView: ScrollView? = null
-
-	/**
-	 * Text view showing the current directory.
-	 */
-	private var directoryTextView: TextView? = null
-
-	/**
-	 * File browser.
-	 */
-	var fileBrowser: NacFileBrowser? = null
-		private set
-
-	/**
 	 * Determine the starting directory and file name that should be selected.
 	 */
 	@OptIn(UnstableApi::class)
@@ -188,108 +287,13 @@ class NacMusicPickerFragment
 	/**
 	 * Called when the view is being created.
 	 */
-	override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
-		savedInstanceState: Bundle?): View?
+	override fun onCreateView(
+		inflater: LayoutInflater,
+		container: ViewGroup?,
+		savedInstanceState: Bundle?
+	): View?
 	{
 		return inflater.inflate(R.layout.frg_music, container, false)
-	}
-
-	/**
-	 * Called when a directory is clicked in the file browser.
-	 */
-	@UnstableApi
-	override fun onDirectoryClicked(browser: NacFileBrowser, path: String)
-	{
-		// Build the path to show in the directory text view
-		val textPath = if (path.isNotEmpty())
-		{
-			"${path}/"
-		}
-		else
-		{
-			""
-		}
-
-		// Set the alarm media path
-		mediaPath = if(browser.previousDirectory.isNotEmpty())
-		{
-			"${textPath}${browser.previousDirectory}"
-		}
-		else
-		{
-			path
-		}
-
-		// Set the text path
-		directoryTextView!!.text = textPath
-
-		// Show the contents of the directory
-		browser.show(path)
-	}
-
-	/**
-	 * Called when a directory is done being shown in the file browser.
-	 */
-	override fun onDoneShowing(browser: NacFileBrowser)
-	{
-		lifecycleScope.launch {
-
-			// Delay a little bit
-			delay(50)
-
-			// Check if the previous directory was clicked
-			if (browser.previousDirectory.isNotEmpty())
-			{
-				val context = requireContext()
-
-				// Select the view
-				browser.select(context, browser.previousDirectory)
-
-				// Make sure the selected view has been set
-				if (browser.selectedView != null)
-				{
-					// Get the location and offset of the view
-					val loc = IntArray(2)
-					val offset = 4 * directoryTextView!!.height
-
-					browser.selectedView!!.getLocationOnScreen(loc)
-
-					// Calculate the Y location
-					val y = if (offset <= loc[1]) loc[1] - offset else 0
-
-					// Scroll to the view's location
-					scrollView?.scrollTo(0, y)
-				}
-			}
-			else
-			{
-				// Scroll to the top
-				scrollView?.fullScroll(View.FOCUS_UP)
-			}
-
-		}
-	}
-
-	/**
-	 * Called when a file is clicked in the file browser.
-	 */
-	@UnstableApi
-	override fun onFileClicked(browser: NacFileBrowser, metadata: NacFile.Metadata)
-	{
-		val uri = metadata.toExternalUri()
-
-		// File was selected
-		if (browser.isSelected)
-		{
-			 // Play the file
-			 play(uri)
-		}
-		// File was deselected
-		else
-		{
-			// Stop any media that is already playing
-			mediaPlayer?.exoPlayer?.stop()
-		}
 	}
 
 	/**
@@ -392,7 +396,7 @@ class NacMusicPickerFragment
 		directoryTextView!!.text = dir
 
 		// Setup the file browser
-		fileBrowser!!.onBrowserClickedListener = this
+		fileBrowser!!.onBrowserClickedListener = onBrowserClickedListener
 		fileBrowser!!.show(dir) {
 
 			// Hide the loading circle
@@ -481,7 +485,7 @@ class NacMusicPickerFragment
 		}
 
 		// Show the dialog
-		dialog.show(childFragmentManager, NacDirectorySelectedWarningDialog.TAG)
+		dialog.show(childFragmentManager, NacDirectorySelectedWarningDialog.Companion.TAG)
 	}
 
 	companion object
@@ -491,42 +495,6 @@ class NacMusicPickerFragment
 		 * Read request callback success result.
 		 */
 		const val READ_REQUEST_CODE = 1
-
-		/**
-		 * Create a new instance of this fragment.
-		 */
-		fun newInstance(alarm: NacAlarm?): Fragment
-		{
-			// Create the fragment
-			val fragment: Fragment = NacMusicPickerFragment()
-
-			// Add the bundle to the fragment
-			fragment.arguments = alarm?.toBundle() ?: Bundle()
-
-			return fragment
-		}
-
-		/**
-		 * Create a new instance of this fragment.
-		 */
-		fun newInstance(
-			mediaPath: String,
-			mediaArtist: String,
-			mediaTitle: String,
-			mediaType: Int,
-			shuffleMedia: Boolean,
-			recursivelyPlayMedia: Boolean
-		): Fragment
-		{
-			// Create the fragment
-			val fragment: Fragment = NacMusicPickerFragment()
-
-			// Add the bundle to the fragment
-			fragment.arguments = Bundle().addMediaInfo(mediaPath, mediaArtist, mediaTitle,
-				mediaType, shuffleMedia, recursivelyPlayMedia)
-
-			return fragment
-		}
 
 	}
 

@@ -32,6 +32,8 @@ import com.google.android.material.checkbox.MaterialCheckBox
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.google.android.material.slider.Slider
+import com.google.android.material.snackbar.BaseTransientBottomBar
+import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputLayout
 import com.nfcalarmclock.R
@@ -383,6 +385,100 @@ fun TextInputLayout.setupInputLayoutColor(
 //	// Update the layout parameters
 //	this.layoutParams = layoutParams
 //}
+
+/**
+ * Reset a timer ringing animation.
+ */
+fun resetTimerRingingAnimation(
+	context: Context,
+	circularProgressIndicator: CircularProgressIndicator,
+	hourTextView: TextView,
+	hourUnits: TextView,
+	minuteTextView: TextView,
+	minuteUnits: TextView,
+	secondsTextView: TextView,
+	secondsUnits: TextView)
+{
+	// Get the color
+	val sharedPreferences = NacSharedPreferences(context)
+	val white = ContextCompat.getColor(context, R.color.white)
+
+	// Change the progress indicator
+	circularProgressIndicator.indicatorDirection = CircularProgressIndicator.INDICATOR_DIRECTION_CLOCKWISE
+	circularProgressIndicator.isIndeterminate = false
+	circularProgressIndicator.setIndicatorColor(sharedPreferences.themeColor)
+	circularProgressIndicator.setIndeterminateAnimatorDurationScale(1f)
+
+	// Change the text color
+	hourTextView.setTextColor(white)
+	minuteTextView.setTextColor(white)
+	secondsTextView.setTextColor(white)
+	hourUnits.setTextColor(white)
+	minuteUnits.setTextColor(white)
+	secondsUnits.setTextColor(white)
+}
+
+/**
+ * Show a snackbar and reuse it, when possible.
+ */
+fun showSnackbar(
+	currentSnackbar: Snackbar?,
+	view: View,
+	message: String,
+	action: String,
+	textColor: Int,
+	onClickListener: View.OnClickListener? = null,
+	onDismissListener: (Int) -> Unit = {}
+): Snackbar?
+{
+	// Check if there is a normal "Dismiss" snackbar that is currently shown, in
+	// which case it will be reused
+	val shouldReuseSnackbar = (currentSnackbar?.isShown == true) && (onClickListener == null)
+
+	// Check if there is a normal "Dismiss" snackbar that is currently shown
+	val snackbar = if (shouldReuseSnackbar)
+	{
+		// Reuse the snackbar
+		currentSnackbar.setText(message.toSpannedString())
+		currentSnackbar.show()
+		currentSnackbar
+	}
+	else
+	{
+		// Create the snackbar
+		Snackbar.make(view, message.toSpannedString(), Snackbar.LENGTH_LONG)
+	}
+
+	// Setup the snackbar
+	snackbar.setAction(action, onClickListener ?: View.OnClickListener { })
+	snackbar.setActionTextColor(textColor)
+	snackbar.setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
+
+	// Add callback if listener is set
+	if (!shouldReuseSnackbar)
+	{
+		// Add the normal show/dismiss callback
+		snackbar.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>()
+		{
+
+			/**
+			 * Snackbar has been dismissed.
+			 */
+			override fun onDismissed(transientBottomBar: Snackbar?, event: Int)
+			{
+				// Call the listener
+				onDismissListener(event)
+			}
+
+		})
+	}
+
+	// Show the snackbar
+	snackbar.show()
+
+	// Return the current snackbar
+	return snackbar.takeIf { onClickListener == null }
+}
 
 /**
  * Start a timer ringing animation.
