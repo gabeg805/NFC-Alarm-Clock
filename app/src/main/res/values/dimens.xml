@@ -27,7 +27,7 @@
 	<dimen name="isz_xxxlarge">44dp</dimen>
 	<dimen name="isz_attention">54dp</dimen>
 	<dimen name="isz_focus">72dp</dimen>
-	<dimen name="isz_numpad">80dp</dimen>
+	<dimen name="isz_numpad">92dp</dimen>
 	<dimen name="isz_actionpad">88dp</dimen>
 	<dimen name="isz_dismiss_large">30dp</dimen>
 
@@ -38,6 +38,7 @@
 	<dimen name="tsz_normal">16sp</dimen>
 	<dimen name="tsz_medium">18sp</dimen>
 	<dimen name="tsz_large">20sp</dimen>
+	<dimen name="tsz_xlarge">22sp</dimen>
 	<dimen name="tsz_huge">28sp</dimen>
 	<dimen name="tsz_xhuge">32sp</dimen>
 	<dimen name="tsz_xxhuge">36sp</dimen>

@@ -1,4 +1,4 @@
-package com.nfcalarmclock.timer.main
+package com.nfcalarmclock.timer
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -23,7 +23,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import androidx.recyclerview.widget.RecyclerView.OnScrollListener
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
@@ -35,10 +35,9 @@ import com.nfcalarmclock.card.NacCardLayoutManager
 import com.nfcalarmclock.main.NacMainActivity
 import com.nfcalarmclock.nfc.SCANNED_NFC_TAG_ID_BUNDLE_NAME
 import com.nfcalarmclock.shared.NacSharedPreferences
-import com.nfcalarmclock.system.NacBundle.BUNDLE_INTENT_ACTION
+import com.nfcalarmclock.system.NacBundle
 import com.nfcalarmclock.system.getTimer
 import com.nfcalarmclock.system.toBundle
-import com.nfcalarmclock.timer.NacTimerViewModel
 import com.nfcalarmclock.timer.active.NacActiveTimerService
 import com.nfcalarmclock.timer.card.NacTimerCardAdapter
 import com.nfcalarmclock.timer.card.NacTimerCardHolder
@@ -74,6 +73,11 @@ class NacShowTimersFragment
 	 * Floating action button to add new timers.
 	 */
 	private lateinit var floatingActionButton: FloatingActionButton
+
+	/**
+	 * Bottom navigation.
+	 */
+	private lateinit var bottomNavigation: BottomNavigationView
 
 	/**
 	 * Recycler view containing the timer cards.
@@ -199,7 +203,7 @@ class NacShowTimersFragment
 				card.updateHourMinuteSecondsTextViews(secUntilFinished)
 
 				// Animate the progress to the new progress
-				card.progressIndicator.animateProgress(card.progressIndicator.progress, newProgress, 250)
+				card.progressIndicator.setProgressCompat(newProgress, true)
 			}
 
 		}
@@ -230,6 +234,9 @@ class NacShowTimersFragment
 			val card = recyclerView.findViewHolderForItemId(timer.id) as NacTimerCardHolder? ?: return@OnServiceStoppedListener
 
 			println("REeseting the timer animation jank")
+			// Update views back to normal
+			card.setResetVisibility()
+			card.updateHourMinuteSecondsTextViews(timer.duration)
 			card.resetTimerRingingAnimation(requireContext())
 		}
 
@@ -245,6 +252,9 @@ class NacShowTimersFragment
 			service = binder.getService()
 			println("Show timers SERVICE IS NOW CONNECTED")
 			// TODO: Null pointer exception when screen turns off and then on again and onTick() is called again? Line 150 in Active timer from show timers.... weird
+
+			// TODO: Repeat toast to explain what that does for timers
+			// TODO: Test saving the default ringtone in general settings
 
 			// Initialize each timer being used by the service
 			service!!.allTimersReadOnly.forEach { timer ->
@@ -290,8 +300,8 @@ class NacShowTimersFragment
 					val message = getString(messageId)
 					val action = getString(R.string.action_undo)
 
-					showSnackbar(
-						currentSnackbar, floatingActionButton,
+					currentSnackbar = showSnackbar(
+						currentSnackbar, bottomNavigation, floatingActionButton,
 						message, action, sharedPreferences.themeColor,
 						onClickListener = {
 							// Undo the insert. This will delete the timer
@@ -317,7 +327,7 @@ class NacShowTimersFragment
 			println("Hello added timer from set timer intent")
 
 			// Navigate to the edit timer fragment
-			findNavController().navigate(R.id.nacEditTimerFragment, timer.toBundle())
+			findNavController().navigate(R.id.action_nacShowTimersFragment_to_nacEditTimerFragment, timer.toBundle())
 		})
 	}
 
@@ -363,7 +373,7 @@ class NacShowTimersFragment
 					if (nfcTagIdList.size == 1)
 					{
 						println("ONLY 1 NFC required for this timer! Dismiss this jank")
-						NacActiveTimerService.dismissTimerServiceWithNfc(context, t)
+						NacActiveTimerService.Companion.dismissTimerServiceWithNfc(context, t)
 					}
 					else
 					{
@@ -387,7 +397,7 @@ class NacShowTimersFragment
 			if (anyNfcTimer != null)
 			{
 				println("DISMISSING ANY NFC TIMER : ${anyNfcTimer.id}")
-				NacActiveTimerService.dismissTimerServiceWithNfc(context, anyNfcTimer)
+				NacActiveTimerService.Companion.dismissTimerServiceWithNfc(context, anyNfcTimer)
 			}
 
 			// As a last resort, try to dismiss one of the timers that does not even use
@@ -395,7 +405,7 @@ class NacShowTimersFragment
 			if (nonNfcTimer != null)
 			{
 				println("DISMISSING NON NFC TIMER : ${nonNfcTimer.id}")
-				NacActiveTimerService.dismissTimerServiceWithNfc(context, nonNfcTimer)
+				NacActiveTimerService.Companion.dismissTimerServiceWithNfc(context, nonNfcTimer)
 			}
 		}
 	}
@@ -435,8 +445,8 @@ class NacShowTimersFragment
 		val message = getString(R.string.message_timer_delete)
 		val action = getString(R.string.action_undo)
 
-		showSnackbar(
-			currentSnackbar, floatingActionButton,
+		currentSnackbar = showSnackbar(
+			currentSnackbar, bottomNavigation, floatingActionButton,
 			message, action, sharedPreferences.themeColor,
 			onClickListener = {
 				// Undo the delete. This will restore the timer
@@ -453,7 +463,8 @@ class NacShowTimersFragment
 				// Cleanup media file
 				lifecycleScope.launch {
 					(requireActivity() as NacMainActivity).cleanupMediaFileAfterDelete(
-						localMediaPath, timerViewModel.getAllTimers())
+						localMediaPath, timerViewModel.getAllTimers()
+					)
 				}
 
 			})
@@ -566,7 +577,7 @@ class NacShowTimersFragment
 
 		// Get the intent action and timer from the fragment arguments bundle. These
 		// could be null, but if an action occurred, they will not be
-		val action = arguments?.getString(BUNDLE_INTENT_ACTION)
+		val action = arguments?.getString(NacBundle.BUNDLE_INTENT_ACTION)
 		val timer = arguments?.getTimer()
 
 		// Add timer that was created from the SET_TIMER intent
@@ -598,7 +609,7 @@ class NacShowTimersFragment
 		// Bind to the active timer service
 		val context = requireContext()
 
-		NacActiveTimerService.bindToService(context, NacActiveTimerService::class.java, serviceConnection)
+		NacActiveTimerService.Companion.bindToService(context, NacActiveTimerService::class.java, serviceConnection)
 	}
 
 	/**
@@ -630,10 +641,12 @@ class NacShowTimersFragment
 		val context = requireContext()
 		sharedPreferences = NacSharedPreferences(context)
 		floatingActionButton = requireActivity().findViewById(R.id.floating_action_button)
+		bottomNavigation = requireActivity().findViewById(R.id.bottom_navigation)
 		recyclerView = view.findViewById(R.id.rv_timer_list)
 		timerCardAdapter = NacTimerCardAdapter()
 		timerCardAdapterLiveData = MutableLiveData<List<NacTimer>>()
-		timerCardTouchHelper = NacTimerCardTouchHelper(object : NacBaseCardTouchHelperCallback.OnCardSwipedListener<NacTimer> {
+		timerCardTouchHelper = NacTimerCardTouchHelper(object : NacBaseCardTouchHelperCallback.OnCardSwipedListener<NacTimer>
+		{
 
 			override fun onCopySwipe(item: NacTimer, index: Int)
 			{
@@ -773,7 +786,7 @@ class NacShowTimersFragment
 		recyclerView.setHasFixedSize(true)
 
 		// Show/hide the FAB on scroll
-		recyclerView.addOnScrollListener(object : OnScrollListener()
+		recyclerView.addOnScrollListener(object : RecyclerView.OnScrollListener()
 		{
 
 			/**
@@ -840,11 +853,11 @@ class NacShowTimersFragment
 				// Determine the destination fragment to use
 				val destinationId = if (service?.isTimerActive(timer) == true)
 				{
-					R.id.nacActiveTimerFragment
+					R.id.action_nacShowTimersFragment_to_nacActiveTimerFragment
 				}
 				else
 				{
-					R.id.nacEditTimerFragment
+					R.id.action_nacShowTimersFragment_to_nacEditTimerFragment
 				}
 
 				// Navigate to the fragment
@@ -871,8 +884,8 @@ class NacShowTimersFragment
 					// Start the service
 					val context = requireContext()
 
-					NacActiveTimerService.startTimerService(context, timer)
-					NacActiveTimerService.bindToService(context, NacActiveTimerService::class.java, serviceConnection)
+					NacActiveTimerService.Companion.startTimerService(context, timer)
+					NacActiveTimerService.Companion.bindToService(context, NacActiveTimerService::class.java, serviceConnection)
 				}
 
 			}
@@ -893,6 +906,12 @@ class NacShowTimersFragment
 				service?.resetCountdownTimer(timer)
 				service?.cleanup(timer)
 
+				// Stop the service when no timers are using it
+				if (service?.allTimersReadOnly?.isEmpty() == true)
+				{
+					service!!.stopThisService()
+				}
+
 			}
 
 			// Stop timer listener
@@ -905,7 +924,6 @@ class NacShowTimersFragment
 				card.setResetVisibility()
 				card.updateHourMinuteSecondsTextViews(timer.duration)
 				card.resetTimerRingingAnimation(requireContext())
-				card.progressIndicator.animateProgress(card.progressIndicator.progress, 0, 250)
 
 			}
 

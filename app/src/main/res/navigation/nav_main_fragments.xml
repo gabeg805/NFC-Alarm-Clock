@@ -22,7 +22,7 @@
 	<fragment
 		android:id="@+id/nacShowAlarmsFragment"
 		android:name="com.nfcalarmclock.alarm.NacShowAlarmsFragment"
-		android:label="NacShowAlarmsFragment" >
+		android:label="@string/app_name" >
 		<action
 			android:id="@+id/action_nacShowAlarmsFragment_to_nacAlarmMainMediaPickerFragment"
 			app:destination="@id/nacAlarmMainMediaPickerFragment" />
@@ -31,8 +31,8 @@
 	<!-- Show timers -->
 	<fragment
 		android:id="@+id/nacShowTimersFragment"
-		android:name="com.nfcalarmclock.timer.main.NacShowTimersFragment"
-		android:label="NacShowTimersFragment" >
+		android:name="com.nfcalarmclock.timer.NacShowTimersFragment"
+		android:label="@string/title_timer_main" >
 		<action
 			android:id="@+id/action_nacShowTimersFragment_to_nacAddTimerFragment"
 			app:destination="@id/nacAddTimerFragment" />
@@ -48,7 +48,7 @@
 	<fragment
 		android:id="@+id/nacAddTimerFragment"
 		android:name="com.nfcalarmclock.timer.addedit.NacAddTimerFragment"
-		android:label="NacAddTimerFragment" >
+		android:label="@string/title_timer_add" >
 		<action
 			android:id="@+id/action_nacAddTimerFragment_to_nacActiveTimerFragment"
 			app:destination="@id/nacActiveTimerFragment" />
@@ -61,7 +61,7 @@
 	<fragment
 		android:id="@+id/nacEditTimerFragment"
 		android:name="com.nfcalarmclock.timer.addedit.NacEditTimerFragment"
-		android:label="NacEditTimerFragment" >
+		android:label="@string/title_timer_edit" >
 		<action
 			android:id="@+id/action_nacEditTimerFragment_to_nacActiveTimerFragment"
 			app:destination="@id/nacActiveTimerFragment" />
@@ -74,16 +74,16 @@
 	<fragment
 		android:id="@+id/nacActiveTimerFragment"
 		android:name="com.nfcalarmclock.timer.active.NacActiveTimerFragment"
-		android:label="NacActiveTimerFragment" />
+		android:label="@string/title_timer_active" />
 
 	<!-- Media pickers -->
 	<fragment
 		android:id="@+id/nacAlarmMainMediaPickerFragment"
 		android:name="com.nfcalarmclock.alarm.options.mediapicker.NacAlarmMainMediaPickerFragment"
-		android:label="NacAlarmMainMediaPickerFragment" />
+		android:label="@string/title_select_media" />
 	<fragment
 		android:id="@+id/nacTimerMainMediaPickerFragment"
 		android:name="com.nfcalarmclock.timer.options.mediapicker.NacTimerMainMediaPickerFragment"
-		android:label="NacTimerMainMediaPickerFragment" />
+		android:label="@string/title_select_media" />
 
 </navigation>

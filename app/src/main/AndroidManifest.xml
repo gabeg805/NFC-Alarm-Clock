@@ -11,12 +11,15 @@
 	<uses-permission android:name="android.permission.VIBRATE" />
 	<uses-permission android:name="android.permission.SCHEDULE_EXACT_ALARM"
 		android:maxSdkVersion="32" />
-	<uses-permission android:name="android.permission.USE_EXACT_ALARM" />
+	<uses-permission android:name="android.permission.USE_EXACT_ALARM"
+		tools:ignore="ExactAlarmPolicy" />
 	<uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
 	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
 	<uses-permission android:name="android.permission.WAKE_LOCK" />
-	<uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT" />
-	<uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
+	<uses-permission android:name="android.permission.USE_FULL_SCREEN_INTENT"
+		tools:ignore="FullScreenIntentPolicy" />
+	<uses-permission android:name="android.permission.FOREGROUND_SERVICE"
+		tools:ignore="ForegroundServicesPolicy" />
 	<uses-permission android:name="android.permission.FOREGROUND_SERVICE_SYSTEM_EXEMPTED" />
 	<uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
 	<uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
@@ -131,15 +134,6 @@
 			android:parentActivityName=".main.NacMainActivity"
 			android:windowSoftInputMode="stateAlwaysHidden"
 			/>
-
-		<!-- Media activity -->
-		<!--
-		<activity
-			android:name=".alarm.options.mediapicker.NacMediaPickerActivity"
-			android:exported="false"
-			android:launchMode="singleInstance"
-			/>
-			-->
 
 		<!-- Active alarm service (show notification and call alarm activity) -->
 		<service

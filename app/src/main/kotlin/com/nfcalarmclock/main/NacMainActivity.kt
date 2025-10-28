@@ -19,6 +19,9 @@ import androidx.core.net.toUri
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
 import androidx.navigation.fragment.NavHostFragment
+import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.navigateUp
+import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -50,9 +53,10 @@ import com.nfcalarmclock.system.triggers.shutdown.NacShutdownBroadcastReceiver
 import com.nfcalarmclock.system.unregisterMyReceiver
 import com.nfcalarmclock.timer.NacTimerViewModel
 import com.nfcalarmclock.timer.active.NacActiveTimerFragment
-import com.nfcalarmclock.timer.main.NacShowTimersFragment
+import com.nfcalarmclock.timer.NacShowTimersFragment
 import com.nfcalarmclock.view.setupRippleColor
 import com.nfcalarmclock.view.setupThemeColor
+import com.nfcalarmclock.view.slideUp
 import com.nfcalarmclock.whatsnew.NacWhatsNewDialog
 import com.nfcalarmclock.widget.refreshAppWidgets
 import dagger.hilt.android.AndroidEntryPoint
@@ -333,6 +337,22 @@ class NacMainActivity
 		setupBottomNavigationView()
 		setupNavController()
 
+		val appBarConfiguration = AppBarConfiguration(setOf(R.id.nacShowAlarmsFragment, R.id.nacShowTimersFragment))
+		toolbar.setupWithNavController(navController, appBarConfiguration)
+		toolbar.setNavigationOnClickListener {
+			println("HELLO : ${navController.currentDestination}")
+			if (navController.currentDestination?.id == R.id.nacActiveTimerFragment)
+			{
+				println("DOING MY POP BACK STACK")
+				navController.popBackStack(R.id.nacShowTimersFragment, false)
+			}
+			else
+			{
+				println("NORMAL NAVIGATE UP")
+				navController.navigateUp(appBarConfiguration)
+			}
+		}
+
 		// Disable the activity alias so that tapping an NFC tag will NOT open
 		// the main activity
 		disableActivityAlias(this)
@@ -450,19 +470,12 @@ class NacMainActivity
 					val currentFragment = navHostFragment.childFragmentManager.primaryNavigationFragment
 					println("Current fragment : $currentFragment")
 
-					//if (currentFragment is NacShowTimersFragment || currentFragment is NacActiveTimerFragment)
-					//if (currentFragment is NacShowTimersFragment)
-					//{
-					//	currentFragment.attemptDismissWithScannedNfc(nfcId)
-					//}
-
 					when (destinationId)
 					{
 
 						// Show timers
 						R.id.nacShowTimersFragment ->
 						{
-							//val fragment = supportFragmentManager.findFragmentById(destinationId) as NacShowTimersFragment?
 							val fragment = currentFragment as NacShowTimersFragment
 
 							println("Attempting to dismiss jank show timers instead of navigate : $nfcId")
@@ -472,7 +485,6 @@ class NacMainActivity
 						// Active timer
 						R.id.nacActiveTimerFragment ->
 						{
-							//val fragment = supportFragmentManager.findFragmentById(destinationId) as NacActiveTimerFragment?
 							val fragment = currentFragment as NacActiveTimerFragment
 
 							println("Attempting to dismiss jank active timer instead of navigate : $nfcId")
@@ -766,7 +778,9 @@ class NacMainActivity
 			println("Changeing destination : ${destination.label}")
 
 			// Set the bottom navigation visibility based on the current destination
-			bottomNavigation.visibility = if ((destination.id == R.id.nacAlarmMainMediaPickerFragment) || (destination.id == R.id.nacTimerMainMediaPickerFragment))
+			bottomNavigation.visibility = if ((destination.id == R.id.nacAlarmMainMediaPickerFragment)
+				|| (destination.id == R.id.nacTimerMainMediaPickerFragment)
+				|| (destination.id == R.id.nacActiveTimerFragment))
 			{
 				println("Hiding bottom nav media")
 				// Media picker
@@ -779,31 +793,17 @@ class NacMainActivity
 				View.VISIBLE
 			}
 
-			//// Bottom navigation visibility
-			//when (destination.id)
-			//{
-			//	// Alarm media picker
-			//	R.id.nacAlarmMainMediaPickerFragment ->
-			//	{
-			//		println("Hiding bottom nav alarm media")
-			//		bottomNavigation.visibility = View.GONE
-			//	}
-
-			//	// Timer media picker
-			//	R.id.nacTimerMainMediaPickerFragment ->
-			//	{
-			//		println("Hiding bottom nav timer media")
-			//		bottomNavigation.visibility = View.GONE
-			//	}
-
-
-			//	// Everything else
-			//	else ->
-			//	{
-			//		println("SHOWING bottom nav")
-			//		bottomNavigation.visibility = View.VISIBLE
-			//	}
-			//}
+			// Slide the bottom navigation view to ensure it is shown
+			if ((destination.id == R.id.nacShowTimersFragment)
+				|| (destination.id == R.id.nacAddTimerFragment)
+				|| (destination.id == R.id.nacEditTimerFragment))
+			{
+				if (bottomNavigation.translationY != 0f)
+				{
+					println("SLIDE UP")
+					bottomNavigation.slideUp()
+				}
+			}
 
 			// Floating action button visibility
 			when (destination.id)

@@ -400,6 +400,30 @@ fun TextInputLayout.setupInputLayoutColor(
 //}
 
 /**
+ * Slide a BottomNavigationView down.
+ */
+fun BottomNavigationView.slideDown(duration: Long = 250)
+{
+	this.clearAnimation()
+	this.animate()
+		.translationY(this.height.toFloat())
+		.setDuration(duration)
+		.start()
+}
+
+/**
+ * Slide a BottomNavigationView up.
+ */
+fun BottomNavigationView.slideUp(duration: Long = 250)
+{
+	this.clearAnimation()
+	this.animate()
+		.translationY(0f)
+		.setDuration(duration)
+		.start()
+}
+
+/**
  * Reset a timer ringing animation.
  */
 fun resetTimerRingingAnimation(
@@ -437,6 +461,7 @@ fun resetTimerRingingAnimation(
 fun showSnackbar(
 	currentSnackbar: Snackbar?,
 	view: View,
+	floatingActionButton: FloatingActionButton,
 	message: String,
 	action: String,
 	textColor: Int,
@@ -465,20 +490,44 @@ fun showSnackbar(
 	// Setup the snackbar
 	snackbar.setAction(action, onClickListener ?: View.OnClickListener { })
 	snackbar.setActionTextColor(textColor)
-	snackbar.setAnimationMode(Snackbar.ANIMATION_MODE_SLIDE)
+	snackbar.setAnchorView(view)
+	snackbar.setAnimationMode(Snackbar.ANIMATION_MODE_FADE)
 
 	// Add callback if listener is set
 	if (!shouldReuseSnackbar)
 	{
+		// Listener for when the snackbar is starting to change and become visible.
+		// This means the view has been measured and has a height, so the animation
+		// of the FAB can be started at the same time since now it is known how much
+		// to animate the FAB's Y position by
+		snackbar.view.addOnLayoutChangeListener { view, _, _, _, _, _, _, _, _ ->
+
+			// Get the height of the snackbar
+			val height = view.height.toFloat()
+
+			// Animate the FAB moving up
+			floatingActionButton.animate()
+				.translationY(-height)
+				.setDuration(250)
+				.start()
+
+		}
+
 		// Add the normal show/dismiss callback
 		snackbar.addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>()
 		{
 
 			/**
-			 * Snackbar has been dismissed.
+			 * Snackbar is dismissed.
 			 */
 			override fun onDismissed(transientBottomBar: Snackbar?, event: Int)
 			{
+				// Animate the FAB moving back to its original position
+				floatingActionButton.animate()
+					.translationY(0f)
+					.setDuration(250)
+					.start()
+
 				// Call the listener
 				onDismissListener(event)
 			}

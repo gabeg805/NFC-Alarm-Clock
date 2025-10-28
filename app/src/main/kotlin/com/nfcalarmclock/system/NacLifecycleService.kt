@@ -63,7 +63,7 @@ abstract class NacLifecycleService
 	 * Stop the service.
 	 */
 	@Suppress("deprecation")
-	protected fun stopThisService()
+	fun stopThisService()
 	{
 		// Stop the foreground service using the updated form of
 		// stopForeground() for API >= 33

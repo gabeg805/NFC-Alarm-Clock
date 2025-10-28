@@ -344,7 +344,6 @@ abstract class NacBaseMainMediaPickerFragment<T: NacAlarm>
 		mediaType = item?.mediaType ?: arguments.getMediaType()
 		shuffleMedia = item?.shouldShuffleMedia ?: arguments.getShuffleMedia()
 		recursivelyPlayMedia = item?.shouldRecursivelyPlayMedia ?: arguments.getRecursivelyPlayMedia()
-		// TODO: Change this view id
 		viewPager = view.findViewById(R.id.view_pager)
 		tabLayout = view.findViewById(R.id.tab_layout)
 		println("Creating pager adapter")

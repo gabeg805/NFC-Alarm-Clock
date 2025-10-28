@@ -28,6 +28,7 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnScrollListener
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
@@ -110,6 +111,11 @@ class NacShowAlarmsFragment
 	 * Floating action button to add new alarms.
 	 */
 	private lateinit var floatingActionButton: FloatingActionButton
+
+	/**
+	 * Bottom navigation.
+	 */
+	private lateinit var bottomNavigation: BottomNavigationView
 
 	/**
 	 * Next alarm text view.
@@ -248,8 +254,8 @@ class NacShowAlarmsFragment
 					val message = getString(messageId)
 					val action = getString(R.string.action_undo)
 
-					showSnackbar(
-						currentSnackbar, floatingActionButton,
+					currentSnackbar = showSnackbar(
+						currentSnackbar, bottomNavigation, floatingActionButton,
 						message, action, sharedPreferences.themeColor,
 						onClickListener = {
 							// Undo the insert. This will delete the alarm
@@ -337,8 +343,8 @@ class NacShowAlarmsFragment
 		val message = getString(R.string.message_alarm_delete)
 		val action = getString(R.string.action_undo)
 
-		showSnackbar(
-			currentSnackbar, floatingActionButton,
+		currentSnackbar = showSnackbar(
+			currentSnackbar, bottomNavigation, floatingActionButton,
 			message, action, sharedPreferences.themeColor,
 			onClickListener = {
 				// Undo the delete. This will restore the alarm
@@ -479,6 +485,7 @@ class NacShowAlarmsFragment
 		sharedPreferences = NacSharedPreferences(context)
 		nextAlarmTextView = view.findViewById(R.id.tv_next_alarm)
 		floatingActionButton = requireActivity().findViewById(R.id.floating_action_button)
+		bottomNavigation = requireActivity().findViewById(R.id.bottom_navigation)
 		recyclerView = view.findViewById(R.id.rv_alarm_list)
 		alarmCardAdapter = NacAlarmCardAdapter()
 		alarmCardAdapterLiveData = NacAlarmCardAdapterLiveData()
@@ -1305,8 +1312,8 @@ class NacShowAlarmsFragment
 		}
 
 		// Show the snackbar
-		showSnackbar(
-			currentSnackbar, floatingActionButton,
+		currentSnackbar = showSnackbar(
+			currentSnackbar, bottomNavigation, floatingActionButton,
 			message, action, sharedPreferences.themeColor)
 	}
 

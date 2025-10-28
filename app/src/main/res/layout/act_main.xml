@@ -55,7 +55,7 @@
 				android:contentDescription="@string/cd_fab_add_alarm"
 				android:layout_width="@dimen/isz_attention"
 				android:layout_height="@dimen/isz_attention"
-				android:layout_marginBottom="100dp"
+				android:layout_marginBottom="88dp"
 				app:layout_anchor="@id/bottom_navigation"
 				app:layout_anchorGravity="center_horizontal"
 				android:src="@drawable/plus"

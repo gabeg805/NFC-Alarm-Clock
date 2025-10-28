@@ -18,7 +18,7 @@
 
 		<!-- Progress indicator -->
 		<com.google.android.material.progressindicator.CircularProgressIndicator
-			style="@style/Timer.CardCircularProgressIndicator"
+			style="@style/My.Timer.CircularProgressIndicator.Card"
 			android:id="@+id/timer_progress"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
@@ -30,12 +30,10 @@
 
 		<!-- Name -->
 		<TextView
-			style="@style/Widget.TextView.Summary"
+			style="@style/My.Timer.NameText.Card"
 			android:id="@+id/timer_name"
-			android:layout_width="wrap_content"
+			android:layout_width="0dp"
 			android:layout_height="wrap_content"
-			android:layout_marginBottom="@dimen/normal"
-			android:textSize="@dimen/tsz_normal"
 			android:text=""
 			app:layout_constraintBottom_toTopOf="@id/timer_seconds"
 			app:layout_constraintStart_toStartOf="@id/timer_progress"
@@ -44,7 +42,7 @@
 
 		<!-- Hour -->
 		<TextView
-			style="@style/Timer.CardTimeText"
+			style="@style/My.Timer.TimeText.Card"
 			android:id="@+id/timer_hour"
 			app:layout_constraintTop_toTopOf="@id/timer_progress"
 			app:layout_constraintBottom_toBottomOf="@id/timer_progress"
@@ -54,7 +52,7 @@
 			/>
 
 		<TextView
-			style="@style/Timer.UnitsText"
+			style="@style/My.Timer.UnitsText"
 			android:id="@+id/timer_hour_units"
 			android:layout_marginEnd="@dimen/tiny"
 			android:text="@string/letter_h"
@@ -65,7 +63,7 @@
 
 		<!-- Minute -->
 		<TextView
-			style="@style/Timer.CardTimeText"
+			style="@style/My.Timer.TimeText.Card"
 			android:id="@+id/timer_minute"
 			app:layout_constraintTop_toTopOf="@id/timer_progress"
 			app:layout_constraintBottom_toBottomOf="@id/timer_progress"
@@ -74,7 +72,7 @@
 			/>
 
 		<TextView
-			style="@style/Timer.UnitsText"
+			style="@style/My.Timer.UnitsText"
 			android:id="@+id/timer_minute_units"
 			android:layout_marginEnd="@dimen/tiny"
 			android:text="@string/letter_m"
@@ -85,7 +83,7 @@
 
 		<!-- Seconds -->
 		<TextView
-			style="@style/Timer.CardTimeText"
+			style="@style/My.Timer.TimeText.Card"
 			android:id="@+id/timer_seconds"
 			app:layout_constraintTop_toTopOf="@id/timer_progress"
 			app:layout_constraintBottom_toBottomOf="@id/timer_progress"
@@ -94,7 +92,7 @@
 			/>
 
 		<TextView
-			style="@style/Timer.UnitsText"
+			style="@style/My.Timer.UnitsText"
 			android:id="@+id/timer_seconds_units"
 			android:layout_marginEnd="@dimen/zero"
 			android:text="@string/letter_s"
@@ -105,7 +103,7 @@
 
 		<!-- Reset timer -->
 		<com.google.android.material.button.MaterialButton
-			style="@style/Timer.IconButton"
+			style="@style/My.Timer.IconButton"
 			android:id="@+id/timer_reset_button"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
@@ -122,7 +120,7 @@
 
 		<!-- Start button-->
 		<com.google.android.material.button.MaterialButton
-			style="@style/Timer.IconButton"
+			style="@style/My.Timer.IconButton"
 			android:id="@+id/timer_start_button"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
@@ -137,7 +135,7 @@
 
 		<!-- Pause button-->
 		<com.google.android.material.button.MaterialButton
-			style="@style/Timer.IconButton"
+			style="@style/My.Timer.IconButton"
 			android:id="@+id/timer_pause_button"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
@@ -152,7 +150,7 @@
 
 		<!-- Stop timer -->
 		<com.google.android.material.button.MaterialButton
-			style="@style/Timer.IconButton"
+			style="@style/My.Timer.IconButton"
 			android:id="@+id/timer_stop_button"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"

@@ -39,6 +39,7 @@
 	<string name="word_of">of</string>
 	<string name="word_alarm">Alarm</string>
 	<string name="word_alarms">Alarms</string>
+	<string name="word_timer">Timer</string>
 	<string name="word_timers">Timers</string>
 	<string name="word_reminder">Reminder</string>
 	<string name="word_more">More</string>
@@ -223,6 +224,11 @@
 	<string name="error_message_unable_to_launch_media_picker">Unable to launch system audio picker</string>
 
 	<!-- Titles -->
+	<string name="title_timer_main">NFC Timer</string>
+	<string name="title_timer_add">Add timer</string>
+	<string name="title_timer_edit">Edit timer</string>
+	<string name="title_timer_active">Active timer</string>
+	<string name="title_select_media">Select media</string>
 	<string name="title_settings">Settings</string>
 	<string name="title_options">Options</string>
 	<string name="title_time">Time</string>

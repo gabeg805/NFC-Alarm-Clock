@@ -415,8 +415,9 @@ class NacActiveTimerService
 		// Stop the service if no more timers are active
 		if (allTimers.isEmpty())
 		{
-			println("STOPPING ACTIVE YO VERY COOL")
-			stopThisService()
+			//println("STOPPING ACTIVE YO VERY COOL")
+			//stopThisService()
+			foregroundNotificationId = 0
 		}
 		// Close the notification and if this is the foreground notification, make
 		// another timer the foreground notification
@@ -479,6 +480,19 @@ class NacActiveTimerService
 			// Show toast that the timer was dismissed and stop the service
 			withContext(Dispatchers.Main) {
 				quickToast(this@NacActiveTimerService, R.string.message_timer_dismiss)
+			}
+
+			// Repeat timer
+			if (timer.shouldRepeat)
+			{
+				println("TIMER REPEATS RESTART IT")
+				startTimerService(this@NacActiveTimerService, timer)
+			}
+			// Timer does not repeat and there are no more timers using the service
+			else if (allTimers.isEmpty())
+			{
+				println("STOPPING ACTIVE YO VERY COOL")
+				stopThisService()
 			}
 
 		}
@@ -1054,7 +1068,7 @@ class NacActiveTimerService
 		// Amount of time until the timer is automatically dismissed
 		val delay = if (timer.shouldUseNfc)
 		{
-			60000L
+			120000L
 		}
 		else
 		{

@@ -2,13 +2,13 @@
 <androidx.constraintlayout.widget.ConstraintLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
-	android:layout_height="match_parent"
-	android:layout_marginBottom="?attr/actionBarSize">
+	android:layout_height="match_parent">
 
 	<!-- Progress indicator -->
 	<com.google.android.material.progressindicator.CircularProgressIndicator
-		style="@style/Timer.ActiveCircularProgressIndicator"
+		style="@style/My.Timer.CircularProgressIndicator.Active"
 		android:id="@+id/timer_progress"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
@@ -21,13 +21,10 @@
 
 	<!-- Name -->
 	<TextView
-		style="@style/Widget.TextView.Summary"
+		style="@style/My.Timer.NameText.Active"
 		android:id="@+id/timer_name"
-		android:layout_width="wrap_content"
+		android:layout_width="0dp"
 		android:layout_height="wrap_content"
-		android:layout_marginBottom="@dimen/normal"
-		android:alpha="0.75"
-		android:textSize="@dimen/tsz_large"
 		android:text=""
 		app:layout_constraintBottom_toTopOf="@id/timer_seconds"
 		app:layout_constraintStart_toStartOf="@id/timer_progress"
@@ -36,7 +33,7 @@
 
 	<!-- Hour -->
 	<TextView
-		style="@style/Timer.AddTimeText"
+		style="@style/My.Timer.TimeText.Active"
 		android:id="@+id/timer_hour"
 		android:text="@string/number00"
 		app:layout_constraintTop_toTopOf="@id/timer_progress"
@@ -47,7 +44,7 @@
 		/>
 
 	<TextView
-		style="@style/Timer.UnitsText"
+		style="@style/My.Timer.UnitsText"
 		android:id="@+id/timer_hour_units"
 		android:layout_marginEnd="@dimen/tiny"
 		android:text="@string/letter_h"
@@ -58,7 +55,7 @@
 
 	<!-- Minute -->
 	<TextView
-		style="@style/Timer.AddTimeText"
+		style="@style/My.Timer.TimeText.Active"
 		android:id="@+id/timer_minute"
 		android:text="@string/number00"
 		app:layout_constraintTop_toTopOf="@id/timer_progress"
@@ -68,7 +65,7 @@
 		/>
 
 	<TextView
-		style="@style/Timer.UnitsText"
+		style="@style/My.Timer.UnitsText"
 		android:id="@+id/timer_minute_units"
 		android:layout_marginEnd="@dimen/tiny"
 		android:text="@string/letter_m"
@@ -79,7 +76,7 @@
 
 	<!-- Seconds -->
 	<TextView
-		style="@style/Timer.AddTimeText"
+		style="@style/My.Timer.TimeText.Active"
 		android:id="@+id/timer_seconds"
 		android:text="@string/number00"
 		app:layout_constraintTop_toTopOf="@id/timer_progress"
@@ -89,7 +86,7 @@
 		/>
 
 	<TextView
-		style="@style/Timer.UnitsText"
+		style="@style/My.Timer.UnitsText"
 		android:id="@+id/timer_seconds_units"
 		android:layout_marginEnd="@dimen/zero"
 		android:text="@string/letter_s"
@@ -98,28 +95,14 @@
 		app:layout_constraintBaseline_toBaselineOf="@id/timer_seconds"
 		/>
 
-	<!-- Chronometer -->
-	<!--
-	<Chronometer
-		android:id="@+id/timer_chronometer"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:textColor="@color/gray_dark2"
-		android:textSize="0sp"
-		app:layout_constraintTop_toTopOf="parent"
-		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintEnd_toEndOf="parent"
-		/>
-		-->
-
 	<!-- Reset timer -->
 	<com.google.android.material.button.MaterialButton
-		style="@style/Timer.IconButton"
+		style="@style/My.Timer.IconButton"
 		android:id="@+id/timer_reset_button"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
 		android:layout_marginBottom="@dimen/normal"
-		app:iconSize="@dimen/isz_large"
+		app:iconSize="@dimen/isz_xlarge"
 		app:icon="@drawable/autorenew_32"
 		app:layout_constraintTop_toBottomOf="@id/timer_seconds"
 		app:layout_constraintBottom_toBottomOf="@id/timer_progress"
@@ -129,7 +112,7 @@
 
 	<!-- Resume timer -->
 	<com.google.android.material.button.MaterialButton
-		style="@style/Timer.ActionButton"
+		style="@style/My.Timer.ActionButton"
 		android:id="@+id/timer_resume_button"
 		android:layout_marginTop="@dimen/zero"
 		android:layout_marginBottom="@dimen/zero"
@@ -147,7 +130,7 @@
 
 	<!-- Pause timer -->
 	<com.google.android.material.button.MaterialButton
-		style="@style/Timer.ActionButton"
+		style="@style/My.Timer.ActionButton"
 		android:id="@+id/timer_pause_button"
 		android:layout_marginTop="@dimen/zero"
 		android:layout_marginBottom="@dimen/zero"
@@ -164,7 +147,7 @@
 
 	<!-- Stop timer -->
 	<com.google.android.material.button.MaterialButton
-		style="@style/Timer.ActionButton"
+		style="@style/My.Timer.ActionButton"
 		android:id="@+id/timer_stop_button"
 		android:layout_marginTop="@dimen/zero"
 		android:layout_marginBottom="@dimen/zero"
@@ -185,6 +168,7 @@
 		android:id="@+id/timer_scan_nfc_container"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
+		android:layout_marginBottom="@dimen/normal"
 		android:gravity="center_horizontal"
 		android:orientation="vertical"
 		android:visibility="invisible"
@@ -192,7 +176,8 @@
 		app:layout_constraintTop_toBottomOf="@id/timer_progress"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
-		app:layout_constraintEnd_toEndOf="parent">
+		app:layout_constraintEnd_toEndOf="parent"
+		tools:ignore="UseCompoundDrawables">
 
 		<ImageView
 			android:contentDescription="@string/cd_scan_nfc"
@@ -219,10 +204,10 @@
 
 	<!-- Add time -->
 	<com.google.android.material.button.MaterialButton
-		style="@style/Timer.NumberpadButton"
+		style="@style/My.Timer.NumberpadButton"
 		android:id="@+id/timer_add_1m"
 		android:layout_width="wrap_content"
-		android:layout_height="@dimen/isz_xxxlarge"
+		android:layout_height="@dimen/touch"
 		android:layout_marginTop="@dimen/zero"
 		android:layout_marginBottom="@dimen/zero"
 		android:textSize="@dimen/tsz_medium"
@@ -235,10 +220,10 @@
 		/>
 
 	<com.google.android.material.button.MaterialButton
-		style="@style/Timer.NumberpadButton"
+		style="@style/My.Timer.NumberpadButton"
 		android:id="@+id/timer_add_30s"
 		android:layout_width="wrap_content"
-		android:layout_height="@dimen/isz_xxxlarge"
+		android:layout_height="@dimen/touch"
 		android:layout_marginTop="@dimen/zero"
 		android:layout_marginBottom="@dimen/zero"
 		android:layout_marginStart="@dimen/normal"
@@ -252,10 +237,10 @@
 		/>
 
 	<com.google.android.material.button.MaterialButton
-		style="@style/Timer.NumberpadButton"
+		style="@style/My.Timer.NumberpadButton"
 		android:id="@+id/timer_add_5s"
 		android:layout_width="wrap_content"
-		android:layout_height="@dimen/isz_xxxlarge"
+		android:layout_height="@dimen/touch"
 		android:layout_marginTop="@dimen/zero"
 		android:layout_marginBottom="@dimen/zero"
 		android:textSize="@dimen/tsz_medium"

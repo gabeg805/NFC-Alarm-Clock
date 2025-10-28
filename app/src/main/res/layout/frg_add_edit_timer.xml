@@ -13,7 +13,7 @@
 
 		<!-- Hour -->
 		<TextView
-			style="@style/Timer.AddTimeText"
+			style="@style/My.Timer.TimeText.Active"
 			android:id="@+id/timer_hour"
 			android:text="@string/number00"
 			app:layout_constraintTop_toTopOf="parent"
@@ -24,7 +24,7 @@
 			/>
 
 		<TextView
-			style="@style/Timer.UnitsText"
+			style="@style/My.Timer.UnitsText"
 			android:id="@+id/timer_hour_units"
 			android:text="@string/letter_h"
 			app:layout_constraintStart_toEndOf="@id/timer_hour"
@@ -34,7 +34,7 @@
 
 		<!-- Minute -->
 		<TextView
-			style="@style/Timer.AddTimeText"
+			style="@style/My.Timer.TimeText.Active"
 			android:id="@+id/timer_minute"
 			android:text="@string/number00"
 			app:layout_constraintStart_toEndOf="@id/timer_hour_units"
@@ -43,7 +43,7 @@
 			/>
 
 		<TextView
-			style="@style/Timer.UnitsText"
+			style="@style/My.Timer.UnitsText"
 			android:id="@+id/timer_minute_units"
 			android:text="@string/letter_m"
 			app:layout_constraintStart_toEndOf="@id/timer_minute"
@@ -53,7 +53,7 @@
 
 		<!-- Seconds -->
 		<TextView
-			style="@style/Timer.AddTimeText"
+			style="@style/My.Timer.TimeText.Active"
 			android:id="@+id/timer_seconds"
 			android:text="@string/number00"
 			app:layout_constraintStart_toEndOf="@id/timer_minute_units"
@@ -62,7 +62,7 @@
 			/>
 
 		<TextView
-			style="@style/Timer.UnitsText"
+			style="@style/My.Timer.UnitsText"
 			android:id="@+id/timer_seconds_units"
 			android:layout_marginEnd="@dimen/zero"
 			android:text="@string/letter_s"
@@ -81,21 +81,21 @@
 
 			<!-- Number pad 1-3 -->
 			<com.google.android.material.button.MaterialButton
-				style="@style/Timer.NumberpadButton"
+				style="@style/My.Timer.NumberpadButton"
 				android:id="@+id/timer_numberpad1"
 				android:layout_toStartOf="@id/timer_numberpad2"
 				android:text="@string/number1"
 				/>
 
 			<com.google.android.material.button.MaterialButton
-				style="@style/Timer.NumberpadButton"
+				style="@style/My.Timer.NumberpadButton"
 				android:id="@+id/timer_numberpad2"
 				android:layout_centerHorizontal="true"
 				android:text="@string/number2"
 				/>
 
 			<com.google.android.material.button.MaterialButton
-				style="@style/Timer.NumberpadButton"
+				style="@style/My.Timer.NumberpadButton"
 				android:id="@+id/timer_numberpad3"
 				android:layout_toEndOf="@id/timer_numberpad2"
 				android:text="@string/number3"
@@ -103,7 +103,7 @@
 
 			<!-- Number pad 4-6 -->
 			<com.google.android.material.button.MaterialButton
-				style="@style/Timer.NumberpadButton"
+				style="@style/My.Timer.NumberpadButton"
 				android:id="@+id/timer_numberpad4"
 				android:layout_alignTop="@id/timer_numberpad5"
 				android:layout_toStartOf="@id/timer_numberpad5"
@@ -112,7 +112,7 @@
 				/>
 
 			<com.google.android.material.button.MaterialButton
-				style="@style/Timer.NumberpadButton"
+				style="@style/My.Timer.NumberpadButton"
 				android:id="@+id/timer_numberpad5"
 				android:layout_below="@id/timer_numberpad2"
 				android:layout_centerHorizontal="true"
@@ -120,7 +120,7 @@
 				/>
 
 			<com.google.android.material.button.MaterialButton
-				style="@style/Timer.NumberpadButton"
+				style="@style/My.Timer.NumberpadButton"
 				android:id="@+id/timer_numberpad6"
 				android:layout_alignTop="@id/timer_numberpad5"
 				android:layout_toEndOf="@id/timer_numberpad5"
@@ -130,7 +130,7 @@
 
 			<!-- Number pad 7-9 -->
 			<com.google.android.material.button.MaterialButton
-				style="@style/Timer.NumberpadButton"
+				style="@style/My.Timer.NumberpadButton"
 				android:id="@+id/timer_numberpad7"
 				android:layout_alignTop="@id/timer_numberpad8"
 				android:layout_toStartOf="@id/timer_numberpad8"
@@ -139,7 +139,7 @@
 				/>
 
 			<com.google.android.material.button.MaterialButton
-				style="@style/Timer.NumberpadButton"
+				style="@style/My.Timer.NumberpadButton"
 				android:id="@+id/timer_numberpad8"
 				android:layout_below="@id/timer_numberpad5"
 				android:layout_centerHorizontal="true"
@@ -147,7 +147,7 @@
 				/>
 
 			<com.google.android.material.button.MaterialButton
-				style="@style/Timer.NumberpadButton"
+				style="@style/My.Timer.NumberpadButton"
 				android:id="@+id/timer_numberpad9"
 				android:layout_alignTop="@id/timer_numberpad8"
 				android:layout_toEndOf="@id/timer_numberpad8"
@@ -157,7 +157,7 @@
 
 			<!-- Number pad 0 and del -->
 			<com.google.android.material.button.MaterialButton
-				style="@style/Timer.NumberpadButton"
+				style="@style/My.Timer.NumberpadButton"
 				android:id="@+id/timer_numberpad0"
 				android:layout_below="@id/timer_numberpad8"
 				android:layout_centerHorizontal="true"
@@ -165,7 +165,7 @@
 				/>
 
 			<com.google.android.material.button.MaterialButton
-				style="@style/Timer.NumberpadButton"
+				style="@style/My.Timer.NumberpadButton"
 				android:id="@+id/timer_numberpad_del"
 				android:layout_alignTop="@id/timer_numberpad0"
 				android:layout_toEndOf="@id/timer_numberpad0"
@@ -177,24 +177,35 @@
 				/>
 		</RelativeLayout>
 
+		<!-- Guide to center start button between numberpad and more options -->
+		<View
+			android:id="@+id/timer_guide_for_start_button"
+			android:layout_width="match_parent"
+			android:layout_height="@dimen/line"
+			android:background="@color/gray_dark"
+			android:visibility="invisible"
+			app:layout_constraintTop_toBottomOf="@id/timer_numberpad_container"
+			app:layout_constraintBottom_toTopOf="@id/timer_more_options_divider"
+			/>
+
 		<!-- Start timer -->
 		<com.google.android.material.button.MaterialButton
-			style="@style/Timer.NumberpadButton"
+			style="@style/My.Timer.ActionButton"
 			android:id="@+id/timer_start_button"
-			android:layout_marginBottom="@dimen/huge"
 			android:backgroundTint="?attr/colorAccent"
 			app:iconPadding="@dimen/zero"
 			app:iconGravity="textStart"
 			app:iconSize="@dimen/isz_xxxlarge"
 			app:icon="@drawable/play"
-			app:layout_constraintBottom_toTopOf="@id/timer_more_options_divider"
+			app:layout_constraintTop_toTopOf="@id/timer_guide_for_start_button"
+			app:layout_constraintBottom_toBottomOf="@id/timer_guide_for_start_button"
 			app:layout_constraintStart_toStartOf="parent"
 			app:layout_constraintEnd_toEndOf="parent"
 			/>
 
 		<!-- More button -->
 		<com.google.android.material.button.MaterialButton
-			style="@style/Timer.IconButton"
+			style="@style/My.Timer.IconButton"
 			android:id="@+id/timer_more_button"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
@@ -212,7 +223,7 @@
 
 		<!-- Save timer -->
 		<com.google.android.material.button.MaterialButton
-			style="@style/Timer.IconButton"
+			style="@style/My.Timer.IconButton"
 			android:id="@+id/timer_save_button"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
@@ -236,7 +247,7 @@
 			android:layout_height="@dimen/line"
 			android:alpha="0.75"
 			android:background="?attr/colorAccent"
-			android:visibility="gone"
+			android:visibility="invisible"
 			app:layout_constraintBottom_toTopOf="@id/timer_more_options_container"
 			/>
 
@@ -410,7 +421,7 @@
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:paddingTop="@dimen/tiny"
-				android:paddingBottom="@dimen/tiny"
+				android:paddingBottom="@dimen/normal"
 				android:gravity="center_horizontal"
 				android:orientation="horizontal">
 

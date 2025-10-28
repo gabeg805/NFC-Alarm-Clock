@@ -218,6 +218,14 @@
 	<style name="My.TabLayout" parent="Widget.Material3.TabLayout">
 		<item name="android:textAllCaps">true</item>
 		<item name="android:textSize">@dimen/tsz_small</item>
+		<item name="android:textStyle">bold</item>
+	</style>
+
+	<!-- Tab layout -->
+	<style name="My.MediaPicker.Button" parent="Widget.Material3.Button">
+		<item name="android:background">?android:attr/selectableItemBackground</item>
+		<item name="android:textAllCaps">true</item>
+		<item name="android:textSize">@dimen/tsz_normal</item>
 	</style>
 
 	<!-- NacDayButton -->

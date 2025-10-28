@@ -7,7 +7,7 @@
 
 	<!-- Loading circle -->
 	<com.google.android.material.progressindicator.CircularProgressIndicator
-		style="@style/Timer.CircularProgressIndicator"
+		style="@style/My.Timer.CircularProgressIndicator"
 		android:id="@+id/loading_circular_progress"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"

@@ -231,7 +231,7 @@ class NacActiveTimerFragment
 				updateHourMinuteSecondsTextViews(secUntilFinished)
 
 				// Animate the progress to the new progress
-				progressIndicator.animateProgress(progressIndicator.progress, newProgress, 250)
+				progressIndicator.setProgressCompat(newProgress, true)
 			}
 
 		}
@@ -725,6 +725,12 @@ class NacActiveTimerFragment
 			// Reset the timer
 			service?.resetCountdownTimer(timer)
 			service?.cleanup(timer)
+
+			// Stop the service when no timers are using it
+			if (service?.allTimersReadOnly?.isEmpty() == true)
+			{
+				service!!.stopThisService()
+			}
 
 		}
 	}

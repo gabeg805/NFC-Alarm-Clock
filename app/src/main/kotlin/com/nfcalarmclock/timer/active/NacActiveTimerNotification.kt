@@ -53,7 +53,7 @@ class NacActiveTimerNotification(
 	/**
 	 * @see NacBaseNotificationBuilder.priorityLevel
 	 */
-	override val priorityLevel: Int = NotificationCompat.PRIORITY_DEFAULT
+	override val priorityLevel: Int = NotificationCompat.PRIORITY_HIGH
 
 	/**
 	 * @see NacBaseNotificationBuilder.group
@@ -74,7 +74,7 @@ class NacActiveTimerNotification(
 			// Generic "Timer"
 			else
 			{
-				context.resources.getString(R.string.word_timers)
+				context.resources.getString(R.string.word_timer)
 			}
 		}
 

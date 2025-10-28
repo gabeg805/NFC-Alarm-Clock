@@ -24,6 +24,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.options.dismissoptions.NacDismissOptionsDialog
@@ -49,6 +50,8 @@ import com.nfcalarmclock.view.performHapticFeedback
 import com.nfcalarmclock.view.quickToast
 import com.nfcalarmclock.view.setupBackgroundColor
 import com.nfcalarmclock.view.setupRippleColor
+import com.nfcalarmclock.view.slideDown
+import com.nfcalarmclock.view.slideUp
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -82,6 +85,11 @@ abstract class NacBaseAddEditTimer
 	 * Shared preferences.
 	 */
 	protected lateinit var sharedPreferences: NacSharedPreferences
+
+	/**
+	 * Bottom navigation.
+	 */
+	private lateinit var bottomNavigation: BottomNavigationView
 
 	/**
 	 * Scrollview.
@@ -169,7 +177,11 @@ abstract class NacBaseAddEditTimer
 				} while (!moreOptionsContainer.isVisible && (i < 3))
 
 				println("Scorlling downtown")
-				scrollView.fullScroll(View.FOCUS_DOWN)
+				// Scroll down and hide the bottom navigation view
+				scrollView.smoothScrollTo(0, moreOptionsContainer.height)
+				bottomNavigation.slideDown(250)
+
+				// Set the scroll flags
 				shouldScrollUp = true
 			}
 
@@ -185,9 +197,11 @@ abstract class NacBaseAddEditTimer
 	private fun delayScrollingUp()
 	{
 		moreOptionsContainer.doOnNextLayout {
-			scrollView.scrollTo(0, 1)
-			scrollView.fullScroll(View.FOCUS_UP)
+
 			println("YOOOOOO")
+			// Scroll up and show the bottom navigation view
+			scrollView.smoothScrollTo(0, 0)
+			bottomNavigation.slideUp(250)
 
 		}
 	}
@@ -269,6 +283,7 @@ abstract class NacBaseAddEditTimer
 		setupInitialMediaForTimer()
 
 		// Get the views
+		bottomNavigation = requireActivity().findViewById(R.id.bottom_navigation)
 		scrollView = view.findViewById(R.id.timer_scrollview)
 		hourTextView = view.findViewById(R.id.timer_hour)
 		minuteTextView = view.findViewById(R.id.timer_minute)
@@ -522,10 +537,12 @@ abstract class NacBaseAddEditTimer
 	 */
 	private fun setupMediaPickerObserver()
 	{
-		// Set the observer for the media picker
+		// Get the saved state handle
 		println("Set the fragment result listener")
-		findNavController().currentBackStackEntry
-			?.savedStateHandle
+		val savedStateHandle = findNavController().currentBackStackEntry?.savedStateHandle
+
+		// Set the observer for the media picker
+		savedStateHandle
 			?.getLiveData<Bundle>("YOYOYO")
 			?.observe(viewLifecycleOwner) { result ->
 
@@ -547,6 +564,10 @@ abstract class NacBaseAddEditTimer
 				// Scroll down
 				delayScrollingDown()
 
+				// Remove the item from the saved state handle so the same item does not
+				// get observed again
+				savedStateHandle.remove<Bundle>("YOYOYO")
+
 			}
 	}
 
@@ -561,7 +582,11 @@ abstract class NacBaseAddEditTimer
 
 		// Setup more button click
 		moreButton.setOnClickListener {
-			scrollView.fullScroll(View.FOCUS_DOWN)
+
+			// Scroll down and hide the bottom navigation view
+			scrollView.smoothScrollTo(0, moreOptionsContainer.height)
+			bottomNavigation.slideDown(250)
+
 		}
 	}
 
@@ -612,11 +637,10 @@ abstract class NacBaseAddEditTimer
 			hourTextView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
 
 				// Set the new margin
-				val smallDimen = resources.getDimension(R.dimen.small).toInt()
 				val bottomNavHeight = resources.getDimension(R.dimen.bottom_nav_height).toInt()
-				bottomMargin = (numberpadContainerLocation[1] - hourLocation[1] - bottomNavHeight + 2*smallDimen) / 2
+				bottomMargin = (numberpadContainerLocation[1] - hourLocation[1] - bottomNavHeight) / 2
 				topMargin = bottomMargin
-				println("Bottom : $bottomMargin | Dimen : $bottomNavHeight | Tiny : $smallDimen")
+				println("Bottom : $bottomMargin | Dimen : $bottomNavHeight")
 
 				// Make the more options container visible
 				moreOptionsContainer.visibility = View.VISIBLE
