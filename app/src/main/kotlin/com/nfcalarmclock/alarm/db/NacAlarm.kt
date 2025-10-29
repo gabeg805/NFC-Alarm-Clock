@@ -6,6 +6,7 @@ import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.nfcalarmclock.nfc.NacNfcTagDismissOrder
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.NacCalendar
 import com.nfcalarmclock.system.NacCalendar.Day
@@ -198,8 +199,17 @@ open class NacAlarm()
 	/**
 	 * Order in which to dismiss NFC tags when multiple are selected.
 	 */
-	@ColumnInfo(name = "nfc_tag_dismiss_order", defaultValue = "0")
-	var nfcTagDismissOrder: Int = 0
+	@ColumnInfo(name = "should_use_nfc_tag_dismiss_order", defaultValue = "0")
+	var shouldUseNfcTagDismissOrder: Boolean = false
+
+	/**
+	 * Order in which to dismiss NFC tags when multiple are selected.
+	 *
+	 * 1 = RANDOM
+	 * 2 = SEQUENTIAL
+	 */
+	@ColumnInfo(name = "nfc_tag_dismiss_order", defaultValue = "2")
+	var nfcTagDismissOrder: Int = 2
 
 	/**
 	 * Whether the alarm should use the flashlight or not.
@@ -579,6 +589,7 @@ open class NacAlarm()
 		// NFC
 		shouldUseNfc = input.readInt() != 0
 		nfcTagId = input.readString() ?: ""
+		shouldUseNfcTagDismissOrder = input.readInt() != 0
 		nfcTagDismissOrder = input.readInt()
 
 		// Flashlight
@@ -994,6 +1005,7 @@ open class NacAlarm()
 		// NFC
 		alarm.shouldUseNfc = shouldUseNfc
 		alarm.nfcTagId = nfcTagId
+		alarm.shouldUseNfcTagDismissOrder = shouldUseNfcTagDismissOrder
 		alarm.nfcTagDismissOrder = nfcTagDismissOrder
 
 		// Flashlight
@@ -1194,6 +1206,7 @@ open class NacAlarm()
 			&& (vibrateWaitTimeAfterPattern == alarm.vibrateWaitTimeAfterPattern)
 			&& (shouldUseNfc == alarm.shouldUseNfc)
 			&& (nfcTagId == alarm.nfcTagId)
+			&& (shouldUseNfcTagDismissOrder == alarm.shouldUseNfcTagDismissOrder)
 			&& (nfcTagDismissOrder == alarm.nfcTagDismissOrder)
 			&& (shouldUseFlashlight == alarm.shouldUseFlashlight)
 			&& (flashlightStrengthLevel == alarm.flashlightStrengthLevel)
@@ -1295,6 +1308,7 @@ open class NacAlarm()
 			+ vibrateRepeatPattern
 			+ vibrateWaitTimeAfterPattern.hashCode()
 			+ shouldUseNfc.hashCode()
+			+ shouldUseNfcTagDismissOrder.hashCode()
 			+ nfcTagDismissOrder
 			+ shouldUseFlashlight.hashCode()
 			+ flashlightStrengthLevel
@@ -1388,6 +1402,7 @@ open class NacAlarm()
 		println("Vibrate wait after    : $vibrateWaitTimeAfterPattern")
 		println("Use NFC               : $shouldUseNfc")
 		println("Nfc Tag Id            : $nfcTagId")
+		println("Should NFC Dismiss Ord: $shouldUseNfcTagDismissOrder")
 		println("Nfc Tag Dismiss Order : $nfcTagDismissOrder")
 		println("Use Flashlight        : $shouldUseFlashlight")
 		println("Flashlight Strength   : $flashlightStrengthLevel")
@@ -1642,6 +1657,7 @@ open class NacAlarm()
 		// NFC
 		output.writeInt(if (shouldUseNfc) 1 else 0)
 		output.writeString(nfcTagId)
+		output.writeInt(if (shouldUseNfcTagDismissOrder) 1 else 0)
 		output.writeInt(nfcTagDismissOrder)
 
 		// Flashlight
@@ -1771,6 +1787,7 @@ open class NacAlarm()
 			// NFC
 			alarm.shouldUseNfc = shared.shouldUseNfc
 			alarm.nfcTagId = shared.nfcTagId
+			alarm.shouldUseNfcTagDismissOrder = shared.shouldUseNfcTagDismissOrder
 			alarm.nfcTagDismissOrder = shared.nfcTagDismissOrder
 
 			// Flashlight
@@ -2067,6 +2084,50 @@ open class NacAlarm()
 			val seconds = time % 60
 
 			return Pair(minutes, seconds)
+		}
+
+		/**
+		 * Calculate the NFC tag dismiss order from an index.
+		 */
+		fun calcNfcTagDismissOrderFromIndex(index: Int): Int
+		{
+			return when (index)
+			{
+				0 ->
+				{
+					NacNfcTagDismissOrder.RANDOM
+				}
+				1 ->
+				{
+					NacNfcTagDismissOrder.SEQUENTIAL
+				}
+				else ->
+				{
+					NacNfcTagDismissOrder.SEQUENTIAL
+				}
+			}
+		}
+
+		/**
+		 * Calculate the NFC tag dismiss order index.
+		 */
+		fun calcNfcTagDismissOrderIndex(dismissOrder: Int): Int
+		{
+			return when (dismissOrder)
+			{
+				NacNfcTagDismissOrder.RANDOM ->
+				{
+					0
+				}
+				NacNfcTagDismissOrder.SEQUENTIAL ->
+				{
+					1
+				}
+				else ->
+				{
+					1
+				}
+			}
 		}
 
 		/**

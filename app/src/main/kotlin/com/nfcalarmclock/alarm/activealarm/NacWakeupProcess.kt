@@ -12,40 +12,31 @@ import com.nfcalarmclock.alarm.options.tts.NacTextToSpeech.OnSpeakingListener
 import com.nfcalarmclock.alarm.options.tts.NacTranslate
 import com.nfcalarmclock.alarm.options.vibrate.NacVibrator
 import com.nfcalarmclock.shared.NacSharedPreferences
-import com.nfcalarmclock.system.mediaplayer.NacMediaPlayer
 import com.nfcalarmclock.system.getDeviceProtectedStorageContext
 import com.nfcalarmclock.system.media.NacAudioAttributes
 import com.nfcalarmclock.system.media.NacAudioManager
 import com.nfcalarmclock.system.media.isMediaDirectory
+import com.nfcalarmclock.system.mediaplayer.NacMediaPlayer
 
 /**
  * Actions to take upon waking up, such as enabling NFC, playing music, etc.
+ *
+ * @param context Application context.
+ * @param alarm Alarm.
  */
 @UnstableApi
 class NacWakeupProcess(
-
-	/**
-	 * The application context.
-	 */
 	private val context: Context,
-
-	/**
-	 * Alarm.
-	 */
 	private val alarm: NacAlarm
-
-	// Interfaces
-) : Player.Listener
+)
 {
 
-	companion object
+	/**
+	 * Listener if a volume key press occurred.
+	 */
+	fun interface OnVolumeKeyPressListener
 	{
-
-		/**
-		 * Period at which to ensure the volume is restricted.
-		 */
-		private const val PERIOD_RESTRICT_VOLUME = 1000L
-
+		fun onVolumeKeyPress(alarm: NacAlarm)
 	}
 
 	/**
@@ -79,9 +70,20 @@ class NacWakeupProcess(
 	private val restrictVolumeHandler: Handler = Handler(context.mainLooper)
 
 	/**
+	 * Volume key press.
+	 */
+	private val volumeKeyPressHandler: Handler = Handler(context.mainLooper)
+
+	/**
 	 * Watchdog to make sure media is playing when it should be playing.
 	 */
 	private val mediaWatchdogHandler: Handler = Handler(context.mainLooper)
+
+	/**
+	 * Flag indicating whether to skip the restrict volume check until the
+	 * gradually increase volume process has started.
+	 */
+	private var hasGraduallyIncreaseVolumeStarted: Boolean = false
 
 	/**
 	 * Volume level to restrict any volume changes to.
@@ -93,10 +95,13 @@ class NacWakeupProcess(
 	private var volumeToRestrictChangeTo: Int = -1
 
 	/**
-	 * Flag indicating whether to skip the restrict volume check until the
-	 * gradually increase volume process has started.
+	 * Volume level to restrict any volume changes to.
+	 *
+	 * This is not just the alarm volume, since if the user wants to gradually
+	 * increase the volume, the restricted volume in that case should be lower
+	 * than the alarm volume.
 	 */
-	private var hasGraduallyIncreaseVolumeStarted: Boolean = false
+	private var initialVolume: Int = audioAttributes.streamVolume
 
 	/**
 	 * Whether the alarm should vibrate or not.
@@ -134,10 +139,31 @@ class NacWakeupProcess(
 	{
 		// Create the media player
 		val deviceContext = getDeviceProtectedStorageContext(context)
-		val player = NacMediaPlayer(deviceContext, this)
+		val player = NacMediaPlayer(deviceContext, object : Player.Listener {
+
+			/**
+			 * Media item that is current playing changes.
+			 */
+			override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int)
+			{
+				// Super
+				super.onMediaItemTransition(mediaItem, reason)
+
+				// Get the path to the current media item
+				val mediaPath = mediaItem?.mediaId ?: ""
+				// TODO: Could the issue where shuffle does not work happen after reboot? Alarm runs, and then next alarm media player breaks?
+				//println("Media item transition : $mediaPath")
+				//println("Artist : ${mediaItem?.mediaMetadata?.artist}")
+				//println("Title  : ${mediaItem?.mediaMetadata?.title}")
+
+				// Save the path of the current media item
+				sharedPreferences.currentPlayingAlarmMedia = mediaPath
+			}
+
+		})
 
 		// Setup the media player
-		player.onAudioFocusChangeListener = object: NacMediaPlayer.OnAudioFocusChangeListener {
+		player.onAudioFocusChangeListener = object : NacMediaPlayer.OnAudioFocusChangeListener {
 
 			// Empty override functions so that nothing happens when audio
 			// focus is lost. This means that audio should keep playing even if
@@ -206,6 +232,11 @@ class NacWakeupProcess(
 	}
 
 	/**
+	 * Volume key press listener.
+	 */
+	var onVolumeKeyPressListener: OnVolumeKeyPressListener? = null
+
+	/**
 	 * Cleanup various alarm objects.
 	 */
 	fun cleanup()
@@ -242,6 +273,9 @@ class NacWakeupProcess(
 
 		// Cleanup the restrict volume handler
 		restrictVolumeHandler.removeCallbacksAndMessages(null)
+
+		// Cleanup the volume key press handler
+		volumeKeyPressHandler.removeCallbacksAndMessages(null)
 	}
 
 	/**
@@ -283,25 +317,6 @@ class NacWakeupProcess(
 	}
 
 	/**
-	 * Called when the media item that is current playing changes.
-	 */
-	override fun onMediaItemTransition(mediaItem: MediaItem?, reason: Int)
-	{
-		// Super
-		super.onMediaItemTransition(mediaItem, reason)
-
-		// Get the path to the current media item
-		val mediaPath = mediaItem?.mediaId ?: ""
-		// TODO: Could the issue where shuffle does not work happen after reboot? Alarm runs, and then next alarm media player breaks?
-		//println("Media item transition : $mediaPath")
-		//println("Artist : ${mediaItem?.mediaMetadata?.artist}")
-		//println("Title  : ${mediaItem?.mediaMetadata?.title}")
-
-		// Save the path of the current media item
-		sharedPreferences.currentPlayingAlarmMedia = mediaPath
-	}
-
-	/**
 	 * Restrict the volume.
 	 */
 	private fun restrictVolume()
@@ -314,6 +329,11 @@ class NacWakeupProcess(
 		{
 			// Change the volume
 			audioAttributes.streamVolume = volumeToRestrictChangeTo
+
+			// Call the volume key press listener
+			println("RESTRICT VOLUME FOUND KEY PRESS!")
+			onVolumeKeyPressListener?.onVolumeKeyPress(alarm)
+			volumeKeyPressHandler.removeCallbacksAndMessages(null)
 		}
 
 		// Run the handler
@@ -388,7 +408,7 @@ class NacWakeupProcess(
 			// Recursively call the watchdog
 			setupMediaWatchdog()
 
-		}, 10000)
+		}, PERIOD_MEDIA_WATCHDOG)
 	}
 
 	/**
@@ -433,9 +453,8 @@ class NacWakeupProcess(
 	 */
 	private fun setupVolume()
 	{
-		// Check if using text-to-speech or playing music. The reason being
-		// that if these are not being used, then there is no point in changing
-		// the volume
+		// Using text-to-speech or playing music. The reason being that if these are
+		// not being used, then there is no point in changing the volume
 		if (alarm.shouldUseTts || alarm.hasMedia)
 		{
 			// Save the current volume level so it can be reverted later
@@ -457,6 +476,12 @@ class NacWakeupProcess(
 			{
 				setupRestrictVolume()
 			}
+		}
+
+		// Watch for volume key press
+		if (alarm.shouldVolumeSnooze)
+		{
+			volumeKeyPressWatchdog()
 		}
 	}
 
@@ -541,6 +566,55 @@ class NacWakeupProcess(
 				flashlight?.turnOn()
 			}
 		}
+	}
+
+	/**
+	 * Setup whether pressing the volume buttons should snooze the alarm. This runs a
+	 * handler every second to see if the volume level has changed.
+	 */
+	private fun volumeKeyPressWatchdog()
+	{
+		volumeKeyPressHandler.postDelayed({
+
+			// Get the current volume
+			val currentVolume = audioAttributes.streamVolume
+
+			// Volume was changed
+			println("Checking volume levels! $initialVolume | $currentVolume")
+			if (initialVolume != currentVolume)
+			{
+				println("OMG VOLUME PRESSED!")
+				// Call the volume key press listener
+				onVolumeKeyPressListener?.onVolumeKeyPress(alarm)
+				volumeKeyPressHandler.removeCallbacksAndMessages(null)
+			}
+			// No change in volume. Keep the watchdog running
+			else
+			{
+				volumeKeyPressWatchdog()
+			}
+
+		}, PERIOD_VOLUME_KEY_PRESS)
+	}
+
+	companion object
+	{
+
+		/**
+		 * Period at which to check for media playing with the watchdog.
+		 */
+		private const val PERIOD_MEDIA_WATCHDOG = 10000L
+
+		/**
+		 * Period at which to ensure the volume is restricted.
+		 */
+		private const val PERIOD_RESTRICT_VOLUME = 1000L
+
+		/**
+		 * Period at which to check for volume key press by looking for volume changes.
+		 */
+		private const val PERIOD_VOLUME_KEY_PRESS = 1000L
+
 	}
 
 }

@@ -6,6 +6,7 @@
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
 		<item>12.6.0-beta</item>
+		<item>Added &lt;b>timer&lt;/b>.</item>
 		<item>Added &lt;b>repeat&lt;/b> options in alarm settings. Can repeat an alarm by hours, days, weeks, or months.</item>
 		<item>Added &lt;b>date&lt;/b> option to have an alarm run on a particular date.  Accessible when selecting a time.</item>
 		<item>Added &lt;b>snooze&lt;/b> with &lt;b>volume buttons&lt;/b>.</item>

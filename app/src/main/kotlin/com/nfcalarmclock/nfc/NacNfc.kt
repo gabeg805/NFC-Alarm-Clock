@@ -11,7 +11,6 @@ import android.os.Parcelable
 import android.provider.Settings
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.alarm.options.nfc.NacNfcTagDismissOrder
 import com.nfcalarmclock.nfc.db.NacNfcTag
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.view.quickToast
@@ -41,14 +40,16 @@ fun NacAlarm.canDismissWithScannedNfc(nfcId: String, nfcTags: MutableList<NacNfc
 	//   if the NFC IDs match a particular dismiss order
 	return if (this.nfcTagId.isEmpty()
 		|| (this.nfcTagId == nfcId)
-		|| ((this.nfcTagDismissOrder == NacNfcTagDismissOrder.ANY) && allNfcIds.contains(nfcId))
-		|| ((this.nfcTagDismissOrder == NacNfcTagDismissOrder.SEQUENTIAL) && allNfcIds.first() == nfcId)
-		|| ((this.nfcTagDismissOrder == NacNfcTagDismissOrder.RANDOM) && allNfcIds.first() == nfcId))
+		|| (!this.shouldUseNfcTagDismissOrder && allNfcIds.contains(nfcId))
+		|| (this.shouldUseNfcTagDismissOrder
+				&& ((this.nfcTagDismissOrder == NacNfcTagDismissOrder.SEQUENTIAL)
+					|| (this.nfcTagDismissOrder == NacNfcTagDismissOrder.RANDOM))
+				&& allNfcIds.first() == nfcId))
 	{
-
 		// NFC tags need to be dismissed in a particular order
-		if ((this.nfcTagDismissOrder == NacNfcTagDismissOrder.SEQUENTIAL)
-			|| (this.nfcTagDismissOrder == NacNfcTagDismissOrder.RANDOM))
+		if (this.shouldUseNfcTagDismissOrder
+			&& ((this.nfcTagDismissOrder == NacNfcTagDismissOrder.SEQUENTIAL)
+				|| (this.nfcTagDismissOrder == NacNfcTagDismissOrder.RANDOM)))
 		{
 			// Remove the first NFC tag since it matched the one that was scanned
 			nfcTags.removeAt(0)
@@ -146,22 +147,27 @@ suspend fun NacAlarm.getNfcTagsForDismissing(
  */
 fun NacAlarm.getNfcTagNamesForDismissing(nfcTags: MutableList<NacNfcTag>): String?
 {
-	// Order the NFC tags based on how the user wants them ordered
-	return when (this.nfcTagDismissOrder)
+	return if (this.shouldUseNfcTagDismissOrder)
 	{
-		// Any. Show all NFC tags
-		NacNfcTagDismissOrder.ANY -> nfcTags.takeIf { nfcTags.isNotEmpty() }
+		// Order the NFC tags based on how the user wants them ordered
+		return when (this.nfcTagDismissOrder)
+		{
+			// Sequential. Show the first NFC tag
+			NacNfcTagDismissOrder.SEQUENTIAL -> nfcTags.getOrNull(0)?.name
+
+			// Random. The list should already be randomized. Show the first NFC tag in the
+			// randomized list
+			NacNfcTagDismissOrder.RANDOM -> nfcTags.getOrNull(0)?.name
+
+			// Unknown
+			else -> null
+		}
+	}
+	// Show all NFC tags, if any are present
+	else
+	{
+		nfcTags.takeIf { nfcTags.isNotEmpty() }
 			?.joinToString(" \u2027 ") { it.name }
-
-		// Sequential. Show the first NFC tag
-		NacNfcTagDismissOrder.SEQUENTIAL -> nfcTags.getOrNull(0)?.name
-
-		// Random. The list should already be randomized. Show the first NFC tag in the
-		// randomized list
-		NacNfcTagDismissOrder.RANDOM -> nfcTags.getOrNull(0)?.name
-
-		// Unknown
-		else -> null
 	}
 }
 
@@ -192,7 +198,6 @@ object NacNfc
 	 * @return True if the alarm can be dismissed with the scanned NFC tag, and False
 	 *         otherwise.
 	 */
-	//intent: Intent,
 	fun canDismissWithScannedNfc(
 		context: Context,
 		alarm: NacAlarm?,
@@ -200,6 +205,7 @@ object NacNfc
 		nfcTags: MutableList<NacNfcTag>?
 	): Boolean
 	{
+		println("canDismissWithScannedNfc()")
 		// Get the NFC ID from the intent
 		val sharedPreferences = NacSharedPreferences(context)
 		//val intentNfcId = parseId(intent)
@@ -210,6 +216,7 @@ object NacNfc
 			// NFC can be shown which means it should be checked
 			if (sharedPreferences.shouldShowNfcButton)
 			{
+				println("Nfc tags : $nfcId | $nfcTags")
 				// Check if the scanned NFC tag can be used to dismiss the alarm
 				val status = alarm.canDismissWithScannedNfc(nfcId, nfcTags!!)
 

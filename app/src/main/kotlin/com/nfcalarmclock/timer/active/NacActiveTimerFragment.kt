@@ -179,6 +179,9 @@ class NacActiveTimerFragment
 	private val onCountdownTimerChangedListener: NacActiveTimerService.OnCountdownTimerChangedListener =
 		object : NacActiveTimerService.OnCountdownTimerChangedListener {
 
+			/**
+			 * Countdown finished.
+			 */
 			override fun onCountdownFinished(timer: NacTimer)
 			{
 				println("DONE WITH THE COUNTDOWN")
@@ -197,12 +200,18 @@ class NacActiveTimerFragment
 					})
 			}
 
+			/**
+			 * Countdown paused.
+			 */
 			override fun onCountdownPaused(timer: NacTimer)
 			{
 				// Set the visibility
 				setPauseVisibility()
 			}
 
+			/**
+			 * Countdown reset.
+			 */
 			override fun onCountdownReset(timer: NacTimer, secUntilFinished: Long)
 			{
 				println("COUNTDOWN RESET : $secUntilFinished")
@@ -218,6 +227,9 @@ class NacActiveTimerFragment
 					})
 			}
 
+			/**
+			 * Countdown tick every second.
+			 */
 			override fun onCountdownTick(timer: NacTimer, secUntilFinished: Long, newProgress: Int)
 			{
 				println("COUNTDOWN Tick")

@@ -9,6 +9,7 @@ import android.content.IntentFilter
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
 import androidx.core.os.UserManagerCompat
+import com.nfcalarmclock.system.triggers.shutdown.NacShutdownBroadcastReceiver
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
@@ -120,6 +121,21 @@ fun registerMyReceiver(
 {
 	// Register the receiver
 	ContextCompat.registerReceiver(context, broadcastReceiver, intentFilter, flags)
+}
+
+/**
+ * Register a shutdown broadcast receiver.
+ */
+fun registerMyShutdownBroadcastReceiver(
+	context: Context,
+	shutdownBroadcastReceiver: NacShutdownBroadcastReceiver)
+{
+	// Register the shutdown receiver
+	val shutdownIntentFilter = IntentFilter()
+
+	shutdownIntentFilter.addAction(Intent.ACTION_SHUTDOWN)
+	shutdownIntentFilter.addAction(Intent.ACTION_REBOOT)
+	registerMyReceiver(context, shutdownBroadcastReceiver, shutdownIntentFilter)
 }
 
 /**

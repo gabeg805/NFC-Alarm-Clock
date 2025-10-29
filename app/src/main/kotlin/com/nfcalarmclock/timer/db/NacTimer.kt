@@ -99,6 +99,7 @@ class NacTimer()
 		// NFC
 		shouldUseNfc = input.readInt() != 0
 		nfcTagId = input.readString() ?: ""
+		shouldUseNfcTagDismissOrder = input.readInt() != 0
 		nfcTagDismissOrder = input.readInt()
 		scanNfcTagIdToStart = input.readString() ?: ""
 
@@ -175,6 +176,7 @@ class NacTimer()
 		// NFC
 		timer.shouldUseNfc = shouldUseNfc
 		timer.nfcTagId = nfcTagId
+		timer.shouldUseNfcTagDismissOrder = shouldUseNfcTagDismissOrder
 		timer.nfcTagDismissOrder = nfcTagDismissOrder
 		timer.scanNfcTagIdToStart = scanNfcTagIdToStart
 
@@ -256,6 +258,7 @@ class NacTimer()
 			&& (vibrateWaitTimeAfterPattern == timer.vibrateWaitTimeAfterPattern)
 			&& (shouldUseNfc == timer.shouldUseNfc)
 			&& (nfcTagId == timer.nfcTagId)
+			&& (shouldUseNfcTagDismissOrder == timer.shouldUseNfcTagDismissOrder)
 			&& (nfcTagDismissOrder == timer.nfcTagDismissOrder)
 			&& (shouldUseFlashlight == timer.shouldUseFlashlight)
 			&& (flashlightStrengthLevel == timer.flashlightStrengthLevel)
@@ -318,6 +321,7 @@ class NacTimer()
 		println("Vibrate wait after    : $vibrateWaitTimeAfterPattern")
 		println("Use NFC               : $shouldUseNfc")
 		println("Nfc Tag Id            : $nfcTagId")
+		println("Should NFC Dismiss Ord: $shouldUseNfcTagDismissOrder")
 		println("Nfc Tag Dismiss Order : $nfcTagDismissOrder")
 		println("Sacn NFC tag to start : $scanNfcTagIdToStart")
 		println("Use Flashlight        : $shouldUseFlashlight")
@@ -380,6 +384,7 @@ class NacTimer()
 		// NFC
 		output.writeInt(if (shouldUseNfc) 1 else 0)
 		output.writeString(nfcTagId)
+		output.writeInt(if (shouldUseNfcTagDismissOrder) 1 else 0)
 		output.writeInt(nfcTagDismissOrder)
 		output.writeString(scanNfcTagIdToStart)
 
@@ -473,6 +478,7 @@ class NacTimer()
 			// NFC
 			timer.shouldUseNfc = shared.shouldUseNfcTimer
 			timer.nfcTagId = shared.nfcTagIdTimer
+			timer.shouldUseNfcTagDismissOrder = shared.shouldUseNfcTagDismissOrderTimer
 			timer.nfcTagDismissOrder = shared.nfcTagDismissOrderTimer
 
 			// Flashlight

@@ -42,23 +42,45 @@
 	<!-- Separator -->
 	<Space style="@style/Widget.AlarmOptionDialog.SeparatorAfterCheckBox" />
 
-	<!-- Dismiss order title -->
-	<TextView
-		style="@style/Widget.AlarmOptionDialog.Title"
-		android:id="@+id/nfc_tag_dismiss_order_title"
+	<!-- Dismiss order title and switch -->
+	<RelativeLayout
+		android:id="@+id/nfc_tag_dismiss_order_container"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="@string/title_nfc_tag_dismiss_order"
-		/>
+		android:clickable="true"
+		android:focusable="true">
 
-	<!-- Dismiss order description -->
-	<TextView
-		style="@style/Widget.AlarmOptionDialog.Description"
-		android:id="@+id/nfc_tag_dismiss_order_description"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:text="@string/description_nfc_tag_dismiss_order"
-		/>
+		<!-- Dismiss order title -->
+		<TextView
+			style="@style/Widget.AlarmOptionDialog.Title"
+			android:id="@+id/nfc_tag_dismiss_order_title"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_toStartOf="@id/nfc_tag_dismiss_order_switch"
+			android:text="@string/title_nfc_tag_dismiss_order"
+			/>
+
+		<!-- Dismiss order description -->
+		<TextView
+			style="@style/Widget.AlarmOptionDialog.Description"
+			android:id="@+id/nfc_tag_dismiss_order_description"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/nfc_tag_dismiss_order_title"
+			android:layout_toStartOf="@id/nfc_tag_dismiss_order_switch"
+			android:text="@string/description_nfc_tag_dismiss_order"
+			/>
+
+		<!-- Switch -->
+		<androidx.appcompat.widget.SwitchCompat
+			android:id="@+id/nfc_tag_dismiss_order_switch"
+			android:layout_width="@dimen/touch"
+			android:layout_height="@dimen/touch"
+			android:layout_alignParentEnd="true"
+			android:layout_centerVertical="true"
+			android:clickable="false"
+			/>
+	</RelativeLayout>
 
 	<!-- Dismiss order dropdown -->
 	<com.google.android.material.textfield.TextInputLayout

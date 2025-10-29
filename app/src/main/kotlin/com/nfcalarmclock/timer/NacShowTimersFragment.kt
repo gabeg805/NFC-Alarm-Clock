@@ -28,7 +28,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.nfcalarmclock.R
-import com.nfcalarmclock.alarm.options.nfc.NacNfcTagDismissOrder
 import com.nfcalarmclock.card.NacBaseCardAdapter
 import com.nfcalarmclock.card.NacBaseCardTouchHelperCallback
 import com.nfcalarmclock.card.NacCardLayoutManager
@@ -228,7 +227,7 @@ class NacShowTimersFragment
 	 */
 	private val onServiceStoppedListener: NacActiveTimerService.OnServiceStoppedListener =
 		NacActiveTimerService.OnServiceStoppedListener { timer ->
-			println("YOYOYOYO JANK STOPPED NOW")
+			println("YOYOYOYO JANK STOPPED NOW : ${timer.id}")
 
 			// Get the card
 			val card = recyclerView.findViewHolderForItemId(timer.id) as NacTimerCardHolder? ?: return@OnServiceStoppedListener
@@ -255,6 +254,8 @@ class NacShowTimersFragment
 
 			// TODO: Repeat toast to explain what that does for timers
 			// TODO: Test saving the default ringtone in general settings
+			// TODO: Make sure notifications are not swipable
+			// TODO: Have notification show button yb default?
 
 			// Initialize each timer being used by the service
 			service!!.allTimersReadOnly.forEach { timer ->
@@ -356,7 +357,7 @@ class NacShowTimersFragment
 				}
 
 				// Timer can use any NFC tag to dismiss
-				if (t.nfcTagDismissOrder == NacNfcTagDismissOrder.ANY)
+				if (t.nfcTagId.isEmpty())
 				{
 					anyNfcTimer = anyNfcTimer ?: t
 					println("Timer can dismiss using ANY NFC tags : ${anyNfcTimer.id}")
@@ -369,8 +370,8 @@ class NacShowTimersFragment
 				// NFC tag list contains the NFC tag that was scanned
 				if (nfcTagIdList.contains(nfcId))
 				{
-					println("Timer : ${t.id} contains NFC tag : $nfcId")
-					if (nfcTagIdList.size == 1)
+					println("Timer : ${t.id} contains NFC tag : $nfcId | ${t.shouldUseNfcTagDismissOrder}")
+					if ((nfcTagIdList.size == 1) || !t.shouldUseNfcTagDismissOrder)
 					{
 						println("ONLY 1 NFC required for this timer! Dismiss this jank")
 						NacActiveTimerService.Companion.dismissTimerServiceWithNfc(context, t)

@@ -2387,6 +2387,42 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
+	 * Whether NFC tags should be dismissed in order or not.
+	 */
+	var shouldUseNfcTagDismissOrder: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.key_default_alarm_nfc_should_use_nfc_tag_dismiss_order)
+			val defaultValue = false
+
+			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_alarm_nfc_should_use_nfc_tag_dismiss_order)
+
+			saveBoolean(key, value)
+		}
+
+	/**
+	 * Whether NFC tags should be dismissed in order or not for a timer.
+	 */
+	var shouldUseNfcTagDismissOrderTimer: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.key_default_timer_nfc_should_use_nfc_tag_dismiss_order)
+			val defaultValue = false
+
+			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_timer_nfc_should_use_nfc_tag_dismiss_order)
+
+			saveBoolean(key, value)
+		}
+
+	/**
 	 * Whether to use text-to-speech for the reminder or not.
 	 */
 	var shouldUseTtsForReminder: Boolean

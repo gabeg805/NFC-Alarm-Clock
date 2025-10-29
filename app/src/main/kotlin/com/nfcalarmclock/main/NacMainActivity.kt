@@ -4,7 +4,6 @@ import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.content.res.ColorStateList
 import android.os.Build
 import android.os.Bundle
@@ -46,14 +45,14 @@ import com.nfcalarmclock.system.media.getMediaArtist
 import com.nfcalarmclock.system.media.getMediaTitle
 import com.nfcalarmclock.system.media.getMediaType
 import com.nfcalarmclock.system.permission.NacPermissionRequestManager
-import com.nfcalarmclock.system.registerMyReceiver
+import com.nfcalarmclock.system.registerMyShutdownBroadcastReceiver
 import com.nfcalarmclock.system.scheduler.NacScheduler
 import com.nfcalarmclock.system.toBundle
 import com.nfcalarmclock.system.triggers.shutdown.NacShutdownBroadcastReceiver
 import com.nfcalarmclock.system.unregisterMyReceiver
+import com.nfcalarmclock.timer.NacShowTimersFragment
 import com.nfcalarmclock.timer.NacTimerViewModel
 import com.nfcalarmclock.timer.active.NacActiveTimerFragment
-import com.nfcalarmclock.timer.NacShowTimersFragment
 import com.nfcalarmclock.view.setupRippleColor
 import com.nfcalarmclock.view.setupThemeColor
 import com.nfcalarmclock.view.slideUp
@@ -337,22 +336,6 @@ class NacMainActivity
 		setupBottomNavigationView()
 		setupNavController()
 
-		val appBarConfiguration = AppBarConfiguration(setOf(R.id.nacShowAlarmsFragment, R.id.nacShowTimersFragment))
-		toolbar.setupWithNavController(navController, appBarConfiguration)
-		toolbar.setNavigationOnClickListener {
-			println("HELLO : ${navController.currentDestination}")
-			if (navController.currentDestination?.id == R.id.nacActiveTimerFragment)
-			{
-				println("DOING MY POP BACK STACK")
-				navController.popBackStack(R.id.nacShowTimersFragment, false)
-			}
-			else
-			{
-				println("NORMAL NAVIGATE UP")
-				navController.navigateUp(appBarConfiguration)
-			}
-		}
-
 		// Disable the activity alias so that tapping an NFC tag will NOT open
 		// the main activity
 		disableActivityAlias(this)
@@ -546,14 +529,13 @@ class NacMainActivity
 		setupInitialDialogToShow()
 
 		// Register the shutdown receiver
-		val shutdownIntentFilter = IntentFilter()
-
-		shutdownIntentFilter.addAction(Intent.ACTION_SHUTDOWN)
-		shutdownIntentFilter.addAction(Intent.ACTION_REBOOT)
-		registerMyReceiver(this, shutdownBroadcastReceiver, shutdownIntentFilter)
+		registerMyShutdownBroadcastReceiver(this, shutdownBroadcastReceiver)
 
 		// Start NFC
-		NacNfc.start(this)
+		if (NacNfc.exists(this))
+		{
+			NacNfc.start(this)
+		}
 
 		// Refresh widgets
 		refreshAppWidgets(this)
@@ -848,6 +830,26 @@ class NacMainActivity
 	 */
 	private fun setupToolbar()
 	{
+		// Create the appbar configuration. The two root destinations are show alarms and
+		// show timers
+		val appBarConfiguration = AppBarConfiguration(setOf(R.id.nacShowAlarmsFragment, R.id.nacShowTimersFragment))
+
+		// Setup navigation with the toolbar
+		toolbar.setupWithNavController(navController, appBarConfiguration)
+		toolbar.setNavigationOnClickListener {
+			println("HELLO : ${navController.currentDestination}")
+			if (navController.currentDestination?.id == R.id.nacActiveTimerFragment)
+			{
+				println("DOING MY POP BACK STACK")
+				navController.popBackStack(R.id.nacShowTimersFragment, false)
+			}
+			else
+			{
+				println("NORMAL NAVIGATE UP")
+				navController.navigateUp(appBarConfiguration)
+			}
+		}
+
 		// Menu item click listener
 		toolbar.setOnMenuItemClickListener { item ->
 
@@ -867,6 +869,13 @@ class NacMainActivity
 				// Unknown
 				else -> false
 			}
+
+		}
+
+		navHostFragment.view?.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
+
+			println("Left : $left | Top : $top | Right : $right | Bottom : $bottom")
+			println("Old l: $oldLeft | Old t: $oldTop | Old r : $oldRight | Old b: $oldBottom")
 
 		}
 	}

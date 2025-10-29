@@ -7,6 +7,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.NavDestination
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.button.MaterialButton
 import com.nfcalarmclock.R
@@ -37,14 +38,52 @@ open class NacScanNfcTagDialog
 {
 
 	/**
+	 * NFC tag view model.
+	 */
+	private val nfcTagViewModel: NacNfcTagViewModel by viewModels()
+
+	/**
 	 * Layout resource ID.
 	 */
 	override val layoutId = R.layout.dlg_scan_nfc_tag
 
 	/**
-	 * NFC tag view model.
+	 * Get the navigation destination ID for the Save NFC Tag dialog.
+	 *
+	 * @return The navigation destination ID for the Save NFC Tag dialog.
 	 */
-	private val nfcTagViewModel: NacNfcTagViewModel by viewModels()
+	open fun getSaveNfcTagDialogId(currentDestination: NavDestination?): Int
+	{
+		// Normal option
+		return if (currentDestination?.id == R.id.nacScanNfcTagDialog)
+		{
+			R.id.nacSaveNfcTagDialog
+		}
+		// Quick option
+		else
+		{
+			R.id.nacSaveNfcTagDialog2
+		}
+	}
+
+	/**
+	 * Get the navigation destination ID for the Select NFC Tag dialog.
+	 *
+	 * @return The navigation destination ID for the Select NFC Tag dialog.
+	 */
+	open fun getSelectNfcTagDialogId(currentDestination: NavDestination?): Int
+	{
+		// Normal option
+		return if (currentDestination?.id == R.id.nacScanNfcTagDialog)
+		{
+			R.id.nacSelectNfcTagDialog
+		}
+		// Quick option
+		else
+		{
+			R.id.nacSelectNfcTagDialog2
+		}
+	}
 
 	/**
 	 * Called when the OK buton is clicked.
@@ -122,9 +161,11 @@ open class NacScanNfcTagDialog
 				// Get the nav controller
 				val navController = findNavController()
 				val newArgs = arguments?.addAlarm(alarm)
+				val destinationId = getSaveNfcTagDialogId(navController.currentDestination)
 
 				// Navigate to the select NFC tag dialog
-				navController.navigate(R.id.nacSaveNfcTagDialog, newArgs, this@NacScanNfcTagDialog,
+				println("Current : ${navController.currentDestination}")
+				navController.navigate(destinationId, newArgs, this@NacScanNfcTagDialog,
 					onBackStackPopulated = {
 
 						// Get the alarm from the select NFC tag dialog
@@ -257,9 +298,11 @@ open class NacScanNfcTagDialog
 
 			// Get the nav controller
 			val navController = findNavController()
+			val destinationId = getSelectNfcTagDialogId(navController.currentDestination)
 
 			// Navigate to the select NFC tag dialog
-			navController.navigate(R.id.nacSelectNfcTagDialog, arguments, this,
+			println("Current : ${navController.currentDestination}")
+			navController.navigate(destinationId, arguments, this,
 				onBackStackPopulated = {
 
 					// Get the alarm from the select NFC tag dialog

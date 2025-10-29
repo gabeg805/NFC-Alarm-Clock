@@ -69,6 +69,7 @@ import com.nfcalarmclock.card.NacBaseCardTouchHelperCallback
 import com.nfcalarmclock.card.NacCardLayoutManager
 import com.nfcalarmclock.main.NacMainActivity
 import com.nfcalarmclock.nfc.NacNfcTagViewModel
+import com.nfcalarmclock.nfc.db.NacNfcTag
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.statistics.NacAlarmStatisticViewModel
 import com.nfcalarmclock.system.NacBundle.BUNDLE_INTENT_ACTION
@@ -537,6 +538,12 @@ class NacShowAlarmsFragment
 		setupAlarmCardAdapter()
 		setupRecyclerView()
 		setupFloatingActionButton()
+
+		//lifecycleScope.launch {
+		//	nfcTagViewModel.insert(NacNfcTag("Hello", "102983kjshlak"))
+		//	nfcTagViewModel.insert(NacNfcTag("There", "oi12khj12"))
+		//	nfcTagViewModel.insert(NacNfcTag("Sup", "1209jkhlh0"))
+		//}
 	}
 
 	/**

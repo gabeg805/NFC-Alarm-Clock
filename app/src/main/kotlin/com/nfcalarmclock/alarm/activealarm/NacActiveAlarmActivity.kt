@@ -2,7 +2,6 @@ package com.nfcalarmclock.alarm.activealarm
 
 import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
 import android.view.KeyEvent
@@ -27,7 +26,7 @@ import com.nfcalarmclock.system.NacBundle
 import com.nfcalarmclock.system.addAlarm
 import com.nfcalarmclock.system.enableActivityAlias
 import com.nfcalarmclock.system.getAlarm
-import com.nfcalarmclock.system.registerMyReceiver
+import com.nfcalarmclock.system.registerMyShutdownBroadcastReceiver
 import com.nfcalarmclock.system.triggers.shutdown.NacShutdownBroadcastReceiver
 import com.nfcalarmclock.system.unregisterMyReceiver
 import com.nfcalarmclock.view.quickToast
@@ -168,6 +167,7 @@ class NacActiveAlarmActivity
 			if (alarm?.shouldVolumeSnooze == true)
 			{
 				// Snooze the alarm
+				println("SNOOZING FROM ACTIVITY")
 				NacActiveAlarmService.snoozeAlarmService(this, alarm)
 				return true
 			}
@@ -219,48 +219,33 @@ class NacActiveAlarmActivity
 		// Super
 		super.onResume()
 
-		// NFC tag was scanned so check if it is able to dismiss the alarm
-		//if (NacNfc.wasScanned(intent) && NacNfc.canDismissWithScannedNfc(this, alarm, intent, nfcTags))
-		if (NacNfc.wasScanned(intent) && NacNfc.canDismissWithScannedNfc(this, alarm, NacNfc.parseId(intent), nfcTags))
-		{
-			// Dismiss the alarm service with NFC
-			NacActiveAlarmService.dismissAlarmServiceWithNfc(this, alarm!!)
-		}
+		println("Active alarm activity onResume() : ${NacNfc.parseId(intent)}")
+		println("Active alarm activity was scanned? : ${NacNfc.wasScanned(intent)}")
 
-		// Register the shutdown receiver
-		val shutdownIntentFilter = IntentFilter()
-
-		shutdownIntentFilter.addAction(Intent.ACTION_SHUTDOWN)
-		shutdownIntentFilter.addAction(Intent.ACTION_REBOOT)
-		registerMyReceiver(this, shutdownBroadcastReceiver, shutdownIntentFilter)
-
-		// Setup
+		// Setup NFC and the layout
 		setupNfc()
 		layoutHandler.setup(this)
 
-		// Check if NFC should be setup
-		if (alarm?.shouldUseNfc(this) == true)
-		{
-			// Setup NFC tag
-			lifecycleScope.launch {
+		lifecycleScope.launch {
 
-				// Get the list of NFC tags that can be used to dismiss the alarm, and
-				// order them based on how the user wants them ordered
-				if (nfcTags == null)
-				{
-					nfcTags = alarm!!.getNfcTagsForDismissing(nfcTagViewModel)
-					println("NFC Tags : $nfcTags")
-				}
+			val context = this@NacActiveAlarmActivity
+			val nfcId = NacNfc.parseId(intent)
 
-				// Get the names of the NFC tags that can dismiss the alarm
-				val nfcTagNames = alarm!!.getNfcTagNamesForDismissing(nfcTags!!)
-				println("NFC Names : $nfcTagNames")
+			// Setup the NFC tags
+			setupNfcTags()
 
-				// Setup the NFC tag
-				layoutHandler.setupNfcTag(this@NacActiveAlarmActivity, nfcTagNames)
-
+			// NFC tag was scanned so check if it is able to dismiss the alarm
+			if (NacNfc.wasScanned(intent) && NacNfc.canDismissWithScannedNfc(context, alarm, nfcId, nfcTags))
+			{
+				// Dismiss the alarm service with NFC
+				NacActiveAlarmService.dismissAlarmServiceWithNfc(context, alarm!!)
 			}
+
 		}
+
+
+		// Register the shutdown receiver
+		registerMyShutdownBroadcastReceiver(this, shutdownBroadcastReceiver)
 	}
 
 	/**
@@ -375,6 +360,33 @@ class NacActiveAlarmActivity
 			// Show a toast
 			quickToast(this, R.string.error_message_nfc_unsupported)
 		}
+	}
+
+	/**
+	 * Setup the NFC tags.
+	 */
+	private suspend fun setupNfcTags()
+	{
+		// Get the list of NFC tags that can be used to dismiss the alarm, and
+		// order them based on how the user wants them ordered
+		if (nfcTags == null)
+		{
+			nfcTags = alarm!!.getNfcTagsForDismissing(nfcTagViewModel)
+			println("NFC Tags : $nfcTags")
+		}
+
+		// NFC does not need to be used so do nothing with the layout handler
+		if (alarm?.shouldUseNfc(this@NacActiveAlarmActivity) != true)
+		{
+			return
+		}
+
+		// Get the names of the NFC tags that can dismiss the alarm
+		val nfcTagNames = alarm!!.getNfcTagNamesForDismissing(nfcTags!!)
+		println("NFC Names : $nfcTagNames")
+
+		// Setup the NFC tag
+		layoutHandler.setupNfcTag(this, nfcTagNames)
 	}
 
 	/**

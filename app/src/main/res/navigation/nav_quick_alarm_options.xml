@@ -19,5 +19,20 @@
     <dialog
         android:id="@+id/nacScanNfcTagDialog2"
         android:name="com.nfcalarmclock.alarm.options.nfc.NacScanNfcTagDialog"
-        android:label="NacScanNfcTagDialog" />
+        android:label="NacScanNfcTagDialog" >
+        <action
+            android:id="@+id/action_nacScanNfcTagDialog2_to_nacSelectNfcTagDialog3"
+            app:destination="@id/nacSelectNfcTagDialog2" />
+        <action
+            android:id="@+id/action_nacScanNfcTagDialog2_to_nacSaveNfcTagDialog3"
+            app:destination="@id/nacSaveNfcTagDialog2" />
+    </dialog>
+    <dialog
+        android:id="@+id/nacSelectNfcTagDialog2"
+        android:name="com.nfcalarmclock.alarm.options.nfc.NacSelectNfcTagDialog"
+        android:label="NacSelectNfcTagDialog" />
+    <dialog
+        android:id="@+id/nacSaveNfcTagDialog2"
+        android:name="com.nfcalarmclock.alarm.options.nfc.NacSaveNfcTagDialog"
+        android:label="NacSaveNfcTagDialog" />
 </navigation>

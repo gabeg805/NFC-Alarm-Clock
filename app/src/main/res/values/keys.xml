@@ -62,6 +62,7 @@
 	<string name="key_default_alarm_vibrate_wait_time_after_pattern">pref_vibrate_wait_time_after_pattern</string>
 	<string name="key_default_alarm_nfc_should_use_nfc">pref_use_nfc</string>
 	<string name="key_default_alarm_nfc_tag_id">pref_default_alarm_nfc_tag_id</string>
+	<string name="key_default_alarm_nfc_should_use_nfc_tag_dismiss_order">pref_should_use_nfc_tag_dismiss_order</string>
 	<string name="key_default_alarm_nfc_tag_dismiss_order">pref_default_alarm_nfc_tag_dismiss_order</string>
 	<string name="key_default_alarm_flashlight_should_use_flashlight">pref_use_flashlight</string>
 	<string name="key_default_alarm_flashlight_strength_level">pref_flashlight_strength_level</string>
@@ -114,6 +115,7 @@
 	<string name="key_default_timer_vibrate_wait_time_after_pattern">pref_vibrate_wait_time_after_pattern_timer</string>
 	<string name="key_default_timer_nfc_should_use_nfc">pref_use_nfc_timer</string>
 	<string name="key_default_timer_nfc_tag_id">pref_default_alarm_nfc_tag_id_timer</string>
+	<string name="key_default_timer_nfc_should_use_nfc_tag_dismiss_order">pref_should_use_nfc_tag_dismiss_order_timer</string>
 	<string name="key_default_timer_nfc_tag_dismiss_order">pref_default_alarm_nfc_tag_dismiss_order_timer</string>
 	<string name="key_default_timer_flashlight_should_use_flashlight">pref_use_flashlight_timer</string>
 	<string name="key_default_timer_flashlight_strength_level">pref_flashlight_strength_level_timer</string>

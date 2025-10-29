@@ -59,7 +59,7 @@ class NacActiveAlarmService
 	/**
 	 * Shared preferences.
 	 */
-	private lateinit var sharedPreferences: NacSharedPreferences
+	private val sharedPreferences: NacSharedPreferences by lazy { NacSharedPreferences(this) }
 
 	/**
 	 * Action of the intent that started the service.
@@ -85,17 +85,17 @@ class NacActiveAlarmService
 	 * Delay the wakeup process to ensure that the activity is shown before playing
 	 * audio.
 	 */
-	private var wakeupProcessDelayHandler: Handler? = null
+	private val wakeupProcessDelayHandler: Handler by lazy { Handler(mainLooper) }
 
 	/**
 	 * Automatically dismiss the alarm in case it does not get dismissed.
 	 */
-	private var autoDismissHandler: Handler? = null
+	private val autoDismissHandler: Handler by lazy { Handler(mainLooper) }
 
 	/**
 	 * Automatically snooze the alarm, if desired by the user.
 	 */
-	private var autoSnoozeHandler: Handler? = null
+	private val autoSnoozeHandler: Handler by lazy { Handler(mainLooper) }
 
 	/**
 	 * Time that the service was started, in milliseconds.
@@ -112,9 +112,9 @@ class NacActiveAlarmService
 		wakeupProcess?.cleanup()
 
 		// Cleanup the auto dismiss and snooze handler
-		wakeupProcessDelayHandler?.removeCallbacksAndMessages(null)
-		autoDismissHandler?.removeCallbacksAndMessages(null)
-		autoSnoozeHandler?.removeCallbacksAndMessages(null)
+		wakeupProcessDelayHandler.removeCallbacksAndMessages(null)
+		autoDismissHandler.removeCallbacksAndMessages(null)
+		autoSnoozeHandler.removeCallbacksAndMessages(null)
 
 		// Check if a wake lock is held
 		if (wakeLock?.isHeld == true)
@@ -212,14 +212,6 @@ class NacActiveAlarmService
 	{
 		// Super
 		super.onCreate()
-
-		// Initialize member varirables
-		sharedPreferences = NacSharedPreferences(this)
-		wakeLock = null
-		alarm = null
-		wakeupProcessDelayHandler = Handler(mainLooper)
-		autoDismissHandler = Handler(mainLooper)
-		autoSnoozeHandler = Handler(mainLooper)
 
 		// Enable the activity alias so that tapping an NFC tag will open the main
 		// activity
@@ -541,15 +533,8 @@ class NacActiveAlarmService
 		waitForAutoDismiss()
 		waitForAutoSnooze()
 
-		// Start the wakeup process after a delay of 1 sec. With Android 15, possibly
-		// earlier versions as well, need to ensure that the activity is in focus before
-		// trying to request audio focus, otherwise any media or TTS will fail
-		wakeupProcess = NacWakeupProcess(this, alarm!!)
-
-		//Handler(mainLooper).postDelayed({
-		wakeupProcessDelayHandler?.postDelayed({
-			wakeupProcess!!.start()
-		}, 1000)
+		// Start the wakeup process
+		startWakeupProcess()
 
 		// Set the active flag and reset the skip flag, then update the alarm
 		lifecycleScope.launch {
@@ -558,6 +543,31 @@ class NacActiveAlarmService
 
 			alarmRepository.update(alarm!!)
 		}
+	}
+
+	/**
+	 * Start the wakeup process.
+	 */
+	private fun startWakeupProcess()
+	{
+		// Create the wakeup process
+		wakeupProcess = NacWakeupProcess(this, alarm!!)
+
+		// Add a volume key press listener so that the volume keys can snooze the alarm
+		if (alarm!!.shouldVolumeSnooze)
+		{
+			wakeupProcess!!.onVolumeKeyPressListener = NacWakeupProcess.OnVolumeKeyPressListener {
+				println("VOLUME KEY PRESSED!")
+				snoozeAlarmService(this, alarm)
+			}
+		}
+
+		// Start the wakeup process after a delay of 1 sec. With Android 15, possibly
+		// earlier versions as well, need to ensure that the activity is in focus before
+		// trying to request audio focus, otherwise any media or TTS will fail
+		wakeupProcessDelayHandler.postDelayed({
+			wakeupProcess!!.start()
+		}, 1000)
 	}
 
 	/**
@@ -609,7 +619,7 @@ class NacActiveAlarmService
 		val delay = TimeUnit.SECONDS.toMillis(alarm!!.autoDismissTime.toLong()) - alarm!!.timeActive - 750
 
 		// Automatically dismiss the alarm
-		autoDismissHandler!!.postDelayed({
+		autoDismissHandler.postDelayed({
 
 			// Show the missed alarm notification
 			if (sharedPreferences.missedAlarmNotification)
@@ -654,7 +664,7 @@ class NacActiveAlarmService
 		val delay = TimeUnit.SECONDS.toMillis(alarm!!.autoSnoozeTime.toLong()) - 750
 
 		// Automatically snooze the alarm
-		autoSnoozeHandler!!.postDelayed({ snooze() }, delay)
+		autoSnoozeHandler.postDelayed({ snooze() }, delay)
 	}
 
 	companion object

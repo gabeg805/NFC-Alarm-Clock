@@ -158,7 +158,7 @@
 		app:iconSize="@dimen/isz_xxxlarge"
 		app:icon="@drawable/stop_32"
 		app:layout_constraintTop_toBottomOf="@id/timer_progress"
-		app:layout_constraintBottom_toTopOf="@id/timer_add_5s"
+		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintEnd_toEndOf="parent"
 		/>

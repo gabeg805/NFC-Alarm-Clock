@@ -4,7 +4,9 @@ import android.view.View
 import android.view.ViewGroup.OnHierarchyChangeListener
 import android.widget.AdapterView
 import android.widget.LinearLayout
+import android.widget.RelativeLayout
 import android.widget.TextView
+import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.children
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -16,20 +18,12 @@ import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.NacGenericAlarmOptionsDialog
 import com.nfcalarmclock.nfc.db.NacNfcTag
 import com.nfcalarmclock.nfc.NacNfcTagViewModel
+import com.nfcalarmclock.view.calcAlpha
 import com.nfcalarmclock.view.setTextFromIndex
 import com.nfcalarmclock.view.setupInputLayoutColor
+import com.nfcalarmclock.view.setupSwitchColor
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-
-/**
- * Order in which NFC tags can be dismissed.
- */
-object NacNfcTagDismissOrder
-{
-	const val ANY = 0
-	const val RANDOM = 1
-	const val SEQUENTIAL = 2
-}
 
 /**
  * Select NFC tag(s) to dismiss an alarm.
@@ -38,6 +32,11 @@ object NacNfcTagDismissOrder
 open class NacSelectNfcTagDialog
 	: NacGenericAlarmOptionsDialog()
 {
+
+	/**
+	 * NFC tag view model.
+	 */
+	private val nfcTagViewModel: NacNfcTagViewModel by viewModels()
 
 	/**
 	 * Layout resource ID.
@@ -60,14 +59,14 @@ open class NacSelectNfcTagDialog
 	private lateinit var dismissOrderDescription: TextView
 
 	/**
+	 * Dismiss order switch.
+	 */
+	private lateinit var dismissOrderSwitch: SwitchCompat
+
+	/**
 	 * Input layout (dropdown) for the dismiss order.
 	 */
 	private lateinit var dismissOrderInputLayout: TextInputLayout
-
-	/**
-	 * NFC tag view model.
-	 */
-	private val nfcTagViewModel: NacNfcTagViewModel by viewModels()
 
 	/**
 	 * List of NFC tags.
@@ -98,7 +97,9 @@ open class NacSelectNfcTagDialog
 	override fun onOkClicked(alarm: NacAlarm?)
 	{
 		alarm?.nfcTagId = selectedNfcTags.joinToString(" || ") { it.nfcId }
-		alarm?.nfcTagDismissOrder = selectedDismissOrder
+		alarm?.shouldUseNfcTagDismissOrder = dismissOrderSwitch.isChecked
+		alarm?.nfcTagDismissOrder = NacAlarm.calcNfcTagDismissOrderFromIndex(selectedDismissOrder)
+		println("Selected jank : $selectedDismissOrder | ${alarm?.nfcTagDismissOrder}")
 	}
 
 	/**
@@ -160,20 +161,26 @@ open class NacSelectNfcTagDialog
 	private fun setDismissOrderUsability()
 	{
 		// Determine the usability
-		val enabled = (container.childCount > 1)
-		val alpha = if (enabled) 1f else 0.25f
+		val overallState = (container.childCount > 1)
+		val inputLayoutState = dismissOrderSwitch.isChecked
+		val overallAlpha = calcAlpha(overallState)
+		val inputLayoutAlpha = calcAlpha(inputLayoutState)
 
 		// Title
-		dismissOrderTitle.alpha = alpha
-		dismissOrderTitle.isEnabled = enabled
+		dismissOrderTitle.alpha = overallAlpha
+		dismissOrderTitle.isEnabled = overallState
 
 		// Description
-		dismissOrderDescription.alpha = alpha
-		dismissOrderDescription.isEnabled = enabled
+		dismissOrderDescription.alpha = overallAlpha
+		dismissOrderDescription.isEnabled = overallState
+
+		// Switch
+		dismissOrderSwitch.alpha = overallAlpha
+		dismissOrderSwitch.isEnabled = overallState
 
 		// Dropdown menu
-		dismissOrderInputLayout.alpha = alpha
-		dismissOrderInputLayout.isEnabled = enabled
+		dismissOrderInputLayout.alpha = inputLayoutAlpha
+		dismissOrderInputLayout.isEnabled = overallState && inputLayoutState
 	}
 
 	/**
@@ -218,6 +225,12 @@ open class NacSelectNfcTagDialog
 
 				// Set the usability of the dismiss order views
 				setDismissOrderUsability()
+
+				// Disable the dismiss order if only one child remains
+				if (container.childCount == 1)
+				{
+					dismissOrderSwitch.isChecked = false
+				}
 			}
 
 		})
@@ -228,7 +241,8 @@ open class NacSelectNfcTagDialog
 			val a = alarm ?: NacAlarm.build(sharedPreferences)
 
 			// Set the default selected values
-			selectedDismissOrder = a.nfcTagDismissOrder
+			selectedDismissOrder = NacAlarm.calcNfcTagDismissOrderIndex(a.nfcTagDismissOrder)
+			println("Starting jank : $selectedDismissOrder | ${a.nfcTagDismissOrder}")
 
 			// Get the alarm NFC IDs and all the NFC tags
 			allNfcTags = nfcTagViewModel.getAllNfcTags()
@@ -250,7 +264,8 @@ open class NacSelectNfcTagDialog
 			val nfcTagNames = allNfcTags.map { it.name }.toTypedArray()
 
 			// Dismiss order. This comes first to initialize all the lateinit vars
-			setupDismissOrder(a.nfcTagDismissOrder)
+			println("Dismiss order : ${a.nfcTagDismissOrder}")
+			setupDismissOrder(a.shouldUseNfcTagDismissOrder, a.nfcTagDismissOrder)
 
 			// Select NFC tags
 			selectedNfcTags.forEach {
@@ -263,20 +278,36 @@ open class NacSelectNfcTagDialog
 	/**
 	 * Setup the input layout and textview.
 	 */
-	private fun setupDismissOrder(default: Int)
+	private fun setupDismissOrder(defaultUseNfcDismissOrder: Boolean, defaultDismissOrder: Int)
 	{
 		// Get the views
 		dismissOrderTitle = dialog!!.findViewById(R.id.nfc_tag_dismiss_order_title)
 		dismissOrderDescription = dialog!!.findViewById(R.id.nfc_tag_dismiss_order_description)
+		dismissOrderSwitch = dialog!!.findViewById(R.id.nfc_tag_dismiss_order_switch)
 		dismissOrderInputLayout = dialog!!.findViewById(R.id.nfc_tag_dismiss_order_input_layout)
-		val textView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.nfc_tag_dismiss_order_dropdown_menu)
+		val relativeLayout: RelativeLayout = dialog!!.findViewById(R.id.nfc_tag_dismiss_order_container)
+		val autoCompleteTextView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.nfc_tag_dismiss_order_dropdown_menu)
+
+		// Get the index of dismiss order
+		val index = NacAlarm.calcNfcTagDismissOrderIndex(defaultDismissOrder)
 
 		// Setup the views
+		dismissOrderSwitch.isChecked = defaultUseNfcDismissOrder
+		dismissOrderSwitch.setupSwitchColor(sharedPreferences)
 		dismissOrderInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
-		textView.setTextFromIndex(default)
+		autoCompleteTextView.setTextFromIndex(index)
+
+		// Set the relative layout listener
+		relativeLayout.setOnClickListener {
+
+			// Toggle the checkbox and set the usability of the dropdown
+			dismissOrderSwitch.toggle()
+			setDismissOrderUsability()
+
+		}
 
 		// Set the textview listeners
-		textView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+		autoCompleteTextView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
 			selectedDismissOrder = position
 		}
 
