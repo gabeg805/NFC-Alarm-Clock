@@ -46,7 +46,7 @@ open class NacVolumeOptionsDialog
 	private var selectedWaitTime: Int = 0
 
 	/**
-	 * Called when the Ok button is clicked.
+	 * Ok button is clicked.
 	 */
 	override fun onOkClicked(alarm: NacAlarm?)
 	{

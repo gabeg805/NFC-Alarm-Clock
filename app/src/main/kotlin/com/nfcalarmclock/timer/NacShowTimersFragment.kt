@@ -35,6 +35,7 @@ import com.nfcalarmclock.main.NacMainActivity
 import com.nfcalarmclock.nfc.SCANNED_NFC_TAG_ID_BUNDLE_NAME
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.NacBundle
+import com.nfcalarmclock.system.bindToService
 import com.nfcalarmclock.system.getTimer
 import com.nfcalarmclock.system.toBundle
 import com.nfcalarmclock.timer.active.NacActiveTimerService
@@ -254,8 +255,13 @@ class NacShowTimersFragment
 
 			// TODO: Repeat toast to explain what that does for timers
 			// TODO: Test saving the default ringtone in general settings
-			// TODO: Make sure notifications are not swipable
-			// TODO: Have notification show button yb default?
+			// TODO: What is going on here?
+			//2025-10-29 23:07:51.916 28903-28903 System.out              com.nfcalarmclock                    I  Active alarm activity onResume() : 4d1b1946
+			//2025-10-29 23:07:51.916 28903-28903 System.out              com.nfcalarmclock                    I  Active alarm activity was scanned? : true
+			//2025-10-29 23:07:51.929 28903-28903 System.out              com.nfcalarmclock                    I  NFC Names : Metro
+			//2025-10-29 23:07:51.930 28903-28903 System.out              com.nfcalarmclock                    I  canDismissWithScannedNfc()
+			//2025-10-29 23:07:51.930 28903-28903 System.out              com.nfcalarmclock                    I  Nfc tags : 4d1b1946 | [com.nfcalarmclock.nfc.db.NacNfcTag@235a0ed]
+			//2025-10-29 23:07:54.915  2777-2798  ActivityTaskManager     system_server                        E  Background activity launch blocked! [callingPackage: com.nfcalarmclock; callingPackageTargetSdk: 35; callingUid: 10266; callingPid: -1; appSwitchState: 2; callingUidHasVisibleActivity: true; callingUidHasVisibleNotPinnedActivity: true; callingUidHasNonAppVisibleWindow: false; callingUidProcState: TOP; isCallingUidPersistentSystemProcess: false; forcedBalByPiSender: BSP.NONE; intent: Intent { act=android.nfc.action.TAG_DISCOVERED flg=0x20000000 cmp=com.nfcalarmclock/.alarm.activealarm.NacActiveAlarmActivity (has extras) }; callerApp: null; balAllowedByPiCreator: BSP.NONE; balAllowedByPiCreatorWithHardening: BSP.NONE; resultIfPiCreatorAllowsBal: BAL_ALLOW_VISIBLE_WINDOW; hasRealCaller: true; isCallForResult: false; isPendingIntent: true; autoOptInReason: null; realCallingPackage: android.uid.nfc:1027[debugOnly]; realCallingPackageTargetSdk: -1; realCallingUid: 1027; realCallingPid: 5616; realCallingUidHasVisibleActivity: false; realCallingUidHasVisibleNotPinnedActivity: false; realCallingUidHasNonAppVisibleWindow: false; realCallingUidProcState: PERSISTENT; isRealCallingUidPersistentSystemProcess: true; originatingPendingIntent: PendingIntentRecord{56108d9 com.nfcalarmclock startActivity}; realCallerApp: null; balAllowedByPiSender: BSP.ALLOW_FGS; resultIfPiSenderAllowsBal: BAL_BLOCK; balImproveRealCallerVisibilityCheck: true; balRequireOptInByPendingIntentCreator: true; balRequireOptInSameUid: false; balRespectAppSwitchStateWhenCheckBoundByForegroundUid: true; balDontBringExistingBackgroundTaskStackToFg: true]
 
 			// Initialize each timer being used by the service
 			service!!.allTimersReadOnly.forEach { timer ->
@@ -608,9 +614,7 @@ class NacShowTimersFragment
 		super.onStart()
 
 		// Bind to the active timer service
-		val context = requireContext()
-
-		NacActiveTimerService.Companion.bindToService(context, NacActiveTimerService::class.java, serviceConnection)
+		requireContext().bindToService(NacActiveTimerService::class.java, serviceConnection)
 	}
 
 	/**
@@ -885,8 +889,8 @@ class NacShowTimersFragment
 					// Start the service
 					val context = requireContext()
 
-					NacActiveTimerService.Companion.startTimerService(context, timer)
-					NacActiveTimerService.Companion.bindToService(context, NacActiveTimerService::class.java, serviceConnection)
+					NacActiveTimerService.startTimerService(context, timer)
+					context.bindToService(NacActiveTimerService::class.java, serviceConnection)
 				}
 
 			}

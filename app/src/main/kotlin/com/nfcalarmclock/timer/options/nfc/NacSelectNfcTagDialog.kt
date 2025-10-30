@@ -17,8 +17,6 @@ class NacSelectNfcTagDialog
 	: NacSelectNfcTagDialog()
 {
 
-	// TODO: Add start timer option here?
-
 	/**
 	 * Get the alarm/timer argument from the fragment.
 	 */
@@ -35,10 +33,10 @@ class NacSelectNfcTagDialog
 		// Super
 		super.onViewCreated(view, savedInstanceState)
 
-		// TODO: Test that this works
-		// Change the description for the timer
+		// Get the view
 		val selectNfcTagDescription: TextView = view.findViewById(R.id.select_nfc_tag_description)
 
+		// Change the description for the timer
 		selectNfcTagDescription.setText(R.string.description_select_nfc_tag_timer)
 	}
 

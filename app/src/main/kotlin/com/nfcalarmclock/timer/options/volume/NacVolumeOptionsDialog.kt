@@ -24,7 +24,7 @@ class NacVolumeOptionsDialog
 	}
 
 	/**
-	 * Called when the view has been created.
+	 * View has been created.
 	 */
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
 	{

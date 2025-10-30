@@ -28,6 +28,7 @@ import com.nfcalarmclock.nfc.db.NacNfcTag
 import com.nfcalarmclock.nfc.getNfcTagNamesForDismissing
 import com.nfcalarmclock.nfc.getNfcTagsForDismissing
 import com.nfcalarmclock.shared.NacSharedPreferences
+import com.nfcalarmclock.system.bindToService
 import com.nfcalarmclock.system.getTimer
 import com.nfcalarmclock.timer.db.NacTimer
 import com.nfcalarmclock.view.animateProgress
@@ -445,9 +446,7 @@ class NacActiveTimerFragment
 		super.onStart()
 
 		// Bind to the active timer service
-		val context = requireContext()
-
-		NacActiveTimerService.bindToService(context, NacActiveTimerService::class.java, serviceConnection)
+		requireContext().bindToService(NacActiveTimerService::class.java, serviceConnection)
 	}
 
 	/**
@@ -777,7 +776,7 @@ class NacActiveTimerFragment
 				val context = requireContext()
 
 				NacActiveTimerService.startTimerService(context, timer)
-				NacActiveTimerService.bindToService(context, NacActiveTimerService::class.java, serviceConnection)
+				context.bindToService(NacActiveTimerService::class.java, serviceConnection)
 			}
 
 		}

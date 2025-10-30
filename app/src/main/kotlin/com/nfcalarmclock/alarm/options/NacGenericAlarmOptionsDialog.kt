@@ -58,19 +58,19 @@ abstract class NacGenericAlarmOptionsDialog
 	abstract fun setupAlarmOptions(alarm: NacAlarm?)
 
 	/**
-	 * Called when the Ok button is clicked.
+	 * Ok button is clicked.
 	 */
 	abstract fun onOkClicked(alarm: NacAlarm?)
 
 	/**
-	 * Called when the cancel button is clicked.
+	 * Cancel button is clicked.
 	 */
 	open fun onCancelClicked(alarm: NacAlarm?)
 	{
 	}
 
 	/**
-	 * Called when the creating the view.
+	 * Create the view.
 	 */
 	override fun onCreateView(
 		inflater: LayoutInflater,
@@ -82,7 +82,7 @@ abstract class NacGenericAlarmOptionsDialog
 	}
 
 	/**
-	 * Called when the primary button is clicked.
+	 * Primary button is clicked.
 	 */
 	open fun onPrimaryButtonClicked(alarm: NacAlarm?)
 	{
@@ -105,7 +105,7 @@ abstract class NacGenericAlarmOptionsDialog
 	}
 
 	/**
-	 * Called when the alarm should be saved.
+	 * Alarm should be saved.
 	 */
 	open fun onSaveAlarm(alarm: NacAlarm?)
 	{
@@ -127,7 +127,7 @@ abstract class NacGenericAlarmOptionsDialog
 	}
 
 	/**
-	 * Called when the secondary button is clicked.
+	 * Secondary button is clicked.
 	 */
 	open fun onSecondaryButtonClicked(alarm: NacAlarm?)
 	{
@@ -147,7 +147,7 @@ abstract class NacGenericAlarmOptionsDialog
 	}
 
 	/**
-	 * Called when the view has been created.
+	 * View has been created.
 	 */
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
 	{

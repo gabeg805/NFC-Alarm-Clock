@@ -302,9 +302,9 @@
 	<string name="description_text_to_speech_speech_rate">Tốc độ chuyển văn bản thành giọng nói nên nói như thế nào.</string>
 	<string name="description_volume_gradually_increase_volume_alarm">Tăng âm lượng báo thức theo tần suất đã đặt.</string>
 	<string name="description_volume_restrict_volume_alarm">Không thể thay đổi âm lượng khi báo thức kêu.</string>
-	<string name="description_dismiss_options_auto_dismiss">Tự động tắt báo thức sau một khoảng thời gian đã cài đặt.</string>
+	<string name="description_dismiss_options_auto_dismiss_alarm">Tự động tắt báo thức sau một khoảng thời gian đã cài đặt.</string>
 	<string name="description_dismiss_options_dismiss_early">Tắt báo thức sớm, trước khi báo thức hoạt động.</string>
-	<string name="description_dismiss_options_delete_after_dismissed">Báo thức sẽ bị xóa sau khi bạn tắt nó.</string>
+	<string name="description_dismiss_options_delete_after_dismissed_alarm">Báo thức sẽ bị xóa sau khi bạn tắt nó.</string>
 	<string name="description_snooze_options_auto_snooze">Tự động báo lại báo thức sau khoảng thời gian đã cài đặt.</string>
 	<string name="description_snooze_options_max_snooze">Số lần báo thức có thể được báo lại tối đa.</string>
 	<string name="description_snooze_options_snooze_duration">Khoảng thời gian để báo lại báo thức.</string>

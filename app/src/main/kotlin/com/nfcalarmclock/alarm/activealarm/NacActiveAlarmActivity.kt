@@ -1,9 +1,12 @@
 package com.nfcalarmclock.alarm.activealarm
 
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.ServiceConnection
 import android.os.Build
 import android.os.Bundle
+import android.os.IBinder
 import android.view.KeyEvent
 import android.view.Window
 import android.view.WindowManager
@@ -24,6 +27,7 @@ import com.nfcalarmclock.nfc.shouldUseNfc
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.NacBundle
 import com.nfcalarmclock.system.addAlarm
+import com.nfcalarmclock.system.bindToService
 import com.nfcalarmclock.system.enableActivityAlias
 import com.nfcalarmclock.system.getAlarm
 import com.nfcalarmclock.system.registerMyShutdownBroadcastReceiver
@@ -36,6 +40,7 @@ import kotlinx.coroutines.launch
 /**
  * Activity to dismiss/snooze the alarm.
  */
+@UnstableApi
 @AndroidEntryPoint
 class NacActiveAlarmActivity
 	: AppCompatActivity()
@@ -65,6 +70,11 @@ class NacActiveAlarmActivity
 	 * List of NFC tags.
 	 */
 	private var nfcTags: MutableList<NacNfcTag>? = null
+
+	/**
+	 * Active alarm service.
+	 */
+	private var service: NacActiveAlarmService? = null
 
 	/**
 	 * Shutdown broadcast receiver.
@@ -110,6 +120,22 @@ class NacActiveAlarmActivity
 		override fun handleOnBackPressed()
 		{
 		}
+	}
+
+	/**
+	 * Connection to the active alarm service.
+	 */
+	private val serviceConnection = object : ServiceConnection
+	{
+		override fun onServiceConnected(className: ComponentName, serviceBinder: IBinder)
+		{
+			// Set the active alarm service
+			val binder = serviceBinder as NacActiveAlarmService.NacLocalBinder
+			service = binder.getService()
+			println("ACTIVE ALARM Activity SERVICE IS NOW CONNECTED")
+		}
+
+		override fun onServiceDisconnected(className: ComponentName) {}
 	}
 
 	/**
@@ -187,6 +213,7 @@ class NacActiveAlarmActivity
 	{
 		// Super
 		super.onNewIntent(intent)
+		println("Active alarm activity onNewIntent()!!!!!!!!!!")
 
 		// Set the intent
 		setIntent(intent)
@@ -219,8 +246,7 @@ class NacActiveAlarmActivity
 		// Super
 		super.onResume()
 
-		println("Active alarm activity onResume() : ${NacNfc.parseId(intent)}")
-		println("Active alarm activity was scanned? : ${NacNfc.wasScanned(intent)}")
+		println("Active alarm activity onResume() : ${NacNfc.wasScanned(intent)} | ${NacNfc.parseId(intent)}")
 
 		// Setup NFC and the layout
 		setupNfc()
@@ -232,11 +258,14 @@ class NacActiveAlarmActivity
 			val nfcId = NacNfc.parseId(intent)
 
 			// Setup the NFC tags
+			println("Active alarm activity setupNfcTags()")
 			setupNfcTags()
 
 			// NFC tag was scanned so check if it is able to dismiss the alarm
+			println("Active alarm activity checking if NFC was scanned and can dismiss with NFC")
 			if (NacNfc.wasScanned(intent) && NacNfc.canDismissWithScannedNfc(context, alarm, nfcId, nfcTags))
 			{
+				println("Active alarm activity calling dismiss alarm service")
 				// Dismiss the alarm service with NFC
 				NacActiveAlarmService.dismissAlarmServiceWithNfc(context, alarm!!)
 			}
@@ -263,8 +292,21 @@ class NacActiveAlarmActivity
 		}
 	}
 
+
 	/**
-	 * Activity is stopped.
+	 * Activity started.
+	 */
+	@OptIn(UnstableApi::class)
+	override fun onStart()
+	{
+		// Super
+		super.onStart()
+
+		// Bind to the active alarm service
+		bindToService(NacActiveAlarmService::class.java, serviceConnection)
+	}
+	/**
+	 * Activity stopped.
 	 */
 	override fun onStop()
 	{
@@ -273,6 +315,9 @@ class NacActiveAlarmActivity
 
 		// Remove the back press callback
 		onBackPressedCallback.remove()
+
+		// Unbind from the active alarm service
+		unbindService(serviceConnection)
 	}
 
 	/**
@@ -372,7 +417,8 @@ class NacActiveAlarmActivity
 		if (nfcTags == null)
 		{
 			nfcTags = alarm!!.getNfcTagsForDismissing(nfcTagViewModel)
-			println("NFC Tags : $nfcTags")
+			println("NFC Tags:")
+			nfcTags?.forEach { println(it.nfcId) }
 		}
 
 		// NFC does not need to be used so do nothing with the layout handler

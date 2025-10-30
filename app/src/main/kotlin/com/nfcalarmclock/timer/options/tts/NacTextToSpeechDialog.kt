@@ -31,10 +31,13 @@ class NacTextToSpeechDialog
 		// Super
 		super.onViewCreated(view, savedInstanceState)
 
-		// Change the description for the timer
-		val scanNfcTagDescription: TextView = view.findViewById(R.id.tts_what_to_say_description)
+		// Get the views
+		val ttsDescription: TextView = view.findViewById(R.id.tts_what_to_say_description)
+		val whatToSayNameDescription: TextView = view.findViewById(R.id.tts_say_alarm_name)
 
-		scanNfcTagDescription.setText(R.string.description_text_to_speech_what_to_say_timer)
+		// Change the description for the timer
+		ttsDescription.setText(R.string.description_text_to_speech_what_to_say_timer)
+		whatToSayNameDescription.setText(R.string.message_tts_timer_name)
 	}
 
 }

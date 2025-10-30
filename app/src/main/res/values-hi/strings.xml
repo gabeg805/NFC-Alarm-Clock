@@ -302,9 +302,9 @@
 	<string name="description_text_to_speech_speech_rate">टेक्स्ट-टू-स्पीच को कितनी तेजी से बोलना चाहिए।</string>
 	<string name="description_volume_gradually_increase_volume_alarm">अलार्म की आवाज़ को निर्धारित आवृत्ति पर बढ़ाएँ।</string>
 	<string name="description_volume_restrict_volume_alarm">अलार्म बजने पर वॉल्यूम नहीं बदला जा सकता।</string>
-	<string name="description_dismiss_options_auto_dismiss">निर्धारित अवधि के बाद अलार्म स्वचालित रूप से बंद हो जाएगा।</string>
+	<string name="description_dismiss_options_auto_dismiss_alarm">निर्धारित अवधि के बाद अलार्म स्वचालित रूप से बंद हो जाएगा।</string>
 	<string name="description_dismiss_options_dismiss_early">अलार्म को सक्रिय होने से पहले ही बंद कर दें।</string>
-	<string name="description_dismiss_options_delete_after_dismissed">अलार्म बंद होने के बाद उसे हटा दिया जाएगा।</string>
+	<string name="description_dismiss_options_delete_after_dismissed_alarm">अलार्म बंद होने के बाद उसे हटा दिया जाएगा।</string>
 	<string name="description_snooze_options_auto_snooze">निर्धारित अवधि के बाद अलार्म स्वचालित रूप से बंद हो जाएगा।</string>
 	<string name="description_snooze_options_max_snooze">अलार्म को अधिकतम कितनी बार स्नूज़ किया जा सकता है।</string>
 	<string name="description_snooze_options_snooze_duration">अलार्म को स्नूज़ करने के लिए समय की मात्रा.</string>

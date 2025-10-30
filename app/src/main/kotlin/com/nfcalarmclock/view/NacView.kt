@@ -556,7 +556,7 @@ fun startTimerRingingAnimation(
 	secondsUnits: TextView)
 {
 	// Get the color
-	val red = ContextCompat.getColor(context, R.color.red_light)
+	val red = ContextCompat.getColor(context, R.color.red_dull)
 
 	// Change the progress indicator
 	circularProgressIndicator.indicatorDirection = CircularProgressIndicator.INDICATOR_DIRECTION_COUNTERCLOCKWISE

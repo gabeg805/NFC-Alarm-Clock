@@ -33,6 +33,8 @@ fun NacAlarm.canDismissWithScannedNfc(nfcId: String, nfcTags: MutableList<NacNfc
 	// NFC tags set and need to check that list, instead of doing a string to string
 	// comparison
 	val allNfcIds = nfcTags.map { it.nfcId }
+	println("Alarm's canDismissWithScannedNfc() : $nfcId | ${this.nfcTagId} | ${this.shouldUseNfcTagDismissOrder} | ${this.nfcTagDismissOrder}")
+	allNfcIds.forEach { println(it) }
 
 	// Compare the two NFC IDs
 	//   if the alarm NFC ID is empty, this is good, or
@@ -51,8 +53,13 @@ fun NacAlarm.canDismissWithScannedNfc(nfcId: String, nfcTags: MutableList<NacNfc
 			&& ((this.nfcTagDismissOrder == NacNfcTagDismissOrder.SEQUENTIAL)
 				|| (this.nfcTagDismissOrder == NacNfcTagDismissOrder.RANDOM)))
 		{
+			println("BEFORE")
+			nfcTags.forEach { println(it) }
 			// Remove the first NFC tag since it matched the one that was scanned
 			nfcTags.removeAt(0)
+			println("AFTER")
+			nfcTags.forEach { println(it) }
+			println("Alarm's jank this is sequential or random. removing first jank : ${nfcTags.isEmpty()}")
 
 			// Can dismiss the alarm when all the NFC tags have been scanned. Otherwise,
 			// return null to indicate that
@@ -68,6 +75,7 @@ fun NacAlarm.canDismissWithScannedNfc(nfcId: String, nfcTags: MutableList<NacNfc
 	// Something went wrong when comparing the NFC IDs
 	else
 	{
+		println("SOMETHING WENT WRONG COMPARING NFC IDS")
 		false
 	}
 
@@ -205,7 +213,7 @@ object NacNfc
 		nfcTags: MutableList<NacNfcTag>?
 	): Boolean
 	{
-		println("canDismissWithScannedNfc()")
+		println("canDismissWithScannedNfc() : ${alarm != null} | ${nfcId != null}")
 		// Get the NFC ID from the intent
 		val sharedPreferences = NacSharedPreferences(context)
 		//val intentNfcId = parseId(intent)
@@ -219,6 +227,7 @@ object NacNfc
 				println("Nfc tags : $nfcId | $nfcTags")
 				// Check if the scanned NFC tag can be used to dismiss the alarm
 				val status = alarm.canDismissWithScannedNfc(nfcId, nfcTags!!)
+				println("Can dismiss status? $status")
 
 				when (status)
 				{

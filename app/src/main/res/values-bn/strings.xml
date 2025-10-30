@@ -302,9 +302,9 @@
 	<string name="description_text_to_speech_speech_rate">কত দ্রুত টেক্সট-টু-স্পীচ কথা বলা উচিত।</string>
 	<string name="description_volume_gradually_increase_volume_alarm">একটি সেট ফ্রিকোয়েন্সিতে অ্যালার্মের ভলিউম বাড়ান।</string>
 	<string name="description_volume_restrict_volume_alarm">অ্যালার্ম বন্ধ হয়ে গেলে ভলিউম পরিবর্তন করা যাবে না।</string>
-	<string name="description_dismiss_options_auto_dismiss">একটি নির্দিষ্ট সময়ের পরে স্বয়ংক্রিয়ভাবে অ্যালার্ম খারিজ করুন।</string>
+	<string name="description_dismiss_options_auto_dismiss_alarm">একটি নির্দিষ্ট সময়ের পরে স্বয়ংক্রিয়ভাবে অ্যালার্ম খারিজ করুন।</string>
 	<string name="description_dismiss_options_dismiss_early">অ্যালার্মটি সক্রিয় হওয়ার আগে তাড়াতাড়ি খারিজ করুন।</string>
-	<string name="description_dismiss_options_delete_after_dismissed">অ্যালার্মটি খারিজ হওয়ার পরে মুছে ফেলা হবে।</string>
+	<string name="description_dismiss_options_delete_after_dismissed_alarm">অ্যালার্মটি খারিজ হওয়ার পরে মুছে ফেলা হবে।</string>
 	<string name="description_snooze_options_auto_snooze">একটি নির্দিষ্ট সময়কাল পরে স্বয়ংক্রিয়ভাবে অ্যালার্ম স্নুজ করুন।</string>
 	<string name="description_snooze_options_max_snooze">সর্বোচ্চ কতবার অ্যালার্ম স্নুজ করা যাবে।</string>
 	<string name="description_snooze_options_snooze_duration">অ্যালার্ম স্নুজ করার জন্য সময়ের পরিমাণ।</string>

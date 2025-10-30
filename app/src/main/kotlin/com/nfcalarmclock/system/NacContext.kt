@@ -6,6 +6,7 @@ import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
 import androidx.core.os.UserManagerCompat
@@ -151,6 +152,17 @@ fun unregisterMyReceiver(context: Context, broadcastReceiver: BroadcastReceiver)
 	catch (_: IllegalArgumentException)
 	{
 	}
+}
+
+/**
+ * Bind to a service.
+ */
+fun Context.bindToService(cls: Class<*>, serviceConnection: ServiceConnection)
+{
+	// Bind to the active timer service
+	val intent = Intent(this, cls)
+
+	this.bindService(intent, serviceConnection, 0)
 }
 
 /**

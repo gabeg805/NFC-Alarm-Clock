@@ -5,7 +5,6 @@ package com.nfcalarmclock.nfc
  */
 object NacNfcTagDismissOrder
 {
-	const val ANY = 0
 	const val RANDOM = 1
 	const val SEQUENTIAL = 2
 }

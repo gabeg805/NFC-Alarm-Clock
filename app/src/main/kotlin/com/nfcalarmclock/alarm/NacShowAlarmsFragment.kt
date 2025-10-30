@@ -69,7 +69,6 @@ import com.nfcalarmclock.card.NacBaseCardTouchHelperCallback
 import com.nfcalarmclock.card.NacCardLayoutManager
 import com.nfcalarmclock.main.NacMainActivity
 import com.nfcalarmclock.nfc.NacNfcTagViewModel
-import com.nfcalarmclock.nfc.db.NacNfcTag
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.statistics.NacAlarmStatisticViewModel
 import com.nfcalarmclock.system.NacBundle.BUNDLE_INTENT_ACTION

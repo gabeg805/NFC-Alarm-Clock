@@ -4,8 +4,10 @@ import android.Manifest
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
+import android.os.Binder
 import android.os.Build
 import android.os.Handler
+import android.os.IBinder
 import android.os.PowerManager.WakeLock
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationManagerCompat
@@ -26,6 +28,7 @@ import com.nfcalarmclock.system.disableActivityAlias
 import com.nfcalarmclock.system.enableActivityAlias
 import com.nfcalarmclock.system.getAlarm
 import com.nfcalarmclock.system.scheduler.NacScheduler
+import com.nfcalarmclock.timer.active.NacActiveTimerService
 import com.nfcalarmclock.view.quickToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -45,6 +48,20 @@ class NacActiveAlarmService
 {
 
 	/**
+	 * Local binder class that can return the service.
+	 */
+	inner class NacLocalBinder
+		: Binder()
+	{
+
+		/**
+		 * Return this instance of this service so clients can call public methods.
+		 */
+		fun getService(): NacActiveAlarmService = this@NacActiveAlarmService
+
+	}
+
+	/**
 	 * Alarm repository.
 	 */
 	@Inject
@@ -55,6 +72,11 @@ class NacActiveAlarmService
 	 */
 	@Inject
 	lateinit var statisticRepository: NacAlarmStatisticRepository
+
+	/**
+	 * Binder given to clients.
+	 */
+	private val binder: NacLocalBinder = NacLocalBinder()
 
 	/**
 	 * Shared preferences.
@@ -136,6 +158,7 @@ class NacActiveAlarmService
 	@UnstableApi
 	fun dismiss(usedNfc: Boolean = false, wasMissed: Boolean = false)
 	{
+		println("Active alarm SERVICE dismiss()")
 		// Update the alarm
 		lifecycleScope.launch {
 
@@ -205,6 +228,19 @@ class NacActiveAlarmService
 	}
 
 	/**
+	 * Service is binding.
+	 */
+	override fun onBind(intent: Intent): IBinder
+	{
+		// Super
+		super.onBind(intent)
+
+		println("ALARM SERVICE onBind()")
+
+		return binder
+	}
+
+	/**
 	 * Called when the service is created.
 	 */
 	@UnstableApi
@@ -271,12 +307,15 @@ class NacActiveAlarmService
 		// TODO: Try to have activity bind and use this flag BIND_ALLOW_ACTIVITY_STARTS, BIND_IMPORTANT
 
 		// Setup the service
+		println("Active alarm SERVICE onStartCommand()")
 		setupActiveAlarmService(intent)
+		println("Active alarm SERVICE intent action : $intentAction")
 
 		// Setup the service and disable any reminder notification that may be present
 		// when NOT skipping this alarm
 		if (intentAction != ACTION_SKIP_SERVICE)
 		{
+			println("Active alarm SERVICE show alarm notification")
 			// Show active alarm notification
 			showActiveAlarmNotification()
 
@@ -291,6 +330,7 @@ class NacActiveAlarmService
 			// Alarms are equal. Start the alarm activity
 			ACTION_EQUAL_ALARMS ->
 			{
+				println("Active alarm SERVICE start alarm activity with EQUAL ALARMS")
 				NacActiveAlarmActivity.startAlarmActivity(this, alarm!!)
 				return START_STICKY
 
@@ -324,6 +364,7 @@ class NacActiveAlarmService
 			// Start the service
 			ACTION_START_SERVICE ->
 			{
+				println("Active alarm SERVICE start service as normal")
 				startActiveAlarmService()
 				return START_STICKY
 			}

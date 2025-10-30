@@ -17,7 +17,7 @@ import com.nfcalarmclock.view.setupSwitchColor
 /**
  * Dismiss options.
  */
-class NacDismissOptionsDialog
+open class NacDismissOptionsDialog
 	: NacGenericAlarmOptionsDialog()
 {
 
@@ -77,7 +77,7 @@ class NacDismissOptionsDialog
 	private var selectedShouldDeleteAlarmAfterDismissed: Boolean = false
 
 	/**
-	 * Called when the Ok button is clicked.
+	 * Ok button is clicked.
 	 */
 	override fun onOkClicked(alarm: NacAlarm?)
 	{
@@ -91,7 +91,7 @@ class NacDismissOptionsDialog
 	}
 
 	/**
-	 * Called when the alarm should be saved.
+	 * Alarm should be saved.
 	 */
 	override fun onSaveAlarm(alarm: NacAlarm?)
 	{

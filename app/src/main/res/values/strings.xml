@@ -168,6 +168,7 @@
 	<string name="message_reset_statistics">Are you sure you want to reset all the statistics?</string>
 	<string name="message_tts_current_time">Current time</string>
 	<string name="message_tts_alarm_name">Name of the alarm</string>
+	<string name="message_tts_timer_name">Name of the timer</string>
 	<string name="message_statistics_email_subject">NFC Alarm Clock Statistics</string>
 	<string name="message_skip_general_alarm">Alarm will be skipped.</string>
 	<string name="message_skip_named_alarm">&lt;b&gt;%1$s&lt;/b&gt; will be skipped.</string>
@@ -360,10 +361,12 @@
 	<string name="description_volume_gradually_increase_volume_timer">Increase the volume of the timer at a set frequency.</string>
 	<string name="description_volume_restrict_volume_alarm">Volume cannot be changed when the alarm goes off.</string>
 	<string name="description_volume_restrict_volume_timer">Volume cannot be changed when the timer goes off.</string>
-	<string name="description_dismiss_options_auto_dismiss">Dismiss the alarm automatically after a set duration.</string>
+	<string name="description_dismiss_options_auto_dismiss_alarm">Dismiss the alarm automatically after a set duration.</string>
+	<string name="description_dismiss_options_auto_dismiss_timer">Dismiss the timer automatically after a set duration.</string>
 	<string name="description_dismiss_options_dismiss_early">Dismiss the alarm early, before it is active.</string>
 	<string name="description_dismiss_options_dismiss_early_notification">Show a notification when the alarm can be dismissed early.</string>
-	<string name="description_dismiss_options_delete_after_dismissed">The alarm will be deleted after it is dismissed.</string>
+	<string name="description_dismiss_options_delete_after_dismissed_alarm">The alarm will be deleted after it is dismissed.</string>
+	<string name="description_dismiss_options_delete_after_dismissed_timer">The timer will be deleted after it is dismissed.</string>
 	<string name="description_snooze_options_auto_snooze">Snooze the alarm automatically after a set duration.</string>
 	<string name="description_snooze_options_max_snooze">Maximum number of times the alarm can be snoozed.</string>
 	<string name="description_snooze_options_snooze_duration">Amount of time to snooze the alarm for.</string>

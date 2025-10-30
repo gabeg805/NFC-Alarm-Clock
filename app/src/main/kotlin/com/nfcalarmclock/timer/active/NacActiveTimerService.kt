@@ -4,7 +4,6 @@ import android.Manifest
 import android.annotation.SuppressLint
 import android.content.Context
 import android.content.Intent
-import android.content.ServiceConnection
 import android.os.Binder
 import android.os.Build
 import android.os.CountDownTimer
@@ -104,14 +103,14 @@ class NacActiveTimerService
 	lateinit var timerRepository: NacTimerRepository
 
 	/**
-	 * Shared preferences.
-	 */
-	private lateinit var sharedPreferences: NacSharedPreferences
-
-	/**
 	 * Binder given to clients.
 	 */
 	private val binder: NacLocalBinder = NacLocalBinder()
+
+	/**
+	 * Shared preferences.
+	 */
+	private val sharedPreferences: NacSharedPreferences by lazy { NacSharedPreferences(this) }
 
 	/**
 	 * Timers.
@@ -262,13 +261,13 @@ class NacActiveTimerService
 	 */
 	fun addTimeToCountdown(timer: NacTimer, sec: Long)
 	{
-		// Get the countdown timer and times
-		val countdownTimer = allCountdownTimers[timer.id]
+		// Get the countdown timer and the times. Do nothing if countdown timer does not exist
+		val countdownTimer = allCountdownTimers[timer.id] ?: return
 		val totalDurationMillis = allTotalDurationMillis[timer.id]!!
 		var millisUntilFinished = allMillisUntilFinished[timer.id]!!
 
 		// Cancel the countdown
-		countdownTimer?.cancel()
+		countdownTimer.cancel()
 
 		// Add time to the milliseconds until finished
 		millisUntilFinished += sec*1000
@@ -594,9 +593,6 @@ class NacActiveTimerService
 		// Super
 		super.onCreate()
 		println("SERVICE onCreate()")
-
-		// Initialize member varirables
-		sharedPreferences = NacSharedPreferences(this)
 
 		// Enable the activity alias so that tapping an NFC tag will open the main
 		// activity
@@ -1125,17 +1121,6 @@ class NacActiveTimerService
 		 * Tag for the wakelock.
 		 */
 		const val WAKELOCK_TAG = "NFC Alarm Clock:NacActiveTimerService"
-
-		/**
-		 * Bind to the service.
-		 */
-		fun bindToService(context: Context, cls: Class<*>, serviceConnection: ServiceConnection)
-		{
-			// Bind to the active timer service
-			val intent = Intent(context, cls)
-
-			context.bindService(intent, serviceConnection, 0)
-		}
 
 		/**
 		 * Dismiss the service for the given timer.

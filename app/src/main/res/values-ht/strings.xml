@@ -302,9 +302,9 @@
 	<string name="description_text_to_speech_speech_rate">Ki jan vit tèks-a-lapawòl ta dwe pale.</string>
 	<string name="description_volume_gradually_increase_volume_alarm">Ogmante volim alam la nan yon frekans fikse.</string>
 	<string name="description_volume_restrict_volume_alarm">Volim pa ka chanje lè yon alam sonnen.</string>
-	<string name="description_dismiss_options_auto_dismiss">Ranvwaye alam la otomatikman apre yon dire.</string>
+	<string name="description_dismiss_options_auto_dismiss_alarm">Ranvwaye alam la otomatikman apre yon dire.</string>
 	<string name="description_dismiss_options_dismiss_early">Ranvwaye alam la bonè, anvan li aktif.</string>
-	<string name="description_dismiss_options_delete_after_dismissed">Alam la pral efase apre li fin ranvwaye.</string>
+	<string name="description_dismiss_options_delete_after_dismissed_alarm">Alam la pral efase apre li fin ranvwaye.</string>
 	<string name="description_snooze_options_auto_snooze">Ranpli alam la otomatikman apre yon dire.</string>
 	<string name="description_snooze_options_max_snooze">Maksimòm kantite fwa alam la ka snoozed.</string>
 	<string name="description_snooze_options_snooze_duration">Kantite tan pou snooze alam la pou.</string>

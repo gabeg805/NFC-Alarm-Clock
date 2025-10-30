@@ -302,9 +302,9 @@
 	<string name="description_text_to_speech_speech_rate">Quão rápido o texto para fala deve falar.</string>
 	<string name="description_volume_gradually_increase_volume_alarm">Aumente o volume do alarme em uma frequência definida.</string>
 	<string name="description_volume_restrict_volume_alarm">O volume não pode ser alterado quando um alarme dispara.</string>
-	<string name="description_dismiss_options_auto_dismiss">Descartar o alarme automaticamente após um período definido.</string>
+	<string name="description_dismiss_options_auto_dismiss_alarm">Descartar o alarme automaticamente após um período definido.</string>
 	<string name="description_dismiss_options_dismiss_early">Descarte o alarme antecipadamente, antes que ele seja ativado.</string>
-	<string name="description_dismiss_options_delete_after_dismissed">O alarme será excluído após ser descartado.</string>
+	<string name="description_dismiss_options_delete_after_dismissed_alarm">O alarme será excluído após ser descartado.</string>
 	<string name="description_snooze_options_auto_snooze">Adie o alarme automaticamente após um período definido.</string>
 	<string name="description_snooze_options_max_snooze">Número máximo de vezes que o alarme pode ser adiado.</string>
 	<string name="description_snooze_options_snooze_duration">Período de tempo para adiar o alarme.</string>

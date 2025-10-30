@@ -302,9 +302,9 @@
 	<string name="description_text_to_speech_speech_rate">Wie schnell Text-to-Speech sprechen soll.</string>
 	<string name="description_volume_gradually_increase_volume_alarm">Erhöhen Sie die Lautstärke des Alarms in festgelegten Intervallen.</string>
 	<string name="description_volume_restrict_volume_alarm">Wenn ein Alarm losgeht, kann die Lautstärke nicht geändert werden.</string>
-	<string name="description_dismiss_options_auto_dismiss">Beenden Sie den Alarm automatisch nach einer festgelegten Dauer.</string>
+	<string name="description_dismiss_options_auto_dismiss_alarm">Beenden Sie den Alarm automatisch nach einer festgelegten Dauer.</string>
 	<string name="description_dismiss_options_dismiss_early">Deaktivieren Sie den Alarm frühzeitig, bevor er aktiv wird.</string>
-	<string name="description_dismiss_options_delete_after_dismissed">Nach dem Aufheben wird der Alarm gelöscht.</string>
+	<string name="description_dismiss_options_delete_after_dismissed_alarm">Nach dem Aufheben wird der Alarm gelöscht.</string>
 	<string name="description_snooze_options_auto_snooze">Schalten Sie den Alarm nach einer festgelegten Dauer automatisch stummen.</string>
 	<string name="description_snooze_options_max_snooze">Maximale Anzahl der Schlummervorgänge des Alarms.</string>
 	<string name="description_snooze_options_snooze_duration">Zeitspanne für die Schlummerfunktion des Alarms.</string>

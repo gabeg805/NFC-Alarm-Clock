@@ -27,7 +27,6 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
 import com.nfcalarmclock.R
-import com.nfcalarmclock.alarm.options.dismissoptions.NacDismissOptionsDialog
 import com.nfcalarmclock.alarm.options.name.NacNameDialog
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.NacCalendar
@@ -45,6 +44,7 @@ import com.nfcalarmclock.timer.NacTimerViewModel
 import com.nfcalarmclock.timer.active.NacActiveTimerService
 import com.nfcalarmclock.timer.db.NacTimer
 import com.nfcalarmclock.timer.options.NacTimerOptionsDialog
+import com.nfcalarmclock.timer.options.dismissoptions.NacDismissOptionsDialog
 import com.nfcalarmclock.view.calcContrastColor
 import com.nfcalarmclock.view.performHapticFeedback
 import com.nfcalarmclock.view.quickToast
@@ -779,18 +779,10 @@ abstract class NacBaseAddEditTimer
 		optionsDivider1.backgroundTintList = themeColor
 		optionsDivider2.backgroundTintList = themeColor
 
-		// Stop options dialog on click
+		// Stop/dismiss options dialog on click
 		stopOptionsButton.setOnClickListener {
-
-			NacDismissOptionsDialog.create(
-				timer,
-				onSaveAlarmListener = {
-					println("Save the timer! TODO: Update the logic here")
-					// TODO: Add this logic
-					//updateAlarm(it)
-				})
+			NacDismissOptionsDialog.create(timer)
 				.show(parentFragmentManager, NacDismissOptionsDialog.TAG)
-
 		}
 
 		// Settings options dialog on click

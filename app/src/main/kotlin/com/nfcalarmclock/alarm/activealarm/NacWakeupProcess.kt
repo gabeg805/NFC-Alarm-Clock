@@ -101,7 +101,7 @@ class NacWakeupProcess(
 	 * increase the volume, the restricted volume in that case should be lower
 	 * than the alarm volume.
 	 */
-	private var initialVolume: Int = audioAttributes.streamVolume
+	private var initialVolume: Int = 0
 
 	/**
 	 * Whether the alarm should vibrate or not.
@@ -464,6 +464,7 @@ class NacWakeupProcess(
 			// that it can be correctly reverted back once the wakeup process
 			// is complete
 			audioAttributes.setStreamVolume()
+			println("Current stream volume : ${audioAttributes.streamVolume}")
 
 			// Check if should gradually increase the volume
 			if (alarm.shouldGraduallyIncreaseVolume)
@@ -477,6 +478,10 @@ class NacWakeupProcess(
 				setupRestrictVolume()
 			}
 		}
+
+		// Set the initial volume
+		initialVolume = audioAttributes.streamVolume
+		println("Setting initial volume : $initialVolume")
 
 		// Watch for volume key press
 		if (alarm.shouldVolumeSnooze)
