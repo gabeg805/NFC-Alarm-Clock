@@ -99,7 +99,6 @@ open class NacSelectNfcTagDialog
 		alarm?.nfcTagId = selectedNfcTags.joinToString(" || ") { it.nfcId }
 		alarm?.shouldUseNfcTagDismissOrder = dismissOrderSwitch.isChecked
 		alarm?.nfcTagDismissOrder = NacAlarm.calcNfcTagDismissOrderFromIndex(selectedDismissOrder)
-		println("Selected jank : $selectedDismissOrder | ${alarm?.nfcTagDismissOrder}")
 	}
 
 	/**
@@ -242,7 +241,6 @@ open class NacSelectNfcTagDialog
 
 			// Set the default selected values
 			selectedDismissOrder = NacAlarm.calcNfcTagDismissOrderIndex(a.nfcTagDismissOrder)
-			println("Starting jank : $selectedDismissOrder | ${a.nfcTagDismissOrder}")
 
 			// Get the alarm NFC IDs and all the NFC tags
 			allNfcTags = nfcTagViewModel.getAllNfcTags()
@@ -264,7 +262,6 @@ open class NacSelectNfcTagDialog
 			val nfcTagNames = allNfcTags.map { it.name }.toTypedArray()
 
 			// Dismiss order. This comes first to initialize all the lateinit vars
-			println("Dismiss order : ${a.nfcTagDismissOrder}")
 			setupDismissOrder(a.shouldUseNfcTagDismissOrder, a.nfcTagDismissOrder)
 
 			// Select NFC tags

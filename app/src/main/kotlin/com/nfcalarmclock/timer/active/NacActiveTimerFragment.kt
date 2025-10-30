@@ -382,6 +382,9 @@ class NacActiveTimerFragment
 			// Dismiss the service
 			dismissTimerService(true)
 		}
+
+		// Setup the scan NFC tag textview
+		setupScanNfcTagTextView()
 	}
 
 	/**
@@ -680,12 +683,8 @@ class NacActiveTimerFragment
 				println("NFC Tags : $nfcTags")
 			}
 
-			// Get the names of the NFC tags that can dismiss the timer
-			val nfcTagNames = timer.getNfcTagNamesForDismissing(nfcTags!!)
-			println("NFC Names : $nfcTagNames")
-
-			// Set the name of the NFC tags that are needed to dismiss the timer
-			scanNfcTextView.text = nfcTagNames ?: resources.getString(R.string.title_scan_nfc_tag)
+			// Setup the scan NFC tag textview
+			setupScanNfcTagTextView()
 		}
 	}
 
@@ -780,6 +779,19 @@ class NacActiveTimerFragment
 			}
 
 		}
+	}
+
+	/**
+	 * Setup the Scan NFC Tag textview.
+	 */
+	private fun setupScanNfcTagTextView()
+	{
+		// Get the names of the NFC tags that can dismiss the timer
+		val nfcTagNames = timer.getNfcTagNamesForDismissing(nfcTags!!)
+		println("NFC Names : $nfcTagNames")
+
+		// Set the name of the NFC tags that are needed to dismiss the timer
+		scanNfcTextView.text = nfcTagNames ?: resources.getString(R.string.title_scan_nfc_tag)
 	}
 
 	/**

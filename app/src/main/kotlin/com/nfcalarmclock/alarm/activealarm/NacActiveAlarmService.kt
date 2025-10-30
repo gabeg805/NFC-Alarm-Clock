@@ -28,14 +28,12 @@ import com.nfcalarmclock.system.disableActivityAlias
 import com.nfcalarmclock.system.enableActivityAlias
 import com.nfcalarmclock.system.getAlarm
 import com.nfcalarmclock.system.scheduler.NacScheduler
-import com.nfcalarmclock.timer.active.NacActiveTimerService
 import com.nfcalarmclock.view.quickToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.util.Calendar
-import java.util.concurrent.TimeUnit
 import javax.inject.Inject
 
 /**
@@ -123,6 +121,29 @@ class NacActiveAlarmService
 	 * Time that the service was started, in milliseconds.
 	 */
 	private var startTime: Long = 0
+
+	/**
+	 * Attempt to snooze.
+	 */
+	fun attemptSnooze()
+	{
+		// Check if can snooze
+		if (alarm!!.canSnooze)
+		{
+			snooze()
+		}
+		// Unable to snooze the alarm
+		else
+		{
+			// Show a toast saying the alarm could not be snoozed
+			lifecycleScope.launch {
+				withContext(Dispatchers.Main)
+				{
+					quickToast(this@NacActiveAlarmService, R.string.error_message_snooze)
+				}
+			}
+		}
+	}
 
 	/**
 	 * Run cleanup.
@@ -379,25 +400,7 @@ class NacActiveAlarmService
 			ACTION_DISMISS_ALARM_WITH_NFC -> dismiss(usedNfc = true)
 
 			// Snooze
-			ACTION_SNOOZE_ALARM ->
-			{
-				// Check if can snooze
-				if (alarm!!.canSnooze)
-				{
-					snooze()
-				}
-				// Unable to snooze the alarm
-				else
-				{
-					// Show a toast saying the alarm could not be snoozed
-					lifecycleScope.launch {
-						withContext(Dispatchers.Main)
-						{
-							quickToast(this@NacActiveAlarmService, R.string.error_message_snooze)
-						}
-					}
-				}
-			}
+			ACTION_SNOOZE_ALARM -> attemptSnooze()
 
 			// The default case if things go wrong
 			else -> stopThisService()
@@ -528,7 +531,7 @@ class NacActiveAlarmService
 	 * This will finish the service.
 	 */
 	@UnstableApi
-	fun snooze()
+	private fun snooze()
 	{
 		lifecycleScope.launch {
 
@@ -645,7 +648,7 @@ class NacActiveAlarmService
 	 * starting at the same time that the alarm will auto-dismiss.
 	 */
 	@UnstableApi
-	fun waitForAutoDismiss()
+	private fun waitForAutoDismiss()
 	{
 		// Set the start time
 		startTime = System.currentTimeMillis()
@@ -657,7 +660,7 @@ class NacActiveAlarmService
 		}
 
 		// Amount of time until the alarm is automatically dismissed
-		val delay = TimeUnit.SECONDS.toMillis(alarm!!.autoDismissTime.toLong()) - alarm!!.timeActive - 750
+		val delay = alarm!!.autoDismissTime*1000L - alarm!!.timeActive - 750
 
 		// Automatically dismiss the alarm
 		autoDismissHandler.postDelayed({
@@ -693,7 +696,7 @@ class NacActiveAlarmService
 	 * starting at the same time that the alarm will auto-snooze.
 	 */
 	@UnstableApi
-	fun waitForAutoSnooze()
+	private fun waitForAutoSnooze()
 	{
 		// Check if should not auto snooze or cannot snooze
 		if (!alarm!!.shouldAutoSnooze || !alarm!!.canSnooze || (alarm!!.autoSnoozeTime == 0))
@@ -702,7 +705,7 @@ class NacActiveAlarmService
 		}
 
 		// Amount of time until the alarm is automatically snoozed
-		val delay = TimeUnit.SECONDS.toMillis(alarm!!.autoSnoozeTime.toLong()) - 750
+		val delay = alarm!!.autoSnoozeTime*1000L - 750
 
 		// Automatically snooze the alarm
 		autoSnoozeHandler.postDelayed({ snooze() }, delay)

@@ -7,7 +7,6 @@ import android.content.ServiceConnection
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
-import android.view.KeyEvent
 import android.view.Window
 import android.view.WindowManager
 import androidx.activity.OnBackPressedCallback
@@ -96,8 +95,16 @@ class NacActiveAlarmActivity
 			{
 				// Snooze the alarm service. Whether the alarm is actually
 				// snoozed is determined in the service
-				NacActiveAlarmService.snoozeAlarmService(
-					this@NacActiveAlarmActivity, alarm)
+				if (service != null)
+				{
+					service!!.attemptSnooze()
+				}
+				else
+				{
+					println("SERVICE IS NOT BOUND YET. CALL SNOOZE MANUALLY")
+					NacActiveAlarmService.snoozeAlarmService(
+						this@NacActiveAlarmActivity, alarm)
+				}
 			}
 
 			/**
@@ -107,8 +114,17 @@ class NacActiveAlarmActivity
 			override fun onDismiss(alarm: NacAlarm)
 			{
 				// Dismiss the alarm service
-				NacActiveAlarmService.dismissAlarmService(
-					this@NacActiveAlarmActivity, alarm)
+				if (service != null)
+				{
+					service!!.dismiss()
+				}
+				else
+				{
+					println("SERVICE IS NOT BOUND YET. CALL DISMISS MANUALLY")
+					NacActiveAlarmService.dismissAlarmService(
+						this@NacActiveAlarmActivity, alarm
+					)
+				}
 			}
 
 		}
@@ -180,30 +196,6 @@ class NacActiveAlarmActivity
 	}
 
 	/**
-	 * A physical button is pressed.
-	 */
-	@OptIn(UnstableApi::class)
-	override fun onKeyUp(keyCode: Int, event: KeyEvent?) : Boolean
-	{
-		// Check if volume up or down was pressed
-		if ((keyCode == KeyEvent.KEYCODE_VOLUME_UP)
-			|| (keyCode == KeyEvent.KEYCODE_VOLUME_DOWN))
-		{
-			// Check alarm to see if snoozing with volume buttons is desired
-			if (alarm?.shouldVolumeSnooze == true)
-			{
-				// Snooze the alarm
-				println("SNOOZING FROM ACTIVITY")
-				NacActiveAlarmService.snoozeAlarmService(this, alarm)
-				return true
-			}
-		}
-
-		// Default return
-		return super.onKeyUp(keyCode, event)
-	}
-
-	/**
 	 * NFC tag discovered.
 	 *
 	 * After this, onResume() will be called, which will check if an NFC tag was scanned
@@ -257,17 +249,46 @@ class NacActiveAlarmActivity
 			val context = this@NacActiveAlarmActivity
 			val nfcId = NacNfc.parseId(intent)
 
-			// Setup the NFC tags
 			println("Active alarm activity setupNfcTags()")
-			setupNfcTags()
+			// Get the list of NFC tags that can be used to dismiss the alarm, and
+			// order them based on how the user wants them ordered
+			if (nfcTags == null)
+			{
+				nfcTags = alarm!!.getNfcTagsForDismissing(nfcTagViewModel)
+				println("NFC Tags:")
+				nfcTags?.forEach { println(it.nfcId) }
+			}
 
-			// NFC tag was scanned so check if it is able to dismiss the alarm
+			// NFC tag was scanned so check if it is able to dismiss the alarm. If
+			// multiple NFC tags need to be used to dismiss the alarm,
+			// canDismissWithScannedNfc() will handle removing the NFC tag that was just
+			// scanned
 			println("Active alarm activity checking if NFC was scanned and can dismiss with NFC")
 			if (NacNfc.wasScanned(intent) && NacNfc.canDismissWithScannedNfc(context, alarm, nfcId, nfcTags))
 			{
 				println("Active alarm activity calling dismiss alarm service")
 				// Dismiss the alarm service with NFC
-				NacActiveAlarmService.dismissAlarmServiceWithNfc(context, alarm!!)
+				if (service != null)
+				{
+					service!!.dismiss(usedNfc = true)
+				}
+				else
+				{
+					println("SERVICE IS NOT BOUND YET. CALL DISMISS WITH NFC MANUALLY")
+					NacActiveAlarmService.dismissAlarmServiceWithNfc(context, alarm!!)
+				}
+				//NacActiveAlarmService.dismissAlarmServiceWithNfc(context, alarm!!)
+			}
+
+			// NFC does not need to be used so do nothing with the layout handler
+			if (alarm?.shouldUseNfc(this@NacActiveAlarmActivity) == true)
+			{
+				// Get the names of the NFC tags that can dismiss the alarm
+				val nfcTagNames = alarm!!.getNfcTagNamesForDismissing(nfcTags!!)
+				println("NFC Names : $nfcTagNames")
+
+				// Setup the NFC tag
+				layoutHandler.setupNfcTag(context, nfcTagNames)
 			}
 
 		}
@@ -405,34 +426,6 @@ class NacActiveAlarmActivity
 			// Show a toast
 			quickToast(this, R.string.error_message_nfc_unsupported)
 		}
-	}
-
-	/**
-	 * Setup the NFC tags.
-	 */
-	private suspend fun setupNfcTags()
-	{
-		// Get the list of NFC tags that can be used to dismiss the alarm, and
-		// order them based on how the user wants them ordered
-		if (nfcTags == null)
-		{
-			nfcTags = alarm!!.getNfcTagsForDismissing(nfcTagViewModel)
-			println("NFC Tags:")
-			nfcTags?.forEach { println(it.nfcId) }
-		}
-
-		// NFC does not need to be used so do nothing with the layout handler
-		if (alarm?.shouldUseNfc(this@NacActiveAlarmActivity) != true)
-		{
-			return
-		}
-
-		// Get the names of the NFC tags that can dismiss the alarm
-		val nfcTagNames = alarm!!.getNfcTagNamesForDismissing(nfcTags!!)
-		println("NFC Names : $nfcTagNames")
-
-		// Setup the NFC tag
-		layoutHandler.setupNfcTag(this, nfcTagNames)
 	}
 
 	/**

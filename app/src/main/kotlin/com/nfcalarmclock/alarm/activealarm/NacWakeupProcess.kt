@@ -331,7 +331,6 @@ class NacWakeupProcess(
 			audioAttributes.streamVolume = volumeToRestrictChangeTo
 
 			// Call the volume key press listener
-			println("RESTRICT VOLUME FOUND KEY PRESS!")
 			onVolumeKeyPressListener?.onVolumeKeyPress(alarm)
 			volumeKeyPressHandler.removeCallbacksAndMessages(null)
 		}
@@ -464,7 +463,6 @@ class NacWakeupProcess(
 			// that it can be correctly reverted back once the wakeup process
 			// is complete
 			audioAttributes.setStreamVolume()
-			println("Current stream volume : ${audioAttributes.streamVolume}")
 
 			// Check if should gradually increase the volume
 			if (alarm.shouldGraduallyIncreaseVolume)
@@ -481,7 +479,6 @@ class NacWakeupProcess(
 
 		// Set the initial volume
 		initialVolume = audioAttributes.streamVolume
-		println("Setting initial volume : $initialVolume")
 
 		// Watch for volume key press
 		if (alarm.shouldVolumeSnooze)
@@ -585,10 +582,8 @@ class NacWakeupProcess(
 			val currentVolume = audioAttributes.streamVolume
 
 			// Volume was changed
-			println("Checking volume levels! $initialVolume | $currentVolume")
 			if (initialVolume != currentVolume)
 			{
-				println("OMG VOLUME PRESSED!")
 				// Call the volume key press listener
 				onVolumeKeyPressListener?.onVolumeKeyPress(alarm)
 				volumeKeyPressHandler.removeCallbacksAndMessages(null)

@@ -45,7 +45,7 @@ open class NacAlarmOptionsDialog
 	}
 
 	/**
-	 * Called when the creating the view.
+	 * Create the view.
 	 */
 	override fun onCreateView(
 		inflater: LayoutInflater,
@@ -57,7 +57,7 @@ open class NacAlarmOptionsDialog
 	}
 
 	/**
-	 * Called when the view has been created.
+	 * View has been created.
 	 */
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
 	{
@@ -123,7 +123,7 @@ open class NacAlarmOptionsDialog
 			// Set the graph of the nav controller
 			navController.setGraph(R.navigation.nav_alarm_options, bundle)
 
-			// Check if the nav controller did not navigate to the destination
+			// Nav controller did not navigate to the destination after setting graph
 			if (navController.currentDestination == null)
 			{
 				// Navigate to the destination manually
