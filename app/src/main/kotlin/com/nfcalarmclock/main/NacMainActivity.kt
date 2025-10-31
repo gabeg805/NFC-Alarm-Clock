@@ -423,8 +423,6 @@ class NacMainActivity
 				if (activeAlarm != null)
 				{
 					println("Attempt to dismiss alarm with NFC")
-					//// Try to dismiss with NFC
-					//NacActiveAlarmActivity.startAlarmActivity(this@NacMainActivity, intent, activeAlarm)
 					// Remove the grant URI permissions in the untrusted intent
 					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
 					{

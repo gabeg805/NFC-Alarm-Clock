@@ -396,6 +396,7 @@ class NacActiveTimerFragment
 		savedInstanceState: Bundle?
 	): View?
 	{
+		println("Active timer onCreateView()")
 		return inflater.inflate(R.layout.frg_active_timer, container, false)
 	}
 
@@ -406,6 +407,7 @@ class NacActiveTimerFragment
 	{
 		// Super
 		super.onResume()
+		println("Active timer onResume()")
 
 		// Attempt to get the ID of an NFC tag that was scanned
 		val nfcId = arguments?.getString(SCANNED_NFC_TAG_ID_BUNDLE_NAME)
@@ -418,14 +420,20 @@ class NacActiveTimerFragment
 				// Get the list of NFC tags that can be used to dismiss the timer, and
 				// order them based on how the user wants them ordered
 				nfcTags = timer.getNfcTagsForDismissing(nfcTagViewModel)
-				println("NFC Tags : $nfcTags")
+				println("NFC Tags:")
+				nfcTags?.forEach { println("${it.nfcId} | ${it.name}") }
 			}
 
-			// NFC was scanned. Attempt to dismiss the timer with the NFC tag
+			// NFC was scanned
 			if (nfcId != null)
 			{
 				println("NFC was scanned before the active timer was launched! $nfcId")
+				// Attempt to dismiss the timer with the NFC tag
 				attemptDismissWithScannedNfc(nfcId)
+
+				// Remove the NFC tag from the arguments so it does not retrigger if the
+				// fragment is redrawn
+				arguments?.remove(SCANNED_NFC_TAG_ID_BUNDLE_NAME)
 			}
 		}
 	}
@@ -439,6 +447,7 @@ class NacActiveTimerFragment
 		super.onStart()
 
 		// Bind to the active timer service
+		println("Active timer onStart()")
 		requireContext().bindToService(NacActiveTimerService::class.java, serviceConnection)
 	}
 
@@ -450,6 +459,7 @@ class NacActiveTimerFragment
 		// Super
 		super.onStop()
 
+		println("Active timer onStop()")
 		// Remove the back press callback
 		onBackPressedCallback.remove()
 
@@ -470,6 +480,7 @@ class NacActiveTimerFragment
 	{
 		// Super
 		super.onViewCreated(view, savedInstanceState)
+		println("Active timer onViewCreated()")
 
 		// Get the timer
 		val t = arguments?.getTimer()

@@ -224,7 +224,8 @@ object NacNfc
 			// NFC can be shown which means it should be checked
 			if (sharedPreferences.shouldShowNfcButton)
 			{
-				println("Nfc tags : $nfcId | $nfcTags")
+				println("NFC Tags compare against $nfcId:")
+				nfcTags?.forEach { println("${it.nfcId} | ${it.name}") }
 				// Check if the scanned NFC tag can be used to dismiss the alarm
 				val status = alarm.canDismissWithScannedNfc(nfcId, nfcTags!!)
 				println("Can dismiss status? $status")

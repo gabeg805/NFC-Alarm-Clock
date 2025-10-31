@@ -28,6 +28,7 @@ import java.io.FileNotFoundException
 import java.util.Locale
 import java.util.TreeMap
 import java.util.concurrent.TimeUnit
+import kotlin.Boolean
 
 /**
  * Copy the document to device encrypted storage so that the metadata can be checked and
@@ -852,13 +853,27 @@ object NacMedia
 	fun buildMediaItemsFromDirectory(
 		context: Context,
 		path: String,
-		recursive: Boolean = false
+		recursive: Boolean = false,
+		shuffle: Boolean = false
 	): List<MediaItem>
 	{
 		// Get all the files in the directory
-		val files = getFiles(context, path, recursive = recursive)
+		val files = getFiles(context, path, recursive = recursive).toMutableList()
+
+		println("BEFORE SHUFFLE")
+		files.forEach {
+			val path = it.toString()
+			println("Media path : $path | Uri : $it")
+		}
+
+		// Shuffle the files
+		if (shuffle)
+		{
+			files.shuffle()
+		}
 
 		// Build list of media items and return it
+		println("AFTER SHUFFLE")
 		return buildMediaItemsFromFiles(context, files)
 	}
 

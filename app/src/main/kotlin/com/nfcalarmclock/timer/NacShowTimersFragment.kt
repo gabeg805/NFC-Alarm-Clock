@@ -187,7 +187,6 @@ class NacShowTimersFragment
 
 			override fun onCountdownTick(timer: NacTimer, secUntilFinished: Long, newProgress: Int)
 			{
-				println("SHOW TIMERS COUNTDOWN Tick")
 				// Get the card
 				val card = recyclerView.findViewHolderForItemId(timer.id) as NacTimerCardHolder? ?: return
 
@@ -211,9 +210,8 @@ class NacShowTimersFragment
 	/**
 	 * Listener for when the countup handler ticks.
 	 */
-	private val onCountupTickListener: NacActiveTimerService.OnCountupTickListener = NacActiveTimerService.OnCountupTickListener { timer, secOfRinging ->
-
-		println("On countup yoyoyo : $secOfRinging")
+	private val onCountupTickListener: NacActiveTimerService.OnCountupTickListener =
+		NacActiveTimerService.OnCountupTickListener { timer, secOfRinging ->
 
 		// Get the card
 		val card = recyclerView.findViewHolderForItemId(timer.id) as NacTimerCardHolder? ?: return@OnCountupTickListener
@@ -588,11 +586,16 @@ class NacShowTimersFragment
 		// Attempt to get the ID of an NFC tag that was scanned
 		val nfcId = arguments?.getString(SCANNED_NFC_TAG_ID_BUNDLE_NAME)
 
-		// NFC was scanned before launching this fragment
+		// NFC was scanned
 		if (nfcId != null)
 		{
 			println("NFC was scanned in onResume() of show timers! $nfcId")
+			// Attempt to dismiss the timer with the NFC tag
 			attemptDismissWithScannedNfc(nfcId)
+
+			// Remove the NFC tag from the arguments so it does not retrigger if the
+			// fragment is redrawn
+			arguments?.remove(SCANNED_NFC_TAG_ID_BUNDLE_NAME)
 		}
 	}
 

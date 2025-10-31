@@ -290,10 +290,13 @@ class NacMediaPlayer(
 			// Directory
 			if (alarm.mediaType.isMediaDirectory())
 			{
-				// Play the directory as a playlist and if the recursive flag is
-				// set, it will also include the media in its subdirectories as
-				// part of the playlist
-				playDirectory(alarm.mediaPath, recursive = alarm.shouldRecursivelyPlayMedia)
+				// Play the directory as a playlist.
+				// If the recursive flag is set, it will also include the media in
+				// subdirectories as. Similarly, if shuffle is set, it will shuffle the
+				// media
+				playDirectory(alarm.mediaPath,
+					recursive = alarm.shouldRecursivelyPlayMedia,
+					shuffle = alarm.shouldShuffleMedia)
 				return uri
 			}
 		}
@@ -342,14 +345,16 @@ class NacMediaPlayer(
 	 * @param path Path to a directory.
 	 * @param recursive Whether to recursively search a directory or not.
 	 */
-	private fun playDirectory(path: String, recursive: Boolean = false)
+	private fun playDirectory(
+		path: String,
+		recursive: Boolean = false,
+		shuffle: Boolean = false)
 	{
 		// Convert the path to media items
 		val items = NacMedia.buildMediaItemsFromDirectory(context, path,
-			recursive = recursive)
+			recursive = recursive, shuffle = shuffle)
 
 		// Play the media items
-		//items.forEach { println(it.mediaId) }
 		playMediaItems(items)
 	}
 

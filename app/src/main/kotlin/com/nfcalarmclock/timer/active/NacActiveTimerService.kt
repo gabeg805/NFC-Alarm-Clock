@@ -942,7 +942,6 @@ class NacActiveTimerService
 		allTimerRingingCountupHandlers[timer.id]?.postDelayed({
 
 			val secOfRinging = getSecOfRinging(timer)
-			println("Elapsed time of ringing : $secOfRinging")
 
 			// Update the time
 			updateNotification(timer, timeInSec = secOfRinging)
