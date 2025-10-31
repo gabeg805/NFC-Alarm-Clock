@@ -36,7 +36,7 @@ import kotlinx.coroutines.launch
  */
 @AndroidEntryPoint
 class NacGeneralSettingFragment
-	: NacGenericSettingFragment()
+	: NacBaseSettingFragment()
 {
 
 	/**
@@ -74,6 +74,39 @@ class NacGeneralSettingFragment
 	{
 		// Super
 		super.onViewCreated(view, savedInstanceState)
+
+		// Set the observer for the media picker
+		findNavController().currentBackStackEntry
+			?.savedStateHandle
+			?.getLiveData<Bundle>("YOYOYO")
+			?.observe(viewLifecycleOwner) { result ->
+
+				// Get the preference
+				val context = requireContext()
+				val key = getString(R.string.key_default_alarm_card)
+				val pref = findPreference<NacCardPreference>(key)!!
+
+				// Save the media info for this preference
+				sharedPreferences!!.mediaPath = result.getMediaPath()
+				sharedPreferences!!.mediaArtist = result.getMediaArtist()
+				sharedPreferences!!.mediaTitle = result.getMediaTitle()
+				sharedPreferences!!.mediaType	= result.getMediaType()
+				sharedPreferences!!.localMediaPath = buildLocalMediaPath(
+					context,
+					sharedPreferences!!.mediaArtist,
+					sharedPreferences!!.mediaTitle,
+					sharedPreferences!!.mediaType)
+				sharedPreferences!!.shouldShuffleMedia = result.getShuffleMedia()
+				sharedPreferences!!.recursivelyPlayMedia = result.getRecursivelyPlayMedia()
+
+				// Update the card
+				pref.card.alarm!!.mediaPath = sharedPreferences!!.mediaPath
+				pref.card.alarm!!.mediaArtist = sharedPreferences!!.mediaArtist
+				pref.card.alarm!!.mediaTitle = sharedPreferences!!.mediaTitle
+				pref.card.alarm!!.mediaType = sharedPreferences!!.mediaType
+				pref.card.setMediaButton()
+
+			}
 
 		// Check if API < 35, then edge-to-edge is not enforced and do not need to do
 		// anything
@@ -132,43 +165,11 @@ class NacGeneralSettingFragment
 			pref.allNfcTags = nfcTagViewModel.getAllNfcTags()
 		}
 
-		// Set the observer for the media picker
-		println("Set the fragment result listener")
-		findNavController().currentBackStackEntry
-			?.savedStateHandle
-			?.getLiveData<Bundle>("YOYOYO")
-			?.observe(viewLifecycleOwner) { result ->
-
-				println("Found bundle! $result")
-				// Save the media info for this preference
-				val context = requireContext()
-				sharedPreferences!!.mediaPath = result.getMediaPath()
-				sharedPreferences!!.mediaArtist = result.getMediaArtist()
-				sharedPreferences!!.mediaTitle = result.getMediaTitle()
-				sharedPreferences!!.mediaType	= result.getMediaType()
-				sharedPreferences!!.localMediaPath = buildLocalMediaPath(
-					context,
-					sharedPreferences!!.mediaArtist,
-					sharedPreferences!!.mediaTitle,
-					sharedPreferences!!.mediaType)
-				sharedPreferences!!.shouldShuffleMedia = result.getShuffleMedia()
-				sharedPreferences!!.recursivelyPlayMedia = result.getRecursivelyPlayMedia()
-				println("New timer media jank : ${sharedPreferences!!.mediaPath} | ${sharedPreferences!!.mediaArtist} | ${sharedPreferences!!.mediaTitle} | ${sharedPreferences!!.mediaType}")
-
-				// Update the card
-				pref.card.alarm!!.mediaPath = sharedPreferences!!.mediaPath
-				pref.card.alarm!!.mediaArtist = sharedPreferences!!.mediaArtist
-				pref.card.alarm!!.mediaTitle = sharedPreferences!!.mediaTitle
-				pref.card.alarm!!.mediaType = sharedPreferences!!.mediaType
-				pref.card.setMediaButton()
-
-			}
-
 		// Media
 		pref.onCardMediaClickedListener = NacCardPreference.OnCardMediaClickedListener { alarm ->
 
 			// Create a bundle with the media info
-			val bundle = Bundle()
+			val mediaBundle = Bundle()
 				.addMediaInfo(
 					alarm.mediaPath,
 					alarm.mediaArtist,
@@ -178,8 +179,7 @@ class NacGeneralSettingFragment
 					alarm.shouldRecursivelyPlayMedia)
 
 			// Navigate to the media picker
-			// TODO: Need to make settings launch this jank
-			//findNavController().navigate(R.id.action_nacAddTimerFragment_to_nacTimerMainMediaPickerFragment, bundle)
+			findNavController().navigate(R.id.action_nacGeneralSettingFragment_to_nacAlarmMainMediaPickerFragment2, mediaBundle)
 
 		}
 

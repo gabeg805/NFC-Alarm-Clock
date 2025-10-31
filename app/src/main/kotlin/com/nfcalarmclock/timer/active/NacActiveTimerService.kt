@@ -21,7 +21,6 @@ import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.NacCalendar
 import com.nfcalarmclock.system.NacLifecycleService
 import com.nfcalarmclock.system.addTimer
-import com.nfcalarmclock.system.disableActivityAlias
 import com.nfcalarmclock.system.enableActivityAlias
 import com.nfcalarmclock.system.getTimer
 import com.nfcalarmclock.timer.NacTimerRepository
@@ -316,7 +315,6 @@ class NacActiveTimerService
 					{
 						if (currentAction != NacActiveTimerNotifcationAction.RESUME)
 						{
-							println("...adding resume")
 							allNotificationCurrentActions[timer.id] = NacActiveTimerNotifcationAction.RESUME
 							clearActions()
 							addAction(R.drawable.play, R.string.action_timer_resume, notification.resumePendingIntent)
@@ -327,7 +325,6 @@ class NacActiveTimerService
 					{
 						if (currentAction != NacActiveTimerNotifcationAction.PAUSE)
 						{
-							println("...adding pause")
 							allNotificationCurrentActions[timer.id] = NacActiveTimerNotifcationAction.PAUSE
 							clearActions()
 							addAction(R.drawable.pause_32, R.string.action_timer_pause, notification.pausePendingIntent)
@@ -344,7 +341,6 @@ class NacActiveTimerService
 					{
 						if (currentAction != NacActiveTimerNotifcationAction.STOP)
 						{
-							println("...adding stop")
 							allNotificationCurrentActions[timer.id] = NacActiveTimerNotifcationAction.STOP
 							clearActions()
 							addAction(R.drawable.stop_32, R.string.action_timer_stop, notification.dismissPendingIntent)
@@ -369,8 +365,6 @@ class NacActiveTimerService
 
 		// Set it to null to indicate that the timer is not running
 		allCountdownTimers[timer.id] = null
-
-		// TODO: Remove the notification?
 	}
 
 	/**
@@ -414,8 +408,6 @@ class NacActiveTimerService
 		// Stop the service if no more timers are active
 		if (allTimers.isEmpty())
 		{
-			//println("STOPPING ACTIVE YO VERY COOL")
-			//stopThisService()
 			foregroundNotificationId = 0
 		}
 		// Close the notification and if this is the foreground notification, make
@@ -430,13 +422,11 @@ class NacActiveTimerService
 			if (notificationId == foregroundNotificationId)
 			{
 				val newForegroundTimer = allTimers.first { it.id != timer.id }
-				println("Closing the foreground jank notification : $notificationId | ${newForegroundTimer.id}")
 				updateNotification(newForegroundTimer, foreground = true)
 			}
 			// Close the notification
 			else
 			{
-				println("Normal closing the notification : $notificationId")
 				val notificationManagerCompat = NotificationManagerCompat.from(this)
 				notificationManagerCompat.cancel(notificationId)
 			}
@@ -468,7 +458,6 @@ class NacActiveTimerService
 				timerRepository.update(timer)
 			}
 
-			println("Stopping active timer service")
 			// Cleanup resources used by the timer
 			cleanup(timer)
 
@@ -577,7 +566,6 @@ class NacActiveTimerService
 		// Super
 		super.onBind(intent)
 
-		println("SERVICE onBind()")
 		// Set the bound flag
 		isBound = true
 
@@ -592,7 +580,6 @@ class NacActiveTimerService
 	{
 		// Super
 		super.onCreate()
-		println("SERVICE onCreate()")
 
 		// Enable the activity alias so that tapping an NFC tag will open the main
 		// activity
@@ -608,8 +595,8 @@ class NacActiveTimerService
 		// Super
 		super.onDestroy()
 
-		// Disable the activity alias so that tapping an NFC tag will not do anything
-		disableActivityAlias(this)
+		//// Disable the activity alias so that tapping an NFC tag will not do anything
+		//disableActivityAlias(this)
 
 		// Update the timer so it is no longer marked as active in the database
 		lifecycleScope.launch {
@@ -790,41 +777,6 @@ class NacActiveTimerService
 		allOnCountdownTimerChangedListeners[timer.id]?.forEach { it.onCountdownReset(timer, secUntilFinished) }
 	}
 
-	///**
-	// * Setup the service by getting the action, setting up the timer, and showing the
-	// * notification.
-	// */
-	//@UnstableApi
-	//private fun setupActiveTimerService(intent: Intent?)
-	//{
-	//	//// Set the intent action
-	//	//intentAction = intent?.action ?: ""
-
-	//	// Attempt to get the timer from the intent
-	//	val intentTimer = intent?.getTimer()
-
-	//	println("INTENT ACTION : ${intent?.action} | ${allTimers.forEach { it.id }}")
-
-	//	// Set the new timer for this service
-	//	if (intentTimer != null)
-	//	{
-	//		println("Revised timer id : ${intentTimer.id}")
-	//		// Add the timer to the list
-	//		if (allTimers.none { it.id == intentTimer.id })
-	//		{
-	//			println("ADDING TIMER : ${intentTimer.id}")
-	//			allTimers.add(intentTimer)
-	//		}
-	//		//timer = intentTimer
-	//	}
-
-	//	//// No timer found, so set the action to stop the service
-	//	//if (timer == null)
-	//	//{
-	//	//	intentAction = ACTION_STOP_SERVICE
-	//	//}
-	//}
-
 	/**
 	 * Show the notification.
 	 *
@@ -848,7 +800,6 @@ class NacActiveTimerService
 
 		// Save the notification and when it was shown
 		allNotifications[timer.id] = notification
-		//allNotificationShowWhenTime[timer.id] = Calendar.getInstance().timeInMillis
 	}
 
 	/**
@@ -857,7 +808,6 @@ class NacActiveTimerService
 	@UnstableApi
 	private fun startActiveTimerService(timer: NacTimer)
 	{
-		println("startActiveTimerService()")
 		// Set the active flag and update the timer in the database
 		lifecycleScope.launch {
 			timer.isActive = true
@@ -985,7 +935,6 @@ class NacActiveTimerService
 		// Timer handler does not exist
 		if (timer.id !in allTimerRingingCountupHandlers)
 		{
-			println("TIMER HANDLER DOES NOT EXIST")
 			return
 		}
 
@@ -1027,14 +976,12 @@ class NacActiveTimerService
 			// dismissed. Start/keep the service in the foreground
 			if ((foregroundNotificationId == 0) || foreground)
 			{
-				println("FOREGROUND")
 				startForeground(notification.id, notification.build())
 				foregroundNotificationId = notification.id
 			}
 			// Service is already running in the foreground. Create a new notification
 			else
 			{
-				println("NOTIFY")
 				val notificationManagerCompat = NotificationManagerCompat.from(this)
 				notificationManagerCompat.notify(notification.id, notification.build())
 			}
@@ -1062,16 +1009,7 @@ class NacActiveTimerService
 		}
 
 		// Amount of time until the timer is automatically dismissed
-		val delay = if (timer.shouldUseNfc)
-		{
-			120000L
-		}
-		else
-		{
-			timer.autoDismissTime*1000L
-		}
-		//val delay = timer.autoDismissTime*1000L - 750
-		println("Auto dismiss delay : $delay")
+		val delay = timer.autoDismissTime*1000L
 
 		// Create the handler
 		val handler = Handler(mainLooper)

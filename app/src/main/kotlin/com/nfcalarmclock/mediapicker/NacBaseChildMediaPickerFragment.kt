@@ -34,9 +34,22 @@ abstract class NacBaseChildMediaPickerFragment<T: NacAlarm>
 {
 
 	/**
+	 * Listener when OK is clicked.
+	 */
+	fun interface OnOkClickedListener
+	{
+		fun onOkClicked(bundle: Bundle)
+	}
+
+	/**
 	 * Item.
 	 */
 	protected var item: T? = null
+
+	/**
+	 * Listener when OK is clicked.
+	 */
+	var onOkClickedListener: OnOkClickedListener? = null
 
 	/**
 	 * Media player.
@@ -209,9 +222,7 @@ abstract class NacBaseChildMediaPickerFragment<T: NacAlarm>
 	 */
 	open fun onCancelClicked()
 	{
-		val x = findNavController().popBackStack()
-		println("Cancel clicked! $x")
-		//requireActivity().finish()
+		findNavController().popBackStack()
 	}
 
 	/**
@@ -280,6 +291,9 @@ abstract class NacBaseChildMediaPickerFragment<T: NacAlarm>
 	 */
 	open fun onOkClicked()
 	{
+		// Get the nav controller
+		val navController = findNavController()
+
 		// Item is set
 		if (item != null)
 		{
@@ -294,12 +308,14 @@ abstract class NacBaseChildMediaPickerFragment<T: NacAlarm>
 					shuffleMedia, recursivelyPlayMedia)
 
 			// Save the result
-			println("Setting fragment result!")
-			findNavController().previousBackStackEntry?.savedStateHandle?.set("YOYOYO", bundle)
+			navController.previousBackStackEntry?.savedStateHandle?.set("YOYOYO", bundle)
+
+			// Call the listener
+			onOkClickedListener?.onOkClicked(bundle)
 		}
 
 		// Go back to the previous fragment
-		findNavController().popBackStack()
+		navController.popBackStack()
 	}
 
 	/**

@@ -95,16 +95,7 @@ class NacActiveAlarmActivity
 			{
 				// Snooze the alarm service. Whether the alarm is actually
 				// snoozed is determined in the service
-				if (service != null)
-				{
-					service!!.attemptSnooze()
-				}
-				else
-				{
-					println("SERVICE IS NOT BOUND YET. CALL SNOOZE MANUALLY")
-					NacActiveAlarmService.snoozeAlarmService(
-						this@NacActiveAlarmActivity, alarm)
-				}
+				service?.attemptSnooze()
 			}
 
 			/**
@@ -114,17 +105,7 @@ class NacActiveAlarmActivity
 			override fun onDismiss(alarm: NacAlarm)
 			{
 				// Dismiss the alarm service
-				if (service != null)
-				{
-					service!!.dismiss()
-				}
-				else
-				{
-					println("SERVICE IS NOT BOUND YET. CALL DISMISS MANUALLY")
-					NacActiveAlarmService.dismissAlarmService(
-						this@NacActiveAlarmActivity, alarm
-					)
-				}
+				service?.dismiss()
 			}
 
 		}
@@ -148,7 +129,6 @@ class NacActiveAlarmActivity
 			// Set the active alarm service
 			val binder = serviceBinder as NacActiveAlarmService.NacLocalBinder
 			service = binder.getService()
-			println("ACTIVE ALARM Activity SERVICE IS NOW CONNECTED")
 		}
 
 		override fun onServiceDisconnected(className: ComponentName) {}
@@ -205,7 +185,6 @@ class NacActiveAlarmActivity
 	{
 		// Super
 		super.onNewIntent(intent)
-		println("Active alarm activity onNewIntent()!!!!!!!!!!")
 
 		// Set the intent
 		setIntent(intent)
@@ -238,8 +217,6 @@ class NacActiveAlarmActivity
 		// Super
 		super.onResume()
 
-		println("Active alarm activity onResume() : ${NacNfc.wasScanned(intent)} | ${NacNfc.parseId(intent)}")
-
 		// Setup NFC and the layout
 		setupNfc()
 		layoutHandler.setup(this)
@@ -249,35 +226,21 @@ class NacActiveAlarmActivity
 			val context = this@NacActiveAlarmActivity
 			val nfcId = NacNfc.parseId(intent)
 
-			println("Active alarm activity setupNfcTags()")
 			// Get the list of NFC tags that can be used to dismiss the alarm, and
 			// order them based on how the user wants them ordered
 			if (nfcTags == null)
 			{
 				nfcTags = alarm!!.getNfcTagsForDismissing(nfcTagViewModel)
-				println("NFC Tags:")
-				nfcTags?.forEach { println(it.nfcId) }
 			}
 
 			// NFC tag was scanned so check if it is able to dismiss the alarm. If
 			// multiple NFC tags need to be used to dismiss the alarm,
 			// canDismissWithScannedNfc() will handle removing the NFC tag that was just
 			// scanned
-			println("Active alarm activity checking if NFC was scanned and can dismiss with NFC")
 			if (NacNfc.wasScanned(intent) && NacNfc.canDismissWithScannedNfc(context, alarm, nfcId, nfcTags))
 			{
-				println("Active alarm activity calling dismiss alarm service")
 				// Dismiss the alarm service with NFC
-				if (service != null)
-				{
-					service!!.dismiss(usedNfc = true)
-				}
-				else
-				{
-					println("SERVICE IS NOT BOUND YET. CALL DISMISS WITH NFC MANUALLY")
-					NacActiveAlarmService.dismissAlarmServiceWithNfc(context, alarm!!)
-				}
-				//NacActiveAlarmService.dismissAlarmServiceWithNfc(context, alarm!!)
+				service?.dismiss(usedNfc = true)
 			}
 
 			// NFC does not need to be used so do nothing with the layout handler
@@ -285,7 +248,6 @@ class NacActiveAlarmActivity
 			{
 				// Get the names of the NFC tags that can dismiss the alarm
 				val nfcTagNames = alarm!!.getNfcTagNamesForDismissing(nfcTags!!)
-				println("NFC Names : $nfcTagNames")
 
 				// Setup the NFC tag
 				layoutHandler.setupNfcTag(context, nfcTagNames)

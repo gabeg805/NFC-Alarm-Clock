@@ -5,15 +5,13 @@ import android.os.Build
 import android.os.Bundle
 import android.view.View
 import androidx.core.content.ContextCompat
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import com.nfcalarmclock.R
-import com.nfcalarmclock.settings.nfc.NacNfcTagSettingFragment
 import com.nfcalarmclock.settings.importexport.NacExportManager
 import com.nfcalarmclock.settings.importexport.NacImportExportDialog
 import com.nfcalarmclock.settings.importexport.NacImportManager
-import com.nfcalarmclock.statistics.NacStatisticsSettingFragment
 import com.nfcalarmclock.support.NacSupportSetting
 import com.nfcalarmclock.view.quickToast
 import dagger.hilt.android.AndroidEntryPoint
@@ -24,7 +22,7 @@ import kotlinx.coroutines.launch
  */
 @AndroidEntryPoint
 class NacMainSettingFragment
-	: NacGenericSettingFragment()
+	: NacBaseSettingFragment()
 {
 
 	/**
@@ -78,8 +76,6 @@ class NacMainSettingFragment
 	override fun onPreferenceTreeClick(preference: Preference): Boolean
 	{
 		val preferenceKey = preference.key
-		val fragment: Fragment
-		val title: String
 
 		// Keys for all settings
 		val generalKey = getString(R.string.key_settings_general)
@@ -90,43 +86,25 @@ class NacMainSettingFragment
 		val supportKey = getString(R.string.key_settings_support)
 		val importExportKey = getString(R.string.key_settings_import_export)
 
+		var destinationId: Int
+
 		// Check the preference key
 		when (preferenceKey)
 		{
 			// General
-			generalKey ->
-			{
-				fragment = NacGeneralSettingFragment()
-				title = getString(R.string.title_setting_general)
-			}
+			generalKey -> destinationId = R.id.action_nacMainSettingFragment_to_nacGeneralSettingFragment
 
 			// Appearance
-			appearanceKey ->
-			{
-				fragment = NacAppearanceSettingFragment()
-				title = getString(R.string.title_setting_appearance)
-			}
-
-			// Statistics
-			statisticsKey ->
-			{
-				fragment = NacStatisticsSettingFragment()
-				title = getString(R.string.title_setting_statistics)
-			}
+			appearanceKey -> destinationId = R.id.action_nacMainSettingFragment_to_nacAppearanceSettingFragment
 
 			// Manage NFC tags
-			manageNfcTagsKey ->
-			{
-				fragment = NacNfcTagSettingFragment()
-				title = getString(R.string.title_setting_manage_nfc_tags)
-			}
+			manageNfcTagsKey -> destinationId = R.id.action_nacMainSettingFragment_to_nacNfcTagSettingFragment
+
+			// Statistics
+			statisticsKey -> destinationId = R.id.action_nacMainSettingFragment_to_nacStatisticsSettingFragment
 
 			// About
-			aboutKey ->
-			{
-				fragment = NacAboutSettingFragment()
-				title = getString(R.string.title_setting_about)
-			}
+			aboutKey -> destinationId = R.id.action_nacMainSettingFragment_to_nacAboutSettingFragment
 
 			// Import/export
 			importExportKey ->
@@ -173,10 +151,7 @@ class NacMainSettingFragment
 		}
 
 		// Show the fragment that was selected above
-		parentFragmentManager.beginTransaction()
-			.replace(android.R.id.content, fragment)
-			.addToBackStack(title)
-			.commit()
+		findNavController().navigate(destinationId)
 
 		// Default return
 		return super.onPreferenceTreeClick(preference)

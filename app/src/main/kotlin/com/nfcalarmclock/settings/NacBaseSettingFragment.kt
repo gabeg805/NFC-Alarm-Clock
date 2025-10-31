@@ -5,9 +5,9 @@ import androidx.preference.PreferenceFragmentCompat
 import com.nfcalarmclock.shared.NacSharedPreferences
 
 /**
- * Settings fragment.
+ * Base settings fragment.
  */
-abstract class NacGenericSettingFragment
+abstract class NacBaseSettingFragment
 	: PreferenceFragmentCompat()
 {
 
@@ -17,7 +17,7 @@ abstract class NacGenericSettingFragment
 	protected var sharedPreferences: NacSharedPreferences? = null
 
 	/**
-	 * Called when the fragment is attached.
+	 * Fragment is attached.
 	 */
 	override fun onAttach(context: Context)
 	{

@@ -525,7 +525,6 @@ class NacMainActivity
 		}
 
 		// Setup UI
-		println("setupIntitialDialogToShow()")
 		setupInitialDialogToShow()
 
 		// Register the shutdown receiver
@@ -568,11 +567,9 @@ class NacMainActivity
 		// Item selected listener
 		bottomNavigation.setOnItemSelectedListener { item ->
 
-			println("Item selected : $item")
 			// User did not selected a bottom navigation item so do not navigate anywhere
 			if (!wasBottomNavigationSelectedByUser)
 			{
-				println("DUMMY RETURN EARLY")
 				// Reset the value back to normal
 				wasBottomNavigationSelectedByUser = true
 				return@setOnItemSelectedListener true
@@ -584,7 +581,6 @@ class NacMainActivity
 				// Alarm
 				R.id.bottom_navigation_alarm ->
 				{
-					println("Showing list of alarms")
 					navController.navigate(R.id.action_global_nacShowAlarmsFragment)
 					true
 				}
@@ -593,7 +589,6 @@ class NacMainActivity
 				R.id.bottom_navigation_timer ->
 				{
 
-					println("Showing list of timers")
 					navController.navigate(R.id.action_global_nacShowTimersFragment)
 					true
 				}
@@ -606,9 +601,7 @@ class NacMainActivity
 
 		// Reselected listener. Do nothing so that the backstack does not get more
 		// destinations added to it
-		bottomNavigation.setOnItemReselectedListener {
-			println("HELLO")
-		}
+		bottomNavigation.setOnItemReselectedListener {}
 	}
 
 	/**
@@ -709,7 +702,6 @@ class NacMainActivity
 		// Attempt to show the What's new dialog
 		else if (shouldShowWhatsNewDialog && delayCounter == 0)
 		{
-			println("Should show whats new dialog and delay counter == 0")
 			// Show the What's New dialog
 			NacWhatsNewDialog.show(supportFragmentManager,
 				listener = {
@@ -817,11 +809,6 @@ class NacMainActivity
 				wasBottomNavigationSelectedByUser = false
 				bottomNavigation.selectedItemId = bottomNavId
 			}
-			// Already at the place
-			else
-			{
-				println("ALREADY THERE")
-			}
 		}
 	}
 
@@ -837,15 +824,16 @@ class NacMainActivity
 		// Setup navigation with the toolbar
 		toolbar.setupWithNavController(navController, appBarConfiguration)
 		toolbar.setNavigationOnClickListener {
-			println("HELLO : ${navController.currentDestination}")
+
+			// Go to show timers from active timer, skipping over add/edit since do not
+			// need to go back to those
 			if (navController.currentDestination?.id == R.id.nacActiveTimerFragment)
 			{
-				println("DOING MY POP BACK STACK")
 				navController.popBackStack(R.id.nacShowTimersFragment, false)
 			}
+			// Normal navigate up
 			else
 			{
-				println("NORMAL NAVIGATE UP")
 				navController.navigateUp(appBarConfiguration)
 			}
 		}

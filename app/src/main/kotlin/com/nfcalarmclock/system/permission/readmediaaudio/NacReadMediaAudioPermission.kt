@@ -17,7 +17,7 @@ object NacReadMediaAudioPermission
 	/**
 	 * The name of the READ_MEDIA_AUDIO/READ_EXTERNAL_STORAGE permission.
 	 */
-	private val permissionName: String
+	val permissionName: String
 		get() {
 
 			// Define the permission string based on which version of Android is

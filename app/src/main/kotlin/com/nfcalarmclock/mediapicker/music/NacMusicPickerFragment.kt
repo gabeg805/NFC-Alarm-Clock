@@ -20,7 +20,6 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.mediapicker.music.NacDirectorySelectedWarningDialog
 import com.nfcalarmclock.mediapicker.NacBaseChildMediaPickerFragment
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.file.NacFile
@@ -318,6 +317,13 @@ abstract class NacMusicPickerFragment<T: NacAlarm>
 			mediaType = NacMedia.TYPE_DIRECTORY
 			localMediaPath = ""
 
+			return
+		}
+		// Cleared file
+		else if (uri.toString().isEmpty())
+		{
+			// Normal OK click. No file was selected so do not need to do anything more
+			super.onOkClicked()
 			return
 		}
 

@@ -19,7 +19,7 @@ import com.nfcalarmclock.whatsnew.NacWhatsNewDialog
  * Fragment to show the About preferences.
  */
 class NacAboutSettingFragment
-	: NacGenericSettingFragment()
+	: NacBaseSettingFragment()
 {
 
 	/**

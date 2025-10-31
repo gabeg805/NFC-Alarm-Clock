@@ -1783,6 +1783,7 @@ class NacAlarmCardHolder(root: View)
 			else
 			{
 				// Dismiss the alarm service
+				// TODO: Can bind to service in Show Alarms and then catch a listener here that does both of these branches
 				dismissAlarmService(context, alarm)
 			}
 

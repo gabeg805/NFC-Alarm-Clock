@@ -179,7 +179,6 @@ class NacActiveAlarmService
 	@UnstableApi
 	fun dismiss(usedNfc: Boolean = false, wasMissed: Boolean = false)
 	{
-		println("Active alarm SERVICE dismiss()")
 		// Update the alarm
 		lifecycleScope.launch {
 
@@ -256,8 +255,6 @@ class NacActiveAlarmService
 		// Super
 		super.onBind(intent)
 
-		println("ALARM SERVICE onBind()")
-
 		return binder
 	}
 
@@ -325,18 +322,13 @@ class NacActiveAlarmService
 		// Super
 		super.onStartCommand(intent, flags, startId)
 
-		// TODO: Try to have activity bind and use this flag BIND_ALLOW_ACTIVITY_STARTS, BIND_IMPORTANT
-
 		// Setup the service
-		println("Active alarm SERVICE onStartCommand()")
 		setupActiveAlarmService(intent)
-		println("Active alarm SERVICE intent action : $intentAction")
 
 		// Setup the service and disable any reminder notification that may be present
 		// when NOT skipping this alarm
 		if (intentAction != ACTION_SKIP_SERVICE)
 		{
-			println("Active alarm SERVICE show alarm notification")
 			// Show active alarm notification
 			showActiveAlarmNotification()
 
@@ -351,7 +343,6 @@ class NacActiveAlarmService
 			// Alarms are equal. Start the alarm activity
 			ACTION_EQUAL_ALARMS ->
 			{
-				println("Active alarm SERVICE start alarm activity with EQUAL ALARMS")
 				NacActiveAlarmActivity.startAlarmActivity(this, alarm!!)
 				return START_STICKY
 
@@ -385,7 +376,6 @@ class NacActiveAlarmService
 			// Start the service
 			ACTION_START_SERVICE ->
 			{
-				println("Active alarm SERVICE start service as normal")
 				startActiveAlarmService()
 				return START_STICKY
 			}
@@ -601,7 +591,6 @@ class NacActiveAlarmService
 		if (alarm!!.shouldVolumeSnooze)
 		{
 			wakeupProcess!!.onVolumeKeyPressListener = NacWakeupProcess.OnVolumeKeyPressListener {
-				println("VOLUME KEY PRESSED!")
 				snoozeAlarmService(this, alarm)
 			}
 		}
@@ -769,19 +758,6 @@ class NacActiveAlarmService
 		}
 
 		/**
-		 * Dismiss the service for the given alarm with NFC.
-		 */
-		fun dismissAlarmServiceWithNfc(context: Context, alarm: NacAlarm?)
-		{
-			// Create the intent with the alarm service
-			val intent = getDismissIntentWithNfc(context, alarm)
-
-			// Start the service. This will not be a foreground service so do
-			// not need to call startForegroundService()
-			context.startService(intent)
-		}
-
-		/**
 		 * Get an intent that will be used to dismiss the foreground alarm
 		 * service.
 		 *
@@ -792,20 +768,6 @@ class NacActiveAlarmService
 		{
 			// Create the intent with the alarm service
 			return Intent(ACTION_DISMISS_ALARM, null, context, NacActiveAlarmService::class.java)
-				.addAlarm(alarm)
-		}
-
-		/**
-		 * Get an intent that will be used to dismiss the foreground alarm
-		 * service with NFC.
-		 *
-		 * @return An intent that will be used to dismiss the foreground alarm
-		 *         service with NFC.
-		 */
-		private fun getDismissIntentWithNfc(context: Context, alarm: NacAlarm?): Intent
-		{
-			// Create the intent with the alarm service
-			return Intent(ACTION_DISMISS_ALARM_WITH_NFC, null, context, NacActiveAlarmService::class.java)
 				.addAlarm(alarm)
 		}
 

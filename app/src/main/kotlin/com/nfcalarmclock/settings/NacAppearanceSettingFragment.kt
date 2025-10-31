@@ -15,7 +15,7 @@ import com.nfcalarmclock.settings.colorpicker.NacColorPickerPreference
  * Appearance fragment.
  */
 class NacAppearanceSettingFragment
-	: NacGenericSettingFragment()
+	: NacBaseSettingFragment()
 {
 
 	/**

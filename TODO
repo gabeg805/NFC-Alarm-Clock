@@ -2,31 +2,31 @@
 TODO
 ----
 
-* Change animation of one of the FABs to be popin and out
+* When coming back from media fragment, the order of alarms was all weird. Why
+  is that? This was after hitting cancel but occurred for OK as well. Also when
+  going back to the media fragment after changing the directory, it would not
+  reload to the path of the music that is selected for the alarm.
+
+* Make sure to grep all TODO even layout resources before production
+
+* Remove all print statements and TODO statements that were added, before releasing to production.
+
+* Run optimizer to make sure all the code is good and unused resources are removed before production
+
+* Change name of notification objects to notification builders
+
+* German translation bad: Clear reminder -> Erinnerung ausblenden
+About -> Über
+(Statistics) Turned down Alams -> Abgeschaltete Alarme
 
 * When active alarm or timer is left. Then "nfcTags" has to get reinitialized
   and probably gets cleared. May need to save the current progress in
   onSavedInstanceState() or whatever it is called.
 
-* MissedNotification, snackbar, media activity, NFC. Maybe consolidating some stuff that can be classes?
-
-* Make sure to grep all TODO even layout resources before production
-
-* How will scanning NFC work using fragments instead of activities now?
-  Can maybe handle this with LiveData?
-
 * A repeat option for the timer could simply be number of times to repeat?
   How would keep track of how many times it has been repeated?
 
-* Run optimizer to make sure all the code is good and unused resources are removed before production
-
-* What's new dialog seemed to show up twice. Investigate this.
-
-* Change name of notification objects to notification builders
-
 * Add default timer in Settings
-
-* Add loading thing when loading media activity
 
 * When using TTS, volume seems to get louder when coming back to music, and
   then goes down a bit. Is that intentional? Scope revertVolume() as well.
@@ -36,17 +36,9 @@ TODO
   card was colored like it was expanded but it was not actually expanded. It
   should have been expanded.
 
-* Alarm was not acting like a full screen intent in Android 15. Why is that?
-
 * Alarm time in activity was not updating until turned on screen. May not be an important bug.
 
-* Remove all print statements and TODO statements that were added, before releasing to production.
-
 * Stream internet radio, like KEXP?
-
-* German translation bad: Clear reminder -> Erinnerung ausblenden
-About -> Über
-(Statistics) Turned down Alams -> Abgeschaltete Alarme
 
 * When updating to support API 36:
 
