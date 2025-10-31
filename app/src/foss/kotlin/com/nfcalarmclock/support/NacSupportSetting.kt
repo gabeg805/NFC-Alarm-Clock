@@ -1,12 +1,8 @@
 package com.nfcalarmclock.support
 
-import androidx.fragment.app.FragmentActivity
-import android.net.Uri
-
 import android.content.Intent
-
-
-
+import androidx.core.net.toUri
+import androidx.fragment.app.FragmentActivity
 
 /**
  * Support setting that intentionally has the Google billing flow removed.
@@ -43,7 +39,7 @@ class NacSupportSetting(
 		onSupportEventListener?.onSupported()
 
 		// Open the browser
-		val uri = Uri.parse("https://www.nfcalarmclock.com")
+		val uri = "https://www.nfcalarmclock.com".toUri()
 		val intent = Intent(Intent.ACTION_VIEW, uri)
 
 		fragmentActivity.startActivity(intent)

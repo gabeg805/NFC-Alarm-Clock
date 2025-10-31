@@ -2,10 +2,6 @@
 <resources>
 
 	<!-- Section -->
-	<style name="Widget.AlarmOptionDialog.Section" parent="">
-		<item name="android:paddingTop">@dimen/tiny</item>
-		<item name="android:paddingBottom">@dimen/normal</item>
-	</style>
 
 	<!-- Title -->
 	<style name="Widget.AlarmOptionDialog.Title" parent="">

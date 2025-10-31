@@ -380,33 +380,11 @@ class NacActiveTimerFragment
 		{
 			println("NFC PASSED SCAN CHECK DISMISS THIS YO")
 			// Dismiss the service
-			dismissTimerService(true)
+			service?.dismiss(timer)
 		}
 
 		// Setup the scan NFC tag textview
 		setupScanNfcTagTextView()
-	}
-
-	/**
-	 * Dismiss the timer service.
-	 *
-	 * @param useNfc Whether NFC was used to dismiss the service or not.
-	 */
-	private fun dismissTimerService(useNfc: Boolean)
-	{
-		// Get the context
-		val context = requireContext()
-
-		// Dismiss with NFC
-		if (useNfc)
-		{
-			NacActiveTimerService.dismissTimerServiceWithNfc(context, timer)
-		}
-		// Dismiss normally
-		else
-		{
-			NacActiveTimerService.dismissTimerService(context, timer)
-		}
 	}
 
 	/**
@@ -432,11 +410,23 @@ class NacActiveTimerFragment
 		// Attempt to get the ID of an NFC tag that was scanned
 		val nfcId = arguments?.getString(SCANNED_NFC_TAG_ID_BUNDLE_NAME)
 
-		// NFC was scanned before launching this fragment
-		if (nfcId != null)
-		{
-			println("NFC was scanned before the active timer was launched! $nfcId")
-			attemptDismissWithScannedNfc(nfcId)
+		lifecycleScope.launch {
+
+			// Populate the NFC tags list since NFC is required for this timer
+			if ((timer.shouldUseNfc) && (nfcTags == null))
+			{
+				// Get the list of NFC tags that can be used to dismiss the timer, and
+				// order them based on how the user wants them ordered
+				nfcTags = timer.getNfcTagsForDismissing(nfcTagViewModel)
+				println("NFC Tags : $nfcTags")
+			}
+
+			// NFC was scanned. Attempt to dismiss the timer with the NFC tag
+			if (nfcId != null)
+			{
+				println("NFC was scanned before the active timer was launched! $nfcId")
+				attemptDismissWithScannedNfc(nfcId)
+			}
 		}
 	}
 
@@ -534,7 +524,7 @@ class NacActiveTimerFragment
 		setScanNfcVisibility(false)
 		setupAddTimeButtons()
 		setupProgressIndicator()
-		setupNfcTags()
+		setupScanNfcTagTextView()
 	}
 
 	/**
@@ -661,34 +651,6 @@ class NacActiveTimerFragment
 	}
 
 	/**
-	 * Setup the NFC tags.
-	 */
-	fun setupNfcTags()
-	{
-		if (!timer.shouldUseNfc)
-		{
-			println("TiMER DOES NOT NEED NFC")
-			return
-		}
-
-		lifecycleScope.launch {
-
-			println("SETTING up timer NFC Tags")
-
-			// Get the list of NFC tags that can be used to dismiss the timer, and
-			// order them based on how the user wants them ordered
-			if (nfcTags == null)
-			{
-				nfcTags = timer.getNfcTagsForDismissing(nfcTagViewModel)
-				println("NFC Tags : $nfcTags")
-			}
-
-			// Setup the scan NFC tag textview
-			setupScanNfcTagTextView()
-		}
-	}
-
-	/**
 	 * Setup the pause button.
 	 */
 	@RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
@@ -787,7 +749,14 @@ class NacActiveTimerFragment
 	private fun setupScanNfcTagTextView()
 	{
 		// Get the names of the NFC tags that can dismiss the timer
-		val nfcTagNames = timer.getNfcTagNamesForDismissing(nfcTags!!)
+		val nfcTagNames = if (nfcTags != null)
+		{
+			timer.getNfcTagNamesForDismissing(nfcTags!!)
+		}
+		else
+		{
+			null
+		}
 		println("NFC Names : $nfcTagNames")
 
 		// Set the name of the NFC tags that are needed to dismiss the timer
@@ -807,7 +776,7 @@ class NacActiveTimerFragment
 
 		// Click listener
 		stopButton.setOnClickListener {
-			dismissTimerService(false)
+			service?.dismiss(timer)
 		}
 	}
 

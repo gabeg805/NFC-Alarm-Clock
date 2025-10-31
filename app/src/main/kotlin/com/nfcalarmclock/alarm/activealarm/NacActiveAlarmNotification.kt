@@ -1,5 +1,6 @@
 package com.nfcalarmclock.alarm.activealarm
 
+import android.annotation.SuppressLint
 import android.app.NotificationChannel
 import android.app.PendingIntent
 import android.content.Context
@@ -25,6 +26,7 @@ import java.util.Calendar
  * @param context Context.
  * @param alarm Alarm.
  */
+@SuppressLint("FullScreenIntentPolicy")
 class NacActiveAlarmNotification(
 	context: Context,
 	private val alarm: NacAlarm?
@@ -91,6 +93,7 @@ class NacActiveAlarmNotification(
 	 * @see NacBaseNotificationBuilder.contentPendingIntent
 	 */
 	override val contentPendingIntent: PendingIntent
+		@OptIn(UnstableApi::class)
 		get()
 		{
 			val id = alarm?.id ?: 0

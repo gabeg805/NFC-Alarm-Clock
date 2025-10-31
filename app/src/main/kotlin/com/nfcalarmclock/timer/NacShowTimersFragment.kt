@@ -338,7 +338,6 @@ class NacShowTimersFragment
 		lifecycleScope.launch {
 
 			// Get all the active timers
-			val context = requireContext()
 			val allActiveTimers = timerViewModel.getAllActiveTimers()
 			var nonNfcTimer: NacTimer? = null
 			var anyNfcTimer: NacTimer? = null
@@ -372,7 +371,7 @@ class NacShowTimersFragment
 					if ((nfcTagIdList.size == 1) || !t.shouldUseNfcTagDismissOrder)
 					{
 						println("ONLY 1 NFC required for this timer! Dismiss this jank")
-						NacActiveTimerService.Companion.dismissTimerServiceWithNfc(context, t)
+						service?.dismiss(t)
 					}
 					else
 					{
@@ -396,7 +395,7 @@ class NacShowTimersFragment
 			if (anyNfcTimer != null)
 			{
 				println("DISMISSING ANY NFC TIMER : ${anyNfcTimer.id}")
-				NacActiveTimerService.Companion.dismissTimerServiceWithNfc(context, anyNfcTimer)
+				service?.dismiss(anyNfcTimer)
 			}
 
 			// As a last resort, try to dismiss one of the timers that does not even use
@@ -404,7 +403,7 @@ class NacShowTimersFragment
 			if (nonNfcTimer != null)
 			{
 				println("DISMISSING NON NFC TIMER : ${nonNfcTimer.id}")
-				NacActiveTimerService.Companion.dismissTimerServiceWithNfc(context, nonNfcTimer)
+				service?.dismiss(nonNfcTimer)
 			}
 		}
 	}

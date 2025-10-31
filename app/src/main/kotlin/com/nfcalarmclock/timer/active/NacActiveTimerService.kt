@@ -1061,32 +1061,6 @@ class NacActiveTimerService
 		const val WAKELOCK_TAG = "NFC Alarm Clock:NacActiveTimerService"
 
 		/**
-		 * Dismiss the service for the given timer.
-		 */
-		fun dismissTimerService(context: Context, timer: NacTimer?)
-		{
-			// Create an intent with the timer service
-			val intent = getDismissIntent(context, timer)
-
-			// Start the service. This will not be a foreground service so do
-			// not need to call startForegroundService()
-			context.startService(intent)
-		}
-
-		/**
-		 * Dismiss the service for the given timer with NFC.
-		 */
-		fun dismissTimerServiceWithNfc(context: Context, timer: NacTimer?)
-		{
-			// Create the intent with the timer service
-			val intent = getDismissIntentWithNfc(context, timer)
-
-			// Start the service. This will not be a foreground service so do
-			// not need to call startForegroundService()
-			context.startService(intent)
-		}
-
-		/**
 		 * Get an intent that will be used to dismiss the foreground timer
 		 * service.
 		 *
@@ -1096,19 +1070,6 @@ class NacActiveTimerService
 		fun getDismissIntent(context: Context, timer: NacTimer?): Intent
 		{
 			return Intent(ACTION_DISMISS_TIMER, null, context, NacActiveTimerService::class.java)
-				.addTimer(timer)
-		}
-
-		/**
-		 * Get an intent that will be used to dismiss the foreground timer
-		 * service with NFC.
-		 *
-		 * @return An intent that will be used to dismiss the foreground timer
-		 *         service with NFC.
-		 */
-		private fun getDismissIntentWithNfc(context: Context, timer: NacTimer?): Intent
-		{
-			return Intent(ACTION_DISMISS_TIMER_WITH_NFC, null, context, NacActiveTimerService::class.java)
 				.addTimer(timer)
 		}
 

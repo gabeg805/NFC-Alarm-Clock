@@ -301,7 +301,6 @@ abstract class NacBaseMainMediaPickerFragment<T: NacAlarm>
 		pagerAdapter = NacPagerAdapter(childFragmentManager, lifecycle)
 
 		// Setup
-		setupInitialPosition()
 		setupViewPager()
 		setupTabLayout()
 	}
@@ -310,13 +309,6 @@ abstract class NacBaseMainMediaPickerFragment<T: NacAlarm>
 	 * Set the fragment item.
 	 */
 	abstract fun setFragmentItem()
-
-	/**
-	 * Setup the initial position.
-	 */
-	private fun setupInitialPosition()
-	{
-	}
 
 	/**
 	 * Setup the TabLayout.

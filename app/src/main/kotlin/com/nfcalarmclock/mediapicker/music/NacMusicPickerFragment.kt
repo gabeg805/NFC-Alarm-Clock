@@ -494,14 +494,4 @@ abstract class NacMusicPickerFragment<T: NacAlarm>
 		dialog.show(childFragmentManager, NacDirectorySelectedWarningDialog.Companion.TAG)
 	}
 
-	companion object
-	{
-
-		/**
-		 * Read request callback success result.
-		 */
-		const val READ_REQUEST_CODE = 1
-
-	}
-
 }

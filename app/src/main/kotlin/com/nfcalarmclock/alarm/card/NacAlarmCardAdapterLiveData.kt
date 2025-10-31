@@ -60,7 +60,7 @@ class NacAlarmCardAdapterLiveData
 						notFoundIndices.remove(j)
 
 						// Both alarms are equal
-						if (b.equals(a))
+						if (b == a)
 						{
 							// NOMINAL: do nothing
 						}

@@ -46,6 +46,7 @@ fun createTimeTickReceiver(
  */
 fun disableActivityAlias(context: Context)
 {
+	println("DISABLE ACTIVITY ALIAS")
 	// Build the component name
 	val aliasName = "${context.packageName}.main.NacMainAliasActivity"
 	val componentName = ComponentName(context, aliasName)
@@ -57,12 +58,20 @@ fun disableActivityAlias(context: Context)
 }
 
 /**
- * Check if the deviec is user unlocked or not.
+ * Enable alias for the main activity so that tapping an NFC tag will open
+ * the main activity.
  */
-fun isUserUnlocked(context: Context): Boolean
+fun enableActivityAlias(context: Context)
 {
-	// Check the status
-	return UserManagerCompat.isUserUnlocked(context)
+	println("ENABLE ACTIVITY ALIAS")
+	// Build the component name
+	val aliasName = "${context.packageName}.main.NacMainAliasActivity"
+	val componentName = ComponentName(context, aliasName)
+
+	// Enable the alias
+	context.packageManager.setComponentEnabledSetting(componentName,
+		PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
+		PackageManager.DONT_KILL_APP)
 }
 
 /**
@@ -95,19 +104,12 @@ fun getDeviceProtectedStorageContext(context: Context, appContext: Boolean = fal
 }
 
 /**
- * Enable alias for the main activity so that tapping an NFC tag will open
- * the main activity.
+ * Check if the deviec is user unlocked or not.
  */
-fun enableActivityAlias(context: Context)
+fun isUserUnlocked(context: Context): Boolean
 {
-	// Build the component name
-	val aliasName = "${context.packageName}.main.NacMainAliasActivity"
-	val componentName = ComponentName(context, aliasName)
-
-	// Enable the alias
-	context.packageManager.setComponentEnabledSetting(componentName,
-		PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-		PackageManager.DONT_KILL_APP)
+	// Check the status
+	return UserManagerCompat.isUserUnlocked(context)
 }
 
 /**

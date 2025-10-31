@@ -5,15 +5,13 @@ import android.content.Intent
 import android.os.Bundle
 import android.provider.AlarmClock
 import androidx.core.net.toUri
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.shared.NacSharedPreferences
-import com.nfcalarmclock.timer.db.NacTimer
 import com.nfcalarmclock.system.media.buildLocalMediaPath
 import com.nfcalarmclock.system.media.getMediaArtist
 import com.nfcalarmclock.system.media.getMediaTitle
 import com.nfcalarmclock.system.media.getMediaType
+import com.nfcalarmclock.timer.db.NacTimer
 import java.util.Calendar
 
 /**
@@ -244,39 +242,4 @@ fun Intent.getTimer(): NacTimer?
 
 	// Get the alarm from the bundle
 	return bundle?.getTimer()
-}
-
-/**
- * Store any NFC intent in a LiveData singleton object so it can be saved in an activity
- * and observed in whichever fragment is visible.
- */
-object NacNfcIntent
-{
-
-	/**
-	 * The NFC intent as mutable LiveData. Keep private so that only this object is able
-	 * to modify it.
-	 */
-	private val mutableLiveData: MutableLiveData<Intent> = MutableLiveData<Intent>()
-
-	/**
-	 * The NFC intent LiveData that is publically available.
-	 */
-	val liveData: LiveData<Intent> = mutableLiveData
-
-	/**
-	 * The NFC intent LiveData that is publically available.
-	 */
-	var lastValue: Intent? = null
-		private	set
-
-	/**
-	 * The NFC intent LiveData that is publically available.
-	 */
-	fun update(newIntent: Intent)
-	{
-		mutableLiveData.value = newIntent
-		lastValue = newIntent
-	}
-
 }
