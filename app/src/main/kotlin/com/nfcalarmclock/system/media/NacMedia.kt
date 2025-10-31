@@ -817,7 +817,6 @@ object NacMedia
 	fun buildMediaItemFromFile(context: Context, uri: Uri): MediaItem
 	{
 		val path = uri.toString()
-		println("Media path : $path | Uri : $uri")
 
 		// Get media information
 		val artist = uri.getMediaArtist(context)
@@ -860,12 +859,6 @@ object NacMedia
 		// Get all the files in the directory
 		val files = getFiles(context, path, recursive = recursive).toMutableList()
 
-		println("BEFORE SHUFFLE")
-		files.forEach {
-			val path = it.toString()
-			println("Media path : $path | Uri : $it")
-		}
-
 		// Shuffle the files
 		if (shuffle)
 		{
@@ -873,7 +866,6 @@ object NacMedia
 		}
 
 		// Build list of media items and return it
-		println("AFTER SHUFFLE")
 		return buildMediaItemsFromFiles(context, files)
 	}
 

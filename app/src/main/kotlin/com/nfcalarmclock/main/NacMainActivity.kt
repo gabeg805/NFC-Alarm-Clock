@@ -48,7 +48,7 @@ import com.nfcalarmclock.system.permission.NacPermissionRequestManager
 import com.nfcalarmclock.system.registerMyShutdownBroadcastReceiver
 import com.nfcalarmclock.system.scheduler.NacScheduler
 import com.nfcalarmclock.system.toBundle
-import com.nfcalarmclock.system.triggers.shutdown.NacShutdownBroadcastReceiver
+import com.nfcalarmclock.system.broadcasts.shutdown.NacShutdownBroadcastReceiver
 import com.nfcalarmclock.system.unregisterMyReceiver
 import com.nfcalarmclock.timer.NacShowTimersFragment
 import com.nfcalarmclock.timer.NacTimerViewModel
@@ -308,7 +308,6 @@ class NacMainActivity
 	{
 		// Setup
 		super.onCreate(savedInstanceState)
-		println("Main activity onCreate()")
 
 		// Move the shared preference to device protected storage
 		NacSharedPreferences.moveToDeviceProtectedStorage(this)
@@ -376,7 +375,6 @@ class NacMainActivity
 	{
 		// Super
 		super.onNewIntent(intent)
-		println("Main activity onNewIntent()")
 
 		// Set the intent
 		setIntent(intent)
@@ -389,7 +387,6 @@ class NacMainActivity
 	{
 		// Super
 		super.onPause()
-		println("Main activity onPause()")
 
 		// Cleanup
 		unregisterMyReceiver(this, shutdownBroadcastReceiver)
@@ -407,7 +404,6 @@ class NacMainActivity
 	{
 		// Super
 		super.onResume()
-		println("Main activity onResume()")
 
 		lifecycleScope.launch {
 
@@ -417,12 +413,9 @@ class NacMainActivity
 			// An NFC tag was scanned to open up the main activity
 			if (NacNfc.wasScanned(intent))
 			{
-				println("Updating NFC intent. Current destination : ${navController.currentDestination}")
-
 				// Active alarm
 				if (activeAlarm != null)
 				{
-					println("Attempt to dismiss alarm with NFC")
 					// Remove the grant URI permissions in the untrusted intent
 					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
 					{
@@ -434,7 +427,6 @@ class NacMainActivity
 					if (((intent.flags and Intent.FLAG_GRANT_READ_URI_PERMISSION) == 0) &&
 						((intent.flags and Intent.FLAG_GRANT_WRITE_URI_PERMISSION) == 0))
 					{
-						println("Show alarms start alarm activity")
 						// Start the alarm activity with the intent containing the NFC tag
 						// information in order to dismiss this alarm
 						NacActiveAlarmActivity.startAlarmActivity(this@NacMainActivity, intent, activeAlarm)
@@ -445,12 +437,12 @@ class NacMainActivity
 				{
 					// Put the ID of the NFC tag that was scanned in a bundle
 					val nfcId = NacNfc.parseId(intent)!!
-					val bundle = Bundle().apply { putString(SCANNED_NFC_TAG_ID_BUNDLE_NAME, nfcId) }
 					val destinationId = navController.currentDestination?.id
 
+					// Get the current fragment
 					val currentFragment = navHostFragment.childFragmentManager.primaryNavigationFragment
-					println("Current fragment : $currentFragment")
 
+					// Determine what to do based on the current destination
 					when (destinationId)
 					{
 
@@ -458,8 +450,6 @@ class NacMainActivity
 						R.id.nacShowTimersFragment ->
 						{
 							val fragment = currentFragment as NacShowTimersFragment
-
-							println("Attempting to dismiss jank show timers instead of navigate : $nfcId")
 							fragment.attemptDismissWithScannedNfc(nfcId)
 						}
 
@@ -467,25 +457,26 @@ class NacMainActivity
 						R.id.nacActiveTimerFragment ->
 						{
 							val fragment = currentFragment as NacActiveTimerFragment
-
-							println("Attempting to dismiss jank active timer instead of navigate : $nfcId")
 							fragment.attemptDismissWithScannedNfc(nfcId)
 						}
 
 						// Something else
 						else ->
 						{
-							println("Navigate to show timers with the bundle : $nfcId")
+							// Add the NFC tag that was scanned to a bundle
+							val bundle = Bundle().apply {
+								putString(SCANNED_NFC_TAG_ID_BUNDLE_NAME, nfcId)
+							}
+
 							// Navigate to show timers passing in the NFC tag ID
 							navController.navigate(R.id.action_global_nacShowTimersFragment, bundle)
 						}
 
 					}
 				}
-				// Start a timer from an NFC tag
+				// TODO: Start a timer from an NFC tag
 				else
 				{
-					println("Start a timer from an NFC tag?")
 				}
 			}
 			else
@@ -493,7 +484,6 @@ class NacMainActivity
 				// Show the active alarm activity
 				if (activeAlarm != null)
 				{
-					println("Main activity and NFC was NOT scanned. Start the active alarm activity : ${activeAlarm.id}")
 					NacActiveAlarmActivity.startAlarmActivity(this@NacMainActivity, activeAlarm)
 				}
 			}
@@ -747,20 +737,16 @@ class NacMainActivity
 		// Destination changed listener
 		navController.addOnDestinationChangedListener { controller, destination, arguments ->
 
-			println("Changeing destination : ${destination.label}")
-
 			// Set the bottom navigation visibility based on the current destination
 			bottomNavigation.visibility = if ((destination.id == R.id.nacAlarmMainMediaPickerFragment)
 				|| (destination.id == R.id.nacTimerMainMediaPickerFragment)
 				|| (destination.id == R.id.nacActiveTimerFragment))
 			{
-				println("Hiding bottom nav media")
 				// Media picker
 				View.GONE
 			}
 			else
 			{
-				println("SHOWING bottom nav")
 				// Everything else
 				View.VISIBLE
 			}
@@ -772,7 +758,6 @@ class NacMainActivity
 			{
 				if (bottomNavigation.translationY != 0f)
 				{
-					println("SLIDE UP")
 					bottomNavigation.slideUp()
 				}
 			}
@@ -855,13 +840,6 @@ class NacMainActivity
 				// Unknown
 				else -> false
 			}
-
-		}
-
-		navHostFragment.view?.addOnLayoutChangeListener { v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom ->
-
-			println("Left : $left | Top : $top | Right : $right | Bottom : $bottom")
-			println("Old l: $oldLeft | Old t: $oldTop | Old r : $oldRight | Old b: $oldBottom")
 
 		}
 	}

@@ -169,7 +169,7 @@ class NacActiveTimerFragment
 	private val onBackPressedCallback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
 		override fun handleOnBackPressed()
 		{
-			println("On back pressed!")
+			// Go back to the show timers fragment
 			findNavController().popBackStack(R.id.nacShowTimersFragment, false)
 		}
 	}
@@ -185,7 +185,6 @@ class NacActiveTimerFragment
 			 */
 			override fun onCountdownFinished(timer: NacTimer)
 			{
-				println("DONE WITH THE COUNTDOWN")
 				// Change the seconds text and progress to indicate done
 				secondsTextView.text = resources.getString(R.string.number0)
 				progressIndicator.animateProgress(progressIndicator.progress, 0, 250,
@@ -215,7 +214,6 @@ class NacActiveTimerFragment
 			 */
 			override fun onCountdownReset(timer: NacTimer, secUntilFinished: Long)
 			{
-				println("COUNTDOWN RESET : $secUntilFinished")
 				// Reset progress back to 0
 				progressIndicator.animateProgress(progressIndicator.progress, 0, 250,
 					onEnd = {
@@ -233,12 +231,12 @@ class NacActiveTimerFragment
 			 */
 			override fun onCountdownTick(timer: NacTimer, secUntilFinished: Long, newProgress: Int)
 			{
-				println("COUNTDOWN Tick")
+				// Animation is still running so do nothing
 				if (isRunningStartingAnimation)
 				{
-					println("Still running the starting animation for : ${timer.id}")
 					return
 				}
+
 				// Update the views
 				setResumeVisibility()
 				updateHourMinuteSecondsTextViews(secUntilFinished)
@@ -254,8 +252,6 @@ class NacActiveTimerFragment
 	 */
 	private val onCountupTickListener: NacActiveTimerService.OnCountupTickListener = NacActiveTimerService.OnCountupTickListener { timer, secOfRinging ->
 
-		println("On countup tick : $secOfRinging")
-
 		// Update the time
 		updateHourMinuteSecondsTextViews(secOfRinging)
 
@@ -266,10 +262,10 @@ class NacActiveTimerFragment
 	 */
 	private val onServiceStoppedListener: NacActiveTimerService.OnServiceStoppedListener =
 		NacActiveTimerService.OnServiceStoppedListener {
-			println("THIS JANK IS GETTING STOPPED RIGHT NOW. NEED TO DO SOMETHING")
 
 			// Navigate back to show timers
 			findNavController().popBackStack(R.id.nacShowTimersFragment, false)
+
 		}
 
 	/**
@@ -286,14 +282,11 @@ class NacActiveTimerFragment
 			// Get the progress and seconds
 			val secUntilFinished = service!!.getSecUntilFinished(timer)
 			val progress = service!!.getProgress(timer)
-			println("Active Fragment SERVICE IS NOW CONNECTED : $progress | ${timer.id}")
 
 			// This is the first tick of the countdown timer, while the service is
 			// connected to this fragment
 			if (service!!.allIsFirstTick[timer.id]!!)
 			{
-				println("Progress first tick : ${progressIndicator.progress}")
-
 				// Update the hour, minute, and seconds textviews
 				updateHourMinuteSecondsTextViews(secUntilFinished)
 
@@ -311,8 +304,6 @@ class NacActiveTimerFragment
 				// Ringing
 				if (service!!.isTimerRinging(timer))
 				{
-					println("YO : ${timer.id} | RINGING")
-
 					// Get the seconds that the timer has been ringing
 					val secOfRinging = service!!.getSecOfRinging(timer)
 
@@ -327,8 +318,6 @@ class NacActiveTimerFragment
 				// Paused
 				else if (service!!.isTimerPaused(timer))
 				{
-					println("YO : ${timer.id}| PAUSED")
-
 					// Update the views
 					updateHourMinuteSecondsTextViews(secUntilFinished)
 					setPauseVisibility()
@@ -337,8 +326,6 @@ class NacActiveTimerFragment
 				// Active
 				else if (service!!.isTimerActive(timer))
 				{
-					println("YO : ${timer.id}| ACTIVE")
-
 					// Update the views
 					updateHourMinuteSecondsTextViews(secUntilFinished)
 					setResumeVisibility()
@@ -347,7 +334,6 @@ class NacActiveTimerFragment
 				// Reset, not doing anything
 				else
 				{
-					println("YO reset? ${timer.id} | NORMAL")
 					setResetVisibility()
 					progressIndicator.progress = 0
 				}
@@ -372,18 +358,18 @@ class NacActiveTimerFragment
 	 */
 	fun attemptDismissWithScannedNfc(nfcId: String)
 	{
+		// Get the context
 		val context = requireContext()
-		println("attemptDismissWithScannedNfc() : $nfcId")
 
 		// NFC tag was scanned so check if it is able to dismiss the timer
 		if (NacNfc.canDismissWithScannedNfc(context, timer, nfcId, nfcTags))
 		{
-			println("NFC PASSED SCAN CHECK DISMISS THIS YO")
 			// Dismiss the service
 			service?.dismiss(timer)
 		}
 
-		// Setup the scan NFC tag textview
+		// Setup the scan NFC tag textview, in the event that more NFC tags need to be
+		// scanned
 		setupScanNfcTagTextView()
 	}
 
@@ -396,7 +382,6 @@ class NacActiveTimerFragment
 		savedInstanceState: Bundle?
 	): View?
 	{
-		println("Active timer onCreateView()")
 		return inflater.inflate(R.layout.frg_active_timer, container, false)
 	}
 
@@ -407,27 +392,24 @@ class NacActiveTimerFragment
 	{
 		// Super
 		super.onResume()
-		println("Active timer onResume()")
 
 		// Attempt to get the ID of an NFC tag that was scanned
 		val nfcId = arguments?.getString(SCANNED_NFC_TAG_ID_BUNDLE_NAME)
 
 		lifecycleScope.launch {
 
-			// Populate the NFC tags list since NFC is required for this timer
-			if ((timer.shouldUseNfc) && (nfcTags == null))
+			// Populate the NFC tags list
+			if (nfcTags == null)
 			{
 				// Get the list of NFC tags that can be used to dismiss the timer, and
-				// order them based on how the user wants them ordered
+				// order them based on how the user wants them ordered. If NFC is not
+				// required, this will just be an empty list
 				nfcTags = timer.getNfcTagsForDismissing(nfcTagViewModel)
-				println("NFC Tags:")
-				nfcTags?.forEach { println("${it.nfcId} | ${it.name}") }
 			}
 
 			// NFC was scanned
 			if (nfcId != null)
 			{
-				println("NFC was scanned before the active timer was launched! $nfcId")
 				// Attempt to dismiss the timer with the NFC tag
 				attemptDismissWithScannedNfc(nfcId)
 
@@ -435,6 +417,10 @@ class NacActiveTimerFragment
 				// fragment is redrawn
 				arguments?.remove(SCANNED_NFC_TAG_ID_BUNDLE_NAME)
 			}
+
+			// Setup the scan NFC tag textview, in the event that NFC tags was populated
+			// above and/or NFC was scanned and more NFC tags need to be scanned
+			setupScanNfcTagTextView()
 		}
 	}
 
@@ -447,7 +433,6 @@ class NacActiveTimerFragment
 		super.onStart()
 
 		// Bind to the active timer service
-		println("Active timer onStart()")
 		requireContext().bindToService(NacActiveTimerService::class.java, serviceConnection)
 	}
 
@@ -459,7 +444,6 @@ class NacActiveTimerFragment
 		// Super
 		super.onStop()
 
-		println("Active timer onStop()")
 		// Remove the back press callback
 		onBackPressedCallback.remove()
 
@@ -480,11 +464,9 @@ class NacActiveTimerFragment
 	{
 		// Super
 		super.onViewCreated(view, savedInstanceState)
-		println("Active timer onViewCreated()")
 
 		// Get the timer
 		val t = arguments?.getTimer()
-		println("Timer : ${t?.id} | $t")
 
 		// Set the timer
 		if (t != null)
@@ -768,7 +750,6 @@ class NacActiveTimerFragment
 		{
 			null
 		}
-		println("NFC Names : $nfcTagNames")
 
 		// Set the name of the NFC tags that are needed to dismiss the timer
 		scanNfcTextView.text = nfcTagNames ?: resources.getString(R.string.title_scan_nfc_tag)

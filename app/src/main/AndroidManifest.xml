@@ -171,7 +171,7 @@
 
 		<!-- Restore alarms on boot -->
 		<receiver
-			android:name=".system.triggers.startup.NacStartupBroadcastReceiver"
+			android:name=".system.broadcasts.startup.NacStartupBroadcastReceiver"
 			android:directBootAware="true"
 			android:enabled="true"
 			android:exported="false"
@@ -188,7 +188,7 @@
 
 		<!-- Shutdown active alarms on boot -->
 		<receiver
-			android:name=".system.triggers.shutdown.NacShutdownBroadcastReceiver"
+			android:name=".system.broadcasts.shutdown.NacShutdownBroadcastReceiver"
 			android:enabled="true"
 			android:exported="false">
 
@@ -203,7 +203,7 @@
 
 		<!-- Change alarms when time changes. -->
 		<receiver
-			android:name=".system.triggers.timechange.NacTimeChangeBroadcastReceiver"
+			android:name=".system.broadcasts.timechange.NacTimeChangeBroadcastReceiver"
 			android:enabled="true"
 			android:exported="false">
 
@@ -228,7 +228,7 @@
 
 		<!-- Restore alarms after the app is updated. Alarms are lost after an update -->
 		<receiver
-			android:name=".system.triggers.appupdate.NacAppUpdatedBroadcastReceiver"
+			android:name=".system.broadcasts.appupdate.NacAppUpdatedBroadcastReceiver"
 			android:enabled="true"
 			android:exported="false">
 

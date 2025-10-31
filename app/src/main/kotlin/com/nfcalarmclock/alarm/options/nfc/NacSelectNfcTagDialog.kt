@@ -18,6 +18,7 @@ import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.NacGenericAlarmOptionsDialog
 import com.nfcalarmclock.nfc.db.NacNfcTag
 import com.nfcalarmclock.nfc.NacNfcTagViewModel
+import com.nfcalarmclock.nfc.setNfcTagIds
 import com.nfcalarmclock.view.calcAlpha
 import com.nfcalarmclock.view.setTextFromIndex
 import com.nfcalarmclock.view.setupInputLayoutColor
@@ -96,7 +97,8 @@ open class NacSelectNfcTagDialog
 	 */
 	override fun onOkClicked(alarm: NacAlarm?)
 	{
-		alarm?.nfcTagId = selectedNfcTags.joinToString(" || ") { it.nfcId }
+		//alarm?.nfcTagId = selectedNfcTags.joinToString(" || ") { it.nfcId }
+		alarm?.setNfcTagIds(selectedNfcTags)
 		alarm?.shouldUseNfcTagDismissOrder = dismissOrderSwitch.isChecked
 		alarm?.nfcTagDismissOrder = NacAlarm.calcNfcTagDismissOrderFromIndex(selectedDismissOrder)
 	}

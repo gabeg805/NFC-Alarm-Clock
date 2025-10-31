@@ -180,6 +180,45 @@ fun NacAlarm.getNfcTagNamesForDismissing(nfcTags: MutableList<NacNfcTag>): Strin
 }
 
 /**
+ * Remove an NFC tag if it is being used.
+ *
+ * @return True if the NFC tag was removed, and False otherwise.
+ */
+fun NacAlarm.removeNfcTag(nfcTag: NacNfcTag): Boolean
+{
+	// NFC ID matches
+	if (this.nfcTagId == nfcTag.nfcId)
+	{
+		// Clear the NFC tag ID
+		this.nfcTagId = ""
+
+	}
+	// NFC ID is in the list of NFC tags
+	else if (this.nfcTagIdList.contains(nfcTag.nfcId))
+	{
+		// Remove the NFC ID, but keep the rest of the list
+		this.nfcTagId = this.nfcTagIdList
+			.filter { it != nfcTag.nfcId }
+			.joinToString(" || ")
+	}
+	// No matching NFC tag
+	else
+	{
+		return false
+	}
+
+	return true
+}
+
+/**
+ * Set the NFC tag IDs from a list.
+ */
+fun NacAlarm.setNfcTagIds(nfcTags: List<NacNfcTag>)
+{
+	this.nfcTagId = nfcTags.joinToString(" || ") { it.nfcId }
+}
+
+/**
  * Whether NFC should be used with the alarm.
  *
  * @return True if NFC should be used, and False otherwise.

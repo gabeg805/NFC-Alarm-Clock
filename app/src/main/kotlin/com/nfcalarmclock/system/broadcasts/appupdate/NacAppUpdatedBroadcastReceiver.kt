@@ -1,4 +1,4 @@
-package com.nfcalarmclock.system.triggers.appupdate
+package com.nfcalarmclock.system.broadcasts.appupdate
 
 import android.content.BroadcastReceiver
 import android.content.Context

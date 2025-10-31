@@ -168,6 +168,22 @@ open class NacScanNfcTagDialog
 				navController.navigate(destinationId, newArgs, this@NacScanNfcTagDialog,
 					onBackStackPopulated = {
 
+						println("NFC SCANNED AND TRYING TO SAVE")
+						// Check if there was a previous dialog being shown before this one
+						if (navController.previousBackStackEntry != null)
+						{
+							println("Quick check Saving jank from previous back stack entry")
+							//// Save the change so that it is accessible in the previous dialog
+							//navController.previousBackStackEntry?.savedStateHandle?.set("YOYOYO", alarm)
+						}
+						// No previous dialog. This is a quick alarm option
+						else
+						{
+							println("Quick check Saving jank from current back stack")
+							//// Save to the current dialog
+							//navController.currentBackStackEntry?.savedStateHandle?.set("YOYOYO", alarm)
+						}
+
 						// Get the alarm from the select NFC tag dialog
 						val a = navController.currentBackStackEntry?.savedStateHandle?.get<NacAlarm>("YOYOYO")
 
@@ -259,8 +275,9 @@ open class NacScanNfcTagDialog
 		// Setup the button
 		setupSecondaryButton(useAnyButton, listener = {
 
-			// Clear the NFC tag ID
+			// Clear the NFC tag ID and NFC tag dismiss order
 			alarm?.nfcTagId = ""
+			alarm?.shouldUseNfcTagDismissOrder = false
 
 			// Save the alarm and dismiss
 			onSaveAlarm(alarm)

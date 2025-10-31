@@ -271,7 +271,6 @@ class NacActiveTimerService
 		// Add time to the milliseconds until finished
 		millisUntilFinished += sec*1000
 		allMillisUntilFinished[timer.id] = millisUntilFinished
-		println("New millis : $millisUntilFinished")
 
 		// Time until finished exceeds the total time. Update the total time to match the
 		// new time until finished. Use seconds until finished because it rounds up, in
@@ -279,7 +278,6 @@ class NacActiveTimerService
 		if (totalDurationMillis < millisUntilFinished)
 		{
 			allTotalDurationMillis[timer.id] = getSecUntilFinished(timer) * 1000
-			println("Updated total duration to match millis : ${allTotalDurationMillis[timer.id]}")
 		}
 
 		// Start the countdown
@@ -462,7 +460,6 @@ class NacActiveTimerService
 			cleanup(timer)
 
 			// Call the stop listener(s)
-			println("dismiss() Calling stop yo listener : ${timer.id}")
 			allOnServiceStoppedListeners[timer.id]?.forEach { it.onServiceStopped(timer) }
 
 			// Show toast that the timer was dismissed and stop the service
@@ -473,13 +470,11 @@ class NacActiveTimerService
 			// Repeat timer
 			if (timer.shouldRepeat)
 			{
-				println("TIMER REPEATS RESTART IT")
 				startTimerService(this@NacActiveTimerService, timer)
 			}
 			// Timer does not repeat and there are no more timers using the service
 			else if (allTimers.isEmpty())
 			{
-				println("STOPPING ACTIVE YO VERY COOL")
 				stopThisService()
 			}
 
@@ -595,9 +590,6 @@ class NacActiveTimerService
 		// Super
 		super.onDestroy()
 
-		//// Disable the activity alias so that tapping an NFC tag will not do anything
-		//disableActivityAlias(this)
-
 		// Update the timer so it is no longer marked as active in the database
 		lifecycleScope.launch {
 			allTimers.forEach { t ->
@@ -610,7 +602,6 @@ class NacActiveTimerService
 				cleanup(t)
 
 				// Call the stop listener(s)
-				println("onDestroy() Calling stop yo listener : ${t.id}")
 				allOnServiceStoppedListeners[t.id]?.forEach { it.onServiceStopped(t) }
 
 			}
@@ -627,23 +618,18 @@ class NacActiveTimerService
 		// Super
 		super.onStartCommand(intent, flags, startId)
 
-		// Setup the service
-		//setupActiveTimerService(intent)
 		// Attempt to get the timer from the intent
 		val timer = intent?.getTimer()
 
-		println("INTENT ACTION : ${intent?.action} | ${allTimers.forEach { it.id }}")
 		// Set the new timer for this service
 		if (timer != null)
 		{
 			// Add the timer to the list
 			if (allTimers.none { it.id == timer.id })
 			{
-				println("ADDING TIMER : ${timer.id}")
 				allTimers.add(timer)
 				allIsFirstTick[timer.id] = true
 			}
-			//timer = intentTimer
 		}
 		else
 		{
@@ -788,7 +774,6 @@ class NacActiveTimerService
 		// Notification already is shown for this timer
 		if (timer.id in allNotifications)
 		{
-			println("NOT SHOWING NOTIFICATION BECAUSE ALREADY BEING SHOWN")
 			return
 		}
 
@@ -823,8 +808,7 @@ class NacActiveTimerService
 	 */
 	fun startCountdownTimer(timer: NacTimer)
 	{
-		// Get the times
-		val totalDurationMillis = allTotalDurationMillis[timer.id]!!
+		// Get the time until finished
 		val millisUntilFinished = allMillisUntilFinished[timer.id]!!
 
 		// Activate the timer as active if the timer was previously reset and thus marked
@@ -851,7 +835,6 @@ class NacActiveTimerService
 				this@NacActiveTimerService.allMillisUntilFinished[timer.id] = millisUntilFinished
 				val secUntilFinished = getSecUntilFinished(timer)
 				val progress = getProgress(timer)
-				println("Service on tick : $millisUntilFinished | $secUntilFinished | Total : ${totalDurationMillis / 1000L} | $progress | ${allIsFirstTick[timer.id]}")
 
 				// Update the notification
 				updateNotification(timer)
@@ -873,8 +856,6 @@ class NacActiveTimerService
 			@RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
 			override fun onFinish()
 			{
-				println("SERVICE DONE WITH COUNTDOWN : ${timer.id} | ${timer.isActive}")
-
 				// Set the milliseconds until finished
 				this@NacActiveTimerService.allMillisUntilFinished[timer.id] = 0
 
@@ -916,7 +897,6 @@ class NacActiveTimerService
 	{
 		// Set the time at which the timer started ringing
 		allTimerRingingStartTimeMillis[timer.id] = System.currentTimeMillis()
-		println("Start count up time : ${allTimerRingingStartTimeMillis[timer.id]}")
 
 		// Create a handler that will run every second and add it to the hashmap
 		allTimerRingingCountupHandlers[timer.id] = Handler(mainLooper)

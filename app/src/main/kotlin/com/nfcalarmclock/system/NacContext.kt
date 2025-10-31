@@ -10,7 +10,7 @@ import android.content.ServiceConnection
 import android.content.pm.PackageManager
 import androidx.core.content.ContextCompat
 import androidx.core.os.UserManagerCompat
-import com.nfcalarmclock.system.triggers.shutdown.NacShutdownBroadcastReceiver
+import com.nfcalarmclock.system.broadcasts.shutdown.NacShutdownBroadcastReceiver
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
@@ -46,7 +46,6 @@ fun createTimeTickReceiver(
  */
 fun disableActivityAlias(context: Context)
 {
-	println("DISABLE ACTIVITY ALIAS")
 	// Build the component name
 	val aliasName = "${context.packageName}.main.NacMainAliasActivity"
 	val componentName = ComponentName(context, aliasName)
@@ -63,7 +62,6 @@ fun disableActivityAlias(context: Context)
  */
 fun enableActivityAlias(context: Context)
 {
-	println("ENABLE ACTIVITY ALIAS")
 	// Build the component name
 	val aliasName = "${context.packageName}.main.NacMainAliasActivity"
 	val componentName = ComponentName(context, aliasName)

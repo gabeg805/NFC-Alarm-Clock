@@ -115,12 +115,14 @@ abstract class NacGenericAlarmOptionsDialog
 		// Check if there was a previous dialog being shown before this one
 		if (navController.previousBackStackEntry != null)
 		{
+			println("Saving jank from previous back stack entry")
 			// Save the change so that it is accessible in the previous dialog
 			navController.previousBackStackEntry?.savedStateHandle?.set("YOYOYO", alarm)
 		}
 		// No previous dialog. This is a quick alarm option
 		else
 		{
+			println("Saving jank from current back stack")
 			// Save to the current dialog
 			navController.currentBackStackEntry?.savedStateHandle?.set("YOYOYO", alarm)
 		}

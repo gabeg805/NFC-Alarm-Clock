@@ -34,12 +34,15 @@ import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import com.google.android.material.textview.MaterialTextView
 import com.nfcalarmclock.R
+import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmService.Companion.dismissAlarmService
+import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmService.Companion.startAlarmService
 import com.nfcalarmclock.alarm.card.NacAlarmCardAdapter
 import com.nfcalarmclock.alarm.card.NacAlarmCardAdapterLiveData
 import com.nfcalarmclock.alarm.card.NacAlarmCardHolder
 import com.nfcalarmclock.alarm.card.NacAlarmCardHolder.OnCardAlarmOptionsClickedListener
 import com.nfcalarmclock.alarm.card.NacAlarmCardHolder.OnCardCollapsedListener
 import com.nfcalarmclock.alarm.card.NacAlarmCardHolder.OnCardDaysChangedListener
+import com.nfcalarmclock.alarm.card.NacAlarmCardHolder.OnCardDismissClickedListener
 import com.nfcalarmclock.alarm.card.NacAlarmCardHolder.OnCardDismissEarlyClickedListener
 import com.nfcalarmclock.alarm.card.NacAlarmCardHolder.OnCardDismissOptionsClickedListener
 import com.nfcalarmclock.alarm.card.NacAlarmCardHolder.OnCardExpandedListener
@@ -90,6 +93,7 @@ import java.util.Calendar
 /**
  * Show all alarms.
  */
+@UnstableApi
 @AndroidEntryPoint
 class NacShowAlarmsFragment
 	: Fragment()
@@ -101,6 +105,21 @@ class NacShowAlarmsFragment
 	private val navController by lazy {
 		(childFragmentManager.findFragmentById(R.id.options_content) as NavHostFragment).navController
 	}
+
+	/**
+	 * Alarm view model.
+	 */
+	private val alarmViewModel: NacAlarmViewModel by viewModels()
+
+	/**
+	 * Statistic view model.
+	 */
+	private val statisticViewModel: NacAlarmStatisticViewModel by viewModels()
+
+	/**
+	 * NFC tag view model.
+	 */
+	private val nfcTagViewModel: NacNfcTagViewModel by viewModels()
 
 	/**
 	 * Shared preferences.
@@ -133,21 +152,6 @@ class NacShowAlarmsFragment
 	private lateinit var alarmCardAdapter: NacAlarmCardAdapter
 
 	/**
-	 * Alarm view model.
-	 */
-	private val alarmViewModel: NacAlarmViewModel by viewModels()
-
-	/**
-	 * Statistic view model.
-	 */
-	private val statisticViewModel: NacAlarmStatisticViewModel by viewModels()
-
-	/**
-	 * NFC tag view model.
-	 */
-	private val nfcTagViewModel: NacNfcTagViewModel by viewModels()
-
-	/**
 	 * Mutable live data for the alarm card that can be modified and sorted, or
 	 * not sorted, depending on the circumstance.
 	 *
@@ -159,21 +163,6 @@ class NacShowAlarmsFragment
 	 * Alarm card touch helper.
 	 */
 	private lateinit var alarmCardTouchHelper: NacAlarmCardTouchHelper
-
-	/**
-	 * Receiver for the time tick intent. This is called when the time increments
-	 * every minute.
-	 */
-	private val timeTickReceiver = createTimeTickReceiver { _, _ ->
-
-		println("Time tick receiver")
-		// Set the message for when the next alarm will be run
-		setNextAlarmMessage()
-
-		// Refresh alarms that will run soon
-		refreshAlarmsThatWillAlarmSoon()
-
-	}
 
 	/**
 	 * The IDs of alarms that were recently added.
@@ -225,6 +214,21 @@ class NacShowAlarmsFragment
 			// Check the size
 			return (currentSize+1 > maxAlarms)
 		}
+
+	/**
+	 * Receiver for the time tick intent. This is called when the time increments
+	 * every minute.
+	 */
+	private val timeTickReceiver = createTimeTickReceiver { _, _ ->
+
+		println("Time tick receiver")
+		// Set the message for when the next alarm will be run
+		setNextAlarmMessage()
+
+		// Refresh alarms that will run soon
+		refreshAlarmsThatWillAlarmSoon()
+
+	}
 
 	/**
 	 * Add an alarm to the database.
@@ -446,7 +450,6 @@ class NacShowAlarmsFragment
 	{
 		// Super
 		super.onResume()
-		println("Show alarms onResume()")
 
 		// Get the intent action and alarm from the fragment arguments bundle. These
 		// could be null, but if an action occurred, they will not be
@@ -456,7 +459,6 @@ class NacShowAlarmsFragment
 		// Alarm should be dismissed early
 		if ((action == ACTION_DISMISS_ALARM_EARLY) && (alarm != null))
 		{
-			println("Show alarms dismissAlarmEarlyFromIntent()")
 			dismissAlarmEarlyFromIntent(alarm)
 		}
 
@@ -478,7 +480,6 @@ class NacShowAlarmsFragment
 	{
 		// Setup
 		super.onViewCreated(view, savedInstanceState)
-		println("Show alarms onViewCreated()")
 
 		// Set member variables
 		val context = requireContext()
@@ -738,7 +739,6 @@ class NacShowAlarmsFragment
 			// setupRepeatButtonLongPress
 			// unskip/skipNextAlarm
 			card.onCardUpdatedListener = OnCardUpdatedListener { _, alarm ->
-				println("Card updated!")
 				showNextAlarm(card, alarm)
 				updateAlarm(alarm)
 			}
@@ -765,6 +765,24 @@ class NacShowAlarmsFragment
 
 			}
 
+			// Dismiss
+			card.onCardDismissClickedListener = OnCardDismissClickedListener { _, alarm ->
+
+				// Alarm uses NFC
+				if (alarm.shouldUseNfc)
+				{
+					// Start the alarm service
+					startAlarmService(context, alarm)
+				}
+				// NFC not required to dismiss the alarm
+				else
+				{
+					// Dismiss the alarm service
+					dismissAlarmService(context, alarm)
+				}
+
+			}
+
 			// Dismiss early
 			card.onCardDismissEarlyClickedListener = OnCardDismissEarlyClickedListener { _, alarm ->
 
@@ -780,7 +798,6 @@ class NacShowAlarmsFragment
 
 			// Days
 			card.onCardDaysChangedListener = OnCardDaysChangedListener { _, alarm ->
-				println("Card days changed!")
 				showNextAlarm(card, alarm)
 				updateAlarm(alarm)
 			}
@@ -816,8 +833,8 @@ class NacShowAlarmsFragment
 			card.onCardMediaClickedListener = OnCardMediaClickedListener { _, alarm ->
 
 				// Navigate to the media picker
-				println("Navigating to media picker jank")
-				findNavController().navigate(R.id.action_nacShowAlarmsFragment_to_nacAlarmMainMediaPickerFragment, alarm.toBundle())
+				findNavController().navigate(R.id.action_nacShowAlarmsFragment_to_nacAlarmMainMediaPickerFragment,
+					alarm.toBundle())
 
 			}
 

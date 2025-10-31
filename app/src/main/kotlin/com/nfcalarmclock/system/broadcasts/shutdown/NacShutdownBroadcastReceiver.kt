@@ -1,4 +1,4 @@
-package com.nfcalarmclock.system.triggers.shutdown
+package com.nfcalarmclock.system.broadcasts.shutdown
 
 import android.content.BroadcastReceiver
 import android.content.Context

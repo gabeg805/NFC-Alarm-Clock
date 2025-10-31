@@ -18,27 +18,25 @@ import android.widget.TextView
 import androidx.annotation.OptIn
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.content.ContextCompat
+import androidx.core.view.isGone
+import androidx.core.view.isVisible
 import androidx.media3.common.util.UnstableApi
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.color.MaterialColors
 import com.nfcalarmclock.R
-import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmService.Companion.dismissAlarmService
-import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmService.Companion.startAlarmService
 import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.card.NacBaseCardHolder
+import com.nfcalarmclock.card.NacHeightAnimator
 import com.nfcalarmclock.nfc.db.NacNfcTag
 import com.nfcalarmclock.system.NacCalendar.Day
-import com.nfcalarmclock.view.quickToast
+import com.nfcalarmclock.system.toDayString
 import com.nfcalarmclock.view.dayofweek.NacDayOfWeek
 import com.nfcalarmclock.view.dayofweek.NacDayOfWeek.OnWeekChangedListener
 import com.nfcalarmclock.view.performHapticFeedback
+import com.nfcalarmclock.view.quickToast
 import com.nfcalarmclock.view.setupProgressAndThumbColor
 import com.nfcalarmclock.view.setupRippleColor
 import com.nfcalarmclock.view.setupSwitchColor
-import androidx.core.view.isGone
-import androidx.core.view.isVisible
-import com.nfcalarmclock.card.NacBaseCardHolder
-import com.nfcalarmclock.card.NacHeightAnimator
-import com.nfcalarmclock.system.toDayString
 import java.util.EnumSet
 
 /**
@@ -80,6 +78,14 @@ class NacAlarmCardHolder(root: View)
 	fun interface OnCardDaysChangedListener
 	{
 		fun onCardDaysChanged(card: NacAlarmCardHolder, alarm: NacAlarm)
+	}
+
+	/**
+	 * Listener for when the dismiss button is clicked.
+	 */
+	fun interface OnCardDismissClickedListener
+	{
+		fun onCardDismissClicked(card: NacAlarmCardHolder, alarm: NacAlarm)
 	}
 
 	/**
@@ -373,6 +379,11 @@ class NacAlarmCardHolder(root: View)
 	 * Listener for when the days changed.
 	 */
 	var onCardDaysChangedListener: OnCardDaysChangedListener? = null
+
+	/**
+	 * Listener for when the dismiss button is clicked.
+	 */
+	var onCardDismissClickedListener: OnCardDismissClickedListener? = null
 
 	/**
 	 * Listener for when the dismiss early button is clicked.
@@ -1773,19 +1784,8 @@ class NacAlarmCardHolder(root: View)
 		// Set the listener
 		dismissButton.setOnClickListener { view ->
 
-			// Check if alarm uses NFC
-			if (alarm!!.shouldUseNfc)
-			{
-				// Start the alarm service
-				startAlarmService(context, alarm)
-			}
-			// Alarm does not require NFC to dismiss the alarm
-			else
-			{
-				// Dismiss the alarm service
-				// TODO: Can bind to service in Show Alarms and then catch a listener here that does both of these branches
-				dismissAlarmService(context, alarm)
-			}
+			// Call the listener
+			onCardDismissClickedListener?.onCardDismissClicked(this, alarm!!)
 
 			// Haptic feedback
 			view.performHapticFeedback()

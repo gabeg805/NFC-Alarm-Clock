@@ -506,8 +506,6 @@ abstract class NacAlarmDatabase
 
 		/**
 		 * Copy alarms from another database.
-		 *
-		 * TODO: Copy timers as well?
 		 */
 		private suspend fun copyAlarmsFromDb(
 			context: Context,
@@ -518,6 +516,8 @@ abstract class NacAlarmDatabase
 			// Get the dao
 			val alarmDao = db.alarmDao()
 			val alarmCreatedStatisticDao = db.alarmCreatedStatisticDao()
+
+			// Get the alarms
 			val allAlarms = alarmDao.getAllAlarms()
 
 			// Copy all the alarms
@@ -652,6 +652,9 @@ abstract class NacAlarmDatabase
 				// Copy all the alarms
 				copyAlarmsFromDb(context, db, importDb)
 
+				// Copy all the timers
+				copyTimersFromDb(db, importDb)
+
 				// Copy created statistics
 				copyCreatedStatisticsFromDb(db, importDb)
 
@@ -767,6 +770,37 @@ abstract class NacAlarmDatabase
 					catch (_: SQLiteConstraintException)
 					{
 					}
+				}
+
+			}
+		}
+
+		/**
+		 * Copy timers from another database.
+		 */
+		private suspend fun copyTimersFromDb(
+			db: NacAlarmDatabase,
+			importDb: NacAlarmDatabase
+		)
+		{
+			// Get the dao
+			val timerDao = db.timerDao()
+
+			// Get the timers
+			val allTimers = timerDao.getAllTimers()
+
+			// Copy all the timers
+			importDb.timerDao().getAllTimers().forEach { t ->
+
+				// Make sure none of the timers in the database already match the
+				// one that will be inserted
+				if (allTimers.all { !it.fuzzyEquals(t) })
+				{
+					// Clear the ID
+					t.id = 0
+
+					// Insert the timer
+					timerDao.insert(t)
 				}
 
 			}

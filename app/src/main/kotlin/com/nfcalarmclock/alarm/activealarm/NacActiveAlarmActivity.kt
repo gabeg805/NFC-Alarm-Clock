@@ -30,7 +30,7 @@ import com.nfcalarmclock.system.bindToService
 import com.nfcalarmclock.system.enableActivityAlias
 import com.nfcalarmclock.system.getAlarm
 import com.nfcalarmclock.system.registerMyShutdownBroadcastReceiver
-import com.nfcalarmclock.system.triggers.shutdown.NacShutdownBroadcastReceiver
+import com.nfcalarmclock.system.broadcasts.shutdown.NacShutdownBroadcastReceiver
 import com.nfcalarmclock.system.unregisterMyReceiver
 import com.nfcalarmclock.view.quickToast
 import dagger.hilt.android.AndroidEntryPoint

@@ -137,9 +137,12 @@ class NacShowTimersFragment
 	private val onCountdownTimerChangedListener: NacActiveTimerService.OnCountdownTimerChangedListener =
 		object : NacActiveTimerService.OnCountdownTimerChangedListener {
 
+			/**
+			 * Countdown finished.
+			 */
 			override fun onCountdownFinished(timer: NacTimer)
 			{
-				println("SHOW TIMERS DONE WITH THE COUNTDOWN : ${timer.id} | ${timer.isActive}")
+				// Get the card
 				val card = recyclerView.findViewHolderForItemId(timer.id) as NacTimerCardHolder? ?: return
 
 				// Change the seconds text and progress to indicate done
@@ -154,12 +157,13 @@ class NacShowTimersFragment
 						card.setStopVisibility()
 
 					})
-
 			}
 
+			/**
+			 * Countdown paused.
+			 */
 			override fun onCountdownPaused(timer: NacTimer)
 			{
-				println("SHOW TIMERS PAUSED TIMER")
 				// Get the card
 				val card = recyclerView.findViewHolderForItemId(timer.id) as NacTimerCardHolder? ?: return
 
@@ -167,9 +171,11 @@ class NacShowTimersFragment
 				card.setPauseVisibility()
 			}
 
+			/**
+			 * Countdown reset.
+			 */
 			override fun onCountdownReset(timer: NacTimer, secUntilFinished: Long)
 			{
-				println("SHOW TIMERS COUNTDOWN RESET : $secUntilFinished")
 				// Get the card
 				val card = recyclerView.findViewHolderForItemId(timer.id) as NacTimerCardHolder? ?: return
 
@@ -185,15 +191,17 @@ class NacShowTimersFragment
 					})
 			}
 
+			/**
+			 * Countdown tick every second.
+			 */
 			override fun onCountdownTick(timer: NacTimer, secUntilFinished: Long, newProgress: Int)
 			{
 				// Get the card
 				val card = recyclerView.findViewHolderForItemId(timer.id) as NacTimerCardHolder? ?: return
 
-				// Starting animation is still running. Do nothing yet
+				// Animation is still running so do nothing
 				if (isRunningStartingAnimation[timer.id] == true)
 				{
-					println("Still running the starting animation for : ${timer.id}")
 					return
 				}
 
@@ -226,16 +234,15 @@ class NacShowTimersFragment
 	 */
 	private val onServiceStoppedListener: NacActiveTimerService.OnServiceStoppedListener =
 		NacActiveTimerService.OnServiceStoppedListener { timer ->
-			println("YOYOYOYO JANK STOPPED NOW : ${timer.id}")
 
 			// Get the card
 			val card = recyclerView.findViewHolderForItemId(timer.id) as NacTimerCardHolder? ?: return@OnServiceStoppedListener
 
-			println("REeseting the timer animation jank")
 			// Update views back to normal
 			card.setResetVisibility()
 			card.updateHourMinuteSecondsTextViews(timer.duration)
 			card.resetTimerRingingAnimation(requireContext())
+
 		}
 
 	/**
@@ -248,10 +255,11 @@ class NacShowTimersFragment
 			// Set the active timer service
 			val binder = serviceBinder as NacActiveTimerService.NacLocalBinder
 			service = binder.getService()
-			println("Show timers SERVICE IS NOW CONNECTED")
-			// TODO: Null pointer exception when screen turns off and then on again and onTick() is called again? Line 150 in Active timer from show timers.... weird
 
 			// TODO: Repeat toast to explain what that does for timers
+			// TODO: When removing an NFC tag, make sure to check the nFC tag ID list and remove it there too
+			// TODO: When scanning an NFC tag and it has no name, it does not show up in the Scan NFC Tag list
+			// TODO: When using "Use any NFC" clear the dismiss order flag
 
 			// Initialize each timer being used by the service
 			service!!.allTimersReadOnly.forEach { timer ->
@@ -319,12 +327,11 @@ class NacShowTimersFragment
 	 */
 	private fun addTimerFromSetTimerIntent(timer: NacTimer)
 	{
-		println("addTimerFromSetTimerIntent()")
 		addTimer(timer, onInsertListener = {
-			println("Hello added timer from set timer intent")
 
 			// Navigate to the edit timer fragment
 			findNavController().navigate(R.id.action_nacShowTimersFragment_to_nacEditTimerFragment, timer.toBundle())
+
 		})
 	}
 
@@ -472,15 +479,9 @@ class NacShowTimersFragment
 	 */
 	fun initTimerCard(card: NacTimerCardHolder)
 	{
-		// Get the progress and seconds
-		val progress = service!!.getProgress(card.timer!!)
-		println("Active Fragment SERVICE IS NOW CONNECTED : ${card.timer!!.id} | $progress")
-
 		// Ringing
 		if (service?.isTimerRinging(card.timer!!) == true)
 		{
-			println("Card : ${card.timer!!.id} | RINGING")
-
 			// Get the seconds that the timer has been ringing
 			val secOfRinging = service!!.getSecOfRinging(card.timer!!)
 
@@ -492,8 +493,6 @@ class NacShowTimersFragment
 		// Paused
 		else if (service?.isTimerPaused(card.timer!!) == true)
 		{
-			println("Card : ${card.timer!!.id}| PAUSED")
-
 			// Get the seconds until finished and current progress
 			val secUntilFinished = service!!.getSecUntilFinished(card.timer!!)
 			val progress = service!!.getProgress(card.timer!!)
@@ -506,7 +505,6 @@ class NacShowTimersFragment
 		// Active
 		else if (service?.isTimerActive(card.timer!!) == true)
 		{
-			println("Card : ${card.timer!!.id}| ACTIVE")
 			// Get the seconds until finished and current progress
 			val secUntilFinished = service!!.getSecUntilFinished(card.timer!!)
 			val progress = service!!.getProgress(card.timer!!)
@@ -515,11 +513,7 @@ class NacShowTimersFragment
 			card.updateHourMinuteSecondsTextViews(secUntilFinished)
 			card.setResumeVisibility()
 
-			if (isRunningStartingAnimation[card.timer!!.id] == true)
-			{
-				println("HELLOOOOOO Still running the starting animation for : ${card.timer!!.id}")
-			}
-			else
+			if (isRunningStartingAnimation[card.timer!!.id] != true)
 			{
 				card.progressIndicator.progress = progress
 			}
@@ -527,7 +521,6 @@ class NacShowTimersFragment
 		// Normal, not doing anything
 		else
 		{
-			println("Card bound : ${card.timer!!.id} | NORMAL")
 			card.setResetVisibility()
 		}
 	}
@@ -538,19 +531,14 @@ class NacShowTimersFragment
 	fun initTimerCard(timer: NacTimer)
 	{
 		// Get the card
-		val card = recyclerView.findViewHolderForItemId(timer.id) as NacTimerCardHolder?
+		val card = recyclerView.findViewHolderForItemId(timer.id) as NacTimerCardHolder? ?: return
 
-		if (card == null)
-		{
-			println("NOT DOING JANK MANG")
-			return
-		}
-
+		// Initialize the card
 		initTimerCard(card)
 	}
 
 	/**
-	 * Called to create the root view.
+	 * Create the view.
 	 */
 	override fun onCreateView(
 		inflater: LayoutInflater,
@@ -562,7 +550,7 @@ class NacShowTimersFragment
 	}
 
 	/**
-	 * Called when the activity is resumed.
+	 * Fragment is resumed.
 	 */
 	@SuppressLint("UnsafeIntentLaunch")
 	@OptIn(UnstableApi::class)
@@ -579,7 +567,6 @@ class NacShowTimersFragment
 		// Add timer that was created from the SET_TIMER intent
 		if ((action == AlarmClock.ACTION_SET_TIMER) && (timer != null))
 		{
-			println("Show timers addTimerFromSetTimerIntent()")
 			addTimerFromSetTimerIntent(timer)
 		}
 
@@ -734,14 +721,10 @@ class NacShowTimersFragment
 
 			// Navigate to the add timer fragment when there are no timers
 			lifecycleScope.launch {
-				println("Timers size : ${timers.size} | Count : ${timerViewModel.count()}")
-
 				if (timerViewModel.count() == 0)
 				{
-					println("GOING TO ADD TIMERS")
 					findNavController().navigate(R.id.nacAddTimerFragment)
 				}
-
 			}
 
 		}
@@ -837,7 +820,6 @@ class NacShowTimersFragment
 			// Initialize the card if the service has been bound
 			if (service?.isUsingTimer(card.timer!!) == true)
 			{
-				println("SERVICE STILL USING TIMER")
 				initTimerCard(card)
 			}
 
@@ -866,7 +848,6 @@ class NacShowTimersFragment
 
 			// Start timer listener
 			card.onStartTimerClickedListener = NacTimerCardHolder.OnStartTimerClickedListener { timer ->
-				println("Hello start : ${timer.id} = ${card.timer!!.id} | ${service?.isTimerActive(timer)} or ${timer.isActive} | ${service?.isTimerPaused(timer)}")
 
 				// Resume the timer
 				if (service?.isTimerPaused(timer) == true)

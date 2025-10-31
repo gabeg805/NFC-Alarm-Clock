@@ -14,8 +14,10 @@ import com.nfcalarmclock.alarm.options.nfc.NacDeleteNfcTagDialog
 import com.nfcalarmclock.nfc.NacNfcTagViewModel
 import com.nfcalarmclock.alarm.options.nfc.NacRenameNfcTagDialog
 import com.nfcalarmclock.nfc.db.NacNfcTag
+import com.nfcalarmclock.nfc.removeNfcTag
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.scheduler.NacScheduler
+import com.nfcalarmclock.timer.NacTimerViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -28,6 +30,21 @@ class NacNfcTagSettingFragment
 {
 
 	/**
+	 * NFC tag view model.
+	 */
+	private val nfcTagViewModel: NacNfcTagViewModel by viewModels()
+
+	/**
+	 * Alarm view model.
+	 */
+	private val alarmViewModel: NacAlarmViewModel by viewModels()
+
+	/**
+	 * Timer view model.
+	 */
+	private val timerViewModel: NacTimerViewModel by viewModels()
+
+	/**
 	 * RecyclerView containing the NFC tags.
 	 */
 	private lateinit var recyclerView: RecyclerView
@@ -38,17 +55,15 @@ class NacNfcTagSettingFragment
 	private lateinit var nfcTagAdapter: NacNfcTagAdapter
 
 	/**
-	 * Alarm view model.
+	 * Remove NFC ID from the item.
 	 */
-	private val alarmViewModel: NacAlarmViewModel by viewModels()
+	private fun removeNfcId()
+	{
+
+	}
 
 	/**
-	 * NFC tag view model.
-	 */
-	private val nfcTagViewModel: NacNfcTagViewModel by viewModels()
-
-	/**
-	 * Called when the view is created.
+	 * View is created.
 	 */
 	override fun onViewCreated(root: View, savedInstanceState: Bundle?)
 	{
@@ -105,21 +120,31 @@ class NacNfcTagSettingFragment
 					// Prepare to update any alarms that were using this NFC tag
 					lifecycleScope.launch {
 
-						// Get all alarms
+						// Get all alarms and timers
 						val allAlarms = alarmViewModel.getAllAlarms()
+						val allTimers = timerViewModel.getAllTimers()
 
-						// Iterate over each alarm
+						// Attempt to remove the NFC tag from any matching alarm
 						allAlarms.forEach { a ->
 
-							// Check if the NFC ID matches the alarm
-							if (a.nfcTagId == nfcTag.nfcId)
+							// NFC tag was removed
+							if (a.removeNfcTag(nfcTag))
 							{
-								// Clear the NFC tag ID for the alarm
-								a.nfcTagId = ""
-
 								// Update the alarm in the view model and scheduler
 								alarmViewModel.update(a)
 								NacScheduler.update(context, a)
+							}
+
+						}
+
+						// Attempt to remove the NFC tag from any matching timer
+						allTimers.forEach { t ->
+
+							// NFC tag was removed
+							if (t.removeNfcTag(nfcTag))
+							{
+								// Update the timer in the view model
+								timerViewModel.update(t)
 							}
 
 						}
