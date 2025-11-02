@@ -6,7 +6,7 @@
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
 		<item>12.6.0</item>
-		<item>Se agregó &lt;b>temporizador&lt;/b>.</item>
+		<item>Se agregó &lt;b>temporizador&lt;/b>.  También puede escanear etiquetas NFC para iniciar temporizadores.</item>
 		<item>Se han añadido opciones de repetición en la configuración de alarmas. Ahora es posible repetir una alarma por horas, días, semanas o meses.</item>
 		<item>Se ha añadido la opción &lt;b>fecha&lt;/b> para programar una alarma para una fecha específica. Disponible al seleccionar una hora.</item>
 		<item>Se agregó la función de &lt;b>repetición&lt;/b> con los &lt;b>botones de volumen&lt;/b>.</item>

@@ -256,9 +256,6 @@ class NacGeneralSettingFragment
 		// Alarm options
 		pref.onCardAlarmOptionsClickedListener = NacCardPreference.OnCardAlarmOptionsClickedListener { alarm ->
 
-			// Get the nav controller
-			//val navController = (activity as NacMainActivity).settingsNavController
-
 			// Show the alarm options dialog
 			NacAlarmOptionsDialog.navigate(navController, alarm)
 				?.observe(this) { a ->

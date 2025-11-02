@@ -73,7 +73,6 @@ class NacMainActivity
 {
 
 	// TODO: Add volume stop for timer
-	// TODO: Add note how dismiss order means you need to dismiss all the selected ones
 
 	/**
 	 * Nav host fragment.

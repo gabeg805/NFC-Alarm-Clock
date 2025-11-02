@@ -6,7 +6,7 @@
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
 		<item>12.6.0</item>
-		<item>Te ajoute &lt;b>minitè&lt;/b>.</item>
+		<item>Te ajoute &lt;b>minitè&lt;/b>.  Kapab eskane etikèt NFC pou kòmanse revèy tou.</item>
 		<item>Te ajoute opsyon &lt;b>repetisyon&lt;/b> nan paramèt alam yo. Ou ka repete yon alam pa èdtan, jou, semèn oswa mwa.</item>
 		<item>Te ajoute opsyon &lt;b>dat&lt;/b> pou fè yon alam sonnen nan yon dat patikilye. Aksesib lè w ap chwazi yon lè.</item>
 		<item>Te ajoute &lt;b>repeche son an&lt;/b> ak &lt;b>bouton volim&lt;/b>.</item>

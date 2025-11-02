@@ -1,0 +1,8 @@
+Added timer.
+Added repeat options in alarm settings. Can repeat an alarm by hours, days, weeks, or months.
+Added date option to have an alarm run on a particular date.
+Added snooze with volume buttons.
+Added dismiss NFC tags in order if multiple NFC tags are selected.  Can be dismissed in any, random, or sequential order.
+Added dismiss early notification.
+Added long press on the repeat, vibrate, NFC, and flashlight buttons to quickly access those options.
+Update to support Android 15.

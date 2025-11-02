@@ -566,36 +566,4 @@
 
 	<string name="tts_say_time">The time is %1$s:%2$s %3$s.</string>
 
-	<!--
-	<plurals name="repeat_minutely">
-	</plurals>
-
-	<plurals name="repeat_hourly">
-	</plurals>
-
-	<plurals name="repeat_daily">
-	</plurals>
-
-	<plurals name="repeat_weekly">
-	</plurals>
-
-	<plurals name="repeat_monthly">
-	</plurals>
-
-	<plurals name="standalone_unit_minute">
-	</plurals>
-
-	<plurals name="standalone_unit_hour">
-	</plurals>
-
-	<plurals name="standalone_unit_day">
-	</plurals>
-
-	<plurals name="standalone_unit_week">
-	</plurals>
-
-	<plurals name="standalone_unit_month">
-	</plurals>
-	-->
-
 </resources>

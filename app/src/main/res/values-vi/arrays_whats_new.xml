@@ -6,7 +6,7 @@
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
 		<item>12.6.0</item>
-		<item>Đã thêm &lt;b>bộ đếm thời gian&lt;/b>.</item>
+		<item>Đã thêm &lt;b>bộ đếm thời gian&lt;/b>.  Có thể quét thẻ NFC để bắt đầu hẹn giờ.</item>
 		<item>Đã thêm tùy chọn &lt;b>lặp lại&lt;/b> trong cài đặt báo thức. Có thể lặp lại báo thức theo giờ, ngày, tuần hoặc tháng.</item>
 		<item>Đã thêm tùy chọn &lt;b>ngày&lt;/b> để báo thức chạy vào một ngày cụ thể. Có thể truy cập khi chọn thời gian.</item>
 		<item>Đã thêm &lt;b>báo lại&lt;/b> với &lt;b>nút âm lượng&lt;/b>.</item>

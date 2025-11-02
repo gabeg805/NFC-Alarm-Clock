@@ -315,6 +315,7 @@ open class NacTextToSpeechDialog
 				val name = alarm?.name?.takeIf { it.isNotEmpty() } ?: ""
 
 				// Start TTS
+				// TODO: Check if "allVoices" is initialized before starting
 				startTextToSpeech(name)
 			}
 
