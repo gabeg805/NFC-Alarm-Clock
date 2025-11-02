@@ -7,6 +7,7 @@ import androidx.annotation.OptIn
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
+import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import androidx.preference.PreferenceManager
@@ -38,6 +39,13 @@ import kotlinx.coroutines.launch
 class NacGeneralSettingFragment
 	: NacBaseSettingFragment()
 {
+
+	/**
+	 * Settings navigation controller.
+	 */
+	val navController by lazy {
+		(requireActivity().supportFragmentManager.findFragmentById(R.id.settings_media_content) as NavHostFragment).navController
+	}
 
 	/**
 	 * NFC tag view model.
@@ -249,7 +257,7 @@ class NacGeneralSettingFragment
 		pref.onCardAlarmOptionsClickedListener = NacCardPreference.OnCardAlarmOptionsClickedListener { alarm ->
 
 			// Get the nav controller
-			val navController = (activity as NacMainSettingActivity).navController
+			//val navController = (activity as NacMainActivity).settingsNavController
 
 			// Show the alarm options dialog
 			NacAlarmOptionsDialog.navigate(navController, alarm)

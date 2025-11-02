@@ -27,6 +27,7 @@ import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.options.name.NacNameDialog
+import com.nfcalarmclock.nfc.NacNfcTagViewModel
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.NacCalendar
 import com.nfcalarmclock.system.addMediaInfo
@@ -74,6 +75,11 @@ abstract class NacBaseAddEditTimer
 	 * Timer view model.
 	 */
 	protected val timerViewModel: NacTimerViewModel by viewModels()
+
+	/**
+	 * NFC tag view model.
+	 */
+	protected val nfcTagViewModel: NacNfcTagViewModel by viewModels()
 
 	/**
 	 * Timer.
@@ -241,8 +247,6 @@ abstract class NacBaseAddEditTimer
 		// Navigate to the destination
 		NacTimerOptionsDialog.navigateTo(navController, destinationId, timer)
 			?.observe(viewLifecycleOwner) { t ->
-				println("NAVIGATE GOT TIMER : ${t.nfcTagId} | ${t.nfcTagIdList}")
-				println("Check duration : ${t.duration} | ${timer.duration}")
 				timer = t
 			}
 	}
@@ -427,6 +431,7 @@ abstract class NacBaseAddEditTimer
 		// Toggle on click
 		button.setOnClickListener {
 			timer.toggleUseFlashlight()
+			timer.toastFlashlight(requireContext())
 		}
 
 		// Show the quick navigate dialog on long click
@@ -682,6 +687,9 @@ abstract class NacBaseAddEditTimer
 		// Click listener
 		button.setOnClickListener {
 			timer.toggleUseNfc()
+			lifecycleScope.launch {
+				timer.toastNfc(requireContext(), nfcTagViewModel.getAllNfcTags())
+			}
 		}
 
 		// Show the quick navigate dialog on long click
@@ -794,6 +802,7 @@ abstract class NacBaseAddEditTimer
 		// Click listener
 		button.setOnClickListener {
 			timer.toggleRepeat()
+			timer.toastRepeat(requireContext())
 		}
 
 		// TODO: Should timer have repeat options on long click?
@@ -897,6 +906,7 @@ abstract class NacBaseAddEditTimer
 		// Click listener
 		button.setOnClickListener {
 			timer.toggleVibrate()
+			timer.toastVibrate(requireContext())
 		}
 
 		// Show the quick navigate dialog on long click

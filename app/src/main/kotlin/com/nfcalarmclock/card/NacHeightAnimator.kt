@@ -3,6 +3,7 @@ package com.nfcalarmclock.card
 import android.animation.ValueAnimator
 import android.animation.ValueAnimator.AnimatorUpdateListener
 import android.view.View
+import androidx.core.animation.addListener
 
 /**
  * Animator to expand or collapse a view.
@@ -48,6 +49,14 @@ class NacHeightAnimator @JvmOverloads constructor(
 	}
 
 	/**
+	 * Listener for when the animation has ended.
+	 */
+	fun interface OnAnimationEndedListener
+	{
+		fun onAnimationEnded(animator: NacHeightAnimator)
+	}
+
+	/**
 	 * Type of animation.
 	 */
 	enum class AnimationType
@@ -81,6 +90,11 @@ class NacHeightAnimator @JvmOverloads constructor(
 	 * Listener for when the view's height is expanding.
 	 */
 	var onAnimateExpandListener: OnAnimateExpandListener? = null
+
+	/**
+	 * Listener for when the animation has ended.
+	 */
+	var onAnimationEndedListener: OnAnimationEndedListener? = null
 
 	/**
 	 * The animated height.
@@ -124,6 +138,10 @@ class NacHeightAnimator @JvmOverloads constructor(
 	{
 		setHeights(fromHeight, toHeight)
 		addUpdateListener(this)
+		addListener(onEnd = {
+			onAnimationEndedListener?.onAnimationEnded(this)
+			onAnimationEndedListener = null
+		})
 	}
 
 	/**

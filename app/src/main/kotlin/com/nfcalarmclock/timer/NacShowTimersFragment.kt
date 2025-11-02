@@ -256,11 +256,6 @@ class NacShowTimersFragment
 			val binder = serviceBinder as NacActiveTimerService.NacLocalBinder
 			service = binder.getService()
 
-			// TODO: Repeat toast to explain what that does for timers
-			// TODO: When removing an NFC tag, make sure to check the nFC tag ID list and remove it there too
-			// TODO: When scanning an NFC tag and it has no name, it does not show up in the Scan NFC Tag list
-			// TODO: When using "Use any NFC" clear the dismiss order flag
-
 			// Initialize each timer being used by the service
 			service!!.allTimersReadOnly.forEach { timer ->
 				initTimerCard(timer)
@@ -347,14 +342,13 @@ class NacShowTimersFragment
 			var nonNfcTimer: NacTimer? = null
 			var anyNfcTimer: NacTimer? = null
 
-			println("Iterate over each active timer")
+			// Iterate over each active timer
 			allActiveTimers.forEach { t ->
 
 				// Timer does not use NFC so ignore
 				if (!t.shouldUseNfc)
 				{
 					nonNfcTimer = nonNfcTimer ?: t
-					println("Timer maybe using non NFC : ${nonNfcTimer.id}")
 					return@forEach
 				}
 
@@ -362,7 +356,6 @@ class NacShowTimersFragment
 				if (t.nfcTagId.isEmpty())
 				{
 					anyNfcTimer = anyNfcTimer ?: t
-					println("Timer can dismiss using ANY NFC tags : ${anyNfcTimer.id}")
 					return@forEach
 				}
 
@@ -372,15 +365,13 @@ class NacShowTimersFragment
 				// NFC tag list contains the NFC tag that was scanned
 				if (nfcTagIdList.contains(nfcId))
 				{
-					println("Timer : ${t.id} contains NFC tag : $nfcId | ${t.shouldUseNfcTagDismissOrder}")
 					if ((nfcTagIdList.size == 1) || !t.shouldUseNfcTagDismissOrder)
 					{
-						println("ONLY 1 NFC required for this timer! Dismiss this jank")
 						service?.dismiss(t)
 					}
 					else
 					{
-						println("Timer NEEDS more than 1 nFC jakn : $nfcTagIdList")
+						// Add the NFC tag ID to a bundle
 						val bundle = t.toBundle()
 							.apply {
 								putString(SCANNED_NFC_TAG_ID_BUNDLE_NAME, nfcId)
@@ -399,7 +390,6 @@ class NacShowTimersFragment
 			// Now try dismiss one of the timers that accepts any NFC tag to dismiss
 			if (anyNfcTimer != null)
 			{
-				println("DISMISSING ANY NFC TIMER : ${anyNfcTimer.id}")
 				service?.dismiss(anyNfcTimer)
 			}
 
@@ -407,7 +397,6 @@ class NacShowTimersFragment
 			// NFC, but NFC is still accepted to dismiss if a user wants to
 			if (nonNfcTimer != null)
 			{
-				println("DISMISSING NON NFC TIMER : ${nonNfcTimer.id}")
 				service?.dismiss(nonNfcTimer)
 			}
 		}
@@ -576,7 +565,6 @@ class NacShowTimersFragment
 		// NFC was scanned
 		if (nfcId != null)
 		{
-			println("NFC was scanned in onResume() of show timers! $nfcId")
 			// Attempt to dismiss the timer with the NFC tag
 			attemptDismissWithScannedNfc(nfcId)
 

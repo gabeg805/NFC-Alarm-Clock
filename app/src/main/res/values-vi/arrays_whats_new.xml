@@ -5,6 +5,17 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.6.0</item>
+		<item>Đã thêm &lt;b>bộ đếm thời gian&lt;/b>.</item>
+		<item>Đã thêm tùy chọn &lt;b>lặp lại&lt;/b> trong cài đặt báo thức. Có thể lặp lại báo thức theo giờ, ngày, tuần hoặc tháng.</item>
+		<item>Đã thêm tùy chọn &lt;b>ngày&lt;/b> để báo thức chạy vào một ngày cụ thể. Có thể truy cập khi chọn thời gian.</item>
+		<item>Đã thêm &lt;b>báo lại&lt;/b> với &lt;b>nút âm lượng&lt;/b>.</item>
+		<item>Đã thêm tùy chọn &lt;b>loại bỏ thẻ NFC&lt;/b> theo &lt;b>thứ tự&lt;/b> nếu nhiều thẻ NFC được chọn. Có thể loại bỏ theo bất kỳ thứ tự nào, ngẫu nhiên hoặc tuần tự.</item>
+		<item>Đã thêm &lt;b>bỏ qua thông báo sớm&lt;/b>. Tùy chọn hiển thị thông báo khi có thể bỏ qua báo thức sớm.</item>
+		<item>Đã thêm &lt;b>nhấn và giữ&lt;/b> vào các nút lặp lại, rung, NFC và đèn pin để truy cập nhanh vào các tùy chọn đó.</item>
+		<item>Đã khắc phục sự cố không phát/trộn tất cả &lt;b>nhạc&lt;/b> trong thư mục &lt;b>.</item>
+		<item>Đã cập nhật để hỗ trợ &lt;b>Android 15&lt;/b>.</item>
+		<item>Đã cập nhật để hỗ trợ chủ đề &lt;b>Material 3&lt;/b> của Android.</item>
 		<item>12.5.4</item>
 		<item>Đã khắc phục sự cố trong đó &lt;b>bỏ qua báo thức tiếp theo&lt;/b> sẽ tiếp tục bỏ qua báo thức.</item>
 		<item>12.5.3</item>

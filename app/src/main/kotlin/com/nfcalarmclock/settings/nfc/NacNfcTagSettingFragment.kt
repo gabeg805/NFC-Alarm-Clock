@@ -55,14 +55,6 @@ class NacNfcTagSettingFragment
 	private lateinit var nfcTagAdapter: NacNfcTagAdapter
 
 	/**
-	 * Remove NFC ID from the item.
-	 */
-	private fun removeNfcId()
-	{
-
-	}
-
-	/**
 	 * View is created.
 	 */
 	override fun onViewCreated(root: View, savedInstanceState: Bundle?)

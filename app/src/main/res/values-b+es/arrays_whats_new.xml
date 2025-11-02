@@ -5,6 +5,17 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.6.0</item>
+		<item>Se agregó &lt;b>temporizador&lt;/b>.</item>
+		<item>Se han añadido opciones de repetición en la configuración de alarmas. Ahora es posible repetir una alarma por horas, días, semanas o meses.</item>
+		<item>Se ha añadido la opción &lt;b>fecha&lt;/b> para programar una alarma para una fecha específica. Disponible al seleccionar una hora.</item>
+		<item>Se agregó la función de &lt;b>repetición&lt;/b> con los &lt;b>botones de volumen&lt;/b>.</item>
+		<item>Se ha añadido la opción &lt;b>descartar etiquetas NFC&lt;/b> en &lt;b>orden&lt;/b> si se seleccionan varias etiquetas NFC. Se pueden descartar en cualquier orden, de forma aleatoria o secuencial.</item>
+		<item>Se ha añadido la notificación de «Descartar anticipadamente». Opcionalmente, se puede mostrar una notificación cuando una alarma se puede descartar anticipadamente.</item>
+		<item>Se agregó <b>pulsación larga</b> en los botones de repetición, vibración, NFC y linterna para acceder rápidamente a esas opciones.</item>
+		<item>Se solucionó un problema por el cual no funcionaba la reproducción/aleatorio de toda la <b>música</b> en una <b>carpeta</b>.</item>
+		<item>Actualizado para admitir <b>Android 15</b>.</item>
+		<item>Actualizado para admitir el tema <b>Material 3</b> de Android.</item>
 		<item>12.5.4</item>
 		<item>Se solucionó el problema por el cual &lt;b>omitir siguiente alarma&lt;/b> seguía omitiendo la alarma.</item>
 		<item>12.5.3</item>

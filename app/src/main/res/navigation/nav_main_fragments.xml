@@ -86,4 +86,54 @@
 		android:name="com.nfcalarmclock.timer.options.mediapicker.NacTimerMainMediaPickerFragment"
 		android:label="@string/title_select_media" />
 
+	<!-- Settings -->
+	<fragment
+		android:id="@+id/nacMainSettingFragment"
+		android:name="com.nfcalarmclock.settings.NacMainSettingFragment"
+		android:label="@string/title_settings" >
+		<action
+			android:id="@+id/action_nacMainSettingFragment_to_nacGeneralSettingFragment"
+			app:destination="@id/nacGeneralSettingFragment" />
+		<action
+			android:id="@+id/action_nacMainSettingFragment_to_nacAppearanceSettingFragment"
+			app:destination="@id/nacAppearanceSettingFragment" />
+		<action
+			android:id="@+id/action_nacMainSettingFragment_to_nacNfcTagSettingFragment"
+			app:destination="@id/nacNfcTagSettingFragment" />
+		<action
+			android:id="@+id/action_nacMainSettingFragment_to_nacStatisticsSettingFragment"
+			app:destination="@id/nacStatisticsSettingFragment" />
+		<action
+			android:id="@+id/action_nacMainSettingFragment_to_nacAboutSettingFragment"
+			app:destination="@id/nacAboutSettingFragment" />
+	</fragment>
+	<fragment
+		android:id="@+id/nacGeneralSettingFragment"
+		android:name="com.nfcalarmclock.settings.NacGeneralSettingFragment"
+		android:label="@string/title_setting_general" >
+		<action
+			android:id="@+id/action_nacGeneralSettingFragment_to_nacAlarmMainMediaPickerFragment2"
+			app:destination="@id/nacAlarmMainMediaPickerFragment2" />
+	</fragment>
+	<fragment
+		android:id="@+id/nacAppearanceSettingFragment"
+		android:name="com.nfcalarmclock.settings.NacAppearanceSettingFragment"
+		android:label="@string/title_setting_appearance" />
+	<fragment
+		android:id="@+id/nacNfcTagSettingFragment"
+		android:name="com.nfcalarmclock.settings.nfc.NacNfcTagSettingFragment"
+		android:label="@string/title_setting_manage_nfc_tags" />
+	<fragment
+		android:id="@+id/nacStatisticsSettingFragment"
+		android:name="com.nfcalarmclock.statistics.NacStatisticsSettingFragment"
+		android:label="@string/title_setting_statistics" />
+	<fragment
+		android:id="@+id/nacAboutSettingFragment"
+		android:name="com.nfcalarmclock.settings.NacAboutSettingFragment"
+		android:label="@string/title_setting_about" />
+	<fragment
+		android:id="@+id/nacAlarmMainMediaPickerFragment2"
+		android:name="com.nfcalarmclock.alarm.options.mediapicker.NacAlarmMainMediaPickerFragment"
+		android:label="@string/title_select_media" />
+
 </navigation>

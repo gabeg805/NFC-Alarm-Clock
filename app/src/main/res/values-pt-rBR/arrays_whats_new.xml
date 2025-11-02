@@ -5,6 +5,17 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.6.0</item>
+		<item>Adicionado &lt;b>temporizador&lt;/b>.</item>
+		<item>Adicionadas opções de &lt;b>repetir&lt;/b> nas configurações de alarme. Agora é possível repetir um alarme por horas, dias, semanas ou meses.</item>
+		<item>Adicionada a opção &lt;b>data&lt;/b> para que o alarme seja acionado em uma data específica. Acessível ao selecionar um horário.</item>
+		<item>Adicionada a função &lt;b>soneca&lt;/b> com os &lt;b>botões de volume&lt;/b>.</item>
+		<item>Adicionada a opção &lt;b>dispensar etiquetas NFC&lt;/b> em &lt;b>ordem&lt;/b> caso várias etiquetas NFC sejam selecionadas. Podem ser dispensadas em qualquer ordem, aleatória ou sequencial.</item>
+		<item>Adicionada a opção &lt;b>dispensar notificação antecipada&lt;/b>. Opcionalmente, exibe uma notificação quando um alarme pode ser dispensado antecipadamente.</item>
+		<item>Adicionamos a opção &lt;b>pressione e segure&lt;/b> aos botões de repetição, vibração, NFC e lanterna para acesso rápido a essas opções.</item>
+		<item>Corrigido o problema em que reproduzir/embaralhar todas as músicas em uma pasta não funcionava.</item>
+		<item>Atualizado para suportar o &lt;b>Android 15&lt;/b>.</item>
+		<item>Atualizado para oferecer suporte ao tema &lt;b>Material 3&lt;/b> do Android.</item>
 		<item>12.5.4</item>
 		<item>Problema corrigido em que &lt;b>ignorar próximo alarme&lt;/b>continuava pulando o alarme.</item>
 		<item>12.5.3</item>

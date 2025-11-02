@@ -9,10 +9,13 @@ import android.nfc.Tag
 import android.os.Build
 import android.os.Parcelable
 import android.provider.Settings
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.nfc.db.NacNfcTag
 import com.nfcalarmclock.shared.NacSharedPreferences
+import com.nfcalarmclock.timer.db.NacTimer
 import com.nfcalarmclock.view.quickToast
 import com.nfcalarmclock.view.toast
 
@@ -33,8 +36,6 @@ fun NacAlarm.canDismissWithScannedNfc(nfcId: String, nfcTags: MutableList<NacNfc
 	// NFC tags set and need to check that list, instead of doing a string to string
 	// comparison
 	val allNfcIds = nfcTags.map { it.nfcId }
-	println("Alarm's canDismissWithScannedNfc() : $nfcId | ${this.nfcTagId} | ${this.shouldUseNfcTagDismissOrder} | ${this.nfcTagDismissOrder}")
-	allNfcIds.forEach { println(it) }
 
 	// Compare the two NFC IDs
 	//   if the alarm NFC ID is empty, this is good, or
@@ -53,13 +54,8 @@ fun NacAlarm.canDismissWithScannedNfc(nfcId: String, nfcTags: MutableList<NacNfc
 			&& ((this.nfcTagDismissOrder == NacNfcTagDismissOrder.SEQUENTIAL)
 				|| (this.nfcTagDismissOrder == NacNfcTagDismissOrder.RANDOM)))
 		{
-			println("BEFORE")
-			nfcTags.forEach { println(it) }
 			// Remove the first NFC tag since it matched the one that was scanned
 			nfcTags.removeAt(0)
-			println("AFTER")
-			nfcTags.forEach { println(it) }
-			println("Alarm's jank this is sequential or random. removing first jank : ${nfcTags.isEmpty()}")
 
 			// Can dismiss the alarm when all the NFC tags have been scanned. Otherwise,
 			// return null to indicate that
@@ -75,53 +71,8 @@ fun NacAlarm.canDismissWithScannedNfc(nfcId: String, nfcTags: MutableList<NacNfc
 	// Something went wrong when comparing the NFC IDs
 	else
 	{
-		println("SOMETHING WENT WRONG COMPARING NFC IDS")
 		false
 	}
-
-	//// NFC tag IDs, in case need to check an ID in the list
-	//val nfcTagIds = nfcTags!!.map { it.nfcId }
-
-	//// Compare the two NFC IDs. As long as nothing is null,
-	////   if the NFC button is not shown in the alarm card, or
-	////   if the alarm NFC ID is empty, this is good, or
-	////   if the two NFC IDs are equal, this is also good
-	////   if the NFC IDs match a particular dismiss order
-	//return if ((alarm != null)
-	//	&& (intentNfcId != null)
-	//	&& (
-	//		!sharedPreferences.shouldShowNfcButton
-	//		|| alarm!!.nfcTagId.isEmpty()
-	//		|| (alarm!!.nfcTagId == intentNfcId)
-	//		|| ((alarm!!.nfcTagDismissOrder == NacNfcTagDismissOrder.ANY) && nfcTagIds.contains(intentNfcId))
-	//		|| ((alarm!!.nfcTagDismissOrder == NacNfcTagDismissOrder.SEQUENTIAL) && nfcTagIds.first() == intentNfcId)
-	//		|| ((alarm!!.nfcTagDismissOrder == NacNfcTagDismissOrder.RANDOM) && nfcTagIds.first() == intentNfcId)
-	//		))
-	//{
-	//	// Check if NFC tags need to be dismissed in a particular order
-	//	if ((alarm!!.nfcTagDismissOrder == NacNfcTagDismissOrder.SEQUENTIAL)
-	//		|| (alarm!!.nfcTagDismissOrder == NacNfcTagDismissOrder.RANDOM))
-	//	{
-	//		// The first NFC tag matched the one that was scanned so remove it
-	//		nfcTags = nfcTags!!.drop(1)
-
-	//		// Return. When all the NFC tags have been scanned, then the alarm can be
-	//		// dismissed
-	//		nfcTags!!.isEmpty()
-	//	}
-	//	// Dismiss the alarm
-	//	else
-	//	{
-	//		true
-	//	}
-	//}
-	//// Something went wrong when comparing the NFC IDs
-	//else
-	//{
-	//	// Show toast
-	//	quickToast(this, R.string.error_message_nfc_mismatch)
-	//	false
-	//}
 }
 
 /**
@@ -211,6 +162,25 @@ fun NacAlarm.removeNfcTag(nfcTag: NacNfcTag): Boolean
 }
 
 /**
+ * Remove an NFC tag if it is being used.
+ *
+ * @return True if the NFC tag was removed, and False otherwise.
+ */
+fun NacTimer.removeNfcTag(nfcTag: NacNfcTag): Boolean
+{
+	// Remove the NFC tag
+	val status = (this as NacAlarm).removeNfcTag(nfcTag)
+
+	// Clear the start timer on scan flag, if necessary
+	if (nfcTagId.isEmpty())
+	{
+		this.shouldScanningNfcTagStartTimer = false
+	}
+
+	return status
+}
+
+/**
  * Set the NFC tag IDs from a list.
  */
 fun NacAlarm.setNfcTagIds(nfcTags: List<NacNfcTag>)
@@ -252,10 +222,8 @@ object NacNfc
 		nfcTags: MutableList<NacNfcTag>?
 	): Boolean
 	{
-		println("canDismissWithScannedNfc() : ${alarm != null} | ${nfcId != null}")
 		// Get the NFC ID from the intent
 		val sharedPreferences = NacSharedPreferences(context)
-		//val intentNfcId = parseId(intent)
 
 		// Alarm and NFC ID are present
 		if ((alarm != null) && (nfcId != null))
@@ -263,11 +231,8 @@ object NacNfc
 			// NFC can be shown which means it should be checked
 			if (sharedPreferences.shouldShowNfcButton)
 			{
-				println("NFC Tags compare against $nfcId:")
-				nfcTags?.forEach { println("${it.nfcId} | ${it.name}") }
 				// Check if the scanned NFC tag can be used to dismiss the alarm
 				val status = alarm.canDismissWithScannedNfc(nfcId, nfcTags!!)
-				println("Can dismiss status? $status")
 
 				when (status)
 				{
@@ -303,7 +268,7 @@ object NacNfc
 		val nfcAdapter = NfcAdapter.getDefaultAdapter(activity)
 
 		// Disable NFC reader mode
-		nfcAdapter.disableReaderMode(activity)
+		nfcAdapter?.disableReaderMode(activity)
 	}
 
 	/**
@@ -323,7 +288,7 @@ object NacNfc
 				NfcAdapter.FLAG_READER_SKIP_NDEF_CHECK
 
 		// Enable NFC reader mode
-		nfcAdapter.enableReaderMode(activity, callback, flags, null)
+		nfcAdapter?.enableReaderMode(activity, callback, flags, null)
 	}
 
 	/**
@@ -540,6 +505,34 @@ object NacNfc
 					|| (intent.action == NfcAdapter.ACTION_TECH_DISCOVERED)
 					|| (intent.action == NfcAdapter.ACTION_TAG_DISCOVERED)
 			}
+	}
+
+}
+
+/**
+ * Status of NFC reader mode. This is really only used as a means to communicate between
+ * the Scan NFC Tag dialog and the main activity so that reader mode is always enabled
+ * when the main activity is visible.
+ */
+object NacNfcReaderMode
+{
+
+	/**
+	 * Status of NFC reader mode, whether it is enabled or not.
+	 */
+	private val mutableLiveData: MutableLiveData<Boolean> = MutableLiveData<Boolean>()
+
+	/**
+	 * The publically available status of NFC reader mode.
+	 */
+	val liveData: LiveData<Boolean> = mutableLiveData
+
+	/**
+	 * Update the status of NFC reader mode.
+	 */
+	fun update(status: Boolean)
+	{
+		mutableLiveData.value = status
 	}
 
 }

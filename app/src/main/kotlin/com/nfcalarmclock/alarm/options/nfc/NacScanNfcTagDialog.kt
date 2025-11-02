@@ -15,9 +15,8 @@ import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.NacGenericAlarmOptionsDialog
 import com.nfcalarmclock.system.navigate
 import com.nfcalarmclock.nfc.NacNfc
+import com.nfcalarmclock.nfc.NacNfcReaderMode
 import com.nfcalarmclock.nfc.NacNfcTagViewModel
-import com.nfcalarmclock.system.addAlarm
-import com.nfcalarmclock.system.getAlarm
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -38,6 +37,14 @@ open class NacScanNfcTagDialog
 {
 
 	/**
+	 * Listener for when the use any NFC tag button is clicked.
+	 */
+	fun interface OnUseAnyNfcTagClickedListener
+	{
+		fun onUseAnyNfcTagClicked(alarm: NacAlarm?)
+	}
+
+	/**
 	 * NFC tag view model.
 	 */
 	private val nfcTagViewModel: NacNfcTagViewModel by viewModels()
@@ -46,6 +53,11 @@ open class NacScanNfcTagDialog
 	 * Layout resource ID.
 	 */
 	override val layoutId = R.layout.dlg_scan_nfc_tag
+
+	/**
+	 * Listener for when the use any NFC tag button is clicked.
+	 */
+	var onUseAnyNfcTagClickedListener: OnUseAnyNfcTagClickedListener? = null
 
 	/**
 	 * Get the navigation destination ID for the Save NFC Tag dialog.
@@ -107,7 +119,9 @@ open class NacScanNfcTagDialog
 		}
 
 		// Enable NFC reader mode
+		NacNfc.disableReaderMode(requireActivity())
 		NacNfc.enableReaderMode(requireActivity(), this)
+		NacNfcReaderMode.update(true)
 	}
 
 	/**
@@ -126,6 +140,7 @@ open class NacScanNfcTagDialog
 
 		// Disable NFC reader mode
 		NacNfc.disableReaderMode(requireActivity())
+		NacNfcReaderMode.update(false)
 	}
 
 	/**
@@ -133,13 +148,24 @@ open class NacScanNfcTagDialog
 	 */
 	override fun onTagDiscovered(tag: Tag?)
 	{
+		// Get the current destination ID
+		val currentDestinationId = findNavController().currentDestination?.id
+
+		// Destination is not one of the valid expected destinations
+		if ((currentDestinationId != R.id.nacScanNfcTagDialog)
+			&& (currentDestinationId != R.id.nacScanNfcTagDialog2)
+			&& (currentDestinationId != R.id.nacScanNfcTagDialog3))
+		{
+			// Do nothing
+			return
+		}
+
 		// Parse and save the ID from the NFC tag
 		val id = NacNfc.parseId(tag).toString()
-		val alarm = arguments?.getAlarm()
-		alarm?.nfcTagId = id
 
-		// Disable NFC reader mode
-		NacNfc.disableReaderMode(requireActivity())
+		// Add the NFC tag ID to the item
+		val item = getFragmentArgument()
+		item?.nfcTagId = id
 
 		lifecycleScope.launch {
 
@@ -149,7 +175,7 @@ open class NacScanNfcTagDialog
 				withContext(Dispatchers.Main)
 				{
 					// Save the alarm to the backstack
-					onSaveAlarm(alarm)
+					onSaveAlarm(item)
 
 					// Dismiss the dialog
 					dismiss()
@@ -158,38 +184,24 @@ open class NacScanNfcTagDialog
 			// Save the NFC tag
 			else
 			{
-				// Get the nav controller
+				// Prepare to navigate to save the NFC tag
 				val navController = findNavController()
-				val newArgs = arguments?.addAlarm(alarm)
+				val newArgs = addFragmentArgument(item)
 				val destinationId = getSaveNfcTagDialogId(navController.currentDestination)
 
-				// Navigate to the select NFC tag dialog
-				println("Current : ${navController.currentDestination}")
+				// Navigate to the save NFC tag dialog
 				navController.navigate(destinationId, newArgs, this@NacScanNfcTagDialog,
 					onBackStackPopulated = {
 
-						println("NFC SCANNED AND TRYING TO SAVE")
-						// Check if there was a previous dialog being shown before this one
-						if (navController.previousBackStackEntry != null)
-						{
-							println("Quick check Saving jank from previous back stack entry")
-							//// Save the change so that it is accessible in the previous dialog
-							//navController.previousBackStackEntry?.savedStateHandle?.set("YOYOYO", alarm)
-						}
-						// No previous dialog. This is a quick alarm option
-						else
-						{
-							println("Quick check Saving jank from current back stack")
-							//// Save to the current dialog
-							//navController.currentBackStackEntry?.savedStateHandle?.set("YOYOYO", alarm)
-						}
+						// Get the item from the save NFC tag dialog and disable the NFC
+						// tag dismiss order, just in case
+						val newItem = navController.currentBackStackEntry?.savedStateHandle?.get<NacAlarm>("YOYOYO")
+						newItem?.shouldUseNfcTagDismissOrder = false
 
-						// Get the alarm from the select NFC tag dialog
-						val a = navController.currentBackStackEntry?.savedStateHandle?.get<NacAlarm>("YOYOYO")
-
-						// Save the alarm and dismiss
-						onSaveAlarm(a)
+						// Save the item and dismiss
+						onSaveAlarm(newItem)
 						dismiss()
+
 					})
 			}
 
@@ -279,6 +291,9 @@ open class NacScanNfcTagDialog
 			alarm?.nfcTagId = ""
 			alarm?.shouldUseNfcTagDismissOrder = false
 
+			// Call the listener
+			onUseAnyNfcTagClickedListener?.onUseAnyNfcTagClicked(alarm)
+
 			// Save the alarm and dismiss
 			onSaveAlarm(alarm)
 			dismiss()
@@ -318,15 +333,14 @@ open class NacScanNfcTagDialog
 			val destinationId = getSelectNfcTagDialogId(navController.currentDestination)
 
 			// Navigate to the select NFC tag dialog
-			println("Current : ${navController.currentDestination}")
 			navController.navigate(destinationId, arguments, this,
 				onBackStackPopulated = {
 
-					// Get the alarm from the select NFC tag dialog
-					val a = navController.currentBackStackEntry?.savedStateHandle?.get<NacAlarm>("YOYOYO")
+					// Get the item from the select NFC tag dialog
+					val newItem = navController.currentBackStackEntry?.savedStateHandle?.get<NacAlarm>("YOYOYO")
 
 					// Save the alarm and dismiss
-					onSaveAlarm(a)
+					onSaveAlarm(newItem)
 					dismiss()
 				})
 

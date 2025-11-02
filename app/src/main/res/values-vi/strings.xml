@@ -38,7 +38,30 @@
 	<string name="word_version">Phiên bản</string>
 	<string name="word_of">của</string>
 	<string name="word_alarm">Báo thức</string>
+	<string name="word_alarms">Báo động</string>
+	<string name="word_timer">Bộ hẹn giờ</string>
+	<string name="word_timers">Bộ hẹn giờ</string>
 	<string name="word_reminder">Lời nhắc nhở</string>
+	<string name="word_more">Hơn</string>
+	<string name="letter_h">giờ</string>
+	<string name="letter_m">tôi</string>
+	<string name="letter_s">S</string>
+	<string name="number00">00</string>
+	<string name="number0">0</string>
+	<string name="number1">1</string>
+	<string name="number2">2</string>
+	<string name="number3">3</string>
+	<string name="number4">4</string>
+	<string name="number5">5</string>
+	<string name="number6">6</string>
+	<string name="number7">7</string>
+	<string name="number8">8</string>
+	<string name="number9">9</string>
+
+	<!-- Timer add time -->
+	<string name="timer_add_1min">+ 1 phút</string>
+	<string name="timer_add_30sec">+ 30 giây</string>
+	<string name="timer_add_5sec">+ 5 giây</string>
 
 	<!-- States -->
 	<string name="state_unknown">không xác định</string>
@@ -49,6 +72,9 @@
 	<string name="action_alarm_dismiss_early">Sa thải sớm</string>
 	<string name="action_alarm_copy">Sao chép</string>
 	<string name="action_alarm_delete">Xóa bỏ</string>
+	<string name="action_timer_pause">Tạm dừng</string>
+	<string name="action_timer_resume">Bản tóm tắt</string>
+	<string name="action_timer_stop">Dừng lại</string>
 	<string name="action_yes">Đúng</string>
 	<string name="action_no">Không</string>
 	<string name="action_ok">ĐƯỢC RỒI</string>
@@ -104,6 +130,7 @@
 	<string name="message_permission_ignore_battery_optimization_request">Để tránh báo thức không chạy nếu ứng dụng không được sử dụng trong một thời gian.&lt;br/>&lt;br/>&lt;b>Lưu ý:&lt;/b> Điều này tùy thuộc vào thiết bị bạn có và &lt;b>có thể không thực sự cần thiết &lt;/b>.</string>
 	<string name="message_permission_post_notifications_request">Cho phép báo thức chạy khi ứng dụng không được chú ý.&lt;br/>&lt;br/>&lt;b>Lưu ý:&lt;/b> Đây là tác dụng phụ của các chính sách bảo mật được giới thiệu trong &lt;b>Android 13&lt;/b>, nhằm mang lại lợi ích cho người dùng nhưng có thể hạn chế các ứng dụng trong những trường hợp như thế này.</string>
 	<string name="message_permission_schedule_exact_alarm_request">Để báo thức chạy chính xác theo đúng lịch trình.</string>
+	<string name="message_permission_system_alert_window_request">Cho phép hiển thị ứng dụng lên trên các ứng dụng khác?&lt;br/>&lt;br/>Điều này sẽ đảm bảo màn hình báo thức được hiển thị, đây là yêu cầu để phát âm thanh nếu ứng dụng ở chế độ nền.&lt;br/>&lt;br/>&lt;b>Lưu ý:&lt;/b> Điều này chỉ ảnh hưởng đến Android 15.</string>
 	<string name="message_playlist">Bạn có muốn phát tất cả nhạc trong thư mục này không?</string>
 	<string name="message_nfc_request">Vui lòng bật NFC để tắt báo thức</string>
 	<string name="message_nfc_optional">tùy chọn NFC</string>
@@ -116,16 +143,22 @@
 	<string name="message_flashlight_on_duration">Bật:</string>
 	<string name="message_flashlight_off_duration">Tắt:</string>
 	<string name="message_no_alarms_scheduled">Không có báo thức nào được lên lịch.</string>
-	<string name="message_repeat_disabled">Không lặp lại báo động</string>
-	<string name="message_repeat_enabled">Lặp lại báo động</string>
+	<string name="message_alarm_repeat_disabled">Không lặp lại báo động</string>
+	<string name="message_alarm_repeat_enabled">Lặp lại báo động</string>
+	<string name="message_timer_repeat_disabled">Không lặp lại bộ đếm thời gian</string>
+	<string name="message_timer_repeat_enabled">Bộ đếm thời gian lặp lại</string>
 	<string name="message_vibrate_disabled">Tắt rung</string>
 	<string name="message_vibrate_enabled">Bật chế độ rung</string>
-	<string name="message_flashlight_disabled">Tắt đèn pin</string>
-	<string name="message_flashlight_enabled">Bật đèn pin</string>
+	<string name="message_flashlight_disabled">Không sử dụng đèn pin</string>
+	<string name="message_flashlight_enabled">Sử dụng đèn pin</string>
 	<string name="message_alarm_copy">Đã sao chép báo thức</string>
+	<string name="message_timer_copy">Đã sao chép bộ đếm thời gian</string>
 	<string name="message_alarm_delete">Đã xóa báo thức</string>
+	<string name="message_timer_delete">Đã xóa bộ đếm thời gian</string>
 	<string name="message_alarm_restore">Đã khôi phục báo thức</string>
+	<string name="message_timer_restore">Đã khôi phục bộ đếm thời gian</string>
 	<string name="message_alarm_dismiss">Đã loại bỏ cảnh báo</string>
+	<string name="message_timer_dismiss">Đã bỏ hẹn giờ</string>
 	<string name="message_alarm_snooze">Báo thức được báo lại</string>
 	<string name="message_statistics_started_on">Thống kê bắt đầu vào</string>
 	<string name="message_bullet">\u25BA</string>
@@ -136,6 +169,7 @@
 	<string name="message_reset_statistics">Bạn có chắc chắn muốn đặt lại tất cả số liệu thống kê không?</string>
 	<string name="message_tts_current_time">Thời điểm hiện tại</string>
 	<string name="message_tts_alarm_name">Tên báo động</string>
+	<string name="message_tts_timer_name">Tên của bộ đếm thời gian</string>
 	<string name="message_statistics_email_subject">Thống kê đồng hồ báo thức NFC</string>
 	<string name="message_skip_general_alarm">Báo thức sẽ bị bỏ qua.</string>
 	<string name="message_skip_named_alarm">&lt;b&gt;%1$s&lt;/b&gt; sẽ bị bỏ qua.</string>
@@ -159,6 +193,7 @@
 	<string name="error_message_active_delete">Không thể xóa báo thức đang hoạt động</string>
 	<string name="error_message_active_modify">Không thể sửa đổi cảnh báo đang hoạt động</string>
 	<string name="error_message_max_alarms">Số lượng cảnh báo tối đa được tạo</string>
+	<string name="error_message_max_timers">Số lượng bộ hẹn giờ tối đa được tạo</string>
 	<string name="error_message_nfc_mismatch">Thẻ NFC không khớp với thẻ đã lưu.</string>
 	<string name="error_message_nfc_unsupported">Thiết bị của bạn không hỗ trợ NFC</string>
 	<string name="error_message_nfc_name_exists">Tên này đã được sử dụng</string>
@@ -171,6 +206,7 @@
 	<string name="error_message_play_audio">Không thể phát âm thanh</string>
 	<string name="error_message_google_play_billing">Lỗi khi kết nối với Cửa hàng Google Play</string>
 	<string name="error_message_text_to_speech_audio_focus">Không thể sử dụng tính năng chuyển văn bản thành giọng nói</string>
+	<string name="error_message_unable_to_dismiss_early">Không tìm thấy báo thức để tắt sớm</string>
 	<string name="error_message_unable_to_email_statistics">Không thể gửi số liệu thống kê qua email</string>
 	<string name="error_message_unable_to_shine_flashlight">Không thể chiếu đèn pin — %1$s</string>
 	<string name="error_message_unable_to_get_flashlight_characteristics">Không thể lấy thông tin đèn pin</string>
@@ -190,12 +226,19 @@
 	<string name="error_message_unable_to_launch_media_picker">Không thể khởi chạy trình chọn âm thanh hệ thống</string>
 
 	<!-- Titles -->
+	<string name="title_timer_main">Bộ hẹn giờ NFC</string>
+	<string name="title_timer_add">Thêm bộ đếm thời gian</string>
+	<string name="title_timer_edit">Chỉnh sửa bộ đếm thời gian</string>
+	<string name="title_timer_active">Bộ đếm thời gian hoạt động</string>
+	<string name="title_select_media">Chọn phương tiện truyền thông</string>
 	<string name="title_settings">Cài đặt</string>
 	<string name="title_options">Tùy chọn</string>
 	<string name="title_time">Thời gian</string>
 	<string name="title_alarm_activity">Loại bỏ cảnh báo</string>
 	<string name="title_scan_nfc_tag">Quét thẻ NFC</string>
 	<string name="title_select_nfc_tag">Chọn thẻ NFC</string>
+	<string name="title_nfc_tag_dismiss_order">Lệnh bác bỏ</string>
+	<string name="title_start_timer_on_nfc_tag_scan">Bắt đầu hẹn giờ quét</string>
 	<string name="title_save_nfc_tag">Lưu thẻ NFC</string>
 	<string name="title_delete_nfc_tag">Xóa thẻ NFC</string>
 	<string name="title_rename_nfc_tag">Đổi tên thẻ NFC</string>
@@ -204,6 +247,7 @@
 	<string name="title_select_next_alarm_format">Chọn một định dạng</string>
 	<string name="title_folder_selected">Bạn đã chọn một thư mục</string>
 	<string name="title_active_alarms">Báo động hoạt động</string>
+	<string name="title_active_timers">Bộ hẹn giờ hoạt động</string>
 	<string name="title_upcoming_reminders">Lời nhắc sắp tới</string>
 	<string name="title_dismissed_alarms">Đã loại bỏ cảnh báo</string>
 	<string name="title_missed_alarms">Báo thức bị bỏ lỡ</string>
@@ -211,6 +255,8 @@
 	<string name="title_created_alarms">Đã tạo báo thức</string>
 	<string name="title_deleted_alarms">Đã xóa báo thức</string>
 	<string name="title_current_alarms">Hiện hành</string>
+	<string name="title_set_date">Đặt ngày</string>
+	<string name="title_set_time">Đặt thời gian</string>
 	<string name="title_whats_new">Có gì mới</string>
 	<string name="title_permission_disable_battery_optimization">Vô hiệu hóa tối ưu hóa pin?</string>
 	<string name="title_permission_storage">Kho</string>
@@ -219,10 +265,13 @@
 	<string name="title_permission_schedule_alarm">Lên lịch báo động chính xác</string>
 	<string name="title_permission_set_alarm">Đặt báo thức</string>
 	<string name="title_permission_show_notifications">Bật thông báo?</string>
+	<string name="title_permission_system_alert_window">Hiển thị trên các ứng dụng khác</string>
 	<string name="title_permission_boot">Khởi động</string>
 	<string name="title_permission_wakelock">Khóa sau</string>
 	<string name="title_request_permission_schedule_exact_alarm">Bật lịch báo thức chính xác</string>
 	<string name="title_reset_statistics">Đặt lại thống kê…</string>
+	<string name="title_repeat_frequency">Tần suất lặp lại</string>
+	<string name="title_repeat_frequency_days_to_run_before_starting">Số ngày chạy trước khi bắt đầu tần suất</string>
 	<string name="title_vibrate_vibration_duration">Thời gian rung động</string>
 	<string name="title_vibrate_custom_pattern">Mẫu tùy chỉnh</string>
 	<string name="title_vibrate_wait">Chờ đợi</string>
@@ -235,11 +284,13 @@
 	<string name="title_volume_restrict_volume">Hạn chế âm lượng</string>
 	<string name="title_dismiss_options_auto_dismiss">Tự động loại bỏ</string>
 	<string name="title_dismiss_options_dismiss_early">Giải tán sớm</string>
+	<string name="title_dismiss_options_dismiss_early_notification">Bỏ qua thông báo sớm</string>
 	<string name="title_dismiss_options_delete_after_dismissed">Xóa sau khi đã xóa</string>
 	<string name="title_snooze_options_auto_snooze">Tự động báo lại</string>
 	<string name="title_snooze_options_max_snooze">Báo lại tối đa</string>
 	<string name="title_snooze_options_snooze_duration">Thời gian báo lại</string>
 	<string name="title_snooze_options_easy_snooze">Dễ dàng báo lại</string>
+	<string name="title_snooze_options_volume_snooze">Báo lại âm lượng</string>
 	<string name="title_upcoming_reminder_show_reminder">Hiển thị lời nhắc</string>
 	<string name="title_upcoming_reminder_how_early">Sớm thế nào…</string>
 	<string name="title_upcoming_reminder_how_frequent">Tần suất như thế nào…</string>
@@ -253,6 +304,7 @@
 	<string name="title_default_alarm">Báo thức mặc định</string>
 	<string name="title_alarm_name">Tên</string>
 	<string name="title_alarm_days">Ngày</string>
+	<string name="title_alarm_schedule_date">Ngày lên lịch</string>
 	<string name="title_alarm_repeat">Lặp lại</string>
 	<string name="title_alarm_nfc">NFC</string>
 	<string name="title_alarm_vibrate">Rung</string>
@@ -284,6 +336,7 @@
 	<string name="description_no_notification">Không hiển thị thông báo.</string>
 	<string name="description_upcoming_reminder">Lời nhắc về các báo thức sắp hoạt động.</string>
 	<string name="description_active_alarm">Báo động hiện đang hoạt động.</string>
+	<string name="description_active_timer">Bộ hẹn giờ hiện đang hoạt động.</string>
 	<string name="description_missed_alarm">Cảnh báo tự động bị loại bỏ.</string>
 	<string name="description_skipped_alarm">Báo thức bị bỏ qua.</string>
 	<string name="description_color">màu lục giác</string>
@@ -291,24 +344,37 @@
 	<string name="description_day_button_style_outlined">Các nút được phác thảo.</string>
 	<string name="description_media">Nhạc hoặc nhạc chuông</string>
 	<string name="description_scan_nfc_tag_alarm">Thẻ NFC đã quét sẽ được yêu cầu loại bỏ cảnh báo này khi nó kêu.</string>
+	<string name="description_scan_nfc_tag_timer">Thẻ NFC được quét sẽ được yêu cầu để tắt bộ hẹn giờ này khi nó tắt.</string>
 	<string name="description_select_nfc_tag_alarm">Chọn thẻ NFC cần thiết để tắt báo thức này khi nó kêu. Nếu chọn nhiều hơn một thẻ, nó cũng có thể được sử dụng để tắt báo thức này.</string>
+	<string name="description_select_nfc_tag_timer">Chọn thẻ NFC cần thiết để tắt bộ hẹn giờ này khi nó reo. Nếu chọn nhiều hơn một thẻ, thẻ NFC đó cũng có thể được sử dụng để tắt bộ hẹn giờ này.</string>
+	<string name="description_nfc_tag_dismiss_order">Thứ tự các thẻ NFC ở trên sẽ bị xóa. Bật tùy chọn này có nghĩa là tất cả các thẻ NFC đã chọn sẽ cần được quét để xóa.</string>
+	<string name="description_start_timer_on_nfc_tag_scan">Khi một trong các thẻ NFC được chọn được quét, bộ đếm thời gian này sẽ tự động bắt đầu.</string>
 	<string name="description_save_nfc_tag">Bạn có thể sử dụng lại thẻ NFC này mà không cần phải quét lại bằng cách đặt tên cho thẻ.</string>
+	<string name="description_repeat_frequency">Lặp lại báo thức theo tần suất nhất định (sau mỗi X khoảng thời gian). Lưu ý: Chọn giờ hoặc ngày sẽ xóa tất cả các ngày báo thức.</string>
+	<string name="description_repeat_frequency_days_to_run_before_starting">Ngày nào trong số các ngày được chọn trong báo thức sẽ được chạy trong tuần này trước khi bắt đầu tần suất.</string>
 	<string name="description_vibrate_vibration_duration">Rung trong bao lâu và chờ bao lâu giữa các lần rung.</string>
 	<string name="description_vibrate_custom_pattern">Lặp lại thời lượng rung động theo số lần nhất định, sau đó đợi trong khoảng thời gian đó.</string>
 	<string name="description_flashlight_brightness_level">Mức độ sáng của đèn pin.</string>
 	<string name="description_flashlight_blink_on_off">Nhấp nháy đèn pin theo khoảng thời gian đã cài đặt.</string>
 	<string name="description_text_to_speech_what_to_say_alarm">Nói gì với tính năng chuyển văn bản thành giọng nói khi báo thức đang hoạt động.</string>
+	<string name="description_text_to_speech_what_to_say_timer">Nói gì với tính năng chuyển văn bản thành giọng nói khi bộ hẹn giờ đang hoạt động.</string>
 	<string name="description_text_to_speech_speak_frequency">Tần suất nói các mục đã chọn ở trên.</string>
 	<string name="description_text_to_speech_speech_rate">Tốc độ chuyển văn bản thành giọng nói nên nói như thế nào.</string>
 	<string name="description_volume_gradually_increase_volume_alarm">Tăng âm lượng báo thức theo tần suất đã đặt.</string>
+	<string name="description_volume_gradually_increase_volume_timer">Tăng âm lượng của bộ hẹn giờ theo tần số đã đặt.</string>
 	<string name="description_volume_restrict_volume_alarm">Không thể thay đổi âm lượng khi báo thức kêu.</string>
+	<string name="description_volume_restrict_volume_timer">Không thể thay đổi âm lượng khi hết giờ.</string>
 	<string name="description_dismiss_options_auto_dismiss_alarm">Tự động tắt báo thức sau một khoảng thời gian đã cài đặt.</string>
+	<string name="description_dismiss_options_auto_dismiss_timer">Tự động tắt bộ hẹn giờ sau khoảng thời gian đã đặt.</string>
 	<string name="description_dismiss_options_dismiss_early">Tắt báo thức sớm, trước khi báo thức hoạt động.</string>
+	<string name="description_dismiss_options_dismiss_early_notification">Hiển thị thông báo khi có thể tắt báo thức sớm.</string>
 	<string name="description_dismiss_options_delete_after_dismissed_alarm">Báo thức sẽ bị xóa sau khi bạn tắt nó.</string>
+	<string name="description_dismiss_options_delete_after_dismissed_timer">Bộ đếm thời gian sẽ bị xóa sau khi bạn tắt nó.</string>
 	<string name="description_snooze_options_auto_snooze">Tự động báo lại báo thức sau khoảng thời gian đã cài đặt.</string>
 	<string name="description_snooze_options_max_snooze">Số lần báo thức có thể được báo lại tối đa.</string>
 	<string name="description_snooze_options_snooze_duration">Khoảng thời gian để báo lại báo thức.</string>
 	<string name="description_snooze_options_easy_snooze">Tắt báo thức bằng cách chạm vào bất kỳ vị trí nào trên màn hình báo thức.</string>
+	<string name="description_snooze_options_volume_snooze">Tắt báo thức bằng cách nhấn nút tăng hoặc giảm âm lượng.</string>
 	<string name="description_upcoming_reminder_show_reminder">Hiển thị thông báo nhắc nhở trước khi báo thức kêu.</string>
 	<string name="description_upcoming_reminder_how_early">Thông báo nhắc nhở nên được hiển thị sớm nhất vào lúc nào?</string>
 	<string name="description_upcoming_reminder_how_frequent">Thông báo nhắc nhở nên được hiển thị thường xuyên như thế nào?</string>
@@ -359,9 +425,11 @@
 	<string name="description_permission_schedule_alarm">Lên lịch báo động chính xác.</string>
 	<string name="description_permission_set_alarm">Đặt báo thức từ nguồn bên ngoài, chẳng hạn như Trợ lý Google.</string>
 	<string name="description_permission_post_notifications">Hiển thị thông báo khi báo thức được kích hoạt, điều này sẽ ngăn thiết bị của bạn chuyển ứng dụng sang chế độ ngủ và tự tắt báo thức.</string>
+	<string name="description_permission_system_alert_window">Đảm bảo màn hình báo thức được hiển thị (đây là yêu cầu bắt buộc để phát âm thanh) nếu ứng dụng đang chạy nền và không được sử dụng trong một thời gian. Chỉ áp dụng cho Android 15.</string>
 	<string name="description_permission_boot">Khôi phục báo thức khi thiết bị của bạn được bật. Android sẽ xóa báo thức khi thiết bị của bạn tắt.</string>
 	<string name="description_permission_wakelock">Ngăn chặn thiết bị của bạn chuyển sang chế độ ngủ để báo thức được kích hoạt sẽ tiếp tục kêu.</string>
 	<string name="description_audio_sources_alarm">Kênh âm thanh để phát báo thức.</string>
+	<string name="description_audio_sources_timer">Kênh âm thanh để phát bộ đếm thời gian.</string>
 	<string name="description_widget_alarm_example">Báo thức hiển thị trong bản xem trước chỉ là một ví dụ.</string>
 	<string name="description_text_to_speech_voice">Giọng nói sử dụng để chuyển văn bản thành giọng nói.</string>
 	<string name="description_only_show_app_alarms">Chỉ những cảnh báo từ ứng dụng này mới được hiển thị trong tiện ích.</string>
@@ -369,6 +437,7 @@
 
 	<!-- Content descriptions -->
 	<string name="cd_alarm_list">Danh sách các cảnh báo sẽ được hiển thị ở đây.</string>
+	<string name="cd_timer_list">Danh sách bộ đếm thời gian sẽ được hiển thị ở đây.</string>
 	<string name="cd_nfc_tag_list">Danh sách các thẻ NFC sẽ được hiển thị ở đây.</string>
 	<string name="cd_fab_add_alarm">Thêm một báo động mới.</string>
 	<string name="cd_fab_launch_system_file_browser">Khởi chạy trình duyệt tập tin hệ thống.</string>
@@ -383,6 +452,7 @@
 	<string name="cd_request_permission_ignore_battery_optimization">Yêu cầu tắt tối ưu hóa pin.</string>
 	<string name="cd_request_permission_post_notifications">Yêu cầu đăng thông báo.</string>
 	<string name="cd_request_permission_schedule_exact_alarm">Yêu cầu lên lịch báo động chính xác.</string>
+	<string name="cd_request_permission_system_alert_window">Yêu cầu cấp quyền hiển thị ứng dụng lên trên các ứng dụng khác.</string>
 	<string name="cd_whats_new">Danh sách các mục mới trong phiên bản ứng dụng này.</string>
 	<string name="cd_scan_nfc">Quét thẻ NFC.</string>
 	<string name="cd_alarm_slider_arrow">Hướng để vuốt ngón tay của bạn.</string>
@@ -404,6 +474,46 @@
 
 	<plurals name="skipped_alarm">
 		<item quantity="other">Báo thức bị bỏ qua</item>
+	</plurals>
+
+	<plurals name="repeat_minutely">
+		<item quantity="other">Mỗi %d phút</item>
+	</plurals>
+
+	<plurals name="repeat_hourly">
+		<item quantity="other">Mỗi %d giờ</item>
+	</plurals>
+
+	<plurals name="repeat_daily">
+		<item quantity="other">Mỗi %d ngày</item>
+	</plurals>
+
+	<plurals name="repeat_weekly">
+		<item quantity="other">Mỗi %d tuần</item>
+	</plurals>
+
+	<plurals name="repeat_monthly">
+		<item quantity="other">Mỗi %d tháng</item>
+	</plurals>
+
+	<plurals name="standalone_unit_minute">
+		<item quantity="other">Phút</item>
+	</plurals>
+
+	<plurals name="standalone_unit_hour">
+		<item quantity="other">Giờ</item>
+	</plurals>
+
+	<plurals name="standalone_unit_day">
+		<item quantity="other">Ngày</item>
+	</plurals>
+
+	<plurals name="standalone_unit_week">
+		<item quantity="other">Tuần</item>
+	</plurals>
+
+	<plurals name="standalone_unit_month">
+		<item quantity="other">Tháng</item>
 	</plurals>
 
 	<plurals name="unit_day">

@@ -13,6 +13,7 @@ import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputLayout
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.system.addAlarm
 import com.nfcalarmclock.system.getAlarm
 import com.nfcalarmclock.view.dialog.NacBottomSheetDialogFragment
 import com.nfcalarmclock.view.setTextFromIndex
@@ -43,6 +44,16 @@ abstract class NacGenericAlarmOptionsDialog
 	 * Save alarm listener. Should be used if the NavController is not used.
 	 */
 	var onSaveAlarmListener: OnSaveAlarmListener? = null
+
+	/**
+	 * Add an alarm/timer argument to a Bundle.
+	 *
+	 * @return An alarm/timer argument added to a Bundle.
+	 */
+	open fun <T: NacAlarm>addFragmentArgument(item: T?): Bundle
+	{
+		return Bundle().addAlarm(item)
+	}
 
 	/**
 	 * Get the alarm/timer argument from the fragment.
@@ -115,14 +126,12 @@ abstract class NacGenericAlarmOptionsDialog
 		// Check if there was a previous dialog being shown before this one
 		if (navController.previousBackStackEntry != null)
 		{
-			println("Saving jank from previous back stack entry")
 			// Save the change so that it is accessible in the previous dialog
 			navController.previousBackStackEntry?.savedStateHandle?.set("YOYOYO", alarm)
 		}
 		// No previous dialog. This is a quick alarm option
 		else
 		{
-			println("Saving jank from current back stack")
 			// Save to the current dialog
 			navController.currentBackStackEntry?.savedStateHandle?.set("YOYOYO", alarm)
 		}

@@ -48,7 +48,7 @@ class NacActiveTimerNotification(
 	/**
 	 * @see NacBaseNotificationBuilder.channelImportance
 	 */
-	override val channelImportance: Int = NotificationManagerCompat.IMPORTANCE_HIGH
+	override val channelImportance: Int = NotificationManagerCompat.IMPORTANCE_DEFAULT
 
 	/**
 	 * @see NacBaseNotificationBuilder.priorityLevel

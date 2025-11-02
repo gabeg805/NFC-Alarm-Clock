@@ -2949,6 +2949,24 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
+	 * Whether NFC was just scanned to dismiss an alarm or timer.
+	 */
+	var wasNfcJustScannedToDismiss: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.key_main_was_nfc_just_scanned_to_dismiss)
+			val defaultValue = false
+
+			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_main_was_nfc_just_scanned_to_dismiss)
+
+			saveBoolean(key, value)
+		}
+
+	/**
 	 * Whether the POST_NOTIFICATIONS permission was requested.
 	 */
 	var wasPostNotificationsPermissionRequested: Boolean

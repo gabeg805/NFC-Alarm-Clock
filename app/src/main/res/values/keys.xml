@@ -33,6 +33,7 @@
 	<!-- Main activity -->
 	<string name="key_main_should_refresh_activity">app_should_refresh_main_activity</string>
 	<string name="key_main_delay_showing_whats_new_dialog_counter">key_delay_showing_whats_new_dialog_counter</string>
+	<string name="key_main_was_nfc_just_scanned_to_dismiss">app_was_nfc_just_scanned_to_dismiss</string>
 
 	<!-- Card -->
 	<string name="key_main_card_is_measured">card_is_measured</string>

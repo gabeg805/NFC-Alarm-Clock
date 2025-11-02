@@ -241,6 +241,7 @@ class NacActiveAlarmActivity
 			{
 				// Dismiss the alarm service with NFC
 				service?.dismiss(usedNfc = true)
+				finish()
 			}
 
 			// NFC does not need to be used so do nothing with the layout handler

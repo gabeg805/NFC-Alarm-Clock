@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.provider.AlarmClock
 import android.view.Menu
 import android.view.View
@@ -30,9 +31,9 @@ import com.nfcalarmclock.alarm.NacAlarmViewModel
 import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmActivity
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.nfc.NacNfc
+import com.nfcalarmclock.nfc.NacNfcReaderMode
 import com.nfcalarmclock.nfc.SCANNED_NFC_TAG_ID_BUNDLE_NAME
 import com.nfcalarmclock.ratemyapp.NacRateMyApp
-import com.nfcalarmclock.settings.NacMainSettingActivity
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.NacBundle.BUNDLE_INTENT_ACTION
 import com.nfcalarmclock.system.disableActivityAlias
@@ -53,6 +54,7 @@ import com.nfcalarmclock.system.unregisterMyReceiver
 import com.nfcalarmclock.timer.NacShowTimersFragment
 import com.nfcalarmclock.timer.NacTimerViewModel
 import com.nfcalarmclock.timer.active.NacActiveTimerFragment
+import com.nfcalarmclock.timer.active.NacActiveTimerService
 import com.nfcalarmclock.view.setupRippleColor
 import com.nfcalarmclock.view.setupThemeColor
 import com.nfcalarmclock.view.slideUp
@@ -69,6 +71,9 @@ import java.io.File
 class NacMainActivity
 	: AppCompatActivity()
 {
+
+	// TODO: Add volume stop for timer
+	// TODO: Add note how dismiss order means you need to dismiss all the selected ones
 
 	/**
 	 * Nav host fragment.
@@ -191,6 +196,44 @@ class NacMainActivity
 	}
 
 	/**
+	 * Attempt to handle an NFC scanning event.
+	 */
+	@OptIn(UnstableApi::class)
+	private fun attemptToHandleNfcScanEvent()
+	{
+		lifecycleScope.launch {
+
+			// Get any active alarm or timer
+			val activeAlarm = alarmViewModel.getActiveAlarm()
+
+			// An NFC tag was scanned to open up the main activity
+			if (NacNfc.wasScanned(intent))
+			{
+				// Alarm
+				if (activeAlarm != null)
+				{
+					handleNfcTagScannedForAlarm(activeAlarm)
+				}
+				// Timer
+				else
+				{
+					val nfcId = NacNfc.parseId(intent) ?: ""
+					handleNfcTagScannedForTimer(nfcId)
+				}
+			}
+			else
+			{
+				// Show the active alarm activity
+				if (activeAlarm != null)
+				{
+					NacActiveAlarmActivity.startAlarmActivity(this@NacMainActivity, activeAlarm)
+				}
+			}
+
+		}
+	}
+
+	/**
 	 * Cleanup any zip files from emailing statistics.
 	 */
 	private fun cleanupEmailZipFiles()
@@ -301,6 +344,105 @@ class NacMainActivity
 	}
 
 	/**
+	 * Handle an NFC tag being scanned for an alarm.
+	 */
+	@SuppressLint("UnsafeIntentLaunch")
+	@OptIn(UnstableApi::class)
+	private fun handleNfcTagScannedForAlarm(activeAlarm: NacAlarm)
+	{
+		// Remove the grant URI permissions in the untrusted intent
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+		{
+			intent.removeFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+			intent.removeFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
+		}
+
+		// Check that the nested intent does not grant URI permissions
+		if (((intent.flags and Intent.FLAG_GRANT_READ_URI_PERMISSION) == 0) &&
+			((intent.flags and Intent.FLAG_GRANT_WRITE_URI_PERMISSION) == 0))
+		{
+			// Start the alarm activity with the intent containing the NFC tag
+			// information in order to dismiss this alarm
+			NacActiveAlarmActivity.startAlarmActivity(this@NacMainActivity, intent, activeAlarm)
+
+			intent = Intent(this@NacMainActivity, NacMainActivity::class.java)
+				.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+		}
+	}
+
+	/**
+	 * Handle an NFC tag being scanned for a timer.
+	 */
+	@OptIn(UnstableApi::class)
+	private suspend fun handleNfcTagScannedForTimer(nfcId: String)
+	{
+		// NFC ID is invalid
+		if (nfcId.isEmpty())
+		{
+			return
+		}
+
+		// Active timer(s)
+		if (timerViewModel.countActive() > 0)
+		{
+			// Get the current fragment and destination ID
+			val currentFragment = navHostFragment.childFragmentManager.primaryNavigationFragment
+			val destinationId = navController.currentDestination?.id
+
+			// Determine what to do based on the current destination
+			when (destinationId)
+			{
+
+				// Show timers
+				R.id.nacShowTimersFragment ->
+				{
+					val fragment = currentFragment as NacShowTimersFragment
+					fragment.attemptDismissWithScannedNfc(nfcId)
+				}
+
+				// Active timer
+				R.id.nacActiveTimerFragment ->
+				{
+					val fragment = currentFragment as NacActiveTimerFragment
+					fragment.attemptDismissWithScannedNfc(nfcId)
+				}
+
+				// Something else
+				else ->
+				{
+					// Add the NFC tag that was scanned to a bundle
+					val bundle = Bundle().apply {
+						putString(SCANNED_NFC_TAG_ID_BUNDLE_NAME, nfcId)
+					}
+
+					// Navigate to show timers passing in the NFC tag ID
+					navController.navigate(R.id.action_global_nacShowTimersFragment, bundle)
+				}
+
+			}
+		}
+		// Start a timer from an NFC tag
+		else
+		{
+			lifecycleScope.launch {
+
+				// Get the first timer that contains the NFC ID and is able to start an
+				// NFC tag from a scan
+				val matchingTimer = timerViewModel.getAllTimers()
+					.firstOrNull { it.nfcTagIdList.contains(nfcId) && it.shouldScanningNfcTagStartTimer }
+
+				// Start the active timer service and fragment
+				if (matchingTimer != null)
+				{
+					NacActiveTimerService.startTimerService(this@NacMainActivity, matchingTimer)
+					navController.navigate(R.id.nacActiveTimerFragment, matchingTimer.toBundle())
+				}
+
+			}
+		}
+	}
+
+	/**
 	 * Activity is created.
 	 */
 	@SuppressLint("NewApi")
@@ -334,6 +476,7 @@ class NacMainActivity
 		setupFloatingActionButton()
 		setupBottomNavigationView()
 		setupNavController()
+		setupNfcReaderModeObserver()
 
 		// Disable the activity alias so that tapping an NFC tag will NOT open
 		// the main activity
@@ -345,15 +488,6 @@ class NacMainActivity
 			cleanupExtraMediaFilesInDeviceEncryptedStorage()
 			cleanupEmailZipFiles()
 		}
-
-		//lifecycleScope.launch {
-		//	timerViewModel.allTimers.observe(this@NacMainActivity) { allTimers ->
-		//		allTimers.forEach {
-		//			it.isActive = false
-		//			timerViewModel.update(it)
-		//		}
-		//	}
-		//}
 	}
 
 	/**
@@ -392,103 +526,31 @@ class NacMainActivity
 		unregisterMyReceiver(this, shutdownBroadcastReceiver)
 
 		// Stop NFC
-		NacNfc.stop(this)
+		NacNfc.disableReaderMode(this)
 	}
 
 	/**
 	 * Activity is resumed.
 	 */
-	@SuppressLint("UnsafeIntentLaunch")
-	@OptIn(UnstableApi::class)
 	override fun onResume()
 	{
 		// Super
 		super.onResume()
 
-		lifecycleScope.launch {
-
-			// Get any active alarm or timer
-			val activeAlarm = alarmViewModel.getActiveAlarm()
-
-			// An NFC tag was scanned to open up the main activity
-			if (NacNfc.wasScanned(intent))
-			{
-				// Active alarm
-				if (activeAlarm != null)
-				{
-					// Remove the grant URI permissions in the untrusted intent
-					if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-					{
-						intent.removeFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-						intent.removeFlags(Intent.FLAG_GRANT_WRITE_URI_PERMISSION)
-					}
-
-					// Check that the nested intent does not grant URI permissions
-					if (((intent.flags and Intent.FLAG_GRANT_READ_URI_PERMISSION) == 0) &&
-						((intent.flags and Intent.FLAG_GRANT_WRITE_URI_PERMISSION) == 0))
-					{
-						// Start the alarm activity with the intent containing the NFC tag
-						// information in order to dismiss this alarm
-						NacActiveAlarmActivity.startAlarmActivity(this@NacMainActivity, intent, activeAlarm)
-					}
-				}
-				// Active timer(s)
-				else if (timerViewModel.countActive() > 0)
-				{
-					// Put the ID of the NFC tag that was scanned in a bundle
-					val nfcId = NacNfc.parseId(intent)!!
-					val destinationId = navController.currentDestination?.id
-
-					// Get the current fragment
-					val currentFragment = navHostFragment.childFragmentManager.primaryNavigationFragment
-
-					// Determine what to do based on the current destination
-					when (destinationId)
-					{
-
-						// Show timers
-						R.id.nacShowTimersFragment ->
-						{
-							val fragment = currentFragment as NacShowTimersFragment
-							fragment.attemptDismissWithScannedNfc(nfcId)
-						}
-
-						// Active timer
-						R.id.nacActiveTimerFragment ->
-						{
-							val fragment = currentFragment as NacActiveTimerFragment
-							fragment.attemptDismissWithScannedNfc(nfcId)
-						}
-
-						// Something else
-						else ->
-						{
-							// Add the NFC tag that was scanned to a bundle
-							val bundle = Bundle().apply {
-								putString(SCANNED_NFC_TAG_ID_BUNDLE_NAME, nfcId)
-							}
-
-							// Navigate to show timers passing in the NFC tag ID
-							navController.navigate(R.id.action_global_nacShowTimersFragment, bundle)
-						}
-
-					}
-				}
-				// TODO: Start a timer from an NFC tag
-				else
-				{
-				}
-			}
-			else
-			{
-				// Show the active alarm activity
-				if (activeAlarm != null)
-				{
-					NacActiveAlarmActivity.startAlarmActivity(this@NacMainActivity, activeAlarm)
-				}
-			}
-
+		// Check if the main activity should be refreshed
+		if (sharedPreferences.shouldRefreshMainActivity)
+		{
+			// Refresh the activity
+			refreshMainActivity()
+			return
 		}
+
+		// Setup NFC
+		setupNfc()
+		attemptToHandleNfcScanEvent()
+
+		// Register the shutdown receiver
+		registerMyShutdownBroadcastReceiver(this, shutdownBroadcastReceiver)
 
 		// Add alarm that was created from the SET_ALARM intent
 		if (intent.action == AlarmClock.ACTION_SET_ALARM)
@@ -504,25 +566,9 @@ class NacMainActivity
 			addTimerFromSetTimerIntent()
 		}
 
-		// Check if the main activity should be refreshed
-		if (sharedPreferences.shouldRefreshMainActivity)
-		{
-			// Refresh the activity
-			refreshMainActivity()
-			return
-		}
-
-		// Setup UI
+		// Setup
 		setupInitialDialogToShow()
-
-		// Register the shutdown receiver
-		registerMyShutdownBroadcastReceiver(this, shutdownBroadcastReceiver)
-
-		// Start NFC
-		if (NacNfc.exists(this))
-		{
-			NacNfc.start(this)
-		}
+		setupWasNfcJustScannedToDismiss()
 
 		// Refresh widgets
 		refreshAppWidgets(this)
@@ -675,15 +721,10 @@ class NacMainActivity
 			// Request permissions
 			permissionRequestManager.requestPermissions(this, onDone = {
 
-				// Refresh the recyclerview in case this is the first time the user is
+				// Refresh the destination in case this is the first time the user is
 				// using the app and the alarm cards do not show because of the
 				// request manager showing up first
-				// TODO: FIX THIS
-				//recyclerView.adapter = null
-				//recyclerView.layoutManager = null
-				//recyclerView.adapter = alarmCardAdapter
-				//recyclerView.layoutManager = NacCardLayoutManager(this)
-				//alarmCardAdapter.notifyDataSetChanged()
+				navController.navigate(R.id.action_global_nacShowAlarmsFragment)
 
 			})
 		}
@@ -729,18 +770,23 @@ class NacMainActivity
 	 */
 	private fun setupNavController()
 	{
-
-		// Change the visibility based on the current destination
-		navController.addOnDestinationChangedListener { _, destination, _ ->
-		}
-
 		// Destination changed listener
 		navController.addOnDestinationChangedListener { controller, destination, arguments ->
 
+			// Setup the flag when NFC was just scanned to dismiss
+			setupWasNfcJustScannedToDismiss()
+
 			// Set the bottom navigation visibility based on the current destination
 			bottomNavigation.visibility = if ((destination.id == R.id.nacAlarmMainMediaPickerFragment)
+				|| (destination.id == R.id.nacAlarmMainMediaPickerFragment2)
 				|| (destination.id == R.id.nacTimerMainMediaPickerFragment)
-				|| (destination.id == R.id.nacActiveTimerFragment))
+				|| (destination.id == R.id.nacActiveTimerFragment)
+				|| (destination.id == R.id.nacMainSettingFragment)
+				|| (destination.id == R.id.nacGeneralSettingFragment)
+				|| (destination.id == R.id.nacAppearanceSettingFragment)
+				|| (destination.id == R.id.nacNfcTagSettingFragment)
+				|| (destination.id == R.id.nacStatisticsSettingFragment)
+				|| (destination.id == R.id.nacAboutSettingFragment))
 			{
 				// Media picker
 				View.GONE
@@ -796,6 +842,52 @@ class NacMainActivity
 	}
 
 	/**
+	 * Setup NFC.
+	 */
+	private fun setupNfc()
+	{
+		// Start NFC
+		if (NacNfc.exists(this))
+		{
+			NacNfc.enableReaderMode(this) { tag ->
+
+				// NFC was just scanned to dismiss an alarm or timer so do nothing
+				if (sharedPreferences.wasNfcJustScannedToDismiss)
+				{
+					sharedPreferences.wasNfcJustScannedToDismiss = false
+					return@enableReaderMode
+				}
+
+				// Parse the NFC ID
+				val nfcId = NacNfc.parseId(tag) ?: return@enableReaderMode
+
+				// Handle an NFC tag being scanned
+				lifecycleScope.launch {
+					handleNfcTagScannedForTimer(nfcId)
+				}
+
+			}
+		}
+	}
+
+	/**
+	 * Setup NFC reader mode observer.
+	 */
+	private fun setupNfcReaderModeObserver()
+	{
+		// Observer the reader mode status
+		NacNfcReaderMode.liveData.observe(this) { status ->
+
+			// Reader mode was disabled so re-enable it here
+			if (!status)
+			{
+				setupNfc()
+			}
+
+		}
+	}
+
+	/**
 	 * Setup the toolbar.
 	 */
 	private fun setupToolbar()
@@ -829,11 +921,7 @@ class NacMainActivity
 				// Settings
 				R.id.menu_settings ->
 				{
-					// Create the intent to show the settings activity
-					val settingsIntent = Intent(this, NacMainSettingActivity::class.java)
-
-					// Start the activity
-					startActivity(settingsIntent)
+					navController.navigate(R.id.nacMainSettingFragment)
 					true
 				}
 
@@ -842,6 +930,26 @@ class NacMainActivity
 			}
 
 		}
+	}
+
+	/**
+	 * Setup the flag for if NFC was just scanned to dismiss an alarm/timer.
+	 *
+	 * If the flag was set, disable it after a delay. Otherwise, do nothing.
+	 */
+	private fun setupWasNfcJustScannedToDismiss()
+	{
+		// The flag is not set so do nothing
+		if (!sharedPreferences.wasNfcJustScannedToDismiss)
+		{
+			return
+		}
+
+		// Create a handler that disables the flag after a delay
+		Handler(mainLooper).postDelayed({
+			sharedPreferences.wasNfcJustScannedToDismiss = false
+		}, 1000)
+
 	}
 
 	companion object

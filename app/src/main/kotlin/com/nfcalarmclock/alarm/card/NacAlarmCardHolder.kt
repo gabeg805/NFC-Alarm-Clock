@@ -27,7 +27,6 @@ import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.card.NacBaseCardHolder
 import com.nfcalarmclock.card.NacHeightAnimator
-import com.nfcalarmclock.nfc.db.NacNfcTag
 import com.nfcalarmclock.system.NacCalendar.Day
 import com.nfcalarmclock.system.toDayString
 import com.nfcalarmclock.view.dayofweek.NacDayOfWeek
@@ -840,7 +839,7 @@ class NacAlarmCardHolder(root: View)
 	/**
 	 * Expand the alarm card.
 	 */
-	fun expand()
+	fun expand(onEnd: NacHeightAnimator.OnAnimationEndedListener? = null)
 	{
 		// Cancel the highlight
 		cancelHighlight()
@@ -849,6 +848,7 @@ class NacAlarmCardHolder(root: View)
 		cardAnimator.animationType = NacHeightAnimator.AnimationType.EXPAND
 		cardAnimator.setHeights(heightCollapsed, heightExpanded)
 		cardAnimator.duration = EXPAND_DURATION.toLong()
+		cardAnimator.onAnimationEndedListener = onEnd
 
 		// Start the animator
 		cardAnimator.start()
@@ -2274,128 +2274,6 @@ class NacAlarmCardHolder(root: View)
 
 		// Call the update listener
 		callOnCardUpdatedListener()
-	}
-
-	/**
-	 * Toast the flashlight message.
-	 */
-	fun toastFlashlight(context: Context)
-	{
-		// Determine which message to show
-		val messageId = if (alarm!!.shouldUseFlashlight)
-		{
-			R.string.message_flashlight_enabled
-		}
-		else
-		{
-			R.string.message_flashlight_disabled
-		}
-
-		// Toast the message
-		quickToast(context, messageId)
-	}
-
-	/**
-	 * Toast the NFC message.
-	 */
-	fun toastNfc(context: Context, allNfcTags: List<NacNfcTag>)
-	{
-		// Determine which message to show
-		val message = if (alarm!!.shouldUseNfc)
-		{
-			// NFC ID
-			if (alarm!!.nfcTagId.isNotEmpty())
-			{
-				// Find a matching NFC tag
-				val tag = allNfcTags.firstOrNull { it.nfcId == alarm!!.nfcTagId }
-
-				// Saved and named
-				if (tag != null)
-				{
-					context.getString(R.string.message_nfc_required_saved, tag.name)
-				}
-				// Unsaved and no name
-				else
-				{
-					context.getString(R.string.message_nfc_required_unsaved)
-				}
-			}
-			// Use any
-			else
-			{
-				context.getString(R.string.message_nfc_required_use_any)
-			}
-		}
-		// Normal
-		else
-		{
-			context.getString(R.string.message_nfc_optional)
-		}
-
-		// Toast the message
-		quickToast(context, message)
-	}
-
-	/**
-	 * Toast the NFC ID message.
-	 */
-	fun toastNfcId(context: Context)
-	{
-		// Determine which message to show
-		val message = if (alarm!!.nfcTagId.isNotEmpty())
-		{
-			// Get the string to show a specific NFC tag
-			val nfcId = context.getString(R.string.message_show_nfc_tag_id)
-
-			"$nfcId: ${alarm!!.nfcTagId}"
-		}
-		else
-		{
-			// Get the string to show any NFC tag
-			context.getString(R.string.message_nfc_required_use_any)
-		}
-
-		// Toast the message
-		quickToast(context, message)
-	}
-
-	/**
-	 * Toast the repeat message.
-	 */
-	fun toastRepeat(context: Context)
-	{
-		// Determine which message to show
-		val messageId = if (alarm!!.shouldRepeat)
-		{
-			R.string.message_repeat_enabled
-		}
-		else
-		{
-			R.string.message_repeat_disabled
-		}
-
-		// Toast the message
-		quickToast(context, messageId)
-	}
-
-	/**
-	 * Toast the vibrate message.
-	 */
-	fun toastVibrate(context: Context)
-	{
-		// Determine which message to show
-		val messageId = if (alarm!!.shouldVibrate)
-		{
-			R.string.message_vibrate_enabled
-		}
-		else
-		{
-			R.string.message_vibrate_disabled
-		}
-
-
-		// Toast the message
-		quickToast(context, messageId)
 	}
 
 	/**

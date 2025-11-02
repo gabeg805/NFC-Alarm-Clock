@@ -38,7 +38,30 @@
 	<string name="word_version">সংস্করণ</string>
 	<string name="word_of">এর</string>
 	<string name="word_alarm">এলার্ম</string>
+	<string name="word_alarms">অ্যালার্ম</string>
+	<string name="word_timer">টাইমার</string>
+	<string name="word_timers">টাইমার</string>
 	<string name="word_reminder">অনুস্মারক</string>
+	<string name="word_more">আরও</string>
+	<string name="letter_h">জ</string>
+	<string name="letter_m">মি</string>
+	<string name="letter_s">গুলি</string>
+	<string name="number00">০০</string>
+	<string name="number0">0</string>
+	<string name="number1">১</string>
+	<string name="number2">২</string>
+	<string name="number3">৩</string>
+	<string name="number4">৪</string>
+	<string name="number5">৫</string>
+	<string name="number6">৬</string>
+	<string name="number7">৭</string>
+	<string name="number8">৮</string>
+	<string name="number9">৯</string>
+
+	<!-- Timer add time -->
+	<string name="timer_add_1min">+ ১ মি</string>
+	<string name="timer_add_30sec">+ ৩০ এর দশক</string>
+	<string name="timer_add_5sec">+ ৫ সেকেন্ড</string>
 
 	<!-- States -->
 	<string name="state_unknown">অজানা</string>
@@ -49,6 +72,9 @@
 	<string name="action_alarm_dismiss_early">তাড়াতাড়ি বরখাস্ত করুন</string>
 	<string name="action_alarm_copy">কপি</string>
 	<string name="action_alarm_delete">মুছে দিন</string>
+	<string name="action_timer_pause">বিরতি</string>
+	<string name="action_timer_resume">জীবনবৃত্তান্ত</string>
+	<string name="action_timer_stop">থামো</string>
 	<string name="action_yes">হ্যাঁ</string>
 	<string name="action_no">না</string>
 	<string name="action_ok">ঠিক আছে</string>
@@ -104,6 +130,7 @@
 	<string name="message_permission_ignore_battery_optimization_request">অ্যাপটি কিছুক্ষণ ব্যবহার না করলে অ্যালার্ম চালু না হওয়ার জন্য।&lt;br/>&lt;br/>&lt;b>দ্রষ্টব্য:&lt;/b> এটা নির্ভর করে আপনার কাছে কোন ডিভাইস আছে এবং &lt;b>আসলে প্রয়োজন নাও হতে পারে &lt;/b>৷</string>
 	<string name="message_permission_post_notifications_request">অ্যাপটি ফোকাসে না থাকলে অ্যালার্ম চালানোর অনুমতি দিতে। &lt;br/>&lt;br/>&lt;b>দ্রষ্টব্য:&lt;/b> এটি &lt;b>Android 13&lt;/b> এ প্রবর্তিত নিরাপত্তা নীতির একটি পার্শ্ব প্রতিক্রিয়া, যা ব্যবহারকারীদের সুবিধার জন্য , কিন্তু এই ধরনের উদাহরণে অ্যাপগুলিকে সীমাবদ্ধ করতে পারে৷</string>
 	<string name="message_permission_schedule_exact_alarm_request">নির্ধারিত সময়ে অ্যালার্মগুলি সঠিকভাবে চালানোর জন্য।</string>
+	<string name="message_permission_system_alert_window_request">অন্যান্য অ্যাপের উপরে অ্যাপ প্রদর্শনের অনুমতি দেবেন?&lt;br/>&lt;br/>এটি নিশ্চিত করবে যে অ্যালার্ম স্ক্রিনটি প্রদর্শিত হচ্ছে, যা অ্যাপটি ব্যাকগ্রাউন্ডে থাকলে অডিও চালানোর জন্য একটি প্রয়োজনীয়তা। &lt;br/>&lt;br/> &lt;b>বিঃদ্রঃ:  &lt;/b> এটি শুধুমাত্র Android 15-এর উপর প্রভাব ফেলে।</string>
 	<string name="message_playlist">আপনি কি এই ফোল্ডারে সমস্ত সঙ্গীত চালাতে চান?</string>
 	<string name="message_nfc_request">অ্যালার্ম খারিজ করতে অনুগ্রহ করে NFC সক্ষম করুন৷</string>
 	<string name="message_nfc_optional">NFC ঐচ্ছিক</string>
@@ -116,16 +143,22 @@
 	<string name="message_flashlight_on_duration">চালু:</string>
 	<string name="message_flashlight_off_duration">বন্ধ:</string>
 	<string name="message_no_alarms_scheduled">কোনো অ্যালার্ম নির্ধারিত নেই।</string>
-	<string name="message_repeat_disabled">অ্যালার্ম পুনরাবৃত্তি করবেন না</string>
-	<string name="message_repeat_enabled">অ্যালার্ম পুনরাবৃত্তি করুন</string>
+	<string name="message_alarm_repeat_disabled">অ্যালার্ম পুনরাবৃত্তি করবেন না</string>
+	<string name="message_alarm_repeat_enabled">অ্যালার্ম পুনরাবৃত্তি করুন</string>
+	<string name="message_timer_repeat_disabled">টাইমার পুনরাবৃত্তি করবেন না</string>
+	<string name="message_timer_repeat_enabled">রিপিট টাইমার</string>
 	<string name="message_vibrate_disabled">কম্পন বন্ধ</string>
 	<string name="message_vibrate_enabled">ভাইব্রেট অন</string>
-	<string name="message_flashlight_disabled">টর্চলাইট বন্ধ</string>
-	<string name="message_flashlight_enabled">টর্চলাইট অন</string>
+	<string name="message_flashlight_disabled">টর্চলাইট ব্যবহার করবেন না</string>
+	<string name="message_flashlight_enabled">টর্চলাইট ব্যবহার করুন</string>
 	<string name="message_alarm_copy">কপি করা অ্যালার্ম</string>
+	<string name="message_timer_copy">টাইমার কপি করা হয়েছে</string>
 	<string name="message_alarm_delete">মুছে ফেলা অ্যালার্ম</string>
+	<string name="message_timer_delete">টাইমার মুছে ফেলা হয়েছে</string>
 	<string name="message_alarm_restore">পুনরুদ্ধার করা অ্যালার্ম</string>
+	<string name="message_timer_restore">টাইমার পুনরুদ্ধার করা হয়েছে</string>
 	<string name="message_alarm_dismiss">খারিজ অ্যালার্ম</string>
+	<string name="message_timer_dismiss">টাইমার বাতিল করা হয়েছে</string>
 	<string name="message_alarm_snooze">স্নুজ করা অ্যালার্ম</string>
 	<string name="message_statistics_started_on">পরিসংখ্যান শুরু হয়েছে</string>
 	<string name="message_bullet">\u25BA</string>
@@ -136,6 +169,7 @@
 	<string name="message_reset_statistics">আপনি কি নিশ্চিত যে আপনি সমস্ত পরিসংখ্যান রিসেট করতে চান?</string>
 	<string name="message_tts_current_time">বর্তমান সময়</string>
 	<string name="message_tts_alarm_name">অ্যালার্মের নাম</string>
+	<string name="message_tts_timer_name">টাইমারের নাম</string>
 	<string name="message_statistics_email_subject">NFC অ্যালার্ম ঘড়ি পরিসংখ্যান</string>
 	<string name="message_skip_general_alarm">অ্যালার্ম এড়িয়ে যাবে।</string>
 	<string name="message_skip_named_alarm">&lt;b&gt;%1$s&lt;/b&gt; বাদ দেওয়া হবে।</string>
@@ -159,6 +193,7 @@
 	<string name="error_message_active_delete">একটি সক্রিয় অ্যালার্ম মুছতে অক্ষম৷</string>
 	<string name="error_message_active_modify">একটি সক্রিয় অ্যালার্ম পরিবর্তন করতে অক্ষম৷</string>
 	<string name="error_message_max_alarms">সর্বোচ্চ সংখ্যক অ্যালার্ম তৈরি করা হয়েছে</string>
+	<string name="error_message_max_timers">সর্বাধিক সংখ্যক টাইমার তৈরি করা হয়েছে</string>
 	<string name="error_message_nfc_mismatch">NFC ট্যাগ সংরক্ষিত ট্যাগের সাথে মেলে না।</string>
 	<string name="error_message_nfc_unsupported">আপনার ডিভাইস NFC সমর্থন করে না</string>
 	<string name="error_message_nfc_name_exists">এই নাম ইতিমধ্যে ব্যবহার করা হচ্ছে</string>
@@ -171,6 +206,7 @@
 	<string name="error_message_play_audio">অডিও চালাতে অক্ষম</string>
 	<string name="error_message_google_play_billing">গুগল প্লে স্টোরের সাথে সংযোগ করার সময় ত্রুটি</string>
 	<string name="error_message_text_to_speech_audio_focus">টেক্সট-টু-স্পীচ ব্যবহার করতে অক্ষম</string>
+	<string name="error_message_unable_to_dismiss_early">তাড়াতাড়ি খারিজ করার জন্য অ্যালার্ম খুঁজে পাওয়া যাচ্ছে না</string>
 	<string name="error_message_unable_to_email_statistics">পরিসংখ্যান ইমেল করতে অক্ষম</string>
 	<string name="error_message_unable_to_shine_flashlight">টর্চলাইট জ্বলতে অক্ষম — %1$s</string>
 	<string name="error_message_unable_to_get_flashlight_characteristics">টর্চলাইট তথ্য পেতে অক্ষম</string>
@@ -190,12 +226,19 @@
 	<string name="error_message_unable_to_launch_media_picker">সিস্টেম অডিও পিকার চালু করা যাচ্ছে না</string>
 
 	<!-- Titles -->
+	<string name="title_timer_main">NFC টাইমার</string>
+	<string name="title_timer_add">টাইমার যোগ করুন</string>
+	<string name="title_timer_edit">টাইমার সম্পাদনা করুন</string>
+	<string name="title_timer_active">সক্রিয় টাইমার</string>
+	<string name="title_select_media">মিডিয়া নির্বাচন করুন</string>
 	<string name="title_settings">সেটিংস</string>
 	<string name="title_time">সময়</string>
 	<string name="title_options">অপশন</string>
 	<string name="title_alarm_activity">অ্যালার্ম খারিজ করুন</string>
 	<string name="title_scan_nfc_tag">NFC ট্যাগ স্ক্যান করুন</string>
 	<string name="title_select_nfc_tag">NFC ট্যাগ(গুলি) নির্বাচন করুন</string>
+	<string name="title_nfc_tag_dismiss_order">অর্ডার খারিজ করুন</string>
+	<string name="title_start_timer_on_nfc_tag_scan">স্ক্যান করার সময় টাইমার শুরু করুন</string>
 	<string name="title_save_nfc_tag">NFC ট্যাগ সংরক্ষণ করুন</string>
 	<string name="title_delete_nfc_tag">NFC ট্যাগ মুছুন</string>
 	<string name="title_rename_nfc_tag">NFC ট্যাগের নাম পরিবর্তন করুন</string>
@@ -204,6 +247,7 @@
 	<string name="title_select_next_alarm_format">একটি বিন্যাস নির্বাচন করুন</string>
 	<string name="title_folder_selected">আপনি একটি ফোল্ডার নির্বাচন করেছেন</string>
 	<string name="title_active_alarms">সক্রিয় অ্যালার্ম</string>
+	<string name="title_active_timers">সক্রিয় টাইমার</string>
 	<string name="title_upcoming_reminders">আসন্ন অনুস্মারক</string>
 	<string name="title_dismissed_alarms">খারিজ অ্যালার্ম</string>
 	<string name="title_missed_alarms">মিস করা অ্যালার্ম</string>
@@ -211,6 +255,8 @@
 	<string name="title_created_alarms">অ্যালার্ম তৈরি করা হয়েছে</string>
 	<string name="title_deleted_alarms">মুছে ফেলা অ্যালার্ম</string>
 	<string name="title_current_alarms">কারেন্ট</string>
+	<string name="title_set_date">তারিখ নির্ধারণ করুন</string>
+	<string name="title_set_time">সময় নির্ধারণ করুন</string>
 	<string name="title_whats_new">নতুন কি</string>
 	<string name="title_permission_disable_battery_optimization">ব্যাটারি অপ্টিমাইজেশান অক্ষম করুন</string>
 	<string name="title_permission_storage">স্টোরেজ</string>
@@ -219,10 +265,13 @@
 	<string name="title_permission_schedule_alarm">সঠিক অ্যালার্ম নির্ধারণ করুন</string>
 	<string name="title_permission_set_alarm">অ্যালার্ম সেট করুন</string>
 	<string name="title_permission_show_notifications">বিজ্ঞপ্তি দেখান</string>
+	<string name="title_permission_system_alert_window">অন্যান্য অ্যাপের উপরে প্রদর্শন করুন</string>
 	<string name="title_permission_boot">স্টার্টআপ</string>
 	<string name="title_permission_wakelock">ওয়েকলক</string>
 	<string name="title_request_permission_schedule_exact_alarm">সময়সূচী সঠিক অ্যালার্ম সক্ষম করুন</string>
 	<string name="title_reset_statistics">পরিসংখ্যান রিসেট করুন…</string>
+	<string name="title_repeat_frequency">পুনরাবৃত্তি ফ্রিকোয়েন্সি</string>
+	<string name="title_repeat_frequency_days_to_run_before_starting">শুরু হওয়ার আগে চালানোর দিনগুলির ফ্রিকোয়েন্সি</string>
 	<string name="title_vibrate_vibration_duration">কম্পন সময়কাল</string>
 	<string name="title_vibrate_custom_pattern">কাস্টম প্যাটার্ন</string>
 	<string name="title_vibrate_wait">অপেক্ষা করুন</string>
@@ -235,11 +284,13 @@
 	<string name="title_volume_restrict_volume">ভলিউম সীমাবদ্ধ করুন</string>
 	<string name="title_dismiss_options_auto_dismiss">স্বতঃ-খারিজ</string>
 	<string name="title_dismiss_options_dismiss_early">তাড়াতাড়ি বরখাস্ত করুন</string>
+	<string name="title_dismiss_options_dismiss_early_notification">আগাম বিজ্ঞপ্তি খারিজ করুন</string>
 	<string name="title_dismiss_options_delete_after_dismissed">বরখাস্ত করার পরে মুছুন</string>
 	<string name="title_snooze_options_auto_snooze">অটো-স্নুজ</string>
 	<string name="title_snooze_options_max_snooze">সর্বোচ্চ স্নুজ</string>
 	<string name="title_snooze_options_snooze_duration">স্নুজ সময়কাল</string>
 	<string name="title_snooze_options_easy_snooze">সহজ স্নুজ</string>
+	<string name="title_snooze_options_volume_snooze">ভলিউম স্নুজ</string>
 	<string name="title_upcoming_reminder_show_reminder">অনুস্মারক দেখান</string>
 	<string name="title_upcoming_reminder_how_early">কত তাড়াতাড়ি…</string>
 	<string name="title_upcoming_reminder_how_frequent">কত ঘন ঘন…</string>
@@ -253,6 +304,7 @@
 	<string name="title_default_alarm">ডিফল্ট অ্যালার্ম</string>
 	<string name="title_alarm_name">নাম</string>
 	<string name="title_alarm_days">দিন</string>
+	<string name="title_alarm_schedule_date">তারিখ নির্ধারণ করুন</string>
 	<string name="title_alarm_repeat">পুনরাবৃত্তি করুন</string>
 	<string name="title_alarm_vibrate">কম্পন</string>
 	<string name="title_alarm_nfc">এনএফসি</string>
@@ -284,6 +336,7 @@
 	<string name="description_no_notification">বিজ্ঞপ্তি দেখাবেন না।</string>
 	<string name="description_upcoming_reminder">আসন্ন অ্যালার্মগুলির জন্য অনুস্মারক যা সক্রিয় হতে চলেছে৷</string>
 	<string name="description_active_alarm">বর্তমানে সক্রিয় অ্যালার্ম।</string>
+	<string name="description_active_timer">বর্তমানে সক্রিয় টাইমার।</string>
 	<string name="description_missed_alarm">স্বয়ংক্রিয়ভাবে বাতিল হওয়া অ্যালার্ম।</string>
 	<string name="description_skipped_alarm">এড়িয়ে যাওয়া অ্যালার্ম।</string>
 	<string name="description_color">হেক্স রঙ</string>
@@ -291,24 +344,37 @@
 	<string name="description_day_button_style_outlined">আউটলাইন করা বোতাম।</string>
 	<string name="description_media">সঙ্গীত বা রিংটোন</string>
 	<string name="description_scan_nfc_tag_alarm">স্ক্যান করা NFC ট্যাগ এই অ্যালার্মটি বন্ধ হয়ে গেলে খারিজ করার জন্য প্রয়োজন হবে৷</string>
+	<string name="description_scan_nfc_tag_timer">এই টাইমারটি বন্ধ হয়ে গেলে স্ক্যান করা NFC ট্যাগটি বন্ধ করার জন্য প্রয়োজন হবে।</string>
 	<string name="description_select_nfc_tag_alarm">একটি NFC ট্যাগ নির্বাচন করুন যা এই অ্যালার্মটি বন্ধ হয়ে গেলে খারিজ করতে প্রয়োজন হবে৷ একাধিক নির্বাচন করা হলে, এটি এই অ্যালার্ম খারিজ করতে ব্যবহার করা যেতে পারে।</string>
+	<string name="description_select_nfc_tag_timer">এই টাইমারটি বন্ধ হয়ে গেলে বন্ধ করার জন্য যে NFC ট্যাগটি প্রয়োজন হবে তা নির্বাচন করুন। যদি একাধিক নির্বাচন করা হয়, তাহলে এই টাইমারটি বন্ধ করার জন্যও এটি ব্যবহার করা যেতে পারে।</string>
+	<string name="description_nfc_tag_dismiss_order">উপরের NFC ট্যাগগুলি কোন ক্রমে খারিজ করা উচিত। এটি সক্ষম করার অর্থ হল খারিজ করার জন্য নির্বাচিত সমস্ত NFC ট্যাগ স্ক্যান করতে হবে।</string>
+	<string name="description_start_timer_on_nfc_tag_scan">নির্বাচিত NFC ট্যাগগুলির মধ্যে একটি স্ক্যান করা হলে, এটি স্বয়ংক্রিয়ভাবে এই টাইমারটি শুরু করবে।</string>
 	<string name="description_save_nfc_tag">আপনি এই এনএফসি ট্যাগটিকে আবার স্ক্যান না করেই একটি নাম দিয়ে পুনরায় ব্যবহার করতে পারেন৷</string>
+	<string name="description_repeat_frequency">নির্দিষ্ট ফ্রিকোয়েন্সিতে (প্রতি X বার) অ্যালার্মটি পুনরাবৃত্তি করুন। দ্রষ্টব্য: ঘন্টা বা দিন নির্বাচন করলে অ্যালার্মের সমস্ত দিন মুছে যাবে।</string>
+	<string name="description_repeat_frequency_days_to_run_before_starting">ফ্রিকোয়েন্সি শুরু করার আগে এই সপ্তাহে অ্যালার্মের বর্তমানে নির্বাচিত কোন দিনগুলি চালানো উচিত।</string>
 	<string name="description_vibrate_vibration_duration">কতক্ষণ কম্পন করতে হবে এবং কম্পনের মধ্যে কতক্ষণ অপেক্ষা করতে হবে।</string>
 	<string name="description_vibrate_custom_pattern">কম্পনের সময়কাল নির্দিষ্ট সংখ্যক বার পুনরাবৃত্তি করুন, এবং তারপর একটি সময়কালের জন্য অপেক্ষা করুন।</string>
 	<string name="description_flashlight_brightness_level">ফ্ল্যাশলাইটের উজ্জ্বলতার মাত্রা।</string>
 	<string name="description_flashlight_blink_on_off">ফ্ল্যাশলাইটটি ব্লিঙ্ক করুন এবং নির্দিষ্ট সময়ে বন্ধ করুন।</string>
 	<string name="description_text_to_speech_what_to_say_alarm">অ্যালার্ম সক্রিয় থাকলে টেক্সট-টু-স্পিচ দিয়ে কী বলতে হবে।</string>
+	<string name="description_text_to_speech_what_to_say_timer">টাইমার সক্রিয় থাকাকালীন টেক্সট-টু-স্পিচ দিয়ে কী বলবেন।</string>
 	<string name="description_text_to_speech_speak_frequency">কত ঘন ঘন উপরে নির্বাচিত আইটেম বলতে.</string>
 	<string name="description_text_to_speech_speech_rate">কত দ্রুত টেক্সট-টু-স্পীচ কথা বলা উচিত।</string>
 	<string name="description_volume_gradually_increase_volume_alarm">একটি সেট ফ্রিকোয়েন্সিতে অ্যালার্মের ভলিউম বাড়ান।</string>
+	<string name="description_volume_gradually_increase_volume_timer">একটি নির্দিষ্ট ফ্রিকোয়েন্সিতে টাইমারের ভলিউম বাড়ান।</string>
 	<string name="description_volume_restrict_volume_alarm">অ্যালার্ম বন্ধ হয়ে গেলে ভলিউম পরিবর্তন করা যাবে না।</string>
+	<string name="description_volume_restrict_volume_timer">টাইমার বন্ধ হয়ে গেলে ভলিউম পরিবর্তন করা যাবে না।</string>
 	<string name="description_dismiss_options_auto_dismiss_alarm">একটি নির্দিষ্ট সময়ের পরে স্বয়ংক্রিয়ভাবে অ্যালার্ম খারিজ করুন।</string>
+	<string name="description_dismiss_options_auto_dismiss_timer">একটি নির্দিষ্ট সময়কালের পরে টাইমারটি স্বয়ংক্রিয়ভাবে বাতিল করুন।</string>
 	<string name="description_dismiss_options_dismiss_early">অ্যালার্মটি সক্রিয় হওয়ার আগে তাড়াতাড়ি খারিজ করুন।</string>
+	<string name="description_dismiss_options_dismiss_early_notification">কখন অ্যালার্মটি তাড়াতাড়ি বন্ধ করা যেতে পারে তা একটি বিজ্ঞপ্তি দেখান।</string>
 	<string name="description_dismiss_options_delete_after_dismissed_alarm">অ্যালার্মটি খারিজ হওয়ার পরে মুছে ফেলা হবে।</string>
+	<string name="description_dismiss_options_delete_after_dismissed_timer">টাইমারটি খারিজ করার পরে মুছে ফেলা হবে।</string>
 	<string name="description_snooze_options_auto_snooze">একটি নির্দিষ্ট সময়কাল পরে স্বয়ংক্রিয়ভাবে অ্যালার্ম স্নুজ করুন।</string>
 	<string name="description_snooze_options_max_snooze">সর্বোচ্চ কতবার অ্যালার্ম স্নুজ করা যাবে।</string>
 	<string name="description_snooze_options_snooze_duration">অ্যালার্ম স্নুজ করার জন্য সময়ের পরিমাণ।</string>
 	<string name="description_snooze_options_easy_snooze">অ্যালার্ম স্ক্রিনের যেকোনো জায়গায় স্পর্শ করে অ্যালার্ম স্নুজ করুন।</string>
+	<string name="description_snooze_options_volume_snooze">ভলিউম আপ বা ডাউন বোতাম টিপে অ্যালার্মটি স্নুজ করুন।</string>
 	<string name="description_upcoming_reminder_show_reminder">অ্যালার্ম বন্ধ হওয়ার আগে একটি অনুস্মারক বিজ্ঞপ্তি দেখান।</string>
 	<string name="description_upcoming_reminder_how_early">কত তাড়াতাড়ি অনুস্মারক বিজ্ঞপ্তি দেখানো উচিত?</string>
 	<string name="description_upcoming_reminder_how_frequent">কত ঘন ঘন অনুস্মারক বিজ্ঞপ্তি দেখানো উচিত?</string>
@@ -359,9 +425,11 @@
 	<string name="description_permission_schedule_alarm">সঠিক অ্যালার্ম নির্ধারণ করুন।</string>
 	<string name="description_permission_set_alarm">একটি বাহ্যিক উত্স থেকে একটি অ্যালার্ম সেট করুন, যেমন Google সহকারী৷</string>
 	<string name="description_permission_post_notifications">যখন একটি অ্যালার্ম সক্রিয় করা হয় তখন একটি বিজ্ঞপ্তি দেখান যা আপনার ডিভাইসটিকে অ্যাপটিকে ঘুমাতে এবং অ্যালার্মটি নিজে থেকে বন্ধ করা থেকে বিরত রাখবে৷</string>
+	<string name="description_permission_system_alert_window">যদি অ্যাপটি ব্যাকগ্রাউন্ডে থাকে এবং অনেকদিন ধরে ব্যবহার না করা হয়, তাহলে অ্যালার্ম স্ক্রিনটি দেখানো হচ্ছে কিনা তা নিশ্চিত করুন, যা অডিও চালানোর জন্য একটি আবশ্যকতা। এটি শুধুমাত্র Android 15-এর উপর প্রভাব ফেলবে।</string>
 	<string name="description_permission_boot">আপনার ডিভাইস চালু হলে অ্যালার্ম পুনরুদ্ধার করুন।  আপনার ডিভাইস বন্ধ হয়ে গেলে Android অ্যালার্ম মুছে দেবে।</string>
 	<string name="description_permission_wakelock">আপনার ডিভাইসটিকে ঘুম থেকে বিরত রাখুন যাতে একটি সক্রিয় অ্যালার্ম বন্ধ হতে থাকে।</string>
 	<string name="description_audio_sources_alarm">অ্যালার্ম বাজানোর জন্য অডিও চ্যানেল।</string>
+	<string name="description_audio_sources_timer">টাইমারটি যে অডিও চ্যানেলে চালানো হবে।</string>
 	<string name="description_widget_alarm_example">পূর্বরূপ দেখানো অ্যালার্ম শুধুমাত্র একটি উদাহরণ.</string>
 	<string name="description_text_to_speech_voice">টেক্সট-টু-স্পিচের জন্য ব্যবহার করা ভয়েস।</string>
 	<string name="description_only_show_app_alarms">এই অ্যাপ থেকে শুধুমাত্র অ্যালার্ম উইজেটে দেখানো হবে।</string>
@@ -369,6 +437,7 @@
 
 	<!-- Content descriptions -->
 	<string name="cd_alarm_list">অ্যালার্মের তালিকা এখানে দেখানো হবে।</string>
+	<string name="cd_timer_list">টাইমারের তালিকা এখানে দেখানো হবে।</string>
 	<string name="cd_nfc_tag_list">NFC ট্যাগের তালিকা এখানে দেখানো হবে।</string>
 	<string name="cd_fab_add_alarm">একটি নতুন অ্যালার্ম যোগ করুন।</string>
 	<string name="cd_fab_launch_system_file_browser">সিস্টেম ফাইল ব্রাউজার চালু করুন।</string>
@@ -383,6 +452,7 @@
 	<string name="cd_request_permission_ignore_battery_optimization">ব্যাটারি অপ্টিমাইজেশান নিষ্ক্রিয় করার জন্য অনুরোধ.</string>
 	<string name="cd_request_permission_post_notifications">বিজ্ঞপ্তি পোস্ট করার অনুরোধ.</string>
 	<string name="cd_request_permission_schedule_exact_alarm">সঠিক অ্যালার্ম শিডিউল করার জন্য অনুরোধ করুন।</string>
+	<string name="cd_request_permission_system_alert_window">অন্যান্য অ্যাপের উপরে অ্যাপ প্রদর্শনের জন্য অনুমতির অনুরোধ করুন।</string>
 	<string name="cd_whats_new">অ্যাপের এই সংস্করণে নতুন আইটেমগুলির তালিকা৷</string>
 	<string name="cd_scan_nfc">একটি NFC ট্যাগ স্ক্যান করুন।</string>
 	<string name="cd_alarm_slider_arrow">আপনার আঙুল সোয়াইপ করার দিকনির্দেশ।</string>
@@ -407,6 +477,56 @@
 	<plurals name="skipped_alarm">
 		<item quantity="one" tools:ignore="ImpliedQuantity">এড়িয়ে যাওয়া অ্যালার্ম</item>
 		<item quantity="other">এড়িয়ে যাওয়া অ্যালার্ম</item>
+	</plurals>
+
+	<plurals name="repeat_minutely">
+		<item quantity="one">প্রতি %d মিনিটে</item>
+		<item quantity="other">প্রতি %d মিনিটে</item>
+	</plurals>
+
+	<plurals name="repeat_hourly">
+		<item quantity="one">প্রতি %d ঘন্টা অন্তর</item>
+		<item quantity="other">প্রতি %d ঘন্টা অন্তর</item>
+	</plurals>
+
+	<plurals name="repeat_daily">
+		<item quantity="one">প্রতি %d দিন</item>
+		<item quantity="other">প্রতি %d দিন অন্তর</item>
+	</plurals>
+
+	<plurals name="repeat_weekly">
+		<item quantity="one">প্রতি %d সপ্তাহে</item>
+		<item quantity="other">প্রতি %d সপ্তাহে</item>
+	</plurals>
+
+	<plurals name="repeat_monthly">
+		<item quantity="one">প্রতি %d মাসে</item>
+		<item quantity="other">প্রতি %d মাসে</item>
+	</plurals>
+
+	<plurals name="standalone_unit_minute">
+		<item quantity="one" tools:ignore="ImpliedQuantity">মিনিট</item>
+		<item quantity="other">মিনিট</item>
+	</plurals>
+
+	<plurals name="standalone_unit_hour">
+		<item quantity="one" tools:ignore="ImpliedQuantity">ঘন্টা</item>
+		<item quantity="other">ঘন্টার</item>
+	</plurals>
+
+	<plurals name="standalone_unit_day">
+		<item quantity="one" tools:ignore="ImpliedQuantity">দিন</item>
+		<item quantity="other">দিনগুলি</item>
+	</plurals>
+
+	<plurals name="standalone_unit_week">
+		<item quantity="one" tools:ignore="ImpliedQuantity">সপ্তাহ</item>
+		<item quantity="other">সপ্তাহ</item>
+	</plurals>
+
+	<plurals name="standalone_unit_month">
+		<item quantity="one" tools:ignore="ImpliedQuantity">মাস</item>
+		<item quantity="other">মাস</item>
 	</plurals>
 
 	<plurals name="unit_day">

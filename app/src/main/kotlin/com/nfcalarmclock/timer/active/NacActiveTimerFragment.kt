@@ -169,8 +169,8 @@ class NacActiveTimerFragment
 	private val onBackPressedCallback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
 		override fun handleOnBackPressed()
 		{
-			// Go back to the show timers fragment
-			findNavController().popBackStack(R.id.nacShowTimersFragment, false)
+			// Go back to show timers fragment
+			findNavController().navigate(R.id.action_global_nacShowTimersFragment)
 		}
 	}
 
@@ -263,8 +263,8 @@ class NacActiveTimerFragment
 	private val onServiceStoppedListener: NacActiveTimerService.OnServiceStoppedListener =
 		NacActiveTimerService.OnServiceStoppedListener {
 
-			// Navigate back to show timers
-			findNavController().popBackStack(R.id.nacShowTimersFragment, false)
+			// Navigate back to show timers fragment
+			findNavController().navigate(R.id.action_global_nacShowTimersFragment)
 
 		}
 
@@ -366,6 +366,9 @@ class NacActiveTimerFragment
 		{
 			// Dismiss the service
 			service?.dismiss(timer)
+
+			// Set the NFC just scanned flag
+			sharedPreferences.wasNfcJustScannedToDismiss = true
 		}
 
 		// Setup the scan NFC tag textview, in the event that more NFC tags need to be

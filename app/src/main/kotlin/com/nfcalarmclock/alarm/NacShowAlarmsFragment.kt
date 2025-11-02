@@ -202,6 +202,11 @@ class NacShowAlarmsFragment
 	private var expandedAlarmCardIds: MutableList<Long> = arrayListOf()
 
 	/**
+	 * New alarm card to show.
+	 */
+	private var newAlarmCardToShow: NacAlarmCardHolder? = null
+
+	/**
 	 * Check if the user has created the maximum number of alarms.
 	 */
 	private val hasCreatedMaxAlarms: Boolean
@@ -667,29 +672,11 @@ class NacShowAlarmsFragment
 					// Highlight the alarm card
 					showNewAlarm(card, alarm)
 				}
-				// Smooth scrolling to card
+				// Currently smooth scrolling to card. Need to wait until scroll is
+				// complete to show the new alarm card
 				else
 				{
-					// Set a scroll listener so that once the recyclerview has reached where its
-					// destination, then the new alarm can be shown
-					recyclerView.addOnScrollListener(object : OnScrollListener()
-					{
-
-						/**
-						 * Scroll state is changed.
-						 */
-						override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int)
-						{
-							// Highlight the alarm card and clear the scroll listeners
-							// once the recyclerview is no longer scrolling
-							if (newState == RecyclerView.SCROLL_STATE_IDLE)
-							{
-								recyclerView.clearOnScrollListeners()
-								showNewAlarm(card, alarm)
-							}
-						}
-
-					})
+					newAlarmCardToShow = card
 				}
 
 				// Remove the alarm from the recently added list
@@ -805,13 +792,13 @@ class NacShowAlarmsFragment
 			// Repeat
 			card.onCardUseRepeatChangedListener = OnCardUseRepeatChangedListener { _, alarm ->
 				updateAlarm(alarm)
-				card.toastRepeat(context)
+				alarm.toastRepeat(context)
 			}
 
 			// Vibrate
 			card.onCardUseVibrateChangedListener = OnCardUseVibrateChangedListener { _, alarm ->
 				updateAlarm(alarm)
-				card.toastVibrate(context)
+				alarm.toastVibrate(context)
 			}
 
 			// NFC
@@ -819,14 +806,14 @@ class NacShowAlarmsFragment
 				updateAlarm(alarm)
 
 				lifecycleScope.launch {
-					card.toastNfc(context, nfcTagViewModel.getAllNfcTags())
+					alarm.toastNfc(context, nfcTagViewModel.getAllNfcTags())
 				}
 			}
 
 			// Flashlight
 			card.onCardUseFlashlightChangedListener = OnCardUseFlashlightChangedListener { _, alarm ->
 				updateAlarm(alarm)
-				card.toastFlashlight(context)
+				alarm.toastFlashlight(context)
 			}
 
 			// Media
@@ -970,7 +957,7 @@ class NacShowAlarmsFragment
 
 							// Show the NFC tag for the current alarm
 							item.setOnMenuItemClickListener { _ ->
-								card.toastNfcId(context)
+								alarm.toastNfcId(context)
 								true
 							}
 						}
@@ -1020,7 +1007,7 @@ class NacShowAlarmsFragment
 		{
 
 			/**
-			 * Called when a range of items are moved.
+			 * Range of items are moved.
 			 */
 			override fun onItemRangeMoved(fromPosition: Int, toPosition: Int, itemCount: Int)
 			{
@@ -1160,7 +1147,9 @@ class NacShowAlarmsFragment
 			// onCreate()
 			if (isAdapterListEmpty)
 			{
-				setNextAlarmMessage()
+				println("ALARM CARD ADAPTER OBSERVER")
+				val nextAlarm = NacCalendar.getNextAlarm(alarms)
+				setNextAlarmMessage(nextAlarm)
 			}
 
 			// Scroll down to any newly added alarms
@@ -1240,7 +1229,7 @@ class NacShowAlarmsFragment
 				if (dy > 0)
 				{
 					// Scroll Down
-					if (floatingActionButton.isShown)
+					if (floatingActionButton.isShown && (newAlarmCardToShow == null))
 					{
 						floatingActionButton.hide()
 					}
@@ -1251,6 +1240,30 @@ class NacShowAlarmsFragment
 					if (!floatingActionButton.isShown)
 					{
 						floatingActionButton.show()
+					}
+				}
+			}
+
+			/**
+			 * Scroll state changed.
+			 */
+			override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int)
+			{
+				super.onScrollStateChanged(recyclerView, newState)
+
+				// Not scrolling anywhere
+				if (newState == RecyclerView.SCROLL_STATE_IDLE)
+				{
+					// Need to show a new alarm
+					if ((newAlarmCardToShow != null) && newAlarmCardToShow!!.isCollapsed)
+					{
+						showNewAlarm(newAlarmCardToShow!!, newAlarmCardToShow!!.alarm!!)
+					}
+					// Do not need to show a new alarm or the new card was already
+					// expanded and can be set to null
+					else
+					{
+						newAlarmCardToShow = null
 					}
 				}
 			}
@@ -1349,9 +1362,10 @@ class NacShowAlarmsFragment
 		// further because the expanded card messes with the initial scroll
 		if (sharedPreferences.expandNewAlarm)
 		{
-			card.expand()
-			showTimeDialog(card, alarm)
-			recyclerView.smoothScrollToPosition(card.bindingAdapterPosition+2)
+			card.expand {
+				showTimeDialog(card, alarm)
+				recyclerView.smoothScrollToPosition(card.bindingAdapterPosition+2)
+			}
 		}
 		// Highlight new alarm cards
 		else

@@ -4,10 +4,12 @@ import android.app.NotificationChannel
 import android.app.PendingIntent
 import android.content.Context
 import android.os.Build
+import androidx.annotation.OptIn
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.content.ContextCompat
+import androidx.media3.common.util.UnstableApi
 import androidx.navigation.NavDeepLinkBuilder
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.NacShowAlarmsFragment
@@ -113,6 +115,7 @@ class NacDismissEarlyNotification(
 	 * The pending intent to use when dismissing the alarm early.
 	 */
 	private val dismissPendingIntent: PendingIntent
+		@OptIn(UnstableApi::class)
 		get()
 		{
 			return NavDeepLinkBuilder(context.applicationContext)

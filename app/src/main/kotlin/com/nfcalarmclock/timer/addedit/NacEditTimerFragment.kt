@@ -30,7 +30,6 @@ class NacEditTimerFragment
 	 */
 	override fun navigateToMediaPicker(bundle: Bundle)
 	{
-		println("Navigating edit timer to main media timer")
 		// Navigate to the media picker
 		findNavController().navigate(R.id.action_nacEditTimerFragment_to_nacTimerMainMediaPickerFragment, bundle)
 	}

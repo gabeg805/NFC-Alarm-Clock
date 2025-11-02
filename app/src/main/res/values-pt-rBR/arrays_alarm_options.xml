@@ -10,6 +10,12 @@
 		<item>Toque</item>
 	</string-array>
 
+	<!-- NFC tag dismiss orders -->
+	<string-array name="nfc_tag_dismiss_orders">
+		<item>Aleatório</item>
+		<item>Sequencial</item>
+	</string-array>
+
 	<!-- Flashlight -->
 	<string-array name="flashlight_on_off_duration_times">
 		<item>0,5 segundos</item>

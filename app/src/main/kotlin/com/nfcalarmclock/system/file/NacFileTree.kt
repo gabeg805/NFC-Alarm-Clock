@@ -196,7 +196,6 @@ class NacFileTree(path: String)
 			}
 
 			// Create a file tree from the path
-			println("Create file tree : $filePath")
 			val tree = NacFileTree(filePath)
 
 			// Scan the tree

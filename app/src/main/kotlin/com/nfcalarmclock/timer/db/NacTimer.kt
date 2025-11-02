@@ -1,11 +1,14 @@
 package com.nfcalarmclock.timer.db
 
+import android.content.Context
 import android.os.Parcel
 import android.os.Parcelable
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.shared.NacSharedPreferences
+import com.nfcalarmclock.view.quickToast
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -39,7 +42,15 @@ class NacTimer()
 	var duration: Long = 0
 
 	/**
+	 * Whether scanning the NFC tag(s) used by this timer should start it or not.
+	 */
+	@ColumnInfo(name = "should_scanning_nfc_tag_start_timer", defaultValue = "0")
+	var shouldScanningNfcTagStartTimer: Boolean = false
+
+	/**
 	 * ID(s) of the NFC tag(s) that can be used to start the timer.
+	 *
+	 * TODO: Do I need this?
 	 */
 	@ColumnInfo(name = "scan_nfc_tag_id_to_start", defaultValue = "")
 	var scanNfcTagIdToStart: String = ""
@@ -49,27 +60,6 @@ class NacTimer()
 	 */
 	@ColumnInfo(name = "should_volume_stop", defaultValue = "0")
 	var shouldVolumeStop: Boolean = false
-
-	/**
-	 * ID(s) of the NFC tag(s) that can be used to start the timer.
-	 */
-	val scanNfcTagIdToStartList: List<String>
-		get()
-		{
-			// Create the regex
-			val regex = Regex(" \\|\\| ")
-
-			return if (scanNfcTagIdToStart.isEmpty())
-			{
-				// No NFC ID
-				emptyList()
-			}
-			else
-			{
-				// Try to split the NFC IDs
-				scanNfcTagIdToStart.split(regex)
-			}
-		}
 
 	/**
 	 * Populate values with input parcel.
@@ -101,6 +91,7 @@ class NacTimer()
 		nfcTagId = input.readString() ?: ""
 		shouldUseNfcTagDismissOrder = input.readInt() != 0
 		nfcTagDismissOrder = input.readInt()
+		shouldScanningNfcTagStartTimer = input.readInt() != 0
 		scanNfcTagIdToStart = input.readString() ?: ""
 
 		// Flashlight
@@ -178,6 +169,7 @@ class NacTimer()
 		timer.nfcTagId = nfcTagId
 		timer.shouldUseNfcTagDismissOrder = shouldUseNfcTagDismissOrder
 		timer.nfcTagDismissOrder = nfcTagDismissOrder
+		timer.shouldScanningNfcTagStartTimer = shouldScanningNfcTagStartTimer
 		timer.scanNfcTagIdToStart = scanNfcTagIdToStart
 
 		// Flashlight
@@ -294,10 +286,10 @@ class NacTimer()
 	override fun hashCode(): Int
 	{
 		return super.hashCode() + 31 * (
-			  duration.hashCode()
-			+ shouldVolumeStop.hashCode()
+			duration.hashCode()
+			+ shouldScanningNfcTagStartTimer.hashCode()
 			+ scanNfcTagIdToStart.hashCode()
-			+ scanNfcTagIdToStartList.hashCode())
+			+ shouldVolumeStop.hashCode())
 	}
 
 	/**
@@ -355,6 +347,25 @@ class NacTimer()
 	}
 
 	/**
+	 * Toast the repeat message.
+	 */
+	override fun toastRepeat(context: Context)
+	{
+		// Determine which message to show
+		val messageId = if (shouldRepeat)
+		{
+			R.string.message_timer_repeat_enabled
+		}
+		else
+		{
+			R.string.message_timer_repeat_disabled
+		}
+
+		// Toast the message
+		quickToast(context, messageId)
+	}
+
+	/**
 	 * Write data into parcel (required for Parcelable).
 	 *
 	 * Update this when adding/removing an element.
@@ -386,6 +397,7 @@ class NacTimer()
 		output.writeString(nfcTagId)
 		output.writeInt(if (shouldUseNfcTagDismissOrder) 1 else 0)
 		output.writeInt(nfcTagDismissOrder)
+		output.writeInt(if (shouldScanningNfcTagStartTimer) 1 else 0)
 		output.writeString(scanNfcTagIdToStart)
 
 		// Flashlight

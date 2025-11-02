@@ -217,8 +217,8 @@ class NacActiveAlarmService
 			// Save the next alarm
 			saveNextAlarm()
 
-			// Set flag to refresh the main activity
-			sharedPreferences.shouldRefreshMainActivity = true
+			// Set the NFC just scanned flag
+			sharedPreferences.wasNfcJustScannedToDismiss = usedNfc
 
 			// Clear the dismiss early notification
 			NacDismissEarlyService.stopService(this@NacActiveAlarmService, alarm)

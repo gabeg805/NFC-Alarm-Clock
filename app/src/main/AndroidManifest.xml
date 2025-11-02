@@ -127,14 +127,6 @@
 			android:taskAffinity=""
 			/>
 
-		<!-- Settings activity -->
-		<activity
-			android:name=".settings.NacMainSettingActivity"
-			android:label="@string/title_settings"
-			android:parentActivityName=".main.NacMainActivity"
-			android:windowSoftInputMode="stateAlwaysHidden"
-			/>
-
 		<!-- Active alarm service (show notification and call alarm activity) -->
 		<service
 			android:name=".alarm.activealarm.NacActiveAlarmService"

@@ -7,7 +7,9 @@ import androidx.navigation.NavDestination
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.nfc.NacScanNfcTagDialog
+import com.nfcalarmclock.system.addTimer
 import com.nfcalarmclock.system.getTimer
+import com.nfcalarmclock.timer.db.NacTimer
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -18,6 +20,16 @@ import dagger.hilt.android.AndroidEntryPoint
 class NacScanNfcTagDialog
 	: NacScanNfcTagDialog()
 {
+
+	/**
+	 * Add an alarm/timer argument to a Bundle.
+	 *
+	 * @return An alarm/timer argument added to a Bundle.
+	 */
+	override fun <T: NacAlarm> addFragmentArgument(item: T?): Bundle
+	{
+		return Bundle().addTimer(item as NacTimer?)
+	}
 
 	/**
 	 * Get the alarm/timer argument from the fragment.
@@ -66,7 +78,7 @@ class NacScanNfcTagDialog
 	}
 
 	/**
-	 * Called when the view has been created.
+	 * View has been created.
 	 */
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
 	{
@@ -77,6 +89,11 @@ class NacScanNfcTagDialog
 		val scanNfcTagDescription: TextView = view.findViewById(R.id.scan_nfc_tag_description)
 
 		scanNfcTagDescription.setText(R.string.description_scan_nfc_tag_timer)
+
+		// Set the use any NFC tag clicked listener
+		onUseAnyNfcTagClickedListener = OnUseAnyNfcTagClickedListener { alarm ->
+			(alarm as NacTimer?)?.shouldScanningNfcTagStartTimer = false
+		}
 	}
 
 }

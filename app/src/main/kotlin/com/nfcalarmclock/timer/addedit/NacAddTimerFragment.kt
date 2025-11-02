@@ -24,18 +24,16 @@ class NacAddTimerFragment
 	private val onBackPressedCallback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
 		override fun handleOnBackPressed()
 		{
-			println("Base add/edit on back pressed!")
 			lifecycleScope.launch {
 
-				println("Chekcing count : ${timerViewModel.count()}")
+				// No timers so go back to show alarms fragment
 				if (timerViewModel.count() == 0)
 				{
-					println("Trying to go back to alarms")
-					findNavController().popBackStack(R.id.nacShowAlarmsFragment, false)
+					findNavController().navigate(R.id.action_global_nacShowAlarmsFragment)
 				}
+				// Normal pop back stack
 				else
 				{
-					println("Going backwards")
 					findNavController().popBackStack()
 				}
 
@@ -57,7 +55,6 @@ class NacAddTimerFragment
 	 */
 	override fun navigateToMediaPicker(bundle: Bundle)
 	{
-		println("Navigating add timer to main media timer")
 		// Navigate to the media picker
 		findNavController().navigate(R.id.action_nacAddTimerFragment_to_nacTimerMainMediaPickerFragment, bundle)
 	}
@@ -81,7 +78,6 @@ class NacAddTimerFragment
 	{
 		// Super
 		super.onViewCreated(view, savedInstanceState)
-		println("Addtimer : onViewCreated()")
 
 		// Setup back press
 		requireActivity().onBackPressedDispatcher.addCallback(onBackPressedCallback)

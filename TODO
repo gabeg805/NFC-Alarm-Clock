@@ -7,17 +7,9 @@ TODO
   going back to the media fragment after changing the directory, it would not
   reload to the path of the music that is selected for the alarm.
 
-* Make sure to grep all TODO even layout resources before production
-
-* Remove all print statements and TODO statements that were added, before releasing to production.
-
 * Run optimizer to make sure all the code is good and unused resources are removed before production
 
 * Change name of notification objects to notification builders
-
-* German translation bad: Clear reminder -> Erinnerung ausblenden
-About -> Über
-(Statistics) Turned down Alams -> Abgeschaltete Alarme
 
 * When active alarm or timer is left. Then "nfcTags" has to get reinitialized
   and probably gets cleared. May need to save the current progress in

@@ -150,7 +150,6 @@ open class NacVibrateOptionsDialog
 		setupVibrationDuration(a.vibrateDuration, a.vibrateWaitTime)
 		setupCustomPattern(a.shouldVibratePattern, a.vibrateRepeatPattern, a.vibrateWaitTimeAfterPattern)
 		setCustomPatternUsability()
-
 	}
 
 	/**

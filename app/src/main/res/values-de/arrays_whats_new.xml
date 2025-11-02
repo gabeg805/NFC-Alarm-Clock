@@ -5,6 +5,17 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.6.0</item>
+		<item>Hinzugefügt &lt;b>timer&lt;/b>.</item>
+		<item>In den Alarmeinstellungen wurden Wiederholungsoptionen hinzugefügt. Ein Alarm kann nun stündlich, täglich, wochenweise oder monatlich wiederholt werden.</item>
+		<item>Die Option „Datum“ wurde hinzugefügt, um einen Alarm an einem bestimmten Datum auszulösen. Diese Option ist bei der Auswahl einer Uhrzeit verfügbar.</item>
+		<item>Hinzugefügt wurde &lt;b>Snooze&lt;/b> mit &lt;b>Lautstärketasten&lt;/b>.</item>
+		<item>Die Option „NFC-Tags in [Reihenfolge] ausblenden“ wurde hinzugefügt, falls mehrere NFC-Tags ausgewählt sind. Die Ausblendung kann in beliebiger, zufälliger oder sequenzieller Reihenfolge erfolgen.</item>
+		<item>Hinzugefügt: &lt;b>Benachrichtigung vorzeitig verwerfen&lt;/b>. Optional kann eine Benachrichtigung angezeigt werden, wenn ein Alarm vorzeitig verworfen werden kann.</item>
+		<item>Die Tasten für Wiederholung, Vibration, NFC und Taschenlampe wurden um ein langes Drücken erweitert, um einen schnelleren Zugriff auf diese Optionen zu ermöglichen.</item>
+		<item>Problem behoben, bei dem das Abspielen/Mischen aller &lt;b>Musikstücke&lt;/b> in einem &lt;b>Ordner&lt;/b> nicht funktionierte.</item>
+		<item>Aktualisiert zur Unterstützung von &lt;b>Android 15&lt;/b>.</item>
+		<item>Aktualisiert zur Unterstützung des Android-Designs &lt;b>Material 3&lt;/b>.</item>
 		<item>12.5.4</item>
 		<item>Problem behoben, bei dem &lt;b>Nächsten Alarm überspringen&lt;/b> den Alarm immer wieder übersprang.</item>
 		<item>12.5.3</item>

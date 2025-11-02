@@ -5,6 +5,17 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.6.0</item>
+		<item>Te ajoute &lt;b>minitè&lt;/b>.</item>
+		<item>Te ajoute opsyon &lt;b>repetisyon&lt;/b> nan paramèt alam yo. Ou ka repete yon alam pa èdtan, jou, semèn oswa mwa.</item>
+		<item>Te ajoute opsyon &lt;b>dat&lt;/b> pou fè yon alam sonnen nan yon dat patikilye. Aksesib lè w ap chwazi yon lè.</item>
+		<item>Te ajoute &lt;b>repeche son an&lt;/b> ak &lt;b>bouton volim&lt;/b>.</item>
+		<item>Te ajoute &lt;b>rejte etikèt NFC yo&lt;/b> nan &lt;b>lòd&lt;/b> si plizyè etikèt NFC chwazi. Ou ka rejte yo nan nenpòt lòd, o aza, oswa sekansyèl.</item>
+		<item>Te ajoute &lt;b>rejte notifikasyon bonè&lt;/b>. Opsyonèlman, montre yon notifikasyon lè yon alam ka rejte bonè.</item>
+		<item>Te ajoute &lt;b>peze lontan&lt;/b> sou bouton repetisyon, vibre, NFC, ak flach la pou jwenn aksè rapid nan opsyon sa yo.</item>
+		<item>Pwoblèm nan rezoud kote jwe/mete tout &lt;b>mizik&lt;/b> ki nan yon &lt;b>dosye&lt;/b> pa t ap mache.</item>
+		<item>Mizajou pou sipòte &lt;b>Android 15&lt;/b>.</item>
+		<item>Mizajou pou sipòte tèm &lt;b>Material 3&lt;/b> Android la.</item>
 		<item>12.5.4</item>
 		<item>Pwoblèm fiks kote &lt;b>sote pwochen alam&lt;/b> ta kontinye sote alam la.</item>
 		<item>12.5.3</item>

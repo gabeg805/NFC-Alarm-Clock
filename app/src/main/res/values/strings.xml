@@ -128,8 +128,7 @@
 
 	<!-- Messages -->
 	<string name="message_permission_ignore_battery_optimization_request">Allow permission to avoid alarm not running if the app has not been used for a while.&lt;br/>&lt;br/>&lt;b>Note:&lt;/b>  This depends on what device you have and &lt;b>may not actually be needed&lt;/b>.</string>
-	<string name="message_permission_post_notifications_request">Allow permission for alarms to run when the app is not in focus.&lt;br/>&lt;br/>&lt;b>Note:&lt;/b>  This is a side effect of the security policies introduced in &lt;b>Android 13&lt;/b>, which are for the benefit of users, but can
-		restrict apps in instances like this.</string>
+	<string name="message_permission_post_notifications_request">Allow permission for alarms to run when the app is not in focus.&lt;br/>&lt;br/>&lt;b>Note:&lt;/b>  This is a side effect of the security policies introduced in &lt;b>Android 13&lt;/b>, which are for the benefit of users, but can restrict apps in instances like this.</string>
 	<string name="message_permission_schedule_exact_alarm_request">Allow permission to have alarms run precisely when scheduled.</string>
 	<string name="message_permission_system_alert_window_request">Allow permission to display app over other apps?&lt;br/>&lt;br/>This will ensure that the alarm screen is shown, which is a requirement for audio to play, if the app is in the background.&lt;br/>&lt;br/>&lt;b>Note:&lt;/b>  This only affects Android 15.</string>
 	<string name="message_playlist">Do you want to play all the music in this folder?</string>
@@ -144,12 +143,14 @@
 	<string name="message_flashlight_on_duration">On:</string>
 	<string name="message_flashlight_off_duration">Off:</string>
 	<string name="message_no_alarms_scheduled">No alarms scheduled.</string>
-	<string name="message_repeat_disabled">Do not repeat alarm</string>
-	<string name="message_repeat_enabled">Repeat alarm</string>
+	<string name="message_alarm_repeat_disabled">Do not repeat alarm</string>
+	<string name="message_alarm_repeat_enabled">Repeat alarm</string>
+	<string name="message_timer_repeat_disabled">Do not repeat timer</string>
+	<string name="message_timer_repeat_enabled">Repeat timer</string>
 	<string name="message_vibrate_disabled">Vibrate off</string>
 	<string name="message_vibrate_enabled">Vibrate on</string>
-	<string name="message_flashlight_disabled">Flashlight off</string>
-	<string name="message_flashlight_enabled">Flashlight on</string>
+	<string name="message_flashlight_disabled">Do not use flashlight</string>
+	<string name="message_flashlight_enabled">Use flashlight</string>
 	<string name="message_alarm_copy">Copied alarm</string>
 	<string name="message_timer_copy">Copied timer</string>
 	<string name="message_alarm_delete">Deleted alarm</string>
@@ -237,6 +238,7 @@
 	<string name="title_scan_nfc_tag">Scan NFC tag</string>
 	<string name="title_select_nfc_tag">Select NFC tag(s)</string>
 	<string name="title_nfc_tag_dismiss_order">Dismiss order</string>
+	<string name="title_start_timer_on_nfc_tag_scan">Start timer on scan</string>
 	<string name="title_save_nfc_tag">Save NFC tag</string>
 	<string name="title_delete_nfc_tag">Delete NFC tag</string>
 	<string name="title_rename_nfc_tag">Rename NFC tag</string>
@@ -345,7 +347,8 @@
 	<string name="description_scan_nfc_tag_timer">The scanned NFC tag will be required to dismiss this timer when it goes off.</string>
 	<string name="description_select_nfc_tag_alarm">Select an NFC tag that will be required to dismiss this alarm when it goes off. If more than one is selected, it can also be used to dismiss this alarm.</string>
 	<string name="description_select_nfc_tag_timer">Select an NFC tag that will be required to dismiss this timer when it goes off. If more than one is selected, it can also be used to dismiss this timer.</string>
-	<string name="description_nfc_tag_dismiss_order">Order in which the NFC tags above should be dismissed.</string>
+	<string name="description_nfc_tag_dismiss_order">Order in which the NFC tags above should be dismissed. Enabling this means all selected NFC tags will need to be scanned in order to dismiss.</string>
+	<string name="description_start_timer_on_nfc_tag_scan">When one of the selected NFC tags is scanned, it will automatically start this timer.</string>
 	<string name="description_save_nfc_tag">You can reuse this NFC tag, without having to scan it again, by giving it a name.</string>
 	<string name="description_repeat_frequency">Repeat the alarm at a given frequency (every X amount of time).  Note: Selecting hours or days will clear all of the alarm\'s days.</string>
 	<string name="description_repeat_frequency_days_to_run_before_starting">Which of the alarm\'s currently selected days should be run this week before starting the frequency.</string>
@@ -422,7 +425,7 @@
 	<string name="description_permission_schedule_alarm">Schedule exact alarms.</string>
 	<string name="description_permission_set_alarm">Set an alarm from an external source, such as the Google Assistant.</string>
 	<string name="description_permission_post_notifications">Show a notification when an alarm is activated that will keep your device from putting the app to sleep and turning the alarm off by itself.</string>
-	<string name="description_permission_system_alert_window">Ensure that the alarm screen is shown, which is a requirement for audio to play, if the app is in the background and has not been used in a while.  Should only affect Android 13–15.</string>
+	<string name="description_permission_system_alert_window">Ensure that the alarm screen is shown, which is a requirement for audio to play, if the app is in the background and has not been used in a while.  Should only affect Android 15.</string>
 	<string name="description_permission_boot">Restore alarms when your device is turned on.  Android will delete alarms when your device is turned off.</string>
 	<string name="description_permission_wakelock">Prevent your device from sleeping so that an activated alarm will continue to go off.</string>
 	<string name="description_audio_sources_alarm">The audio channel to play the alarm on.</string>
@@ -562,5 +565,37 @@
 	</plurals>
 
 	<string name="tts_say_time">The time is %1$s:%2$s %3$s.</string>
+
+	<!--
+	<plurals name="repeat_minutely">
+	</plurals>
+
+	<plurals name="repeat_hourly">
+	</plurals>
+
+	<plurals name="repeat_daily">
+	</plurals>
+
+	<plurals name="repeat_weekly">
+	</plurals>
+
+	<plurals name="repeat_monthly">
+	</plurals>
+
+	<plurals name="standalone_unit_minute">
+	</plurals>
+
+	<plurals name="standalone_unit_hour">
+	</plurals>
+
+	<plurals name="standalone_unit_day">
+	</plurals>
+
+	<plurals name="standalone_unit_week">
+	</plurals>
+
+	<plurals name="standalone_unit_month">
+	</plurals>
+	-->
 
 </resources>

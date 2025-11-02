@@ -49,6 +49,15 @@
 				app:navGraph="@navigation/nav_main_fragments"
 				/>
 
+			<!-- Settings navigation host -->
+			<androidx.fragment.app.FragmentContainerView
+				android:id="@+id/settings_media_content"
+				android:layout_width="match_parent"
+				android:layout_height="match_parent"
+				android:name="androidx.navigation.fragment.NavHostFragment"
+				app:defaultNavHost="false"
+				/>
+
 			<!-- Floating action button -->
 			<com.google.android.material.floatingactionbutton.FloatingActionButton
 				android:id="@+id/floating_action_button"

@@ -65,7 +65,7 @@ import javax.inject.Singleton
 /**
  * Store alarms in a Room database.
  */
-@Database(version = 43,
+@Database(version = 44,
 	entities = [
 		NacAlarm::class,
 		NacAlarmCreatedStatistic::class,
@@ -118,6 +118,7 @@ import javax.inject.Singleton
 		AutoMigration(from = 40, to = 41, spec = RemoveSnoozeHourMinuteColumnsAndRenameShouldEasySnoozeColumnMigration::class),
 		AutoMigration(from = 41, to = 42, spec = RenameShouldDeleteAlarmAfterDismissedColumnMigration::class),
 		AutoMigration(from = 42, to = 43),
+		AutoMigration(from = 43, to = 44),
 	]
 )
 @TypeConverters(NacAlarmTypeConverters::class, NacStatisticTypeConverters::class)

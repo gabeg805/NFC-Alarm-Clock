@@ -10,6 +10,12 @@
 		<item>रिंगटोन</item>
 	</string-array>
 
+	<!-- NFC tag dismiss orders -->
+	<string-array name="nfc_tag_dismiss_orders">
+		<item>यादृच्छिक</item>
+		<item>क्रमबद्ध</item>
+	</string-array>
+
 	<!-- Flashlight -->
 	<string-array name="flashlight_on_off_duration_times">
 		<item>0.5 सेकंड</item>

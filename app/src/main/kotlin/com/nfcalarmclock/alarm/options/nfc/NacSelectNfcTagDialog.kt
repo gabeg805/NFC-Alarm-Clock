@@ -5,7 +5,6 @@ import android.view.ViewGroup.OnHierarchyChangeListener
 import android.widget.AdapterView
 import android.widget.LinearLayout
 import android.widget.RelativeLayout
-import android.widget.TextView
 import androidx.appcompat.widget.SwitchCompat
 import androidx.core.view.children
 import androidx.fragment.app.viewModels
@@ -50,14 +49,9 @@ open class NacSelectNfcTagDialog
 	private lateinit var container: LinearLayout
 
 	/**
-	 * Title for the dismiss order.
+	 * Container for the dismiss order
 	 */
-	private lateinit var dismissOrderTitle: TextView
-
-	/**
-	 * Description for the dismiss order.
-	 */
-	private lateinit var dismissOrderDescription: TextView
+	private lateinit var dismissOrderContainer: RelativeLayout
 
 	/**
 	 * Dismiss order switch.
@@ -97,7 +91,6 @@ open class NacSelectNfcTagDialog
 	 */
 	override fun onOkClicked(alarm: NacAlarm?)
 	{
-		//alarm?.nfcTagId = selectedNfcTags.joinToString(" || ") { it.nfcId }
 		alarm?.setNfcTagIds(selectedNfcTags)
 		alarm?.shouldUseNfcTagDismissOrder = dismissOrderSwitch.isChecked
 		alarm?.nfcTagDismissOrder = NacAlarm.calcNfcTagDismissOrderFromIndex(selectedDismissOrder)
@@ -162,26 +155,16 @@ open class NacSelectNfcTagDialog
 	private fun setDismissOrderUsability()
 	{
 		// Determine the usability
-		val overallState = (container.childCount > 1)
-		val inputLayoutState = dismissOrderSwitch.isChecked
-		val overallAlpha = calcAlpha(overallState)
-		val inputLayoutAlpha = calcAlpha(inputLayoutState)
+		val state = (container.childCount > 1)
+		val alpha = calcAlpha(state)
 
-		// Title
-		dismissOrderTitle.alpha = overallAlpha
-		dismissOrderTitle.isEnabled = overallState
-
-		// Description
-		dismissOrderDescription.alpha = overallAlpha
-		dismissOrderDescription.isEnabled = overallState
-
-		// Switch
-		dismissOrderSwitch.alpha = overallAlpha
-		dismissOrderSwitch.isEnabled = overallState
+		// Container
+		dismissOrderContainer.alpha = alpha
+		dismissOrderContainer.isEnabled = state
 
 		// Dropdown menu
-		dismissOrderInputLayout.alpha = inputLayoutAlpha
-		dismissOrderInputLayout.isEnabled = overallState && inputLayoutState
+		dismissOrderInputLayout.alpha = alpha
+		dismissOrderInputLayout.isEnabled = state && dismissOrderSwitch.isChecked
 	}
 
 	/**
@@ -205,7 +188,7 @@ open class NacSelectNfcTagDialog
 		{
 
 			/**
-			 * Called when a child is added.
+			 * A child is added.
 			 */
 			override fun onChildViewAdded(parent: View, child: View)
 			{
@@ -217,7 +200,7 @@ open class NacSelectNfcTagDialog
 			}
 
 			/**
-			 * Called when a child is reomved.
+			 * A child is reomved.
 			 */
 			override fun onChildViewRemoved(parent: View, child: View)
 			{
@@ -280,11 +263,9 @@ open class NacSelectNfcTagDialog
 	private fun setupDismissOrder(defaultUseNfcDismissOrder: Boolean, defaultDismissOrder: Int)
 	{
 		// Get the views
-		dismissOrderTitle = dialog!!.findViewById(R.id.nfc_tag_dismiss_order_title)
-		dismissOrderDescription = dialog!!.findViewById(R.id.nfc_tag_dismiss_order_description)
+		dismissOrderContainer = dialog!!.findViewById(R.id.nfc_tag_dismiss_order_container)
 		dismissOrderSwitch = dialog!!.findViewById(R.id.nfc_tag_dismiss_order_switch)
 		dismissOrderInputLayout = dialog!!.findViewById(R.id.nfc_tag_dismiss_order_input_layout)
-		val relativeLayout: RelativeLayout = dialog!!.findViewById(R.id.nfc_tag_dismiss_order_container)
 		val autoCompleteTextView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.nfc_tag_dismiss_order_dropdown_menu)
 
 		// Get the index of dismiss order
@@ -297,7 +278,7 @@ open class NacSelectNfcTagDialog
 		autoCompleteTextView.setTextFromIndex(index)
 
 		// Set the relative layout listener
-		relativeLayout.setOnClickListener {
+		dismissOrderContainer.setOnClickListener {
 
 			// Toggle the checkbox and set the usability of the dropdown
 			dismissOrderSwitch.toggle()

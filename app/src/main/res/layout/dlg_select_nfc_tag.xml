@@ -42,7 +42,55 @@
 	<!-- Separator -->
 	<Space style="@style/Widget.AlarmOptionDialog.SeparatorAfterCheckBox" />
 
-	<!-- Dismiss order title and switch -->
+	<!-- Start on scan title, description, and switch -->
+	<RelativeLayout
+		android:id="@+id/start_timer_on_nfc_tag_scan_container"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:clickable="true"
+		android:focusable="true"
+		android:visibility="gone">
+
+		<!-- Start on scan title -->
+		<TextView
+			style="@style/Widget.AlarmOptionDialog.Title"
+			android:id="@+id/nfc_tag_start_on_scan_title"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_toStartOf="@id/start_timer_on_nfc_tag_scan_switch"
+			android:text="@string/title_start_timer_on_nfc_tag_scan"
+			/>
+
+		<!-- Dismiss order description -->
+		<TextView
+			style="@style/Widget.AlarmOptionDialog.Description"
+			android:id="@+id/start_timer_on_nfc_tag_scan_description"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/nfc_tag_start_on_scan_title"
+			android:layout_toStartOf="@id/start_timer_on_nfc_tag_scan_switch"
+			android:text="@string/description_start_timer_on_nfc_tag_scan"
+			/>
+
+		<!-- Switch -->
+		<androidx.appcompat.widget.SwitchCompat
+			android:id="@+id/start_timer_on_nfc_tag_scan_switch"
+			android:layout_width="@dimen/touch"
+			android:layout_height="@dimen/touch"
+			android:layout_alignParentEnd="true"
+			android:layout_centerVertical="true"
+			android:clickable="false"
+			/>
+	</RelativeLayout>
+
+	<!-- Separator -->
+	<Space
+		style="@style/Widget.AlarmOptionDialog.SeparatorAfterCheckBox"
+		android:id="@+id/start_timer_on_nfc_tag_scan_separator"
+		android:visibility="gone"
+		/>
+
+	<!-- Dismiss order title, description, and switch -->
 	<RelativeLayout
 		android:id="@+id/nfc_tag_dismiss_order_container"
 		android:layout_width="match_parent"
