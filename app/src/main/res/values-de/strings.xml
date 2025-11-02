@@ -206,6 +206,7 @@
 	<string name="error_message_play_audio">Audio kann nicht wiedergegeben werden</string>
 	<string name="error_message_google_play_billing">Fehler beim Verbinden mit dem Google Play Store</string>
 	<string name="error_message_text_to_speech_audio_focus">Text-to-Speech kann nicht verwendet werden</string>
+	<string name="error_message_enter_timer_duration">Geben Sie eine Dauer ein.</string>
 	<string name="error_message_unable_to_dismiss_early">Alarm konnte nicht frühzeitig abgeschaltet werden.</string>
 	<string name="error_message_unable_to_email_statistics">Statistiken können nicht per E-Mail versendet werden</string>
 	<string name="error_message_unable_to_shine_flashlight">Taschenlampe kann nicht leuchten — %1$s</string>

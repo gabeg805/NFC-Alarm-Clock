@@ -206,6 +206,7 @@
 	<string name="error_message_play_audio">Incapaz de tocar audio</string>
 	<string name="error_message_google_play_billing">Error al conectarse a Google Play Store</string>
 	<string name="error_message_text_to_speech_audio_focus">Incapaz de usar texto-a-voz</string>
+	<string name="error_message_enter_timer_duration">Introduzca una duración</string>
 	<string name="error_message_unable_to_dismiss_early">No se pudo encontrar la alarma para desactivarla antes de tiempo</string>
 	<string name="error_message_unable_to_email_statistics">No se pueden enviar estadísticas por correo electrónico</string>
 	<string name="error_message_unable_to_shine_flashlight">No se puede encender la linterna — %1$s</string>

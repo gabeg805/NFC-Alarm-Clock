@@ -26,6 +26,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.android.material.button.MaterialButton
 import com.nfcalarmclock.R
+import com.nfcalarmclock.alarm.db.normalizeName
 import com.nfcalarmclock.alarm.options.name.NacNameDialog
 import com.nfcalarmclock.nfc.NacNfcTagViewModel
 import com.nfcalarmclock.shared.NacSharedPreferences
@@ -45,6 +46,7 @@ import com.nfcalarmclock.timer.active.NacActiveTimerService
 import com.nfcalarmclock.timer.db.NacTimer
 import com.nfcalarmclock.timer.options.NacTimerOptionsDialog
 import com.nfcalarmclock.timer.options.dismissoptions.NacDismissOptionsDialog
+import com.nfcalarmclock.view.calcAlpha
 import com.nfcalarmclock.view.calcContrastColor
 import com.nfcalarmclock.view.performHapticFeedback
 import com.nfcalarmclock.view.quickToast
@@ -127,6 +129,11 @@ abstract class NacBaseAddEditTimer
 	protected lateinit var mediaButton: MaterialButton
 
 	/**
+	 * Name of the timer before it is saved.
+	 */
+	protected var nameBeforeSaving: String = ""
+
+	/**
 	 * Whether to scroll the scrollview up or not.
 	 */
 	protected var shouldScrollUp: Boolean = true
@@ -154,9 +161,6 @@ abstract class NacBaseAddEditTimer
 		hourTextView.text = newTime.substring(0, 2)
 		minuteTextView.text = newTime.substring(2, 4)
 		secondsTextView.text = newTime.substring(4, 6)
-
-		// Set the duration
-		setDuration()
 
 		// Haptic feedback
 		view?.performHapticFeedback()
@@ -226,9 +230,6 @@ abstract class NacBaseAddEditTimer
 		hourTextView.text = newTime.substring(0, 2)
 		minuteTextView.text = newTime.substring(2, 4)
 		secondsTextView.text = newTime.substring(4, 6)
-
-		// Set the duration
-		setDuration()
 
 		// Haptic feedback
 		view?.performHapticFeedback()
@@ -365,13 +366,16 @@ abstract class NacBaseAddEditTimer
 	 */
 	private fun setNameMessageAndAlpha(button: MaterialButton)
 	{
+		// Normalize the name
+		val nameNormalized = nameBeforeSaving.normalizeName()
+
 		// Get the name message
-		val message = timer.nameNormalized.ifEmpty {
+		val message = nameNormalized.ifEmpty {
 			resources.getString(R.string.title_alarm_name)
 		}
 
 		// Get the alpha that the view should be
-		val alpha = if (timer.nameNormalized.isNotEmpty()) 1.0f else 0.3f
+		val alpha = calcAlpha(nameNormalized.isNotEmpty())
 
 		// Set the name as text for the button, and the alpha
 		button.text = message
@@ -466,7 +470,9 @@ abstract class NacBaseAddEditTimer
 			seconds = zeros
 		}
 
-		// Always zero pad seconds
+		// Always zero pad when setting up
+		hour = hour.padStart(2, '0')
+		minute = minute.padStart(2, '0')
 		seconds = seconds.padStart(2, '0')
 
 
@@ -656,6 +662,9 @@ abstract class NacBaseAddEditTimer
 	 */
 	private fun setupName(button: MaterialButton)
 	{
+		// Set the name
+		nameBeforeSaving = timer.name
+
 		// Set the message and alpha
 		setNameMessageAndAlpha(button)
 
@@ -663,9 +672,9 @@ abstract class NacBaseAddEditTimer
 		button.setOnClickListener { view ->
 
 			NacNameDialog.create(
-				timer.name,
+				nameBeforeSaving,
 				onNameEnteredListener = { name ->
-					timer.name = name
+					nameBeforeSaving = name
 					setNameMessageAndAlpha(button)
 				})
 				.show(parentFragmentManager, NacNameDialog.TAG)
@@ -753,9 +762,6 @@ abstract class NacBaseAddEditTimer
 			minuteTextView.text = doubleZero
 			secondsTextView.text = doubleZero
 
-			// Set the duration
-			setDuration()
-
 			true
 		}
 	}
@@ -823,12 +829,18 @@ abstract class NacBaseAddEditTimer
 		// On click listener
 		saveButton.setOnClickListener {
 
-			// Duration not set
+			// Set the duration
+			setDuration()
+
+			// Duration is 0
 			if (timer.duration == 0L)
 			{
-				quickToast(requireContext(), "Enter a duration")
+				quickToast(requireContext(), R.string.error_message_enter_timer_duration)
 				return@setOnClickListener
 			}
+
+			// Set the name
+			timer.name = nameBeforeSaving
 
 			// Update the timer and then go back to the show timers fragment
 			timerViewModel.update(timer) {
@@ -860,12 +872,18 @@ abstract class NacBaseAddEditTimer
 		// On click listener
 		startButton.setOnClickListener {
 
-			// Duration not set
+			// Set the duration
+			setDuration()
+
+			// Duration is 0
 			if (timer.duration == 0L)
 			{
-				quickToast(context, "Enter a duration")
+				quickToast(context, R.string.error_message_enter_timer_duration)
 				return@setOnClickListener
 			}
+
+			// Set the name
+			timer.name = nameBeforeSaving
 
 			// Save the timer
 			lifecycleScope.launch {

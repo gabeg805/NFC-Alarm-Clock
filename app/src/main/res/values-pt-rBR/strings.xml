@@ -206,6 +206,7 @@
 	<string name="error_message_play_audio">Não é possível reproduzir áudio</string>
 	<string name="error_message_google_play_billing">Erro ao conectar na Google Play Store</string>
 	<string name="error_message_text_to_speech_audio_focus">Não é possível usar conversão de texto em fala</string>
+	<string name="error_message_enter_timer_duration">Insira a duração</string>
 	<string name="error_message_unable_to_dismiss_early">Não foi possível encontrar o alarme para desativar antecipadamente.</string>
 	<string name="error_message_unable_to_email_statistics">Não é possível enviar estatísticas por e-mail</string>
 	<string name="error_message_unable_to_shine_flashlight">Não é possível acender a lanterna — %1$s</string>

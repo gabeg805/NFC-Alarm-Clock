@@ -206,6 +206,7 @@
 	<string name="error_message_play_audio">Không thể phát âm thanh</string>
 	<string name="error_message_google_play_billing">Lỗi khi kết nối với Cửa hàng Google Play</string>
 	<string name="error_message_text_to_speech_audio_focus">Không thể sử dụng tính năng chuyển văn bản thành giọng nói</string>
+	<string name="error_message_enter_timer_duration">Nhập thời lượng</string>
 	<string name="error_message_unable_to_dismiss_early">Không tìm thấy báo thức để tắt sớm</string>
 	<string name="error_message_unable_to_email_statistics">Không thể gửi số liệu thống kê qua email</string>
 	<string name="error_message_unable_to_shine_flashlight">Không thể chiếu đèn pin — %1$s</string>

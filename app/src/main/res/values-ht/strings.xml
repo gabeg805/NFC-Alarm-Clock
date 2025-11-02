@@ -206,6 +206,7 @@
 	<string name="error_message_play_audio">Pa kapab jwe odyo</string>
 	<string name="error_message_google_play_billing" tools:keep="@string/error_message_google_play_billing">Erè lè w konekte ak Google Play Store la</string>
 	<string name="error_message_text_to_speech_audio_focus">Pa kapab itilize tèks-a-lapawòl</string>
+	<string name="error_message_enter_timer_duration">Antre yon dire</string>
 	<string name="error_message_unable_to_dismiss_early">Pa ka jwenn alam pou fèmen bonè</string>
 	<string name="error_message_unable_to_email_statistics">Pa kapab voye imèl estatistik</string>
 	<string name="error_message_unable_to_shine_flashlight">Pa kapab klere flach — %1$s</string>

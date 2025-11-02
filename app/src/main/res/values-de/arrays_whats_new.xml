@@ -5,6 +5,8 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.6.1</item>
+		<item>Problem beim Bearbeiten eines &lt;b>Timers&lt;/b> behoben.</item>
 		<item>12.6.0</item>
 		<item>Hinzugefügt &lt;b>timer&lt;/b>.  Kann auch NFC-Tags scannen, um Timer zu starten.</item>
 		<item>In den Alarmeinstellungen wurden Wiederholungsoptionen hinzugefügt. Ein Alarm kann nun stündlich, täglich, wochenweise oder monatlich wiederholt werden.</item>

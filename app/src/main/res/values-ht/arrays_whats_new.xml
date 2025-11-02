@@ -5,6 +5,8 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.6.1</item>
+		<item>Pwoblèm ak modifikasyon yon &lt;b>revèy tan&lt;/b> rezoud.</item>
 		<item>12.6.0</item>
 		<item>Te ajoute &lt;b>minitè&lt;/b>.  Kapab eskane etikèt NFC pou kòmanse revèy tou.</item>
 		<item>Te ajoute opsyon &lt;b>repetisyon&lt;/b> nan paramèt alam yo. Ou ka repete yon alam pa èdtan, jou, semèn oswa mwa.</item>

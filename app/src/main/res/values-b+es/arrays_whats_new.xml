@@ -5,6 +5,8 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.6.1</item>
+		<item>Se solucionó un problema con la edición de un &lt;b>temporizador&lt;/b>.</item>
 		<item>12.6.0</item>
 		<item>Se agregó &lt;b>temporizador&lt;/b>.  También puede escanear etiquetas NFC para iniciar temporizadores.</item>
 		<item>Se han añadido opciones de repetición en la configuración de alarmas. Ahora es posible repetir una alarma por horas, días, semanas o meses.</item>

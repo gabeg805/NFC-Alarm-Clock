@@ -206,6 +206,7 @@
 	<string name="error_message_play_audio">ऑडियो चलाने में असमर्थ</string>
 	<string name="error_message_google_play_billing">Google Play स्टोर से कनेक्ट करते समय त्रुटि</string>
 	<string name="error_message_text_to_speech_audio_focus">टेक्स्ट-टू-स्पीच का उपयोग करने में असमर्थ</string>
+	<string name="error_message_enter_timer_duration">अवधि दर्ज करें</string>
 	<string name="error_message_unable_to_dismiss_early">जल्दी बंद करने के लिए अलार्म नहीं मिल सका</string>
 	<string name="error_message_unable_to_email_statistics">आंकड़े ईमेल करने में असमर्थ</string>
 	<string name="error_message_unable_to_shine_flashlight">टॉर्च चमकाने में असमर्थ — %1$s</string>

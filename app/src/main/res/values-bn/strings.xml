@@ -206,6 +206,7 @@
 	<string name="error_message_play_audio">অডিও চালাতে অক্ষম</string>
 	<string name="error_message_google_play_billing">গুগল প্লে স্টোরের সাথে সংযোগ করার সময় ত্রুটি</string>
 	<string name="error_message_text_to_speech_audio_focus">টেক্সট-টু-স্পীচ ব্যবহার করতে অক্ষম</string>
+	<string name="error_message_enter_timer_duration">একটি সময়কাল লিখুন</string>
 	<string name="error_message_unable_to_dismiss_early">তাড়াতাড়ি খারিজ করার জন্য অ্যালার্ম খুঁজে পাওয়া যাচ্ছে না</string>
 	<string name="error_message_unable_to_email_statistics">পরিসংখ্যান ইমেল করতে অক্ষম</string>
 	<string name="error_message_unable_to_shine_flashlight">টর্চলাইট জ্বলতে অক্ষম — %1$s</string>

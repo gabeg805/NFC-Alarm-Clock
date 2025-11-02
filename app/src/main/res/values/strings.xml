@@ -206,6 +206,7 @@
 	<string name="error_message_play_audio">Unable to play audio</string>
 	<string name="error_message_google_play_billing">Error when connecting to the Google Play Store</string>
 	<string name="error_message_text_to_speech_audio_focus">Unable to use text-to-speech</string>
+	<string name="error_message_enter_timer_duration">Enter a duration</string>
 	<string name="error_message_unable_to_dismiss_early">Unable to find alarm to dismiss early</string>
 	<string name="error_message_unable_to_email_statistics">Unable to email statistics</string>
 	<string name="error_message_unable_to_shine_flashlight">Unable to shine flashlight — %1$s</string>

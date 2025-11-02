@@ -5,6 +5,8 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.6.1</item>
+		<item>Fixed issue with editing a &lt;b>timer&lt;/b>.</item>
 		<item>12.6.0</item>
 		<item>Added &lt;b>timer&lt;/b>. Able to scan NFC tags to start timers as well.</item>
 		<item>Added &lt;b>repeat&lt;/b> options in alarm settings. Can repeat an alarm by hours, days, weeks, or months.</item>

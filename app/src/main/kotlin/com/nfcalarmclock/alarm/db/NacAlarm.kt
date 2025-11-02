@@ -28,6 +28,21 @@ import java.util.EnumSet
 import java.util.Locale
 
 /**
+ * Normalize a name.
+ */
+fun String.normalizeName(): String
+{
+	return if (this.isNotEmpty())
+	{
+		this.replace("\n", " ")
+	}
+	else
+	{
+		this
+	}
+}
+
+/**
  * Next alarm object.
  *
  * Really just a container for a NacAlarm and Calendar.
@@ -518,14 +533,7 @@ open class NacAlarm()
 	val nameNormalized: String
 		get()
 		{
-			return if (name.isNotEmpty())
-			{
-				name.replace("\n", " ")
-			}
-			else
-			{
-				name
-			}
+			return name.normalizeName()
 		}
 
 	/**
