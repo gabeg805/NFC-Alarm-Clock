@@ -1,0 +1,4 @@
+Fixed issue with translation to Portuguese.
+Fixed issue with flashlight not working.
+Fixed UI error in Settings.
+Improved how the active alarm screen looks for low density devices.
