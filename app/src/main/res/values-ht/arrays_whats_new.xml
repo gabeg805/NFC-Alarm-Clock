@@ -5,6 +5,11 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.6.2</item>
+		<item>Pwoblèm ak tradiksyon &lt;b>Pòtigè&lt;/b> la rezoud.</item>
+		<item>Pwoblèm ak &lt;b>flash&lt;/b> ki pa t ap fonksyone a rezoud.</item>
+		<item>Erè koòdone itilizatè a korije nan &lt;b>Paramèt&lt;/b>.</item>
+		<item>Amelyore aparans ekran &lt;b>alam aktif&lt;/b> la pou aparèy ki gen ti dansite.</item>
 		<item>12.6.1</item>
 		<item>Pwoblèm ak modifikasyon yon &lt;b>revèy tan&lt;/b> rezoud.</item>
 		<item>12.6.0</item>

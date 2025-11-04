@@ -5,6 +5,11 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.6.2</item>
+		<item>Fixed issue with translation of &lt;b>Portuguese&lt;/b>.</item>
+		<item>Fixed issue with &lt;b>flashlight&lt;/b> not working.</item>
+		<item>Fixed UI error in &lt;b>Settings&lt;/b>.</item>
+		<item>Improved how the &lt;b>active alarm&lt;/b> screen looks for low density devices.</item>
 		<item>12.6.1</item>
 		<item>Fixed issue with editing a &lt;b>timer&lt;/b>.</item>
 		<item>12.6.0</item>

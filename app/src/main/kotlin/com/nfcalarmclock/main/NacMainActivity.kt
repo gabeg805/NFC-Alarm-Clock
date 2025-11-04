@@ -9,7 +9,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.provider.AlarmClock
-import android.view.Menu
 import android.view.View
 import androidx.activity.viewModels
 import androidx.annotation.OptIn
@@ -36,6 +35,7 @@ import com.nfcalarmclock.nfc.SCANNED_NFC_TAG_ID_BUNDLE_NAME
 import com.nfcalarmclock.ratemyapp.NacRateMyApp
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.NacBundle.BUNDLE_INTENT_ACTION
+import com.nfcalarmclock.system.broadcasts.shutdown.NacShutdownBroadcastReceiver
 import com.nfcalarmclock.system.disableActivityAlias
 import com.nfcalarmclock.system.getDeviceProtectedStorageContext
 import com.nfcalarmclock.system.getSetAlarm
@@ -49,7 +49,6 @@ import com.nfcalarmclock.system.permission.NacPermissionRequestManager
 import com.nfcalarmclock.system.registerMyShutdownBroadcastReceiver
 import com.nfcalarmclock.system.scheduler.NacScheduler
 import com.nfcalarmclock.system.toBundle
-import com.nfcalarmclock.system.broadcasts.shutdown.NacShutdownBroadcastReceiver
 import com.nfcalarmclock.system.unregisterMyReceiver
 import com.nfcalarmclock.timer.NacShowTimersFragment
 import com.nfcalarmclock.timer.NacTimerViewModel
@@ -490,16 +489,6 @@ class NacMainActivity
 	}
 
 	/**
-	 * Activity creates the options menu.
-	 */
-	override fun onCreateOptionsMenu(menu: Menu): Boolean
-	{
-		// Inflate the menu bar
-		menuInflater.inflate(R.menu.menu_action_bar, menu)
-		return true
-	}
-
-	/**
 	 * Activity received new intent. Happens when an NFC tag is discovered.
 	 *
 	 * After this, onResume() will be called, which will check if an NFC tag was scanned.
@@ -771,6 +760,15 @@ class NacMainActivity
 	{
 		// Destination changed listener
 		navController.addOnDestinationChangedListener { controller, destination, arguments ->
+
+			// Set the visibility of the settings menu button in the toolbar
+			val settingsMenuItem = toolbar.menu.findItem(R.id.menu_settings)
+			settingsMenuItem.isVisible = !((destination.id == R.id.nacMainSettingFragment)
+					|| (destination.id == R.id.nacGeneralSettingFragment)
+					|| (destination.id == R.id.nacAppearanceSettingFragment)
+					|| (destination.id == R.id.nacNfcTagSettingFragment)
+					|| (destination.id == R.id.nacStatisticsSettingFragment)
+					|| (destination.id == R.id.nacAboutSettingFragment))
 
 			// Setup the flag when NFC was just scanned to dismiss
 			setupWasNfcJustScannedToDismiss()

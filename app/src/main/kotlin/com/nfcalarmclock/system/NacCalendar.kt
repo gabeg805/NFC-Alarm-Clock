@@ -505,13 +505,21 @@ object NacCalendar
 		// Alarm date was set
 		if (alarm.date.isNotEmpty())
 		{
-			// Get the year/month/day
-			val (year, month, day) = alarm.date.split("-")
+			println("Date : '${alarm.date}'")
+			try
+			{
+				// Get the year/month/day
+				val (year, month, day) = alarm.date.split("-")
 
-			// Build a calendar with that date
-			cal[Calendar.YEAR] = year.toInt()
-			cal[Calendar.MONTH] = month.toInt()-1
-			cal[Calendar.DAY_OF_MONTH] = day.toInt()
+				// Build a calendar with that date
+				cal[Calendar.YEAR] = year.toInt()
+				cal[Calendar.MONTH] = month.toInt()-1
+				cal[Calendar.DAY_OF_MONTH] = day.toInt()
+			}
+			catch (e: IndexOutOfBoundsException)
+			{
+				println("Error from trying parse date! ${e.toString()}")
+			}
 		}
 
 		return cal

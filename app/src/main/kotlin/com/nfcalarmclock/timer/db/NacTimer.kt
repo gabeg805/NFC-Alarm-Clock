@@ -99,8 +99,8 @@ class NacTimer()
 		flashlightStrengthLevel = input.readInt()
 		graduallyIncreaseFlashlightStrengthLevelWaitTime = input.readInt()
 		shouldBlinkFlashlight = input.readInt() != 0
-		flashlightOnDuration = input.readString() ?: ""
-		flashlightOffDuration = input.readString() ?: ""
+		flashlightOnDuration = input.readString() ?: "1.0"
+		flashlightOffDuration = input.readString() ?: "1.0"
 
 		// Media
 		mediaPath = input.readString() ?: ""

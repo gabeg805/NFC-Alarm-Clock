@@ -468,101 +468,121 @@
 	<plurals name="alarm">
 		<item quantity="one">%d alarme</item>
 		<item quantity="many">%d alarmes</item>
+		<item quantity="other">%d alarmes</item>
 	</plurals>
 
 	<plurals name="missed_alarm">
 		<item quantity="one">%d Alarme perdido</item>
 		<item quantity="many">%d Alarmes perdidos</item>
+		<item quantity="other">%d Alarmes perdidos</item>
 	</plurals>
 
 	<plurals name="skipped_alarm">
 		<item quantity="one" tools:ignore="ImpliedQuantity">Alarme pulado</item>
 		<item quantity="many">Alarmes ignorados</item>
+		<item quantity="other">Alarmes ignorados</item>
 	</plurals>
 
 	<plurals name="repeat_minutely">
 		<item quantity="one">A cada %d minutos</item>
 		<item quantity="many">A cada %d minutos</item>
+		<item quantity="other">A cada %d minutos</item>
 	</plurals>
 
 	<plurals name="repeat_hourly">
 		<item quantity="one">A cada %d horas</item>
 		<item quantity="many">A cada %d horas</item>
+		<item quantity="other">A cada %d horas</item>
 	</plurals>
 
 	<plurals name="repeat_daily">
 		<item quantity="one">Todo %d dia</item>
 		<item quantity="many">A cada %d dias</item>
+		<item quantity="other">A cada %d dias</item>
 	</plurals>
 
 	<plurals name="repeat_weekly">
 		<item quantity="one">A cada %d semana</item>
 		<item quantity="many">A cada %d semanas</item>
+		<item quantity="other">A cada %d semanas</item>
 	</plurals>
 
 	<plurals name="repeat_monthly">
 		<item quantity="one">Todo mês %d</item>
 		<item quantity="many">A cada %d meses</item>
+		<item quantity="other">A cada %d meses</item>
 	</plurals>
 
 	<plurals name="standalone_unit_minute">
 		<item quantity="one" tools:ignore="ImpliedQuantity">Minuto</item>
 		<item quantity="many">Minutos</item>
+		<item quantity="other">Minutos</item>
 	</plurals>
 
 	<plurals name="standalone_unit_hour">
 		<item quantity="one" tools:ignore="ImpliedQuantity">Hora</item>
 		<item quantity="many">Horas</item>
+		<item quantity="other">Horas</item>
 	</plurals>
 
 	<plurals name="standalone_unit_day">
 		<item quantity="one" tools:ignore="ImpliedQuantity">Dia</item>
 		<item quantity="many">Dias</item>
+		<item quantity="other">Dias</item>
 	</plurals>
 
 	<plurals name="standalone_unit_week">
 		<item quantity="one" tools:ignore="ImpliedQuantity">Semana</item>
 		<item quantity="many">Semanas</item>
+		<item quantity="other">Semanas</item>
 	</plurals>
 
 	<plurals name="standalone_unit_month">
 		<item quantity="one" tools:ignore="ImpliedQuantity">Mês</item>
 		<item quantity="many">Meses</item>
+		<item quantity="other">Meses</item>
 	</plurals>
 
 	<plurals name="unit_day">
 		<item quantity="one">%d dia</item>
 		<item quantity="many">%d dias</item>
+		<item quantity="other">%d dias</item>
 	</plurals>
 
 	<plurals name="unit_hour">
 		<item quantity="one">%d hora</item>
 		<item quantity="many">%d horas</item>
+		<item quantity="other">%d horas</item>
 	</plurals>
 
 	<plurals name="unit_minute">
 		<item quantity="one">%d minuto</item>
 		<item quantity="many">%d minutos</item>
+		<item quantity="other">%d minutos</item>
 	</plurals>
 
 	<plurals name="unit_second">
 		<item quantity="one">%d segundo</item>
 		<item quantity="many">%d segundos</item>
+		<item quantity="other">%d segundos</item>
 	</plurals>
 
 	<plurals name="unit_number_of_times">
 		<item quantity="one">%1$d vez</item>
 		<item quantity="many">%1$d vezes</item>
+		<item quantity="other">%1$d vezes</item>
 	</plurals>
 
 	<plurals name="number_of_snoozes_left">
 		<item quantity="one">(%1$d restante)</item>
 		<item quantity="many">(%1$d restantes)</item>
+		<item quantity="other">(%1$d restantes)</item>
 	</plurals>
 
 	<plurals name="tts_say_reminder">
 		<item quantity="one">Lembrete. %1$s, será executado em %2$d minuto.</item>
 		<item quantity="many">Lembrete. %1$s, será executado em %2$d minutos.</item>
+		<item quantity="other">Lembrete. %1$s, será executado em %2$d minutos.</item>
 	</plurals>
 
 	<string name="tts_say_time">O tempo é %1$s:%2$s %3$s.</string>

@@ -5,6 +5,11 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.6.2</item>
+		<item>Đã khắc phục sự cố liên quan đến bản dịch &lt;b>tiếng Bồ Đào Nha&lt;/b>.</item>
+		<item>Đã khắc phục sự cố &lt;b>đèn pin&lt;/b> không hoạt động.</item>
+		<item>Đã sửa lỗi giao diện người dùng trong &lt;b>Cài đặt&lt;/b>.</item>
+		<item>Cải thiện giao diện màn hình &lt;b>báo động đang hoạt động&lt;/b> cho các thiết bị có mật độ thấp.</item>
 		<item>12.6.1</item>
 		<item>Đã khắc phục sự cố khi chỉnh sửa &lt;b>bộ đếm thời gian&lt;/b>.</item>
 		<item>12.6.0</item>

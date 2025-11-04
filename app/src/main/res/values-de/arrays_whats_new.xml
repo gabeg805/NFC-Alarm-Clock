@@ -5,6 +5,11 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.6.2</item>
+		<item>Problem mit der Übersetzung von &lt;b>Portugiesisch&lt;/b> behoben.</item>
+		<item>Problem mit &lt;b>Taschenlampe&lt;/b> behoben, die nicht funktionierte.</item>
+		<item>UI-Fehler in &lt;b>Einstellungen&lt;/b> behoben.</item>
+		<item>Verbesserte Darstellung des &lt;b>aktiven Alarms&lt;/b>-Bildschirms für Geräte mit geringer Dichte.</item>
 		<item>12.6.1</item>
 		<item>Problem beim Bearbeiten eines &lt;b>Timers&lt;/b> behoben.</item>
 		<item>12.6.0</item>

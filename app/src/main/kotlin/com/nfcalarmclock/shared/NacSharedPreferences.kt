@@ -866,23 +866,6 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
-	 * Alarm date.
-	 */
-	var date: String
-		get()
-		{
-			val key = resources.getString(R.string.key_default_alarm_date)
-
-			return instance.getString(key, "") ?: ""
-		}
-		set(value)
-		{
-			val key = resources.getString(R.string.key_default_alarm_date)
-
-			saveString(key, value)
-		}
-
-	/**
 	 * Which style to use for the day buttons.
 	 *
 	 * 1: Represents using the filled-in buttons (Default)

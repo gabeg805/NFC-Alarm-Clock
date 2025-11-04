@@ -5,6 +5,11 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.6.2</item>
+		<item>&lt;b>পর্তুগিজ&lt;/b> এর অনুবাদের সমস্যা সমাধান করা হয়েছে।</item>
+		<item>&lt;b>টর্চলাইট&lt;/b> কাজ করছে না এমন সমস্যার সমাধান করা হয়েছে।</item>
+		<item>&lt;b>সেটিংস&lt;/b>-এ UI ত্রুটি ঠিক করা হয়েছে।</item>
+		<item>কম ঘনত্বের ডিভাইসের জন্য &lt;b>সক্রিয় অ্যালার্ম&lt;/b> স্ক্রিন কীভাবে দেখায় তা উন্নত করা হয়েছে।</item>
 		<item>12.6.1</item>
 		<item>একটি &lt;b>টাইমার&lt;/b> সম্পাদনা করার সমস্যা সমাধান করা হয়েছে।</item>
 		<item>12.6.0</item>

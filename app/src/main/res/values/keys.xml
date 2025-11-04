@@ -50,7 +50,6 @@
 	<!-- Default alarm -->
 	<string name="key_default_alarm_card">pref_default_alarm_card</string>
 	<string name="key_default_alarm_days">pref_deys</string>
-	<string name="key_default_alarm_date">pref_date</string>
 	<string name="key_default_alarm_repeat_should_repeat">pref_repeat</string>
 	<string name="key_default_alarm_repeat_frequency">pref_repeat_frequency</string>
 	<string name="key_default_alarm_repeat_frequency_units">pref_repeat_frequency_units</string>

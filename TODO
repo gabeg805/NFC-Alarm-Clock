@@ -7,8 +7,6 @@ TODO
   going back to the media fragment after changing the directory, it would not
   reload to the path of the music that is selected for the alarm.
 
-* Run optimizer to make sure all the code is good and unused resources are removed before production
-
 * Change name of notification objects to notification builders
 
 * When active alarm or timer is left. Then "nfcTags" has to get reinitialized

@@ -5,6 +5,11 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.6.2</item>
+		<item>Se solucionó un problema con la traducción de &lt;b>portugués&lt;/b>.</item>
+		<item>Se solucionó el problema con la &lt;b>linterna&lt;/b> que no funcionaba.</item>
+		<item>Se corrigió un error de interfaz de usuario en &lt;b>Ajustes&lt;/b>.</item>
+		<item>Se ha mejorado el aspecto de la pantalla &lt;b>alarma activa&lt;/b> para dispositivos de baja densidad.</item>
 		<item>12.6.1</item>
 		<item>Se solucionó un problema con la edición de un &lt;b>temporizador&lt;/b>.</item>
 		<item>12.6.0</item>
