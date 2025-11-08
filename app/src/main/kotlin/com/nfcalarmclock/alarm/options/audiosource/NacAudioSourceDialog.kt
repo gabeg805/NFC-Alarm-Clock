@@ -71,7 +71,7 @@ open class NacAudioSourceDialog
 		for (src in allAudioSources)
 		{
 			// Inflate the radio button
-			val view = layoutInflater.inflate(R.layout.radio_button, radioGroup, true)
+			val view = layoutInflater.inflate(R.layout.radio_button_audio_source, radioGroup, true)
 			val button = view.findViewById<RadioButton>(R.id.radio_button)
 
 			// Generate a view ID

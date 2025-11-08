@@ -5,7 +5,59 @@
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content">
 
-	<!-- Title -->
+	<!-- Add or replace title -->
+	<TextView
+		style="@style/Widget.AlarmOptionDialog.Title"
+		android:id="@+id/save_nfc_tag_add_or_replace_title"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="Add or replace..."
+		android:visibility="gone"
+		/>
+
+	<!-- Add or replace description -->
+	<TextView
+		style="@style/Widget.AlarmOptionDialog.Description"
+		android:id="@+id/save_nfc_tag_add_or_replace_description"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="Should the NFC tag be added to the list of NFC tags that can dismiss this alarm, or should it replace any NFC tags that are being used by this alarm?"
+		android:visibility="gone"
+		/>
+
+	<RadioGroup
+		style="@style/My.RadioGroup"
+		android:id="@+id/save_nfc_tag_add_or_replace_radio_group"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="@dimen/tiny"
+		android:visibility="gone">
+
+		<RadioButton
+			style="@style/My.RadioButton"
+			android:id="@+id/save_nfc_tag_add_radio_button"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text="Add"
+			/>
+
+		<RadioButton
+			style="@style/My.RadioButton"
+			android:id="@+id/save_nfc_tag_replace_radio_button"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:text="Replace"
+			/>
+	</RadioGroup>
+
+	<!-- Separator -->
+	<Space
+		style="@style/Widget.AlarmOptionDialog.SeparatorAfterCheckBox"
+		android:id="@+id/save_nfc_tag_separator"
+		android:visibility="gone"
+		/>
+
+	<!-- Save NFC tag title -->
 	<TextView
 		style="@style/Widget.AlarmOptionDialog.Title"
 		android:layout_width="match_parent"
@@ -13,7 +65,7 @@
 		android:text="@string/title_save_nfc_tag"
 		/>
 
-	<!-- Description -->
+	<!-- Save NFC tag description -->
 	<TextView
 		style="@style/Widget.AlarmOptionDialog.Description"
 		android:layout_width="match_parent"
@@ -21,7 +73,7 @@
 		android:text="@string/description_save_nfc_tag"
 		/>
 
-	<!-- Name -->
+	<!-- Save NFC tag name -->
 	<com.google.android.material.textfield.TextInputLayout
 		style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
 		android:id="@+id/nfc_tag_input_layout"
@@ -51,5 +103,6 @@
 
 		</com.google.android.material.textfield.TextInputEditText>
 	</com.google.android.material.textfield.TextInputLayout>
+
 
 </com.nfcalarmclock.view.alarmoptionlayout.NacAlarmOptionLayout>

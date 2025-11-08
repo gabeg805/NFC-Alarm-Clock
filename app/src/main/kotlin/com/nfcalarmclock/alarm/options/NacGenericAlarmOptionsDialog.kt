@@ -41,6 +41,11 @@ abstract class NacGenericAlarmOptionsDialog
 	abstract val layoutId: Int
 
 	/**
+	 * Max scroll view height as a percentage of the total height of the screen.
+	 */
+	open val maxScrollViewHeightPercent: Int = 85
+
+	/**
 	 * Save alarm listener. Should be used if the NavController is not used.
 	 */
 	var onSaveAlarmListener: OnSaveAlarmListener? = null
@@ -304,7 +309,7 @@ abstract class NacGenericAlarmOptionsDialog
 		val nbuttons = container.childCount - 1
 
 		// Set the max height that the scroll view can take up
-		setupScrollableViewHeight(scrollView, 85, nbuttons = nbuttons)
+		setupScrollableViewHeight(scrollView, maxScrollViewHeightPercent, nbuttons = nbuttons)
 	}
 
 }

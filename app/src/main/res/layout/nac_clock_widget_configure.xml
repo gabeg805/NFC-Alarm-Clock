@@ -100,27 +100,27 @@
 					tools:ignore="RtlSymmetry">
 
 					<RadioButton
+						style="@style/My.RadioButton"
 						android:id="@+id/general_layout_alignment_center_radio_button"
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
-						android:paddingStart="@dimen/small"
 						android:checked="true"
 						android:text="@string/action_center"
 						/>
 
 					<RadioButton
+						style="@style/My.RadioButton"
 						android:id="@+id/general_layout_alignment_left_radio_button"
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
-						android:paddingStart="@dimen/small"
 						android:text="@string/action_left"
 						/>
 
 					<RadioButton
+						style="@style/My.RadioButton"
 						android:id="@+id/general_layout_alignment_right_radio_button"
 						android:layout_width="match_parent"
 						android:layout_height="wrap_content"
-						android:paddingStart="@dimen/small"
 						android:text="@string/action_right"
 						/>
 				</RadioGroup>

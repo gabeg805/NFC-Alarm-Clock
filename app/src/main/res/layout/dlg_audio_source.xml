@@ -24,7 +24,7 @@
 
 	<!-- Audio source options -->
 	<RadioGroup
-		style="@style/RadioGroup"
+		style="@style/My.RadioGroup"
 		android:id="@+id/audio_sources"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"

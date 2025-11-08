@@ -35,6 +35,13 @@ class NacNfcTag()
 	var nfcId: String = ""
 
 	/**
+	 * Text containing either the name or the ID of the NFC tag, in the event that the
+	 * name is empty.
+	 */
+	val text: String
+		get() = name.takeIf { it.isNotEmpty() } ?: nfcId
+
+	/**
 	 * Constructor.
 	 */
 	constructor(nfcTagName: String, nfcTagId: String) : this()

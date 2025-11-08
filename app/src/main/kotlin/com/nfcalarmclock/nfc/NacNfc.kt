@@ -22,7 +22,12 @@ import com.nfcalarmclock.view.toast
 /**
  * Bundle name for ID of an NFC tag that was scanned.
  */
-const val SCANNED_NFC_TAG_ID_BUNDLE_NAME = "NacNfcWasScannedBundle"
+const val SCANNED_NFC_TAG_ID_BUNDLE_NAME = "NacNfcScannedNfcTagIdBundle"
+
+/**
+ * Bundle name an NFC tag that was scanned that already exists.
+ */
+const val SCANNED_NFC_TAG_ALREADY_EXISTS_BUNDLE_NAME = "NacNfcScannedNfcTagAlreadyExistsBundle"
 
 /**
  * Check if the alarm can be dismissed with the scanned NFC tag.

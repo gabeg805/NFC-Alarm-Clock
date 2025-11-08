@@ -78,6 +78,18 @@ class NacScanNfcTagDialog
 	}
 
 	/**
+	 * Use any NFC tag was clicked.
+	 */
+	override fun onUseAnyNfcTagClicked(alarm: NacAlarm?)
+	{
+		// Clear the start timer on NFC scan flag
+		(alarm as NacTimer?)?.shouldScanningNfcTagStartTimer = false
+
+		// Super
+		super.onUseAnyNfcTagClicked(alarm)
+	}
+
+	/**
 	 * View has been created.
 	 */
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
@@ -89,11 +101,6 @@ class NacScanNfcTagDialog
 		val scanNfcTagDescription: TextView = view.findViewById(R.id.scan_nfc_tag_description)
 
 		scanNfcTagDescription.setText(R.string.description_scan_nfc_tag_timer)
-
-		// Set the use any NFC tag clicked listener
-		onUseAnyNfcTagClickedListener = OnUseAnyNfcTagClickedListener { alarm ->
-			(alarm as NacTimer?)?.shouldScanningNfcTagStartTimer = false
-		}
 	}
 
 }

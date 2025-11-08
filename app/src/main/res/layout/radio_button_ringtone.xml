@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RadioButton
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	style="@style/RadioButton"
+	style="@style/My.RadioButton"
 	android:id="@+id/radio_button_ringtone"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"

@@ -1,6 +1,12 @@
 package com.nfcalarmclock.alarm.options.nfc
 
+import android.view.View
 import android.view.inputmethod.EditorInfo
+import android.widget.RadioButton
+import android.widget.RadioGroup
+import android.widget.Space
+import android.widget.TextView
+import androidx.core.view.isVisible
 import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -12,6 +18,9 @@ import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.NacGenericAlarmOptionsDialog
 import com.nfcalarmclock.nfc.db.NacNfcTag
 import com.nfcalarmclock.nfc.NacNfcTagViewModel
+import com.nfcalarmclock.nfc.SCANNED_NFC_TAG_ALREADY_EXISTS_BUNDLE_NAME
+import com.nfcalarmclock.nfc.SCANNED_NFC_TAG_ID_BUNDLE_NAME
+import com.nfcalarmclock.nfc.setNfcTagIds
 import com.nfcalarmclock.view.calcAlpha
 import com.nfcalarmclock.view.quickToast
 import com.nfcalarmclock.view.setupInputLayoutColor
@@ -63,34 +72,55 @@ open class NacSaveNfcTagDialog
 		// Get the name
 		val nfcName = editText.text.toString().trim()
 
-		// Iterate over each NFC tag
-		allNfcTags.forEach {
-
-			// Check that the name does not already exist
-			if (it.name == nfcName)
-			{
-				// Show toast
-				quickToast(requireContext(), R.string.error_message_nfc_name_exists)
-				throw IllegalStateException()
-			}
-			// Check that the NFC ID does not already exist
-			else if (it.nfcId == alarm!!.nfcTagId)
-			{
-				// Get the message
-				val msg = getString(R.string.error_message_nfc_id_exists, it.name)
-
-				// Show toast
-				quickToast(requireContext(), msg)
-				throw IllegalStateException()
-			}
-
+		// The entered name for an NFC tag already exists
+		if (allNfcTags.any { it.name == nfcName })
+		{
+			quickToast(requireContext(), R.string.error_message_nfc_name_exists)
+			throw IllegalStateException()
 		}
 
-		// Save the NFC tag
-		lifecycleScope.launch {
-			val tag = NacNfcTag(nfcName, alarm!!.nfcTagId)
+		// Get the NFC tag bundle paramters
+		val nfcId = requireArguments().getString(SCANNED_NFC_TAG_ID_BUNDLE_NAME) ?: ""
+		val doesNfcTagAlreadyExist = requireArguments().getBoolean(SCANNED_NFC_TAG_ALREADY_EXISTS_BUNDLE_NAME)
 
-			nfcTagViewModel.insert(tag)
+		// NFC tag does not already exist so save the NFC tag
+		if (!doesNfcTagAlreadyExist)
+		{
+			lifecycleScope.launch {
+				val tag = NacNfcTag(nfcName, alarm!!.nfcTagId)
+				nfcTagViewModel.insert(tag)
+			}
+		}
+
+		// Get the add and replace radio buttons
+		val radioGroup: RadioGroup = dialog!!.findViewById(R.id.save_nfc_tag_add_or_replace_radio_group)
+		val addButton: RadioButton = dialog!!.findViewById(R.id.save_nfc_tag_add_radio_button)
+		val replaceButton: RadioButton = dialog!!.findViewById(R.id.save_nfc_tag_replace_radio_button)
+
+		// Radio buttons are not shown so do nothing
+		if (!radioGroup.isVisible || (alarm == null))
+		{
+			return
+		}
+
+		// Add
+		if (addButton.isChecked)
+		{
+			println("ADD")
+			// Create a list of NFC tags
+			val nfcTags = alarm.nfcTagIdList
+				.toMutableList()
+				.apply { add(nfcId) }
+				.map { NacNfcTag("", it) }
+
+			// Set the NFC tag IDs to the alarm/timer
+			alarm.setNfcTagIds(nfcTags)
+		}
+		// Replace
+		else if (replaceButton.isChecked)
+		{
+			println("REPLACE")
+			alarm.nfcTagId = nfcId
 		}
 	}
 
@@ -105,7 +135,29 @@ open class NacSaveNfcTagDialog
 		}
 
 		// Setup the views
+		setupAddOrReplace(alarm)
 		setupEditText(alarm)
+	}
+
+	/**
+	 * Setup the add or replace views.
+	 */
+	private fun setupAddOrReplace(alarm: NacAlarm?)
+	{
+		// Get the views
+		val title: TextView = dialog!!.findViewById(R.id.save_nfc_tag_add_or_replace_title)
+		val description: TextView = dialog!!.findViewById(R.id.save_nfc_tag_add_or_replace_description)
+		val radioGroup: RadioGroup = dialog!!.findViewById(R.id.save_nfc_tag_add_or_replace_radio_group)
+		val separator: Space = dialog!!.findViewById(R.id.save_nfc_tag_separator)
+
+		// Get the visibility depending on if the alarm/timer has NFC tags set or not
+		val visibility = if (alarm?.nfcTagId?.isNotEmpty() == true) View.VISIBLE else View.GONE
+
+		// Set the visibility
+		title.visibility = visibility
+		description.visibility = visibility
+		radioGroup.visibility = visibility
+		separator.visibility = visibility
 	}
 
 	/**
@@ -116,11 +168,18 @@ open class NacSaveNfcTagDialog
 		// Super
 		super.setupCancelButton(alarm)
 
-		// Get the cancel button
-		val cancelButton: MaterialButton = dialog!!.findViewById(R.id.cancel_button)
+		// Get whether the NFC tag already exists or not
+		val doesNfcTagAlreadyExist = requireArguments().getBoolean(SCANNED_NFC_TAG_ALREADY_EXISTS_BUNDLE_NAME)
 
-		// Rename the button
-		cancelButton.setText(R.string.action_skip)
+		// NFC tag does not already exist so need to save it and give it a name
+		if (!doesNfcTagAlreadyExist)
+		{
+			// Get the cancel button
+			val cancelButton: MaterialButton = dialog!!.findViewById(R.id.cancel_button)
+
+			// Rename the button
+			cancelButton.setText(R.string.action_skip)
+		}
 	}
 
 	/**
@@ -139,18 +198,10 @@ open class NacSaveNfcTagDialog
 		// Text change listener
 		editText.addTextChangedListener{
 
-			// Make sure the editable is valid and has text
-			if (it?.isNotEmpty() == true)
-			{
-				okButton.isEnabled = true
-				okButton.alpha = 1.0f
-			}
-			// Editable is null or does not have a name entered
-			else
-			{
-				okButton.isEnabled = false
-				okButton.alpha = calcAlpha(false)
-			}
+			// Ok button should only be clickable when there is text in the editable
+			okButton.isEnabled = (it?.isNotEmpty() == true)
+			okButton.alpha = calcAlpha(okButton.isEnabled)
+
 		}
 
 		// Keyboard IME action listener
@@ -177,13 +228,20 @@ open class NacSaveNfcTagDialog
 		// Super
 		super.setupOkButton(alarm)
 
-		// Get the ok button
-		val okButton: MaterialButton = dialog!!.findViewById(R.id.ok_button)
+		// Get whether the NFC tag already exists or not
+		val doesNfcTagAlreadyExist = requireArguments().getBoolean(SCANNED_NFC_TAG_ALREADY_EXISTS_BUNDLE_NAME)
 
-		// Rename the button and set its usability
-		okButton.setText(R.string.action_save)
-		okButton.isEnabled = false
-		okButton.alpha = calcAlpha(false)
+		// NFC tag does not already exist so need to save it and give it a name
+		if (!doesNfcTagAlreadyExist)
+		{
+			// Get the ok button
+			val okButton: MaterialButton = dialog!!.findViewById(R.id.ok_button)
+
+			// Rename the button and set its usability
+			okButton.setText(R.string.action_save)
+			okButton.isEnabled = false
+			okButton.alpha = calcAlpha(false)
+		}
 	}
 
 }

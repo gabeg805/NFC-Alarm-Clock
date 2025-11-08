@@ -79,6 +79,7 @@ open class NacAlarmOptionsDialog
 				v.setupBackgroundColor(sharedPreferences)
 				continue
 			}
+			// TODO: Add more hiding here
 			// Check if this is the flashlight option
 			else if (v.id == R.id.option_flashlight)
 			{

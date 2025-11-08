@@ -75,9 +75,9 @@ fun CircularProgressIndicator.animateProgress(
 /**
  * Determine the correct alpha to use, depending on the state.
  */
-fun calcAlpha(state: Boolean): Float
+fun calcAlpha(state: Boolean, alpha: Float = 0.4f): Float
 {
-	return if (state) 1.0f else 0.4f
+	return if (state) 1.0f else alpha
 }
 
 /**

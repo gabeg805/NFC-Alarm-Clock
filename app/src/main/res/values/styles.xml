@@ -99,16 +99,17 @@
 	</style>
 	-->
 
-	<!-- Widget base style -->
+	<!-- Base styles -->
 	<style name="Widget" />
+	<style name="My" />
 
 	<!-- Radio button -->
-	<style name="RadioGroup">
+	<style name="My.RadioGroup">
 		<item name="android:layout_marginStart">@dimen/normal</item>
 		<item name="android:layout_marginEnd">@dimen/normal</item>
 	</style>
 
-	<style name="RadioButton">
+	<style name="My.RadioButton">
 		<item name="android:paddingStart">@dimen/small</item>
 		<item name="android:textColor">@color/white</item>
 		<item name="android:textSize">@dimen/tsz_normal</item>

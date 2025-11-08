@@ -22,7 +22,7 @@
 			android:scrollbars="vertical">
 
 			<RadioGroup
-				style="@style/RadioGroup"
+				style="@style/My.RadioGroup"
 				android:id="@+id/radio_group"
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
