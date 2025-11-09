@@ -40,8 +40,6 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_marginTop="@dimen/tiny"
-		android:textAlignment="textEnd"
-		android:textSize="@dimen/tsz_small"
 		android:text="@string/title_current_selected"
 		android:visibility="gone"
 		/>
@@ -52,7 +50,6 @@
 		android:id="@+id/description_nfc_tag_name"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:textAlignment="textEnd"
 		android:ellipsize="end"
 		android:maxLines="5"
 		android:text=""

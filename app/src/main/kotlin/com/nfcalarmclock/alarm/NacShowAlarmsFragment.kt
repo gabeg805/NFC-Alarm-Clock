@@ -441,6 +441,7 @@ class NacShowAlarmsFragment
 	{
 		// Super
 		super.onPause()
+		println("SHOW ALARMS onPause()")
 
 		// Cleanup
 		unregisterMyReceiver(requireContext(), timeTickReceiver)
@@ -457,6 +458,7 @@ class NacShowAlarmsFragment
 	{
 		// Super
 		super.onResume()
+		println("SHOW ALARMS onResume()")
 
 		// Get the intent action and alarm from the fragment arguments bundle. These
 		// could be null, but if an action occurred, they will not be
@@ -487,6 +489,7 @@ class NacShowAlarmsFragment
 	{
 		// Setup
 		super.onViewCreated(view, savedInstanceState)
+		println("SHOW ALARMS onViewCreated()")
 
 		// Set member variables
 		val context = requireContext()
@@ -546,27 +549,27 @@ class NacShowAlarmsFragment
 		setupRecyclerView()
 		setupFloatingActionButton()
 
-		lifecycleScope.launch {
+		//lifecycleScope.launch {
 
-			//nfcTagViewModel.getAllNfcTags().forEach {
-			//	nfcTagViewModel.delete(it)
-			//}
+		//	//nfcTagViewModel.getAllNfcTags().forEach {
+		//	//	nfcTagViewModel.delete(it)
+		//	//}
 
-			//val dummy = listOf(NacNfcTag("", "1982jh1g23k"), NacNfcTag("", "skjdfh1234"))
-			//val alarm = alarmViewModel.getAllAlarms().firstOrNull()
-			//alarm?.setNfcTagIds(dummy)
+		//	//val dummy = listOf(NacNfcTag("", "1982jh1g23k"), NacNfcTag("", "skjdfh1234"))
+		//	//val alarm = alarmViewModel.getAllAlarms().firstOrNull()
+		//	//alarm?.setNfcTagIds(dummy)
 
-			//if (alarm != null)
-			//{
-			//	println("UPDATING THE JANK")
-			//	alarmViewModel.update(alarm)
-			//}
+		//	//if (alarm != null)
+		//	//{
+		//	//	println("UPDATING THE JANK")
+		//	//	alarmViewModel.update(alarm)
+		//	//}
 
-			//nfcTagViewModel.insert(NacNfcTag("Hello", "102983kjshlak"))
-			//nfcTagViewModel.insert(NacNfcTag("There", "oi12khj12"))
-			//nfcTagViewModel.insert(NacNfcTag("Sup", "1209jkhlh0"))
+		//	//nfcTagViewModel.insert(NacNfcTag("Hello", "102983kjshlak"))
+		//	//nfcTagViewModel.insert(NacNfcTag("There", "oi12khj12"))
+		//	//nfcTagViewModel.insert(NacNfcTag("Sup", "1209jkhlh0"))
 
-		}
+		//}
 	}
 
 	/**

@@ -6,6 +6,7 @@ import android.content.ServiceConnection
 import android.content.res.ColorStateList
 import android.os.Bundle
 import android.os.IBinder
+import android.os.SystemClock
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -164,6 +165,11 @@ class NacActiveTimerFragment
 	private var isRunningStartingAnimation: Boolean = false
 
 	/**
+	 * The last time the reset button was clicked.
+	 */
+	private var lastClickTimeResetButton: Long = 0
+
+	/**
 	 * Callback when back is pressed.
 	 */
 	private val onBackPressedCallback: OnBackPressedCallback = object : OnBackPressedCallback(true) {
@@ -278,6 +284,16 @@ class NacActiveTimerFragment
 			// Set the active timer service
 			val binder = serviceBinder as NacActiveTimerService.NacLocalBinder
 			service = binder.getService()
+
+			// Service has not started yet
+			if (service!!.allTimersReadOnly.none { it.id == timer.id })
+			{
+				// Add the listeners
+				service!!.addOnServiceStoppedListener(timer.id, onServiceStoppedListener)
+				service!!.addOnCountdownTimerChangedListener(timer.id, onCountdownTimerChangedListener)
+				service!!.addOnCountupTickListener(timer.id, onCountupTickListener)
+				return
+			}
 
 			// Get the progress and seconds
 			val secUntilFinished = service!!.getSecUntilFinished(timer)
@@ -687,6 +703,12 @@ class NacActiveTimerFragment
 		// Click listener
 		resetButton.setOnClickListener {
 
+			// Button was clicked too recently
+			if ((SystemClock.elapsedRealtime() - lastClickTimeResetButton) < 500)
+			{
+				return@setOnClickListener
+			}
+
 			// Clear the running starting animation flag
 			isRunningStartingAnimation = false
 
@@ -699,6 +721,9 @@ class NacActiveTimerFragment
 			{
 				service!!.stopThisService()
 			}
+
+			// Set the last click time
+			lastClickTimeResetButton = SystemClock.elapsedRealtime()
 
 		}
 	}

@@ -40,6 +40,7 @@ fun NacAlarm.canDismissWithScannedNfc(nfcId: String, nfcTags: MutableList<NacNfc
 	// Get all NFC IDs from the NFC tags. This is used when the alarm has multiple
 	// NFC tags set and need to check that list, instead of doing a string to string
 	// comparison
+	nfcTags.forEach { println("Using jank nfc tag? ${it.name} | ${it.nfcId}") }
 	val allNfcIds = nfcTags.map { it.nfcId }
 
 	// Compare the two NFC IDs
@@ -94,6 +95,7 @@ suspend fun NacAlarm.getNfcTagsForDismissing(
 		?.mapNotNull { nfcTagViewModel.findNfcTag(it) }
 		?.toMutableList()
 		?: mutableListOf()
+	nfcTags.forEach { println("Got nfc tag? ${it.name} | ${it.nfcId}") }
 
 	// Random dismiss order so shuffle the list
 	if (this.nfcTagDismissOrder == NacNfcTagDismissOrder.RANDOM)
@@ -236,6 +238,7 @@ object NacNfc
 			// NFC can be shown which means it should be checked
 			if (sharedPreferences.shouldShowNfcButton)
 			{
+				nfcTags?.forEach { println("Can dismiss nfc tag? ${it.name} | ${it.nfcId}") }
 				// Check if the scanned NFC tag can be used to dismiss the alarm
 				val status = alarm.canDismissWithScannedNfc(nfcId, nfcTags!!)
 

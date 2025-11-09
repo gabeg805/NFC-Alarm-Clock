@@ -2,11 +2,6 @@
 TODO
 ----
 
-* Move currently selected NFC tags to left like normal option
-
-* Hide separator for add/replace when NFC tag exists. Alternatively, have thing
-  saying the name of the NFC tag that was scanned
-
 * Reword "translation of" to "translation to"
 
 * When building dialog and alarm is null, should create a default builder? When

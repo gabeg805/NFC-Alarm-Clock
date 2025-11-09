@@ -1,6 +1,7 @@
 package com.nfcalarmclock.timer.card
 
 import android.content.Context
+import android.os.SystemClock
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -161,6 +162,16 @@ class NacTimerCardHolder(
 	var onStopTimerClickedListener: OnStopTimerClickedListener? = null
 
 	/**
+	 * The last time the start button was clicked.
+	 */
+	private var lastClickTimeStartButton: Long = 0
+
+	/**
+	 * The last time the reset button was clicked.
+	 */
+	private var lastClickTimeResetButton: Long = 0
+
+	/**
 	 * Constructor.
 	 */
 	init
@@ -213,13 +224,31 @@ class NacTimerCardHolder(
 
 		// Start clicked
 		startButton.setOnClickListener {
+
+			// Button was clicked too recently
+			if ((SystemClock.elapsedRealtime() - lastClickTimeStartButton) < 500)
+			{
+				return@setOnClickListener
+			}
+
 			it.performHapticFeedback()
 			setResumeVisibility()
 			onStartTimerClickedListener?.onStartTimer(timer!!)
+
+			// Set the last click time
+			lastClickTimeStartButton = SystemClock.elapsedRealtime()
+
 		}
 
 		// Pause clicked
 		pauseButton.setOnClickListener {
+
+			// Button was clicked too recently
+			if ((SystemClock.elapsedRealtime() - lastClickTimeStartButton) < 500)
+			{
+				return@setOnClickListener
+			}
+
 			it.performHapticFeedback()
 			setPauseVisibility()
 			onPauseTimerClickedListener?.onPauseTimer(timer!!)
@@ -227,9 +256,20 @@ class NacTimerCardHolder(
 
 		// Reset clicked
 		resetButton.setOnClickListener {
+
+			// Button was clicked too recently
+			if ((SystemClock.elapsedRealtime() - lastClickTimeResetButton) < 500)
+			{
+				return@setOnClickListener
+			}
+
 			it.performHapticFeedback()
 			setResetVisibility()
 			onResetTimerClickedListener?.onResetTimer(timer!!)
+
+			// Set the last click time
+			lastClickTimeResetButton = SystemClock.elapsedRealtime()
+
 		}
 
 		// Stop clicked

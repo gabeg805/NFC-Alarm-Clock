@@ -454,7 +454,7 @@ class NacShowTimersFragment
 
 				// Cleanup media file
 				lifecycleScope.launch {
-					(requireActivity() as NacMainActivity).cleanupMediaFileAfterDelete(
+					(activity as NacMainActivity?)?.cleanupMediaFileAfterDelete(
 						localMediaPath, timerViewModel.getAllTimers()
 					)
 				}

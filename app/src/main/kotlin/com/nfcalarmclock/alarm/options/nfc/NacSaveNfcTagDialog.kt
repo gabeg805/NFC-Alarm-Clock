@@ -184,7 +184,7 @@ open class NacSaveNfcTagDialog
 
 		// Setup the views
 		setupAddOrReplace(alarm)
-		setupEditText(alarm)
+		setupSaveNfcTag(alarm)
 	}
 
 	/**
@@ -204,7 +204,14 @@ open class NacSaveNfcTagDialog
 		title.visibility = visibility
 		description.visibility = visibility
 		addOrReplaceRadioGroup.visibility = visibility
-		separator.visibility = visibility
+
+		// Separator only needs to change visibility when the add/replace views will be
+		// visible and the save NFC tag views will be visible. Otherwise, it should not
+		// be shown
+		if ((visibility == View.VISIBLE) && !doesNfcTagAlreadyExist)
+		{
+			separator.visibility = View.VISIBLE
+		}
 
 		// Do nothing else if the radio group is not shown
 		if (visibility == View.GONE)
@@ -237,32 +244,44 @@ open class NacSaveNfcTagDialog
 	}
 
 	/**
-	 * Setup the edit text.
+	 * Setup the save NFC tag views.
 	 */
-	private fun setupEditText(alarm: NacAlarm?)
+	private fun setupSaveNfcTag(alarm: NacAlarm?)
 	{
 		// Get the views
 		val okButton: MaterialButton = dialog!!.findViewById(R.id.ok_button)
-		val title: TextView = dialog!!.findViewById(R.id.save_nfc_tag_title)
-		val description: TextView = dialog!!.findViewById(R.id.save_nfc_tag_description)
-		val inputLayout: TextInputLayout = dialog!!.findViewById(R.id.save_nfc_tag_input_layout)
+		val saveNfcTagTitle: TextView = dialog!!.findViewById(R.id.save_nfc_tag_title)
+		val saveNfcTagDescription: TextView = dialog!!.findViewById(R.id.save_nfc_tag_description)
+		val saveNfcTagInputLayout: TextInputLayout = dialog!!.findViewById(R.id.save_nfc_tag_input_layout)
+		val usingNfcTagTitle: TextView = dialog!!.findViewById(R.id.save_nfc_tag_already_exists_title)
+		val usingNfcTagDescription: TextView = dialog!!.findViewById(R.id.save_nfc_tag_already_exists_description)
 
 		// Get the visibility
 		val visibility = if (doesNfcTagAlreadyExist) View.GONE else View.VISIBLE
+		val oppositeVisibility = if (visibility == View.VISIBLE) View.GONE else View.VISIBLE
 
 		// Set the visibility
-		title.visibility = visibility
-		description.visibility = visibility
-		inputLayout.visibility = visibility
+		saveNfcTagTitle.visibility = visibility
+		saveNfcTagDescription.visibility = visibility
+		saveNfcTagInputLayout.visibility = visibility
+		usingNfcTagTitle.visibility = oppositeVisibility
+		usingNfcTagDescription.visibility = oppositeVisibility
 
-		// Views are not being shown so no need to do anything else
+		// Views are not being shown so no need to set any listeners
 		if (visibility == View.GONE)
 		{
+			// Set the text of the using NFC tag description
+			lifecycleScope.launch {
+				val nfcTag = nfcTagViewModel.findNfcTag(nfcTagId)!!
+				println("Setting the text! ${nfcTag.name}")
+				usingNfcTagDescription.text = nfcTag.name
+			}
+
 			return
 		}
 
 		// Setup the input layout
-		inputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
+		saveNfcTagInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
 
 		// Text change listener
 		editText.addTextChangedListener{

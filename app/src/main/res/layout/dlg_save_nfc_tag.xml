@@ -61,6 +61,26 @@
 	<!-- Save NFC tag title -->
 	<TextView
 		style="@style/Widget.AlarmOptionDialog.Title"
+		android:id="@+id/save_nfc_tag_already_exists_title"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/title_using_nfc_tag"
+		android:visibility="gone"
+		/>
+
+	<!-- Save NFC tag description -->
+	<TextView
+		style="@style/Widget.AlarmOptionDialog.Description"
+		android:id="@+id/save_nfc_tag_already_exists_description"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text=""
+		android:visibility="gone"
+		/>
+
+	<!-- Save NFC tag title -->
+	<TextView
+		style="@style/Widget.AlarmOptionDialog.Title"
 		android:id="@+id/save_nfc_tag_title"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"

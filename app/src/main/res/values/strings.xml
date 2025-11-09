@@ -245,6 +245,7 @@
 	<string name="title_nfc_tag_dismiss_order">Dismiss order</string>
 	<string name="title_start_timer_on_nfc_tag_scan">Start timer on scan</string>
 	<string name="title_add_or_replace_nfc_tag">Add or replace…</string>
+	<string name="title_using_nfc_tag">Using NFC tag:</string>
 	<string name="title_save_nfc_tag">Save NFC tag</string>
 	<string name="title_delete_nfc_tag">Delete NFC tag</string>
 	<string name="title_rename_nfc_tag">Rename NFC tag</string>
