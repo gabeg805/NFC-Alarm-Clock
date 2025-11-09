@@ -24,6 +24,7 @@ import com.nfcalarmclock.nfc.setNfcTagIds
 import com.nfcalarmclock.view.calcAlpha
 import com.nfcalarmclock.view.quickToast
 import com.nfcalarmclock.view.setupInputLayoutColor
+import com.nfcalarmclock.view.setupThemeColor
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 
@@ -46,9 +47,32 @@ open class NacSaveNfcTagDialog
 	private val nfcTagViewModel: NacNfcTagViewModel by viewModels()
 
 	/**
+	 * Radio group for the add/replace buttons.
+	 */
+	private val addOrReplaceRadioGroup: RadioGroup by lazy {
+		requireView().findViewById(R.id.save_nfc_tag_add_or_replace_radio_group)
+	}
+
+	/**
+	 * Add radio button.
+	 */
+	private val addRadioButton: RadioButton by lazy {
+		requireView().findViewById(R.id.save_nfc_tag_add_radio_button)
+	}
+
+	/**
+	 * Replace radio button.
+	 */
+	private val replaceRadioButton: RadioButton by lazy {
+		requireView().findViewById(R.id.save_nfc_tag_replace_radio_button)
+	}
+
+	/**
 	 * Edit text containing the name of the NFC tag to save.
 	 */
-	private lateinit var editText: TextInputEditText
+	private val editText: TextInputEditText by lazy {
+		requireView().findViewById(R.id.nfc_tag_name)
+	}
 
 	/**
 	 * List of NFC tags.
@@ -56,10 +80,59 @@ open class NacSaveNfcTagDialog
 	private var allNfcTags: List<NacNfcTag> = emptyList()
 
 	/**
+	 * Scanned NFC tag ID.
+	 */
+	private var nfcTagId: String = ""
+
+	/**
+	 * Whether the NFC tag exists already or not.
+	 */
+	private var doesNfcTagAlreadyExist: Boolean = false
+
+	/**
+	 * Add or replace the NFC tag.
+	 */
+	private fun addOrReplaceNfcTag(alarm: NacAlarm?)
+	{
+		// Radio buttons are not shown so do nothing
+		if (!addOrReplaceRadioGroup.isVisible || (alarm == null))
+		{
+			alarm?.nfcTagId = nfcTagId
+			println("NO ADD OR REPLACE, SO SIMPLY SET : ${alarm?.nfcTagId} | $nfcTagId")
+			return
+		}
+
+		// Add
+		if (addRadioButton.isChecked)
+		{
+			println("ADD")
+			// Create a list of NFC tags
+			val nfcTags = alarm.nfcTagIdList
+				.toMutableList()
+				.apply { add(nfcTagId) }
+				.map { NacNfcTag("", it) }
+
+			// Set the NFC tag IDs to the alarm/timer
+			alarm.setNfcTagIds(nfcTags)
+		}
+		// Replace
+		else if (replaceRadioButton.isChecked)
+		{
+			println("REPLACE")
+			alarm.nfcTagId = nfcTagId
+		}
+	}
+
+	/**
 	 * Called when the cancel button is clicked.
 	 */
 	override fun onCancelClicked(alarm: NacAlarm?)
 	{
+		println("Cancel clicked!")
+		// Add or replace the NFC tag
+		addOrReplaceNfcTag(alarm)
+		println("Alarm now has NFC ID : ${alarm?.nfcTagId} | $doesNfcTagAlreadyExist")
+
 		// Save the alarm
 		onSaveAlarm(alarm)
 	}
@@ -71,6 +144,7 @@ open class NacSaveNfcTagDialog
 	{
 		// Get the name
 		val nfcName = editText.text.toString().trim()
+		println("OK CLICKED! $nfcName")
 
 		// The entered name for an NFC tag already exists
 		if (allNfcTags.any { it.name == nfcName })
@@ -79,49 +153,18 @@ open class NacSaveNfcTagDialog
 			throw IllegalStateException()
 		}
 
-		// Get the NFC tag bundle paramters
-		val nfcId = requireArguments().getString(SCANNED_NFC_TAG_ID_BUNDLE_NAME) ?: ""
-		val doesNfcTagAlreadyExist = requireArguments().getBoolean(SCANNED_NFC_TAG_ALREADY_EXISTS_BUNDLE_NAME)
-
 		// NFC tag does not already exist so save the NFC tag
 		if (!doesNfcTagAlreadyExist)
 		{
+			println("SAVING NFC TAG : $nfcName | $nfcTagId")
 			lifecycleScope.launch {
-				val tag = NacNfcTag(nfcName, alarm!!.nfcTagId)
+				val tag = NacNfcTag(nfcName, nfcTagId)
 				nfcTagViewModel.insert(tag)
 			}
 		}
 
-		// Get the add and replace radio buttons
-		val radioGroup: RadioGroup = dialog!!.findViewById(R.id.save_nfc_tag_add_or_replace_radio_group)
-		val addButton: RadioButton = dialog!!.findViewById(R.id.save_nfc_tag_add_radio_button)
-		val replaceButton: RadioButton = dialog!!.findViewById(R.id.save_nfc_tag_replace_radio_button)
-
-		// Radio buttons are not shown so do nothing
-		if (!radioGroup.isVisible || (alarm == null))
-		{
-			return
-		}
-
-		// Add
-		if (addButton.isChecked)
-		{
-			println("ADD")
-			// Create a list of NFC tags
-			val nfcTags = alarm.nfcTagIdList
-				.toMutableList()
-				.apply { add(nfcId) }
-				.map { NacNfcTag("", it) }
-
-			// Set the NFC tag IDs to the alarm/timer
-			alarm.setNfcTagIds(nfcTags)
-		}
-		// Replace
-		else if (replaceButton.isChecked)
-		{
-			println("REPLACE")
-			alarm.nfcTagId = nfcId
-		}
+		// Add or replace the NFC tag
+		addOrReplaceNfcTag(alarm)
 	}
 
 	/**
@@ -133,6 +176,11 @@ open class NacSaveNfcTagDialog
 		lifecycleScope.launch {
 			allNfcTags = nfcTagViewModel.getAllNfcTags()
 		}
+
+		// Set the NFC tag ID and whether the NFC tag exists already or not
+		nfcTagId = requireArguments().getString(SCANNED_NFC_TAG_ID_BUNDLE_NAME) ?: ""
+		doesNfcTagAlreadyExist = requireArguments().getBoolean(SCANNED_NFC_TAG_ALREADY_EXISTS_BUNDLE_NAME)
+		println("Found NFC tag? $nfcTagId | $doesNfcTagAlreadyExist")
 
 		// Setup the views
 		setupAddOrReplace(alarm)
@@ -147,7 +195,6 @@ open class NacSaveNfcTagDialog
 		// Get the views
 		val title: TextView = dialog!!.findViewById(R.id.save_nfc_tag_add_or_replace_title)
 		val description: TextView = dialog!!.findViewById(R.id.save_nfc_tag_add_or_replace_description)
-		val radioGroup: RadioGroup = dialog!!.findViewById(R.id.save_nfc_tag_add_or_replace_radio_group)
 		val separator: Space = dialog!!.findViewById(R.id.save_nfc_tag_separator)
 
 		// Get the visibility depending on if the alarm/timer has NFC tags set or not
@@ -156,8 +203,18 @@ open class NacSaveNfcTagDialog
 		// Set the visibility
 		title.visibility = visibility
 		description.visibility = visibility
-		radioGroup.visibility = visibility
+		addOrReplaceRadioGroup.visibility = visibility
 		separator.visibility = visibility
+
+		// Do nothing else if the radio group is not shown
+		if (visibility == View.GONE)
+		{
+			return
+		}
+
+		// Setup the radio button colors
+		addRadioButton.setupThemeColor(sharedPreferences)
+		replaceRadioButton.setupThemeColor(sharedPreferences)
 	}
 
 	/**
@@ -167,9 +224,6 @@ open class NacSaveNfcTagDialog
 	{
 		// Super
 		super.setupCancelButton(alarm)
-
-		// Get whether the NFC tag already exists or not
-		val doesNfcTagAlreadyExist = requireArguments().getBoolean(SCANNED_NFC_TAG_ALREADY_EXISTS_BUNDLE_NAME)
 
 		// NFC tag does not already exist so need to save it and give it a name
 		if (!doesNfcTagAlreadyExist)
@@ -189,8 +243,23 @@ open class NacSaveNfcTagDialog
 	{
 		// Get the views
 		val okButton: MaterialButton = dialog!!.findViewById(R.id.ok_button)
-		val inputLayout: TextInputLayout = dialog!!.findViewById(R.id.nfc_tag_input_layout)
-		editText = dialog!!.findViewById(R.id.nfc_tag_name)
+		val title: TextView = dialog!!.findViewById(R.id.save_nfc_tag_title)
+		val description: TextView = dialog!!.findViewById(R.id.save_nfc_tag_description)
+		val inputLayout: TextInputLayout = dialog!!.findViewById(R.id.save_nfc_tag_input_layout)
+
+		// Get the visibility
+		val visibility = if (doesNfcTagAlreadyExist) View.GONE else View.VISIBLE
+
+		// Set the visibility
+		title.visibility = visibility
+		description.visibility = visibility
+		inputLayout.visibility = visibility
+
+		// Views are not being shown so no need to do anything else
+		if (visibility == View.GONE)
+		{
+			return
+		}
 
 		// Setup the input layout
 		inputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
@@ -227,9 +296,6 @@ open class NacSaveNfcTagDialog
 	{
 		// Super
 		super.setupOkButton(alarm)
-
-		// Get whether the NFC tag already exists or not
-		val doesNfcTagAlreadyExist = requireArguments().getBoolean(SCANNED_NFC_TAG_ALREADY_EXISTS_BUNDLE_NAME)
 
 		// NFC tag does not already exist so need to save it and give it a name
 		if (!doesNfcTagAlreadyExist)

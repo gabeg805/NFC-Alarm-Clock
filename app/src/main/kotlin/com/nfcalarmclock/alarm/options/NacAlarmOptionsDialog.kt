@@ -73,20 +73,36 @@ open class NacAlarmOptionsDialog
 		// Iterate over each child in the container
 		for (v in container.children)
 		{
-			// Check if the view does not have an ID
+			// View does not have an ID
 			if (v.id == View.NO_ID)
 			{
 				v.setupBackgroundColor(sharedPreferences)
 				continue
 			}
-			// TODO: Add more hiding here
-			// Check if this is the flashlight option
+			// Flashlight
 			else if (v.id == R.id.option_flashlight)
 			{
-				// Check if should hide this option
+				// Hide the button
 				if (!sharedPreferences.shouldShowFlashlightButton)
 				{
-					// Hide the flashlight option
+					v.visibility = View.GONE
+				}
+			}
+			// NFC
+			else if (v.id == R.id.option_nfc)
+			{
+				// Hide the button
+				if (!sharedPreferences.shouldShowNfcButton)
+				{
+					v.visibility = View.GONE
+				}
+			}
+			// Vibrate
+			else if (v.id == R.id.option_vibrate)
+			{
+				// Hide the button
+				if (!sharedPreferences.shouldShowVibrateButton)
+				{
 					v.visibility = View.GONE
 				}
 			}

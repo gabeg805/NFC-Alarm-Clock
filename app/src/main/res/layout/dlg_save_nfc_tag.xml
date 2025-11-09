@@ -11,7 +11,7 @@
 		android:id="@+id/save_nfc_tag_add_or_replace_title"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="Add or replace..."
+		android:text="@string/title_add_or_replace_nfc_tag"
 		android:visibility="gone"
 		/>
 
@@ -21,7 +21,7 @@
 		android:id="@+id/save_nfc_tag_add_or_replace_description"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="Should the NFC tag be added to the list of NFC tags that can dismiss this alarm, or should it replace any NFC tags that are being used by this alarm?"
+		android:text="@string/description_add_or_replace_nfc_tag"
 		android:visibility="gone"
 		/>
 
@@ -38,7 +38,8 @@
 			android:id="@+id/save_nfc_tag_add_radio_button"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:text="Add"
+			android:checked="true"
+			android:text="@string/action_add"
 			/>
 
 		<RadioButton
@@ -46,7 +47,7 @@
 			android:id="@+id/save_nfc_tag_replace_radio_button"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:text="Replace"
+			android:text="@string/action_replace"
 			/>
 	</RadioGroup>
 
@@ -60,6 +61,7 @@
 	<!-- Save NFC tag title -->
 	<TextView
 		style="@style/Widget.AlarmOptionDialog.Title"
+		android:id="@+id/save_nfc_tag_title"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:text="@string/title_save_nfc_tag"
@@ -68,6 +70,7 @@
 	<!-- Save NFC tag description -->
 	<TextView
 		style="@style/Widget.AlarmOptionDialog.Description"
+		android:id="@+id/save_nfc_tag_description"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:text="@string/description_save_nfc_tag"
@@ -76,7 +79,7 @@
 	<!-- Save NFC tag name -->
 	<com.google.android.material.textfield.TextInputLayout
 		style="@style/Widget.Material3.TextInputLayout.OutlinedBox"
-		android:id="@+id/nfc_tag_input_layout"
+		android:id="@+id/save_nfc_tag_input_layout"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_marginTop="@dimen/normal"
@@ -103,6 +106,5 @@
 
 		</com.google.android.material.textfield.TextInputEditText>
 	</com.google.android.material.textfield.TextInputLayout>
-
 
 </com.nfcalarmclock.view.alarmoptionlayout.NacAlarmOptionLayout>

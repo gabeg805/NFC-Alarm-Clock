@@ -72,6 +72,8 @@ import com.nfcalarmclock.card.NacBaseCardTouchHelperCallback
 import com.nfcalarmclock.card.NacCardLayoutManager
 import com.nfcalarmclock.main.NacMainActivity
 import com.nfcalarmclock.nfc.NacNfcTagViewModel
+import com.nfcalarmclock.nfc.db.NacNfcTag
+import com.nfcalarmclock.nfc.setNfcTagIds
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.statistics.NacAlarmStatisticViewModel
 import com.nfcalarmclock.system.NacBundle.BUNDLE_INTENT_ACTION
@@ -544,27 +546,27 @@ class NacShowAlarmsFragment
 		setupRecyclerView()
 		setupFloatingActionButton()
 
-		//lifecycleScope.launch {
+		lifecycleScope.launch {
 
-		//	//nfcTagViewModel.getAllNfcTags().forEach {
-		//	//	nfcTagViewModel.delete(it)
-		//	//}
+			//nfcTagViewModel.getAllNfcTags().forEach {
+			//	nfcTagViewModel.delete(it)
+			//}
 
-		//	//val dummy = listOf(NacNfcTag("", "1982jh1g23k"), NacNfcTag("", "skjdfh1234"))
-		//	//val alarm = alarmViewModel.getAllAlarms().firstOrNull()
-		//	//alarm?.setNfcTagIds(dummy)
+			//val dummy = listOf(NacNfcTag("", "1982jh1g23k"), NacNfcTag("", "skjdfh1234"))
+			//val alarm = alarmViewModel.getAllAlarms().firstOrNull()
+			//alarm?.setNfcTagIds(dummy)
 
-		//	//if (alarm != null)
-		//	//{
-		//	//	println("UPDATING THE JANK")
-		//	//	alarmViewModel.update(alarm)
-		//	//}
+			//if (alarm != null)
+			//{
+			//	println("UPDATING THE JANK")
+			//	alarmViewModel.update(alarm)
+			//}
 
-		//	//nfcTagViewModel.insert(NacNfcTag("Hello", "102983kjshlak"))
-		//	//nfcTagViewModel.insert(NacNfcTag("There", "oi12khj12"))
-		//	//nfcTagViewModel.insert(NacNfcTag("Sup", "1209jkhlh0"))
+			//nfcTagViewModel.insert(NacNfcTag("Hello", "102983kjshlak"))
+			//nfcTagViewModel.insert(NacNfcTag("There", "oi12khj12"))
+			//nfcTagViewModel.insert(NacNfcTag("Sup", "1209jkhlh0"))
 
-		//}
+		}
 	}
 
 	/**
@@ -898,7 +900,7 @@ class NacShowAlarmsFragment
 				NacAlarmOptionsDialog.navigate(navController, alarm)
 					?.observe(viewLifecycleOwner) { a ->
 
-						println("On alarm option clicked!")
+						println("On alarm option OBSERVED! ${a.nfcTagId}")
 						// Update the alarm
 						updateAlarm(a)
 						card.refreshRepeatOptionViews()

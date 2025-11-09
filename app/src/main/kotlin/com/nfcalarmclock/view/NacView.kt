@@ -344,6 +344,22 @@ fun TabLayout.setupThemeColor(sharedPreferences: NacSharedPreferences)
 }
 
 /**
+ * Setup the background color of a FloatingActionButton.
+ */
+fun RadioButton.setupThemeColor(sharedPreferences: NacSharedPreferences)
+{
+	// Get the colors for the boolean states
+	val colors = intArrayOf(sharedPreferences.themeColor, Color.GRAY)
+
+	// Get the IDs of the two states
+	val states = arrayOf(intArrayOf(android.R.attr.state_checked),
+		intArrayOf(-android.R.attr.state_checked))
+
+	// Set the state list of the radio button
+	this.buttonTintList = ColorStateList(states, colors)
+}
+
+/**
  * Setup the color of a switch.
  */
 fun SwitchCompat.setupSwitchColor(sharedPreferences: NacSharedPreferences)

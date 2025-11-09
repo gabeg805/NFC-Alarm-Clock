@@ -1,7 +1,5 @@
 package com.nfcalarmclock.mediapicker.ringtone
 
-import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +17,7 @@ import com.nfcalarmclock.system.media.NacMedia
 import com.nfcalarmclock.system.media.buildLocalMediaPath
 import com.nfcalarmclock.system.media.getMediaArtist
 import com.nfcalarmclock.system.media.getMediaTitle
+import com.nfcalarmclock.view.setupThemeColor
 
 /**
  * Pick a ringtone.
@@ -129,24 +128,6 @@ abstract class NacRingtonePickerFragment<T: NacAlarm>
 	}
 
 	/**
-	 * Set the radio button's color state list.
-	 */
-	private fun setRadioButtonColor(
-		shared: NacSharedPreferences,
-		radioButton: RadioButton)
-	{
-		// Get the colors for the boolean states
-		val colors = intArrayOf(shared.themeColor, Color.GRAY)
-
-		// Get the IDs of the two states
-		val states = arrayOf(intArrayOf(android.R.attr.state_checked),
-			intArrayOf(-android.R.attr.state_checked))
-
-		// Set the state list of the radio button
-		radioButton.buttonTintList = ColorStateList(states, colors)
-	}
-
-	/**
 	 * Setup the radio buttons.
 	 */
 	private fun setupRadioButtons()
@@ -168,8 +149,8 @@ abstract class NacRingtonePickerFragment<T: NacAlarm>
 			// Create a button for each ringtone
 			val button = createRadioButton(title, path)
 
-			// Set the radio button color
-			setRadioButtonColor(shared, button)
+			// Setup the radio button color
+			button.setupThemeColor(shared)
 
 			// Check if the paths match
 			if (path == mediaPath)

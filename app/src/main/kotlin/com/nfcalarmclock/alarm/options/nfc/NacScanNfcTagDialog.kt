@@ -140,6 +140,12 @@ open class NacScanNfcTagDialog
 			.map { it.text }
 
 	/**
+	 * The visibility of the select NFC tag and dismiss order views (as an example).
+	 */
+	private val viewVisibility: Int
+		get() = if (allNfcTags.isNotEmpty()) View.VISIBLE else View.GONE
+
+	/**
 	 * Get the navigation destination ID for the Save NFC Tag dialog.
 	 *
 	 * @return The navigation destination ID for the Save NFC Tag dialog.
@@ -295,6 +301,8 @@ open class NacScanNfcTagDialog
 					putBoolean(SCANNED_NFC_TAG_ALREADY_EXISTS_BUNDLE_NAME, doesNfcTagAlreadyExist)
 				}
 
+			println("Putting NFC tag in the bundle : $nfcId | ${NacNfc.parseId(tag).toString()} | $doesNfcTagAlreadyExist")
+
 			// Navigate to the save NFC tag dialog
 			navController.navigate(destinationId, newArgs, this@NacScanNfcTagDialog,
 				onBackStackPopulated = {
@@ -302,6 +310,7 @@ open class NacScanNfcTagDialog
 					// Get the item from the save NFC tag dialog and disable the NFC
 					// tag dismiss order, just in case
 					val newItem = navController.currentBackStackEntry?.savedStateHandle?.get<NacAlarm>("YOYOYO")
+					println("Back STACK Populated!  ${newItem?.nfcTagId}")
 					// TODO: Should maybe not do this?
 					//newItem?.shouldUseNfcTagDismissOrder = false
 
@@ -409,6 +418,20 @@ open class NacScanNfcTagDialog
 	}
 
 	/**
+	 * Set OK button visibility.
+	 */
+	private fun setOkButtonVisibility()
+	{
+		// Get the ok button
+		val okButton: MaterialButton = dialog!!.findViewById(R.id.ok_button)
+
+		// Set the visibility. If the select NFC tags and dismiss order views are
+		// not shown, then the OK button does not need to be shown either since all the
+		// buttons are basically going to do the same thing
+		okButton.visibility = viewVisibility
+	}
+
+	/**
 	 * Set remove button usability.
 	 */
 	private fun setRemoveButtonUsability(button: MaterialButton)
@@ -434,12 +457,19 @@ open class NacScanNfcTagDialog
 
 			setupAllAndSelectedNfcTags()
 			setupCurrentlySelectedInfo()
+			setupStartTimerOnScan(alarm)
 			setupSelectNfcTag()
 			// TODO: Need to add thing for timer in here. Maybe override setupCurrentlySelected or allandselected?
 			setupDismissOrder(a.shouldUseNfcTagDismissOrder, a.nfcTagDismissOrder)
+			setOkButtonVisibility()
 
 		}
 	}
+
+	/**
+	 * Setup the start timer on scan.
+	 */
+	open fun setupStartTimerOnScan(alarm: NacAlarm?) {}
 
 	/**
 	 * Setup all and selected NFC tags.
@@ -537,8 +567,7 @@ open class NacScanNfcTagDialog
 		val dismissOrderSeparator: Space = dialog!!.findViewById(R.id.nfc_tag_dismiss_order_separator)
 
 		// Determine the visibility
-		//val visibility = if (currentlySelectedNfcTagIds.size > 1) View.VISIBLE else View.GONE
-		val visibility = if (allNfcTags.isNotEmpty()) View.VISIBLE else View.GONE
+		val visibility = viewVisibility
 
 		// Set the visibility
 		dismissOrderContainer.visibility = visibility
@@ -563,7 +592,7 @@ open class NacScanNfcTagDialog
 		// Set the relative layout listener
 		dismissOrderContainer.setOnClickListener {
 
-			// Toggle the checkbox and set the usability of the dropdown
+			// Toggle the switch and set the usability of the dropdown
 			dismissOrderSwitch.toggle()
 			setDismissOrderUsability()
 
@@ -576,6 +605,7 @@ open class NacScanNfcTagDialog
 
 		// Set the usability
 		setDismissOrderUsability()
+		// TODO: The dropdown shows all janks still available even though it should only show a blank spot
 	}
 
 	/**
@@ -587,6 +617,19 @@ open class NacScanNfcTagDialog
 		val useAnyButton: MaterialButton = dialog!!.findViewById(R.id.use_any_nfc_tag_button)
 		val cancelButton: MaterialButton = dialog!!.findViewById(R.id.cancel_button)
 		val parentView: LinearLayout = useAnyButton.parent as LinearLayout
+
+		// Get the visibility. If the alarm/timer does not have any NFC tags set, then it
+		// does not need to be shown
+		val visibility = if (alarm?.nfcTagId?.isNotEmpty() == true) View.VISIBLE else View.GONE
+
+		// Set the visibility
+		useAnyButton.visibility = visibility
+
+		// Do not proceed if the button is not shown
+		if (visibility == View.GONE)
+		{
+			return
+		}
 
 		// Swap views
 		parentView.removeView(cancelButton)
@@ -718,7 +761,7 @@ open class NacScanNfcTagDialog
 		val selectNfcTagSeparator: Space = dialog!!.findViewById(R.id.select_nfc_tag_separator)
 
 		// Determine the visibility
-		val visibility = if (allNfcTags.isNotEmpty()) View.VISIBLE else View.GONE
+		val visibility = viewVisibility
 
 		// Set the visibility
 		selectNfcTagTitle.visibility = visibility
@@ -769,6 +812,9 @@ open class NacScanNfcTagDialog
 		selectedNfcTags.forEach {
 			setupInputLayoutAndTextView(it.text, nfcTagNames)
 		}
+
+		// Update all the dropdown items
+		setAllDropdownItems()
 	}
 
 }
