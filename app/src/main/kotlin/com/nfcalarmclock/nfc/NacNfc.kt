@@ -35,13 +35,13 @@ const val SCANNED_NFC_TAG_ALREADY_EXISTS_BUNDLE_NAME = "NacNfcScannedNfcTagAlrea
  * @return True if the alarm can be dismissed with the scanned NFC tag, and False
  *         otherwise.
  */
-fun NacAlarm.canDismissWithScannedNfc(nfcId: String, nfcTags: MutableList<NacNfcTag>): Boolean?
+fun NacAlarm.canDismissWithScannedNfc(nfcId: String, validNfcTagsForDismissal: MutableList<NacNfcTag>): Boolean?
 {
 	// Get all NFC IDs from the NFC tags. This is used when the alarm has multiple
 	// NFC tags set and need to check that list, instead of doing a string to string
 	// comparison
-	nfcTags.forEach { println("Using jank nfc tag? ${it.name} | ${it.nfcId}") }
-	val allNfcIds = nfcTags.map { it.nfcId }
+	validNfcTagsForDismissal.forEach { println("Using jank nfc tag? ${it.name} | ${it.nfcId}") }
+	val validNfcIdsForDismissal = validNfcTagsForDismissal.map { it.nfcId }
 
 	// Compare the two NFC IDs
 	//   if the alarm NFC ID is empty, this is good, or
@@ -49,11 +49,11 @@ fun NacAlarm.canDismissWithScannedNfc(nfcId: String, nfcTags: MutableList<NacNfc
 	//   if the NFC IDs match a particular dismiss order
 	return if (this.nfcTagId.isEmpty()
 		|| (this.nfcTagId == nfcId)
-		|| (!this.shouldUseNfcTagDismissOrder && allNfcIds.contains(nfcId))
-		|| (this.shouldUseNfcTagDismissOrder
+		|| (!this.shouldUseNfcTagDismissOrder && validNfcIdsForDismissal.contains(nfcId))
+		|| (this.shouldUseNfcTagDismissOrder && (this.nfcTagIdList.size > 1)
 				&& ((this.nfcTagDismissOrder == NacNfcTagDismissOrder.SEQUENTIAL)
 					|| (this.nfcTagDismissOrder == NacNfcTagDismissOrder.RANDOM))
-				&& allNfcIds.first() == nfcId))
+				&& validNfcIdsForDismissal.first() == nfcId))
 	{
 		// NFC tags need to be dismissed in a particular order
 		if (this.shouldUseNfcTagDismissOrder
@@ -61,11 +61,11 @@ fun NacAlarm.canDismissWithScannedNfc(nfcId: String, nfcTags: MutableList<NacNfc
 				|| (this.nfcTagDismissOrder == NacNfcTagDismissOrder.RANDOM)))
 		{
 			// Remove the first NFC tag since it matched the one that was scanned
-			nfcTags.removeAt(0)
+			validNfcTagsForDismissal.removeAt(0)
 
 			// Can dismiss the alarm when all the NFC tags have been scanned. Otherwise,
 			// return null to indicate that
-			nfcTags.isEmpty()
+			validNfcTagsForDismissal.isEmpty()
 				.takeIf { it }
 		}
 		// Can dismiss the alarm
@@ -92,7 +92,7 @@ suspend fun NacAlarm.getNfcTagsForDismissing(
 {
 	// Get the NFC tags
 	val nfcTags = this.nfcTagIdList.takeIf { this.nfcTagId.isNotEmpty() }
-		?.mapNotNull { nfcTagViewModel.findNfcTag(it) }
+		?.map { nfcTagViewModel.findNfcTag(it) ?: NacNfcTag("", it) }
 		?.toMutableList()
 		?: mutableListOf()
 	nfcTags.forEach { println("Got nfc tag? ${it.name} | ${it.nfcId}") }
@@ -119,11 +119,11 @@ fun NacAlarm.getNfcTagNamesForDismissing(nfcTags: MutableList<NacNfcTag>): Strin
 		return when (this.nfcTagDismissOrder)
 		{
 			// Sequential. Show the first NFC tag
-			NacNfcTagDismissOrder.SEQUENTIAL -> nfcTags.getOrNull(0)?.name
+			NacNfcTagDismissOrder.SEQUENTIAL -> nfcTags.getOrNull(0)?.text
 
 			// Random. The list should already be randomized. Show the first NFC tag in the
 			// randomized list
-			NacNfcTagDismissOrder.RANDOM -> nfcTags.getOrNull(0)?.name
+			NacNfcTagDismissOrder.RANDOM -> nfcTags.getOrNull(0)?.text
 
 			// Unknown
 			else -> null
@@ -133,7 +133,7 @@ fun NacAlarm.getNfcTagNamesForDismissing(nfcTags: MutableList<NacNfcTag>): Strin
 	else
 	{
 		nfcTags.takeIf { nfcTags.isNotEmpty() }
-			?.joinToString(" \u2027 ") { it.name }
+			?.joinToString(" \u2027 ") { it.text }
 	}
 }
 
