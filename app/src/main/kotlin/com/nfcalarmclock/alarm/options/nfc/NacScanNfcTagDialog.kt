@@ -200,7 +200,7 @@ open class NacScanNfcTagDialog
 		// TODO: Added from select nfc
 		selectedNfcTags.filter { it.text.isNotEmpty() }.forEach { println("USING THESE : ${it.text}") }
 
-		alarm?.setNfcTagIds(selectedNfcTags.filter { it.text.isNotEmpty() })
+		alarm?.setNfcTagIds(selectedNfcTags.filter { !it.isEmpty })
 		alarm?.shouldUseNfcTagDismissOrder = dismissOrderSwitch.isChecked
 		alarm?.nfcTagDismissOrder = NacAlarm.calcNfcTagDismissOrderFromIndex(selectedDismissOrder)
 	}
@@ -386,7 +386,7 @@ open class NacScanNfcTagDialog
 
 				// None of the selected NFC tags are the empty placeholder so add it to
 				// the list of possible unused
-				if (selectedNfcTags.none { it.name.isEmpty() && it.nfcId.isEmpty() })
+				if (selectedNfcTags.none { it.isEmpty })
 				{
 					println("ADDING EMPTY THING TO UNUSED")
 					add(0, "")
@@ -418,7 +418,7 @@ open class NacScanNfcTagDialog
 	private fun setDismissOrderUsability()
 	{
 		// Count how many NFC tags are actually selected
-		val emptyCount = selectedNfcTags.count { it.name.isEmpty() && it.nfcId.isEmpty() }
+		val emptyCount = selectedNfcTags.count { it.isEmpty }
 		val childCount = selectNfcTagListContainer.childCount
 		val finalCount = childCount - emptyCount
 
@@ -833,10 +833,13 @@ open class NacScanNfcTagDialog
 			.toMutableList()
 			.apply { add(0, "") }
 			.toTypedArray()
+		nfcTagNames.forEach { println("NFC Tag names : $it") }
 
 		// Create input layouts for select NFC tags
 		selectedNfcTags.forEach {
-			setupInputLayoutAndTextView(it.getTextWithPrefix(nfcIdLabelPrefix), nfcTagNames)
+			val text = if (it.isEmpty) "" else it.getTextWithPrefix(nfcIdLabelPrefix)
+			println("Text : $text")
+			setupInputLayoutAndTextView(text, nfcTagNames)
 		}
 
 		// Update all the dropdown items

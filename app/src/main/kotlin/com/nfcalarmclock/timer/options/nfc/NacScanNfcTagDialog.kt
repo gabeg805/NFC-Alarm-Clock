@@ -13,6 +13,7 @@ import com.nfcalarmclock.alarm.options.nfc.NacScanNfcTagDialog
 import com.nfcalarmclock.system.addTimer
 import com.nfcalarmclock.system.getTimer
 import com.nfcalarmclock.timer.db.NacTimer
+import com.nfcalarmclock.view.setupSwitchColor
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -138,6 +139,10 @@ class NacScanNfcTagDialog
 		// Set the visibility
 		relativeLayout.visibility = View.VISIBLE
 		separator.visibility = View.VISIBLE
+
+		// Setup the switch
+		startTimerOnScanSwitch.setupSwitchColor(sharedPreferences)
+		startTimerOnScanSwitch.isChecked = (alarm as NacTimer?)?.shouldScanningNfcTagStartTimer == true
 
 		// Set the relative layout listener
 		relativeLayout.setOnClickListener {

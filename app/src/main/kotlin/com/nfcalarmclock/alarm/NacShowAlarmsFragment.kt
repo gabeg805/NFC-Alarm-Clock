@@ -476,7 +476,7 @@ class NacShowAlarmsFragment
 			addAlarmFromSetAlarmIntent(alarm)
 		}
 
-		// Set the message for when the next alarm will be run
+		// Set the next alarm message
 		setNextAlarmMessage()
 
 		// Register the time tick receiver
@@ -1168,10 +1168,10 @@ class NacShowAlarmsFragment
 			// Update the alarm adapter
 			alarmCardAdapter.submitList(alarms)
 
-			// Refresh the next alarm message when the adapter list was empty. This
-			// always happens when the adapter is first created and populated from
-			// onCreate()
-			if (isAdapterListEmpty)
+			// Refresh the next alarm message when the adapter list was empty or when the
+			// list of alarms changed size because one was added or removed. It can be
+			// empty when the adapter is first created and populated from onCreate()
+			if (isAdapterListEmpty || (alarmCardAdapter.currentList.size != alarms.size))
 			{
 				println("ALARM CARD ADAPTER OBSERVER")
 				val nextAlarm = NacCalendar.getNextAlarm(alarms)

@@ -42,6 +42,14 @@ class NacNfcTag()
 		get() = name.takeIf { it.isNotEmpty() } ?: nfcId
 
 	/**
+	 * Whether the NFC tag is empty or not.
+	 *
+	 * This is when the name and NFC ID have not been set.
+	 */
+	val isEmpty: Boolean
+		get() = name.isEmpty() && nfcId.isEmpty()
+
+	/**
 	 * Constructor.
 	 */
 	constructor(nfcTagName: String, nfcTagId: String) : this()
