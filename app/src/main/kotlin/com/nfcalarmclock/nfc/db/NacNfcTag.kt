@@ -59,4 +59,19 @@ class NacNfcTag()
 			&& (nfcId == tag.nfcId)
 	}
 
+	/**
+	 * Text containing either the name or the ID of the NFC tag, in the event that the
+	 * name is empty.
+	 *
+	 * If the ID is returned, can optionally have a prefix in front of it.
+	 *
+	 * @return Text containing either the name or the ID of the NFC tag, in the event
+	 *         that the name is empty.
+	 */
+	fun getTextWithPrefix(prefix: String): String
+	{
+		println("Text with prefix '$prefix' | $name | $nfcId | ${name.isNotEmpty()}")
+		return name.takeIf { it.isNotEmpty() } ?: "$prefix$nfcId"
+	}
+
 }

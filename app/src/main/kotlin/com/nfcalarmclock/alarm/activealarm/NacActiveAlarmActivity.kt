@@ -248,7 +248,8 @@ class NacActiveAlarmActivity
 			if (alarm?.shouldUseNfc(this@NacActiveAlarmActivity) == true)
 			{
 				// Get the names of the NFC tags that can dismiss the alarm
-				val nfcTagNames = alarm!!.getNfcTagNamesForDismissing(nfcTags!!)
+				val prefix = "(${resources.getString(R.string.message_show_nfc_tag_id)}) "
+				val nfcTagNames = alarm!!.getNfcTagNamesForDismissing(nfcTags!!, prefix)
 
 				// Setup the NFC tag
 				layoutHandler.setupNfcTag(context, nfcTagNames)

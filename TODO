@@ -2,6 +2,8 @@
 TODO
 ----
 
+* On resume should set the next alarm message
+
 * Reword "translation of" to "translation to"
 
 * When building dialog and alarm is null, should create a default builder? When

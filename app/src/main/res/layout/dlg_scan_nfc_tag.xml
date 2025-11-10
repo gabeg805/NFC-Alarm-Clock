@@ -5,6 +5,35 @@
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content">
 
+	<!-- Currently selected title -->
+	<TextView
+		style="@style/Widget.AlarmOptionDialog.Title"
+		android:id="@+id/currently_selected_nfc_tags_title"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/title_current_selected"
+		android:visibility="gone"
+		/>
+
+	<!-- Currently selected description -->
+	<TextView
+		style="@style/Widget.AlarmOptionDialog.Description"
+		android:id="@+id/currently_selected_nfc_tags_description"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:ellipsize="end"
+		android:maxLines="5"
+		android:text=""
+		android:visibility="gone"
+		/>
+
+	<!-- Separator -->
+	<Space
+		style="@style/Widget.AlarmOptionDialog.SeparatorAfterCheckBox"
+		android:id="@+id/currently_selected_nfc_tags_separator"
+		android:visibility="gone"
+		/>
+
 	<!-- Scan NFC title -->
 	<TextView
 		style="@style/Widget.AlarmOptionDialog.Title"
@@ -27,33 +56,10 @@
 		android:contentDescription="@string/title_scan_nfc_tag"
 		android:layout_width="@dimen/isz_focus"
 		android:layout_height="@dimen/isz_focus"
-		android:layout_marginTop="@dimen/large"
-		android:layout_marginBottom="@dimen/large"
+		android:layout_marginTop="@dimen/normal"
+		android:layout_marginBottom="@dimen/normal"
 		android:layout_gravity="center"
 		android:src="@drawable/tap_and_play"
-		/>
-
-	<!-- Currently selected title -->
-	<TextView
-		style="@style/Widget.AlarmOptionDialog.Title"
-		android:id="@+id/title_currently_selected"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:layout_marginTop="@dimen/tiny"
-		android:text="@string/title_current_selected"
-		android:visibility="gone"
-		/>
-
-	<!-- Currently selected description -->
-	<TextView
-		style="@style/Widget.AlarmOptionDialog.Description"
-		android:id="@+id/description_nfc_tag_name"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:ellipsize="end"
-		android:maxLines="5"
-		android:text=""
-		android:visibility="gone"
 		/>
 
 	<!-- Separator -->

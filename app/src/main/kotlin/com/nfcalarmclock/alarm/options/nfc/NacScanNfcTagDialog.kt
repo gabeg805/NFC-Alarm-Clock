@@ -35,7 +35,9 @@ import com.nfcalarmclock.view.setTextFromIndex
 import com.nfcalarmclock.view.setupInputLayoutColor
 import com.nfcalarmclock.view.setupSwitchColor
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * Check if NFC tag matches a name.
@@ -132,12 +134,19 @@ open class NacScanNfcTagDialog
 	private var currentlySelectedNfcTagIds: List<String> = emptyList()
 
 	/**
+	 * Prefix to use for the NFC ID when labeling a tag.
+	 */
+	private val nfcIdLabelPrefix: String by lazy {
+		"(${resources.getString(R.string.message_show_nfc_tag_id)}) "
+	}
+
+	/**
 	 * Unused (unselected) NFC tag names and is updated as the selected NFC tags list is
 	 * updated.
 	 */
 	private val unusedNfcTagNames: List<String>
 		get() = allNfcTags.filter { !selectedNfcTags.contains(it) }
-			.map { it.text }
+			.map { it.getTextWithPrefix(nfcIdLabelPrefix) }
 
 	/**
 	 * The visibility of the select NFC tag and dismiss order views (as an example).
@@ -260,13 +269,25 @@ open class NacScanNfcTagDialog
 		// Unable to parse the NFC ID
 		if (nfcId == null)
 		{
-			quickToast(context, R.string.error_message_unable_to_parse_nfc_id)
+			lifecycleScope.launch {
+				withContext(Dispatchers.Main)
+				{
+					quickToast(context, R.string.error_message_unable_to_parse_nfc_id)
+				}
+			}
+
 			return
 		}
 		// The NFC ID is already being used by the alarm/timer
 		else if (item!!.nfcTagIdList.contains(nfcId))
 		{
-			quickToast(context, R.string.error_message_nfc_id_exists_new)
+			lifecycleScope.launch {
+				withContext(Dispatchers.Main)
+				{
+					quickToast(context, R.string.error_message_nfc_id_exists_new)
+				}
+			}
+
 			return
 		}
 
@@ -311,8 +332,6 @@ open class NacScanNfcTagDialog
 					// tag dismiss order, just in case
 					val newItem = navController.currentBackStackEntry?.savedStateHandle?.get<NacAlarm>("YOYOYO")
 					println("Back STACK Populated!  ${newItem?.nfcTagId}")
-					// TODO: Should maybe not do this?
-					//newItem?.shouldUseNfcTagDismissOrder = false
 
 					// Save the item and dismiss
 					onSaveAlarm(newItem)
@@ -328,7 +347,6 @@ open class NacScanNfcTagDialog
 	 */
 	open fun onUseAnyNfcTagClicked(alarm: NacAlarm?)
 	{
-		// TODO: See if I need this anymore?
 		// Clear the NFC tag ID and NFC tag dismiss order
 		alarm?.nfcTagId = ""
 		alarm?.shouldUseNfcTagDismissOrder = false
@@ -459,7 +477,6 @@ open class NacScanNfcTagDialog
 			setupCurrentlySelectedInfo()
 			setupStartTimerOnScan(alarm)
 			setupSelectNfcTag()
-			// TODO: Need to add thing for timer in here. Maybe override setupCurrentlySelected or allandselected?
 			setupDismissOrder(a.shouldUseNfcTagDismissOrder, a.nfcTagDismissOrder)
 			setOkButtonVisibility()
 
@@ -520,39 +537,37 @@ open class NacScanNfcTagDialog
 		}
 
 		// Get the views and NFC tag name
-		val title: TextView = dialog!!.findViewById(R.id.title_currently_selected)
-		val description: TextView = dialog!!.findViewById(R.id.description_nfc_tag_name)
+		val title: TextView = dialog!!.findViewById(R.id.currently_selected_nfc_tags_title)
+		val description: TextView = dialog!!.findViewById(R.id.currently_selected_nfc_tags_description)
+		val separator: Space = dialog!!.findViewById(R.id.currently_selected_nfc_tags_separator)
 
-		lifecycleScope.launch {
+		// Get the name of each NFC tag selected
+		var names = ""
 
-			// Get the name of each NFC tag selected
-			var names = ""
+		currentlySelectedNfcTagIds.forEachIndexed { index, id ->
 
-			currentlySelectedNfcTagIds.forEachIndexed { index, id ->
+			// Find the NFC tag
+			val tag = allNfcTags.firstOrNull { it.nfcId == id }
+				?: NacNfcTag("", id)
 
-				// Find the NFC tag
-				val tag = allNfcTags.firstOrNull { it.nfcId == id }
-
-				// Add a newline if multiple NFC tags have been found
-				if (index > 0)
-				{
-					names += "\n"
-				}
-
-				// Add the tag name or show the ID
-				names += tag?.name?.takeIf { it.isNotEmpty() }
-					?: "(${resources.getString(R.string.message_show_nfc_tag_id)}) $id"
-
+			// Add a newline if multiple NFC tags have been found
+			if (index > 0)
+			{
+				names += "\n"
 			}
 
-			// Set the description
-			description.text = names
-
-			// Change the visibility of the views
-			title.visibility = View.VISIBLE
-			description.visibility = View.VISIBLE
+			// Add the tag name or show the ID
+			names += tag.getTextWithPrefix(nfcIdLabelPrefix)
 
 		}
+
+		// Set the description
+		description.text = names
+
+		// Change the visibility of the views
+		title.visibility = View.VISIBLE
+		description.visibility = View.VISIBLE
+		separator.visibility = View.VISIBLE
 	}
 
 	/**
@@ -605,7 +620,6 @@ open class NacScanNfcTagDialog
 
 		// Set the usability
 		setDismissOrderUsability()
-		// TODO: The dropdown shows all janks still available even though it should only show a blank spot
 	}
 
 	/**
@@ -685,9 +699,13 @@ open class NacScanNfcTagDialog
 			// Normal NFC tag selected
 			else
 			{
+				// Get the simpler name
+				val simpleName = name.replace(nfcIdLabelPrefix, "")
+				println("Hello : $simpleName")
+
 				// Find the matching tag in the list of all NFC tags and add/replace it in
 				// the selected NFC tags list
-				allNfcTags.firstOrNull { it.matchesName(name) }
+				allNfcTags.firstOrNull { it.matchesName(simpleName) }
 					?.let { match ->
 
 						// Add the selected NFC tag
@@ -718,8 +736,12 @@ open class NacScanNfcTagDialog
 			val unusedName = unusedNfcTagNames.firstOrNull()
 				?.also { name ->
 
+					// Get the simpler name
+					val simpleName = name.replace(nfcIdLabelPrefix, "")
+					println("Hello : $simpleName")
+
 					// Add the unused tag to the selected NFC tags
-					allNfcTags.firstOrNull { it.matchesName(name) }
+					allNfcTags.firstOrNull { it.matchesName(simpleName) }
 						?.let { selectedNfcTags.add(it) }
 
 				}
@@ -734,11 +756,15 @@ open class NacScanNfcTagDialog
 		// Remove button click listener
 		removeButton.setOnClickListener {
 
+			// Get the simpler name
+			val simpleName = textView.text.toString().replace(nfcIdLabelPrefix, "")
+			println("Hello : $simpleName")
+
 			// Remove the view
 			selectNfcTagListContainer.removeView(root)
 
 			// Remove the tag from the list
-			selectedNfcTags.indexOfFirst { it.matchesName(textView.text.toString()) }
+			selectedNfcTags.indexOfFirst { it.matchesName(simpleName) }
 				.takeIf { it >= 0 }
 				?.let { index ->
 					println("Removing index : $index")
@@ -803,14 +829,14 @@ open class NacScanNfcTagDialog
 
 		// Set the list of items in the textview dropdown menu. If the name is empty then
 		// use the NFC ID
-		val nfcTagNames = allNfcTags.map { it.text }
+		val nfcTagNames = allNfcTags.map { it.getTextWithPrefix(nfcIdLabelPrefix) }
 			.toMutableList()
 			.apply { add(0, "") }
 			.toTypedArray()
 
 		// Create input layouts for select NFC tags
 		selectedNfcTags.forEach {
-			setupInputLayoutAndTextView(it.text, nfcTagNames)
+			setupInputLayoutAndTextView(it.getTextWithPrefix(nfcIdLabelPrefix), nfcTagNames)
 		}
 
 		// Update all the dropdown items

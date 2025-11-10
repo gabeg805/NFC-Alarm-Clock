@@ -206,9 +206,9 @@ open class NacSaveNfcTagDialog
 		addOrReplaceRadioGroup.visibility = visibility
 
 		// Separator only needs to change visibility when the add/replace views will be
-		// visible and the save NFC tag views will be visible. Otherwise, it should not
-		// be shown
-		if ((visibility == View.VISIBLE) && !doesNfcTagAlreadyExist)
+		// visible and the save NFC tag views will NOT be visible. Otherwise, it should
+		// not be shown
+		if ((visibility == View.VISIBLE) && doesNfcTagAlreadyExist)
 		{
 			separator.visibility = View.VISIBLE
 		}
@@ -232,15 +232,11 @@ open class NacSaveNfcTagDialog
 		// Super
 		super.setupCancelButton(alarm)
 
-		// NFC tag does not already exist so need to save it and give it a name
-		if (!doesNfcTagAlreadyExist)
-		{
-			// Get the cancel button
-			val cancelButton: MaterialButton = dialog!!.findViewById(R.id.cancel_button)
+		// Get the cancel button
+		val cancelButton: MaterialButton = dialog!!.findViewById(R.id.cancel_button)
 
-			// Rename the button
-			cancelButton.setText(R.string.action_skip)
-		}
+		// Rename the button
+		cancelButton.setText(R.string.action_skip)
 	}
 
 	/**

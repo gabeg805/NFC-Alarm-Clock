@@ -72,8 +72,6 @@ import com.nfcalarmclock.card.NacBaseCardTouchHelperCallback
 import com.nfcalarmclock.card.NacCardLayoutManager
 import com.nfcalarmclock.main.NacMainActivity
 import com.nfcalarmclock.nfc.NacNfcTagViewModel
-import com.nfcalarmclock.nfc.db.NacNfcTag
-import com.nfcalarmclock.nfc.setNfcTagIds
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.statistics.NacAlarmStatisticViewModel
 import com.nfcalarmclock.system.NacBundle.BUNDLE_INTENT_ACTION
@@ -478,6 +476,9 @@ class NacShowAlarmsFragment
 			addAlarmFromSetAlarmIntent(alarm)
 		}
 
+		// Set the message for when the next alarm will be run
+		setNextAlarmMessage()
+
 		// Register the time tick receiver
 		registerMyReceiver(requireContext(), timeTickReceiver, IntentFilter(Intent.ACTION_TIME_TICK))
 	}
@@ -555,7 +556,10 @@ class NacShowAlarmsFragment
 		//	//	nfcTagViewModel.delete(it)
 		//	//}
 
-		//	//val dummy = listOf(NacNfcTag("", "1982jh1g23k"), NacNfcTag("", "skjdfh1234"))
+		//	//val tempTag = NacNfcTag("Hello", "102983kjshlak")
+		//	//nfcTagViewModel.insert(tempTag)
+
+		//	//val dummy = listOf(NacNfcTag("", "1982jh1g23k"), tempTag, NacNfcTag("", "skjdfh1234"))
 		//	//val alarm = alarmViewModel.getAllAlarms().firstOrNull()
 		//	//alarm?.setNfcTagIds(dummy)
 

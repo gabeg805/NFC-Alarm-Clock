@@ -772,7 +772,8 @@ class NacActiveTimerFragment
 		// Get the names of the NFC tags that can dismiss the timer
 		val nfcTagNames = if (nfcTags != null)
 		{
-			timer.getNfcTagNamesForDismissing(nfcTags!!)
+			val prefix = "(${resources.getString(R.string.message_show_nfc_tag_id)}) "
+			timer.getNfcTagNamesForDismissing(nfcTags!!, prefix)
 		}
 		else
 		{

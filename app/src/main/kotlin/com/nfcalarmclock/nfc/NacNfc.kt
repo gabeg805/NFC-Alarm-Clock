@@ -111,7 +111,7 @@ suspend fun NacAlarm.getNfcTagsForDismissing(
  *
  * @return The list of NFC tags that can be used to dismiss this alarm.
  */
-fun NacAlarm.getNfcTagNamesForDismissing(nfcTags: MutableList<NacNfcTag>): String?
+fun NacAlarm.getNfcTagNamesForDismissing(nfcTags: MutableList<NacNfcTag>, prefix: String = ""): String?
 {
 	return if (this.shouldUseNfcTagDismissOrder)
 	{
@@ -119,11 +119,11 @@ fun NacAlarm.getNfcTagNamesForDismissing(nfcTags: MutableList<NacNfcTag>): Strin
 		return when (this.nfcTagDismissOrder)
 		{
 			// Sequential. Show the first NFC tag
-			NacNfcTagDismissOrder.SEQUENTIAL -> nfcTags.getOrNull(0)?.text
+			NacNfcTagDismissOrder.SEQUENTIAL -> nfcTags.getOrNull(0)?.getTextWithPrefix(prefix)
 
 			// Random. The list should already be randomized. Show the first NFC tag in the
 			// randomized list
-			NacNfcTagDismissOrder.RANDOM -> nfcTags.getOrNull(0)?.text
+			NacNfcTagDismissOrder.RANDOM -> nfcTags.getOrNull(0)?.getTextWithPrefix(prefix)
 
 			// Unknown
 			else -> null
@@ -133,7 +133,7 @@ fun NacAlarm.getNfcTagNamesForDismissing(nfcTags: MutableList<NacNfcTag>): Strin
 	else
 	{
 		nfcTags.takeIf { nfcTags.isNotEmpty() }
-			?.joinToString(" \u2027 ") { it.text }
+			?.joinToString(" \u2027 ") { it.getTextWithPrefix(prefix) }
 	}
 }
 
