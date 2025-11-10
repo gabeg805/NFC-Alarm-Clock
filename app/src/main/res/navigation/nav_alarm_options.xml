@@ -51,10 +51,6 @@
 		android:name="com.nfcalarmclock.alarm.options.flashlight.NacFlashlightOptionsDialog"
 		android:label="NacFlashlightOptionsDialog" />
 	<dialog
-		android:id="@+id/nacSelectNfcTagDialog"
-		android:name="com.nfcalarmclock.alarm.options.nfc.NacSelectNfcTagDialog"
-		android:label="NacSelectNfcTagDialog" />
-	<dialog
 		android:id="@+id/nacVibrateOptionsDialog"
 		android:name="com.nfcalarmclock.alarm.options.vibrate.NacVibrateOptionsDialog"
 		android:label="NacVibrateOptionsDialog" />
@@ -66,9 +62,6 @@
 		android:id="@+id/nacScanNfcTagDialog"
 		android:name="com.nfcalarmclock.alarm.options.nfc.NacScanNfcTagDialog"
 		android:label="NacScanNfcTagDialog" >
-		<action
-			android:id="@+id/action_nacScanNfcTagDialog_to_nacSelectNfcTagDialog"
-			app:destination="@id/nacSelectNfcTagDialog" />
 		<action
 			android:id="@+id/action_nacScanNfcTagDialog_to_nacSaveNfcTagDialog"
 			app:destination="@id/nacSaveNfcTagDialog" />

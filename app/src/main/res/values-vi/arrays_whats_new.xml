@@ -5,8 +5,15 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.6.3</item>
+		<item>Đã thiết kế lại giao diện của hộp thoại &lt;b>tùy chọn NFC&lt;/b> để tất cả được hợp nhất trong một màn hình.</item>
+		<item>Đã khắc phục sự cố khi cố gắng &lt;b>đóng &lt;/b> bằng &lt;b>NFC&lt;/b>.</item>
+		<item>Đã khắc phục sự cố khi &lt;b>ẩn&lt;/b> nút &lt;b>NFC&lt;/b>, tùy chọn báo thức/hẹn giờ NFC vẫn được hiển thị.</item>
+		<item>Đã khắc phục sự cố về thời gian khi xóa &lt;b>báo thức&lt;/b>/&lt;b>bộ hẹn giờ&lt;/b>.</item>
+		<item>Đã khắc phục sự cố hiếm gặp khi bắt đầu &lt;b>bộ đếm thời gian&lt;/b>.</item>
+		<item>Đã khắc phục sự cố mà &lt;b>nhạc chuông&lt;/b> không phát khi &lt;b>điện thoại bị khóa&lt;/b> và sử dụng &lt;b>NFC&lt;/b>.</item>
 		<item>12.6.2</item>
-		<item>Đã khắc phục sự cố liên quan đến bản dịch &lt;b>tiếng Bồ Đào Nha&lt;/b>.</item>
+		<item>Đã khắc phục sự cố khi dịch sang tiếng &lt;b>Bồ Đào Nha&lt;/b>.</item>
 		<item>Đã khắc phục sự cố &lt;b>đèn pin&lt;/b> không hoạt động.</item>
 		<item>Đã sửa lỗi giao diện người dùng trong &lt;b>Cài đặt&lt;/b>.</item>
 		<item>Cải thiện giao diện màn hình &lt;b>báo động đang hoạt động&lt;/b> cho các thiết bị có mật độ thấp.</item>

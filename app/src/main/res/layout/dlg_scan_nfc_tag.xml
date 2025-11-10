@@ -5,35 +5,6 @@
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content">
 
-	<!-- Currently selected title -->
-	<TextView
-		style="@style/Widget.AlarmOptionDialog.Title"
-		android:id="@+id/currently_selected_nfc_tags_title"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:text="@string/title_current_selected"
-		android:visibility="gone"
-		/>
-
-	<!-- Currently selected description -->
-	<TextView
-		style="@style/Widget.AlarmOptionDialog.Description"
-		android:id="@+id/currently_selected_nfc_tags_description"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:ellipsize="end"
-		android:maxLines="5"
-		android:text=""
-		android:visibility="gone"
-		/>
-
-	<!-- Separator -->
-	<Space
-		style="@style/Widget.AlarmOptionDialog.SeparatorAfterCheckBox"
-		android:id="@+id/currently_selected_nfc_tags_separator"
-		android:visibility="gone"
-		/>
-
 	<!-- Scan NFC title -->
 	<TextView
 		style="@style/Widget.AlarmOptionDialog.Title"

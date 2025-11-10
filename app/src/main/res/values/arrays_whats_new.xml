@@ -5,8 +5,15 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.6.3</item>
+		<item>Reworked how the &lt;b>NFC options&lt;/b> dialog looks so that it is all consolidated in one screen.</item>
+		<item>Fixed issue when trying to &lt;b>dismiss &lt;/b> with &lt;b>NFC&lt;/b>.</item>
+		<item>Fixed issue when &lt;b>hiding&lt;/b> the &lt;b>NFC button&lt;/b>, the NFC alarm/timer option would still be shown.</item>
+		<item>Fixed timing issue when deleting an &lt;b>alarm&lt;/b>/&lt;b>timer&lt;/b>.</item>
+		<item>Fixed rare issue when starting &lt;b>timer&lt;/b>.</item>
+		<item>Fixed issue where &lt;b>ringtone&lt;/b> would not play with &lt;b>phone locked&lt;/b> and using &lt;b>NFC&lt;/b>.</item>
 		<item>12.6.2</item>
-		<item>Fixed issue with translation of &lt;b>Portuguese&lt;/b>.</item>
+		<item>Fixed issue with translation to &lt;b>Portuguese&lt;/b>.</item>
 		<item>Fixed issue with &lt;b>flashlight&lt;/b> not working.</item>
 		<item>Fixed UI error in &lt;b>Settings&lt;/b>.</item>
 		<item>Improved how the &lt;b>active alarm&lt;/b> screen looks for low density devices.</item>

@@ -87,6 +87,8 @@
 	<string name="action_stop_preview">Parar visualização</string>
 	<string name="action_show_nfc_tag_id">Mostrar etiqueta NFC</string>
 	<string name="action_use_any">Use qualquer etiqueta NFC</string>
+	<string name="action_add">Adicionar</string>
+	<string name="action_replace">Substituir</string>
 	<string name="action_save">Salvar</string>
 	<string name="action_skip">Pular</string>
 	<string name="action_undo">Desfazer</string>
@@ -137,6 +139,7 @@
 	<string name="message_nfc_required_unsaved">NFC necessário</string>
 	<string name="message_nfc_required_saved">NFC necessário — %1$s</string>
 	<string name="message_nfc_required_use_any">NFC necessário (use qualquer)</string>
+	<string name="message_nfc_screen_locked">Desbloqueie o dispositivo para usar NFC.</string>
 	<string name="message_show_nfc_tag_id">EU IA</string>
 	<string name="message_delete_nfc_tag">Tem certeza de que deseja excluir esta etiqueta NFC?</string>
 	<string name="message_rename_nfc_tag">Como você gostaria de renomear a etiqueta NFC?</string>
@@ -197,7 +200,8 @@
 	<string name="error_message_nfc_mismatch">A etiqueta NFC não corresponde à etiqueta salva.</string>
 	<string name="error_message_nfc_unsupported">Seu dispositivo não suporta NFC</string>
 	<string name="error_message_nfc_name_exists">Este nome já está sendo usado</string>
-	<string name="error_message_nfc_id_exists">Este ID NFC já está sendo usado por %1$s</string>
+	<string name="error_message_unable_to_parse_nfc_id">Não foi possível analisar o ID NFC.</string>
+	<string name="error_message_nfc_id_exists">Este ID NFC já está sendo usado.</string>
 	<string name="error_message_unable_to_scan_nfc">Não é possível escanear tags NFC</string>
 	<string name="error_message_snooze">Não é possível adiar o alarme</string>
 	<string name="error_message_snoozed_delete">Não é possível excluir um alarme adiado</string>
@@ -240,6 +244,8 @@
 	<string name="title_select_nfc_tag">Selecione a(s) etiqueta(s) NFC</string>
 	<string name="title_nfc_tag_dismiss_order">Ordem de arquivamento</string>
 	<string name="title_start_timer_on_nfc_tag_scan">Iniciar o cronômetro na digitalização</string>
+	<string name="title_add_or_replace_nfc_tag">Adicionar ou substituir…</string>
+	<string name="title_using_nfc_tag">Utilizando a etiqueta NFC:</string>
 	<string name="title_save_nfc_tag">Salvar etiqueta NFC</string>
 	<string name="title_delete_nfc_tag">Excluir etiqueta NFC</string>
 	<string name="title_rename_nfc_tag">Renomear etiqueta NFC</string>
@@ -349,7 +355,9 @@
 	<string name="description_select_nfc_tag_alarm">Selecione uma tag NFC que será necessária para dispensar este alarme quando ele disparar. Se mais de uma for selecionada, ela também pode ser usada para dispensar este alarme.</string>
 	<string name="description_select_nfc_tag_timer">Selecione uma etiqueta NFC que será necessária para desativar este temporizador quando ele disparar. Se mais de uma for selecionada, ela também poderá ser usada para desativar o temporizador.</string>
 	<string name="description_nfc_tag_dismiss_order">Ordem em que as etiquetas NFC acima devem ser descartadas. Habilitar esta opção significa que todas as etiquetas NFC selecionadas precisarão ser escaneadas para serem descartadas.</string>
-	<string name="description_start_timer_on_nfc_tag_scan">Quando uma das etiquetas NFC selecionadas for lida, este temporizador será iniciado automaticamente.</string>
+	<string name="description_start_timer_on_single_nfc_tag_scan">Quando o aplicativo estiver em execução e a etiqueta NFC for lida (não nesta tela), o cronômetro será iniciado automaticamente.</string>
+	<string name="description_start_timer_on_multiple_nfc_tag_scan">Quando o aplicativo estiver em execução e uma das etiquetas NFC selecionadas for lida (não nesta tela), o cronômetro será iniciado automaticamente.</string>
+	<string name="description_add_or_replace_nfc_tag">A etiqueta NFC deve ser adicionada à lista de etiquetas NFC que podem desativar este alarme, ou deve substituir quaisquer etiquetas NFC que estejam sendo usadas por este alarme?</string>
 	<string name="description_save_nfc_tag">Você pode reutilizar esta etiqueta NFC, sem precisar escaneá-la novamente, dando-lhe um nome.</string>
 	<string name="description_repeat_frequency">Repita o alarme em uma frequência determinada (a cada X intervalos de tempo). Observação: selecionar horas ou dias apagará todos os dias do alarme.</string>
 	<string name="description_repeat_frequency_days_to_run_before_starting">Qual dos dias atualmente selecionados para o alarme deve ser executado esta semana antes de iniciar a frequência?</string>

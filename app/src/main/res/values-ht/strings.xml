@@ -87,6 +87,8 @@
 	<string name="action_stop_preview">One Stop Preview</string>
 	<string name="action_show_nfc_tag_id">Montre tag NFC</string>
 	<string name="action_use_any">Sèvi ak nenpòt tag NFC</string>
+	<string name="action_add">Ajoute</string>
+	<string name="action_replace">Ranplase</string>
 	<string name="action_save">Sove</string>
 	<string name="action_skip">Sote</string>
 	<string name="action_undo">Defèt</string>
@@ -137,6 +139,7 @@
 	<string name="message_nfc_required_unsaved">NFC obligatwa</string>
 	<string name="message_nfc_required_saved">NFC obligatwa — %1$s</string>
 	<string name="message_nfc_required_use_any">NFC obligatwa (itilize nenpòt)</string>
+	<string name="message_nfc_screen_locked">Debloke aparèy la pou itilize NFC</string>
 	<string name="message_show_nfc_tag_id">ID</string>
 	<string name="message_delete_nfc_tag">Èske w sèten ou vle efase tag NFC sa a?</string>
 	<string name="message_rename_nfc_tag">Ki sa ou ta renmen chanje non tag NFC la?</string>
@@ -197,7 +200,8 @@
 	<string name="error_message_nfc_mismatch">Tag NFC pa matche ak tag ki te sove a.</string>
 	<string name="error_message_nfc_unsupported">Aparèy ou a pa sipòte NFC</string>
 	<string name="error_message_nfc_name_exists">Non sa deja ap itilize</string>
-	<string name="error_message_nfc_id_exists">ID NFC sa a deja itilize pa %1$s</string>
+	<string name="error_message_unable_to_parse_nfc_id">Pa kapab analize ID NFC a</string>
+	<string name="error_message_nfc_id_exists">ID NFC sa a deja ap itilize.</string>
 	<string name="error_message_unable_to_scan_nfc">Pa kapab eskane tags NFC</string>
 	<string name="error_message_snooze">Ou pa kapab rann alam la</string>
 	<string name="error_message_snoozed_delete">Ou pa kapab efase yon alam ki an reta</string>
@@ -240,6 +244,8 @@
 	<string name="title_select_nfc_tag">Chwazi tag (yo) NFC</string>
 	<string name="title_nfc_tag_dismiss_order">Anile lòd la</string>
 	<string name="title_start_timer_on_nfc_tag_scan">Kòmanse revèy la lè w ap eskane</string>
+	<string name="title_add_or_replace_nfc_tag">Ajoute oswa ranplase…</string>
+	<string name="title_using_nfc_tag">Sèvi ak etikèt NFC a:</string>
 	<string name="title_save_nfc_tag">Sove tag NFC</string>
 	<string name="title_delete_nfc_tag">Efase tag NFC</string>
 	<string name="title_rename_nfc_tag">Chanje non tag NFC</string>
@@ -349,7 +355,9 @@
 	<string name="description_select_nfc_tag_alarm">Chwazi yon tag NFC ki pral oblije ranvwaye alam sa a lè li sonnen. Si yo chwazi plis pase youn, li kapab tou itilize pou ranvwaye alam sa a.</string>
 	<string name="description_select_nfc_tag_timer">Chwazi yon etikèt NFC ki pral nesesè pou fèmen revèy sa a lè li sonnen. Si ou chwazi plis pase youn, ou ka itilize li tou pou fèmen revèy sa a.</string>
 	<string name="description_nfc_tag_dismiss_order">Lòd pou yo rejte etikèt NFC ki anwo yo. Si ou aktive sa, sa vle di ou ap bezwen eskane tout etikèt NFC yo chwazi pou yo ka rejte yo.</string>
-	<string name="description_start_timer_on_nfc_tag_scan">Lè yo eskane youn nan etikèt NFC yo chwazi a, li pral otomatikman kòmanse revèy sa a.</string>
+	<string name="description_start_timer_on_single_nfc_tag_scan">Lè aplikasyon an ap fonksyone epi yo eskane etikèt NFC a (pa nan ekran sa a), li pral otomatikman kòmanse revèy sa a.</string>
+	<string name="description_start_timer_on_multiple_nfc_tag_scan">Lè aplikasyon an ap fonksyone epi yo eskane youn nan etikèt NFC yo chwazi yo (pa nan ekran sa a), li pral otomatikman kòmanse revèy sa a.</string>
+	<string name="description_add_or_replace_nfc_tag">Èske yo ta dwe ajoute etikèt NFC a nan lis etikèt NFC ki ka inyore alam sa a, oubyen èske li ta dwe ranplase nenpòt etikèt NFC ke alam sa a ap itilize?</string>
 	<string name="description_save_nfc_tag">Ou ka reitilize tag NFC sa a, san ou pa bezwen eskane li ankò, lè w ba li yon non.</string>
 	<string name="description_repeat_frequency">Repete alam lan nan yon frekans bay (chak X kantite tan). Remak: Chwazi èdtan oswa jou ap efase tout jou alam lan.</string>
 	<string name="description_repeat_frequency_days_to_run_before_starting">Kilès nan jou alam lan ki chwazi kounye a ki ta dwe limen semèn sa a anvan frekans lan kòmanse?</string>

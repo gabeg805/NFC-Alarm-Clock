@@ -901,13 +901,14 @@ class NacMainActivity
 			// need to go back to those
 			if (navController.currentDestination?.id == R.id.nacActiveTimerFragment)
 			{
-				navController.popBackStack(R.id.nacShowTimersFragment, false)
+				navController.navigate(R.id.action_global_nacShowTimersFragment)
 			}
 			// Normal navigate up
 			else
 			{
 				navController.navigateUp(appBarConfiguration)
 			}
+
 		}
 
 		// Menu item click listener

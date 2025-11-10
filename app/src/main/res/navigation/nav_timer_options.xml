@@ -36,9 +36,6 @@
 		android:name="com.nfcalarmclock.timer.options.nfc.NacScanNfcTagDialog"
 		android:label="NacScanNfcTagDialog" >
 		<action
-			android:id="@+id/action_nacScanNfcTagDialog3_to_nacSelectNfcTagDialog2"
-			app:destination="@id/nacSelectNfcTagDialog3" />
-		<action
 			android:id="@+id/action_nacScanNfcTagDialog3_to_nacSaveNfcTagDialog2"
 			app:destination="@id/nacSaveNfcTagDialog3" />
 	</dialog>
@@ -58,10 +55,6 @@
 		android:id="@+id/nacVolumeOptionsDialog2"
 		android:name="com.nfcalarmclock.timer.options.volume.NacVolumeOptionsDialog"
 		android:label="NacVolumeOptionsDialog" />
-	<dialog
-		android:id="@+id/nacSelectNfcTagDialog3"
-		android:name="com.nfcalarmclock.timer.options.nfc.NacSelectNfcTagDialog"
-		android:label="NacSelectNfcTagDialog" />
 	<dialog
 		android:id="@+id/nacSaveNfcTagDialog3"
 		android:name="com.nfcalarmclock.timer.options.nfc.NacSaveNfcTagDialog"

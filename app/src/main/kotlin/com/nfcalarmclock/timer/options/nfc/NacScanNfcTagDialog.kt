@@ -70,25 +70,6 @@ class NacScanNfcTagDialog
 	}
 
 	/**
-	 * Get the navigation destination ID for the Select NFC Tag dialog.
-	 *
-	 * @return The navigation destination ID for the Select NFC Tag dialog.
-	 */
-	override fun getSelectNfcTagDialogId(currentDestination: NavDestination?): Int
-	{
-		// Normal option
-		return if (currentDestination?.id == R.id.nacScanNfcTagDialog3)
-		{
-			R.id.nacSelectNfcTagDialog3
-		}
-		// TODO: Quick option
-		else
-		{
-			R.id.nacSelectNfcTagDialog3
-		}
-	}
-
-	/**
 	 * OK buton is clicked.
 	 */
 	override fun onOkClicked(alarm: NacAlarm?)
@@ -97,7 +78,6 @@ class NacScanNfcTagDialog
 		super.onOkClicked(alarm)
 
 		// Set the start timer on scan flag
-		println("Start timer on scan? ${startTimerOnScanSwitch.isChecked}")
 		(alarm as NacTimer?)?.shouldScanningNfcTagStartTimer = startTimerOnScanSwitch.isChecked
 	}
 
@@ -159,18 +139,15 @@ class NacScanNfcTagDialog
 			val stringId = if (alarm.nfcTagIdList.size == 1)
 			{
 				// 1 NFC tag
-				println("SINGLE NFC TAG")
 				R.string.description_start_timer_on_single_nfc_tag_scan
 			}
 			else
 			{
 				// 2+ NFC tags
-				println("MULTIPLE NFC TAGS")
 				R.string.description_start_timer_on_multiple_nfc_tag_scan
 			}
 
 			// Set the description
-			println("Setting description of start timer!")
 			description.setText(stringId)
 		}
 	}

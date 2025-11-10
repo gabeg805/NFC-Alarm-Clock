@@ -58,7 +58,7 @@
 		android:visibility="gone"
 		/>
 
-	<!-- Save NFC tag title -->
+	<!-- Already exists NFC tag title -->
 	<TextView
 		style="@style/Widget.AlarmOptionDialog.Title"
 		android:id="@+id/save_nfc_tag_already_exists_title"
@@ -68,7 +68,7 @@
 		android:visibility="gone"
 		/>
 
-	<!-- Save NFC tag description -->
+	<!-- Already exists NFC tag description -->
 	<TextView
 		style="@style/Widget.AlarmOptionDialog.Description"
 		android:id="@+id/save_nfc_tag_already_exists_description"

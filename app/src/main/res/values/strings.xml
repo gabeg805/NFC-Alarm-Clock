@@ -139,6 +139,7 @@
 	<string name="message_nfc_required_unsaved">NFC required</string>
 	<string name="message_nfc_required_saved">NFC required — %1$s</string>
 	<string name="message_nfc_required_use_any">NFC required (use any)</string>
+	<string name="message_nfc_screen_locked">Unlock device to use NFC</string>
 	<string name="message_show_nfc_tag_id">ID</string>
 	<string name="message_delete_nfc_tag">Are you sure you want to delete this NFC tag?</string>
 	<string name="message_rename_nfc_tag">What would you like to rename the NFC tag to?</string>
@@ -200,8 +201,7 @@
 	<string name="error_message_nfc_unsupported">Your device does not support NFC</string>
 	<string name="error_message_nfc_name_exists">This name is already being used</string>
 	<string name="error_message_unable_to_parse_nfc_id">Unable to parse NFC ID</string>
-	<string name="error_message_nfc_id_exists_new">This NFC ID is already being used</string>
-	<string name="error_message_nfc_id_exists">This NFC ID is already being used by %1$s</string>
+	<string name="error_message_nfc_id_exists">This NFC ID is already being used</string>
 	<string name="error_message_unable_to_scan_nfc">Unable to scan NFC tags</string>
 	<string name="error_message_snooze">Unable to snooze the alarm</string>
 	<string name="error_message_snoozed_delete">Unable to delete a snoozed alarm</string>
@@ -357,7 +357,6 @@
 	<string name="description_nfc_tag_dismiss_order">Order in which the NFC tags above should be dismissed. Enabling this means all selected NFC tags will need to be scanned in order to dismiss.</string>
 	<string name="description_start_timer_on_single_nfc_tag_scan">When the app is running and the NFC tag is scanned (not in this screen), it will automatically start this timer.</string>
 	<string name="description_start_timer_on_multiple_nfc_tag_scan">When the app is running and one of the selected NFC tags are scanned (not in this screen), it will automatically start this timer.</string>
-	<string name="description_start_timer_on_nfc_tag_scan">When one of the selected NFC tags is scanned, it will automatically start this timer.</string>
 	<string name="description_add_or_replace_nfc_tag">Should the NFC tag be added to the list of NFC tags that can dismiss this alarm, or should it replace any NFC tags that are being used by this alarm?</string>
 	<string name="description_save_nfc_tag">You can reuse this NFC tag, without having to scan it again, by giving it a name.</string>
 	<string name="description_repeat_frequency">Repeat the alarm at a given frequency (every X amount of time).  Note: Selecting hours or days will clear all of the alarm\'s days.</string>

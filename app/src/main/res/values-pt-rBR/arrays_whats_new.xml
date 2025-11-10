@@ -5,8 +5,15 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.6.3</item>
+		<item>Reformulamos a aparência da caixa de diálogo &lt;b>Opções de NFC&lt;/b> para que todas as informações fiquem consolidadas em uma única tela.</item>
+		<item>Problema resolvido ao tentar &lt;b>dispensar&lt;/b> com &lt;b>NFC&lt;/b>.</item>
+		<item>Corrigido o problema em que, ao &lt;b>ocultar&lt;/b> o &lt;b>botão NFC&lt;/b>, a opção de alarme/temporizador NFC ainda era exibida.</item>
+		<item>Corrigido problema de sincronização ao excluir um &lt;b>alarme&lt;/b>/&lt;b>temporizador&lt;/b>.</item>
+		<item>Corrigido um problema raro que ocorria ao iniciar o &lt;b>temporizador&lt;/b>.</item>
+		<item>Corrigido o problema em que o toque não era reproduzido com o telefone bloqueado e usando NFC.</item>
 		<item>12.6.2</item>
-		<item>Problema corrigido com a tradução de &lt;b>Português&lt;/b>.</item>
+		<item>Problema corrigido com a tradução para &lt;b>Português&lt;/b>.</item>
 		<item>Problema com a &lt;b>lanterna&lt;/b> que não funcionava resolvido.</item>
 		<item>Corrigido erro de interface do usuário em &lt;b>Configurações&lt;/b>.</item>
 		<item>Melhoramos a aparência da tela de &lt;b>alarme ativo&lt;/b> em dispositivos de baixa densidade.</item>

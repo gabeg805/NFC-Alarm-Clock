@@ -844,10 +844,22 @@ class NacSwipeLayoutHandler(
 	/**
 	 * Setup an NFC tag. This is only called if NFC is enabled for an alarm.
 	 */
-	override fun setupNfcTag(context: Context, names: String?)
+	override fun setupNfcTag(
+		context: Context,
+		names: String?,
+		isDeviceLocked: Boolean)
 	{
-		// Set the name
-		nfcNameTextView.text = names ?: context.resources.getString(R.string.title_scan_nfc_tag)
+		// Device is locked
+		if (isDeviceLocked)
+		{
+			// Show warning that device needs to be unlocked for NFC to work
+			nfcNameTextView.text = context.resources.getString(R.string.message_nfc_screen_locked)
+		}
+		// Normal usage
+		else
+		{
+			nfcNameTextView.text = names ?: context.resources.getString(R.string.title_scan_nfc_tag)
+		}
 	}
 
 	/**

@@ -5,8 +5,15 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.6.3</item>
+		<item>Das Aussehen des &lt;b>NFC-Optionen&lt;/b>-Dialogs wurde überarbeitet, sodass nun alles auf einem Bildschirm zusammengefasst ist.</item>
+		<item>Problem behoben beim Versuch, &lt;b>dismiss&lt;/b> mit &lt;b>NFC&lt;/b> zu senden.</item>
+		<item>Problem behoben: Wenn &lt;b>die &lt;b>NFC-Taste&lt;/b> ausgeblendet wurde&lt;/b>, wurde die NFC-Alarm-/Timer-Option weiterhin angezeigt.</item>
+		<item>Ein Timing-Problem beim Löschen eines &lt;b>alarm&lt;/b>/&lt;b>timer&lt;/b> wurde behoben.</item>
+		<item>Ein seltener Fehler beim Starten eines &lt;b>Timers&lt;/b> wurde behoben.</item>
+		<item>Problem behoben, bei dem &lt;b>Klingelton&lt;/b> nicht abgespielt wurde, wenn &lt;b>das Telefon gesperrt&lt;/b> war und &lt;b>NFC&lt;/b> verwendet wurde.</item>
 		<item>12.6.2</item>
-		<item>Problem mit der Übersetzung von &lt;b>Portugiesisch&lt;/b> behoben.</item>
+		<item>Problem mit der Übersetzung ins &lt;b>Portugiesische&lt;/b> behoben.</item>
 		<item>Problem mit &lt;b>Taschenlampe&lt;/b> behoben, die nicht funktionierte.</item>
 		<item>UI-Fehler in &lt;b>Einstellungen&lt;/b> behoben.</item>
 		<item>Verbesserte Darstellung des &lt;b>aktiven Alarms&lt;/b>-Bildschirms für Geräte mit geringer Dichte.</item>

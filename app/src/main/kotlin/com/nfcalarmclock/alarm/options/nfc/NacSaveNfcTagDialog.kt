@@ -98,14 +98,12 @@ open class NacSaveNfcTagDialog
 		if (!addOrReplaceRadioGroup.isVisible || (alarm == null))
 		{
 			alarm?.nfcTagId = nfcTagId
-			println("NO ADD OR REPLACE, SO SIMPLY SET : ${alarm?.nfcTagId} | $nfcTagId")
 			return
 		}
 
 		// Add
 		if (addRadioButton.isChecked)
 		{
-			println("ADD")
 			// Create a list of NFC tags
 			val nfcTags = alarm.nfcTagIdList
 				.toMutableList()
@@ -118,7 +116,6 @@ open class NacSaveNfcTagDialog
 		// Replace
 		else if (replaceRadioButton.isChecked)
 		{
-			println("REPLACE")
 			alarm.nfcTagId = nfcTagId
 		}
 	}
@@ -128,10 +125,8 @@ open class NacSaveNfcTagDialog
 	 */
 	override fun onCancelClicked(alarm: NacAlarm?)
 	{
-		println("Cancel clicked!")
 		// Add or replace the NFC tag
 		addOrReplaceNfcTag(alarm)
-		println("Alarm now has NFC ID : ${alarm?.nfcTagId} | $doesNfcTagAlreadyExist")
 
 		// Save the alarm
 		onSaveAlarm(alarm)
@@ -144,7 +139,6 @@ open class NacSaveNfcTagDialog
 	{
 		// Get the name
 		val nfcName = editText.text.toString().trim()
-		println("OK CLICKED! $nfcName")
 
 		// The entered name for an NFC tag already exists
 		if (allNfcTags.any { it.name == nfcName })
@@ -156,7 +150,6 @@ open class NacSaveNfcTagDialog
 		// NFC tag does not already exist so save the NFC tag
 		if (!doesNfcTagAlreadyExist)
 		{
-			println("SAVING NFC TAG : $nfcName | $nfcTagId")
 			lifecycleScope.launch {
 				val tag = NacNfcTag(nfcName, nfcTagId)
 				nfcTagViewModel.insert(tag)
@@ -180,7 +173,6 @@ open class NacSaveNfcTagDialog
 		// Set the NFC tag ID and whether the NFC tag exists already or not
 		nfcTagId = requireArguments().getString(SCANNED_NFC_TAG_ID_BUNDLE_NAME) ?: ""
 		doesNfcTagAlreadyExist = requireArguments().getBoolean(SCANNED_NFC_TAG_ALREADY_EXISTS_BUNDLE_NAME)
-		println("Found NFC tag? $nfcTagId | $doesNfcTagAlreadyExist")
 
 		// Setup the views
 		setupAddOrReplace(alarm)
@@ -204,14 +196,7 @@ open class NacSaveNfcTagDialog
 		title.visibility = visibility
 		description.visibility = visibility
 		addOrReplaceRadioGroup.visibility = visibility
-
-		// Separator only needs to change visibility when the add/replace views will be
-		// visible and the save NFC tag views will NOT be visible. Otherwise, it should
-		// not be shown
-		if ((visibility == View.VISIBLE) && doesNfcTagAlreadyExist)
-		{
-			separator.visibility = View.VISIBLE
-		}
+		separator.visibility = visibility
 
 		// Do nothing else if the radio group is not shown
 		if (visibility == View.GONE)
@@ -269,7 +254,6 @@ open class NacSaveNfcTagDialog
 			// Set the text of the using NFC tag description
 			lifecycleScope.launch {
 				val nfcTag = nfcTagViewModel.findNfcTag(nfcTagId)!!
-				println("Setting the text! ${nfcTag.name}")
 				usingNfcTagDescription.text = nfcTag.name
 			}
 

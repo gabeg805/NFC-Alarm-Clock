@@ -78,7 +78,6 @@ class NacNfcTag()
 	 */
 	fun getTextWithPrefix(prefix: String): String
 	{
-		println("Text with prefix '$prefix' | $name | $nfcId | ${name.isNotEmpty()}")
 		return name.takeIf { it.isNotEmpty() } ?: "$prefix$nfcId"
 	}
 

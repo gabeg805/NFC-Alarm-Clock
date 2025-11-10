@@ -1,8 +1,11 @@
 package com.nfcalarmclock.alarm.activealarm
 
+import android.app.KeyguardManager
+import android.content.BroadcastReceiver
 import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.content.ServiceConnection
 import android.os.Build
 import android.os.Bundle
@@ -31,6 +34,7 @@ import com.nfcalarmclock.system.enableActivityAlias
 import com.nfcalarmclock.system.getAlarm
 import com.nfcalarmclock.system.registerMyShutdownBroadcastReceiver
 import com.nfcalarmclock.system.broadcasts.shutdown.NacShutdownBroadcastReceiver
+import com.nfcalarmclock.system.registerMyReceiver
 import com.nfcalarmclock.system.unregisterMyReceiver
 import com.nfcalarmclock.view.quickToast
 import dagger.hilt.android.AndroidEntryPoint
@@ -76,9 +80,31 @@ class NacActiveAlarmActivity
 	private var service: NacActiveAlarmService? = null
 
 	/**
+	 * Keyguard manager.
+	 */
+	private val keyguardManager: KeyguardManager by lazy {
+		getSystemService(KEYGUARD_SERVICE) as KeyguardManager
+	}
+
+	/**
 	 * Shutdown broadcast receiver.
 	 */
 	private val shutdownBroadcastReceiver: NacShutdownBroadcastReceiver = NacShutdownBroadcastReceiver()
+
+	/**
+	 * Device unlocked broadcast receiver.
+	 */
+	private val deviceUnlockedBroadcastReceiver: BroadcastReceiver = object: BroadcastReceiver() {
+		override fun onReceive(context: Context, intent: Intent)
+		{
+			// Device is unlocked
+			if (!keyguardManager.isDeviceLocked)
+			{
+				// Setup NFC for the layout handler
+				setupLayoutHandlerNfc()
+			}
+		}
+	}
 
 	/**
 	 * Listener for an alarm action, such as snooze or dismiss.
@@ -172,7 +198,20 @@ class NacActiveAlarmActivity
 
 		// Setup
 		setupScreenOn()
+		registerMyReceiver(this, deviceUnlockedBroadcastReceiver, IntentFilter(Intent.ACTION_USER_UNLOCKED))
 		onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
+	}
+
+	/**
+	 * Activity is destroyed.
+	 */
+	override fun onDestroy()
+	{
+		// Super
+		super.onDestroy()
+
+		// Unregister device unlocked receiver
+		unregisterMyReceiver(this, deviceUnlockedBroadcastReceiver)
 	}
 
 	/**
@@ -223,7 +262,7 @@ class NacActiveAlarmActivity
 
 		lifecycleScope.launch {
 
-			val context = this@NacActiveAlarmActivity
+			// Parse the NFC ID
 			val nfcId = NacNfc.parseId(intent)
 
 			// Get the list of NFC tags that can be used to dismiss the alarm, and
@@ -237,23 +276,15 @@ class NacActiveAlarmActivity
 			// multiple NFC tags need to be used to dismiss the alarm,
 			// canDismissWithScannedNfc() will handle removing the NFC tag that was just
 			// scanned
-			if (NacNfc.wasScanned(intent) && NacNfc.canDismissWithScannedNfc(context, alarm, nfcId, nfcTags))
+			if (NacNfc.wasScanned(intent) && NacNfc.canDismissWithScannedNfc(this@NacActiveAlarmActivity, alarm, nfcId, nfcTags))
 			{
 				// Dismiss the alarm service with NFC
 				service?.dismiss(usedNfc = true)
 				finish()
 			}
 
-			// NFC does not need to be used so do nothing with the layout handler
-			if (alarm?.shouldUseNfc(this@NacActiveAlarmActivity) == true)
-			{
-				// Get the names of the NFC tags that can dismiss the alarm
-				val prefix = "(${resources.getString(R.string.message_show_nfc_tag_id)}) "
-				val nfcTagNames = alarm!!.getNfcTagNamesForDismissing(nfcTags!!, prefix)
-
-				// Setup the NFC tag
-				layoutHandler.setupNfcTag(context, nfcTagNames)
-			}
+			// Setup NFC for the layout handler
+			setupLayoutHandlerNfc()
 
 		}
 
@@ -354,6 +385,23 @@ class NacActiveAlarmActivity
 	}
 
 	/**
+	 * Setup NFC for the layout handler.
+	 */
+	private fun setupLayoutHandlerNfc()
+	{
+		// NFC does not need to be used so do nothing with the layout handler
+		if (alarm?.shouldUseNfc(this) == true)
+		{
+			// Get the names of the NFC tags that can dismiss the alarm
+			val prefix = "(${resources.getString(R.string.message_show_nfc_tag_id)}) "
+			val nfcTagNames = alarm!!.getNfcTagNamesForDismissing(nfcTags!!, prefix)
+
+			// Setup the NFC tag
+			layoutHandler.setupNfcTag(this, nfcTagNames, keyguardManager.isDeviceLocked)
+		}
+	}
+
+	/**
 	 * Setup NFC.
 	 */
 	private fun setupNfc()
@@ -398,9 +446,6 @@ class NacActiveAlarmActivity
 	@Suppress("deprecation")
 	private fun setupScreenOn()
 	{
-		// Get whether the alarm should be shown when locked
-		val showWhenLocked = (alarm?.shouldUseNfc(this) != true)
-
 		// Use updated method calls to control screen for APK >= 27
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O_MR1)
 		{
@@ -411,7 +456,7 @@ class NacActiveAlarmActivity
 			}
 
 			// Show when locked
-			setShowWhenLocked(showWhenLocked)
+			setShowWhenLocked(true)
 		}
 		else
 		{
@@ -422,15 +467,7 @@ class NacActiveAlarmActivity
 			}
 
 			// Add flag to show when locked
-			if (showWhenLocked)
-			{
-				window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED)
-			}
-			// Do not show when locked
-			else
-			{
-				window.clearFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED)
-			}
+			window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED)
 		}
 
 		// Check if should NOT save battery and keep screen on

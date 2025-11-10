@@ -369,7 +369,7 @@ class NacShowAlarmsFragment
 
 				// Cleanup media file
 				lifecycleScope.launch {
-					(requireActivity() as NacMainActivity).cleanupMediaFileAfterDelete(
+					(activity as NacMainActivity?)?.cleanupMediaFileAfterDelete(
 						localMediaPath, alarmViewModel.getAllAlarms())
 				}
 
@@ -439,7 +439,13 @@ class NacShowAlarmsFragment
 	{
 		// Super
 		super.onPause()
-		println("SHOW ALARMS onPause()")
+
+		// Clear the alarm options dialogs
+		var i = 0
+		while (navController.popBackStack() && i < 3)
+		{
+			i++
+		}
 
 		// Cleanup
 		unregisterMyReceiver(requireContext(), timeTickReceiver)
@@ -456,7 +462,6 @@ class NacShowAlarmsFragment
 	{
 		// Super
 		super.onResume()
-		println("SHOW ALARMS onResume()")
 
 		// Get the intent action and alarm from the fragment arguments bundle. These
 		// could be null, but if an action occurred, they will not be
@@ -490,7 +495,6 @@ class NacShowAlarmsFragment
 	{
 		// Setup
 		super.onViewCreated(view, savedInstanceState)
-		println("SHOW ALARMS onViewCreated()")
 
 		// Set member variables
 		val context = requireContext()
@@ -565,7 +569,6 @@ class NacShowAlarmsFragment
 
 		//	//if (alarm != null)
 		//	//{
-		//	//	println("UPDATING THE JANK")
 		//	//	alarmViewModel.update(alarm)
 		//	//}
 
@@ -907,7 +910,6 @@ class NacShowAlarmsFragment
 				NacAlarmOptionsDialog.navigate(navController, alarm)
 					?.observe(viewLifecycleOwner) { a ->
 
-						println("On alarm option OBSERVED! ${a.nfcTagId}")
 						// Update the alarm
 						updateAlarm(a)
 						card.refreshRepeatOptionViews()
@@ -1173,7 +1175,6 @@ class NacShowAlarmsFragment
 			// empty when the adapter is first created and populated from onCreate()
 			if (isAdapterListEmpty || (alarmCardAdapter.currentList.size != alarms.size))
 			{
-				println("ALARM CARD ADAPTER OBSERVER")
 				val nextAlarm = NacCalendar.getNextAlarm(alarms)
 				setNextAlarmMessage(nextAlarm)
 			}

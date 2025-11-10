@@ -5,8 +5,15 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.6.3</item>
+		<item>Nou te retravaye aparans dyalòg &lt;b>opsyon NFC&lt;/b> la pou tout bagay rasanble sou yon sèl ekran.</item>
+		<item>Pwoblèm nan rezoud lè w ap eseye &lt;b>fèmen &lt;/b> ak &lt;b>NFC&lt;/b>.</item>
+		<item>Pwoblèm nan rezoud lè w ap &lt;b>kache&lt;/b> bouton &lt;b>NFC a&lt;/b>, opsyon alam/revèy NFC a te toujou ap parèt.</item>
+		<item>Pwoblèm tan rezoud lè w ap efase yon &lt;b>alam&lt;/b>/&lt;b>revèy&lt;/b>.</item>
+		<item>Pwoblèm ki ra lè w ap kòmanse &lt;b>minit&lt;/b> la rezoud.</item>
+		<item>Pwoblèm nan rezoud kote &lt;b>sonri a&lt;/b> pa t ap jwe lè &lt;b>telefòn nan te bloke&lt;/b> epi w ap itilize &lt;b>NFC&lt;/b>.</item>
 		<item>12.6.2</item>
-		<item>Pwoblèm ak tradiksyon &lt;b>Pòtigè&lt;/b> la rezoud.</item>
+		<item>Pwoblèm tradiksyon an &lt;b>Pòtigè&lt;/b> rezoud.</item>
 		<item>Pwoblèm ak &lt;b>flash&lt;/b> ki pa t ap fonksyone a rezoud.</item>
 		<item>Erè koòdone itilizatè a korije nan &lt;b>Paramèt&lt;/b>.</item>
 		<item>Amelyore aparans ekran &lt;b>alam aktif&lt;/b> la pou aparèy ki gen ti dansite.</item>

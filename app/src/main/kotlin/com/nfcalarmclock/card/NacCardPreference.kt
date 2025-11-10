@@ -77,6 +77,14 @@ class NacCardPreference @JvmOverloads constructor(
 	}
 
 	/**
+	 * Listener for when the card view holder is bound.
+	 */
+	fun interface OnCardViewHolderBoundListener
+	{
+		fun onCardViewHolderBound(alarm: NacAlarm)
+	}
+
+	/**
 	 * List of NFC tags.
 	 */
 	var allNfcTags: List<NacNfcTag> = emptyList()
@@ -107,6 +115,11 @@ class NacCardPreference @JvmOverloads constructor(
 	var onCardSnoozeOptionsClickedListener: OnCardSnoozeOptionsClickedListener? = null
 
 	/**
+	 * Listener for when the card view holder is bound.
+	 */
+	var onCardViewHolderBoundListener: OnCardViewHolderBoundListener? = null
+
+	/**
 	 * Alarm card.
 	 */
 	lateinit var card: NacAlarmCardHolder
@@ -115,6 +128,16 @@ class NacCardPreference @JvmOverloads constructor(
 	init
 	{
 		layoutResource = R.layout.nac_preference_alarm_card
+	}
+
+	/**
+	 * Whether the card is initialized or not.
+	 *
+	 * @return True if the card is initialized, and False otherwise.
+	 */
+	fun isCardInitialized(): Boolean
+	{
+		return ::card.isInitialized
 	}
 
 	/**
@@ -200,5 +223,7 @@ class NacCardPreference @JvmOverloads constructor(
 			onCardAlarmOptionsClickedListener?.onCardAlarmOptionsClicked(a)
 		}
 
+		// Call the listener
+		onCardViewHolderBoundListener?.onCardViewHolderBound(alarm)
 	}
 }

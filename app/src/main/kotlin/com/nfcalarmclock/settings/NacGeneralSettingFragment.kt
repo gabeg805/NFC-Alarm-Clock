@@ -107,12 +107,28 @@ class NacGeneralSettingFragment
 				sharedPreferences!!.shouldShuffleMedia = result.getShuffleMedia()
 				sharedPreferences!!.recursivelyPlayMedia = result.getRecursivelyPlayMedia()
 
-				// Update the card
-				pref.card.alarm!!.mediaPath = sharedPreferences!!.mediaPath
-				pref.card.alarm!!.mediaArtist = sharedPreferences!!.mediaArtist
-				pref.card.alarm!!.mediaTitle = sharedPreferences!!.mediaTitle
-				pref.card.alarm!!.mediaType = sharedPreferences!!.mediaType
-				pref.card.setMediaButton()
+				// Card is initialized
+				if (pref.isCardInitialized())
+				{
+					// Update the card
+					pref.card.alarm!!.mediaPath = sharedPreferences!!.mediaPath
+					pref.card.alarm!!.mediaArtist = sharedPreferences!!.mediaArtist
+					pref.card.alarm!!.mediaTitle = sharedPreferences!!.mediaTitle
+					pref.card.alarm!!.mediaType = sharedPreferences!!.mediaType
+					pref.card.setMediaButton()
+				}
+				// Card has not been initialized so setting any properties would fail
+				else
+				{
+					// Update the card once the card is bound
+					pref.onCardViewHolderBoundListener = NacCardPreference.OnCardViewHolderBoundListener {
+						pref.card.alarm!!.mediaPath = sharedPreferences!!.mediaPath
+						pref.card.alarm!!.mediaArtist = sharedPreferences!!.mediaArtist
+						pref.card.alarm!!.mediaTitle = sharedPreferences!!.mediaTitle
+						pref.card.alarm!!.mediaType = sharedPreferences!!.mediaType
+						pref.card.setMediaButton()
+					}
+				}
 
 			}
 
@@ -297,8 +313,10 @@ class NacGeneralSettingFragment
 						}
 
 						// NFC
-						R.id.nacSelectNfcTagDialog -> {
+						R.id.nacScanNfcTagDialog -> {
 							sharedPreferences!!.nfcTagId = a.nfcTagId
+							sharedPreferences!!.shouldUseNfcTagDismissOrder = a.shouldUseNfcTagDismissOrder
+							sharedPreferences!!.nfcTagDismissOrder = a.nfcTagDismissOrder
 						}
 
 						// Flashlight

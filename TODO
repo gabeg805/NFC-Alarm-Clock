@@ -2,16 +2,10 @@
 TODO
 ----
 
-* On resume should set the next alarm message
-
 * Reword "translation of" to "translation to"
 
 * When building dialog and alarm is null, should create a default builder? When
   would that even happen? Should I just assume alarm will be non null?
-
-* Investigate why the NFC button is still shown when hiding the button in appearance settings.
-
-* Reset button null pointer exception. Could possibly occur when double tapping reset button?
 
 * When coming back from media fragment, the order of alarms was all weird. Why
   is that? This was after hitting cancel but occurred for OK as well. Also when

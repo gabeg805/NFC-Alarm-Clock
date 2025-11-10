@@ -87,6 +87,8 @@
 	<string name="action_stop_preview">Dừng xem trước</string>
 	<string name="action_show_nfc_tag_id">Hiển thị thẻ NFC</string>
 	<string name="action_use_any">Sử dụng bất kỳ thẻ NFC nào</string>
+	<string name="action_add">Thêm vào</string>
+	<string name="action_replace">Thay thế</string>
 	<string name="action_save">Cứu</string>
 	<string name="action_skip">Nhảy</string>
 	<string name="action_undo">Hoàn tác</string>
@@ -137,6 +139,7 @@
 	<string name="message_nfc_required_unsaved">Cần có NFC</string>
 	<string name="message_nfc_required_saved">Cần có NFC — %1$s</string>
 	<string name="message_nfc_required_use_any">Cần có NFC (sử dụng bất kỳ)</string>
+	<string name="message_nfc_screen_locked">Mở khóa thiết bị để sử dụng NFC</string>
 	<string name="message_show_nfc_tag_id">NHẬN DẠNG</string>
 	<string name="message_delete_nfc_tag">Bạn có chắc chắn muốn xóa thẻ NFC này không?</string>
 	<string name="message_rename_nfc_tag">Bạn muốn đổi tên thẻ NFC thành gì?</string>
@@ -197,7 +200,8 @@
 	<string name="error_message_nfc_mismatch">Thẻ NFC không khớp với thẻ đã lưu.</string>
 	<string name="error_message_nfc_unsupported">Thiết bị của bạn không hỗ trợ NFC</string>
 	<string name="error_message_nfc_name_exists">Tên này đã được sử dụng</string>
-	<string name="error_message_nfc_id_exists">ID NFC này đã được %1$s sử dụng</string>
+	<string name="error_message_unable_to_parse_nfc_id">Không thể phân tích ID NFC</string>
+	<string name="error_message_nfc_id_exists">ID NFC này đã được sử dụng</string>
 	<string name="error_message_unable_to_scan_nfc">Không thể quét thẻ NFC</string>
 	<string name="error_message_snooze">Không thể tạm dừng báo thức</string>
 	<string name="error_message_snoozed_delete">Không thể xóa báo thức đã tạm ẩn</string>
@@ -240,6 +244,8 @@
 	<string name="title_select_nfc_tag">Chọn thẻ NFC</string>
 	<string name="title_nfc_tag_dismiss_order">Lệnh bác bỏ</string>
 	<string name="title_start_timer_on_nfc_tag_scan">Bắt đầu hẹn giờ quét</string>
+	<string name="title_add_or_replace_nfc_tag">Thêm hoặc thay thế…</string>
+	<string name="title_using_nfc_tag">Sử dụng thẻ NFC:</string>
 	<string name="title_save_nfc_tag">Lưu thẻ NFC</string>
 	<string name="title_delete_nfc_tag">Xóa thẻ NFC</string>
 	<string name="title_rename_nfc_tag">Đổi tên thẻ NFC</string>
@@ -349,7 +355,9 @@
 	<string name="description_select_nfc_tag_alarm">Chọn thẻ NFC cần thiết để tắt báo thức này khi nó kêu. Nếu chọn nhiều hơn một thẻ, nó cũng có thể được sử dụng để tắt báo thức này.</string>
 	<string name="description_select_nfc_tag_timer">Chọn thẻ NFC cần thiết để tắt bộ hẹn giờ này khi nó reo. Nếu chọn nhiều hơn một thẻ, thẻ NFC đó cũng có thể được sử dụng để tắt bộ hẹn giờ này.</string>
 	<string name="description_nfc_tag_dismiss_order">Thứ tự các thẻ NFC ở trên sẽ bị xóa. Bật tùy chọn này có nghĩa là tất cả các thẻ NFC đã chọn sẽ cần được quét để xóa.</string>
-	<string name="description_start_timer_on_nfc_tag_scan">Khi một trong các thẻ NFC được chọn được quét, bộ đếm thời gian này sẽ tự động bắt đầu.</string>
+	<string name="description_start_timer_on_single_nfc_tag_scan">Khi ứng dụng đang chạy và thẻ NFC được quét (không phải trên màn hình này), bộ đếm thời gian này sẽ tự động bắt đầu.</string>
+	<string name="description_start_timer_on_multiple_nfc_tag_scan">Khi ứng dụng đang chạy và một trong các thẻ NFC đã chọn được quét (không phải trên màn hình này), ứng dụng sẽ tự động bắt đầu bộ đếm thời gian này.</string>
+	<string name="description_add_or_replace_nfc_tag">Có nên thêm thẻ NFC vào danh sách thẻ NFC có thể loại bỏ cảnh báo này hay nên thay thế bất kỳ thẻ NFC nào đang được cảnh báo này sử dụng không?</string>
 	<string name="description_save_nfc_tag">Bạn có thể sử dụng lại thẻ NFC này mà không cần phải quét lại bằng cách đặt tên cho thẻ.</string>
 	<string name="description_repeat_frequency">Lặp lại báo thức theo tần suất nhất định (sau mỗi X khoảng thời gian). Lưu ý: Chọn giờ hoặc ngày sẽ xóa tất cả các ngày báo thức.</string>
 	<string name="description_repeat_frequency_days_to_run_before_starting">Ngày nào trong số các ngày được chọn trong báo thức sẽ được chạy trong tuần này trước khi bắt đầu tần suất.</string>

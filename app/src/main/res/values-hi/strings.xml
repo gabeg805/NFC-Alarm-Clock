@@ -87,6 +87,8 @@
 	<string name="action_stop_preview">पूर्वावलोकन रोकें</string>
 	<string name="action_show_nfc_tag_id">NFC टैग दिखाएं</string>
 	<string name="action_use_any">किसी भी NFC टैग का उपयोग करें</string>
+	<string name="action_add">जोड़ना</string>
+	<string name="action_replace">प्रतिस्थापित करें</string>
 	<string name="action_save">बचाना</string>
 	<string name="action_skip">छोडना</string>
 	<string name="action_undo">पूर्ववत</string>
@@ -137,6 +139,7 @@
 	<string name="message_nfc_required_unsaved">एनएफसी आवश्यक</string>
 	<string name="message_nfc_required_saved">एनएफसी आवश्यक — %1$s</string>
 	<string name="message_nfc_required_use_any">एनएफसी आवश्यक (किसी भी का उपयोग करें)</string>
+	<string name="message_nfc_screen_locked">NFC का उपयोग करने के लिए डिवाइस अनलॉक करें</string>
 	<string name="message_show_nfc_tag_id">पहचान</string>
 	<string name="message_delete_nfc_tag">क्या आप वाकई इस NFC टैग को हटाना चाहते हैं?</string>
 	<string name="message_rename_nfc_tag">आप एनएफसी टैग का नाम बदलकर क्या रखना चाहेंगे?</string>
@@ -197,7 +200,8 @@
 	<string name="error_message_nfc_mismatch">NFC टैग सहेजे गए टैग से मेल नहीं खाता.</string>
 	<string name="error_message_nfc_unsupported">आपका डिवाइस NFC का समर्थन नहीं करता है</string>
 	<string name="error_message_nfc_name_exists">यह नाम पहले से ही उपयोग किया जा रहा है</string>
-	<string name="error_message_nfc_id_exists">यह NFC ID पहले से ही %1$s द्वारा उपयोग की जा रही है</string>
+	<string name="error_message_unable_to_parse_nfc_id">NFC ID पार्स करने में असमर्थ</string>
+	<string name="error_message_nfc_id_exists">यह NFC ID पहले से ही उपयोग में है</string>
 	<string name="error_message_unable_to_scan_nfc">NFC टैग स्कैन करने में असमर्थ</string>
 	<string name="error_message_snooze">अलार्म को स्नूज़ करने में असमर्थ</string>
 	<string name="error_message_snoozed_delete">स्नूज़ किया गया अलार्म हटाने में असमर्थ</string>
@@ -240,6 +244,8 @@
 	<string name="title_select_nfc_tag">NFC टैग चुनें</string>
 	<string name="title_nfc_tag_dismiss_order">आदेश खारिज करें</string>
 	<string name="title_start_timer_on_nfc_tag_scan">स्कैन पर टाइमर प्रारंभ करें</string>
+	<string name="title_add_or_replace_nfc_tag">जोड़ें या बदलें...</string>
+	<string name="title_using_nfc_tag">एनएफसी टैग का उपयोग:</string>
 	<string name="title_save_nfc_tag">NFC टैग सहेजें</string>
 	<string name="title_delete_nfc_tag">NFC टैग हटाएं</string>
 	<string name="title_rename_nfc_tag">NFC टैग का नाम बदलें</string>
@@ -349,7 +355,9 @@
 	<string name="description_select_nfc_tag_alarm">एक NFC टैग चुनें जो इस अलार्म के बजने पर उसे बंद करने के लिए ज़रूरी होगा। अगर एक से ज़्यादा टैग चुने गए हैं, तो उनका इस्तेमाल इस अलार्म को बंद करने के लिए भी किया जा सकता है।</string>
 	<string name="description_select_nfc_tag_timer">एक NFC टैग चुनें जो इस टाइमर के बंद होने पर उसे बंद करने के लिए ज़रूरी होगा। अगर एक से ज़्यादा टैग चुने गए हैं, तो उनका इस्तेमाल भी इस टाइमर को बंद करने के लिए किया जा सकता है।</string>
 	<string name="description_nfc_tag_dismiss_order">ऊपर दिए गए NFC टैग्स को हटाने का क्रम। इसे सक्षम करने का अर्थ है कि हटाने के लिए सभी चयनित NFC टैग्स को स्कैन करना होगा।</string>
-	<string name="description_start_timer_on_nfc_tag_scan">जब चयनित एनएफसी टैग में से किसी एक को स्कैन किया जाता है, तो यह टाइमर स्वचालित रूप से शुरू हो जाएगा।</string>
+	<string name="description_start_timer_on_single_nfc_tag_scan">जब ऐप चल रहा हो और NFC टैग स्कैन किया गया हो (इस स्क्रीन में नहीं), तो यह स्वचालित रूप से यह टाइमर शुरू कर देगा।</string>
+	<string name="description_start_timer_on_multiple_nfc_tag_scan">जब ऐप चल रहा हो और चयनित NFC टैग में से एक को स्कैन किया जाता है (इस स्क्रीन में नहीं), तो यह स्वचालित रूप से इस टाइमर को शुरू कर देगा।</string>
+	<string name="description_add_or_replace_nfc_tag">क्या एनएफसी टैग को उन एनएफसी टैग की सूची में जोड़ा जाना चाहिए जो इस अलार्म को खारिज कर सकते हैं, या क्या इसे इस अलार्म द्वारा उपयोग किए जा रहे किसी भी एनएफसी टैग को प्रतिस्थापित करना चाहिए?</string>
 	<string name="description_save_nfc_tag">आप इस NFC टैग को नाम देकर, इसे दोबारा स्कैन किए बिना, पुनः उपयोग कर सकते हैं।</string>
 	<string name="description_repeat_frequency">अलार्म को एक निश्चित आवृत्ति पर दोहराएँ (हर X समय पर)। नोट: घंटे या दिन चुनने से अलार्म के सभी दिन साफ़ हो जाएँगे।</string>
 	<string name="description_repeat_frequency_days_to_run_before_starting">आवृत्ति शुरू करने से पहले इस सप्ताह अलार्म के वर्तमान में चयनित दिनों में से कौन सा दिन चलाया जाना चाहिए।</string>
