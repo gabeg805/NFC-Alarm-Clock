@@ -432,6 +432,13 @@ abstract class NacBaseAddEditTimer
 		// Initial state
 		button.isChecked = timer.shouldUseFlashlight
 
+		// Hide the button and do nothing else
+		if (!sharedPreferences.shouldShowFlashlightButton)
+		{
+			button.visibility = View.GONE
+			return
+		}
+
 		// Toggle on click
 		button.setOnClickListener {
 			timer.toggleUseFlashlight()
@@ -693,6 +700,13 @@ abstract class NacBaseAddEditTimer
 		// Initial state
 		button.isChecked = timer.shouldUseNfc
 
+		// Hide the button and do nothing else
+		if (!sharedPreferences.shouldShowNfcButton)
+		{
+			button.visibility = View.GONE
+			return
+		}
+
 		// Click listener
 		button.setOnClickListener {
 			timer.toggleUseNfc()
@@ -920,6 +934,13 @@ abstract class NacBaseAddEditTimer
 
 		// Initial state
 		button.isChecked = timer.shouldVibrate
+
+		// Hide the button and do nothing else
+		if (!sharedPreferences.shouldShowVibrateButton)
+		{
+			button.visibility = View.GONE
+			return
+		}
 
 		// Click listener
 		button.setOnClickListener {

@@ -33,6 +33,7 @@ import com.nfcalarmclock.card.NacBaseCardTouchHelperCallback
 import com.nfcalarmclock.card.NacCardLayoutManager
 import com.nfcalarmclock.main.NacMainActivity
 import com.nfcalarmclock.nfc.SCANNED_NFC_TAG_ID_BUNDLE_NAME
+import com.nfcalarmclock.nfc.shouldUseNfc
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.NacBundle
 import com.nfcalarmclock.system.bindToService
@@ -338,6 +339,7 @@ class NacShowTimersFragment
 		lifecycleScope.launch {
 
 			// Get all the active timers
+			val context = requireContext()
 			val allActiveTimers = timerViewModel.getAllActiveTimers()
 			var nonNfcTimer: NacTimer? = null
 			var anyNfcTimer: NacTimer? = null
@@ -346,7 +348,7 @@ class NacShowTimersFragment
 			allActiveTimers.forEach { t ->
 
 				// Timer does not use NFC so ignore
-				if (!t.shouldUseNfc)
+				if (!t.shouldUseNfc(context))
 				{
 					nonNfcTimer = nonNfcTimer ?: t
 					return@forEach

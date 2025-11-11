@@ -28,6 +28,7 @@ import com.nfcalarmclock.nfc.SCANNED_NFC_TAG_ID_BUNDLE_NAME
 import com.nfcalarmclock.nfc.db.NacNfcTag
 import com.nfcalarmclock.nfc.getNfcTagNamesForDismissing
 import com.nfcalarmclock.nfc.getNfcTagsForDismissing
+import com.nfcalarmclock.nfc.shouldUseNfc
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.bindToService
 import com.nfcalarmclock.system.getTimer
@@ -196,11 +197,14 @@ class NacActiveTimerFragment
 				progressIndicator.animateProgress(progressIndicator.progress, 0, 250,
 					onEnd = {
 
+						// Get the context
+						val context = requireContext()
+
 						// Start the timer ringing animation
 						startTimerRingingAnimation()
 
 						// Set the visibility
-						setScanNfcVisibility(timer.shouldUseNfc)
+						setScanNfcVisibility(timer.shouldUseNfc(context))
 						setStopVisibility()
 
 					})
@@ -296,6 +300,7 @@ class NacActiveTimerFragment
 			}
 
 			// Get the progress and seconds
+			val context = requireContext()
 			val secUntilFinished = service!!.getSecUntilFinished(timer)
 			val progress = service!!.getProgress(timer)
 
@@ -325,7 +330,7 @@ class NacActiveTimerFragment
 
 					// Update the views
 					updateHourMinuteSecondsTextViews(secOfRinging)
-					setScanNfcVisibility(timer.shouldUseNfc)
+					setScanNfcVisibility(timer.shouldUseNfc(context))
 					setStopVisibility()
 
 					// Start the timer ringing animation
@@ -358,7 +363,7 @@ class NacActiveTimerFragment
 			// Set the state of the resume/pause/stop buttons
 			resumeButton.visibility = if (service!!.isTimerPaused(timer)) View.VISIBLE else View.INVISIBLE
 			pauseButton.visibility = if (service!!.isTimerPaused(timer) || service!!.isTimerRinging(timer)) View.INVISIBLE else View.VISIBLE
-			stopButton.visibility = if (service!!.isTimerRinging(timer) && !timer.shouldUseNfc) View.VISIBLE else View.INVISIBLE
+			stopButton.visibility = if (service!!.isTimerRinging(timer) && !timer.shouldUseNfc(context)) View.VISIBLE else View.INVISIBLE
 
 			// Add the listeners
 			service!!.addOnServiceStoppedListener(timer.id, onServiceStoppedListener)
@@ -610,10 +615,13 @@ class NacActiveTimerFragment
 	 */
 	private fun setStopVisibility()
 	{
+		// Get the context
+		val context = requireContext()
+
 		// Show the stop button. Hide the resume and pause button
 		resumeButton.visibility = View.INVISIBLE
 		pauseButton.visibility = View.INVISIBLE
-		stopButton.visibility = if (timer.shouldUseNfc) View.INVISIBLE else View.VISIBLE
+		stopButton.visibility = if (timer.shouldUseNfc(context)) View.INVISIBLE else View.VISIBLE
 		resetButton.visibility = View.INVISIBLE
 
 		// Hide the add time buttons as the timer is no longer running

@@ -9,6 +9,7 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.nfcalarmclock.R
 import com.nfcalarmclock.card.NacBaseCardHolder
+import com.nfcalarmclock.nfc.shouldUseNfc
 import com.nfcalarmclock.system.NacCalendar
 import com.nfcalarmclock.timer.db.NacTimer
 import com.nfcalarmclock.view.performHapticFeedback
@@ -474,7 +475,7 @@ class NacTimerCardHolder(
 		}
 
 		// Timer requires NFC
-		if (timer!!.shouldUseNfc)
+		if (timer!!.shouldUseNfc(root.context))
 		{
 			// Show the scan NFC tag icon
 			if (scanNfcTagIcon.visibility != View.VISIBLE)
