@@ -1,9 +1,14 @@
 package com.nfcalarmclock.timer.active
 
 import android.Manifest
+import android.content.BroadcastReceiver
 import android.content.ComponentName
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.content.ServiceConnection
 import android.content.res.ColorStateList
+import android.nfc.NfcAdapter
 import android.os.Bundle
 import android.os.IBinder
 import android.os.SystemClock
@@ -14,6 +19,7 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.OnBackPressedCallback
 import androidx.annotation.RequiresPermission
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
@@ -32,6 +38,8 @@ import com.nfcalarmclock.nfc.shouldUseNfc
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.bindToService
 import com.nfcalarmclock.system.getTimer
+import com.nfcalarmclock.system.registerMyReceiver
+import com.nfcalarmclock.system.unregisterMyReceiver
 import com.nfcalarmclock.timer.db.NacTimer
 import com.nfcalarmclock.view.animateProgress
 import com.nfcalarmclock.view.calcContrastColor
@@ -169,6 +177,17 @@ class NacActiveTimerFragment
 	 * The last time the reset button was clicked.
 	 */
 	private var lastClickTimeResetButton: Long = 0
+
+	/**
+	 * NFC adapter state changed broadcast receiver.
+	 */
+	private val nfcAdapterStateChangedBroadcastReceiver: BroadcastReceiver = object: BroadcastReceiver() {
+		override fun onReceive(context: Context, intent: Intent)
+		{
+			// Setup NFC textview
+			setupScanNfcTagTextView()
+		}
+	}
 
 	/**
 	 * Callback when back is pressed.
@@ -410,6 +429,18 @@ class NacActiveTimerFragment
 	}
 
 	/**
+	 * Fragment paused.
+	 */
+	override fun onPause()
+	{
+		// Super
+		super.onPause()
+
+		// Unregister the broadcast receivers
+		unregisterMyReceiver(requireContext(), nfcAdapterStateChangedBroadcastReceiver)
+	}
+
+	/**
 	 * Fragment resumed.
 	 */
 	override fun onResume()
@@ -446,6 +477,10 @@ class NacActiveTimerFragment
 			// above and/or NFC was scanned and more NFC tags need to be scanned
 			setupScanNfcTagTextView()
 		}
+
+		// Register the broadcast receivers
+		registerMyReceiver(requireContext(), nfcAdapterStateChangedBroadcastReceiver,
+			IntentFilter(NfcAdapter.ACTION_ADAPTER_STATE_CHANGED))
 	}
 
 	/**
@@ -788,8 +823,25 @@ class NacActiveTimerFragment
 			null
 		}
 
-		// Set the name of the NFC tags that are needed to dismiss the timer
-		scanNfcTextView.text = nfcTagNames ?: resources.getString(R.string.title_scan_nfc_tag)
+		// Get colors
+		val context = requireContext()
+		val yellow = ContextCompat.getColor(context, R.color.yellow)
+		val white = ContextCompat.getColor(context, R.color.white)
+
+		// Normal usage
+		if (NacNfc.isEnabled(context))
+		{
+			// Set the name of the NFC tags that are needed to dismiss the timer
+			scanNfcTextView.text = nfcTagNames ?: resources.getString(R.string.title_scan_nfc_tag)
+			scanNfcTextView.setTextColor(white)
+		}
+		// NFC needs to be enabled
+		else
+		{
+			// Show warning that NFC needs to be enabled to be able to dismiss the timer
+			scanNfcTextView.text = resources.getString(R.string.message_nfc_enable_on_device_request)
+			scanNfcTextView.setTextColor(yellow)
+		}
 	}
 
 	/**

@@ -134,12 +134,12 @@
 	<string name="message_permission_schedule_exact_alarm_request">Để báo thức chạy chính xác theo đúng lịch trình.</string>
 	<string name="message_permission_system_alert_window_request">Cho phép hiển thị ứng dụng lên trên các ứng dụng khác?&lt;br/>&lt;br/>Điều này sẽ đảm bảo màn hình báo thức được hiển thị, đây là yêu cầu để phát âm thanh nếu ứng dụng ở chế độ nền.&lt;br/>&lt;br/>&lt;b>Lưu ý:&lt;/b> Điều này chỉ ảnh hưởng đến Android 15.</string>
 	<string name="message_playlist">Bạn có muốn phát tất cả nhạc trong thư mục này không?</string>
-	<string name="message_nfc_request">Vui lòng bật NFC để tắt báo thức</string>
+	<string name="message_nfc_enable_on_device_request">Vui lòng bật NFC trên thiết bị</string>
 	<string name="message_nfc_optional">tùy chọn NFC</string>
 	<string name="message_nfc_required_unsaved">Cần có NFC</string>
 	<string name="message_nfc_required_saved">Cần có NFC — %1$s</string>
 	<string name="message_nfc_required_use_any">Cần có NFC (sử dụng bất kỳ)</string>
-	<string name="message_nfc_screen_locked">Mở khóa thiết bị để sử dụng NFC</string>
+	<string name="message_nfc_screen_locked">Vui lòng mở khóa thiết bị để sử dụng NFC</string>
 	<string name="message_show_nfc_tag_id">NHẬN DẠNG</string>
 	<string name="message_delete_nfc_tag">Bạn có chắc chắn muốn xóa thẻ NFC này không?</string>
 	<string name="message_rename_nfc_tag">Bạn muốn đổi tên thẻ NFC thành gì?</string>

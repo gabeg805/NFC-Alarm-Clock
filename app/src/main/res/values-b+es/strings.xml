@@ -134,12 +134,12 @@
 	<string name="message_permission_schedule_exact_alarm_request">Para que las alarmas se ejecuten exactamente en el momento programado.</string>
 	<string name="message_permission_system_alert_window_request">¿Permitir que la aplicación se muestre sobre otras aplicaciones?&lt;br/>&lt;br/>Esto garantizará que se muestre la pantalla de alarma, que es un requisito para que se reproduzca el audio, si la aplicación está en segundo plano.&lt;br/>&lt;br/>&lt;b>Nota:&lt;b>  Esto solo afecta a Android 15.</string>
 	<string name="message_playlist">¿Quieres tocar toda la música de esta carpeta?</string>
-	<string name="message_nfc_request">Por favor, habilite la NFC para descartar la alarma</string>
+	<string name="message_nfc_enable_on_device_request">Por favor, active NFC en el dispositivo</string>
 	<string name="message_nfc_optional">NFC opcional</string>
 	<string name="message_nfc_required_unsaved">NFC requerido</string>
 	<string name="message_nfc_required_saved">NFC requerido — %1$s</string>
 	<string name="message_nfc_required_use_any">NFC requerido (usa cualquiera)</string>
-	<string name="message_nfc_screen_locked">Desbloquea el dispositivo para usar NFC.</string>
+	<string name="message_nfc_screen_locked">Por favor, desbloquea el dispositivo para usar NFC</string>
 	<string name="message_show_nfc_tag_id">Id</string>
 	<string name="message_delete_nfc_tag">¿Estás seguro de que quieres eliminar esta etiqueta NFC?</string>
 	<string name="message_rename_nfc_tag">¿Cómo te gustaría cambiar el nombre de la etiqueta NFC?</string>

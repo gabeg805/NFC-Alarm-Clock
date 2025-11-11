@@ -8,7 +8,6 @@ import android.nfc.NfcAdapter
 import android.nfc.Tag
 import android.os.Build
 import android.os.Parcelable
-import android.provider.Settings
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.nfcalarmclock.R
@@ -17,7 +16,6 @@ import com.nfcalarmclock.nfc.db.NacNfcTag
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.timer.db.NacTimer
 import com.nfcalarmclock.view.quickToast
-import com.nfcalarmclock.view.toast
 
 /**
  * Bundle name for ID of an NFC tag that was scanned.
@@ -391,24 +389,6 @@ object NacNfc
 			{
 				null
 			}
-	}
-
-	/**
-	 * Prompt the user to enable NFC.
-	 */
-	fun prompt(context: Context)
-	{
-		// NFC adapter does not exist
-		if (!exists(context))
-		{
-			return
-		}
-
-		val settings = Intent(Settings.ACTION_NFC_SETTINGS)
-
-		// Prompt the user to enable NFC
-		toast(context, R.string.message_nfc_request)
-		context.startActivity(settings)
 	}
 
 	/**

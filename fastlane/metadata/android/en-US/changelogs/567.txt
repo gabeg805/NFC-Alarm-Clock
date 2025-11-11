@@ -1,0 +1,6 @@
+Reworked how the NFC options dialog looks so that it is all consolidated in one screen.
+Fixed issue when trying to dismiss with NFC.
+Fixed issue when hiding the NFC button, the NFC alarm/timer option would still be shown.
+Fixed timing issue when deleting an alarm/timer.
+Fixed rare issue when starting timer.
+Fixed issue where ringtone would not play with phone locked and using NFC.

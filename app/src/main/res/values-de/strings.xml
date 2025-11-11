@@ -134,12 +134,12 @@
 	<string name="message_permission_schedule_exact_alarm_request">Damit Alarme genau zum geplanten Zeitpunkt ausgelöst werden.</string>
 	<string name="message_permission_system_alert_window_request">Berechtigung zum Anzeigen der App über anderen Apps erteilen?&lt;br/>&lt;br/>Dadurch wird sichergestellt, dass der Alarmbildschirm angezeigt wird, was für die Audiowiedergabe erforderlich ist, wenn die App im Hintergrund ausgeführt wird.&lt;br/>&lt;br/>&lt;b>Hinweis:&lt;b>  Dies betrifft nur Android 15.</string>
 	<string name="message_playlist">Möchten Sie die gesamte Musik in diesem Ordner abspielen?</string>
-	<string name="message_nfc_request">Bitte aktivieren Sie NFC, um den Alarm auszuschalten</string>
+	<string name="message_nfc_enable_on_device_request">Bitte aktivieren Sie NFC auf dem Gerät</string>
 	<string name="message_nfc_optional">NFC optional</string>
 	<string name="message_nfc_required_unsaved">NFC erforderlich</string>
 	<string name="message_nfc_required_saved">NFC erforderlich — %1$s</string>
 	<string name="message_nfc_required_use_any">NFC erforderlich (beliebig verwenden)</string>
-	<string name="message_nfc_screen_locked">Gerät entsperren, um NFC zu nutzen</string>
+	<string name="message_nfc_screen_locked">Bitte entsperren Sie das Gerät, um NFC zu nutzen</string>
 	<string name="message_show_nfc_tag_id">AUSWEIS</string>
 	<string name="message_delete_nfc_tag">Möchten Sie diesen NFC-Tag wirklich löschen?</string>
 	<string name="message_rename_nfc_tag">Wie möchten Sie das NFC-Tag umbenennen?</string>

@@ -134,12 +134,12 @@
 	<string name="message_permission_schedule_exact_alarm_request">Pou gen alam yo kouri jisteman lè pwograme.</string>
 	<string name="message_permission_system_alert_window_request">Èske w ap bay pèmisyon pou montre aplikasyon an sou lòt aplikasyon yo?&lt;br/>&lt;br/>Sa ap asire ke ekran alam lan ap parèt, ki se yon kondisyon pou odyo a ka jwe, si aplikasyon an nan background nan.&lt;br/>&lt;br/>&lt;b>Nòt:&lt;/b> Sa sèlman afekte Android 15.</string>
 	<string name="message_playlist">Ou vle jwe tout mizik ki nan katab sa a?</string>
-	<string name="message_nfc_request">Tanpri pèmèt NFC pou ranvwaye alam la</string>
+	<string name="message_nfc_enable_on_device_request">Tanpri aktive NFC sou aparèy la</string>
 	<string name="message_nfc_optional">NFC opsyonèl</string>
 	<string name="message_nfc_required_unsaved">NFC obligatwa</string>
 	<string name="message_nfc_required_saved">NFC obligatwa — %1$s</string>
 	<string name="message_nfc_required_use_any">NFC obligatwa (itilize nenpòt)</string>
-	<string name="message_nfc_screen_locked">Debloke aparèy la pou itilize NFC</string>
+	<string name="message_nfc_screen_locked">Tanpri debloke aparèy la pou itilize NFC</string>
 	<string name="message_show_nfc_tag_id">ID</string>
 	<string name="message_delete_nfc_tag">Èske w sèten ou vle efase tag NFC sa a?</string>
 	<string name="message_rename_nfc_tag">Ki sa ou ta renmen chanje non tag NFC la?</string>

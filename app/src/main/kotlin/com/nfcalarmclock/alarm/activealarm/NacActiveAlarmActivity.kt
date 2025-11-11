@@ -7,6 +7,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.ServiceConnection
+import android.nfc.NfcAdapter
 import android.os.Build
 import android.os.Bundle
 import android.os.IBinder
@@ -97,12 +98,20 @@ class NacActiveAlarmActivity
 	private val deviceUnlockedBroadcastReceiver: BroadcastReceiver = object: BroadcastReceiver() {
 		override fun onReceive(context: Context, intent: Intent)
 		{
-			// Device is unlocked
-			if (!keyguardManager.isDeviceLocked)
-			{
-				// Setup NFC for the layout handler
-				setupLayoutHandlerNfc()
-			}
+			// Setup NFC for the layout handler
+			setupLayoutHandlerNfc()
+		}
+	}
+
+	/**
+	 * NFC adapter state changed broadcast receiver.
+	 */
+	private val nfcAdapterStateChangedBroadcastReceiver: BroadcastReceiver = object: BroadcastReceiver() {
+		override fun onReceive(context: Context, intent: Intent)
+		{
+			// Setup NFC
+			setupNfc()
+			setupLayoutHandlerNfc()
 		}
 	}
 
@@ -243,8 +252,9 @@ class NacActiveAlarmActivity
 		// Re-enable the activity alias
 		enableActivityAlias(this)
 
-		// Unregister the shutdown receiver
+		// Unregister the broadcast receivers
 		unregisterMyReceiver(this, shutdownBroadcastReceiver)
+		unregisterMyReceiver(this, nfcAdapterStateChangedBroadcastReceiver)
 	}
 
 	/**
@@ -288,9 +298,10 @@ class NacActiveAlarmActivity
 
 		}
 
-
-		// Register the shutdown receiver
+		// Register the broadcast receivers
 		registerMyShutdownBroadcastReceiver(this, shutdownBroadcastReceiver)
+		registerMyReceiver(this, nfcAdapterStateChangedBroadcastReceiver,
+			IntentFilter(NfcAdapter.ACTION_ADAPTER_STATE_CHANGED))
 	}
 
 	/**
@@ -409,17 +420,7 @@ class NacActiveAlarmActivity
 		// NFC is not enabled
 		if (!NacNfc.isEnabled(this))
 		{
-			// NFC should be used
-			if (alarm?.shouldUseNfc(this) == true)
-			{
-				// Prompt the user
-				NacNfc.prompt(this)
-			}
-			// NFC does not need to be used
-			else
-			{
-				return
-			}
+			return
 		}
 
 		// NFC exists on the device. The device is NFC capable

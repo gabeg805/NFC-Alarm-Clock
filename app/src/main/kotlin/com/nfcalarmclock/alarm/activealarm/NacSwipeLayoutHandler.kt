@@ -17,12 +17,14 @@ import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.net.toUri
 import androidx.dynamicanimation.animation.DynamicAnimation
 import androidx.dynamicanimation.animation.FlingAnimation
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.nfc.NacNfc
 import com.nfcalarmclock.system.NacCalendar
 import com.nfcalarmclock.system.createTimeTickReceiver
 import com.nfcalarmclock.system.getDeviceProtectedStorageContext
@@ -41,25 +43,15 @@ import kotlin.math.absoluteValue
 
 /**
  * Handler for the swipe layout.
+ *
+ * @param activity Activity.
+ * @param alarm Alarm.
+ * @param onAlarmActionListener Listener for an alarm action.
  */
 class NacSwipeLayoutHandler(
-
-	/**
-	 * Activity.
-	 */
 	activity: AppCompatActivity,
-
-	/**
-	 * Alarm.
-	 */
 	alarm: NacAlarm?,
-
-	/**
-	 * Listener for an alarm action.
-	 */
 	onAlarmActionListener: OnAlarmActionListener
-
-	// Constructor
 ) : NacActiveAlarmLayoutHandler(activity, alarm, onAlarmActionListener)
 {
 
@@ -849,16 +841,35 @@ class NacSwipeLayoutHandler(
 		names: String?,
 		isDeviceLocked: Boolean)
 	{
-		// Device is locked
+		// Get colors
+		val yellow = ContextCompat.getColor(context, R.color.yellow)
+		val white = ContextCompat.getColor(context, R.color.white)
+
+		// Locked device
 		if (isDeviceLocked)
 		{
 			// Show warning that device needs to be unlocked for NFC to work
 			nfcNameTextView.text = context.resources.getString(R.string.message_nfc_screen_locked)
+			nfcNameTextView.setTextColor(yellow)
 		}
-		// Normal usage
+		// Unlocked device
 		else
 		{
-			nfcNameTextView.text = names ?: context.resources.getString(R.string.title_scan_nfc_tag)
+			// Normal usage
+			if (NacNfc.isEnabled(context))
+			{
+				// Set the name of the NFC tags that are needed to dismiss the alarm
+				nfcNameTextView.text = names ?: context.resources.getString(R.string.title_scan_nfc_tag)
+				nfcNameTextView.setTextColor(white)
+			}
+			// NFC needs to be enabled
+			else
+			{
+				// Show warning that NFC needs to be enabled to be able to dismiss the
+				// alarm
+				nfcNameTextView.text = context.resources.getString(R.string.message_nfc_enable_on_device_request)
+				nfcNameTextView.setTextColor(yellow)
+			}
 		}
 	}
 

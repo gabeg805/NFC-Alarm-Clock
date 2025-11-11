@@ -134,12 +134,12 @@
 	<string name="message_permission_schedule_exact_alarm_request">নির্ধারিত সময়ে অ্যালার্মগুলি সঠিকভাবে চালানোর জন্য।</string>
 	<string name="message_permission_system_alert_window_request">অন্যান্য অ্যাপের উপরে অ্যাপ প্রদর্শনের অনুমতি দেবেন?&lt;br/>&lt;br/>এটি নিশ্চিত করবে যে অ্যালার্ম স্ক্রিনটি প্রদর্শিত হচ্ছে, যা অ্যাপটি ব্যাকগ্রাউন্ডে থাকলে অডিও চালানোর জন্য একটি প্রয়োজনীয়তা। &lt;br/>&lt;br/> &lt;b>বিঃদ্রঃ:  &lt;/b> এটি শুধুমাত্র Android 15-এর উপর প্রভাব ফেলে।</string>
 	<string name="message_playlist">আপনি কি এই ফোল্ডারে সমস্ত সঙ্গীত চালাতে চান?</string>
-	<string name="message_nfc_request">অ্যালার্ম খারিজ করতে অনুগ্রহ করে NFC সক্ষম করুন৷</string>
+	<string name="message_nfc_enable_on_device_request">ডিভাইসে NFC চালু করুন</string>
 	<string name="message_nfc_optional">NFC ঐচ্ছিক</string>
 	<string name="message_nfc_required_unsaved">NFC প্রয়োজন</string>
 	<string name="message_nfc_required_saved">NFC প্রয়োজন — %1$s</string>
 	<string name="message_nfc_required_use_any">NFC প্রয়োজন (যেকোনো ব্যবহার করুন)</string>
-	<string name="message_nfc_screen_locked">NFC ব্যবহার করতে ডিভাইস আনলক করুন</string>
+	<string name="message_nfc_screen_locked">NFC ব্যবহার করতে ডিভাইসটি আনলক করুন।</string>
 	<string name="message_show_nfc_tag_id">আইডি</string>
 	<string name="message_delete_nfc_tag">আপনি কি এই NFC ট্যাগটি মুছতে চান?</string>
 	<string name="message_rename_nfc_tag">আপনি NFC ট্যাগের নাম পরিবর্তন করতে চান কি?</string>

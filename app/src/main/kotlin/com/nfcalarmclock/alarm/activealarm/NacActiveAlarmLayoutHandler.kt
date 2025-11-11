@@ -53,7 +53,10 @@ abstract class NacActiveAlarmLayoutHandler(
 	/**
 	 * Setup an NFC tag, if necessary.
 	 */
-	open fun setupNfcTag(context: Context, names: String?, isDeviceLocked: Boolean) {}
+	open fun setupNfcTag(
+		context: Context,
+		names: String?,
+		isDeviceLocked: Boolean) {}
 
 	/**
 	 * Start the layout and run any setup that needs to run.
