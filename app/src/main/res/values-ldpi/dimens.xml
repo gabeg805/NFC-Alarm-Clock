@@ -1,0 +1,15 @@
+<resources>
+
+	<!-- Image -->
+	<dimen name="isz_focus">56dp</dimen>
+	<dimen name="isz_numpad">56dp</dimen>
+	<dimen name="isz_actionpad">56dp</dimen>
+
+	<!-- Text -->
+	<dimen name="tsz_dummy">32sp</dimen>
+	<dimen name="tsz_widget">72sp</dimen>
+
+	<!-- Sizing -->
+	<dimen name="touch">32dp</dimen>
+
+</resources>

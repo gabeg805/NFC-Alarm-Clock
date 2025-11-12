@@ -44,6 +44,7 @@ import com.nfcalarmclock.timer.db.NacTimer
 import com.nfcalarmclock.view.animateProgress
 import com.nfcalarmclock.view.calcContrastColor
 import com.nfcalarmclock.view.setupBackgroundColor
+import com.nfcalarmclock.view.setupRippleColor
 import com.nfcalarmclock.view.startTimerRingingAnimation
 import com.nfcalarmclock.view.updateHourMinuteSecondsTextViews
 import dagger.hilt.android.AndroidEntryPoint
@@ -743,6 +744,9 @@ class NacActiveTimerFragment
 	@RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
 	private fun setupResetButton()
 	{
+		// Setup color
+		resetButton.setupRippleColor(sharedPreferences)
+
 		// Click listener
 		resetButton.setOnClickListener {
 

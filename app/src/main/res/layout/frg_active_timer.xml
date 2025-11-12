@@ -12,7 +12,6 @@
 		android:id="@+id/timer_progress"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		app:layout_constraintVertical_bias="0.2"
 		app:layout_constraintTop_toTopOf="parent"
 		app:layout_constraintBottom_toBottomOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
@@ -97,11 +96,10 @@
 
 	<!-- Reset timer -->
 	<com.google.android.material.button.MaterialButton
-		style="@style/My.Timer.IconButton"
+		style="@style/My.Timer.ResetButton"
 		android:id="@+id/timer_reset_button"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_marginBottom="@dimen/normal"
 		app:iconSize="@dimen/isz_xlarge"
 		app:icon="@drawable/autorenew_32"
 		app:layout_constraintTop_toBottomOf="@id/timer_seconds"
@@ -118,9 +116,6 @@
 		android:layout_marginBottom="@dimen/zero"
 		android:backgroundTint="?attr/colorAccent"
 		android:visibility="invisible"
-		app:iconGravity="textStart"
-		app:iconPadding="@dimen/zero"
-		app:iconSize="@dimen/isz_xxxlarge"
 		app:icon="@drawable/play"
 		app:layout_constraintTop_toBottomOf="@id/timer_progress"
 		app:layout_constraintBottom_toTopOf="@id/timer_add_5s"
@@ -135,9 +130,6 @@
 		android:layout_marginTop="@dimen/zero"
 		android:layout_marginBottom="@dimen/zero"
 		android:backgroundTint="?attr/colorAccent"
-		app:iconGravity="textStart"
-		app:iconPadding="@dimen/zero"
-		app:iconSize="@dimen/isz_xxxlarge"
 		app:icon="@drawable/pause_32"
 		app:layout_constraintTop_toTopOf="@id/timer_resume_button"
 		app:layout_constraintBottom_toBottomOf="@id/timer_resume_button"
@@ -153,9 +145,6 @@
 		android:layout_marginBottom="@dimen/zero"
 		android:backgroundTint="?attr/colorAccent"
 		android:visibility="invisible"
-		app:iconGravity="textStart"
-		app:iconPadding="@dimen/zero"
-		app:iconSize="@dimen/isz_xxxlarge"
 		app:icon="@drawable/stop_32"
 		app:layout_constraintTop_toBottomOf="@id/timer_progress"
 		app:layout_constraintBottom_toBottomOf="parent"
@@ -204,13 +193,8 @@
 
 	<!-- Add time -->
 	<com.google.android.material.button.MaterialButton
-		style="@style/My.Timer.NumberpadButton"
+		style="@style/My.Timer.AddTimeButton"
 		android:id="@+id/timer_add_1m"
-		android:layout_width="wrap_content"
-		android:layout_height="@dimen/touch"
-		android:layout_marginTop="@dimen/zero"
-		android:layout_marginBottom="@dimen/zero"
-		android:textSize="@dimen/tsz_medium"
 		android:text="@string/timer_add_1min"
 		app:layout_constraintTop_toBottomOf="@id/timer_resume_button"
 		app:layout_constraintBottom_toBottomOf="parent"
@@ -220,15 +204,10 @@
 		/>
 
 	<com.google.android.material.button.MaterialButton
-		style="@style/My.Timer.NumberpadButton"
+		style="@style/My.Timer.AddTimeButton"
 		android:id="@+id/timer_add_30s"
-		android:layout_width="wrap_content"
-		android:layout_height="@dimen/touch"
-		android:layout_marginTop="@dimen/zero"
-		android:layout_marginBottom="@dimen/zero"
 		android:layout_marginStart="@dimen/normal"
 		android:layout_marginEnd="@dimen/normal"
-		android:textSize="@dimen/tsz_medium"
 		android:text="@string/timer_add_30sec"
 		app:layout_constraintTop_toBottomOf="@id/timer_resume_button"
 		app:layout_constraintBottom_toBottomOf="parent"
@@ -237,13 +216,8 @@
 		/>
 
 	<com.google.android.material.button.MaterialButton
-		style="@style/My.Timer.NumberpadButton"
+		style="@style/My.Timer.AddTimeButton"
 		android:id="@+id/timer_add_5s"
-		android:layout_width="wrap_content"
-		android:layout_height="@dimen/touch"
-		android:layout_marginTop="@dimen/zero"
-		android:layout_marginBottom="@dimen/zero"
-		android:textSize="@dimen/tsz_medium"
 		android:text="@string/timer_add_5sec"
 		app:layout_constraintTop_toBottomOf="@id/timer_resume_button"
 		app:layout_constraintBottom_toBottomOf="parent"

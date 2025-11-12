@@ -73,10 +73,10 @@
 
 		<!-- Number pad container -->
 		<RelativeLayout
+			style="@style/My.Timer.NumberpadContainer"
 			android:id="@+id/timer_numberpad_container"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_marginBottom="@dimen/huge"
 			app:layout_constraintBottom_toTopOf="@id/timer_start_button">
 
 			<!-- Number pad 1-3 -->
@@ -165,14 +165,11 @@
 				/>
 
 			<com.google.android.material.button.MaterialButton
-				style="@style/My.Timer.NumberpadButton"
+				style="@style/My.Timer.NumberpadDeleteButton"
 				android:id="@+id/timer_numberpad_del"
 				android:layout_alignTop="@id/timer_numberpad0"
 				android:layout_toEndOf="@id/timer_numberpad0"
 				android:layout_marginTop="@dimen/zero"
-				app:iconGravity="textStart"
-				app:iconPadding="@dimen/zero"
-				app:iconSize="@dimen/isz_normal"
 				app:icon="@drawable/backspace_32"
 				/>
 		</RelativeLayout>
@@ -193,9 +190,6 @@
 			style="@style/My.Timer.ActionButton"
 			android:id="@+id/timer_start_button"
 			android:backgroundTint="?attr/colorAccent"
-			app:iconPadding="@dimen/zero"
-			app:iconGravity="textStart"
-			app:iconSize="@dimen/isz_xxxlarge"
 			app:icon="@drawable/play"
 			app:layout_constraintTop_toTopOf="@id/timer_guide_for_start_button"
 			app:layout_constraintBottom_toBottomOf="@id/timer_guide_for_start_button"
@@ -205,16 +199,12 @@
 
 		<!-- More button -->
 		<com.google.android.material.button.MaterialButton
-			style="@style/My.Timer.IconButton"
+			style="@style/My.Timer.MoreButton"
 			android:id="@+id/timer_more_button"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginStart="@dimen/small"
-			android:padding="@dimen/large"
-			android:alpha="0.5"
 			android:text="@string/word_more"
-			app:iconPadding="@dimen/nudge"
-			app:iconSize="@dimen/isz_medium"
 			app:icon="@drawable/expand"
 			app:layout_constraintTop_toTopOf="@id/timer_start_button"
 			app:layout_constraintBottom_toBottomOf="@id/timer_start_button"
@@ -223,17 +213,13 @@
 
 		<!-- Save timer -->
 		<com.google.android.material.button.MaterialButton
-			style="@style/My.Timer.IconButton"
+			style="@style/My.Timer.SaveButton"
 			android:id="@+id/timer_save_button"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_marginEnd="@dimen/small"
-			android:padding="@dimen/large"
 			android:visibility="invisible"
 			android:text="@string/action_save"
-			android:alpha="0.5"
-			app:iconPadding="@dimen/tiny"
-			app:iconSize="@dimen/isz_normal"
 			app:icon="@drawable/save_32"
 			app:layout_constraintTop_toTopOf="@id/timer_start_button"
 			app:layout_constraintBottom_toBottomOf="@id/timer_start_button"

@@ -896,19 +896,27 @@ class NacMainActivity
 		// Setup navigation with the toolbar
 		toolbar.setupWithNavController(navController, appBarConfiguration)
 		toolbar.setNavigationOnClickListener {
+			lifecycleScope.launch {
 
-			// Go to show timers from active timer, skipping over add/edit since do not
-			// need to go back to those
-			if (navController.currentDestination?.id == R.id.nacActiveTimerFragment)
-			{
-				navController.navigate(R.id.action_global_nacShowTimersFragment)
-			}
-			// Normal navigate up
-			else
-			{
-				navController.navigateUp(appBarConfiguration)
-			}
+				// From active timer, go directly to show timers, skipping over add/edit
+				// since do not need to go back to those
+				if (navController.currentDestination?.id == R.id.nacActiveTimerFragment)
+				{
+					navController.navigate(R.id.action_global_nacShowTimersFragment)
+				}
+				// From add timer and no timers have been saved yet, go back to show alarms
+				else if ((navController.currentDestination?.id == R.id.nacAddTimerFragment)
+					&& (timerViewModel.count() == 0))
+				{
+					navController.navigate(R.id.action_global_nacShowAlarmsFragment)
+				}
+				// Normal navigate up
+				else
+				{
+					navController.navigateUp(appBarConfiguration)
+				}
 
+			}
 		}
 
 		// Menu item click listener

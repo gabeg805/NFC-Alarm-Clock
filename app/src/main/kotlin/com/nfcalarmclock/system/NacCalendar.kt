@@ -995,7 +995,7 @@ object NacCalendar
 	{
 		// Get the hour, minute, and seconds values
 		val hour = duration / 3600
-		val minute = duration / 60
+		val minute = (duration / 60) % 60
 		val seconds = duration % 60
 		var hourString = hour.toString()
 		var minuteString = minute.toString()

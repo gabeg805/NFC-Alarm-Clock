@@ -17,7 +17,7 @@
 
 	<!-- Reset button -->
 	<style name="My.Timer.ResetButton" parent="My.Timer.IconButton">
-		<item name="android:layout_marginBottom">@dimen/normal</item>
+		<item name="android:layout_marginBottom">@dimen/small</item>
 	</style>
 
 	<!-- Circular progress -->
@@ -32,14 +32,14 @@
 
 	<!-- Active circular progress -->
 	<style name="My.Timer.CircularProgressIndicator.Active" parent="My.Timer.CircularProgressIndicator">
-		<item name="indicatorSize">320dp</item>
+		<item name="indicatorSize">240dp</item>
 		<item name="trackThickness">8dp</item>
-		<item name="layout_constraintVertical_bias">0.2</item>
+		<item name="layout_constraintVertical_bias">0.1</item>
 	</style>
 
 	<!-- Card circular progress -->
 	<style name="My.Timer.CircularProgressIndicator.Card" parent="My.Timer.CircularProgressIndicator">
-		<item name="indicatorSize">260dp</item>
+		<item name="indicatorSize">180dp</item>
 	</style>
 
 	<!-- Name text -->
@@ -49,13 +49,13 @@
 		<item name="android:layout_marginEnd">@dimen/xxxlarge</item>
 		<item name="android:ellipsize">end</item>
 		<item name="android:textAlignment">center</item>
-		<item name="android:textSize">@dimen/tsz_large</item>
+		<item name="android:textSize">@dimen/tsz_medium</item>
 		<item name="android:textStyle">bold</item>
 	</style>
 
 	<!-- Card name text -->
 	<style name="My.Timer.NameText.Card" parent="My.Timer.NameText.Active">
-		<item name="android:textSize">@dimen/tsz_normal</item>
+		<item name="android:textSize">@dimen/tsz_small</item>
 	</style>
 
 	<!-- Time text -->
@@ -69,7 +69,7 @@
 
 	<!-- Card time text -->
 	<style name="My.Timer.TimeText.Card" parent="My.Timer.TimeText.Active">
-		<item name="android:textSize">@dimen/tsz_xxhuge</item>
+		<item name="android:textSize">@dimen/tsz_huge</item>
 		<item name="android:textStyle">bold</item>
 		<item name="android:text">@string/number00</item>
 	</style>
@@ -80,24 +80,24 @@
 		<item name="android:layout_height">wrap_content</item>
 		<item name="android:layout_marginStart">@dimen/twoline</item>
 		<item name="android:layout_marginEnd">@dimen/normal</item>
-		<item name="android:textSize">@dimen/tsz_large</item>
+		<item name="android:textSize">@dimen/tsz_medium</item>
 	</style>
 
 	<!-- Numberpad container -->
 	<style name="My.Timer.NumberpadContainer" parent="">
-		<item name="android:layout_marginBottom">@dimen/huge</item>
+		<item name="android:layout_marginBottom">@dimen/small</item>
 	</style>
 
 	<!-- Numberpad button -->
 	<style name="My.Timer.NumberpadButton" parent="">
 		<item name="android:layout_width">@dimen/isz_numpad</item>
 		<item name="android:layout_height">@dimen/isz_numpad</item>
-		<item name="android:layout_marginTop">@dimen/tiny</item>
-		<item name="android:layout_marginBottom">@dimen/tiny</item>
-		<item name="android:layout_marginStart">@dimen/tiny</item>
-		<item name="android:layout_marginEnd">@dimen/tiny</item>
+		<item name="android:layout_marginTop">@dimen/twoline</item>
+		<item name="android:layout_marginBottom">@dimen/twoline</item>
+		<item name="android:layout_marginStart">@dimen/nudge</item>
+		<item name="android:layout_marginEnd">@dimen/nudge</item>
 		<item name="android:backgroundTint">@color/gray_dark2</item>
-		<item name="android:textSize">@dimen/tsz_xlarge</item>
+		<item name="android:textSize">@dimen/tsz_small</item>
 		<item name="android:insetTop">@dimen/zero</item>
 		<item name="android:insetBottom">@dimen/zero</item>
 		<item name="android:insetLeft">@dimen/zero</item>
@@ -108,7 +108,7 @@
 	<style name="My.Timer.NumberpadDeleteButton" parent="My.Timer.NumberpadButton">
 		<item name="iconGravity">textStart</item>
 		<item name="iconPadding">@dimen/zero</item>
-		<item name="iconSize">@dimen/isz_normal</item>
+		<item name="iconSize">@dimen/isz_small</item>
 	</style>
 
 	<!-- Action button -->
@@ -117,7 +117,7 @@
 		<item name="android:layout_height">@dimen/isz_actionpad</item>
 		<item name="iconGravity">textStart</item>
 		<item name="iconPadding">@dimen/zero</item>
-		<item name="iconSize">@dimen/isz_xxxlarge</item>
+		<item name="iconSize">@dimen/isz_large</item>
 	</style>
 
 	<!-- Add time button -->
@@ -126,16 +126,16 @@
 		<item name="android:layout_height">@dimen/touch</item>
 		<item name="android:layout_marginTop">@dimen/zero</item>
 		<item name="android:layout_marginBottom">@dimen/zero</item>
-		<item name="android:textSize">@dimen/tsz_medium</item>
+		<item name="android:textSize">@dimen/tsz_small</item>
 	</style>
 
 	<!-- Extra button -->
 	<style name="My.Timer.ExtraButton" parent="My.Timer.IconButton">
 		<item name="android:alpha">0.5</item>
-		<item name="android:padding">@dimen/large</item>
-		<item name="android:textSize">@dimen/tsz_normal</item>
+		<item name="android:padding">@dimen/small</item>
+		<item name="android:textSize">@dimen/tsz_small</item>
 		<item name="iconPadding">@dimen/nudge</item>
-		<item name="iconSize">@dimen/isz_medium</item>
+		<item name="iconSize">@dimen/isz_normal</item>
 	</style>
 
 	<!-- More button -->
@@ -147,7 +147,7 @@
 	<!-- Save button -->
 	<style name="My.Timer.SaveButton" parent="My.Timer.ExtraButton">
 		<item name="iconPadding">@dimen/tiny</item>
-		<item name="iconSize">@dimen/isz_normal</item>
+		<item name="iconSize">@dimen/isz_small</item>
 	</style>
 
 </resources>
