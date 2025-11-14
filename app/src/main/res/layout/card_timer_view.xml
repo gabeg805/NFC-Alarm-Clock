@@ -103,13 +103,11 @@
 
 		<!-- Reset timer -->
 		<com.google.android.material.button.MaterialButton
-			style="@style/My.Timer.IconButton"
+			style="@style/My.Timer.IconButton.InsideTimer.Card"
 			android:id="@+id/timer_reset_button"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_marginBottom="@dimen/normal"
 			android:visibility="gone"
-			app:iconSize="@dimen/isz_xlarge"
 			app:icon="@drawable/autorenew_32"
 			app:layout_constraintHorizontal_chainStyle="packed"
 			app:layout_constraintTop_toBottomOf="@id/timer_seconds"
@@ -120,12 +118,10 @@
 
 		<!-- Start button-->
 		<com.google.android.material.button.MaterialButton
-			style="@style/My.Timer.IconButton"
+			style="@style/My.Timer.IconButton.InsideTimer.Card"
 			android:id="@+id/timer_start_button"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_marginBottom="@dimen/normal"
-			app:iconSize="@dimen/isz_xlarge"
 			app:icon="@drawable/play"
 			app:layout_constraintTop_toBottomOf="@id/timer_seconds"
 			app:layout_constraintBottom_toBottomOf="@id/timer_progress"
@@ -135,12 +131,12 @@
 
 		<!-- Pause button-->
 		<com.google.android.material.button.MaterialButton
-			style="@style/My.Timer.IconButton"
+			style="@style/My.Timer.IconButton.InsideTimer.Card"
 			android:id="@+id/timer_pause_button"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
+			android:layout_marginBottom="@dimen/zero"
 			android:visibility="invisible"
-			app:iconSize="@dimen/isz_xlarge"
 			app:icon="@drawable/pause_32"
 			app:layout_constraintTop_toTopOf="@id/timer_start_button"
 			app:layout_constraintBottom_toBottomOf="@id/timer_start_button"
@@ -150,13 +146,11 @@
 
 		<!-- Stop timer -->
 		<com.google.android.material.button.MaterialButton
-			style="@style/My.Timer.IconButton"
+			style="@style/My.Timer.IconButton.InsideTimer.Card"
 			android:id="@+id/timer_stop_button"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_marginBottom="@dimen/normal"
 			android:visibility="invisible"
-			app:iconSize="@dimen/isz_xlarge"
 			app:icon="@drawable/stop_32"
 			app:layout_constraintTop_toBottomOf="@id/timer_seconds"
 			app:layout_constraintBottom_toBottomOf="@id/timer_progress"
@@ -166,11 +160,9 @@
 
 		<!-- Scan NFC tag -->
 		<ImageView
+			style="@style/My.Timer.NfcIcon.Card"
 			android:id="@+id/timer_scan_nfc_icon"
 			android:contentDescription="@string/cd_scan_nfc"
-			android:layout_width="@dimen/isz_large"
-			android:layout_height="@dimen/isz_large"
-			android:layout_marginBottom="@dimen/normal"
 			android:src="@drawable/tap_and_play"
 			android:visibility="invisible"
 			app:layout_constraintTop_toBottomOf="@id/timer_seconds"

@@ -2,6 +2,9 @@
 TODO
 ----
 
+* Test having the weekday and label show always, this way you can have the
+  expand/collapse button be shown always as well
+
 * Reword "translation of" to "translation to"
 
 * When building dialog and alarm is null, should create a default builder? When

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<!-- Days -->
+	<style name="My.Alarm.Days" parent="">
+		<item name="android:layout_marginTop">@dimen/zero</item>
+		<item name="android:layout_marginBottom">@dimen/zero</item>
+		<item name="android:layout_marginStart">@dimen/small</item>
+		<item name="android:layout_marginEnd">@dimen/small</item>
+	</style>
+
+	<!-- Buttons -->
+	<style name="My.Alarm.Buttons" parent="Widget.Button.Icon">
+		<item name="iconSize">@dimen/isz_large</item>
+	</style>
+
+</resources>

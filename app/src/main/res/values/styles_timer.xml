@@ -15,11 +15,6 @@
 		<item name="iconTint">@color/white</item>
 	</style>
 
-	<!-- Reset button -->
-	<style name="My.Timer.ResetButton" parent="My.Timer.IconButton">
-		<item name="android:layout_marginBottom">@dimen/normal</item>
-	</style>
-
 	<!-- Circular progress -->
 	<style name="My.Timer.CircularProgressIndicator" parent="">
 		<item name="android:indeterminate">false</item>
@@ -129,6 +124,44 @@
 		<item name="android:textSize">@dimen/tsz_medium</item>
 	</style>
 
+	<!-- Button inside timer -->
+	<style name="My.Timer.IconButton.InsideTimer" parent="My.Timer.IconButton">
+		<item name="android:layout_marginBottom">@dimen/normal</item>
+	</style>
+
+	<!-- Active button inside timer -->
+	<style name="My.Timer.IconButton.InsideTimer.Active" parent="My.Timer.IconButton.InsideTimer">
+		<item name="iconSize">@dimen/isz_xlarge</item>
+	</style>
+
+	<!-- Card button inside timer -->
+	<style name="My.Timer.IconButton.InsideTimer.Card" parent="My.Timer.IconButton.InsideTimer">
+		<item name="iconSize">@dimen/isz_xlarge</item>
+	</style>
+
+	<!-- NFC icon -->
+	<style name="My.Timer.NfcIcon" parent="" />
+
+	<style name="My.Timer.NfcIcon.Active" parent="My.Timer.NfcIcon">
+		<item name="android:layout_width">@dimen/isz_focus</item>
+		<item name="android:layout_height">@dimen/isz_focus</item>
+		<item name="android:layout_marginStart">@dimen/nudge</item>
+	</style>
+
+	<style name="My.Timer.NfcIcon.Card" parent="My.Timer.NfcIcon">
+		<item name="android:layout_width">@dimen/isz_large</item>
+		<item name="android:layout_height">@dimen/isz_large</item>
+		<item name="android:layout_marginBottom">@dimen/normal</item>
+	</style>
+
+	<!-- NFC text -->
+	<style name="My.Timer.NfcText" parent="" />
+
+	<style name="My.Timer.NfcText.Active" parent="My.Timer.NfcText">
+		<item name="android:layout_marginTop">@dimen/small</item>
+		<item name="android:textSize">@dimen/tsz_large</item>
+	</style>
+
 	<!-- Extra button -->
 	<style name="My.Timer.ExtraButton" parent="My.Timer.IconButton">
 		<item name="android:alpha">0.5</item>
@@ -140,12 +173,14 @@
 
 	<!-- More button -->
 	<style name="My.Timer.MoreButton" parent="My.Timer.ExtraButton">
+		<item name="android:layout_marginStart">@dimen/small</item>
 		<item name="iconPadding">@dimen/nudge</item>
 		<item name="iconSize">@dimen/isz_medium</item>
 	</style>
 
 	<!-- Save button -->
 	<style name="My.Timer.SaveButton" parent="My.Timer.ExtraButton">
+		<item name="android:layout_marginEnd">@dimen/small</item>
 		<item name="iconPadding">@dimen/tiny</item>
 		<item name="iconSize">@dimen/isz_normal</item>
 	</style>

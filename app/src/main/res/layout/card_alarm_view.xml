@@ -184,7 +184,7 @@
 					android:textSize="@dimen/tsz_small"
 					android:text="@string/action_alarm_dismiss"
 					android:visibility="visible"
-					app:iconSize="@dimen/medium"
+					app:iconSize="@dimen/isz_small"
 					app:icon="@drawable/dismiss"
 					/>
 
@@ -201,7 +201,7 @@
 					android:textSize="@dimen/tsz_small"
 					android:text="@string/action_alarm_dismiss_early"
 					android:visibility="gone"
-					app:iconSize="@dimen/medium"
+					app:iconSize="@dimen/isz_small"
 					app:icon="@drawable/dismiss"
 					/>
 
@@ -263,11 +263,10 @@
 
 			<!-- Days -->
 			<LinearLayout
+				style="@style/My.Alarm.Days"
 				android:id="@+id/nac_days"
 				android:layout_width="match_parent"
 				android:layout_height="@dimen/touch"
-				android:layout_marginStart="@dimen/small"
-				android:layout_marginEnd="@dimen/small"
 				android:gravity="center"
 				android:orientation="horizontal">
 
@@ -285,7 +284,7 @@
 
 				<!-- Repeat -->
 				<com.google.android.material.button.MaterialButton
-					style="@style/Widget.Button.Icon"
+					style="@style/My.Alarm.Buttons"
 					android:id="@+id/nac_repeat"
 					android:layout_width="@dimen/touch"
 					android:layout_height="@dimen/touch"
@@ -293,13 +292,12 @@
 					android:checkable="true"
 					app:backgroundTint="@android:color/transparent"
 					app:iconTint="@color/card_toggle_button"
-					app:iconSize="@dimen/isz_large"
 					app:icon="@drawable/repeat"
 					/>
 
 				<!-- Vibrate -->
 				<com.google.android.material.button.MaterialButton
-					style="@style/Widget.Button.Icon"
+					style="@style/My.Alarm.Buttons"
 					android:id="@+id/nac_vibrate"
 					android:layout_width="@dimen/touch"
 					android:layout_height="@dimen/touch"
@@ -307,13 +305,12 @@
 					android:checkable="true"
 					app:backgroundTint="@android:color/transparent"
 					app:iconTint="@color/card_toggle_button"
-					app:iconSize="@dimen/isz_large"
 					app:icon="@drawable/vibrate"
 					/>
 
 				<!-- NFC -->
 				<com.google.android.material.button.MaterialButton
-					style="@style/Widget.Button.Icon"
+					style="@style/My.Alarm.Buttons"
 					android:id="@+id/nac_nfc"
 					android:layout_width="@dimen/touch"
 					android:layout_height="@dimen/touch"
@@ -321,13 +318,12 @@
 					android:checkable="true"
 					app:backgroundTint="@android:color/transparent"
 					app:iconTint="@color/card_toggle_button"
-					app:iconSize="@dimen/isz_large"
 					app:icon="@drawable/tap_and_play"
 					/>
 
 				<!-- Flashlight -->
 				<com.google.android.material.button.MaterialButton
-					style="@style/Widget.Button.Icon"
+					style="@style/My.Alarm.Buttons"
 					android:id="@+id/nac_flashlight"
 					android:layout_width="@dimen/touch"
 					android:layout_height="@dimen/touch"
@@ -335,7 +331,6 @@
 					android:checkable="true"
 					app:backgroundTint="@android:color/transparent"
 					app:iconTint="@color/card_toggle_button"
-					app:iconSize="@dimen/isz_large"
 					app:icon="@drawable/flashlight_on_32"
 					/>
 			</LinearLayout> <!-- Repeat, Vibrate, NFC, Flashlight -->

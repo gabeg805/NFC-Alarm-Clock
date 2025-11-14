@@ -96,11 +96,10 @@
 
 	<!-- Reset timer -->
 	<com.google.android.material.button.MaterialButton
-		style="@style/My.Timer.ResetButton"
+		style="@style/My.Timer.IconButton.InsideTimer.Active"
 		android:id="@+id/timer_reset_button"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		app:iconSize="@dimen/isz_xlarge"
 		app:icon="@drawable/autorenew_32"
 		app:layout_constraintTop_toBottomOf="@id/timer_seconds"
 		app:layout_constraintBottom_toBottomOf="@id/timer_progress"
@@ -169,23 +168,20 @@
 		tools:ignore="UseCompoundDrawables">
 
 		<ImageView
+			style="@style/My.Timer.NfcIcon.Active"
 			android:contentDescription="@string/cd_scan_nfc"
-			android:layout_width="@dimen/isz_focus"
-			android:layout_height="@dimen/isz_focus"
-			android:layout_marginStart="@dimen/nudge"
 			android:src="@drawable/tap_and_play"
 			/>
 
 		<TextView
+			style="@style/My.Timer.NfcText.Active"
 			android:id="@+id/timer_scan_nfc_text"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:layout_marginTop="@dimen/small"
 			android:ellipsize="end"
 			android:maxLines="2"
 			android:textAlignment="center"
 			android:textColor="@color/white"
-			android:textSize="@dimen/tsz_large"
 			android:textStyle="bold"
 			android:text=""
 			/>
