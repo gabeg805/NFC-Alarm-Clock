@@ -20,7 +20,7 @@ Customizable and feature-rich alarm clock app that allows you to:
     height="80">](https://f-droid.org/packages/com.nfcalarmclock/)
 [<img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroidButtonGreyBorder_nofont.png"
     alt="Get it at IzzyOnDroid"
-    height="80">](https://apt.izzysoft.de/packages/com.nfcalarmclock)
+    height="55">](https://apt.izzysoft.de/packages/com.nfcalarmclock)
 [<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png"
      alt="Get it on Google Play"
      height="80">](https://play.google.com/store/apps/details?id=com.nfcalarmclock)
