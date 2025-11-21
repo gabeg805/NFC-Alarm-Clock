@@ -53,7 +53,7 @@ fun NacAlarm.canDismissWithScannedNfc(nfcId: String, validNfcTagsForDismissal: M
 				&& validNfcIdsForDismissal.first() == nfcId))
 	{
 		// NFC tags need to be dismissed in a particular order
-		if (this.shouldUseNfcTagDismissOrder
+		if (this.shouldUseNfcTagDismissOrder && (this.nfcTagIdList.size > 1)
 			&& ((this.nfcTagDismissOrder == NacNfcTagDismissOrder.SEQUENTIAL)
 				|| (this.nfcTagDismissOrder == NacNfcTagDismissOrder.RANDOM)))
 		{

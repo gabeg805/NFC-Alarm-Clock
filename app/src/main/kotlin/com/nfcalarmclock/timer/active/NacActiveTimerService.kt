@@ -296,6 +296,13 @@ class NacActiveTimerService
 		timeInSec: Long
 	): NacActiveTimerNotification
 	{
+		// Notification show when time has not been added to the hashmap yet
+		if (timer.id !in allNotificationShowWhenTime)
+		{
+			// Add the show when time for when the notification is shown
+			allNotificationShowWhenTime[timer.id] = Calendar.getInstance().timeInMillis
+		}
+
 		// Get the notification builder, the current action, and the full time
 		var notification = allNotifications[timer.id] ?: NacActiveTimerNotification(this, timer)
 		val currentAction = allNotificationCurrentActions[timer.id]
@@ -347,6 +354,13 @@ class NacActiveTimerService
 				}
 			}
 
+		// Notification has not been added to the hashmap yet
+		if (timer.id !in allNotifications)
+		{
+			// Add the notification to the hashmap
+			allNotifications[timer.id] = notification
+		}
+
 		return notification
 	}
 
@@ -370,7 +384,7 @@ class NacActiveTimerService
 	 */
 	@SuppressLint("MissingPermission")
 	@UnstableApi
-	fun cleanup(timer: NacTimer)
+	fun cleanup(timer: NacTimer, shouldStop: Boolean = false)
 	{
 		// Clean the wakeup process
 		allWakeupProcesses[timer.id]?.cleanup()
@@ -428,6 +442,12 @@ class NacActiveTimerService
 				val notificationManagerCompat = NotificationManagerCompat.from(this)
 				notificationManagerCompat.cancel(notificationId)
 			}
+		}
+
+		// Stop the service when no timers are using it
+		if (shouldStop && allTimers.isEmpty())
+		{
+			stopThisService()
 		}
 	}
 
@@ -509,7 +529,9 @@ class NacActiveTimerService
 	 */
 	fun getSecUntilFinished(timer: NacTimer): Long
 	{
-		return ceil(allMillisUntilFinished[timer.id]!! / 1000f).toLong()
+		val millisUntilFinished = allMillisUntilFinished[timer.id] ?: (timer.duration * 1000)
+
+		return ceil(millisUntilFinished / 1000f).toLong()
 	}
 
 	/**
@@ -781,10 +803,7 @@ class NacActiveTimerService
 		allNotificationShowWhenTime[timer.id] = Calendar.getInstance().timeInMillis
 
 		// Create the active timer notification
-		val notification = updateNotification(timer, timer.duration)
-
-		// Save the notification and when it was shown
-		allNotifications[timer.id] = notification
+		updateNotification(timer, timer.duration)
 	}
 
 	/**
@@ -943,7 +962,7 @@ class NacActiveTimerService
 		timer: NacTimer,
 		timeInSec: Long = getSecUntilFinished(timer),
 		foreground: Boolean = false
-	): NacActiveTimerNotification
+	)
 	{
 		// Create/get the notification
 		val notification = buildNotification(timer, timeInSec)
@@ -966,9 +985,6 @@ class NacActiveTimerService
 			}
 
 		}
-
-		// Return the notification builder
-		return notification
 	}
 
 	/**

@@ -49,6 +49,16 @@ interface NacTimerDao
 	suspend fun delete(timer: NacTimer): Int
 
 	/**
+	 * Whether the table has a matching timer or not.
+	 *
+	 * @param id The ID of the timer to find.
+	 *
+	 * @return The number of timers that match the ID. Should be either 0 or 1.
+	 */
+	@Query("SELECT COUNT(id) FROM timer WHERE id=:id")
+	suspend fun exists(id: Long): Boolean
+
+	/**
 	 * Get an active timer.
 	 *
 	 * @return An active timer.
@@ -65,16 +75,6 @@ interface NacTimerDao
 	 */
 	@Query("SELECT * FROM timer")
 	suspend fun getAllTimers(): List<NacTimer>
-
-	/**
-	 * Whether the table has a matching timer or not.
-	 *
-	 * @param id The ID of the timer to find.
-	 *
-	 * @return The number of timers that match the ID. Should be either 0 or 1.
-	 */
-	@Query("SELECT COUNT(id) FROM timer WHERE id=:id")
-	suspend fun hasTimer(id: Long): Boolean
 
 	/**
 	 * Insert a timer.

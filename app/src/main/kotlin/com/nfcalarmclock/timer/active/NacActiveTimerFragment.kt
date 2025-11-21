@@ -761,13 +761,7 @@ class NacActiveTimerFragment
 
 			// Reset the timer
 			service?.resetCountdownTimer(timer)
-			service?.cleanup(timer)
-
-			// Stop the service when no timers are using it
-			if (service?.allTimersReadOnly?.isEmpty() == true)
-			{
-				service!!.stopThisService()
-			}
+			service?.cleanup(timer, shouldStop = true)
 
 			// Set the last click time
 			lastClickTimeResetButton = SystemClock.elapsedRealtime()

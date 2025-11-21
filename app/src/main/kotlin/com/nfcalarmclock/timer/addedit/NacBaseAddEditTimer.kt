@@ -314,6 +314,7 @@ abstract class NacBaseAddEditTimer
 		setupStartButton()
 		setupMoreButton()
 		setupMoreOptionsContainerVisibility()
+		setupSaveButton()
 		setupRepeatButton(repeatButton)
 		setupVibrateButton(vibrateButton)
 		setupNfcButton(nfcButton)
@@ -323,6 +324,27 @@ abstract class NacBaseAddEditTimer
 		setupName(nameButton)
 		setupOptionsSection(view)
 		setupMediaPickerObserver()
+	}
+
+	/**
+	 * Save the timer.
+	 */
+	protected fun saveTimer(unit: () -> Unit)
+	{
+		lifecycleScope.launch {
+
+			// Update the timer
+			if (timerViewModel.exists(timer.id))
+			{
+				timerViewModel.update(timer, unit = unit)
+			}
+			// Add the timer to the table
+			else
+			{
+				timerViewModel.insert(timer, unit = unit)
+			}
+
+		}
 	}
 
 	/**
@@ -592,7 +614,7 @@ abstract class NacBaseAddEditTimer
 	 */
 	protected fun setupMoreButton()
 	{
-		// Get the views
+		// Get the view
 		val view = requireView()
 		val moreButton: MaterialButton = view.findViewById(R.id.timer_more_button)
 
@@ -837,9 +859,6 @@ abstract class NacBaseAddEditTimer
 		val view = requireView()
 		val saveButton: MaterialButton = view.findViewById(R.id.timer_save_button)
 
-		// Show the view
-		saveButton.visibility = View.VISIBLE
-
 		// On click listener
 		saveButton.setOnClickListener {
 
@@ -856,8 +875,8 @@ abstract class NacBaseAddEditTimer
 			// Set the name
 			timer.name = nameBeforeSaving
 
-			// Update the timer and then go back to the show timers fragment
-			timerViewModel.update(timer) {
+			// Save the timer, then go back to the show timers fragment
+			saveTimer {
 				findNavController().popBackStack(R.id.nacShowTimersFragment, false)
 			}
 
@@ -899,26 +918,10 @@ abstract class NacBaseAddEditTimer
 			// Set the name
 			timer.name = nameBeforeSaving
 
-			// Save the timer
-			lifecycleScope.launch {
-
-				// Unit to start the timer
-				val unit = {
-					NacActiveTimerService.startTimerService(context, timer)
-					findNavController().navigate(R.id.nacActiveTimerFragment, timer.toBundle())
-				}
-
-				// Update the timer
-				if (timerViewModel.hasTimer(timer.id))
-				{
-					timerViewModel.update(timer, unit = unit)
-				}
-				// Add the timer to the table
-				else
-				{
-					timerViewModel.insert(timer, unit = unit)
-				}
-
+			// Save the timer, then start the timer and go to the active timer fragment
+			saveTimer {
+				NacActiveTimerService.startTimerService(context, timer)
+				findNavController().navigate(R.id.nacActiveTimerFragment, timer.toBundle())
 			}
 
 		}

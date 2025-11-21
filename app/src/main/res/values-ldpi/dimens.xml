@@ -1,7 +1,6 @@
 <resources>
 
 	<!-- Image -->
-	<dimen name="isz_focus">56dp</dimen>
 	<dimen name="isz_numpad">56dp</dimen>
 	<dimen name="isz_actionpad">56dp</dimen>
 

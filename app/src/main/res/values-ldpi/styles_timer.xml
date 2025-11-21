@@ -118,7 +118,7 @@
 	<!-- Add time button -->
 	<style name="My.Timer.AddTimeButton" parent="My.Timer.NumberpadButton">
 		<item name="android:layout_width">wrap_content</item>
-		<item name="android:layout_height">@dimen/xxlarge</item>
+		<item name="android:layout_height">@dimen/touch</item>
 		<item name="android:layout_marginTop">@dimen/zero</item>
 		<item name="android:layout_marginBottom">@dimen/zero</item>
 		<item name="android:textSize">@dimen/tsz_small</item>
@@ -143,8 +143,8 @@
 	<style name="My.Timer.NfcIcon" parent="" />
 
 	<style name="My.Timer.NfcIcon.Active" parent="My.Timer.NfcIcon">
-		<item name="android:layout_width">@dimen/isz_focus</item>
-		<item name="android:layout_height">@dimen/isz_focus</item>
+		<item name="android:layout_width">@dimen/isz_attention</item>
+		<item name="android:layout_height">@dimen/isz_attention</item>
 		<item name="android:layout_marginStart">@dimen/nudge</item>
 	</style>
 

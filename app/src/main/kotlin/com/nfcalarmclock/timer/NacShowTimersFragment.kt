@@ -281,6 +281,7 @@ class NacShowTimersFragment
 	 * @param timer A timer.
 	 * @param onInsertListener Listener to call after the timer is inserted and has an ID.
 	 */
+	@RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
 	private fun addTimer(
 		timer: NacTimer,
 		messageId: Int? = null,
@@ -321,6 +322,7 @@ class NacShowTimersFragment
 	/**
 	 * Add a timer that was created from the SET_TIMER intent.
 	 */
+	@RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
 	private fun addTimerFromSetTimerIntent(timer: NacTimer)
 	{
 		addTimer(timer, onInsertListener = {
@@ -409,6 +411,7 @@ class NacShowTimersFragment
 	 *
 	 * @param timer A timer.
 	 */
+	@RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
 	private fun copyTimer(timer: NacTimer)
 	{
 		// Create a copy of the timer
@@ -423,6 +426,7 @@ class NacShowTimersFragment
 	 *
 	 * @param timer A timer.
 	 */
+	@RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
 	private fun deleteTimer(timer: NacTimer)
 	{
 		// Get the local media path
@@ -431,6 +435,8 @@ class NacShowTimersFragment
 		// Remove the countdown/up timer change listeners
 		service?.removeOnCountdownTimerChangedListener(timer.id, onCountdownTimerChangedListener)
 		service?.removeOnCountupTickListener(timer.id, onCountupTickListener)
+		service?.resetCountdownTimer(timer)
+		service?.cleanup(timer, shouldStop = true)
 
 		// Delete the timer
 		timerViewModel.delete(timer)
@@ -544,6 +550,7 @@ class NacShowTimersFragment
 	 * Fragment is resumed.
 	 */
 	@SuppressLint("UnsafeIntentLaunch")
+	@RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
 	@OptIn(UnstableApi::class)
 	override fun onResume()
 	{
@@ -624,6 +631,7 @@ class NacShowTimersFragment
 		timerCardTouchHelper = NacTimerCardTouchHelper(object : NacBaseCardTouchHelperCallback.OnCardSwipedListener<NacTimer>
 		{
 
+			@RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
 			override fun onCopySwipe(item: NacTimer, index: Int)
 			{
 				// Haptic feedback
@@ -644,6 +652,7 @@ class NacShowTimersFragment
 				copyTimer(item)
 			}
 
+			@RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
 			override fun onDeleteSwipe(item: NacTimer, index: Int)
 			{
 				// Haptic feedback
@@ -667,6 +676,7 @@ class NacShowTimersFragment
 	 *
 	 * @param timer A timer.
 	 */
+	@RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
 	private fun restoreTimer(timer: NacTimer)
 	{
 		addTimer(timer, R.string.message_timer_restore)
@@ -693,6 +703,7 @@ class NacShowTimersFragment
 
 			// Navigate to add timer fragment
 			findNavController().navigate(R.id.nacAddTimerFragment)
+
 		}
 	}
 
@@ -832,7 +843,15 @@ class NacShowTimersFragment
 				}
 
 				// Navigate to the fragment
-				findNavController().navigate(destinationId, timer.toBundle())
+				try
+				{
+					findNavController().navigate(destinationId, timer.toBundle())
+				}
+				catch (e: IllegalArgumentException)
+				{
+					println("CAUGHT THE EXCEPTION HURRAY!")
+					println(e.toString())
+				}
 
 			}
 

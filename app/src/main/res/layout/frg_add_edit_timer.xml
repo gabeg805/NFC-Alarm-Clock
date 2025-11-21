@@ -216,7 +216,6 @@
 			android:id="@+id/timer_save_button"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:visibility="invisible"
 			android:text="@string/action_save"
 			app:icon="@drawable/save_32"
 			app:layout_constraintTop_toTopOf="@id/timer_start_button"

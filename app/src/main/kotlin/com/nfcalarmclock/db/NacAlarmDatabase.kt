@@ -22,6 +22,7 @@ import com.nfcalarmclock.db.NacAlarmDatabase.ChangeFlashlightOnOffDurationTypeTo
 import com.nfcalarmclock.db.NacAlarmDatabase.ClearAllStatisticsMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.ConvertDismissAndSnoozeOptionsFromMinutesToSecondsMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.FixDismissAndSnoozeOptionsConvertedFromMinutesToSecondsMigration
+import com.nfcalarmclock.db.NacAlarmDatabase.FixFlashlightBlinkEmptyStringDurationMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.ClearNfcTagTableMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.DropNfcTagTableMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.RenameShouldDeleteAlarmAfterDismissedColumnMigration
@@ -65,7 +66,7 @@ import javax.inject.Singleton
 /**
  * Store alarms in a Room database.
  */
-@Database(version = 44,
+@Database(version = 45,
 	entities = [
 		NacAlarm::class,
 		NacAlarmCreatedStatistic::class,
@@ -119,6 +120,7 @@ import javax.inject.Singleton
 		AutoMigration(from = 41, to = 42, spec = RenameShouldDeleteAlarmAfterDismissedColumnMigration::class),
 		AutoMigration(from = 42, to = 43),
 		AutoMigration(from = 43, to = 44),
+		AutoMigration(from = 44, to = 45, spec = FixFlashlightBlinkEmptyStringDurationMigration::class),
 	]
 )
 @TypeConverters(NacAlarmTypeConverters::class, NacStatisticTypeConverters::class)
@@ -340,6 +342,19 @@ abstract class NacAlarmDatabase
 					it.snoozeDuration /= 60
 				}
 			}
+		}
+	}
+
+	/**
+	 * Fix the case where the flashlight should blink, but the duration times are empty
+	 * strings.
+	 */
+	internal class FixFlashlightBlinkEmptyStringDurationMigration : AutoMigrationSpec
+	{
+		override fun onPostMigrate(db: SupportSQLiteDatabase)
+		{
+			db.execSQL("UPDATE alarm SET flashlight_on_duration='1.0' WHERE should_blink_flashlight=1 AND flashlight_on_duration=''")
+			db.execSQL("UPDATE alarm SET flashlight_off_duration='1.0' WHERE should_blink_flashlight=1 AND flashlight_off_duration=''")
 		}
 	}
 

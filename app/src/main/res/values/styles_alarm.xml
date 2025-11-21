@@ -14,4 +14,123 @@
 		<item name="iconSize">@dimen/isz_large</item>
 	</style>
 
+	<!-- Parent container -->
+	<style name="My.Alarm.Active.Parent" parent="">
+		<item name="android:padding">@dimen/xxlarge</item>
+	</style>
+
+	<!-- Time -->
+	<style name="My.Alarm.Active.Time" parent="">
+		<item name="android:textColor">@color/white</item>
+		<item name="android:textSize">@dimen/tsz_widget</item>
+		<item name="android:textStyle">bold</item>
+	</style>
+
+	<!-- Meridian -->
+	<style name="My.Alarm.Active.Meridian" parent="">
+		<item name="android:layout_marginStart">@dimen/nudge</item>
+		<item name="android:textColor">@color/white</item>
+		<item name="android:textSize">@dimen/tsz_large</item>
+		<item name="android:textStyle">bold</item>
+	</style>
+
+	<!-- Date -->
+	<style name="My.Alarm.Active.Date" parent="">
+		<item name="android:layout_marginTop">@dimen/nudge</item>
+		<item name="android:textColor">@color/white_dull</item>
+		<item name="android:textSize">@dimen/tsz_normal</item>
+	</style>
+
+	<!-- Name -->
+	<style name="My.Alarm.Active.Name" parent="">
+		<item name="android:layout_marginTop">@dimen/small</item>
+		<item name="android:textColor">@color/white</item>
+		<item name="android:textSize">@dimen/tsz_huge</item>
+		<item name="android:textStyle">bold</item>
+	</style>
+
+	<!-- Scan NFC -->
+	<style name="My.Alarm.Active.ScanNfc.Icon" parent="">
+		<item name="android:layout_width">@dimen/isz_focus</item>
+		<item name="android:layout_height">@dimen/isz_focus</item>
+		<item name="android:layout_marginStart">@dimen/nudge</item>
+	</style>
+
+	<style name="My.Alarm.Active.ScanNfc.Text" parent="">
+		<item name="android:layout_marginTop">@dimen/small</item>
+		<item name="android:textAlignment">center</item>
+		<item name="android:textColor">@color/white</item>
+		<item name="android:textSize">@dimen/tsz_large</item>
+		<item name="android:textStyle">bold</item>
+	</style>
+
+	<!-- Slider instructions -->
+	<style name="My.Alarm.Active.SliderInstructions" parent="">
+		<item name="android:textColor">@color/white</item>
+		<item name="android:textSize">@dimen/tsz_normal</item>
+	</style>
+
+	<!-- Number of snoozes left -->
+	<style name="My.Alarm.Active.NumberOfSnoozesLeft" parent="">
+		<item name="android:layout_marginBottom">@dimen/nudge</item>
+		<item name="android:textColor">@color/white</item>
+		<item name="android:textSize">@dimen/tsz_caption</item>
+	</style>
+
+	<!-- Snooze/dismiss row -->
+	<style name="My.Alarm.Active.SnoozeDismissRow" parent="">
+		<item name="android:layout_height">@dimen/action_row_height</item>
+		<item name="android:layout_marginBottom">@dimen/xxxlarge</item>
+		<item name="android:layout_marginStart">@dimen/large</item>
+		<item name="android:layout_marginEnd">@dimen/large</item>
+	</style>
+
+	<!-- Slider arrow -->
+	<style name="My.Alarm.Active.SliderArrow" parent="">
+		<item name="android:layout_width">@dimen/isz_large</item>
+		<item name="android:layout_height">@dimen/isz_large</item>
+		<item name="android:layout_marginStart">@dimen/small</item>
+		<item name="android:layout_marginEnd">@dimen/small</item>
+	</style>
+
+	<style name="My.Alarm.Active.SliderArrow.Left" parent="My.Alarm.Active.SliderArrow">
+		<item name="android:layout_marginEnd">@dimen/medium</item>
+	</style>
+
+	<style name="My.Alarm.Active.SliderArrow.Right" parent="My.Alarm.Active.SliderArrow">
+		<item name="android:layout_marginStart">@dimen/medium</item>
+	</style>
+
+	<!-- Music and warning -->
+	<style name="My.Alarm.Active.MusicAndWarning.Container" parent="">
+		<item name="android:layout_marginStart">@dimen/normal</item>
+		<item name="android:layout_marginEnd">@dimen/normal</item>
+	</style>
+
+	<style name="My.Alarm.Active.MusicAndWarning.Dummy" parent="">
+		<item name="android:textColor">@color/white</item>
+		<item name="android:textSize">@dimen/tsz_caption</item>
+	</style>
+
+	<style name="My.Alarm.Active.MusicAndWarning.MusicTitle" parent="">
+		<item name="android:layout_marginStart">@dimen/nudge</item>
+		<item name="android:layout_marginEnd">@dimen/nudge</item>
+		<item name="android:textColor">@color/white</item>
+		<item name="android:textSize">@dimen/tsz_normal</item>
+		<item name="android:textStyle">bold</item>
+	</style>
+
+	<style name="My.Alarm.Active.MusicAndWarning.MusicArtist" parent="">
+		<item name="android:textColor">@color/white</item>
+		<item name="android:textSize">@dimen/tsz_caption</item>
+		<item name="android:textStyle">italic</item>
+	</style>
+
+	<style name="My.Alarm.Active.MusicAndWarning.Warning" parent="">
+		<item name="android:layout_marginTop">@dimen/nudge</item>
+		<item name="android:layout_marginStart">@dimen/small</item>
+		<item name="android:textColor">@color/white_dull</item>
+		<item name="android:textSize">@dimen/tsz_caption</item>
+	</style>
+
 </resources>
