@@ -1,0 +1,5 @@
+Fixed issue when using NFC to dismiss an alarm or timer, but the dismiss order options had also been set.
+Fixed issue where using flashlight blink would cause a crash.
+Fixed various timer UI issues.
+Added a save button when adding timer, so that you are not forced to start a timer immediately in order to save it.
+Improved how the alarm and timer screens look for low pixel density devices.
