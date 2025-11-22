@@ -5,6 +5,12 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.6.4</item>
+		<item>Pwoblèm nan rezoud lè w ap itilize &lt;b>NFC&lt;/b> pou fèmen yon alam oswa yon revèy, men opsyon &lt;b>lòd fèmen&lt;/b> yo te deja configuré tou.</item>
+		<item>Pwoblèm nan rezoud kote itilizasyon &lt;b>kliyote flach&lt;/b> te ka lakòz yon aksidan.</item>
+		<item>Ranje plizyè pwoblèm koòdone itilizatè &lt;b>revèy&lt;/b>.</item>
+		<item>Te ajoute yon bouton &lt;b>sove&lt;/b> lè w ap ajoute &lt;b>revèy&lt;/b>, pou ou pa oblije kòmanse yon revèy touswit pou sove li.</item>
+		<item>Amelyore aparans ekran &lt;b>alam&lt;/b> ak &lt;b>revèy&lt;/b> yo pou aparèy ki gen yon dansite pixel ki ba.</item>
 		<item>12.6.3</item>
 		<item>Nou te retravaye aparans dyalòg &lt;b>opsyon NFC&lt;/b> la pou tout bagay rasanble sou yon sèl ekran.</item>
 		<item>Pwoblèm nan rezoud lè w ap eseye &lt;b>fèmen &lt;/b> ak &lt;b>NFC&lt;/b>.</item>

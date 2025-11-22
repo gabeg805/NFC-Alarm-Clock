@@ -847,10 +847,8 @@ class NacShowTimersFragment
 				{
 					findNavController().navigate(destinationId, timer.toBundle())
 				}
-				catch (e: IllegalArgumentException)
+				catch (_: IllegalArgumentException)
 				{
-					println("CAUGHT THE EXCEPTION HURRAY!")
-					println(e.toString())
 				}
 
 			}

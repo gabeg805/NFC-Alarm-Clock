@@ -5,6 +5,12 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.6.4</item>
+		<item>Corrigido problema que ocorria ao usar &lt;b>NFC&lt;/b> para dispensar um alarme ou temporizador, mas as opções de &lt;b>ordem de dispensa&lt;/b> também haviam sido definidas.</item>
+		<item>Corrigido problema em que o uso de &lt;b>piscar lanterna&lt;/b> causava travamento.</item>
+		<item>Corrigidos diversos problemas de interface do usuário relacionados ao &lt;b>temporizador&lt;/b>.</item>
+		<item>Adicionamos um &lt;b>botão salvar&lt;/b> ao adicionar um &lt;b>temporizador&lt;/b>, para que você não seja obrigado a iniciar um temporizador imediatamente para salvá-lo.</item>
+		<item>Melhoramos a aparência das telas de &lt;b>alarme&lt;/b> e &lt;b>temporizador&lt;/b> em dispositivos com baixa densidade de pixels.</item>
 		<item>12.6.3</item>
 		<item>Reformulamos a aparência da caixa de diálogo &lt;b>Opções de NFC&lt;/b> para que todas as informações fiquem consolidadas em uma única tela.</item>
 		<item>Problema resolvido ao tentar &lt;b>dispensar&lt;/b> com &lt;b>NFC&lt;/b>.</item>

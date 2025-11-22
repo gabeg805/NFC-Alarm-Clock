@@ -130,7 +130,8 @@ class NacWhatsNewDialog
 		 */
 		fun show(
 			manager: FragmentManager,
-			listener: () -> Unit = {})
+			listener: () -> Unit = {}
+		): NacWhatsNewDialog
 		{
 			// Create the dialog
 			val dialog = NacWhatsNewDialog()
@@ -142,6 +143,8 @@ class NacWhatsNewDialog
 
 			// Show the dialog
 			dialog.show(manager, TAG)
+
+			return dialog
 		}
 
 	}

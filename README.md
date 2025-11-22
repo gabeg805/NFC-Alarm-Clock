@@ -21,9 +21,9 @@ Customizable and feature-rich alarm clock app that allows you to:
 [<img src="https://play.google.com/intl/en_us/badges/images/generic/en-play-badge.png"
      alt="Get it on Google Play"
      height="80">](https://play.google.com/store/apps/details?id=com.nfcalarmclock)
-[<img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroidButtonGreyBorder_nofont.png"
+[<img src="https://gitlab.com/IzzyOnDroid/repo/-/raw/master/assets/IzzyOnDroid.png"
     alt="Get it at IzzyOnDroid"
-    height="55">](https://apt.izzysoft.de/packages/com.nfcalarmclock)
+    height="80">](https://apt.izzysoft.de/packages/com.nfcalarmclock)
 
 Or download the latest APK from the [Releases Section](https://github.com/gabeg805/NFC-Alarm-Clock/releases/latest).
 

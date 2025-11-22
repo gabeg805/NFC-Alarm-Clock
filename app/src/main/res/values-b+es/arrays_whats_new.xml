@@ -5,6 +5,12 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.6.4</item>
+		<item>Se solucionó un problema que ocurría al usar &lt;b>NFC&lt;/b> para descartar una alarma o un temporizador, pero las opciones &lt;b>orden de descarte&lt;/b> también se habían configurado.</item>
+		<item>Se solucionó un problema por el cual el uso de &lt;b>parpadeo de linterna&lt;/b> provocaba un fallo.</item>
+		<item>Se corrigieron varios problemas de la interfaz de usuario del &lt;b>temporizador&lt;/b>.</item>
+		<item>Se agregó un &lt;b>botón guardar&lt;/b> al agregar &lt;b>temporizador&lt;/b>, para que no se vea obligado a iniciar un temporizador inmediatamente para poder guardarlo.</item>
+		<item>Se mejoró la apariencia de las pantallas &lt;b>alarma&lt;/b> y &lt;b>temporizador&lt;/b> en dispositivos con baja densidad de píxeles.</item>
 		<item>12.6.3</item>
 		<item>Se ha rediseñado el aspecto del cuadro de diálogo &lt;b>Opciones NFC&lt;/b> para que todo esté consolidado en una sola pantalla.</item>
 		<item>Se solucionó un problema al intentar &lt;b>descartar&lt;/b> con &lt;b>NFC&lt;/b>.</item>

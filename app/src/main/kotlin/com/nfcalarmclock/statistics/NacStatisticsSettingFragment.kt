@@ -426,12 +426,13 @@ class NacStatisticsSettingFragment
 	private fun sendEmail(attachmentPath: String, timestamp: String)
 	{
 		// Get the subject of the email
+		val context = requireContext()
 		val title = getString(R.string.message_statistics_email_subject)
 		val subject = "$title $timestamp"
 
 		// Create the attachment URI
 		val attachmentUri = FileProvider.getUriForFile(
-			requireContext(),
+			context,
 			"com.nfcalarmclock.fileprovider",
 			File(attachmentPath))
 
@@ -447,9 +448,7 @@ class NacStatisticsSettingFragment
 		}
 
 		// Check if can resolve the package manager? Not sure what this really does
-		val packageManager = requireContext().packageManager
-
-		if (intent.resolveActivity(packageManager) != null)
+		if (intent.resolveActivity(context.packageManager) != null)
 		{
 			// Start the activity
 			startActivity(intent)

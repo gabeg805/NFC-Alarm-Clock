@@ -5,6 +5,12 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.6.4</item>
+		<item>Fixed issue when using &lt;b>NFC&lt;/b> to dismiss an alarm or timer, but the &lt;b>dismiss order&lt;/b> options had also been set.</item>
+		<item>Fixed issue where using &lt;b>flashlight blink&lt;/b> would cause a crash.</item>
+		<item>Fixed various &lt;b>timer&lt;/b> UI issues.</item>
+		<item>Added a &lt;b>save button&lt;/b> when adding &lt;b>timer&lt;/b>, so that you are not forced to start a timer immediately in order to save it.</item>
+		<item>Improved how the &lt;b>alarm&lt;/b> and &lt;b>timer&lt;/b> screens look for low pixel density devices.</item>
 		<item>12.6.3</item>
 		<item>Reworked how the &lt;b>NFC options&lt;/b> dialog looks so that it is all consolidated in one screen.</item>
 		<item>Fixed issue when trying to &lt;b>dismiss &lt;/b> with &lt;b>NFC&lt;/b>.</item>

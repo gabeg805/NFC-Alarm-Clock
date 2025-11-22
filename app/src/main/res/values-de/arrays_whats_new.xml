@@ -5,6 +5,12 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.6.4</item>
+		<item>Problem behoben, bei dem ein Alarm oder Timer über &lt;b>NFC&lt;/b> abgebrochen werden konnte, wenn die Option &lt;b>Abbruchreihenfolge&lt;/b> ebenfalls aktiviert war.</item>
+		<item>Problem behoben, bei dem die Verwendung von &lt;b>Taschenlampenblinken&lt;/b> zu einem Absturz führte.</item>
+		<item>Diverse &lt;b>timer&lt;/b> UI Probleme wurden behoben.</item>
+		<item>Beim Hinzufügen eines Timers wurde eine &lt;b>Speichern-Schaltfläche&lt;/b> hinzugefügt, damit Sie den Timer nicht sofort starten müssen, um ihn zu speichern.</item>
+		<item>Verbesserte Darstellung der &lt;b>alarm&lt;/b> und &lt;b>timer&lt;/b>-Bildschirme auf Geräten mit niedriger Pixeldichte.</item>
 		<item>12.6.3</item>
 		<item>Das Aussehen des &lt;b>NFC-Optionen&lt;/b>-Dialogs wurde überarbeitet, sodass nun alles auf einem Bildschirm zusammengefasst ist.</item>
 		<item>Problem behoben beim Versuch, &lt;b>dismiss&lt;/b> mit &lt;b>NFC&lt;/b> zu senden.</item>

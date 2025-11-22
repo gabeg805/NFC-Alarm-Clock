@@ -131,6 +131,11 @@ class NacMainActivity
 	private var wasBottomNavigationSelectedByUser: Boolean = true
 
 	/**
+	 * What's new dialog. If it is set, then the dialog is currently being shown.
+	 */
+	private var whatsNewDialog: NacWhatsNewDialog? = null
+
+	/**
 	 * Check if the What's New dialog should be shown.
 	 */
 	private val shouldShowWhatsNewDialog: Boolean
@@ -139,14 +144,16 @@ class NacMainActivity
 			// Get the previous version
 			val previousVersion = sharedPreferences.previousAppVersion
 
-			// Only show the dialog if the current version and the previously
-			// saved version do not match.
+			// Only show the dialog if the current version and the previously saved
+			// version do not match, and there is not already a dialog being shown.
 			//
 			// This does not apply to a newly installed app, in which case the
 			// previously saved version is empty. Do not show the What's New
 			// dialog to a person that just installed the app because they
 			// probably do not care
-			return previousVersion.isNotEmpty() && (BuildConfig.VERSION_NAME != previousVersion)
+			return previousVersion.isNotEmpty()
+				&& (BuildConfig.VERSION_NAME != previousVersion)
+				&& (whatsNewDialog == null)
 		}
 
 	/**
@@ -536,6 +543,7 @@ class NacMainActivity
 		// Setup NFC
 		setupNfc()
 		attemptToHandleNfcScanEvent()
+		setupWasNfcJustScannedToDismiss()
 
 		// Register the shutdown receiver
 		registerMyShutdownBroadcastReceiver(this, shutdownBroadcastReceiver)
@@ -546,17 +554,27 @@ class NacMainActivity
 			println("addAlarmFromSetAlarmIntent()")
 			addAlarmFromSetAlarmIntent()
 		}
-
 		// Add timer that was created from the SET_TIMER intent
-		if (intent.action == AlarmClock.ACTION_SET_TIMER)
+		else if (intent.action == AlarmClock.ACTION_SET_TIMER)
 		{
 			println("addTimerFromSetTimerIntent()")
 			addTimerFromSetTimerIntent()
 		}
-
-		// Setup
-		setupInitialDialogToShow()
-		setupWasNfcJustScannedToDismiss()
+		// Show alarms
+		else if (intent.action == AlarmClock.ACTION_SHOW_ALARMS)
+		{
+			navController.navigate(R.id.action_global_nacShowAlarmsFragment)
+		}
+		// Show timers
+		else if (intent.action == AlarmClock.ACTION_SHOW_TIMERS)
+		{
+			navController.navigate(R.id.action_global_nacShowTimersFragment)
+		}
+		// Setup intial dialog to show
+		else
+		{
+			setupInitialDialogToShow()
+		}
 
 		// Refresh widgets
 		refreshAppWidgets(this)
@@ -720,12 +738,15 @@ class NacMainActivity
 		else if (shouldShowWhatsNewDialog && delayCounter == 0)
 		{
 			// Show the What's New dialog
-			NacWhatsNewDialog.show(supportFragmentManager,
+			whatsNewDialog = NacWhatsNewDialog.show(supportFragmentManager,
 				listener = {
 
 					// Set the previous app version as the current version. This way, the What's
 					// New dialog does not show again
 					sharedPreferences.previousAppVersion = BuildConfig.VERSION_NAME
+
+					// Clear the whats new dialog
+					whatsNewDialog = null
 
 				})
 		}
