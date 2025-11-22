@@ -4,7 +4,6 @@
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:layout_margin="@dimen/medium"
 	android:orientation="vertical">
 
 	<ScrollView
@@ -15,7 +14,8 @@
 
 		<RelativeLayout
 			android:layout_width="match_parent"
-			android:layout_height="wrap_content">
+			android:layout_height="wrap_content"
+			android:padding="@dimen/medium">
 
 			<!-- Dismissed alarms -->
 			<TextView
@@ -218,9 +218,9 @@
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:layout_alignParentBottom="true"
-				android:layout_marginTop="@dimen/medium"
-				android:layout_marginBottom="@dimen/medium"
-				android:gravity="center_horizontal"
+				android:layout_below="@id/current_alarms_title"
+				android:paddingTop="@dimen/medium"
+				android:gravity="center_horizontal|bottom"
 				android:layout_centerHorizontal="true"
 				android:textSize="@dimen/tsz_small"
 				android:textStyle="italic"
@@ -236,6 +236,7 @@
 		android:layout_height="wrap_content"
 		android:layout_marginTop="@dimen/tiny"
 		android:layout_marginBottom="@dimen/tiny"
+		android:layout_marginHorizontal="@dimen/medium"
 		android:backgroundTint="?attr/colorAccent"
 		android:text="@string/action_email"
 		app:cornerRadius="@dimen/tiny"
@@ -248,6 +249,8 @@
 		android:id="@+id/reset_button"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
+		android:layout_marginBottom="@dimen/medium"
+		android:layout_marginHorizontal="@dimen/medium"
 		android:backgroundTint="@color/gray"
 		android:text="@string/action_reset"
 		app:cornerRadius="@dimen/tiny"
