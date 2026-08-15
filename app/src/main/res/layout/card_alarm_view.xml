@@ -318,7 +318,7 @@
 					android:checkable="true"
 					app:backgroundTint="@android:color/transparent"
 					app:iconTint="@color/card_toggle_button"
-					app:icon="@drawable/tap_and_play"
+					app:icon="@drawable/nfc_32"
 					/>
 
 				<!-- Flashlight -->

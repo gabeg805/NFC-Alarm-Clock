@@ -6,6 +6,11 @@
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
 		<item>12.6.5-beta</item>
+		<item>Updated to support &lt;b>Android 16&lt;/b>.</item>
+		<item>Updated &lt;b>widget&lt;/b> so the date follows the locale format.</item>
+		<item>Improved &lt;b>alarm card&lt;/b> to allow swiping to copy/delete when the card is expanded.</item>
+		<item>Improved &lt;b>set date&lt;/b> so the time is also saved when the date is set.</item>
+		<item>Improved &lt;b>missed alarm&lt;/b> notification so it shows the name and time of the alarm that was missed.</item>
 		<item>12.6.4</item>
 		<item>Fixed issue when using &lt;b>NFC&lt;/b> to dismiss an alarm or timer, but the &lt;b>dismiss order&lt;/b> options had also been set.</item>
 		<item>Fixed issue where using &lt;b>flashlight blink&lt;/b> would cause a crash.</item>
