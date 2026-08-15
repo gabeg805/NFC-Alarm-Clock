@@ -1,14 +1,16 @@
 package com.nfcalarmclock.system.permission
 
 import android.annotation.SuppressLint
-import android.app.AlertDialog
-import android.app.Dialog
 import android.content.DialogInterface
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import com.google.android.material.button.MaterialButton
 import com.nfcalarmclock.R
-import com.nfcalarmclock.view.dialog.NacDialogFragment
+import com.nfcalarmclock.view.dialog.NacBottomSheetDialogFragment
 import com.nfcalarmclock.view.toSpannedString
 import com.nfcalarmclock.view.toThemedBold
 
@@ -16,11 +18,11 @@ import com.nfcalarmclock.view.toThemedBold
  * Generic dialog for requesting permissions.
  */
 abstract class NacPermissionRequestDialog
-	: NacDialogFragment()
+	: NacBottomSheetDialogFragment()
 {
 
 	/**
-	 * Listener for when what's new dialog has been read.
+	 * Listener for the permission request.
 	 */
 	@Suppress("Unused")
 	interface OnPermissionRequestListener
@@ -30,9 +32,9 @@ abstract class NacPermissionRequestDialog
 	}
 
 	/**
-	 * The ID of the layout.
+	 * The ID of the icon.
 	 */
-	abstract val layoutId: Int
+	abstract val iconId: Int
 
 	/**
 	 * The ID of the title string.
@@ -40,9 +42,9 @@ abstract class NacPermissionRequestDialog
 	abstract val titleId: Int
 
 	/**
-	 * The ID of the text string.
+	 * The ID of the description string.
 	 */
-	open val textId: Int = 0
+	abstract val descriptionId: Int
 
 	/**
 	 * The name of the permission.
@@ -90,43 +92,55 @@ abstract class NacPermissionRequestDialog
 	}
 
 	/**
-	 * Called when the dialog is created.
+	 * Called when the creating the view.
 	 */
-	override fun onCreateDialog(savedInstanceState: Bundle?): Dialog
+	override fun onCreateView(
+		inflater: LayoutInflater,
+		container: ViewGroup?,
+		savedInstanceState: Bundle?
+	): View?
 	{
-		// Setup the shared preferences
-		setupSharedPreferences()
-
-		// Build the dialog
-		return AlertDialog.Builder(requireContext())
-			.setPositiveButton(R.string.action_ok) { _, _ ->
-				doPermissionRequestAccepted()
-			}
-			.setNegativeButton(R.string.action_cancel) { _, _ ->
-				doPermissionRequestCanceled()
-			}
-			.setTitle(titleId)
-			.setView(layoutId)
-			.create()
+		return inflater.inflate(R.layout.dlg_request_permission, container, false)
 	}
 
 	/**
-	 * Called when the fragment is resumed.
+	 * Called when the view has been created.
 	 */
-	override fun onResume()
+	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
 	{
 		// Super
-		super.onResume()
+		super.onViewCreated(view, savedInstanceState)
 
-		// Get the textview
-		val textView: TextView = dialog!!.findViewById(R.id.request_summary)
+		// Get the theme color
+		val themeColor = sharedPreferences.themeColor
 
-		// Get the text and theme color
-		val text = resources.getString(textId)
-		val themeColor = sharedPreferences!!.themeColor
+		// Get the views
+		val imageView: ImageView = view.findViewById(R.id.request_icon)
+		val titleView: TextView = view.findViewById(R.id.request_title)
+		val descriptionView: TextView = view.findViewById(R.id.request_description)
+		val okButton: MaterialButton = view.findViewById(R.id.request_ok_button)
+		val skipButton: MaterialButton = view.findViewById(R.id.request_skip_button)
 
-		// Theme the text
-		textView.text = text.toThemedBold(themeColor).toSpannedString()
+		// Setup the views
+		imageView.setImageResource(iconId)
+		titleView.setText(titleId)
+
+		// Color the summary text with the theme color
+		descriptionView.text = resources.getString(descriptionId)
+			.toThemedBold(themeColor)
+			.toSpannedString()
+
+		// Setup the ok button
+		setupPrimaryButton(okButton, listener = {
+			doPermissionRequestAccepted()
+			dismiss()
+		})
+
+		// Setup the skip button
+		setupSecondaryButton(skipButton, listener = {
+			doPermissionRequestCanceled()
+			dismiss()
+		})
 	}
 
 	/**
@@ -150,8 +164,9 @@ abstract class NacPermissionRequestDialog
 	private fun setupPageInfo()
 	{
 		// Get the separate and number of pages views
-		val separator = dialog!!.findViewById<View>(R.id.request_separator)
-		val pages = dialog!!.findViewById<View>(R.id.request_pages)
+		val dummy: View = dialog!!.findViewById(R.id.request_dummy)
+		val separator: View = dialog!!.findViewById(R.id.request_separator)
+		val pages: View = dialog!!.findViewById(R.id.request_pages)
 
 		// Show page information
 		if (totalNumberOfPages > 1)
@@ -170,7 +185,8 @@ abstract class NacPermissionRequestDialog
 		}
 		else
 		{
-			// Make the separate and pages disappear
+			// Make the dummy view show up for spacing and separate and pages disappear
+			dummy.visibility = View.INVISIBLE
 			separator.visibility = View.GONE
 			pages.visibility = View.GONE
 		}

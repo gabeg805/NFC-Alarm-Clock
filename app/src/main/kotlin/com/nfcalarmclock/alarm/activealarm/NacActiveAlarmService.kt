@@ -29,6 +29,7 @@ import com.nfcalarmclock.system.enableActivityAlias
 import com.nfcalarmclock.system.getAlarm
 import com.nfcalarmclock.system.scheduler.NacScheduler
 import com.nfcalarmclock.view.quickToast
+import com.nfcalarmclock.widget.partiallyUpdateAllWidgets
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -225,6 +226,9 @@ class NacActiveAlarmService
 
 			// Restart any other active alarm or stop the service
 			restartOtherActiveAlarmOrStop(R.string.message_alarm_dismiss)
+
+			// Refresh widgets
+			partiallyUpdateAllWidgets(this@NacActiveAlarmService)
 
 		}
 	}
@@ -497,7 +501,7 @@ class NacActiveAlarmService
 
 		// Start the service in the foreground
 		showForegroundNotification {
-			startForeground(NacActiveAlarmNotification.ID, notification.build())
+			startForeground(notification.id, notification.build())
 		}
 	}
 
@@ -511,7 +515,7 @@ class NacActiveAlarmService
 
 		// Start the service in the foreground
 		showForegroundNotification {
-			startForeground(NacSkipAlarmNotification.ID, notification.build())
+			startForeground(notification.id, notification.build())
 		}
 	}
 
@@ -544,6 +548,9 @@ class NacActiveAlarmService
 
 			// Restart any other active alarm or stop the service
 			restartOtherActiveAlarmOrStop(R.string.message_alarm_snooze)
+
+			// Refresh widgets
+			partiallyUpdateAllWidgets(this@NacActiveAlarmService)
 
 		}
 	}
@@ -749,6 +756,7 @@ class NacActiveAlarmService
 		 */
 		fun dismissAlarmService(context: Context, alarm: NacAlarm?)
 		{
+			// TODO: If there are crashes due to foreground, maybe this is causing it?
 			// Create an intent with the alarm service
 			val intent = getDismissIntent(context, alarm)
 

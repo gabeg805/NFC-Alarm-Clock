@@ -16,25 +16,22 @@ class NacScheduleExactAlarmPermissionRequestDialog
 	/**
 	 * The name of the permission.
 	 */
-	override val permission: String
-		get() = NacScheduleExactAlarmPermission.permissionName
+	override val permission: String = NacScheduleExactAlarmPermission.permissionName
 
 	/**
-	 * The ID of the layout.
+	 * The ID of the icon.
 	 */
-	override val layoutId: Int
-		get() = R.layout.dlg_request_schedule_exact_alarm_permission
+	override val iconId: Int = R.drawable.schedule
 
 	/**
 	 * The ID of the title string.
 	 */
-	override val titleId: Int
-		get() = R.string.title_request_permission_schedule_exact_alarm
+	override val titleId: Int = R.string.title_request_permission_schedule_exact_alarm
 
 	/**
 	 * The ID of the text string.
 	 */
-	override val textId: Int = R.string.message_permission_schedule_exact_alarm_request
+	override val descriptionId: Int = R.string.message_permission_schedule_exact_alarm_request
 
 	/**
 	 * The actions to execute when the permission request is accepted.
@@ -42,7 +39,7 @@ class NacScheduleExactAlarmPermissionRequestDialog
 	override fun doPermissionRequestAccepted()
 	{
 		// Set the flag that the permission was requested
-		sharedPreferences!!.wasScheduleExactAlarmPermissionRequested = true
+		sharedPreferences.wasScheduleExactAlarmPermissionRequested = true
 
 		// Call the accepeted listeners
 		super.doPermissionRequestAccepted()
@@ -54,7 +51,7 @@ class NacScheduleExactAlarmPermissionRequestDialog
 	override fun doPermissionRequestCanceled()
 	{
 		// Set the flag that the permission was requested
-		sharedPreferences!!.wasScheduleExactAlarmPermissionRequested = true
+		sharedPreferences.wasScheduleExactAlarmPermissionRequested = true
 
 		// Call the accepeted listeners
 		super.doPermissionRequestCanceled()

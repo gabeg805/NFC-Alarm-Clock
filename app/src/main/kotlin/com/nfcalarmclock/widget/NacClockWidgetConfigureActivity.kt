@@ -1139,7 +1139,7 @@ class NacClockWidgetConfigureActivity : AppCompatActivity()
 	{
 		// It is the responsibility of the configuration activity to update the app widget
 		val appWidgetManager = AppWidgetManager.getInstance(this)
-		updateAppWidget(this, appWidgetManager, appWidgetId)
+		refreshWidget(this, appWidgetManager, appWidgetId)
 
 		// Make sure we pass back the original appWidgetId
 		val resultValue = Intent()

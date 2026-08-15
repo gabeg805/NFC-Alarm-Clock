@@ -5,16 +5,24 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
 import android.provider.AlarmClock
 import android.view.View
+import android.view.ViewGroup
 import androidx.activity.viewModels
 import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.net.toUri
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.insets.ColorProtection
+import androidx.core.view.insets.ProtectionLayout
+import androidx.core.view.updateLayoutParams
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
 import androidx.navigation.fragment.NavHostFragment
@@ -58,7 +66,6 @@ import com.nfcalarmclock.view.setupRippleColor
 import com.nfcalarmclock.view.setupThemeColor
 import com.nfcalarmclock.view.slideUp
 import com.nfcalarmclock.whatsnew.NacWhatsNewDialog
-import com.nfcalarmclock.widget.refreshAppWidgets
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.io.File
@@ -548,36 +555,41 @@ class NacMainActivity
 		// Register the shutdown receiver
 		registerMyShutdownBroadcastReceiver(this, shutdownBroadcastReceiver)
 
-		// Add alarm that was created from the SET_ALARM intent
-		if (intent.action == AlarmClock.ACTION_SET_ALARM)
+		// Determine which intent action to do
+		when (intent.action)
 		{
-			println("addAlarmFromSetAlarmIntent()")
-			addAlarmFromSetAlarmIntent()
-		}
-		// Add timer that was created from the SET_TIMER intent
-		else if (intent.action == AlarmClock.ACTION_SET_TIMER)
-		{
-			println("addTimerFromSetTimerIntent()")
-			addTimerFromSetTimerIntent()
-		}
-		// Show alarms
-		else if (intent.action == AlarmClock.ACTION_SHOW_ALARMS)
-		{
-			navController.navigate(R.id.action_global_nacShowAlarmsFragment)
-		}
-		// Show timers
-		else if (intent.action == AlarmClock.ACTION_SHOW_TIMERS)
-		{
-			navController.navigate(R.id.action_global_nacShowTimersFragment)
-		}
-		// Setup intial dialog to show
-		else
-		{
-			setupInitialDialogToShow()
-		}
+			// Add alarm that was created from the SET_ALARM intent
+			AlarmClock.ACTION_SET_ALARM ->
+			{
+				println("addAlarmFromSetAlarmIntent()")
+				addAlarmFromSetAlarmIntent()
+			}
 
-		// Refresh widgets
-		refreshAppWidgets(this)
+			// Add timer that was created from the SET_TIMER intent
+			AlarmClock.ACTION_SET_TIMER ->
+			{
+				println("addTimerFromSetTimerIntent()")
+				addTimerFromSetTimerIntent()
+			}
+
+			// Show alarms
+			AlarmClock.ACTION_SHOW_ALARMS ->
+			{
+				navController.navigate(R.id.action_global_nacShowAlarmsFragment)
+			}
+
+			// Show timers
+			AlarmClock.ACTION_SHOW_TIMERS ->
+			{
+				navController.navigate(R.id.action_global_nacShowTimersFragment)
+			}
+
+			// Setup intial dialog to show
+			else ->
+			{
+				setupInitialDialogToShow()
+			}
+		}
 	}
 
 	/**
@@ -656,14 +668,39 @@ class NacMainActivity
 			return
 		}
 
-		// TODO: Can maybe customize this more when going up to API 36, but for now opting out
-		// Set edge to edge color of top status bar
-		//findViewById<ProtectionLayout>(R.id.protection_layout)
-		//	.setProtections(
-		//		listOf(
-		//			ColorProtection(WindowInsetsCompat.Side.TOP, Color.BLACK)
-		//		)
-		//	)
+		// Get the views
+		val protectionLayout: ProtectionLayout = findViewById(R.id.protection_layout)
+		val constraintLayout: ConstraintLayout = findViewById(R.id.constraint_layout)
+
+		// Set the color of the protection view so that the status and navigation bar appear
+		// black
+		protectionLayout.setProtections(
+				listOf(
+					ColorProtection(WindowInsetsCompat.Side.TOP, Color.BLACK),
+					ColorProtection(WindowInsetsCompat.Side.BOTTOM, Color.BLACK),
+				)
+			)
+
+		// Set the margin of the constraint view, which is inside the protection view, so
+		// that the window insets are handled
+		ViewCompat.setOnApplyWindowInsetsListener(constraintLayout) { v, windowInsets ->
+
+			// Get the insets
+			val insets = windowInsets.getInsets(WindowInsetsCompat.Type.systemBars())
+
+			// Apply the insets as a margin to the view
+			v.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+				topMargin = insets.top
+				bottomMargin = insets.bottom
+				leftMargin = insets.left
+				rightMargin = insets.right
+			}
+			//println("Top : ${insets.top} | Bottom : ${insets.bottom} | Left : ${insets.left} | Right : ${insets.right}")
+			//v.setPadding(insets.left, insets.top, insets.right, insets.bottom)
+
+			// Return CONSUMED so that window insets do not propagate down to descendant views
+			WindowInsetsCompat.CONSUMED
+		}
 	}
 
 	/**
@@ -780,7 +817,7 @@ class NacMainActivity
 	private fun setupNavController()
 	{
 		// Destination changed listener
-		navController.addOnDestinationChangedListener { controller, destination, arguments ->
+		navController.addOnDestinationChangedListener { _, destination, _ ->
 
 			// Set the visibility of the settings menu button in the toolbar
 			val settingsMenuItem = toolbar.menu.findItem(R.id.menu_settings)

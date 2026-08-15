@@ -36,11 +36,18 @@ class NacDateAndTimePickerDialog
 	}
 
 	/**
-	 * Listener for when the date is selected.
+	 * Listener for when the date and time is selected.
 	 */
-	fun interface OnDateSelectedListener
+	fun interface OnDateAndTimeSelectedListener
 	{
-		fun onDateSelected(datePicker: DatePicker, year: Int, month: Int, dayOfMonth: Int)
+		fun onDateAndTimeSelected(
+			datePicker: DatePicker,
+			timePicker: TimePicker,
+			year: Int,
+			month: Int,
+			dayOfMonth: Int,
+			hour: Int,
+			minute: Int)
 	}
 
 	/**
@@ -48,7 +55,10 @@ class NacDateAndTimePickerDialog
 	 */
 	fun interface OnTimeSelectedListener
 	{
-		fun onTimeSelected(timePicker: TimePicker, hour: Int, minute: Int)
+		fun onTimeSelected(
+			timePicker: TimePicker,
+			hour: Int,
+			minute: Int)
 	}
 
 	/**
@@ -74,7 +84,7 @@ class NacDateAndTimePickerDialog
 	/**
 	 * Date selected listener.
 	 */
-	var onDateSelectedListener: OnDateSelectedListener? = null
+	var onDateAndTimeSelectedListener: OnDateAndTimeSelectedListener? = null
 
 	/**
 	 * Time selected listener.
@@ -191,15 +201,23 @@ class NacDateAndTimePickerDialog
 			if (timePicker.isVisible)
 			{
 				// Call the listener
-				onTimeSelectedListener?.onTimeSelected(timePicker, timePicker.hour,
+				onTimeSelectedListener?.onTimeSelected(
+					timePicker,
+					timePicker.hour,
 					timePicker.minute)
 			}
 			// Date picker is visible
 			else
 			{
 				// Call the listener
-				onDateSelectedListener?.onDateSelected(datePicker, datePicker.year,
-					datePicker.month, datePicker.dayOfMonth)
+				onDateAndTimeSelectedListener?.onDateAndTimeSelected(
+					datePicker,
+					timePicker,
+					datePicker.year,
+					datePicker.month,
+					datePicker.dayOfMonth,
+					timePicker.hour,
+					timePicker.minute)
 			}
 
 			// Dismiss the dialog
@@ -297,7 +315,7 @@ class NacDateAndTimePickerDialog
 		fun create(
 			alarm: NacAlarm,
 			onDateClearedListener: (DatePicker) -> Unit = { },
-			onDateSelectedListener: (DatePicker, Int, Int, Int) -> Unit = { _, _, _, _ -> },
+			onDateAndTimeSelectedListener: (DatePicker, TimePicker, Int, Int, Int, Int, Int) -> Unit = { _, _, _, _, _, _, _ -> },
 			onTimeSelectedListener: (TimePicker, Int, Int) -> Unit = { _, _, _ -> },
 		): NacDateAndTimePickerDialog
 		{
@@ -314,13 +332,13 @@ class NacDateAndTimePickerDialog
 			}
 
 			// Set the date set listener
-			dialog.onDateSelectedListener = OnDateSelectedListener { datePicker, year, month, day ->
-				onDateSelectedListener(datePicker, year, month, day)
+			dialog.onDateAndTimeSelectedListener = OnDateAndTimeSelectedListener { datePicker, timePicker, year, month, day, hour, min ->
+				onDateAndTimeSelectedListener(datePicker, timePicker, year, month, day, hour, min)
 			}
 
 			// Set the time listener
-			dialog.onTimeSelectedListener = OnTimeSelectedListener { timePicker, hr, min ->
-				onTimeSelectedListener(timePicker, hr, min)
+			dialog.onTimeSelectedListener = OnTimeSelectedListener { timePicker, hour, min ->
+				onTimeSelectedListener(timePicker, hour, min)
 			}
 
 			return dialog

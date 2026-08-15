@@ -19,9 +19,9 @@ class NacPostNotificationsPermissionRequestDialog
 	override val permission: String = NacPostNotificationsPermission.permissionName
 
 	/**
-	 * The ID of the layout.
+	 * The ID of the icon.
 	 */
-	override val layoutId: Int = R.layout.dlg_request_post_notifications_permission
+	override val iconId: Int = R.drawable.notifications
 
 	/**
 	 * The ID of the title string.
@@ -31,7 +31,7 @@ class NacPostNotificationsPermissionRequestDialog
 	/**
 	 * The ID of the text string.
 	 */
-	override val textId: Int = R.string.message_permission_post_notifications_request
+	override val descriptionId: Int = R.string.message_permission_post_notifications_request
 
 	/**
 	 * The actions to execute when the permission request is accepted.
@@ -39,7 +39,7 @@ class NacPostNotificationsPermissionRequestDialog
 	override fun doPermissionRequestAccepted()
 	{
 		// Set the flag that the permission was requested
-		sharedPreferences!!.wasPostNotificationsPermissionRequested = true
+		sharedPreferences.wasPostNotificationsPermissionRequested = true
 
 		// Call the accepeted listeners
 		super.doPermissionRequestAccepted()
@@ -51,7 +51,7 @@ class NacPostNotificationsPermissionRequestDialog
 	override fun doPermissionRequestCanceled()
 	{
 		// Set the flag that the permission was requested
-		sharedPreferences!!.wasPostNotificationsPermissionRequested = true
+		sharedPreferences.wasPostNotificationsPermissionRequested = true
 
 		// Call the canceled listeners
 		super.doPermissionRequestCanceled()

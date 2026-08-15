@@ -8,9 +8,6 @@ import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.NacGenericAlarmOptionsDialog
 import com.nfcalarmclock.system.NacCalendar.Day
-import com.nfcalarmclock.system.NacCalendar.alarmToCalendar
-import com.nfcalarmclock.system.toCalendarDay
-import com.nfcalarmclock.system.toDay
 import com.nfcalarmclock.view.calcAlpha
 import com.nfcalarmclock.view.dayofweek.NacDayOfWeek
 import com.nfcalarmclock.view.dayofweek.NacDayOfWeek.OnWeekChangedListener
@@ -18,7 +15,6 @@ import com.nfcalarmclock.view.performHapticFeedback
 import com.nfcalarmclock.view.setTextFromIndex
 import com.nfcalarmclock.view.setupInputLayoutColor
 import com.nfcalarmclock.view.setupRippleColor
-import java.util.Calendar
 import java.util.EnumSet
 
 /**
@@ -126,36 +122,6 @@ class NacRepeatOptionsDialog
 	}
 
 	/**
-	 * Get next alarm day.
-	 */
-	private fun getNextAlarmDay(alarm: NacAlarm): Day
-	{
-		// Get the current time
-		val now = Calendar.getInstance()
-
-		// Build the alarm calendar instance
-		val alarmCal = alarmToCalendar(alarm)
-		alarmCal[Calendar.DAY_OF_WEEK] = Day.TODAY.toCalendarDay()
-
-		// Alarm will occur in the future
-		return if (alarmCal.after(now))
-		{
-			Day.TODAY
-		}
-		// Alarm is in the past
-		else
-		{
-			// Increment today to tomorrow
-			now.add(Calendar.DAY_OF_MONTH, 1)
-
-			// Get tomorrow as a day
-			val tomorrow = now.get(Calendar.DAY_OF_WEEK)
-
-			return tomorrow.toDay()
-		}
-	}
-
-	/**
 	 * Called when the Ok button is clicked.
 	 */
 	override fun onOkClicked(alarm: NacAlarm?)
@@ -245,9 +211,7 @@ class NacRepeatOptionsDialog
 		// Set the default selected values
 		selectedRepeatFrequencyValue = a.repeatFrequency
 		selectedRepeatFrequencyUnits = a.repeatFrequencyUnits
-		selectedDaysToRunBeforeFrequency = a.days.ifEmpty {
-				EnumSet.of(getNextAlarmDay(a))
-		}
+		selectedDaysToRunBeforeFrequency = a.days
 
 		// Setup the views
 		setupRepeatFrequency(a.repeatFrequency, a.repeatFrequencyUnits)

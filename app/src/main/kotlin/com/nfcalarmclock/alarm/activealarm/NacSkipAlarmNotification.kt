@@ -34,8 +34,7 @@ class NacSkipAlarmNotification(
 	/**
 	 * @see NacBaseNotificationBuilder.id
 	 */
-	override val id: Int
-		get() = ID
+	override val id: Int = 49
 
 	/**
 	 * @see NacBaseNotificationBuilder.channelName
@@ -137,16 +136,6 @@ class NacSkipAlarmNotification(
 		channel.setSound(null, null)
 
 		return channel
-	}
-
-	companion object
-	{
-
-		/**
-		 * Notification ID.
-		 */
-		const val ID = 49
-
 	}
 
 }

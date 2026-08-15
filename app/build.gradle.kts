@@ -27,16 +27,16 @@ if (keystorePropertiesFile.exists()) {
 android {
 
 	// Version to compile the SDK
-	compileSdk = 35
+	compileSdk = 36
 
 	defaultConfig {
 
 		// Default app stuff
 		applicationId = "com.nfcalarmclock"
 		minSdk = 24
-		targetSdk = 35
-		versionCode = 572
-		versionName = "12.6.4"
+		targetSdk = 36
+		versionCode = 573
+		versionName = "12.6.5-beta001"
 
 		// Set output filename
 		setProperty("archivesBaseName", "nfc_alarm_clock_v${versionName}")

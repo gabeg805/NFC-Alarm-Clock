@@ -5,6 +5,7 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.6.5-beta</item>
 		<item>12.6.4</item>
 		<item>Fixed issue when using &lt;b>NFC&lt;/b> to dismiss an alarm or timer, but the &lt;b>dismiss order&lt;/b> options had also been set.</item>
 		<item>Fixed issue where using &lt;b>flashlight blink&lt;/b> would cause a crash.</item>

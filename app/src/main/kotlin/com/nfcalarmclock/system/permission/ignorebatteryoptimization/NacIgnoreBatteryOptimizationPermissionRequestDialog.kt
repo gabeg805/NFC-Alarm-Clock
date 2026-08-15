@@ -11,12 +11,27 @@ class NacIgnoreBatteryOptimizationPermissionRequestDialog
 {
 
 	/**
+	 * The ID of the layout.
+	 */
+	override val iconId: Int = R.drawable.battery_alert
+
+	/**
+	 * The ID of the title string.
+	 */
+	override val titleId: Int = R.string.title_permission_disable_battery_optimization
+
+	/**
+	 * The ID of the text string.
+	 */
+	override val descriptionId = R.string.message_permission_ignore_battery_optimization_request
+
+	/**
 	 * The actions to execute when the permission request is accepted.
 	 */
 	override fun doPermissionRequestAccepted()
 	{
 		// Set the flag that the permission was requested
-		sharedPreferences!!.wasIgnoreBatteryOptimizationPermissionRequested = true
+		sharedPreferences.wasIgnoreBatteryOptimizationPermissionRequested = true
 
 		// Call the accepeted listeners
 		super.doPermissionRequestAccepted()
@@ -28,23 +43,11 @@ class NacIgnoreBatteryOptimizationPermissionRequestDialog
 	override fun doPermissionRequestCanceled()
 	{
 		// Set the flag that the permission was requested
-		sharedPreferences!!.wasIgnoreBatteryOptimizationPermissionRequested = true
+		sharedPreferences.wasIgnoreBatteryOptimizationPermissionRequested = true
 
 		// Call the accepeted listeners
 		super.doPermissionRequestCanceled()
 	}
-
-	/**
-	 * The ID of the layout.
-	 */
-	override val layoutId: Int
-		get() = R.layout.dlg_request_ignore_battery_optimization_permission
-
-	/**
-	 * The ID of the title string.
-	 */
-	override val titleId: Int
-		get() = R.string.title_permission_disable_battery_optimization
 
 	companion object
 	{

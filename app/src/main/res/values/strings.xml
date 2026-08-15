@@ -257,6 +257,7 @@
 	<string name="title_active_timers">Active timers</string>
 	<string name="title_upcoming_reminders">Upcoming reminders</string>
 	<string name="title_dismissed_alarms">Dismissed alarms</string>
+	<string name="title_missed_alarm">Missed alarm</string>
 	<string name="title_missed_alarms">Missed alarms</string>
 	<string name="title_snoozed_alarms">Snoozed alarms</string>
 	<string name="title_created_alarms">Created alarms</string>

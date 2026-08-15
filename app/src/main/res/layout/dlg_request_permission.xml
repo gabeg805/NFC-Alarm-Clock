@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	android:orientation="vertical"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	android:paddingTop="@dimen/normal"
+	android:paddingBottom="@dimen/normal"
+	android:paddingStart="@dimen/medium"
+	android:paddingEnd="@dimen/medium">
+
+	<ImageView
+		android:id="@+id/request_icon"
+		android:layout_width="@dimen/isz_medium"
+		android:layout_height="@dimen/isz_medium"
+		android:layout_gravity="center"
+		/>
+
+	<TextView
+		android:id="@+id/request_title"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginVertical="@dimen/small"
+		android:layout_gravity="center"
+		android:textColor="@color/white"
+		android:textSize="@dimen/tsz_large"
+		android:textStyle="bold"
+		/>
+
+	<TextView
+		style="@style/Widget.TextView.Primary"
+		android:id="@+id/request_description"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_gravity="center_vertical"
+		android:textAppearance="?android:attr/textAppearanceMedium"
+		/>
+
+	<!-- Dummy view -->
+	<View
+		android:id="@+id/request_dummy"
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/large"
+		android:visibility="gone"
+		/>
+
+	<!-- Separator -->
+	<View
+		android:id="@+id/request_separator"
+		android:layout_width="@dimen/isz_attention"
+		android:layout_height="@dimen/line"
+		android:layout_marginTop="@dimen/large"
+		android:layout_marginStart="@dimen/tiny"
+		android:layout_marginEnd="@dimen/tiny"
+		android:layout_gravity="center_horizontal"
+		android:background="@color/white"
+		/>
+
+	<!-- Permission # of # -->
+	<LinearLayout
+		android:id="@+id/request_pages"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_marginVertical="@dimen/tiny"
+		android:layout_gravity="center_horizontal"
+		android:orientation="horizontal">
+
+		<TextView
+			style="@style/Widget.TextView.Caption"
+			android:id="@+id/request_current_page"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="@dimen/tiny"
+			android:layout_gravity="center_horizontal"
+			android:textAppearance="?android:attr/textAppearanceSmall"
+			android:text=""
+			/>
+
+		<TextView
+			style="@style/Widget.TextView.Caption"
+			android:id="@+id/request_of_page"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="@dimen/tiny"
+			android:layout_gravity="center_horizontal"
+			android:textAppearance="?android:attr/textAppearanceSmall"
+			android:text="@string/word_of"
+			/>
+
+		<TextView
+			style="@style/Widget.TextView.Caption"
+			android:id="@+id/request_total_num_pages"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="@dimen/tiny"
+			android:layout_gravity="center_horizontal"
+			android:textAppearance="?android:attr/textAppearanceSmall"
+			android:text=""
+			/>
+	</LinearLayout>
+
+	<!-- Ok -->
+	<com.google.android.material.button.MaterialButton
+		android:id="@+id/request_ok_button"
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/touch"
+		android:backgroundTint="@color/orange"
+		android:textColor="@color/white"
+		android:text="@string/action_ok"
+		/>
+
+	<!-- Skip -->
+	<com.google.android.material.button.MaterialButton
+		android:id="@+id/request_skip_button"
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/touch"
+		android:backgroundTint="@color/gray_light"
+		android:textColor="@color/white"
+		android:text="@string/action_skip"
+		/>
+
+</LinearLayout>

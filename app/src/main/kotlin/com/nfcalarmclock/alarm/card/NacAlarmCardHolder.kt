@@ -483,12 +483,6 @@ class NacAlarmCardHolder(root: View)
 		get() = sharedPreferences.cardHeightExpanded
 
 	/**
-	 * Check if the alarm is in use.
-	 */
-	val isAlarmInUse: Boolean
-		get() = alarm!!.isInUse
-
-	/**
 	 * Check if the alarm card is collapsed.
 	 */
 	val isCollapsed: Boolean
@@ -1351,7 +1345,7 @@ class NacAlarmCardHolder(root: View)
 			nameButton.text = message
 		}
 
-		// Check if the alpha of the view is different than what it should be
+		// Check if the alpha of the view is different from what it should be
 		if (nameButton.alpha.compareTo(alpha) != 0)
 		{
 			// Set the new alpha

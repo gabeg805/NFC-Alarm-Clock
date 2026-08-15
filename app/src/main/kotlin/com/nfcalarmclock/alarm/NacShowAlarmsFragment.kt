@@ -85,7 +85,7 @@ import com.nfcalarmclock.system.unregisterMyReceiver
 import com.nfcalarmclock.view.performHapticFeedback
 import com.nfcalarmclock.view.quickToast
 import com.nfcalarmclock.view.showSnackbar
-import com.nfcalarmclock.widget.refreshAppWidgets
+import com.nfcalarmclock.widget.partiallyUpdateAllWidgets
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -756,6 +756,7 @@ class NacShowAlarmsFragment
 			card.onCardUpdatedListener = OnCardUpdatedListener { _, alarm ->
 				showNextAlarm(card, alarm)
 				updateAlarm(alarm)
+				partiallyUpdateAllWidgets(context)
 			}
 
 			// Time
@@ -766,9 +767,10 @@ class NacShowAlarmsFragment
 			// Switch
 			card.onCardSwitchChangedListener = OnCardSwitchChangedListener { _, alarm ->
 
-				// Show next alarm and update the alarm
+				// Show next alarm, update the alarm, and refresh widgets
 				showNextAlarm(card, alarm)
 				updateAlarm(alarm)
+				partiallyUpdateAllWidgets(context)
 
 				// Alarm was disabled
 				if (!alarm.isEnabled)
@@ -801,9 +803,10 @@ class NacShowAlarmsFragment
 			// Dismiss early
 			card.onCardDismissEarlyClickedListener = OnCardDismissEarlyClickedListener { _, alarm ->
 
-				// Show next alarm and update the alarm
+				// Show next alarm, update the alarm, and refersh widgets
 				showNextAlarm(card, alarm)
 				updateAlarm(alarm)
+				partiallyUpdateAllWidgets(context)
 
 				// Clear any notifications
 				NacDismissEarlyService.stopService(context, alarm)
@@ -815,6 +818,7 @@ class NacShowAlarmsFragment
 			card.onCardDaysChangedListener = OnCardDaysChangedListener { _, alarm ->
 				showNextAlarm(card, alarm)
 				updateAlarm(alarm)
+				partiallyUpdateAllWidgets(context)
 			}
 
 			// Repeat
@@ -1130,7 +1134,7 @@ class NacShowAlarmsFragment
 					|| (preAlarmTimeMillis != sharedPreferences.appNextAlarmTimeMillis))
 				{
 					// Refresh widgets
-					refreshAppWidgets(requireContext())
+					partiallyUpdateAllWidgets(requireContext())
 				}
 			}
 
@@ -1406,7 +1410,6 @@ class NacShowAlarmsFragment
 	 */
 	private fun showNextAlarm(card: NacAlarmCardHolder, alarm: NacAlarm)
 	{
-		println("Show next alarm() : ${alarm.hour}:${alarm.minute} | ${alarm.isEnabled}")
 		// Set the next alarm message and get the next alarm
 		val nextAlarm = setNextAlarmMessage()
 
@@ -1459,19 +1462,21 @@ class NacShowAlarmsFragment
 				// Refresh the schedule date views
 				card.refreshScheduleDateViews()
 
-				// Show the next alarm, update the alarm, and save the next alarm
+				// Show the next alarm, update the alarm, and refresh widgets
 				showNextAlarm(card, alarm)
 				updateAlarm(alarm)
+				partiallyUpdateAllWidgets(requireContext())
 
 			},
-			onDateSelectedListener = { _, year, month, day ->
+			onDateAndTimeSelectedListener = { _, _, year, month, day, hour, min ->
 
-				// Set the date
+				// Set the date and time
 				alarm.date = "$year-${month+1}-$day"
+				alarm.hour = hour
+				alarm.minute = min
 
-				// Enable the alarm and clear the repeat and skip next alarm flag
+				// Enable the alarm and clear the skip next alarm flag
 				alarm.isEnabled = true
-				alarm.shouldRepeat = false
 				alarm.shouldSkipNextAlarm = false
 
 				// Clear the dismiss early time
@@ -1479,19 +1484,22 @@ class NacShowAlarmsFragment
 
 				// Clear all the days
 				alarm.setDays(0)
+				alarm.repeatFrequencyDaysToRunBeforeStarting = NacCalendar.Day.NONE
 
-				// Refresh the schedule date views
+				// Refresh the schedule date and time views
 				card.refreshScheduleDateViews()
+				card.refreshTimeViews()
 
-				// Show the next alarm, update the alarm, and save the next alarm
+				// Show the next alarm, update the alarm, and refresh widgets
 				showNextAlarm(card, alarm)
 				updateAlarm(alarm)
+				partiallyUpdateAllWidgets(requireContext())
 
 			},
-			onTimeSelectedListener = { _, hr, min ->
+			onTimeSelectedListener = { _, hour, min ->
 
 				// Set the time
-				alarm.hour = hr
+				alarm.hour = hour
 				alarm.minute = min
 
 				// Enable the alarm and reset the skip next alarm flag
@@ -1504,9 +1512,10 @@ class NacShowAlarmsFragment
 				// Refresh the time views
 				card.refreshTimeViews()
 
-				// Show the next alarm, update the alarm, and save the next alarm
+				// Show the next alarm, update the alarm, and refresh widgets
 				showNextAlarm(card, alarm)
 				updateAlarm(alarm)
+				partiallyUpdateAllWidgets(requireContext())
 
 			})
 			.show(parentFragmentManager, NacDateAndTimePickerDialog.TAG)

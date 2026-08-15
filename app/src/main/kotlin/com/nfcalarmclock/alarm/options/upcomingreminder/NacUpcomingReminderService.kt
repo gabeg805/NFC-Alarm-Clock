@@ -64,8 +64,18 @@ class NacUpcomingReminderService
 		// Attempt to get the alarm from the intent
 		val alarm = intent?.getAlarm()
 
+		// Intent action
+		val intentAction = if (alarm == null)
+		{
+			ACTION_STOP_SERVICE
+		}
+		else
+		{
+			intent.action
+		}
+
 		// Check the intent action
-		when (intent?.action)
+		when (intentAction)
 		{
 
 			// Clear the reminder by stopping the service
@@ -85,19 +95,15 @@ class NacUpcomingReminderService
 			else ->
 			{
 				// Create the reminder notification
-				val notification = NacUpcomingReminderNotification(this, alarm)
+				val notification = NacUpcomingReminderNotification(this, alarm!!)
 
 				// Start the service in the foreground
 				showForegroundNotification {
 					startForeground(notification.id, notification.build())
 				}
 
-				// Check if alarm is not null
-				if (alarm != null)
-				{
-					// Start the reminder process
-					startReminderProcess(alarm)
-				}
+				// Start the reminder process
+				startReminderProcess(alarm)
 			}
 
 		}

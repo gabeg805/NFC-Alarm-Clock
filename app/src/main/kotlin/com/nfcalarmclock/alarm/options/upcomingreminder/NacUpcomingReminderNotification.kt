@@ -14,7 +14,6 @@ import com.nfcalarmclock.main.NacMainActivity
 import com.nfcalarmclock.system.NacCalendar
 import com.nfcalarmclock.view.notification.NacBaseNotificationBuilder
 import com.nfcalarmclock.view.toSpannedString
-import java.util.Calendar
 
 /**
  * Upcoming reminder notification indicating that an alarm will go off soon.
@@ -24,15 +23,15 @@ import java.util.Calendar
  */
 class NacUpcomingReminderNotification(
 	context: Context,
-	private val alarm: NacAlarm?
+	private val alarm: NacAlarm
 ) : NacBaseNotificationBuilder(context, "NacNotiChannelUpcoming")
 {
 
 	/**
 	 * @see NacBaseNotificationBuilder.id
 	 */
-	public override val id: Int
-		get() = BASE_ID + (alarm?.id?.toInt() ?: 0)
+	override val id: Int
+		get() = BASE_ID + alarm.id.toInt()
 
 	/**
 	 * @see NacBaseNotificationBuilder.channelName
@@ -65,29 +64,17 @@ class NacUpcomingReminderNotification(
 	override val contentText: String
 		get()
 		{
-			// Get the calendar of the alarm
-			val cal = if (alarm != null)
-			{
-				NacCalendar.getNextAlarmDay(alarm)!!
-			}
-			else
-			{
-				Calendar.getInstance()
-			}
-
-			// Get the full time from the calendar
+			// Get the full time of the alarm
+			val cal = NacCalendar.getNextAlarmDay(alarm)!!
 			val time = NacCalendar.getFullTime(context, cal)
 
-			// Get the alarm name
-			val name = alarm?.name ?: ""
-
-			return if (name.isEmpty())
+			return if (alarm.name.isEmpty())
 			{
 				time
 			}
 			else
 			{
-				"$time  —  $name"
+				"$time  —  ${alarm.name}"
 			}
 		}
 
@@ -141,7 +128,7 @@ class NacUpcomingReminderNotification(
 			.setShowWhen(true) as NacBaseNotificationBuilder)
 			.apply {
 				// Add a button to clear the recurring reminder notification
-				if ((alarm != null) && (alarm.reminderFrequency > 0))
+				if (alarm.reminderFrequency > 0)
 				{
 					addAction(R.drawable.dismiss, R.string.action_clear_reminder, clearReminderPendingIntent)
 				}

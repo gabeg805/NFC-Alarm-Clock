@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Build
+import android.text.format.DateFormat
 import android.util.TypedValue
 import android.view.View
 import android.widget.RemoteViews
@@ -16,6 +17,7 @@ import com.nfcalarmclock.main.NacMainActivity
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.NacCalendar
 import java.util.Calendar
+import java.util.Locale
 import java.util.TimeZone
 
 /**
@@ -25,6 +27,9 @@ import java.util.TimeZone
 class NacClockWidgetProvider : AppWidgetProvider()
 {
 
+	/**
+	 * Called when intent is received.
+	 */
 	override fun onReceive(context: Context, intent: Intent?)
 	{
 		// Super
@@ -37,7 +42,8 @@ class NacClockWidgetProvider : AppWidgetProvider()
 			|| (intent?.action == Intent.ACTION_LOCALE_CHANGED)
 			|| (intent?.action == AlarmManager.ACTION_NEXT_ALARM_CLOCK_CHANGED))
 		{
-			refreshAppWidgets(context)
+			// Refresh all widgets
+			refreshAllWidgets(context)
 		}
 	}
 
@@ -49,132 +55,199 @@ class NacClockWidgetProvider : AppWidgetProvider()
 		appWidgetManager: AppWidgetManager,
 		appWidgetIds: IntArray)
 	{
-		// Iterate over each widget
-		for (id in appWidgetIds)
-		{
-			// Update the widget
-			updateAppWidget(context, appWidgetManager, id)
-		}
+		// Partially update all widgets
+		partiallyUpdateAllWidgets(
+			context,
+			appWidgetManager = appWidgetManager,
+			appWidgetIds = appWidgetIds)
 	}
 
 }
 
 /**
- * Refresh the list of widgets.
+ * Partially update all the widgets.
  */
-internal fun refreshAppWidgets(context: Context)
+internal fun partiallyUpdateAllWidgets(
+	context: Context,
+	appWidgetManager: AppWidgetManager = AppWidgetManager.getInstance(context),
+	appWidgetIds: IntArray = appWidgetManager.getAppWidgetIds(ComponentName(context, NacClockWidgetProvider::class.java))
+)
 {
-	// Get the list of widget IDs
-	val componentName = ComponentName(context, NacClockWidgetProvider::class.java)
-	val appWidgetManager = AppWidgetManager.getInstance(context)
-	val appWidgetIds = appWidgetManager.getAppWidgetIds(componentName)
-
-	// Iterate over each widget ID and update it
 	for (id in appWidgetIds)
 	{
-		updateAppWidget(context, appWidgetManager, id)
+		partiallyUpdateWidget(context, appWidgetManager, id)
 	}
 }
 
 /**
- * Update an widget.
+ * Partially update a widget.
  */
-internal fun updateAppWidget(
+internal fun partiallyUpdateWidget(
 	context: Context,
 	appWidgetManager: AppWidgetManager,
-	appWidgetId: Int)
+	widgetId: Int
+)
 {
 	// Construct the RemoteViews object
 	val views = RemoteViews(context.packageName, R.layout.nac_clock_widget)
 
-	// Set on click pending intent
-	val pendingIntent = NacMainActivity.getStartPendingIntent(context)
-	views.setOnClickPendingIntent(R.id.widget_parent, pendingIntent)
+	// Build the clock widget helper
+	val helper = NacClockWidgetDataHelper(context)
 
-	// Get the clock widget helper
-	val shared = NacSharedPreferences(context)
-	val helper = NacClockWidgetDataHelper(context, shared)
+	// Update the widget
+	views.updateText(helper)
 
-	// Set view visibility
-	views.setViewVisibility(R.id.widget_time, helper.timeVis)
-	views.setViewVisibility(R.id.widget_hour, helper.hourVis)
-	views.setViewVisibility(R.id.widget_hour_bold, helper.hourBoldVis)
-	views.setViewVisibility(R.id.widget_minute, helper.minuteVis)
-	views.setViewVisibility(R.id.widget_minute_bold, helper.minuteBoldVis)
-	views.setViewVisibility(R.id.widget_am_pm, helper.meridianVis)
-	views.setViewVisibility(R.id.widget_am_pm_bold, helper.meridianBoldVis)
-	views.setViewVisibility(R.id.widget_date, helper.dateVis)
-	views.setViewVisibility(R.id.widget_date_bold, helper.dateBoldVis)
-	views.setViewVisibility(R.id.widget_alarm_icon, helper.alarmIconVis)
-	views.setViewVisibility(R.id.widget_alarm_icon_above, helper.alarmIconVis)
-	views.setViewVisibility(R.id.widget_alarm_icon_below, helper.alarmIconVis)
-	views.setViewVisibility(R.id.widget_alarm_time, helper.alarmVis)
-	views.setViewVisibility(R.id.widget_alarm_time_above, helper.alarmVis)
-	views.setViewVisibility(R.id.widget_alarm_time_below, helper.alarmVis)
-	views.setViewVisibility(R.id.widget_alarm_time_bold, helper.alarmBoldVis)
-	views.setViewVisibility(R.id.widget_alarm_time_bold_above, helper.alarmBoldVis)
-	views.setViewVisibility(R.id.widget_alarm_time_bold_below, helper.alarmBoldVis)
-	views.setViewVisibility(R.id.widget_alarm_same_line_as_date_container, helper.alarmPositionSameLineAsDateVis)
-	views.setViewVisibility(R.id.widget_alarm_above_container, helper.alarmPositionAboveDateVis)
-	views.setViewVisibility(R.id.widget_alarm_below_container, helper.alarmPositionBelowDateVis)
+	// Instruct the widget manager to partially update the widget
+	appWidgetManager.partiallyUpdateAppWidget(widgetId, views)
+}
 
-	// Set the gravity
-	views.setInt(R.id.widget_time, "setGravity", helper.gravity)
-	views.setInt(R.id.widget_alarm_date_inline_container, "setGravity", helper.gravity)
-	views.setInt(R.id.widget_alarm_above_container, "setGravity", helper.gravity)
-	views.setInt(R.id.widget_alarm_below_container, "setGravity", helper.gravity)
+/**
+ * Refresh all the widgets.
+ */
+internal fun refreshAllWidgets(
+	context: Context,
+	appWidgetManager: AppWidgetManager = AppWidgetManager.getInstance(context),
+	appWidgetIds: IntArray = appWidgetManager.getAppWidgetIds(ComponentName(context, NacClockWidgetProvider::class.java))
+)
+{
+	for (id in appWidgetIds)
+	{
+		refreshWidget(context, appWidgetManager, id)
+	}
+}
 
-	// Show alarm time
+/**
+ * Refresh a widget.
+ */
+internal fun refreshWidget(
+	context: Context,
+	appWidgetManager: AppWidgetManager = AppWidgetManager.getInstance(context),
+	widgetId: Int
+)
+{
+	// Construct the RemoteViews object
+	val views = RemoteViews(context.packageName, R.layout.nac_clock_widget)
+
+	// Build the clock widget helper
+	val helper = NacClockWidgetDataHelper(context)
+
+	// Refresh the widget
+	views.updateVisuals(context, helper)
+	views.updateText(helper)
+
+	// Instruct the widget manager to update the widget
+	appWidgetManager.updateAppWidget(widgetId, views)
+}
+
+/**
+ * Update the text of a RemoteView.
+ */
+internal fun RemoteViews.updateText(helper: NacClockWidgetDataHelper)
+{
+	// TODO: Update locale
+	// Alarm visible
 	if ((helper.alarmVis == View.VISIBLE) || (helper.alarmBoldVis == View.VISIBLE))
 	{
 		// Set the text
-		views.setTextViewText(R.id.widget_alarm_time, helper.nextAlarm)
-		views.setTextViewText(R.id.widget_alarm_time_above, helper.nextAlarm)
-		views.setTextViewText(R.id.widget_alarm_time_below, helper.nextAlarm)
-		views.setTextViewText(R.id.widget_alarm_time_bold, helper.nextAlarm)
-		views.setTextViewText(R.id.widget_alarm_time_bold_above, helper.nextAlarm)
-		views.setTextViewText(R.id.widget_alarm_time_bold_below, helper.nextAlarm)
+		this.setTextViewText(R.id.widget_alarm_time, helper.nextAlarm)
+		this.setTextViewText(R.id.widget_alarm_time_above, helper.nextAlarm)
+		this.setTextViewText(R.id.widget_alarm_time_below, helper.nextAlarm)
+		this.setTextViewText(R.id.widget_alarm_time_bold, helper.nextAlarm)
+		this.setTextViewText(R.id.widget_alarm_time_bold_above, helper.nextAlarm)
+		this.setTextViewText(R.id.widget_alarm_time_bold_below, helper.nextAlarm)
 	}
 
+	// Date visible
+	if ((helper.dateVis == View.VISIBLE) || (helper.dateBoldVis == View.VISIBLE))
+	{
+		this.setTextViewText(R.id.widget_date, helper.date)
+		this.setTextViewText(R.id.widget_date_bold, helper.date)
+	}
+}
+
+/**
+ * Update the visual attributes of a RemoteView.
+ */
+internal fun RemoteViews.updateVisuals(
+	context: Context,
+	helper: NacClockWidgetDataHelper
+)
+{
+	// Get the shared preferences
+	val shared = helper.sharedPreferences
+
+	// Set on click pending intent
+	val pendingIntent = NacMainActivity.getStartPendingIntent(context)
+	this.setOnClickPendingIntent(R.id.widget_parent, pendingIntent)
+
+	// Set view visibility
+	this.setViewVisibility(R.id.widget_time, helper.timeVis)
+	this.setViewVisibility(R.id.widget_hour, helper.hourVis)
+	this.setViewVisibility(R.id.widget_hour_bold, helper.hourBoldVis)
+	this.setViewVisibility(R.id.widget_minute, helper.minuteVis)
+	this.setViewVisibility(R.id.widget_minute_bold, helper.minuteBoldVis)
+	this.setViewVisibility(R.id.widget_am_pm, helper.meridianVis)
+	this.setViewVisibility(R.id.widget_am_pm_bold, helper.meridianBoldVis)
+	this.setViewVisibility(R.id.widget_date, helper.dateVis)
+	this.setViewVisibility(R.id.widget_date_bold, helper.dateBoldVis)
+	this.setViewVisibility(R.id.widget_alarm_icon, helper.alarmIconVis)
+	this.setViewVisibility(R.id.widget_alarm_icon_above, helper.alarmIconVis)
+	this.setViewVisibility(R.id.widget_alarm_icon_below, helper.alarmIconVis)
+	this.setViewVisibility(R.id.widget_alarm_time, helper.alarmVis)
+	this.setViewVisibility(R.id.widget_alarm_time_above, helper.alarmVis)
+	this.setViewVisibility(R.id.widget_alarm_time_below, helper.alarmVis)
+	this.setViewVisibility(R.id.widget_alarm_time_bold, helper.alarmBoldVis)
+	this.setViewVisibility(R.id.widget_alarm_time_bold_above, helper.alarmBoldVis)
+	this.setViewVisibility(R.id.widget_alarm_time_bold_below, helper.alarmBoldVis)
+	this.setViewVisibility(R.id.widget_alarm_same_line_as_date_container, helper.alarmPositionSameLineAsDateVis)
+	this.setViewVisibility(R.id.widget_alarm_above_container, helper.alarmPositionAboveDateVis)
+	this.setViewVisibility(R.id.widget_alarm_below_container, helper.alarmPositionBelowDateVis)
+
+	// Set the gravity
+	this.setInt(R.id.widget_time, "setGravity", helper.gravity)
+	this.setInt(R.id.widget_alarm_date_inline_container, "setGravity", helper.gravity)
+	this.setInt(R.id.widget_alarm_above_container, "setGravity", helper.gravity)
+	this.setInt(R.id.widget_alarm_below_container, "setGravity", helper.gravity)
+
 	// Set the background color and transparency
-	views.setInt(R.id.widget_parent, "setBackgroundColor", helper.bgColor)
+	this.setInt(R.id.widget_parent, "setBackgroundColor", helper.bgColor)
 
 	// Set text and icon colors
-	views.setTextColor(R.id.widget_hour, shared.clockWidgetHourColor)
-	views.setTextColor(R.id.widget_hour_bold, shared.clockWidgetHourColor)
-	views.setTextColor(R.id.widget_colon, shared.clockWidgetMinuteColor)
-	views.setTextColor(R.id.widget_minute, shared.clockWidgetMinuteColor)
-	views.setTextColor(R.id.widget_minute_bold, shared.clockWidgetMinuteColor)
-	views.setTextColor(R.id.widget_am_pm, shared.clockWidgetAmPmColor)
-	views.setTextColor(R.id.widget_am_pm_bold, shared.clockWidgetAmPmColor)
-	views.setTextColor(R.id.widget_date, shared.clockWidgetDateColor)
-	views.setTextColor(R.id.widget_date_bold, shared.clockWidgetDateColor)
-	views.setTextColor(R.id.widget_alarm_time, shared.clockWidgetAlarmTimeColor)
-	views.setTextColor(R.id.widget_alarm_time_above, shared.clockWidgetAlarmTimeColor)
-	views.setTextColor(R.id.widget_alarm_time_below, shared.clockWidgetAlarmTimeColor)
-	views.setTextColor(R.id.widget_alarm_time_bold, shared.clockWidgetAlarmTimeColor)
-	views.setTextColor(R.id.widget_alarm_time_bold_above, shared.clockWidgetAlarmTimeColor)
-	views.setTextColor(R.id.widget_alarm_time_bold_below, shared.clockWidgetAlarmTimeColor)
-	views.setInt(R.id.widget_alarm_icon, "setColorFilter", shared.clockWidgetAlarmIconColor)
-	views.setInt(R.id.widget_alarm_icon_above, "setColorFilter", shared.clockWidgetAlarmIconColor)
-	views.setInt(R.id.widget_alarm_icon_below, "setColorFilter", shared.clockWidgetAlarmIconColor)
+	this.setTextColor(R.id.widget_hour, shared.clockWidgetHourColor)
+	this.setTextColor(R.id.widget_hour_bold, shared.clockWidgetHourColor)
+	this.setTextColor(R.id.widget_colon, shared.clockWidgetMinuteColor)
+	this.setTextColor(R.id.widget_minute, shared.clockWidgetMinuteColor)
+	this.setTextColor(R.id.widget_minute_bold, shared.clockWidgetMinuteColor)
+	this.setTextColor(R.id.widget_am_pm, shared.clockWidgetAmPmColor)
+	this.setTextColor(R.id.widget_am_pm_bold, shared.clockWidgetAmPmColor)
+	this.setTextColor(R.id.widget_date, shared.clockWidgetDateColor)
+	this.setTextColor(R.id.widget_date_bold, shared.clockWidgetDateColor)
+	this.setTextColor(R.id.widget_alarm_time, shared.clockWidgetAlarmTimeColor)
+	this.setTextColor(R.id.widget_alarm_time_above, shared.clockWidgetAlarmTimeColor)
+	this.setTextColor(R.id.widget_alarm_time_below, shared.clockWidgetAlarmTimeColor)
+	this.setTextColor(R.id.widget_alarm_time_bold, shared.clockWidgetAlarmTimeColor)
+	this.setTextColor(R.id.widget_alarm_time_bold_above, shared.clockWidgetAlarmTimeColor)
+	this.setTextColor(R.id.widget_alarm_time_bold_below, shared.clockWidgetAlarmTimeColor)
+	this.setInt(R.id.widget_alarm_icon, "setColorFilter", shared.clockWidgetAlarmIconColor)
+	this.setInt(R.id.widget_alarm_icon_above, "setColorFilter", shared.clockWidgetAlarmIconColor)
+	this.setInt(R.id.widget_alarm_icon_below, "setColorFilter", shared.clockWidgetAlarmIconColor)
 
 	// Set text size
-	views.setTextViewTextSize(R.id.widget_hour, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetTimeTextSize)
-	views.setTextViewTextSize(R.id.widget_hour_bold, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetTimeTextSize)
-	views.setTextViewTextSize(R.id.widget_colon, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetTimeTextSize)
-	views.setTextViewTextSize(R.id.widget_minute, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetTimeTextSize)
-	views.setTextViewTextSize(R.id.widget_minute_bold, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetTimeTextSize)
-	views.setTextViewTextSize(R.id.widget_am_pm, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetAmPmTextSize)
-	views.setTextViewTextSize(R.id.widget_am_pm_bold, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetAmPmTextSize)
-	views.setTextViewTextSize(R.id.widget_date, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetDateTextSize)
-	views.setTextViewTextSize(R.id.widget_date_bold, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetDateTextSize)
-	views.setTextViewTextSize(R.id.widget_alarm_time, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetAlarmTimeTextSize)
-	views.setTextViewTextSize(R.id.widget_alarm_time_above, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetAlarmTimeTextSize)
-	views.setTextViewTextSize(R.id.widget_alarm_time_below, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetAlarmTimeTextSize)
-	views.setTextViewTextSize(R.id.widget_alarm_time_bold, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetAlarmTimeTextSize)
-	views.setTextViewTextSize(R.id.widget_alarm_time_bold_above, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetAlarmTimeTextSize)
-	views.setTextViewTextSize(R.id.widget_alarm_time_bold_below, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetAlarmTimeTextSize)
+	this.setTextViewTextSize(R.id.widget_hour, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetTimeTextSize)
+	this.setTextViewTextSize(R.id.widget_hour_bold, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetTimeTextSize)
+	this.setTextViewTextSize(R.id.widget_colon, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetTimeTextSize)
+	this.setTextViewTextSize(R.id.widget_minute, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetTimeTextSize)
+	this.setTextViewTextSize(R.id.widget_minute_bold, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetTimeTextSize)
+	this.setTextViewTextSize(R.id.widget_am_pm, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetAmPmTextSize)
+	this.setTextViewTextSize(R.id.widget_am_pm_bold, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetAmPmTextSize)
+	this.setTextViewTextSize(R.id.widget_date, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetDateTextSize)
+	this.setTextViewTextSize(R.id.widget_date_bold, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetDateTextSize)
+	this.setTextViewTextSize(R.id.widget_alarm_time, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetAlarmTimeTextSize)
+	this.setTextViewTextSize(R.id.widget_alarm_time_above, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetAlarmTimeTextSize)
+	this.setTextViewTextSize(R.id.widget_alarm_time_below, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetAlarmTimeTextSize)
+	this.setTextViewTextSize(R.id.widget_alarm_time_bold, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetAlarmTimeTextSize)
+	this.setTextViewTextSize(R.id.widget_alarm_time_bold_above, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetAlarmTimeTextSize)
+	this.setTextViewTextSize(R.id.widget_alarm_time_bold_below, TypedValue.COMPLEX_UNIT_SP, shared.clockWidgetAlarmTimeTextSize)
 
 	// Set margin
 	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
@@ -194,20 +267,17 @@ internal fun updateAppWidget(
 		val newMargin = NacClockWidgetDataHelper.calcAlarmIconMargin(context, avgTextSize)
 
 		// Start
-		views.setViewLayoutMargin(R.id.widget_alarm_icon, RemoteViews.MARGIN_START,
+		this.setViewLayoutMargin(R.id.widget_alarm_icon, RemoteViews.MARGIN_START,
 			newMargin, TypedValue.COMPLEX_UNIT_DIP)
 
 		// End
-		views.setViewLayoutMargin(R.id.widget_alarm_icon, RemoteViews.MARGIN_END,
+		this.setViewLayoutMargin(R.id.widget_alarm_icon, RemoteViews.MARGIN_END,
 			newMargin, TypedValue.COMPLEX_UNIT_DIP)
-		views.setViewLayoutMargin(R.id.widget_alarm_icon_above, RemoteViews.MARGIN_END,
+		this.setViewLayoutMargin(R.id.widget_alarm_icon_above, RemoteViews.MARGIN_END,
 			newMargin, TypedValue.COMPLEX_UNIT_DIP)
-		views.setViewLayoutMargin(R.id.widget_alarm_icon_below, RemoteViews.MARGIN_END,
+		this.setViewLayoutMargin(R.id.widget_alarm_icon_below, RemoteViews.MARGIN_END,
 			newMargin, TypedValue.COMPLEX_UNIT_DIP)
 	}
-
-	// Instruct the widget manager to update the widget
-	appWidgetManager.updateAppWidget(appWidgetId, views)
 }
 
 /**
@@ -224,7 +294,7 @@ internal class NacClockWidgetDataHelper(
 	/**
 	 * Shared preferences.
 	 */
-	val sharedPreferences: NacSharedPreferences
+	val sharedPreferences: NacSharedPreferences = NacSharedPreferences(context)
 
 )
 {
@@ -542,7 +612,7 @@ internal class NacClockWidgetDataHelper(
 		}
 
 	/**
-	 * String containing the time at which the next alarm will run.
+	 * Time at which the next alarm will run.
 	 */
 	val nextAlarm: String
 		get()
@@ -555,6 +625,20 @@ internal class NacClockWidgetDataHelper(
 
 			// Return the alarm time as a spannable string
 			return NacCalendar.getFullTime(context, nextAlarmCal!!).replace("  ", " ")
+		}
+
+	/**
+	 * Date in the current locale.
+	 */
+	val date: String
+		get()
+		{
+			val locale = Locale.getDefault()
+			val now = Calendar.getInstance()
+			val skeletonFormat = "E MMM d"
+			val betterFormat = DateFormat.getBestDateTimePattern(locale, skeletonFormat)
+
+			return DateFormat.format(betterFormat, now).toString()
 		}
 
 	companion object

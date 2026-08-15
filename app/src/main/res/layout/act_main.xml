@@ -4,11 +4,14 @@
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:id="@+id/protection_layout"
 	android:layout_width="match_parent"
-	android:layout_height="match_parent">
+	android:layout_height="match_parent"
+	android:background="@color/black">
 
 	<androidx.constraintlayout.widget.ConstraintLayout
+		android:id="@+id/constraint_layout"
 		android:layout_width="match_parent"
-		android:layout_height="match_parent">
+		android:layout_height="match_parent"
+		android:background="?attr/colorCard">
 
 		<!-- Toolbar -->
 		<com.google.android.material.appbar.AppBarLayout

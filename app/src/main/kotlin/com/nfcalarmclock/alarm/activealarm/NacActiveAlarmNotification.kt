@@ -36,20 +36,17 @@ class NacActiveAlarmNotification(
 	/**
 	 * @see NacBaseNotificationBuilder.id
 	 */
-	override val id: Int
-		get() = ID
+	override val id: Int = 69
 
 	/**
 	 * @see NacBaseNotificationBuilder.channelName
 	 */
-	override val channelName: String
-		get() = context.getString(R.string.title_active_alarms)
+	override val channelName: String = context.getString(R.string.title_active_alarms)
 
 	/**
 	 * @see NacBaseNotificationBuilder.channelDescription
 	 */
-	override val channelDescription: String
-		get() = context.getString(R.string.description_active_alarm)
+	override val channelDescription: String = context.getString(R.string.description_active_alarm)
 
 	/**
 	 * @see NacBaseNotificationBuilder.channelImportance
@@ -79,6 +76,7 @@ class NacActiveAlarmNotification(
 			// Get the alarm name
 			val name = alarm?.name ?: ""
 
+			// Notification text
 			return if (name.isEmpty())
 			{
 				time
@@ -211,16 +209,6 @@ class NacActiveAlarmNotification(
 		channel.setSound(null, null)
 
 		return channel
-	}
-
-	companion object
-	{
-
-		/**
-		 * Notification ID.
-		 */
-		const val ID = 69
-
 	}
 
 }

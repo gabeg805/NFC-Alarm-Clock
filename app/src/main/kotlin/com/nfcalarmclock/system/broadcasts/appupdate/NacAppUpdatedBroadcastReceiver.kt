@@ -7,6 +7,7 @@ import com.nfcalarmclock.db.NacAlarmDatabase
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.scheduler.NacScheduler
 import com.nfcalarmclock.system.goAsync
+import com.nfcalarmclock.widget.refreshAllWidgets
 
 /**
  * After the app is updated, reapply the alarms.
@@ -29,6 +30,7 @@ class NacAppUpdatedBroadcastReceiver
 		// Check that the action is correct
 		if (intent.action == Intent.ACTION_MY_PACKAGE_REPLACED)
 		{
+			println("PACKAGE REPLACED!!!!!!!!!!!!!!!!!!!!1")
 			// Move shared preferences to device protected storage
 			NacSharedPreferences.moveToDeviceProtectedStorage(context)
 
@@ -61,6 +63,9 @@ class NacAppUpdatedBroadcastReceiver
 
 			// Save the next alarm
 			sharedPreferences.saveNextAlarm(allAlarms)
+
+			// Refresh widgets
+			refreshAllWidgets(context)
 		}
 
 	}

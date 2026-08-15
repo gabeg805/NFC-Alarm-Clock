@@ -25,7 +25,7 @@ abstract class NacBaseNotificationBuilder(
 	/**
 	 * Notification ID.
 	 */
-	protected abstract val id: Int
+	abstract val id: Int
 
 	/**
 	 * Channel name.
