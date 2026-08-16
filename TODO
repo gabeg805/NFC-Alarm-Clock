@@ -2,6 +2,23 @@
 TODO
 ----
 
+* Test backup and restore
+
+* Make DateTime dialog scrollable on small screens.
+
+* Have a way to test various settings, like gradually increase volume, etc.
+
+* When in media activity, the settings button is up there. Should hide that.
+
+* Is it possible to not have the top bar that says NFC Alarm Clock? Perhaps
+  have settings button be an unlabeled item in the navigation bar?
+
+* Test NFC dismiss when app is not in focus and make sure scanning NFC isn't
+  causing a loop.
+
+* Airplane mode receiver: Intent#ACTION_AIRPLANE_MODE_CHANGED
+  Constant Value: "android.intent.action.AIRPLANE_MODE"
+
 * Test having the weekday and label show always, this way you can have the
   expand/collapse button be shown always as well
 

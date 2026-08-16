@@ -30,7 +30,6 @@ class NacAppUpdatedBroadcastReceiver
 		// Check that the action is correct
 		if (intent.action == Intent.ACTION_MY_PACKAGE_REPLACED)
 		{
-			println("PACKAGE REPLACED!!!!!!!!!!!!!!!!!!!!1")
 			// Move shared preferences to device protected storage
 			NacSharedPreferences.moveToDeviceProtectedStorage(context)
 

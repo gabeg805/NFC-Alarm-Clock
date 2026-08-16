@@ -39,12 +39,18 @@ class NacClockWidgetProvider : AppWidgetProvider()
 		if ((intent?.action == Intent.ACTION_BOOT_COMPLETED)
 			|| (intent?.action == "android.intent.action.TIME_SET")
 			|| (intent?.action == Intent.ACTION_TIMEZONE_CHANGED)
-			|| (intent?.action == Intent.ACTION_LOCALE_CHANGED)
-			|| (intent?.action == AlarmManager.ACTION_NEXT_ALARM_CLOCK_CHANGED))
+			|| (intent?.action == Intent.ACTION_LOCALE_CHANGED))
 		{
 			// Refresh all widgets
+			println("onReceived() : refresh all widgets")
 			refreshAllWidgets(context)
 		}
+		else if (intent?.action == AlarmManager.ACTION_NEXT_ALARM_CLOCK_CHANGED)
+		{
+			println("onReceived() : partially update all all widgets")
+			partiallyUpdateAllWidgets(context)
+		}
+
 	}
 
 	/**
@@ -55,6 +61,7 @@ class NacClockWidgetProvider : AppWidgetProvider()
 		appWidgetManager: AppWidgetManager,
 		appWidgetIds: IntArray)
 	{
+		println("onUpdate() : partially update all widgets")
 		// Partially update all widgets
 		partiallyUpdateAllWidgets(
 			context,
@@ -73,6 +80,7 @@ internal fun partiallyUpdateAllWidgets(
 	appWidgetIds: IntArray = appWidgetManager.getAppWidgetIds(ComponentName(context, NacClockWidgetProvider::class.java))
 )
 {
+	println("partiallyUpdateAllWidgets()")
 	for (id in appWidgetIds)
 	{
 		partiallyUpdateWidget(context, appWidgetManager, id)
@@ -110,6 +118,7 @@ internal fun refreshAllWidgets(
 	appWidgetIds: IntArray = appWidgetManager.getAppWidgetIds(ComponentName(context, NacClockWidgetProvider::class.java))
 )
 {
+	println("refreshAllWidgets()")
 	for (id in appWidgetIds)
 	{
 		refreshWidget(context, appWidgetManager, id)
@@ -144,7 +153,6 @@ internal fun refreshWidget(
  */
 internal fun RemoteViews.updateText(helper: NacClockWidgetDataHelper)
 {
-	// TODO: Update locale
 	// Alarm visible
 	if ((helper.alarmVis == View.VISIBLE) || (helper.alarmBoldVis == View.VISIBLE))
 	{
@@ -635,7 +643,7 @@ internal class NacClockWidgetDataHelper(
 		{
 			val locale = Locale.getDefault()
 			val now = Calendar.getInstance()
-			val skeletonFormat = "E MMM d"
+			val skeletonFormat = "E, MMM d"
 			val betterFormat = DateFormat.getBestDateTimePattern(locale, skeletonFormat)
 
 			return DateFormat.format(betterFormat, now).toString()

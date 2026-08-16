@@ -505,7 +505,6 @@ object NacCalendar
 		// Alarm date was set
 		if (alarm.date.isNotEmpty())
 		{
-			println("Date : '${alarm.date}'")
 			try
 			{
 				// Get the year/month/day

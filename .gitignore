@@ -2,6 +2,7 @@ build
 captures
 .gradle
 .idea
+.kotlin
 
 app/my-new-release-key.jks
 app/debug
@@ -14,5 +15,6 @@ local.properties
 *.swp
 *.apk
 *.aab
+*.log
 .DS_Store
 .externalNativeBuild

@@ -35,8 +35,8 @@ android {
 		applicationId = "com.nfcalarmclock"
 		minSdk = 24
 		targetSdk = 36
-		versionCode = 573
-		versionName = "12.6.5-beta001"
+		versionCode = 574
+		versionName = "12.6.5-beta002"
 
 		// Set output filename
 		setProperty("archivesBaseName", "nfc_alarm_clock_v${versionName}")
@@ -148,45 +148,44 @@ dependencies {
 	// ------------------------------------------------------------------------
 
 	// Android
-	implementation("androidx.annotation:annotation:1.9.1")
-	implementation("androidx.appcompat:appcompat:1.7.1")
+	implementation("androidx.annotation:annotation:1.10.0")
+	implementation("androidx.appcompat:appcompat:1.8.0")
 	implementation("androidx.cardview:cardview:1.0.0")
 	implementation("androidx.coordinatorlayout:coordinatorlayout:1.3.0")
-	// Upgrading to 1.17.0 requires API 36
-	implementation("androidx.core:core-ktx:1.16.0")
-	implementation("androidx.fragment:fragment-ktx:1.8.9")
-	implementation("androidx.lifecycle:lifecycle-process:2.9.3")
-	implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.9.3")
+	implementation("androidx.constraintlayout:constraintlayout:2.2.2")
+	// Upgrading to 1.19.0 requires API 37
+	implementation("androidx.core:core-ktx:1.18.0")
+	implementation("androidx.fragment:fragment-ktx:1.9.0")
+	implementation("androidx.lifecycle:lifecycle-process:2.11.0")
+	implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.11.0")
 	implementation("androidx.media3:media3-exoplayer:1.5.1")
 	implementation("androidx.media3:media3-common:1.5.1")
 	implementation("androidx.preference:preference-ktx:1.2.1")
 	implementation("androidx.recyclerview:recyclerview:1.4.0")
 	implementation("androidx.viewpager:viewpager:1.1.0")
-	implementation("com.google.android.material:material:1.13.0")
-	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.2")
+	implementation("com.google.android.material:material:1.14.0")
+	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.11.0")
 	implementation("androidx.dynamicanimation:dynamicanimation:1.1.0")
-	implementation("androidx.navigation:navigation-fragment-ktx:2.9.4")
-	implementation("androidx.navigation:navigation-ui-ktx:2.9.4")
+	implementation("androidx.navigation:navigation-fragment-ktx:2.9.8")
+	implementation("androidx.navigation:navigation-ui-ktx:2.9.8")
 
 	// Room database (Any later requires API > 34
-	implementation("androidx.room:room-runtime:2.8.0")
-	implementation("androidx.constraintlayout:constraintlayout:2.2.1")
-	ksp("androidx.room:room-compiler:2.8.0")
+	implementation("androidx.room:room-runtime:2.8.4")
+	implementation("androidx.room:room-ktx:2.8.4")
+	ksp("androidx.room:room-compiler:2.8.4")
 
 	// Room kotlin extensions and coroutines
-	ksp("androidx.room:room-compiler:2.8.0")
-	implementation("androidx.room:room-ktx:2.8.0")
 
 	// Dependency injection with Hilt
-	implementation("com.google.dagger:hilt-android:2.57.1")
-	ksp("com.google.dagger:hilt-android-compiler:2.57.1")
+	implementation("com.google.dagger:hilt-android:2.57.2")
+	ksp("com.google.dagger:hilt-android-compiler:2.57.2")
 
 	// ------------------------------------------------------------------------
 	// Google Play Build Variant
 	// ------------------------------------------------------------------------
 
 	// Google Play billing and in-app review
-	googleplayImplementation("com.android.billingclient:billing:8.0.0")
+	googleplayImplementation("com.android.billingclient:billing:9.1.0")
 	googleplayImplementation("com.google.android.play:review:2.0.2")
 	googleplayImplementation("com.google.android.play:review-ktx:2.0.2")
 
