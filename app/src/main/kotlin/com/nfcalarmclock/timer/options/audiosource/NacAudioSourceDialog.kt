@@ -32,7 +32,7 @@ class NacAudioSourceDialog
 		super.onViewCreated(view, savedInstanceState)
 
 		// Change the description for the timer
-		val audioSourceDescription: TextView = view.findViewById(R.id.audio_source_description)
+		val audioSourceDescription: TextView = view.findViewById(R.id.prompt_description)
 
 		audioSourceDescription.setText(R.string.description_audio_sources_timer)
 	}

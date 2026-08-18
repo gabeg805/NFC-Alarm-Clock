@@ -4,14 +4,12 @@ import android.app.ForegroundServiceStartNotAllowedException
 import android.os.Build
 import android.os.PowerManager
 import androidx.lifecycle.LifecycleService
-import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.R
 import com.nfcalarmclock.view.toast
 
 /**
  * Generic lifecycle service.
  */
-@UnstableApi
 abstract class NacLifecycleService
 	: LifecycleService()
 {

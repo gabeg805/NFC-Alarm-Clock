@@ -29,7 +29,7 @@ Or download the latest APK from the [Releases Section](https://github.com/gabeg8
 
 # License
 
-    Copyright (C) 2025  Gabriel Gonzalez
+    Copyright (C) 2026  Gabriel Gonzalez
 
     This program is free software: you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

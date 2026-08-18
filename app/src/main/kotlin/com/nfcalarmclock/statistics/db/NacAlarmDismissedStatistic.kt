@@ -2,6 +2,7 @@ package com.nfcalarmclock.statistics.db
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import androidx.room.Index
 import com.nfcalarmclock.alarm.db.NacAlarm
 import dagger.Module
 import dagger.Provides
@@ -11,7 +12,10 @@ import dagger.hilt.components.SingletonComponent
 /**
  * Statistics for when an alarm is dismissed.
  */
-@Entity(tableName = "alarm_dismissed_statistic")
+@Entity(
+	tableName = "alarm_dismissed_statistic",
+	inheritSuperIndices = true,
+)
 class NacAlarmDismissedStatistic
 	: NacAlarmStatistic
 {

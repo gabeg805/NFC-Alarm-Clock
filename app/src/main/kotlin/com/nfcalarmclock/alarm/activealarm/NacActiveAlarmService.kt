@@ -29,7 +29,7 @@ import com.nfcalarmclock.system.enableActivityAlias
 import com.nfcalarmclock.system.getAlarm
 import com.nfcalarmclock.system.scheduler.NacScheduler
 import com.nfcalarmclock.view.quickToast
-import com.nfcalarmclock.widget.partiallyUpdateAllWidgets
+import com.nfcalarmclock.widget.refreshAllWidgets
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -228,7 +228,7 @@ class NacActiveAlarmService
 			restartOtherActiveAlarmOrStop(R.string.message_alarm_dismiss)
 
 			// Refresh widgets
-			partiallyUpdateAllWidgets(this@NacActiveAlarmService)
+			refreshAllWidgets(this@NacActiveAlarmService)
 
 		}
 	}
@@ -550,7 +550,7 @@ class NacActiveAlarmService
 			restartOtherActiveAlarmOrStop(R.string.message_alarm_snooze)
 
 			// Refresh widgets
-			partiallyUpdateAllWidgets(this@NacActiveAlarmService)
+			refreshAllWidgets(this@NacActiveAlarmService)
 
 		}
 	}

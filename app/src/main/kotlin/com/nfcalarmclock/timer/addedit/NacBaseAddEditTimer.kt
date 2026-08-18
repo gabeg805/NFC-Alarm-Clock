@@ -187,7 +187,7 @@ abstract class NacBaseAddEditTimer
 
 				// Scroll down and hide the bottom navigation view
 				scrollView.smoothScrollTo(0, moreOptionsContainer.height)
-				bottomNavigation.slideDown(250)
+				//bottomNavigation.slideDown(250)
 
 				// Set the scroll flags
 				shouldScrollUp = true
@@ -208,7 +208,7 @@ abstract class NacBaseAddEditTimer
 
 			// Scroll up and show the bottom navigation view
 			scrollView.smoothScrollTo(0, 0)
-			bottomNavigation.slideUp(250)
+			//bottomNavigation.slideUp(250)
 
 		}
 	}
@@ -623,7 +623,7 @@ abstract class NacBaseAddEditTimer
 
 			// Scroll down and hide the bottom navigation view
 			scrollView.smoothScrollTo(0, moreOptionsContainer.height)
-			bottomNavigation.slideDown(250)
+			//bottomNavigation.slideDown(250)
 
 		}
 	}
@@ -669,8 +669,16 @@ abstract class NacBaseAddEditTimer
 
 				// Set the new margin
 				val bottomNavHeight = resources.getDimension(R.dimen.bottom_nav_height).toInt()
-				bottomMargin = (numberpadContainerLocation[1] - hourLocation[1] - bottomNavHeight) / 2
-				topMargin = bottomMargin
+				val x = (numberpadContainerLocation[1] - hourLocation[1] - bottomNavHeight) / 2
+				val y = (numberpadContainerLocation[1] - hourLocation[1]) / 2
+				//bottomMargin = (numberpadContainerLocation[1] - hourLocation[1]) / 2
+				//bottomMargin = (numberpadContainerLocation[1] - hourLocation[1] - bottomNavHeight) / 2
+				//bottomMargin = resources.getDimension(R.dimen.normal).toInt()
+				//topMargin = bottomMargin
+				println("X = $x | Y = $y")
+				println("Loc : ${numberpadContainerLocation[1]} | ${hourLocation[1]} | $bottomNavHeight")
+				//println("Bottom = $bottomMargin")
+				// TODO: Padding 16dp? normal
 
 				// Make the more options container visible
 				moreOptionsContainer.visibility = View.VISIBLE
@@ -698,7 +706,7 @@ abstract class NacBaseAddEditTimer
 		setNameMessageAndAlpha(button)
 
 		// Show a dialog to set a new name
-		button.setOnClickListener { view ->
+		button.setOnClickListener { _ ->
 
 			NacNameDialog.create(
 				nameBeforeSaving,
@@ -761,6 +769,7 @@ abstract class NacBaseAddEditTimer
 		val numpad8: MaterialButton = view.findViewById(R.id.timer_numberpad8)
 		val numpad9: MaterialButton = view.findViewById(R.id.timer_numberpad9)
 		val numpad0: MaterialButton = view.findViewById(R.id.timer_numberpad0)
+		val numpad00: MaterialButton = view.findViewById(R.id.timer_numberpad00)
 		val numpadDel: MaterialButton = view.findViewById(R.id.timer_numberpad_del)
 
 		// Setup numberpad colors
@@ -774,6 +783,7 @@ abstract class NacBaseAddEditTimer
 		numpad8.setupRippleColor(sharedPreferences)
 		numpad9.setupRippleColor(sharedPreferences)
 		numpad0.setupRippleColor(sharedPreferences)
+		numpad00.setupRippleColor(sharedPreferences)
 		numpadDel.setupRippleColor(sharedPreferences)
 
 		// Setup button click listeners
@@ -787,6 +797,7 @@ abstract class NacBaseAddEditTimer
 		numpad8.setOnClickListener { appendTime(numpad8.text) }
 		numpad9.setOnClickListener { appendTime(numpad9.text) }
 		numpad0.setOnClickListener { appendTime(numpad0.text) }
+		numpad00.setOnClickListener { appendTime(numpad00.text) }
 		numpadDel.setOnClickListener { deleteTime() }
 
 		// Setup long press

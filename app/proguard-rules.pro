@@ -5,9 +5,16 @@
 # For more details, see
 #   http://developer.android.com/guide/developing/tools/proguard.html
 
-#-keep class com.nfcalarmclock.** { *; }
 -verbose
+-keep class com.nfcalarmclock.** { *; }
 -keepattributes EnclosingMethod,LineNumberTable,SourceFile
+-dontobfuscate
+
+# Enforce a deterministic build output across different machines
+-repackageclasses ''
+-allowaccessmodification
+
+
 
 # If you keep the line number information, uncomment this to
 # hide the original source file name.

@@ -17,4 +17,12 @@
 		android:title="@string/word_timers"
 		/>
 
+	<!-- Settings -->
+	<item
+		android:id="@+id/bottom_navigation_settings"
+		android:enabled="true"
+		android:icon="@drawable/settings"
+		android:title="@string/title_settings"
+		/>
+
 </menu>

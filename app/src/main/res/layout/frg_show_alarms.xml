@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
@@ -11,12 +11,16 @@
 		android:id="@+id/tv_next_alarm"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:background="?attr/colorCard"
+		android:background="@color/black"
 		android:gravity="center_horizontal"
 		android:paddingTop="@dimen/small"
 		android:paddingBottom="@dimen/tiny"
 		android:textSize="@dimen/tsz_normal"
 		android:text=""
+		app:layout_constraintStart_toEndOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintBottom_toTopOf="@id/rv_alarm_list"
 		/>
 
 	<!-- Alarm list -->
@@ -24,11 +28,15 @@
 		android:id="@+id/rv_alarm_list"
 		android:contentDescription="@string/cd_alarm_list"
 		android:layout_width="match_parent"
-		android:layout_height="match_parent"
+		android:layout_height="0dp"
 		android:paddingBottom="@dimen/bottom_nav_height"
 		android:clipToPadding="false"
 		android:descendantFocusability="blocksDescendants"
 		android:scrollbars="vertical"
+		app:layout_constraintStart_toEndOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		app:layout_constraintTop_toBottomOf="@id/tv_next_alarm"
+		app:layout_constraintBottom_toBottomOf="parent"
 		/>
 
 	<!-- Navigation host -->
@@ -40,4 +48,4 @@
 		app:defaultNavHost="true"
 		/>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

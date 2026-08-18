@@ -5,27 +5,28 @@
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content">
 
-	<!-- Audio source title -->
+	<!-- Title -->
 	<TextView
 		style="@style/Widget.AlarmOptionDialog.Title"
+		android:id="@+id/prompt_title"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:text="@string/action_alarm_option_audio_source"
 		/>
 
-	<!-- Audio source description -->
+	<!-- Description -->
 	<TextView
 		style="@style/Widget.AlarmOptionDialog.DescriptionBeforeCheckBox"
-		android:id="@+id/audio_source_description"
+		android:id="@+id/prompt_description"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:text="@string/description_audio_sources_alarm"
 		/>
 
-	<!-- Audio source options -->
+	<!-- Radio group -->
 	<RadioGroup
 		style="@style/My.RadioGroup"
-		android:id="@+id/audio_sources"
+		android:id="@+id/prompt_radio_group"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:layout_marginVertical="@dimen/tiny"

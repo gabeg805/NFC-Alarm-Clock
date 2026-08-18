@@ -29,10 +29,7 @@ class NacStartWeekOnPreference @JvmOverloads constructor(
 	style: Int = 0
 
 	// Constructor
-) : Preference(context, attrs, style),
-
-	// Interface
-	NacStartWeekOnDialog.OnStartWeekSelectedListener
+) : Preference(context, attrs, style)
 {
 	/**
 	 * Index of the day to start on.
@@ -102,26 +99,6 @@ class NacStartWeekOnPreference @JvmOverloads constructor(
 	}
 
 	/**
-	 * Called when the start week on day is selected.
-	 */
-	override fun onStartWeekSelected(which: Int)
-	{
-		// Set the index of the day to start on
-		startWeekOnIndex = which
-
-		// Persist this index
-		persistInt(startWeekOnIndex)
-
-		// Set flag to refresh the main activity so that the days are redrawn
-		val shared = NacSharedPreferences(context)
-
-		shared.shouldRefreshMainActivity = true
-
-		// Notify that a change occurred
-		notifyChanged()
-	}
-
-	/**
 	 * Show the start week on dialog.
 	 */
 	fun showDialog(manager: FragmentManager)
@@ -130,8 +107,24 @@ class NacStartWeekOnPreference @JvmOverloads constructor(
 		val dialog = NacStartWeekOnDialog()
 
 		// Setup the dialog
-		dialog.defaultStartWeekOnIndex = startWeekOnIndex
-		dialog.onStartWeekSelectedListener = this
+		dialog.defaultSelectedIndex = startWeekOnIndex
+		dialog.onStartWeekSelectedListener = NacStartWeekOnDialog.OnStartWeekSelectedListener { which ->
+
+			// Set the index of the day to start on
+			startWeekOnIndex = which
+
+			// Persist this index
+			persistInt(startWeekOnIndex)
+
+			// Set flag to refresh the main activity so that the days are redrawn
+			val shared = NacSharedPreferences(context)
+
+			shared.shouldRefreshMainActivity = true
+
+			// Notify that a change occurred
+			notifyChanged()
+
+		}
 
 		// Show the dialog
 		dialog.show(manager, NacStartWeekOnDialog.TAG)

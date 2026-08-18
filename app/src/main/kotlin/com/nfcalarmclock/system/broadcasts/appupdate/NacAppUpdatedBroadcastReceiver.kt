@@ -5,8 +5,8 @@ import android.content.Context
 import android.content.Intent
 import com.nfcalarmclock.db.NacAlarmDatabase
 import com.nfcalarmclock.shared.NacSharedPreferences
-import com.nfcalarmclock.system.scheduler.NacScheduler
 import com.nfcalarmclock.system.goAsync
+import com.nfcalarmclock.system.scheduler.NacScheduler
 import com.nfcalarmclock.widget.refreshAllWidgets
 
 /**

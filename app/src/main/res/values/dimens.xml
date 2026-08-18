@@ -39,6 +39,7 @@
 	<dimen name="tsz_medium">18sp</dimen>
 	<dimen name="tsz_large">20sp</dimen>
 	<dimen name="tsz_xlarge">22sp</dimen>
+	<dimen name="tsz_xxlarge">24sp</dimen>
 	<dimen name="tsz_huge">28sp</dimen>
 	<dimen name="tsz_xhuge">32sp</dimen>
 	<dimen name="tsz_xxhuge">36sp</dimen>

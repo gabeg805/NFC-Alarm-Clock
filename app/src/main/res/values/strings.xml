@@ -424,6 +424,8 @@
 	<string name="description_show_hide_flashlight_button_false">Hide the flashlight button when expanding an alarm.</string>
 	<string name="description_expand_new_alarm_true">Alarms that are copied or created with the &#8220;+&#8221; button are expanded.</string>
 	<string name="description_expand_new_alarm_false">Alarms are not expanded.</string>
+	<string name="description_start_week_on">The week shown in an expanded alarm card will start on this day.</string>
+	<string name="description_next_alarm_format">The format to use when showing when the next alarm will run.</string>
 	<string name="description_next_alarm_format_time_in">Next alarm in 7 hours 30 minutes</string>
 	<string name="description_next_alarm_format_time_on">Next alarm on Mon 7:00 AM</string>
 	<string name="description_permission_disable_battery_optimization">The app will not be put to sleep, allowing alarms to be activated as normal.</string>

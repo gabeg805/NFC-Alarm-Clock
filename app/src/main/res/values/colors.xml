@@ -24,6 +24,7 @@
 	<color name="sky_blue">#00c0fb</color>
 	<color name="white">#ffffff</color>
 	<color name="white_dull">#b2b2b2</color>
+	<color name="white_duller">#7c7c7c</color>
 	<color name="ic_launcher_background">#FF5F2D</color>
 
 	<!--

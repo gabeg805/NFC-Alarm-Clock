@@ -92,7 +92,7 @@
 		<item name="android:layout_marginStart">@dimen/tiny</item>
 		<item name="android:layout_marginEnd">@dimen/tiny</item>
 		<item name="android:backgroundTint">@color/gray_dark2</item>
-		<item name="android:textSize">@dimen/tsz_xlarge</item>
+		<item name="android:textSize">@dimen/tsz_xxlarge</item>
 		<item name="android:insetTop">@dimen/zero</item>
 		<item name="android:insetBottom">@dimen/zero</item>
 		<item name="android:insetLeft">@dimen/zero</item>

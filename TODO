@@ -2,7 +2,25 @@
 TODO
 ----
 
-* Test backup and restore
+* Darken color of expanded alarm card?
+
+* Add labels to everything?
+
+* Add 00 to timer
+
+* Change name of notification objects to notification builders
+
+* Test having the weekday and label show always, this way you can have the
+  expand/collapse button be shown always as well
+
+* When active alarm or timer is left. Then "nfcTags" has to get reinitialized
+  and probably gets cleared. May need to save the current progress in
+  onSavedInstanceState() or whatever it is called.
+
+* Is it possible to not have the top bar that says NFC Alarm Clock? Perhaps
+  have settings button be an unlabeled item in the navigation bar?
+
+* Update website with f-droid and izzy
 
 * Make DateTime dialog scrollable on small screens.
 
@@ -10,33 +28,16 @@ TODO
 
 * When in media activity, the settings button is up there. Should hide that.
 
-* Is it possible to not have the top bar that says NFC Alarm Clock? Perhaps
-  have settings button be an unlabeled item in the navigation bar?
-
 * Test NFC dismiss when app is not in focus and make sure scanning NFC isn't
   causing a loop.
 
 * Airplane mode receiver: Intent#ACTION_AIRPLANE_MODE_CHANGED
   Constant Value: "android.intent.action.AIRPLANE_MODE"
 
-* Test having the weekday and label show always, this way you can have the
-  expand/collapse button be shown always as well
-
-* Reword "translation of" to "translation to"
-
-* When building dialog and alarm is null, should create a default builder? When
-  would that even happen? Should I just assume alarm will be non null?
-
 * When coming back from media fragment, the order of alarms was all weird. Why
   is that? This was after hitting cancel but occurred for OK as well. Also when
   going back to the media fragment after changing the directory, it would not
   reload to the path of the music that is selected for the alarm.
-
-* Change name of notification objects to notification builders
-
-* When active alarm or timer is left. Then "nfcTags" has to get reinitialized
-  and probably gets cleared. May need to save the current progress in
-  onSavedInstanceState() or whatever it is called.
 
 * A repeat option for the timer could simply be number of times to repeat?
   How would keep track of how many times it has been repeated?
@@ -53,15 +54,11 @@ TODO
 
 * Alarm time in activity was not updating until turned on screen. May not be an important bug.
 
-* Stream internet radio, like KEXP?
-
 * When updating to support API 36:
 
     - Bottom padding of settings is wack, and possibly in main activity as well
 
     - Test MediaActivity with edge-to-edge
-
-* Start week on and next alarm format radio button colors are not themed
 
 * Add languages for Pakistan, Japan, Thailand, Poland, Turkey, France,
   Serbia, Finland, Romania, Italy

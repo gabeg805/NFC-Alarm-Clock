@@ -3,7 +3,6 @@ package com.nfcalarmclock.db
 import android.annotation.SuppressLint
 import android.content.Context
 import android.database.sqlite.SQLiteConstraintException
-import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.DeleteColumn
@@ -20,20 +19,19 @@ import com.nfcalarmclock.alarm.db.NacAlarmTypeConverters
 import com.nfcalarmclock.db.NacAlarmDatabase.AddAutoDismissAndSnoozeSettingsToAllAlarmsMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.ChangeFlashlightOnOffDurationTypeToStringMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.ClearAllStatisticsMigration
+import com.nfcalarmclock.db.NacAlarmDatabase.ClearNfcTagTableMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.ConvertDismissAndSnoozeOptionsFromMinutesToSecondsMigration
+import com.nfcalarmclock.db.NacAlarmDatabase.DropNfcTagTableMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.FixDismissAndSnoozeOptionsConvertedFromMinutesToSecondsMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.FixFlashlightBlinkEmptyStringDurationMigration
-import com.nfcalarmclock.db.NacAlarmDatabase.ClearNfcTagTableMigration
-import com.nfcalarmclock.db.NacAlarmDatabase.DropNfcTagTableMigration
-import com.nfcalarmclock.db.NacAlarmDatabase.RenameShouldDeleteAlarmAfterDismissedColumnMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.RemoveSnoozeHourMinuteColumnsAndRenameShouldEasySnoozeColumnMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.RemoveUseTtsColumnMigration
+import com.nfcalarmclock.db.NacAlarmDatabase.RenameShouldDeleteAlarmAfterDismissedColumnMigration
 import com.nfcalarmclock.db.NacAlarmDatabase.UpdateRepeatFrequencyFrom0To1Migration
 import com.nfcalarmclock.db.NacAlarmDatabase.UpdateRepeatFrequencyUnitFrom0To1Migration
 import com.nfcalarmclock.db.NacOldDatabase.Companion.read
 import com.nfcalarmclock.nfc.db.NacNfcTag
 import com.nfcalarmclock.nfc.db.NacNfcTagDao
-import com.nfcalarmclock.system.scheduler.NacScheduler
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.statistics.db.NacAlarmCreatedStatistic
 import com.nfcalarmclock.statistics.db.NacAlarmCreatedStatisticDao
@@ -47,6 +45,7 @@ import com.nfcalarmclock.statistics.db.NacAlarmSnoozedStatistic
 import com.nfcalarmclock.statistics.db.NacAlarmSnoozedStatisticDao
 import com.nfcalarmclock.statistics.db.NacStatisticTypeConverters
 import com.nfcalarmclock.system.getDeviceProtectedStorageContext
+import com.nfcalarmclock.system.scheduler.NacScheduler
 import com.nfcalarmclock.timer.db.NacTimer
 import com.nfcalarmclock.timer.db.NacTimerDao
 import com.nfcalarmclock.view.quickToast
@@ -59,14 +58,14 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
-import java.lang.IllegalStateException
 import javax.inject.Singleton
 
 /**
  * Store alarms in a Room database.
  */
-@Database(version = 45,
+@Database(version = 46,
 	entities = [
 		NacAlarm::class,
 		NacAlarmCreatedStatistic::class,
@@ -121,6 +120,7 @@ import javax.inject.Singleton
 		AutoMigration(from = 42, to = 43),
 		AutoMigration(from = 43, to = 44),
 		AutoMigration(from = 44, to = 45, spec = FixFlashlightBlinkEmptyStringDurationMigration::class),
+		AutoMigration(from = 45, to = 46),
 	]
 )
 @TypeConverters(NacAlarmTypeConverters::class, NacStatisticTypeConverters::class)
@@ -539,8 +539,6 @@ abstract class NacAlarmDatabase
 			// Copy all the alarms
 			importDb.alarmDao().getAllAlarms().forEach { a ->
 
-				// Make sure none of the alarms in the database already match the
-				// one that will be inserted
 				if (allAlarms.all { !it.fuzzyEquals(a) })
 				{
 					// Clear the ID
@@ -651,10 +649,10 @@ abstract class NacAlarmDatabase
 		/**
 		 * Copy data from another database.
 		 */
-		fun copyFromDb(
+		suspend fun copyFromDb(
 			context: Context,
 			dbFile: File,
-			lifecycleScope: LifecycleCoroutineScope)
+		)
 		{
 			// Open the main app database
 			val db = getInstance(context)
@@ -663,41 +661,36 @@ abstract class NacAlarmDatabase
 			val importDb = databaseBuilder(context, NacAlarmDatabase::class.java, dbFile.path)
 				.build()
 
-			lifecycleScope.launch {
+			// Copy all the alarms
+			copyAlarmsFromDb(context, db, importDb)
 
-				// Copy all the alarms
-				copyAlarmsFromDb(context, db, importDb)
+			// Copy all the timers
+			copyTimersFromDb(db, importDb)
 
-				// Copy all the timers
-				copyTimersFromDb(db, importDb)
+			// Copy created statistics
+			copyCreatedStatisticsFromDb(db, importDb)
 
-				// Copy created statistics
-				copyCreatedStatisticsFromDb(db, importDb)
+			// Copy deleted statistics
+			copyDeletedStatisticsFromDb(db, importDb)
 
-				// Copy deleted statistics
-				copyDeletedStatisticsFromDb(db, importDb)
+			// Copy dismissed statistics
+			copyDismissedStatisticsFromDb(db, importDb)
 
-				// Copy dismissed statistics
-				copyDismissedStatisticsFromDb(db, importDb)
+			// Copy missed statistics
+			copyMissedStatisticsFromDb(db, importDb)
 
-				// Copy missed statistics
-				copyMissedStatisticsFromDb(db, importDb)
+			// Copy snoozed statistics
+			copySnoozedStatisticsFromDb(db, importDb)
 
-				// Copy snoozed statistics
-				copySnoozedStatisticsFromDb(db, importDb)
+			// Copy NFC tags
+			copyNfcTagsFromDb(db, importDb)
 
-				// Copy NFC tags
-				copyNfcTagsFromDb(db, importDb)
+			// Close the import database
+			importDb.close()
 
-				// Close the import database
-				importDb.close()
-
-				// Show success message
+			// Show success message
+			withContext(Dispatchers.Main) {
 				quickToast(context, R.string.message_import_completed)
-
-				// Delete the database file
-				dbFile.delete()
-
 			}
 		}
 

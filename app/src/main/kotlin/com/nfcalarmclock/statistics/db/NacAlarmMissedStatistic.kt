@@ -1,6 +1,7 @@
 package com.nfcalarmclock.statistics.db
 
 import androidx.room.Entity
+import androidx.room.Index
 import com.nfcalarmclock.alarm.db.NacAlarm
 import dagger.Module
 import dagger.Provides
@@ -10,7 +11,10 @@ import dagger.hilt.components.SingletonComponent
 /**
  * Statistics for when an alarm is missed.
  */
-@Entity(tableName = "alarm_missed_statistic")
+@Entity(
+	tableName = "alarm_missed_statistic",
+	inheritSuperIndices = true,
+)
 class NacAlarmMissedStatistic
 	: NacAlarmStatistic
 {

@@ -35,22 +35,16 @@ class NacClockWidgetProvider : AppWidgetProvider()
 		// Super
 		super.onReceive(context, intent)
 
-		// Check if certain action pertaining to booting up, time change, or clock change
+		// Check if certain action pertaining to booting up or time/timezone/locale/alarm changed
 		if ((intent?.action == Intent.ACTION_BOOT_COMPLETED)
 			|| (intent?.action == "android.intent.action.TIME_SET")
 			|| (intent?.action == Intent.ACTION_TIMEZONE_CHANGED)
-			|| (intent?.action == Intent.ACTION_LOCALE_CHANGED))
+			|| (intent?.action == Intent.ACTION_LOCALE_CHANGED)
+			|| (intent?.action == AlarmManager.ACTION_NEXT_ALARM_CLOCK_CHANGED))
 		{
 			// Refresh all widgets
-			println("onReceived() : refresh all widgets")
 			refreshAllWidgets(context)
 		}
-		else if (intent?.action == AlarmManager.ACTION_NEXT_ALARM_CLOCK_CHANGED)
-		{
-			println("onReceived() : partially update all all widgets")
-			partiallyUpdateAllWidgets(context)
-		}
-
 	}
 
 	/**
@@ -61,9 +55,8 @@ class NacClockWidgetProvider : AppWidgetProvider()
 		appWidgetManager: AppWidgetManager,
 		appWidgetIds: IntArray)
 	{
-		println("onUpdate() : partially update all widgets")
-		// Partially update all widgets
-		partiallyUpdateAllWidgets(
+		// Refresh all widgets
+		refreshAllWidgets(
 			context,
 			appWidgetManager = appWidgetManager,
 			appWidgetIds = appWidgetIds)
@@ -74,51 +67,12 @@ class NacClockWidgetProvider : AppWidgetProvider()
 /**
  * Partially update all the widgets.
  */
-internal fun partiallyUpdateAllWidgets(
-	context: Context,
-	appWidgetManager: AppWidgetManager = AppWidgetManager.getInstance(context),
-	appWidgetIds: IntArray = appWidgetManager.getAppWidgetIds(ComponentName(context, NacClockWidgetProvider::class.java))
-)
-{
-	println("partiallyUpdateAllWidgets()")
-	for (id in appWidgetIds)
-	{
-		partiallyUpdateWidget(context, appWidgetManager, id)
-	}
-}
-
-/**
- * Partially update a widget.
- */
-internal fun partiallyUpdateWidget(
-	context: Context,
-	appWidgetManager: AppWidgetManager,
-	widgetId: Int
-)
-{
-	// Construct the RemoteViews object
-	val views = RemoteViews(context.packageName, R.layout.nac_clock_widget)
-
-	// Build the clock widget helper
-	val helper = NacClockWidgetDataHelper(context)
-
-	// Update the widget
-	views.updateText(helper)
-
-	// Instruct the widget manager to partially update the widget
-	appWidgetManager.partiallyUpdateAppWidget(widgetId, views)
-}
-
-/**
- * Refresh all the widgets.
- */
 internal fun refreshAllWidgets(
 	context: Context,
 	appWidgetManager: AppWidgetManager = AppWidgetManager.getInstance(context),
 	appWidgetIds: IntArray = appWidgetManager.getAppWidgetIds(ComponentName(context, NacClockWidgetProvider::class.java))
 )
 {
-	println("refreshAllWidgets()")
 	for (id in appWidgetIds)
 	{
 		refreshWidget(context, appWidgetManager, id)

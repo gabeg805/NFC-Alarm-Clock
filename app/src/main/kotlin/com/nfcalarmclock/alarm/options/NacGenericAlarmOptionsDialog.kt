@@ -69,21 +69,9 @@ abstract class NacGenericAlarmOptionsDialog
 	}
 
 	/**
-	 * Setup all alarm options.
-	 */
-	abstract fun setupAlarmOptions(alarm: NacAlarm?)
-
-	/**
-	 * Ok button is clicked.
-	 */
-	abstract fun onOkClicked(alarm: NacAlarm?)
-
-	/**
 	 * Cancel button is clicked.
 	 */
-	open fun onCancelClicked(alarm: NacAlarm?)
-	{
-	}
+	open fun onCancelClicked(alarm: NacAlarm?) {}
 
 	/**
 	 * Create the view.
@@ -119,6 +107,11 @@ abstract class NacGenericAlarmOptionsDialog
 		// Dismiss the dialog
 		dismiss()
 	}
+
+	/**
+	 * Ok button is clicked.
+	 */
+	abstract fun onOkClicked(alarm: NacAlarm?)
 
 	/**
 	 * Alarm should be saved.
@@ -184,6 +177,11 @@ abstract class NacGenericAlarmOptionsDialog
 	}
 
 	/**
+	 * Setup all alarm options.
+	 */
+	abstract fun setupAlarmOptions(alarm: NacAlarm?)
+
+	/**
 	 * Setup the Cancel button.
 	 */
 	open fun setupCancelButton(alarm: NacAlarm?)
@@ -198,9 +196,7 @@ abstract class NacGenericAlarmOptionsDialog
 	/**
 	 * Setup any extra buttons.
 	 */
-	open fun setupExtraButtons(alarm: NacAlarm?)
-	{
-	}
+	open fun setupExtraButtons(alarm: NacAlarm?) {}
 
 	/**
 	 * Setup the minutes and second dropdown views of an option.

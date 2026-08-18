@@ -228,7 +228,7 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:orientation="vertical"
-			android:visibility="gone">
+			android:visibility="visible">
 
 			<!-- Header divider -->
 			<LinearLayout
@@ -238,6 +238,7 @@
 				android:paddingTop="@dimen/tiny"
 				android:paddingBottom="@dimen/tiny"
 				android:gravity="center"
+				android:visibility="gone"
 				android:orientation="horizontal">
 
 				<View

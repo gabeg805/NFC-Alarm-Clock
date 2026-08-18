@@ -64,7 +64,6 @@ import com.nfcalarmclock.timer.active.NacActiveTimerFragment
 import com.nfcalarmclock.timer.active.NacActiveTimerService
 import com.nfcalarmclock.view.setupRippleColor
 import com.nfcalarmclock.view.setupThemeColor
-import com.nfcalarmclock.view.slideUp
 import com.nfcalarmclock.whatsnew.NacWhatsNewDialog
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -645,6 +644,14 @@ class NacMainActivity
 					true
 				}
 
+				// Settings
+				R.id.bottom_navigation_settings ->
+				{
+
+					navController.navigate(R.id.nacMainSettingFragment)
+					true
+				}
+
 				// Unknown
 				else -> false
 			}
@@ -819,14 +826,34 @@ class NacMainActivity
 		// Destination changed listener
 		navController.addOnDestinationChangedListener { _, destination, _ ->
 
-			// Set the visibility of the settings menu button in the toolbar
-			val settingsMenuItem = toolbar.menu.findItem(R.id.menu_settings)
-			settingsMenuItem.isVisible = !((destination.id == R.id.nacMainSettingFragment)
-					|| (destination.id == R.id.nacGeneralSettingFragment)
-					|| (destination.id == R.id.nacAppearanceSettingFragment)
-					|| (destination.id == R.id.nacNfcTagSettingFragment)
-					|| (destination.id == R.id.nacStatisticsSettingFragment)
-					|| (destination.id == R.id.nacAboutSettingFragment))
+			toolbar.visibility = if ((destination.id == R.id.nacGeneralSettingFragment)
+				|| (destination.id == R.id.nacAppearanceSettingFragment)
+				|| (destination.id == R.id.nacNfcTagSettingFragment)
+				|| (destination.id == R.id.nacStatisticsSettingFragment)
+				|| (destination.id == R.id.nacAboutSettingFragment)
+				|| (destination.id == R.id.nacAlarmMainMediaPickerFragment)
+				|| (destination.id == R.id.nacAlarmMainMediaPickerFragment2)
+				|| (destination.id == R.id.nacTimerMainMediaPickerFragment)
+				|| (destination.id == R.id.nacAddTimerFragment)
+				|| (destination.id == R.id.nacEditTimerFragment)
+				|| (destination.id == R.id.nacActiveTimerFragment)
+				)
+			{
+				View.VISIBLE
+			}
+			else
+			{
+				View.GONE
+			}
+
+			//// Set the visibility of the settings menu button in the toolbar
+			//val settingsMenuItem = toolbar.menu.findItem(R.id.menu_settings)
+			//settingsMenuItem.isVisible = !((destination.id == R.id.nacMainSettingFragment)
+			//		|| (destination.id == R.id.nacGeneralSettingFragment)
+			//		|| (destination.id == R.id.nacAppearanceSettingFragment)
+			//		|| (destination.id == R.id.nacNfcTagSettingFragment)
+			//		|| (destination.id == R.id.nacStatisticsSettingFragment)
+			//		|| (destination.id == R.id.nacAboutSettingFragment))
 
 			// Setup the flag when NFC was just scanned to dismiss
 			setupWasNfcJustScannedToDismiss()
@@ -835,13 +862,13 @@ class NacMainActivity
 			bottomNavigation.visibility = if ((destination.id == R.id.nacAlarmMainMediaPickerFragment)
 				|| (destination.id == R.id.nacAlarmMainMediaPickerFragment2)
 				|| (destination.id == R.id.nacTimerMainMediaPickerFragment)
-				|| (destination.id == R.id.nacActiveTimerFragment)
-				|| (destination.id == R.id.nacMainSettingFragment)
-				|| (destination.id == R.id.nacGeneralSettingFragment)
-				|| (destination.id == R.id.nacAppearanceSettingFragment)
-				|| (destination.id == R.id.nacNfcTagSettingFragment)
-				|| (destination.id == R.id.nacStatisticsSettingFragment)
-				|| (destination.id == R.id.nacAboutSettingFragment))
+				|| (destination.id == R.id.nacActiveTimerFragment))
+				//|| (destination.id == R.id.nacMainSettingFragment)
+				//|| (destination.id == R.id.nacGeneralSettingFragment)
+				//|| (destination.id == R.id.nacAppearanceSettingFragment)
+				//|| (destination.id == R.id.nacNfcTagSettingFragment)
+				//|| (destination.id == R.id.nacStatisticsSettingFragment)
+				//|| (destination.id == R.id.nacAboutSettingFragment))
 			{
 				// Media picker
 				View.GONE
@@ -852,16 +879,16 @@ class NacMainActivity
 				View.VISIBLE
 			}
 
-			// Slide the bottom navigation view to ensure it is shown
-			if ((destination.id == R.id.nacShowTimersFragment)
-				|| (destination.id == R.id.nacAddTimerFragment)
-				|| (destination.id == R.id.nacEditTimerFragment))
-			{
-				if (bottomNavigation.translationY != 0f)
-				{
-					bottomNavigation.slideUp()
-				}
-			}
+			//// Slide the bottom navigation view to ensure it is shown
+			//if ((destination.id == R.id.nacShowTimersFragment)
+			//	|| (destination.id == R.id.nacAddTimerFragment)
+			//	|| (destination.id == R.id.nacEditTimerFragment))
+			//{
+			//	if (bottomNavigation.translationY != 0f)
+			//	{
+			//		bottomNavigation.slideUp()
+			//	}
+			//}
 
 			// Floating action button visibility
 			when (destination.id)
@@ -880,10 +907,27 @@ class NacMainActivity
 			val bottomNavId = when (destination.id)
 			{
 				// Alarm
-				R.id.nacShowAlarmsFragment -> R.id.bottom_navigation_alarm
+				R.id.nacShowAlarmsFragment           -> R.id.bottom_navigation_alarm
+				R.id.nacAlarmMainMediaPickerFragment -> R.id.bottom_navigation_alarm
+
+				// Timer
+				R.id.nacShowTimersFragment           -> R.id.bottom_navigation_timer
+				R.id.nacAddTimerFragment             -> R.id.bottom_navigation_timer
+				R.id.nacEditTimerFragment            -> R.id.bottom_navigation_timer
+				R.id.nacActiveTimerFragment          -> R.id.bottom_navigation_timer
+				R.id.nacTimerMainMediaPickerFragment -> R.id.bottom_navigation_timer
+
+				// Settings
+				R.id.nacMainSettingFragment           -> R.id.bottom_navigation_settings
+				R.id.nacGeneralSettingFragment        -> R.id.bottom_navigation_settings
+				R.id.nacAppearanceSettingFragment     -> R.id.bottom_navigation_settings
+				R.id.nacNfcTagSettingFragment         -> R.id.bottom_navigation_settings
+				R.id.nacStatisticsSettingFragment     -> R.id.bottom_navigation_settings
+				R.id.nacAboutSettingFragment          -> R.id.bottom_navigation_settings
+				R.id.nacAlarmMainMediaPickerFragment2 -> R.id.bottom_navigation_settings
 
 				// Everything else
-				else -> R.id.bottom_navigation_timer
+				else -> R.id.bottom_navigation_alarm
 			}
 
 			// Navigate to that ID. Update the flag indicating that this change was not
@@ -977,23 +1021,23 @@ class NacMainActivity
 			}
 		}
 
-		// Menu item click listener
-		toolbar.setOnMenuItemClickListener { item ->
+		//// Menu item click listener
+		//toolbar.setOnMenuItemClickListener { item ->
 
-			when (item.itemId)
-			{
-				// Settings
-				R.id.menu_settings ->
-				{
-					navController.navigate(R.id.nacMainSettingFragment)
-					true
-				}
+		//	when (item.itemId)
+		//	{
+		//		// Settings
+		//		R.id.menu_settings ->
+		//		{
+		//			navController.navigate(R.id.nacMainSettingFragment)
+		//			true
+		//		}
 
-				// Unknown
-				else -> false
-			}
+		//		// Unknown
+		//		else -> false
+		//	}
 
-		}
+		//}
 	}
 
 	/**

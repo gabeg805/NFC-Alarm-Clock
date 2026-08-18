@@ -7,7 +7,6 @@ import java.io.FileInputStream
 // Plugins
 plugins {
 	id("com.android.application")
-	id("org.jetbrains.kotlin.android")
 	id("com.google.dagger.hilt.android")
 	id("com.google.devtools.ksp")
 }
@@ -30,29 +29,16 @@ android {
 	compileSdk = 36
 
 	defaultConfig {
-
-		// Default app stuff
 		applicationId = "com.nfcalarmclock"
 		minSdk = 24
 		targetSdk = 36
-		versionCode = 574
-		versionName = "12.6.5-beta002"
-
-		// Set output filename
-		setProperty("archivesBaseName", "nfc_alarm_clock_v${versionName}")
-
-		// Location to export Room database schema
-		//noinspection WrongGradleMethod
-		ksp {
-			arg("room.schemaLocation", "${projectDir}/schemas")
-		}
-
+		versionCode = 575
+		versionName = "12.6.5-beta003"
 	}
 
-	// Configuration for signing the app
+	// Configuration for signing the app on release builds. The keystore.properties file must exist
 	signingConfigs {
 		create("release") {
-			// Set the signing config for release builds, if the keystore.properties file exists
 			if (keystorePropertiesFile.exists()) {
 				keyAlias = keystoreProperties["keyAlias"] as String
 				keyPassword = keystoreProperties["keyPassword"] as String
@@ -62,29 +48,30 @@ android {
 		}
 	}
 
+	// Setup when creating a release build
 	buildTypes {
-
-		// Setup when creating a release build
 		getByName("release") {
-			// Remove unused code and resources, and optimize the code without
-			// obfuscating so that the build is reproducible
-			postprocessing {
-				isRemoveUnusedCode = true
-				isRemoveUnusedResources = true
-				isObfuscate = false
-				isOptimizeCode = true
-			}
+
+			// Remove unused code and resources, and optimize the code
+			isMinifyEnabled = true
+			isShrinkResources = true
+
+			// Set do not obfuscate flag in proguard so that the build is reproducible
+			proguardFiles(
+				getDefaultProguardFile("proguard-android-optimize.txt"),
+				"proguard-rules.pro"
+			)
 
 			// Set the signing config for release builds, if the keystore.properties file exists
 			if (keystorePropertiesFile.exists()) {
 				signingConfig = signingConfigs.getByName("release")
 			}
-		}
 
+		}
 	}
 
+	// Disable dependency metadata when building apks and bundles
 	dependenciesInfo {
-		// Disable dependency metadata when building apks and bundles
 		includeInApk = false
 		includeInBundle = false
 	}
@@ -95,34 +82,28 @@ android {
 		viewBinding = true
 	}
 
-	// Build variants
+	// Build variants, FOSS and Google Play
 	flavorDimensions += "version"
 
 	productFlavors {
-
-		// FOSS
 		create("foss") {
 			dimension = "version"
 		}
 
-		// Google play
 		create("googleplay") {
 			dimension = "version"
 		}
+	}
 
+	// Enable automatic per-app language support
+	androidResources {
+		generateLocaleConfig = true
 	}
 
 	compileOptions {
 		// Sets Java version the same as the Kotlin version
 		sourceCompatibility = JavaVersion.VERSION_17
 		targetCompatibility = JavaVersion.VERSION_17
-	}
-
-	// Set the same JVM version as the compile options
-	kotlin {
-		compilerOptions {
-			jvmTarget.set(JvmTarget.JVM_17)
-		}
 	}
 
 	// Lint setup
@@ -133,13 +114,31 @@ android {
 				"TypographyQuotes"
     }
 
+	// Data binding
 	namespace = "com.nfcalarmclock"
 	dataBinding.enable = true
 
 }
 
-// Define the Google play build configuration
-val googleplayImplementation by configurations
+// Set output filename
+base {
+	archivesName = "nfc_alarm_clock_v${android.defaultConfig.versionName}"
+}
+
+// Set the same JVM version as the compile options
+kotlin {
+	compilerOptions {
+		jvmTarget = JvmTarget.JVM_17
+	}
+}
+
+// Location to export Room database schema
+ksp {
+	arg("room.schemaLocation", "${projectDir}/schemas")
+}
+
+// Define the Google Play build configuration
+val googleplayImplementation = configurations.getByName("googleplayImplementation")
 
 dependencies {
 
@@ -177,8 +176,8 @@ dependencies {
 	// Room kotlin extensions and coroutines
 
 	// Dependency injection with Hilt
-	implementation("com.google.dagger:hilt-android:2.57.2")
-	ksp("com.google.dagger:hilt-android-compiler:2.57.2")
+	implementation("com.google.dagger:hilt-android:2.59.2")
+	ksp("com.google.dagger:hilt-android-compiler:2.59.2")
 
 	// ------------------------------------------------------------------------
 	// Google Play Build Variant

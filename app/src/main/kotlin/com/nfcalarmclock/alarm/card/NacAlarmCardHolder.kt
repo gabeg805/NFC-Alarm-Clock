@@ -2,6 +2,7 @@ package com.nfcalarmclock.alarm.card
 
 import android.animation.Animator
 import android.animation.AnimatorInflater
+import android.animation.ObjectAnimator
 import android.content.Context
 import android.content.res.ColorStateList
 import android.view.View
@@ -771,6 +772,11 @@ class NacAlarmCardHolder(root: View)
 		// Setup the summary
 		summaryView.visibility = View.VISIBLE
 		summaryView.isEnabled = true
+		ObjectAnimator.ofFloat(expandButton, "rotation", expandButton.rotation, 0f)
+			.apply {
+				duration = 250
+				start()
+			}
 
 		// Setup the expanded view
 		expandedView.visibility = View.GONE
@@ -804,8 +810,15 @@ class NacAlarmCardHolder(root: View)
 	private fun doExpand()
 	{
 		// Setup the summary
-		summaryView.visibility = View.GONE
-		summaryView.isEnabled = false
+		//summaryView.visibility = View.GONE
+		//summaryView.isEnabled = false
+		summaryView.visibility = View.VISIBLE
+		summaryView.isEnabled = true
+		ObjectAnimator.ofFloat(expandButton, "rotation", expandButton.rotation, 180f)
+			.apply {
+				duration = 300
+				start()
+			}
 
 		// Setup the expanded view
 		expandedView.visibility = View.VISIBLE
@@ -1652,10 +1665,12 @@ class NacAlarmCardHolder(root: View)
 		// id == R.id.nac_dismiss_parent
 		// id == R.id.nac_expand
 		// id == R.id.nac_expand_other
+		// id == R.id.nac_divider_header
 
 		// List of all the views that need the same on click listener for the card
-		val allCardViews = listOf(headerView, summaryView, extraBelowSummaryView,
-			expandButton, expandOtherButton)
+		val headerDivider = root.findViewById<ViewGroup>(R.id.nac_divider_header)
+		val allCardViews = listOf(headerView, summaryView, headerDivider,
+			extraBelowSummaryView, expandButton, expandOtherButton)
 
 		// Iterate over all the main card views that will control expanding and
 		// collapsing the alarm

@@ -29,10 +29,7 @@ class NacNextAlarmFormatPreference @JvmOverloads constructor(
 	style: Int = 0
 
 	// Constructor
-) : Preference(context, attrs, style),
-
-	// Interface
-	NacNextAlarmFormatDialog.OnNextAlarmFormatSelectedListener
+) : Preference(context, attrs, style)
 {
 
 	/**
@@ -76,21 +73,6 @@ class NacNextAlarmFormatPreference @JvmOverloads constructor(
 	}
 
 	/**
-	 * Save the spinner index value.
-	 */
-	override fun onNextAlarmFormatSelected(which: Int)
-	{
-		// Set the value of the next alarm format
-		nextAlarmFormatIndex = which
-
-		// Persist the index
-		persistInt(nextAlarmFormatIndex)
-
-		// Notify of the change
-		notifyChanged()
-	}
-
-	/**
 	 * Set the initial preference value.
 	 */
 	public override fun onSetInitialValue(defaultValue: Any?)
@@ -118,8 +100,19 @@ class NacNextAlarmFormatPreference @JvmOverloads constructor(
 		val dialog = NacNextAlarmFormatDialog()
 
 		// Setup the dialog
-		dialog.defaultNextAlarmFormatIndex = nextAlarmFormatIndex
-		dialog.onNextAlarmFormatListener = this
+		dialog.defaultSelectedIndex = nextAlarmFormatIndex
+		dialog.onNextAlarmFormatListener = NacNextAlarmFormatDialog.OnNextAlarmFormatSelectedListener { which ->
+
+			// Set the value of the next alarm format
+			nextAlarmFormatIndex = which
+
+			// Persist the index
+			persistInt(nextAlarmFormatIndex)
+
+			// Notify of the change
+			notifyChanged()
+
+		}
 
 		// Show the dialog
 		dialog.show(manager, NacNextAlarmFormatDialog.TAG)
