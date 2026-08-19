@@ -10,6 +10,7 @@ import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.NacGenericAlarmOptionsDialog
 import com.nfcalarmclock.system.toBundle
 import com.nfcalarmclock.view.calcAlpha
+import com.nfcalarmclock.view.quickToast
 import com.nfcalarmclock.view.setTextFromIndex
 import com.nfcalarmclock.view.setupInputLayoutColor
 import com.nfcalarmclock.view.setupSwitchColor
@@ -62,6 +63,16 @@ open class NacDismissOptionsDialog
 	private lateinit var dismissEarlyInputLayout: TextInputLayout
 
 	/**
+	 * Delete after dismissed switch.
+	 */
+	private lateinit var deleteAfterDismissedSwitch: SwitchCompat
+
+	/**
+	 * Volume dismiss switch.
+	 */
+	private lateinit var volumeDismissSwitch: SwitchCompat
+
+	/**
 	 * Selected auto dismiss time.
 	 */
 	private var selectedAutoDismissTime: Int = 0
@@ -70,11 +81,6 @@ open class NacDismissOptionsDialog
 	 * Selected dismiss early time.
 	 */
 	private var selectedDismissEarlyTime: Int = 0
-
-	/**
-	 * Selected should delete the alarm after it is dismissed option.
-	 */
-	private var selectedShouldDeleteAlarmAfterDismissed: Boolean = false
 
 	/**
 	 * Ok button is clicked.
@@ -87,7 +93,8 @@ open class NacDismissOptionsDialog
 		alarm?.canDismissEarly = dismissEarlySwitch.isChecked
 		alarm?.shouldShowDismissEarlyNotification = dismissEarlyNotificationSwitch.isChecked
 		alarm?.dismissEarlyTime = selectedDismissEarlyTime
-		alarm?.shouldDeleteAfterDismissed = selectedShouldDeleteAlarmAfterDismissed
+		alarm?.shouldDeleteAfterDismissed = deleteAfterDismissedSwitch.isChecked
+		alarm?.shouldVolumeDismiss = volumeDismissSwitch.isChecked
 	}
 
 	/**
@@ -147,8 +154,36 @@ open class NacDismissOptionsDialog
 		setupAutoDismiss(a.shouldAutoDismiss, defaultAutoDismissTime)
 		setupDismissEarly(a.canDismissEarly, a.shouldShowDismissEarlyNotification, a.dismissEarlyTime)
 		setupShouldDeleteAlarmAfterDismissed(a.shouldDeleteAfterDismissed)
+		setupVolumeDismiss(a.shouldVolumeDismiss, a.shouldVolumeSnooze)
 		setAutoDismissUsability()
 		setDismissEarlyUsability()
+	}
+
+	/**
+	 * Setup volume dismiss.
+	 */
+	private fun setupVolumeDismiss(defaultDismiss: Boolean, defaultSnooze: Boolean)
+	{
+		// Get the views
+		val relativeLayout: RelativeLayout = dialog!!.findViewById(R.id.volume_dismiss_container)
+		volumeDismissSwitch = dialog!!.findViewById(R.id.volume_dismiss_switch)
+
+		// Setup the checkbox
+		volumeDismissSwitch.isChecked = defaultDismiss
+		volumeDismissSwitch.setupSwitchColor(sharedPreferences)
+
+		// Volume dismiss listener
+		relativeLayout.setOnClickListener {
+			volumeDismissSwitch.toggle()
+		}
+
+		// Show toast if volume dismiss and snooze are both enabled
+		volumeDismissSwitch.setOnCheckedChangeListener { _, state ->
+			if (state && defaultSnooze)
+			{
+				quickToast(requireContext(), R.string.message_volume_snooze_ignored)
+			}
+		}
 	}
 
 	/**
@@ -249,19 +284,15 @@ open class NacDismissOptionsDialog
 	{
 		// Get the views
 		val relativeLayout: RelativeLayout = dialog!!.findViewById(R.id.delete_after_dismissed_container)
-		val switch: SwitchCompat = dialog!!.findViewById(R.id.delete_after_dismissed_switch)
+		deleteAfterDismissedSwitch = dialog!!.findViewById(R.id.delete_after_dismissed_switch)
 
 		// Setup the checkbox
-		switch.isChecked = default
-		switch.setupSwitchColor(sharedPreferences)
+		deleteAfterDismissedSwitch.isChecked = default
+		deleteAfterDismissedSwitch.setupSwitchColor(sharedPreferences)
 
-		// Set the parent click listener to change the checkbox
+		// Delete after dismissed listener
 		relativeLayout.setOnClickListener {
-
-			// Toggle the checkbox
-			switch.toggle()
-			selectedShouldDeleteAlarmAfterDismissed = switch.isChecked
-
+			deleteAfterDismissedSwitch.toggle()
 		}
 	}
 

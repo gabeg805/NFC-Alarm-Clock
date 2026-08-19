@@ -481,7 +481,7 @@ class NacWakeupProcess(
 		initialVolume = audioAttributes.streamVolume
 
 		// Watch for volume key press
-		if (alarm.shouldVolumeSnooze)
+		if (alarm.shouldVolumeDismiss || alarm.shouldVolumeSnooze)
 		{
 			volumeKeyPressWatchdog()
 		}
@@ -587,6 +587,7 @@ class NacWakeupProcess(
 				// Call the volume key press listener
 				onVolumeKeyPressListener?.onVolumeKeyPress(alarm)
 				volumeKeyPressHandler.removeCallbacksAndMessages(null)
+				// TODO: Test what happens if out of snoozes!
 			}
 			// No change in volume. Keep the watchdog running
 			else

@@ -426,6 +426,12 @@ open class NacAlarm()
 	var shouldDeleteAfterDismissed: Boolean = false
 
 	/**
+	 * Whether dismissing with a volume button is allowed or not.
+	 */
+	@ColumnInfo(name = "should_volume_dismiss", defaultValue = "0")
+	var shouldVolumeDismiss: Boolean = false
+
+	/**
 	 * Whether to auto snooze or not.
 	 */
 	@ColumnInfo(name = "should_auto_snooze", defaultValue = "0")
@@ -645,6 +651,7 @@ open class NacAlarm()
 		timeOfDismissEarlyAlarm = input.readLong()
 		shouldShowDismissEarlyNotification = input.readInt() != 0
 		shouldDeleteAfterDismissed = input.readInt() != 0
+		shouldVolumeDismiss = input.readInt() != 0
 
 		// Snooze
 		shouldAutoSnooze = input.readInt() != 0
@@ -1061,6 +1068,7 @@ open class NacAlarm()
 		alarm.timeOfDismissEarlyAlarm = timeOfDismissEarlyAlarm
 		alarm.shouldShowDismissEarlyNotification = shouldShowDismissEarlyNotification
 		alarm.shouldDeleteAfterDismissed = shouldDeleteAfterDismissed
+		alarm.shouldVolumeDismiss = shouldVolumeDismiss
 
 		// Snooze
 		alarm.shouldAutoSnooze = shouldAutoSnooze
@@ -1248,6 +1256,7 @@ open class NacAlarm()
 			&& (dismissEarlyTime == alarm.dismissEarlyTime)
 			&& (shouldShowDismissEarlyNotification == alarm.shouldShowDismissEarlyNotification)
 			&& (shouldDeleteAfterDismissed == alarm.shouldDeleteAfterDismissed)
+			&& (shouldVolumeDismiss == alarm.shouldVolumeDismiss)
 			&& (shouldAutoSnooze == alarm.shouldAutoSnooze)
 			&& (autoSnoozeTime == alarm.autoSnoozeTime)
 			&& (maxSnooze == alarm.maxSnooze)
@@ -1343,6 +1352,7 @@ open class NacAlarm()
 			+ timeOfDismissEarlyAlarm.hashCode()
 			+ shouldShowDismissEarlyNotification.hashCode()
 			+ shouldDeleteAfterDismissed.hashCode()
+			+ shouldVolumeDismiss.hashCode()
 			+ shouldAutoSnooze.hashCode()
 			+ autoSnoozeTime
 			+ maxSnooze
@@ -1446,6 +1456,7 @@ open class NacAlarm()
 		println("Time of Early Alarm   : $timeOfDismissEarlyAlarm")
 		println("Should Dismiss Early N: $shouldShowDismissEarlyNotification")
 		println("Should delete after   : $shouldDeleteAfterDismissed")
+		println("Should Volume Dismiss : $shouldVolumeDismiss")
 		println("Should auto snooze    : $shouldAutoSnooze")
 		println("Auto Snooze           : $autoSnoozeTime")
 		println("Max Snooze            : $maxSnooze")
@@ -1834,6 +1845,7 @@ open class NacAlarm()
 		output.writeLong(timeOfDismissEarlyAlarm)
 		output.writeInt(if (shouldShowDismissEarlyNotification) 1 else 0)
 		output.writeInt(if (shouldDeleteAfterDismissed) 1 else 0)
+		output.writeInt(if (shouldVolumeDismiss) 1 else 0)
 
 		// Snooze
 		output.writeInt(if (shouldAutoSnooze) 1 else 0)
@@ -1962,6 +1974,7 @@ open class NacAlarm()
 			alarm.dismissEarlyTime = shared.dismissEarlyTime
 			alarm.shouldShowDismissEarlyNotification = shared.shouldShowDismissEarlyNotification
 			alarm.shouldDeleteAfterDismissed = shared.shouldDeleteAfterDismissed
+			alarm.shouldVolumeDismiss = shared.shouldVolumeDismiss
 
 			// Snooze
 			alarm.shouldAutoSnooze = shared.shouldAutoSnooze

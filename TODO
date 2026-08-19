@@ -2,31 +2,23 @@
 TODO
 ----
 
+* Make active alarm slide buttons bigger
+
 * Darken color of expanded alarm card?
 
 * Add labels to everything?
 
-* Add 00 to timer
-
 * Change name of notification objects to notification builders
-
-* Test having the weekday and label show always, this way you can have the
-  expand/collapse button be shown always as well
 
 * When active alarm or timer is left. Then "nfcTags" has to get reinitialized
   and probably gets cleared. May need to save the current progress in
   onSavedInstanceState() or whatever it is called.
-
-* Is it possible to not have the top bar that says NFC Alarm Clock? Perhaps
-  have settings button be an unlabeled item in the navigation bar?
 
 * Update website with f-droid and izzy
 
 * Make DateTime dialog scrollable on small screens.
 
 * Have a way to test various settings, like gradually increase volume, etc.
-
-* When in media activity, the settings button is up there. Should hide that.
 
 * Test NFC dismiss when app is not in focus and make sure scanning NFC isn't
   causing a loop.

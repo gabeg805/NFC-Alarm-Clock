@@ -977,7 +977,7 @@ class NacSwipeLayoutHandler(
 			dismissButton.id ->
 			{
 				// Check if the view position is at the start of the alarm action row
-				return (view.x == startAlarmActionX)
+				(view.x == startAlarmActionX)
 			}
 
 			// Snooze button or some other view which should never happen
@@ -1008,7 +1008,7 @@ class NacSwipeLayoutHandler(
 			snoozeButton.id ->
 			{
 				// Check if the view position is at the end of the alarm action row
-				return (view.x == endAlarmActionX)
+				(view.x == endAlarmActionX)
 			}
 
 			// Dismiss button or some other view which should never happen

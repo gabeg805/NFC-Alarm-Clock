@@ -216,6 +216,7 @@ class NacMainActivity
 
 			// Get any active alarm or timer
 			val activeAlarm = alarmViewModel.getActiveAlarm()
+			activeAlarm?.print()
 
 			// An NFC tag was scanned to open up the main activity
 			if (NacNfc.wasScanned(intent))
@@ -647,7 +648,15 @@ class NacMainActivity
 				// Settings
 				R.id.bottom_navigation_settings ->
 				{
+					// Remove the media fragment from the back stack
+					if ((navController.currentDestination?.id == R.id.nacAlarmMainMediaPickerFragment)
+						|| (navController.currentDestination?.id == R.id.nacAlarmMainMediaPickerFragment2)
+						|| (navController.currentDestination?.id == R.id.nacTimerMainMediaPickerFragment))
+					{
+						navController.popBackStack()
+					}
 
+					// Go to settings
 					navController.navigate(R.id.nacMainSettingFragment)
 					true
 				}
@@ -702,8 +711,6 @@ class NacMainActivity
 				leftMargin = insets.left
 				rightMargin = insets.right
 			}
-			//println("Top : ${insets.top} | Bottom : ${insets.bottom} | Left : ${insets.left} | Right : ${insets.right}")
-			//v.setPadding(insets.left, insets.top, insets.right, insets.bottom)
 
 			// Return CONSUMED so that window insets do not propagate down to descendant views
 			WindowInsetsCompat.CONSUMED
@@ -846,48 +853,29 @@ class NacMainActivity
 				View.GONE
 			}
 
-			//// Set the visibility of the settings menu button in the toolbar
-			//val settingsMenuItem = toolbar.menu.findItem(R.id.menu_settings)
-			//settingsMenuItem.isVisible = !((destination.id == R.id.nacMainSettingFragment)
-			//		|| (destination.id == R.id.nacGeneralSettingFragment)
-			//		|| (destination.id == R.id.nacAppearanceSettingFragment)
-			//		|| (destination.id == R.id.nacNfcTagSettingFragment)
-			//		|| (destination.id == R.id.nacStatisticsSettingFragment)
-			//		|| (destination.id == R.id.nacAboutSettingFragment))
-
 			// Setup the flag when NFC was just scanned to dismiss
 			setupWasNfcJustScannedToDismiss()
 
-			// Set the bottom navigation visibility based on the current destination
-			bottomNavigation.visibility = if ((destination.id == R.id.nacAlarmMainMediaPickerFragment)
-				|| (destination.id == R.id.nacAlarmMainMediaPickerFragment2)
-				|| (destination.id == R.id.nacTimerMainMediaPickerFragment)
-				|| (destination.id == R.id.nacActiveTimerFragment))
-				//|| (destination.id == R.id.nacMainSettingFragment)
-				//|| (destination.id == R.id.nacGeneralSettingFragment)
-				//|| (destination.id == R.id.nacAppearanceSettingFragment)
-				//|| (destination.id == R.id.nacNfcTagSettingFragment)
-				//|| (destination.id == R.id.nacStatisticsSettingFragment)
-				//|| (destination.id == R.id.nacAboutSettingFragment))
-			{
-				// Media picker
-				View.GONE
-			}
-			else
-			{
-				// Everything else
-				View.VISIBLE
-			}
-
-			//// Slide the bottom navigation view to ensure it is shown
-			//if ((destination.id == R.id.nacShowTimersFragment)
-			//	|| (destination.id == R.id.nacAddTimerFragment)
-			//	|| (destination.id == R.id.nacEditTimerFragment))
+			// TODO: Remove comment
+			//// Set the bottom navigation visibility based on the current destination
+			//bottomNavigation.visibility = if ((destination.id == R.id.nacAlarmMainMediaPickerFragment)
+			//	|| (destination.id == R.id.nacAlarmMainMediaPickerFragment2)
+			//	|| (destination.id == R.id.nacTimerMainMediaPickerFragment)
+			//	|| (destination.id == R.id.nacActiveTimerFragment))
+			//	//|| (destination.id == R.id.nacMainSettingFragment)
+			//	//|| (destination.id == R.id.nacGeneralSettingFragment)
+			//	//|| (destination.id == R.id.nacAppearanceSettingFragment)
+			//	//|| (destination.id == R.id.nacNfcTagSettingFragment)
+			//	//|| (destination.id == R.id.nacStatisticsSettingFragment)
+			//	//|| (destination.id == R.id.nacAboutSettingFragment))
 			//{
-			//	if (bottomNavigation.translationY != 0f)
-			//	{
-			//		bottomNavigation.slideUp()
-			//	}
+			//	// Media picker
+			//	View.GONE
+			//}
+			//else
+			//{
+			//	// Everything else
+			//	View.VISIBLE
 			//}
 
 			// Floating action button visibility
@@ -1002,6 +990,7 @@ class NacMainActivity
 
 				// From active timer, go directly to show timers, skipping over add/edit
 				// since do not need to go back to those
+				@Suppress("CascadeIf")
 				if (navController.currentDestination?.id == R.id.nacActiveTimerFragment)
 				{
 					navController.navigate(R.id.action_global_nacShowTimersFragment)
@@ -1020,24 +1009,6 @@ class NacMainActivity
 
 			}
 		}
-
-		//// Menu item click listener
-		//toolbar.setOnMenuItemClickListener { item ->
-
-		//	when (item.itemId)
-		//	{
-		//		// Settings
-		//		R.id.menu_settings ->
-		//		{
-		//			navController.navigate(R.id.nacMainSettingFragment)
-		//			true
-		//		}
-
-		//		// Unknown
-		//		else -> false
-		//	}
-
-		//}
 	}
 
 	/**

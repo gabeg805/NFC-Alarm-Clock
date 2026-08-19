@@ -1,7 +1,6 @@
 package com.nfcalarmclock.settings
 
 import android.animation.AnimatorInflater
-import android.content.Context
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -11,21 +10,15 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
-import androidx.sqlite.db.SimpleSQLiteQuery
 import com.nfcalarmclock.R
-import com.nfcalarmclock.db.NacAlarmDatabase
+import com.nfcalarmclock.settings.importexport.NacExportService
 import com.nfcalarmclock.settings.importexport.NacImportExportDialog
 import com.nfcalarmclock.settings.importexport.NacImportService
-import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.support.NacSupportSetting
 import com.nfcalarmclock.system.NacCalendar
-import com.nfcalarmclock.system.file.zipFiles
-import com.nfcalarmclock.system.getDeviceProtectedStorageContext
 import com.nfcalarmclock.view.quickToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import java.io.File
-import java.io.OutputStream
 
 /**
  * Main setting fragment.
@@ -47,30 +40,8 @@ class NacMainSettingFragment
 	 * Export the shared preferences and database files to a zip file.
 	 */
 	private val exportContent = registerForActivityResult(ActivityResultContracts.CreateDocument("application/zip")) { uri ->
-
-		// Get the context
-		val context = requireContext()
-
-		// Get the output stream for the zip file
-		val outputStream = if (uri != null)
-		{
-			context.contentResolver.openOutputStream(uri)
-		}
-		else
-		{
-			null
-		}
-
-		// Stream is not valid
-		if (outputStream == null)
-		{
-			quickToast(context, R.string.error_message_unable_to_open_import_export_stream)
-			return@registerForActivityResult
-		}
-
-		// Export data to a zip file
-		export(context, outputStream)
-
+		val intent = Intent(Intent.ACTION_DEFAULT, uri, context, NacExportService::class.java)
+		requireContext().startService(intent)
 	}
 
 	/**
@@ -88,45 +59,6 @@ class NacMainSettingFragment
 		// Animate the drawable
 		animator.setTarget(preference!!.icon!!)
 		animator.start()
-	}
-
-	/**
-	 * Export the shared preferences and database files to a zip file.
-	 */
-	private fun export(context: Context, outputStream: OutputStream)
-	{
-		// Get the context depending on if the device can use direct boot or not
-		val deviceContext = getDeviceProtectedStorageContext(context)
-
-		// Get the shared preferences and csv file
-		val sharedPreferences = NacSharedPreferences(deviceContext)
-		val csvFile = File("${context.filesDir}/shared_preferences.csv")
-
-		// Get the database files
-		val dbFile = NacAlarmDatabase.getPath(deviceContext)
-		val dbShm = File("${dbFile.path}-shm")
-		val dbWal = File("${dbFile.path}-wal")
-
-		// Build the list of files to zip
-		val files = listOf(csvFile, dbFile, dbShm, dbWal)
-
-		// Write the shared preferences to a csv file
-		sharedPreferences.writeToCsv(context, csvFile)
-
-		lifecycleScope.launch {
-
-			// Checkpoint the database so that it does not need to be closed
-			NacAlarmDatabase.getInstance(deviceContext)
-				.alarmDao()
-				.checkpoint(SimpleSQLiteQuery("pragma wal_checkpoint(full)"))
-
-			// Zip the files
-			zipFiles(outputStream, files)
-
-			// Show success message
-			quickToast(context, R.string.message_export_completed)
-
-		}
 	}
 
 	/**

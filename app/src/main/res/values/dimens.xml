@@ -27,6 +27,7 @@
 	<dimen name="isz_xxxlarge">44dp</dimen>
 	<dimen name="isz_attention">54dp</dimen>
 	<dimen name="isz_focus">72dp</dimen>
+	<dimen name="isz_action_button">78dp</dimen>
 	<dimen name="isz_numpad">92dp</dimen>
 	<dimen name="isz_actionpad">88dp</dimen>
 	<dimen name="isz_dismiss_large">30dp</dimen>
@@ -55,7 +56,7 @@
 	<dimen name="fab_margin">88dp</dimen>
 	<dimen name="top_bar_height">64dp</dimen>
 	<dimen name="bottom_nav_height">64dp</dimen>
-	<dimen name="action_row_height">84dp</dimen>
+	<dimen name="action_row_height">92dp</dimen>
 	<dimen name="action_row_landscape_width">420dp</dimen>
 
 </resources>

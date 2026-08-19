@@ -2,7 +2,6 @@ package com.nfcalarmclock.settings.importexport
 
 import android.content.Context
 import android.content.Intent
-import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.lifecycle.lifecycleScope
 import com.nfcalarmclock.R
 import com.nfcalarmclock.db.NacAlarmDatabase
@@ -41,8 +40,8 @@ class NacImportService
 			// Import the file
 			if (inputStream != null)
 			{
-				quickToast(this, "Importing...")
-				import(this, inputStream, lifecycleScope)
+				quickToast(this, R.string.message_import_started)
+				import(this, inputStream)
 				return START_NOT_STICKY
 			}
 			// Unable to open the Uri
@@ -62,11 +61,7 @@ class NacImportService
 	/**
 	 * Import the shared preferences and database files from a zip file.
 	 */
-	fun import(
-		context: Context,
-		inputStream: InputStream,
-		coroutineScope: LifecycleCoroutineScope
-	)
+	fun import(context: Context, inputStream: InputStream)
 	{
 		// Flags for the two types of files that can be found
 		var wasCsvFound = false
@@ -97,7 +92,7 @@ class NacImportService
 			{
 				// Copy data from the imported database. Use regular context so that the
 				// imported database can be opened from the regular context filesDir
-				coroutineScope.launch {
+				lifecycleScope.launch {
 					NacAlarmDatabase.copyFromDb(context, file)
 					file.delete()
 					stopThisService()

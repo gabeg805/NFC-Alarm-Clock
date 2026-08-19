@@ -1,25 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout
+	style="@style/My.Alarm.Active.Parent"
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:tools="http://schemas.android.com/tools"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:id="@+id/act_alarm"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:padding="@dimen/small"
-	android:clipChildren="false"
-	android:clipToPadding="false"
-	android:background="@color/gray_dark"
 	tools:ignore="UseCompoundDrawables">
 
 	<!-- Time -->
 	<TextView
+		style="@style/My.Alarm.Active.Time"
 		android:id="@+id/current_time"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:textColor="@color/white"
-		android:textSize="@dimen/tsz_dummy"
-		android:textStyle="bold"
 		android:text=""
 		app:layout_constraintTop_toTopOf="parent"
 		app:layout_constraintStart_toStartOf="parent"
@@ -28,13 +23,10 @@
 		/>
 
 	<TextView
+		style="@style/My.Alarm.Active.Meridian"
 		android:id="@+id/current_meridian"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_marginStart="@dimen/nudge"
-		android:textColor="@color/white"
-		android:textSize="@dimen/tsz_medium"
-		android:textStyle="bold"
 		android:text=""
 		app:layout_constraintStart_toEndOf="@id/current_time"
 		app:layout_constraintBaseline_toBaselineOf="@id/current_time"
@@ -43,31 +35,22 @@
 
 	<!-- Date -->
 	<TextView
+		style="@style/My.Alarm.Active.Date"
 		android:id="@+id/current_date"
-		android:layout_width="match_parent"
+		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:layout_marginTop="@dimen/nudge"
-		android:gravity="center_horizontal"
-		android:textColor="@color/white_dull"
-		android:textSize="@dimen/tsz_normal"
 		android:text=""
-		app:layout_constraintTop_toBottomOf="@id/current_meridian"
+		app:layout_constraintBottom_toBottomOf="@id/current_meridian"
+		app:layout_constraintEnd_toStartOf="@id/current_time"
 		/>
 
 	<!-- Alarm name -->
 	<TextView
+		style="@style/My.Alarm.Active.Name"
 		android:id="@+id/alarm_name"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_marginTop="@dimen/small"
 		android:gravity="center_horizontal"
-		android:ellipsize="marquee"
-		android:marqueeRepeatLimit="marquee_forever"
-		android:scrollHorizontally="true"
-		android:singleLine="true"
-		android:textColor="@color/white"
-		android:textSize="@dimen/tsz_huge"
-		android:textStyle="bold"
 		android:text=""
 		app:layout_constraintTop_toBottomOf="@id/current_date"
 		/>
@@ -86,36 +69,28 @@
 
 
 		<ImageView
-			android:contentDescription="@string/cd_scan_nfc"
+			style="@style/My.Alarm.Active.ScanNfc.Icon"
 			android:id="@+id/scan_nfc_icon"
-			android:layout_width="@dimen/isz_xlarge"
-			android:layout_height="@dimen/isz_xlarge"
-			android:layout_marginEnd="@dimen/tiny"
+			android:contentDescription="@string/cd_scan_nfc"
 			android:src="@drawable/tap_and_play"
 			/>
 
 		<TextView
+			style="@style/My.Alarm.Active.ScanNfc.Text"
 			android:id="@+id/scan_nfc_text"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:ellipsize="end"
-			android:maxLines="1"
-			android:textAlignment="center"
-			android:textColor="@color/white"
-			android:textSize="@dimen/tsz_large"
-			android:textStyle="bold"
 			android:text=""
 			/>
 	</LinearLayout>
 
 	<!-- Slider instructions -->
 	<TextView
+		style="@style/My.Alarm.Active.SliderInstructions"
 		android:id="@+id/slider_instructions"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:gravity="center_horizontal"
-		android:textColor="@color/white"
-		android:textSize="@dimen/tsz_normal"
 		android:text=""
 		app:layout_constraintBottom_toTopOf="@id/number_of_snoozes_left_message"
 		app:layout_goneMarginBottom="@dimen/twoline"
@@ -123,13 +98,11 @@
 
 	<!-- Number of snoozes left -->
 	<TextView
+		style="@style/My.Alarm.Active.NumberOfSnoozesLeft"
 		android:id="@+id/number_of_snoozes_left_message"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_marginBottom="@dimen/nudge"
 		android:gravity="center_horizontal"
-		android:textColor="@color/white"
-		android:textSize="@dimen/tsz_caption"
 		android:text=""
 		android:visibility="gone"
 		app:layout_constraintBottom_toTopOf="@id/alarm_action_row"
@@ -137,14 +110,8 @@
 
 	<!-- Snooze/dismiss -->
 	<RelativeLayout
+		style="@style/My.Alarm.Active.SnoozeDismissRow"
 		android:id="@+id/alarm_action_row"
-		android:layout_width="@dimen/action_row_landscape_width"
-		android:layout_height="@dimen/action_row_height"
-		android:layout_marginBottom="@dimen/normal"
-		android:layout_marginStart="@dimen/normal"
-		android:layout_marginEnd="@dimen/normal"
-		android:clipChildren="false"
-		android:clipToPadding="false"
 		app:layout_constraintBottom_toTopOf="@id/music_and_warning_container"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintEnd_toEndOf="parent">
@@ -158,68 +125,57 @@
 			android:visibility="invisible">
 
 			<ImageView
+				style="@style/My.Alarm.Active.SliderArrow"
 				android:id="@+id/slider_center_arrow"
-				android:layout_width="@dimen/isz_large"
-				android:layout_height="@dimen/isz_large"
 				android:layout_centerVertical="true"
 				android:layout_centerHorizontal="true"
 				android:contentDescription="@string/cd_alarm_slider_arrow"
 				/>
 
 			<ImageView
+				style="@style/My.Alarm.Active.SliderArrow.Left"
 				android:id="@+id/slider_left_arrow"
-				android:layout_width="@dimen/isz_large"
-				android:layout_height="@dimen/isz_large"
 				android:layout_centerVertical="true"
 				android:layout_toStartOf="@id/slider_center_arrow"
-				android:layout_marginEnd="@dimen/medium"
 				android:contentDescription="@string/cd_alarm_slider_arrow"
 				/>
 
 			<ImageView
+				style="@style/My.Alarm.Active.SliderArrow.Right"
 				android:id="@+id/slider_right_arrow"
-				android:layout_width="@dimen/isz_large"
-				android:layout_height="@dimen/isz_large"
 				android:layout_centerVertical="true"
 				android:layout_toEndOf="@id/slider_center_arrow"
-				android:layout_marginStart="@dimen/medium"
 				android:contentDescription="@string/cd_alarm_slider_arrow"
 				/>
 		</RelativeLayout>
 
 		<!-- Snooze animation -->
 		<RelativeLayout
+			style="@style/My.Alarm.Active.SnoozeDismissButton"
 			android:id="@+id/snooze_attention_view"
-			android:layout_width="@dimen/isz_focus"
-			android:layout_height="@dimen/isz_focus"
 			android:layout_alignTop="@id/snooze_view"
 			android:layout_alignStart="@id/snooze_view"
 			android:alpha="0.3"
-			android:background="@drawable/round_action_button"
 			android:backgroundTint="@color/white"
 			/>
 
 		<!-- Dismiss animation -->
 		<RelativeLayout
+			style="@style/My.Alarm.Active.SnoozeDismissButton"
 			android:id="@+id/dismiss_attention_view"
-			android:layout_width="@dimen/isz_focus"
-			android:layout_height="@dimen/isz_focus"
 			android:layout_alignTop="@id/dismiss_view"
 			android:layout_alignStart="@id/dismiss_view"
 			android:alpha="0.3"
-			android:background="@drawable/round_action_button"
 			android:backgroundTint="@color/white"
 			/>
 
 		<!-- Snooze -->
 		<RelativeLayout
+			style="@style/My.Alarm.Active.SnoozeDismissButton"
 			android:id="@+id/snooze_view"
-			android:layout_width="@dimen/isz_focus"
-			android:layout_height="@dimen/isz_focus"
 			android:layout_alignParentStart="true"
 			android:layout_centerVertical="true"
 			android:layout_marginStart="@dimen/tiny"
-			android:background="@drawable/round_action_button"
 			android:backgroundTint="@color/gray_light"
 			android:gravity="center_vertical">
 
@@ -247,13 +203,11 @@
 
 		<!-- Dismiss -->
 		<RelativeLayout
+			style="@style/My.Alarm.Active.SnoozeDismissButton"
 			android:id="@+id/dismiss_view"
-			android:layout_width="@dimen/isz_focus"
-			android:layout_height="@dimen/isz_focus"
 			android:layout_alignParentEnd="true"
 			android:layout_centerVertical="true"
 			android:layout_marginEnd="@dimen/tiny"
-			android:background="@drawable/round_action_button"
 			android:backgroundTint="@color/orange"
 			android:gravity="center_vertical">
 
@@ -292,17 +246,17 @@
 
 		<!-- Dummy -->
 		<TextView
+			style="@style/My.Alarm.Active.MusicAndWarning.Dummy"
 			android:id="@+id/music_dummy"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
 			android:layout_centerHorizontal="true"
-			android:textColor="@color/white"
-			android:textSize="@dimen/tsz_caption"
 			android:text=""
 			/>
 
 		<!-- Music -->
 		<RelativeLayout
+			style="@style/My.Alarm.Active.MusicAndWarning.Container"
 			android:id="@+id/music_container"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
@@ -323,34 +277,22 @@
 
 			<!-- Title -->
 			<TextView
+				style="@style/My.Alarm.Active.MusicAndWarning.MusicTitle"
 				android:id="@+id/music_title"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_toEndOf="@id/music_icon"
-				android:layout_marginStart="@dimen/nudge"
-				android:layout_marginEnd="@dimen/nudge"
-				android:ellipsize="marquee"
-				android:marqueeRepeatLimit="marquee_forever"
-				android:singleLine="true"
-				android:textColor="@color/white"
-				android:textSize="@dimen/tsz_normal"
-				android:textStyle="bold"
 				android:text=""
 				/>
 
 			<!-- Artist -->
 			<TextView
+				style="@style/My.Alarm.Active.MusicAndWarning.MusicArtist"
 				android:id="@+id/music_artist"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_alignStart="@id/music_title"
 				android:layout_below="@id/music_title"
-				android:ellipsize="marquee"
-				android:marqueeRepeatLimit="marquee_forever"
-				android:singleLine="true"
-				android:textColor="@color/white"
-				android:textSize="@dimen/tsz_caption"
-				android:textStyle="italic"
 				android:text=""
 				android:visibility="gone"
 				/>
@@ -358,15 +300,12 @@
 
 		<!-- Warning -->
 		<TextView
+			style="@style/My.Alarm.Active.MusicAndWarning.Warning"
 			android:id="@+id/selected_alarm_song_not_available_warning"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:layout_marginTop="@dimen/nudge"
-			android:layout_marginStart="@dimen/small"
 			android:layout_below="@id/music_container"
 			android:gravity="center_horizontal"
-			android:textColor="@color/white_dull"
-			android:textSize="@dimen/tsz_caption"
 			android:text="@string/message_selected_alarm_song_not_available"
 			android:visibility="invisible"
 			/>

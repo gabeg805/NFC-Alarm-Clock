@@ -7,9 +7,6 @@
 	android:id="@+id/act_alarm"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
-	android:clipChildren="false"
-	android:clipToPadding="false"
-	android:background="@color/gray_dark"
 	tools:ignore="Overdraw,UseCompoundDrawables">
 
 	<!-- Time -->
@@ -54,10 +51,6 @@
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
 		android:gravity="center_horizontal"
-		android:ellipsize="marquee"
-		android:marqueeRepeatLimit="marquee_forever"
-		android:scrollHorizontally="true"
-		android:singleLine="true"
 		android:text=""
 		app:layout_constraintTop_toBottomOf="@id/current_date"
 		/>
@@ -86,8 +79,6 @@
 			android:id="@+id/scan_nfc_text"
 			android:layout_width="wrap_content"
 			android:layout_height="wrap_content"
-			android:ellipsize="end"
-			android:maxLines="2"
 			android:text=""
 			/>
 	</LinearLayout>
@@ -120,9 +111,6 @@
 	<RelativeLayout
 		style="@style/My.Alarm.Active.SnoozeDismissRow"
 		android:id="@+id/alarm_action_row"
-		android:layout_width="match_parent"
-		android:clipChildren="false"
-		android:clipToPadding="false"
 		app:layout_constraintBottom_toTopOf="@id/music_and_warning_container"
 		app:layout_constraintStart_toStartOf="parent"
 		app:layout_constraintEnd_toEndOf="parent">
@@ -162,37 +150,31 @@
 
 		<!-- Snooze animation -->
 		<RelativeLayout
+			style="@style/My.Alarm.Active.SnoozeDismissButton"
 			android:id="@+id/snooze_attention_view"
-			android:layout_width="@dimen/isz_focus"
-			android:layout_height="@dimen/isz_focus"
 			android:layout_alignTop="@id/snooze_view"
 			android:layout_alignStart="@id/snooze_view"
 			android:alpha="0.3"
-			android:background="@drawable/round_action_button"
 			android:backgroundTint="@color/white"
 			/>
 
 		<!-- Dismiss animation -->
 		<RelativeLayout
+			style="@style/My.Alarm.Active.SnoozeDismissButton"
 			android:id="@+id/dismiss_attention_view"
-			android:layout_width="@dimen/isz_focus"
-			android:layout_height="@dimen/isz_focus"
 			android:layout_alignTop="@id/dismiss_view"
 			android:layout_alignStart="@id/dismiss_view"
 			android:alpha="0.3"
-			android:background="@drawable/round_action_button"
 			android:backgroundTint="@color/white"
 			/>
 
 		<!-- Snooze -->
 		<RelativeLayout
+			style="@style/My.Alarm.Active.SnoozeDismissButton"
 			android:id="@+id/snooze_view"
-			android:layout_width="@dimen/isz_focus"
-			android:layout_height="@dimen/isz_focus"
 			android:layout_alignParentStart="true"
 			android:layout_centerVertical="true"
 			android:layout_marginStart="@dimen/tiny"
-			android:background="@drawable/round_action_button"
 			android:backgroundTint="@color/gray_light"
 			android:gravity="center_vertical">
 
@@ -220,13 +202,11 @@
 
 		<!-- Dismiss -->
 		<RelativeLayout
+			style="@style/My.Alarm.Active.SnoozeDismissButton"
 			android:id="@+id/dismiss_view"
-			android:layout_width="@dimen/isz_focus"
-			android:layout_height="@dimen/isz_focus"
 			android:layout_alignParentEnd="true"
 			android:layout_centerVertical="true"
 			android:layout_marginEnd="@dimen/tiny"
-			android:background="@drawable/round_action_button"
 			android:backgroundTint="@color/orange"
 			android:gravity="center_vertical">
 
@@ -299,9 +279,6 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:layout_toEndOf="@id/music_icon"
-				android:ellipsize="marquee"
-				android:marqueeRepeatLimit="marquee_forever"
-				android:singleLine="true"
 				android:text=""
 				/>
 
@@ -313,9 +290,6 @@
 				android:layout_height="wrap_content"
 				android:layout_alignStart="@id/music_title"
 				android:layout_below="@id/music_title"
-				android:ellipsize="marquee"
-				android:marqueeRepeatLimit="marquee_forever"
-				android:singleLine="true"
 				android:text=""
 				android:visibility="gone"
 				/>

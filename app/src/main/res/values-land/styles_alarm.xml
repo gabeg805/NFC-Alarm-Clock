@@ -1,22 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<!-- Days -->
-	<style name="My.Alarm.Days" parent="">
-		<item name="android:layout_marginTop">@dimen/tiny</item>
-		<item name="android:layout_marginBottom">@dimen/tiny</item>
-		<item name="android:layout_marginStart">@dimen/small</item>
-		<item name="android:layout_marginEnd">@dimen/small</item>
-	</style>
-
-	<!-- Buttons -->
-	<style name="My.Alarm.Buttons" parent="Widget.Button.Icon">
-		<item name="iconSize">@dimen/isz_large</item>
-	</style>
-
 	<!-- Parent container -->
 	<style name="My.Alarm.Active.Parent" parent="">
-		<item name="android:padding">@dimen/xxlarge</item>
+		<item name="android:padding">@dimen/small</item>
 		<item name="android:background">@color/gray_dark</item>
 		<item name="android:clipChildren">false</item>
 		<item name="android:clipToPadding">false</item>
@@ -25,7 +12,7 @@
 	<!-- Time -->
 	<style name="My.Alarm.Active.Time" parent="">
 		<item name="android:textColor">@color/white</item>
-		<item name="android:textSize">@dimen/tsz_widget</item>
+		<item name="android:textSize">@dimen/tsz_dummy</item>
 		<item name="android:textStyle">bold</item>
 	</style>
 
@@ -33,13 +20,13 @@
 	<style name="My.Alarm.Active.Meridian" parent="">
 		<item name="android:layout_marginStart">@dimen/nudge</item>
 		<item name="android:textColor">@color/white</item>
-		<item name="android:textSize">@dimen/tsz_large</item>
+		<item name="android:textSize">@dimen/tsz_medium</item>
 		<item name="android:textStyle">bold</item>
 	</style>
 
 	<!-- Date -->
 	<style name="My.Alarm.Active.Date" parent="">
-		<item name="android:layout_marginTop">@dimen/nudge</item>
+		<item name="android:layout_marginEnd">@dimen/small</item>
 		<item name="android:textColor">@color/white_dull</item>
 		<item name="android:textSize">@dimen/tsz_normal</item>
 	</style>
@@ -52,24 +39,23 @@
 		<item name="android:scrollHorizontally">true</item>
 		<item name="android:singleLine">true</item>
 		<item name="android:textColor">@color/white</item>
-		<item name="android:textSize">@dimen/tsz_huge</item>
+		<item name="android:textSize">@dimen/tsz_xxlarge</item>
 		<item name="android:textStyle">bold</item>
 	</style>
 
 	<!-- Scan NFC -->
 	<style name="My.Alarm.Active.ScanNfc.Icon" parent="">
-		<item name="android:layout_width">@dimen/isz_focus</item>
-		<item name="android:layout_height">@dimen/isz_focus</item>
-		<item name="android:layout_marginStart">@dimen/nudge</item>
+		<item name="android:layout_width">@dimen/isz_xlarge</item>
+		<item name="android:layout_height">@dimen/isz_xlarge</item>
+		<item name="android:layout_marginEnd">@dimen/tiny</item>
 	</style>
 
 	<style name="My.Alarm.Active.ScanNfc.Text" parent="">
-		<item name="android:layout_marginTop">@dimen/small</item>
 		<item name="android:ellipsize">end</item>
-		<item name="android:maxLines">2</item>
+		<item name="android:maxLines">1</item>
 		<item name="android:textAlignment">center</item>
 		<item name="android:textColor">@color/white</item>
-		<item name="android:textSize">@dimen/tsz_large</item>
+		<item name="android:textSize">@dimen/tsz_medium</item>
 		<item name="android:textStyle">bold</item>
 	</style>
 
@@ -88,18 +74,18 @@
 
 	<!-- Snooze/dismiss row -->
 	<style name="My.Alarm.Active.SnoozeDismissRow" parent="">
-		<item name="android:layout_width">match_parent</item>
+		<item name="android:layout_width">@dimen/action_row_landscape_width</item>
 		<item name="android:layout_height">@dimen/action_row_height</item>
-		<item name="android:layout_marginBottom">@dimen/xxxlarge</item>
-		<item name="android:layout_marginStart">@dimen/large</item>
-		<item name="android:layout_marginEnd">@dimen/large</item>
+		<item name="android:layout_marginBottom">@dimen/normal</item>
+		<item name="android:layout_marginStart">@dimen/normal</item>
+		<item name="android:layout_marginEnd">@dimen/normal</item>
 		<item name="android:clipChildren">false</item>
 		<item name="android:clipToPadding">false</item>
 	</style>
 
 	<style name="My.Alarm.Active.SnoozeDismissButton" parent="">
-		<item name="android:layout_width">@dimen/isz_action_button</item>
-		<item name="android:layout_height">@dimen/isz_action_button</item>
+		<item name="android:layout_width">78dp</item>
+		<item name="android:layout_height">78dp</item>
 		<item name="android:background">@drawable/round_action_button</item>
 	</style>
 

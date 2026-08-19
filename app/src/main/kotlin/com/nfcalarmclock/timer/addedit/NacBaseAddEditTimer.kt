@@ -52,11 +52,10 @@ import com.nfcalarmclock.view.performHapticFeedback
 import com.nfcalarmclock.view.quickToast
 import com.nfcalarmclock.view.setupBackgroundColor
 import com.nfcalarmclock.view.setupRippleColor
-import com.nfcalarmclock.view.slideDown
-import com.nfcalarmclock.view.slideUp
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
+import kotlin.time.Duration.Companion.milliseconds
 
 /**
  * Base class to add or edit a timer.
@@ -181,7 +180,7 @@ abstract class NacBaseAddEditTimer
 				var i = 0
 				do
 				{
-					delay(150)
+					delay(150.milliseconds)
 					i++
 				} while (!moreOptionsContainer.isVisible && (i < 3))
 
@@ -666,19 +665,6 @@ abstract class NacBaseAddEditTimer
 			// it visible, it will be shown off screen because every view is taking up
 			// the proper amount of space
 			hourTextView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-
-				// Set the new margin
-				val bottomNavHeight = resources.getDimension(R.dimen.bottom_nav_height).toInt()
-				val x = (numberpadContainerLocation[1] - hourLocation[1] - bottomNavHeight) / 2
-				val y = (numberpadContainerLocation[1] - hourLocation[1]) / 2
-				//bottomMargin = (numberpadContainerLocation[1] - hourLocation[1]) / 2
-				//bottomMargin = (numberpadContainerLocation[1] - hourLocation[1] - bottomNavHeight) / 2
-				//bottomMargin = resources.getDimension(R.dimen.normal).toInt()
-				//topMargin = bottomMargin
-				println("X = $x | Y = $y")
-				println("Loc : ${numberpadContainerLocation[1]} | ${hourLocation[1]} | $bottomNavHeight")
-				//println("Bottom = $bottomMargin")
-				// TODO: Padding 16dp? normal
 
 				// Make the more options container visible
 				moreOptionsContainer.visibility = View.VISIBLE

@@ -43,10 +43,12 @@ class NacDismissOptionsDialog
 		val dismissEarlyNotificationContainer: RelativeLayout = dialog!!.findViewById(R.id.dismiss_early_notification_container)
 		val dismissEarlyNotificationSeparator: Space = dialog!!.findViewById(R.id.dismiss_early_notification_separator)
 		val deleteAfterDismissedDescription: TextView = view.findViewById(R.id.delete_after_dismissed_description)
+		val volumeDismissDescription: TextView = view.findViewById(R.id.volume_dismiss_description)
 
 		// Change the description for the timer
 		autoDismissDescription.setText(R.string.description_dismiss_options_auto_dismiss_timer)
 		deleteAfterDismissedDescription.setText(R.string.description_dismiss_options_delete_after_dismissed_timer)
+		volumeDismissDescription.setText(R.string.description_dismiss_options_volume_dismiss_timer)
 
 		// Hide the views
 		dismissEarlyContainer.visibility = View.GONE

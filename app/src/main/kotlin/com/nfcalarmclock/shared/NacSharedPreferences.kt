@@ -2262,6 +2262,24 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
+	 * Whether volume dismiss is enabled or not.
+	 */
+	var shouldVolumeDismiss: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.key_default_alarm_dismiss_should_use_volume_dismiss)
+			val defaultValue = false
+
+			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_alarm_dismiss_should_use_volume_dismiss)
+
+			saveBoolean(key, value)
+		}
+
+	/**
 	 * Whether volume snooze is enabled or not.
 	 */
 	var shouldVolumeSnooze: Boolean

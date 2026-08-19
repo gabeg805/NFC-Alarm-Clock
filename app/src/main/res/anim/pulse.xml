@@ -8,8 +8,8 @@
 		android:duration="2000"
 		android:fromXScale="1.0"
 		android:fromYScale="1.0"
-		android:toXScale="1.75"
-		android:toYScale="1.75"
+		android:toXScale="1.5"
+		android:toYScale="1.5"
 		android:pivotX="50%"
 		android:pivotY="50%"
 		android:repeatCount="infinite"
@@ -17,7 +17,7 @@
 
 	<alpha
 		android:duration="2000"
-		android:fromAlpha="0.75"
+		android:fromAlpha="0.3"
 		android:toAlpha="0.0"
 		android:repeatCount="infinite"
 		/>

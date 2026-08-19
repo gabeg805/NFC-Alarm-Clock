@@ -184,13 +184,17 @@
 	<string name="message_will_run_in_named_alarm">&lt;b&gt;%1$s&lt;/b&gt; will run in %2$s.</string>
 	<string name="message_next_alarm_on">Next alarm on %1$s</string>
 	<string name="message_next_alarm_in">Next alarm in %1$s</string>
+	<string name="message_export_started">Exporting...</string>
 	<string name="message_export_completed">Export completed</string>
+	<string name="message_import_started">Importing...</string>
 	<string name="message_import_completed">Import completed</string>
 	<string name="message_selected_alarm_song_not_available">Chosen song for alarm not available</string>
 	<string name="message_milliseconds">%1$d ms</string>
 	<string name="message_text_to_speech_default_voice">Default voice</string>
 	<string name="message_text_to_speech_voice">Voice %1$d</string>
 	<string name="message_text_to_speech_network_required">Network connection may be required for voice to work</string>
+	<string name="message_volume_dismiss_priority">Dismiss with volume will have priority</string>
+	<string name="message_volume_snooze_ignored">Snooze with volume will be ignored</string>
 
 	<!-- Error messages -->
 	<string name="error_message_active_delete">Unable to delete an active alarm</string>
@@ -294,6 +298,7 @@
 	<string name="title_dismiss_options_dismiss_early">Dismiss early</string>
 	<string name="title_dismiss_options_dismiss_early_notification">Dismiss early notification</string>
 	<string name="title_dismiss_options_delete_after_dismissed">Delete after dismissed</string>
+	<string name="title_dismiss_options_volume_dismiss">Volume dismiss</string>
 	<string name="title_snooze_options_auto_snooze">Auto-snooze</string>
 	<string name="title_snooze_options_max_snooze">Max snoozes</string>
 	<string name="title_snooze_options_snooze_duration">Snooze duration</string>
@@ -380,6 +385,8 @@
 	<string name="description_dismiss_options_dismiss_early_notification">Show a notification when the alarm can be dismissed early.</string>
 	<string name="description_dismiss_options_delete_after_dismissed_alarm">The alarm will be deleted after it is dismissed.</string>
 	<string name="description_dismiss_options_delete_after_dismissed_timer">The timer will be deleted after it is dismissed.</string>
+	<string name="description_dismiss_options_volume_dismiss_alarm">Dismiss the alarm by pressing the volume up or down button.</string>
+	<string name="description_dismiss_options_volume_dismiss_timer">Dismiss the timer by pressing the volume up or down button.</string>
 	<string name="description_snooze_options_auto_snooze">Snooze the alarm automatically after a set duration.</string>
 	<string name="description_snooze_options_max_snooze">Maximum number of times the alarm can be snoozed.</string>
 	<string name="description_snooze_options_snooze_duration">Amount of time to snooze the alarm for.</string>

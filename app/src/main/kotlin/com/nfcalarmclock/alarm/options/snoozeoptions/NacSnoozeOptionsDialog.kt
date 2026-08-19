@@ -10,6 +10,7 @@ import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.NacGenericAlarmOptionsDialog
 import com.nfcalarmclock.system.toBundle
 import com.nfcalarmclock.view.calcAlpha
+import com.nfcalarmclock.view.quickToast
 import com.nfcalarmclock.view.setTextFromIndex
 import com.nfcalarmclock.view.setupInputLayoutColor
 import com.nfcalarmclock.view.setupSwitchColor
@@ -125,7 +126,7 @@ class NacSnoozeOptionsDialog
 		setupMaxSnooze(a.maxSnooze)
 		setupSnoozeDuration(defaultSnoozeDuration)
 		setupEasySnooze(a.shouldEasySnooze)
-		setupVolumeSnooze(a.shouldVolumeSnooze)
+		setupVolumeSnooze(a.shouldVolumeSnooze, a.shouldVolumeDismiss)
 	}
 
 	/**
@@ -243,19 +244,27 @@ class NacSnoozeOptionsDialog
 	/**
 	 * Setup volume snooze.
 	 */
-	private fun setupVolumeSnooze(default: Boolean)
+	private fun setupVolumeSnooze(defaultSnooze: Boolean, defaultDismiss: Boolean)
 	{
 		// Get the views
 		val relativeLayout: RelativeLayout = dialog!!.findViewById(R.id.volume_snooze_container)
 		volumeSnoozeSwitch = dialog!!.findViewById(R.id.volume_snooze_switch)
 
 		// Setup the checkbox
-		volumeSnoozeSwitch.isChecked = default
+		volumeSnoozeSwitch.isChecked = defaultSnooze
 		volumeSnoozeSwitch.setupSwitchColor(sharedPreferences)
 
 		// Volume snooze listener
 		relativeLayout.setOnClickListener {
-			volumeSnoozeSwitch.isChecked = !volumeSnoozeSwitch.isChecked
+			volumeSnoozeSwitch.toggle()
+		}
+
+		// Show toast if volume dismiss and snooze are both enabled
+		volumeSnoozeSwitch.setOnCheckedChangeListener { _, state ->
+			if (state && defaultDismiss)
+			{
+				quickToast(requireContext(), R.string.message_volume_dismiss_priority)
+			}
 		}
 	}
 

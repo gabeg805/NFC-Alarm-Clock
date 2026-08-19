@@ -211,7 +211,7 @@ class NacRepeatOptionsDialog
 		// Set the default selected values
 		selectedRepeatFrequencyValue = a.repeatFrequency
 		selectedRepeatFrequencyUnits = a.repeatFrequencyUnits
-		selectedDaysToRunBeforeFrequency = a.days
+		selectedDaysToRunBeforeFrequency = a.repeatFrequencyDaysToRunBeforeStarting
 
 		// Setup the views
 		setupRepeatFrequency(a.repeatFrequency, a.repeatFrequencyUnits)

@@ -20,6 +20,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.R
+import com.nfcalarmclock.alarm.NacAlarmRepository
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.nfc.NacNfc
 import com.nfcalarmclock.nfc.NacNfcTagViewModel
@@ -40,6 +41,7 @@ import com.nfcalarmclock.system.unregisterMyReceiver
 import com.nfcalarmclock.view.quickToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
 /**
  * Activity to dismiss/snooze the alarm.
@@ -49,6 +51,12 @@ import kotlinx.coroutines.launch
 class NacActiveAlarmActivity
 	: AppCompatActivity()
 {
+
+	/**
+	 * Alarm repository.
+	 */
+	@Inject
+	lateinit var alarmRepository: NacAlarmRepository
 
 	/**
 	 * NFC tag view model.
@@ -79,6 +87,12 @@ class NacActiveAlarmActivity
 	 * Active alarm service.
 	 */
 	private var service: NacActiveAlarmService? = null
+
+	///**
+	// * Service bound watchdog, to ensure that the service is actually bound. If it is not
+	// * after a timeout then the activity is stopped.
+	// */
+	//private val serviceBoundWatchdogHandler: Handler by lazy { Handler(mainLooper) }
 
 	/**
 	 * Keyguard manager.
@@ -164,6 +178,7 @@ class NacActiveAlarmActivity
 			// Set the active alarm service
 			val binder = serviceBinder as NacActiveAlarmService.NacLocalBinder
 			service = binder.getService()
+			//serviceBoundWatchdogHandler.removeCallbacksAndMessages(null)
 		}
 
 		override fun onServiceDisconnected(className: ComponentName) {}
@@ -221,6 +236,9 @@ class NacActiveAlarmActivity
 
 		// Unregister device unlocked receiver
 		unregisterMyReceiver(this, deviceUnlockedBroadcastReceiver)
+
+		//// Stop the watchdog
+		//serviceBoundWatchdogHandler.removeCallbacksAndMessages(null)
 	}
 
 	/**
@@ -331,7 +349,24 @@ class NacActiveAlarmActivity
 
 		// Bind to the active alarm service
 		bindToService(NacActiveAlarmService::class.java, serviceConnection)
+
+		//// Start the watchdog
+		//serviceBoundWatchdogHandler.postDelayed({
+
+		//	if ((service == null) && (alarm != null))
+		//	{
+		//		lifecycleScope.launch {
+
+		//			alarm!!.dismiss()
+		//			alarmRepository.update(alarm!!)
+		//			finish()
+
+		//		}
+		//	}
+
+		//}, 10000)
 	}
+
 	/**
 	 * Activity stopped.
 	 */

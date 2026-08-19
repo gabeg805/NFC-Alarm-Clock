@@ -594,11 +594,22 @@ class NacActiveAlarmService
 		// Create the wakeup process
 		wakeupProcess = NacWakeupProcess(this, alarm!!)
 
-		// Add a volume key press listener so that the volume keys can snooze the alarm
-		if (alarm!!.shouldVolumeSnooze)
+		// Add a volume key press listener so that the volume keys can dismiss/snooze the alarm
+		if (alarm!!.shouldVolumeDismiss || alarm!!.shouldVolumeSnooze)
 		{
 			wakeupProcess!!.onVolumeKeyPressListener = NacWakeupProcess.OnVolumeKeyPressListener {
-				snoozeAlarmService(this, alarm)
+
+				// Dismiss
+				if (alarm!!.shouldVolumeDismiss)
+				{
+					dismissAlarmService(this, alarm)
+				}
+				// Snooze
+				else
+				{
+					snoozeAlarmService(this, alarm)
+				}
+
 			}
 		}
 
