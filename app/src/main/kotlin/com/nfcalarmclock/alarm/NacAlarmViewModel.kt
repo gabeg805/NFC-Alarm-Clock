@@ -1,6 +1,8 @@
 package com.nfcalarmclock.alarm
 
+import android.os.Parcelable
 import androidx.lifecycle.LiveData
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.nfcalarmclock.alarm.db.NacAlarm
@@ -10,15 +12,13 @@ import javax.inject.Inject
 
 /**
  * Alarm view model.
+ *
+ * @param alarmRepository Alarm repository.
  */
 @HiltViewModel
 class NacAlarmViewModel @Inject constructor(
-
-	/**
-	 * Alarm repository.
-	 */
-	val alarmRepository: NacAlarmRepository
-
+	val alarmRepository: NacAlarmRepository,
+	private val savedState: SavedStateHandle
 ) : ViewModel()
 {
 
@@ -26,6 +26,59 @@ class NacAlarmViewModel @Inject constructor(
 	 * Live data list of all alarms.
 	 */
 	val allAlarms: LiveData<List<NacAlarm>> = alarmRepository.allAlarms
+
+	/**
+	 * List of alarm IDs corresponding to alarm cards that are expanded.
+	 */
+	var expandedAlarmIds: MutableList<Long>
+		get()
+		{
+			// Saved state item is not present. Initialize it to an empty list
+			if (savedState[SAVE_STATE_EXPANDED_ALARM_IDS] as Any? == null)
+			{
+				savedState[SAVE_STATE_EXPANDED_ALARM_IDS] = ArrayList<Long>()
+			}
+
+			// Return
+			return (savedState[SAVE_STATE_EXPANDED_ALARM_IDS] as MutableList<Long>?)!!
+		}
+		set(value)
+		{
+			savedState[SAVE_STATE_EXPANDED_ALARM_IDS] = value
+		}
+
+	/**
+	 * Recyclerview scroll state.
+	 */
+	var recyclerViewState: Parcelable?
+		get()
+		{
+			return savedState[SAVE_STATE_REYCYCLERVIEW_SCROLL_STATE] as Parcelable?
+		}
+		set(value)
+		{
+			savedState[SAVE_STATE_REYCYCLERVIEW_SCROLL_STATE] = value
+		}
+
+	///**
+	// * List of alarm IDs that are in sort order, how they are displayed to the user.
+	// */
+	//var sortOrderedAlarmIds: List<Long>
+	//	get()
+	//	{
+	//		// Saved state item is not present. Initialize it to an empty list
+	//		if (savedState[SAVE_STATE_SORT_ORDERED_ALARM_IDS] as Any? == null)
+	//		{
+	//			savedState[SAVE_STATE_SORT_ORDERED_ALARM_IDS] = ArrayList<Long>()
+	//		}
+
+	//		// Return
+	//		return (savedState[SAVE_STATE_SORT_ORDERED_ALARM_IDS] as List<Long>?)!!
+	//	}
+	//	set(value)
+	//	{
+	//		savedState[SAVE_STATE_SORT_ORDERED_ALARM_IDS] = value
+	//	}
 
 	/**
 	 * Count the number of alarms.
@@ -118,6 +171,28 @@ class NacAlarmViewModel @Inject constructor(
 			unit()
 
 		}
+	}
+
+	companion object
+	{
+
+		/**
+		 * Key for the save instance state that will contain the list of alarm IDs that
+		 * correspond to expanded alarm cards.
+		 */
+		const val SAVE_STATE_EXPANDED_ALARM_IDS = "com.nfcalarmclock.alarm.SAVE_STATE_EXPANDED_ALARM_IDS"
+
+		/**
+		 * Key for the reycyclerview scroll state.
+		 */
+		const val SAVE_STATE_REYCYCLERVIEW_SCROLL_STATE = "com.nfcalarmclock.alarm.SAVE_STATE_REYCYCLERVIEW_SCROLL_STATE"
+
+		///**
+		// * Key for the save instance state that will contain the list of alarm IDs that
+		// * are in sort order, how they are displayed to the user.
+		// */
+		//const val SAVE_STATE_SORT_ORDERED_ALARM_IDS = "com.nfcalarmclock.alarm.SAVE_STATE_SORT_ORDERED_ALARM_IDS"
+
 	}
 
 }

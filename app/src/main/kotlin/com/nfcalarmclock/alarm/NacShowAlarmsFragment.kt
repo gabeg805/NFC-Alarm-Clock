@@ -3,17 +3,14 @@ package com.nfcalarmclock.alarm
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.IntentFilter
-import android.graphics.drawable.InsetDrawable
 import android.os.Bundle
 import android.os.Handler
-import android.os.Parcelable
 import android.provider.AlarmClock
 import android.view.LayoutInflater
 import android.view.MenuInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.annotation.OptIn
-import androidx.core.content.ContextCompat
 import androidx.core.view.MenuCompat
 import androidx.core.view.get
 import androidx.core.view.isNotEmpty
@@ -24,7 +21,6 @@ import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.OnScrollListener
@@ -191,17 +187,6 @@ class NacShowAlarmsFragment
 	private var currentSnackbar: Snackbar? = null
 
 	/**
-	 * Saved state of the recyclerview so that it does not change scroll position when
-	 * disabling/enabling or changing the time. Anything that causes a sort to occur.
-	 */
-	private var recyclerViewSavedState: Parcelable? = null
-
-	/**
-	 * List of alarm IDs corresponding to cards that are expanded.
-	 */
-	private var expandedAlarmCardIds: MutableList<Long> = arrayListOf()
-
-	/**
 	 * New alarm card to show.
 	 */
 	private var newAlarmCardToShow: NacAlarmCardHolder? = null
@@ -226,7 +211,6 @@ class NacShowAlarmsFragment
 	 */
 	private val timeTickReceiver = createTimeTickReceiver { _, _ ->
 
-		println("Time tick receiver")
 		// Set the message for when the next alarm will be run
 		setNextAlarmMessage()
 
@@ -283,11 +267,18 @@ class NacShowAlarmsFragment
 	/**
 	 * Add an alarm that was created from the SET_ALARM intent.
 	 */
-	private fun addAlarmFromSetAlarmIntent(alarm: NacAlarm)
+	private fun addAlarmFromSetAlarmIntent()
 	{
-		addAlarm(alarm) {
-			recentlyAddedAlarmIds.add(alarm.id)
+		// Get the alarm from the intent
+		arguments?.getAlarm()?.let { alarm ->
+
+			// Add the alarm
+			addAlarm(alarm) {
+				recentlyAddedAlarmIds.add(alarm.id)
+			}
+
 		}
+
 	}
 
 	/**
@@ -379,17 +370,22 @@ class NacShowAlarmsFragment
 	/**
 	 * Dismiss an alarm early that was sent the intent action to do so.
 	 */
-	private fun dismissAlarmEarlyFromIntent(alarm: NacAlarm)
+	private fun dismissAlarmEarlyFromIntent()
 	{
-		// Dismiss the alarm early and update it
-		alarm.dismissEarly()
-		updateAlarm(alarm)
+		// Get the alarm from the intent
+		arguments?.getAlarm()?.let { alarm ->
 
-		// Clear any notifications
-		val context = requireContext()
+			// Dismiss the alarm early and update it
+			alarm.dismissEarly()
+			updateAlarm(alarm)
 
-		NacDismissEarlyService.stopService(context, alarm)
-		NacUpcomingReminderService.stopService(context, alarm)
+			// Clear any notifications
+			val context = requireContext()
+
+			NacDismissEarlyService.stopService(context, alarm)
+			NacUpcomingReminderService.stopService(context, alarm)
+
+		}
 	}
 
 	/**
@@ -440,6 +436,9 @@ class NacShowAlarmsFragment
 		// Super
 		super.onPause()
 
+		// Save scroll position of recyclerview?
+		alarmViewModel.recyclerViewState = recyclerView.layoutManager?.onSaveInstanceState()
+
 		// Clear the alarm options dialogs
 		var i = 0
 		while (navController.popBackStack() && i < 3)
@@ -466,20 +465,21 @@ class NacShowAlarmsFragment
 		// Get the intent action and alarm from the fragment arguments bundle. These
 		// could be null, but if an action occurred, they will not be
 		val action = arguments?.getString(BUNDLE_INTENT_ACTION)
-		val alarm = arguments?.getAlarm()
 
-		// Alarm should be dismissed early
-		if ((action == ACTION_DISMISS_ALARM_EARLY) && (alarm != null))
+		when (action)
 		{
-			dismissAlarmEarlyFromIntent(alarm)
+			// Alarm should be dismissed early
+			ACTION_DISMISS_ALARM_EARLY -> dismissAlarmEarlyFromIntent()
+
+			// Add alarm that was created from the SET_ALARM intent
+			AlarmClock.ACTION_SET_ALARM -> addAlarmFromSetAlarmIntent()
 		}
 
-		// Add alarm that was created from the SET_ALARM intent
-		if ((action == AlarmClock.ACTION_SET_ALARM) && (alarm != null))
-		{
-			println("Show alarms addAlarmFromSetAlarmIntent()")
-			addAlarmFromSetAlarmIntent(alarm)
-		}
+		// Clear the action from the back stack entry
+		arguments?.remove(BUNDLE_INTENT_ACTION)
+
+		// Restore the recyclerview state
+		restoreRecyclerViewState()
 
 		// Set the next alarm message
 		setNextAlarmMessage()
@@ -544,9 +544,6 @@ class NacShowAlarmsFragment
 			}
 
 		})
-
-		// Set flag that cards need to be measured
-		sharedPreferences.cardIsMeasured = false
 
 		// Setup
 		setupLiveDataObservers()
@@ -613,11 +610,22 @@ class NacShowAlarmsFragment
 	}
 
 	/**
+	 * Restore the recyclerview saved state.
+	 */
+	private fun restoreRecyclerViewState()
+	{
+		if (alarmViewModel.recyclerViewState != null)
+		{
+			recyclerView.layoutManager?.onRestoreInstanceState(alarmViewModel.recyclerViewState)
+			alarmViewModel.recyclerViewState = null
+		}
+	}
+
+	/**
 	 * Set the next alarm message in the text view.
 	 */
 	private fun setNextAlarmMessage(nextAlarm: NacNextAlarm? = null): NacNextAlarm?
 	{
-		println("setNextAlarmMessage() $nextAlarm")
 		// Cancel any post delayed runnables
 		nextAlarmMessageHandler.removeCallbacksAndMessages(null)
 
@@ -629,7 +637,6 @@ class NacShowAlarmsFragment
 		// Get the next alarm message
 		val message = NacCalendar.Message.getNext(requireContext(),
 			nextAlarm?.calendar, sharedPreferences.nextAlarmFormat)
-		println("Decide next alarm? ${nextAlarm?.alarm?.isEnabled} | ${nextAlarm?.calendar.toString()}")
 
 		// Set the message in the text view
 		nextAlarmTextView.text = message
@@ -637,7 +644,6 @@ class NacShowAlarmsFragment
 		// Check if the next alarm message should be refreshed
 		if (shouldRefreshNextAlarmMessage(nextAlarm))
 		{
-			println("Refresh next alarm!")
 			// Set the message for when the next alarm will be run
 			nextAlarmMessageHandler.postDelayed({
 				setNextAlarmMessage(nextAlarm = nextAlarm.takeIf { nextAlarm!!.alarm.isEnabled })
@@ -660,8 +666,14 @@ class NacShowAlarmsFragment
 			// Get the alarm
 			val alarm = alarmCardAdapter.getItemAt(index)
 
+			// Measure the card
+			if (!sharedPreferences.cardIsMeasured)
+			{
+				measureCard(card)
+			}
+
 			// Check if the index is part of the expanded cards
-			if (expandedAlarmCardIds.contains(alarm.id))
+			if (alarmViewModel.expandedAlarmIds.contains(alarm.id))
 			{
 				// Expand the card and change its color
 				card.doExpandWithColor()
@@ -682,13 +694,6 @@ class NacShowAlarmsFragment
 			{
 				// Collapse the card
 				card.doCollapseWithColor()
-			}
-
-			// Check if the alarm card has not been measured
-			if (!sharedPreferences.cardIsMeasured)
-			{
-				// Measure the card
-				measureCard(card)
 			}
 
 			// Check if the alarm was recently added
@@ -722,10 +727,10 @@ class NacShowAlarmsFragment
 			card.onCardCollapsedListener = OnCardCollapsedListener { _, alarm ->
 
 				// Remove the ID from the expanded list
-				expandedAlarmCardIds.remove(alarm.id)
+				alarmViewModel.expandedAlarmIds.remove(alarm.id)
 
 				// Sort the list when no cards are expanded
-				if (expandedAlarmCardIds.isEmpty())
+				if (alarmViewModel.expandedAlarmIds.isEmpty())
 				{
 					// TODO: This could be the cause of poor performance when there are a lot of alarms?
 					alarmCardAdapterLiveData.sort()
@@ -745,7 +750,7 @@ class NacShowAlarmsFragment
 			card.onCardExpandedListener = OnCardExpandedListener { _, alarm ->
 
 				// Add the ID to the expanded list
-				expandedAlarmCardIds.add(alarm.id)
+				alarmViewModel.expandedAlarmIds.add(alarm.id)
 
 			}
 
@@ -754,9 +759,7 @@ class NacShowAlarmsFragment
 			// setupRepeatButtonLongPress
 			// unskip/skipNextAlarm
 			card.onCardUpdatedListener = OnCardUpdatedListener { _, alarm ->
-				showNextAlarm(card, alarm)
-				updateAlarm(alarm)
-				refreshAllWidgets(context)
+				updateAllAlarmReferences(card, alarm)
 			}
 
 			// Time
@@ -766,20 +769,7 @@ class NacShowAlarmsFragment
 
 			// Switch
 			card.onCardSwitchChangedListener = OnCardSwitchChangedListener { _, alarm ->
-
-				// Show next alarm, update the alarm, and refresh widgets
-				showNextAlarm(card, alarm)
-				updateAlarm(alarm)
-				refreshAllWidgets(context)
-
-				// Alarm was disabled
-				if (!alarm.isEnabled)
-				{
-					// Clear any notifications, just in case
-					NacDismissEarlyService.stopService(context, alarm)
-					NacUpcomingReminderService.stopService(context, alarm)
-				}
-
+				updateAllAlarmReferences(card, alarm)
 			}
 
 			// Dismiss
@@ -802,23 +792,12 @@ class NacShowAlarmsFragment
 
 			// Dismiss early
 			card.onCardDismissEarlyClickedListener = OnCardDismissEarlyClickedListener { _, alarm ->
-
-				// Show next alarm, update the alarm, and refersh widgets
-				showNextAlarm(card, alarm)
-				updateAlarm(alarm)
-				refreshAllWidgets(context)
-
-				// Clear any notifications
-				NacDismissEarlyService.stopService(context, alarm)
-				NacUpcomingReminderService.stopService(context, alarm)
-
+				updateAllAlarmReferences(card, alarm)
 			}
 
 			// Days
 			card.onCardDaysChangedListener = OnCardDaysChangedListener { _, alarm ->
-				showNextAlarm(card, alarm)
-				updateAlarm(alarm)
-				refreshAllWidgets(context)
+				updateAllAlarmReferences(card, alarm)
 			}
 
 			// Repeat
@@ -852,8 +831,10 @@ class NacShowAlarmsFragment
 			card.onCardMediaClickedListener = OnCardMediaClickedListener { _, alarm ->
 
 				// Navigate to the media picker
-				findNavController().navigate(R.id.action_nacShowAlarmsFragment_to_nacAlarmMainMediaPickerFragment,
-					alarm.toBundle())
+				findNavController().navigate(
+					R.id.action_nacShowAlarmsFragment_to_nacAlarmMainMediaPickerFragment,
+					alarm.toBundle()
+				)
 
 			}
 
@@ -914,15 +895,21 @@ class NacShowAlarmsFragment
 				NacAlarmOptionsDialog.navigate(navController, alarm)
 					?.observe(viewLifecycleOwner) { a ->
 
-						// Update the alarm
-						updateAlarm(a)
-						card.refreshRepeatOptionViews()
 
-						// Show next alarm when changing repeat options
+						// Update all alarm references, since repeat options can just when
+						// the alarm will run
 						if (navController.currentDestination?.id == R.id.nacRepeatOptionsDialog)
 						{
-							showNextAlarm(card, alarm)
+							updateAllAlarmReferences(card, alarm)
 						}
+						// Update only the alarm
+						else
+						{
+							updateAlarm(a)
+						}
+
+						// Refresh the views
+						card.refreshRepeatOptionViews()
 
 					}
 
@@ -1046,16 +1033,11 @@ class NacShowAlarmsFragment
 				// Super
 				super.onItemRangeMoved(fromPosition, toPosition, itemCount)
 
-				// Restore the recyclerview saved state
-				if (recyclerViewSavedState != null)
-				{
-					recyclerView.layoutManager?.onRestoreInstanceState(recyclerViewSavedState)
-					recyclerViewSavedState = null
-				}
+				// Restore the recyclerview state
+				restoreRecyclerViewState()
 			}
 
 		})
-
 	}
 
 	/**
@@ -1141,10 +1123,10 @@ class NacShowAlarmsFragment
 			// Save the recyclerview state so that it does not scroll down with an
 			// item that was changed. Instead it should retain its current scroll
 			// position
-			recyclerViewSavedState = recyclerView.layoutManager?.onSaveInstanceState()
+			alarmViewModel.recyclerViewState = recyclerView.layoutManager?.onSaveInstanceState()
 
-			// Check if no cards are expanded
-			if (expandedAlarmCardIds.isEmpty())
+			// No cards are expanded
+			if (alarmViewModel.expandedAlarmIds.isEmpty())
 			{
 				// Merge and sort the alarms
 				alarmCardAdapterLiveData.mergeSort(alarms)
@@ -1162,9 +1144,6 @@ class NacShowAlarmsFragment
 		// Observe any changes to the alarms in the adapter
 		alarmCardAdapterLiveData.observe(viewLifecycleOwner) { alarms ->
 
-			// Get if the adapter list is currently empty
-			val isAdapterListEmpty = alarmCardAdapter.currentList.isEmpty()
-
 			// If this is the first time the app is running, set the flags accordingly
 			if (sharedPreferences.appFirstRun)
 			{
@@ -1172,15 +1151,15 @@ class NacShowAlarmsFragment
 			}
 
 			// Update the alarm adapter
-			alarmCardAdapter.submitList(alarms)
+			alarmCardAdapter.submitList(alarms) {
 
-			// Refresh the next alarm message when the adapter list was empty or when the
-			// list of alarms changed size because one was added or removed. It can be
-			// empty when the adapter is first created and populated from onCreate()
-			if (isAdapterListEmpty || (alarmCardAdapter.currentList.size != alarms.size))
-			{
+				// Refresh the next alarm message after the alarm list is submitted. If
+				// too many changes are made at once before the list is submitted, this
+				// does not get called over and over. Instead it will just be called the
+				// last time
 				val nextAlarm = NacCalendar.getNextAlarm(alarms)
 				setNextAlarmMessage(nextAlarm)
+
 			}
 
 			// Scroll down to any newly added alarms
@@ -1225,21 +1204,6 @@ class NacShowAlarmsFragment
 	{
 		// Get the context
 		val context = requireContext()
-
-		// Create the divider drawable
-		val padding = resources.getDimensionPixelSize(R.dimen.normal)
-		val drawable = ContextCompat.getDrawable(context, R.drawable.card_divider)
-		val divider = InsetDrawable(drawable, padding, 0, padding, 0)
-
-		// Create the item decoration
-		val decoration = DividerItemDecoration(context, LinearLayoutManager.VERTICAL)
-
-		// Set the divider on the decoration
-		decoration.setDrawable(divider)
-
-		// Add the decoration to the recycler view. This will divide every item by this
-		// decoration
-		recyclerView.addItemDecoration(decoration)
 
 		// Setup everything else
 		recyclerView.adapter = alarmCardAdapter
@@ -1459,13 +1423,10 @@ class NacShowAlarmsFragment
 				// Clear the dismiss early time
 				alarm.timeOfDismissEarlyAlarm = 0
 
+				// Update all alarm references
 				// Refresh the schedule date views
+				updateAllAlarmReferences(card, alarm)
 				card.refreshScheduleDateViews()
-
-				// Show the next alarm, update the alarm, and refresh widgets
-				showNextAlarm(card, alarm)
-				updateAlarm(alarm)
-				refreshAllWidgets(requireContext())
 
 			},
 			onDateAndTimeSelectedListener = { _, _, year, month, day, hour, min ->
@@ -1486,14 +1447,12 @@ class NacShowAlarmsFragment
 				alarm.setDays(0)
 				alarm.repeatFrequencyDaysToRunBeforeStarting = NacCalendar.Day.NONE
 
+
+				// Update all alarm references
 				// Refresh the schedule date and time views
+				updateAllAlarmReferences(card, alarm)
 				card.refreshScheduleDateViews()
 				card.refreshTimeViews()
-
-				// Show the next alarm, update the alarm, and refresh widgets
-				showNextAlarm(card, alarm)
-				updateAlarm(alarm)
-				refreshAllWidgets(requireContext())
 
 			},
 			onTimeSelectedListener = { _, hour, min ->
@@ -1509,13 +1468,10 @@ class NacShowAlarmsFragment
 				// Clear the dismiss early time
 				alarm.timeOfDismissEarlyAlarm = 0
 
+				// Update all alarm references
 				// Refresh the time views
+				updateAllAlarmReferences(card, alarm)
 				card.refreshTimeViews()
-
-				// Show the next alarm, update the alarm, and refresh widgets
-				showNextAlarm(card, alarm)
-				updateAlarm(alarm)
-				refreshAllWidgets(requireContext())
 
 			})
 			.show(parentFragmentManager, NacDateAndTimePickerDialog.TAG)
@@ -1531,6 +1487,24 @@ class NacShowAlarmsFragment
 
 		// Reschedule the alarm
 		NacScheduler.update(requireContext(), alarm)
+	}
+
+	/**
+	 * Update all things that refer to the alarm.
+	 */
+	private fun updateAllAlarmReferences(card: NacAlarmCardHolder, alarm: NacAlarm)
+	{
+		// Get the context
+		val context = requireContext()
+
+		// Clear any notifications, just in case
+		NacDismissEarlyService.stopService(context, alarm)
+		NacUpcomingReminderService.stopService(context, alarm)
+
+		// Show next alarm, update the alarm, and refresh widgets
+		showNextAlarm(card, alarm)
+		updateAlarm(alarm)
+		refreshAllWidgets(context)
 	}
 
 	companion object

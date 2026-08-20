@@ -769,11 +769,6 @@ class NacAlarmCardHolder(root: View)
 	 */
 	private fun doCollapse()
 	{
-		// Setup the summary
-		// TODO: This is not necessary if it is always shown and visible
-		summaryView.visibility = View.VISIBLE
-		summaryView.isEnabled = true
-
 		// Animate rotation of the expand/collapse button
 		ObjectAnimator.ofFloat(expandButton, "rotation", expandButton.rotation, 0f)
 			.apply {
@@ -812,17 +807,16 @@ class NacAlarmCardHolder(root: View)
 	 */
 	private fun doExpand()
 	{
-		// Setup the summary
-		// TODO: This is not necessary if it is always shown and visible
-		summaryView.visibility = View.VISIBLE
-		summaryView.isEnabled = true
-
 		// Animate rotation of the expand/collapse button
 		ObjectAnimator.ofFloat(expandButton, "rotation", expandButton.rotation, 180f)
 			.apply {
 				duration = 300
 				start()
 			}
+
+		// Hide the extra summary view
+		extraBelowSummaryView.visibility = View.GONE
+		extraBelowSummaryView.isEnabled = false
 
 		// Setup the expanded view
 		expandedView.visibility = View.VISIBLE
@@ -2270,7 +2264,8 @@ class NacAlarmCardHolder(root: View)
 	 */
 	private fun shouldShowExtraView(): Boolean
 	{
-		return alarm!!.isInUse || alarm!!.willAlarmSoon()
+		//return (alarm!!.isInUse || alarm!!.willAlarmSoon())
+		return (alarm!!.isInUse || alarm!!.willAlarmSoon()) && isCollapsed
 	}
 
 	/**

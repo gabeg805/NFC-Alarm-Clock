@@ -474,6 +474,12 @@
 			</LinearLayout> <!-- Options -->
 		</LinearLayout> <!-- Expanded alarm -->
 
+		<View
+			android:layout_width="match_parent"
+			android:layout_height="@dimen/line"
+			android:background="@color/gray"
+			/>
+
 	</LinearLayout> <!-- Content -->
 
 </androidx.cardview.widget.CardView>

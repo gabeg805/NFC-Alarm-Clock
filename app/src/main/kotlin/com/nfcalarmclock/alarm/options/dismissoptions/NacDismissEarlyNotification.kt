@@ -37,7 +37,7 @@ class NacDismissEarlyNotification(
 	/**
 	 * @see NacBaseNotificationBuilder.id
 	 */
-	public override val id: Int
+	override val id: Int
 		get() = BASE_ID + (alarm?.id?.toInt() ?: 0)
 
 	/**

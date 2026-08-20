@@ -3,8 +3,8 @@
 
 	<!-- Days -->
 	<style name="My.Alarm.Days" parent="">
-		<item name="android:layout_marginTop">@dimen/tiny</item>
-		<item name="android:layout_marginBottom">@dimen/tiny</item>
+		<item name="android:layout_marginTop">@dimen/nudge</item>
+		<item name="android:layout_marginBottom">@dimen/nudge</item>
 		<item name="android:layout_marginStart">@dimen/small</item>
 		<item name="android:layout_marginEnd">@dimen/small</item>
 	</style>

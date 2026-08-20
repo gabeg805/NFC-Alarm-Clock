@@ -136,16 +136,25 @@ class NacAlarmCardAdapterLiveData
 	/**
 	 * Merge the current alarms with a new set of alarms, and sort the merge.
 	 */
-	fun mergeSort(alarms: List<NacAlarm>?)
+	fun mergeSort(alarms: List<NacAlarm>?, order: List<Long>? = null)
 	{
 		// Get the current alarms
 		val currentAlarms = value
 
 		// Merge the current alarms with the new alarms
-		val mergedAlarms = calculateMerge(currentAlarms, alarms).toMutableList()
+		var mergedAlarms = calculateMerge(currentAlarms, alarms).toMutableList()
 
-		// Sort the merged alarms
-		mergedAlarms.sort()
+		// Normal sort of the merged alarms. There was no order specified or mismatching sizes of lists
+		if ((order == null) || (order.size != mergedAlarms.size))
+		{
+			mergedAlarms.sort()
+		}
+		// Use the ordered list as the sort order for the alarms
+		else
+		{
+			val alarmIdMap = mergedAlarms.associateBy { it.id }
+			mergedAlarms = order.mapNotNull { alarmIdMap[it] }.toMutableList()
+		}
 
 		// Set the merged alarms as the current alarms
 		value = mergedAlarms
@@ -154,14 +163,23 @@ class NacAlarmCardAdapterLiveData
 	/**
 	 * Sort the current values.
 	 */
-	fun sort()
+	fun sort(order: List<Long>? = null)
 	{
 		// Create a list of alarms using the current alarm list
-		val newAlarms: MutableList<NacAlarm> = value?.toMutableList()
+		var newAlarms: MutableList<NacAlarm> = value?.toMutableList()
 			?: mutableListOf()
 
-		// Sort the alarms
-		newAlarms.sort()
+		// Sort the alarms normally
+		if ((order == null) || (order.size != newAlarms.size))
+		{
+			newAlarms.sort()
+		}
+		// Use the ordered list as the sort order for the alarms
+		else
+		{
+			val alarmIdMap = newAlarms.associateBy { it.id }
+			newAlarms = order.mapNotNull { alarmIdMap[it] }.toMutableList()
+		}
 
 		// Set the sorted alarm list as the current alarms
 		value = newAlarms

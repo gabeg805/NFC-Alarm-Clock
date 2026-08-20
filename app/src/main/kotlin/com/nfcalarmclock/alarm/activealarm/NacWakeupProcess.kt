@@ -304,6 +304,7 @@ class NacWakeupProcess(
 			// Gradually increase the volume by one step
 			val newVolume = currentVolume + 1
 
+			initialVolume = newVolume
 			volumeToRestrictChangeTo = newVolume
 			audioAttributes.streamVolume = newVolume
 		}
@@ -314,30 +315,6 @@ class NacWakeupProcess(
 		// level has been reached
 		graduallyIncreaseVolumeHandler.postDelayed({ graduallyIncreaseVolume() },
 			alarm.graduallyIncreaseVolumeWaitTime * 1000L)
-	}
-
-	/**
-	 * Restrict the volume.
-	 */
-	private fun restrictVolume()
-	{
-		// Check if the volume is below the restrict volume.
-		// If the volume will be gradually increasing, check that the process
-		// has already started
-		if ((audioAttributes.streamVolume < volumeToRestrictChangeTo)
-			&& (!alarm.shouldGraduallyIncreaseVolume || hasGraduallyIncreaseVolumeStarted))
-		{
-			// Change the volume
-			audioAttributes.streamVolume = volumeToRestrictChangeTo
-
-			// Call the volume key press listener
-			onVolumeKeyPressListener?.onVolumeKeyPress(alarm)
-			volumeKeyPressHandler.removeCallbacksAndMessages(null)
-		}
-
-		// Run the handler
-		restrictVolumeHandler.postDelayed({ restrictVolume() },
-			PERIOD_RESTRICT_VOLUME)
 	}
 
 	/**
@@ -377,6 +354,29 @@ class NacWakeupProcess(
 				sharedPreferences.isSelectedMediaForAlarmNotAvailable = true
 			}
 		}
+	}
+
+	/**
+	 * Restrict the volume.
+	 */
+	private fun restrictVolume()
+	{
+		// Check if the volume is below the restrict volume.
+		// If the volume will be gradually increasing, check that the process
+		// has already started
+		if ((audioAttributes.streamVolume < volumeToRestrictChangeTo)
+			&& (!alarm.shouldGraduallyIncreaseVolume || hasGraduallyIncreaseVolumeStarted))
+		{
+			// Change the volume
+			audioAttributes.streamVolume = volumeToRestrictChangeTo
+
+			// Call the volume key press listener
+			onVolumeKeyPressListener?.onVolumeKeyPress(alarm)
+		}
+
+		// Run the handler
+		restrictVolumeHandler.postDelayed({ restrictVolume() },
+			PERIOD_RESTRICT_VOLUME)
 	}
 
 	/**
@@ -586,14 +586,16 @@ class NacWakeupProcess(
 			{
 				// Call the volume key press listener
 				onVolumeKeyPressListener?.onVolumeKeyPress(alarm)
-				volumeKeyPressHandler.removeCallbacksAndMessages(null)
-				// TODO: Test what happens if out of snoozes!
+
+				// Change the initial volume if alarm does NOT restrict or gradually increase volume
+				if (!alarm.shouldRestrictVolume && !alarm.shouldGraduallyIncreaseVolume)
+				{
+					initialVolume = currentVolume
+				}
 			}
-			// No change in volume. Keep the watchdog running
-			else
-			{
-				volumeKeyPressWatchdog()
-			}
+
+			// Keep the watchdog running just in case unable to snooze/dismiss
+			volumeKeyPressWatchdog()
 
 		}, PERIOD_VOLUME_KEY_PRESS)
 	}

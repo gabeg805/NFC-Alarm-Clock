@@ -20,7 +20,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.R
-import com.nfcalarmclock.alarm.NacAlarmRepository
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.nfc.NacNfc
 import com.nfcalarmclock.nfc.NacNfcTagViewModel
@@ -32,16 +31,15 @@ import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.NacBundle
 import com.nfcalarmclock.system.addAlarm
 import com.nfcalarmclock.system.bindToService
+import com.nfcalarmclock.system.broadcasts.shutdown.NacShutdownBroadcastReceiver
 import com.nfcalarmclock.system.enableActivityAlias
 import com.nfcalarmclock.system.getAlarm
-import com.nfcalarmclock.system.registerMyShutdownBroadcastReceiver
-import com.nfcalarmclock.system.broadcasts.shutdown.NacShutdownBroadcastReceiver
 import com.nfcalarmclock.system.registerMyReceiver
+import com.nfcalarmclock.system.registerMyShutdownBroadcastReceiver
 import com.nfcalarmclock.system.unregisterMyReceiver
 import com.nfcalarmclock.view.quickToast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 /**
  * Activity to dismiss/snooze the alarm.
@@ -52,11 +50,11 @@ class NacActiveAlarmActivity
 	: AppCompatActivity()
 {
 
-	/**
-	 * Alarm repository.
-	 */
-	@Inject
-	lateinit var alarmRepository: NacAlarmRepository
+	///**
+	// * Alarm repository.
+	// */
+	//@Inject
+	//lateinit var alarmRepository: NacAlarmRepository
 
 	/**
 	 * NFC tag view model.

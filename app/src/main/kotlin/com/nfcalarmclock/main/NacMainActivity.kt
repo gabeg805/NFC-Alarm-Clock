@@ -216,7 +216,6 @@ class NacMainActivity
 
 			// Get any active alarm or timer
 			val activeAlarm = alarmViewModel.getActiveAlarm()
-			activeAlarm?.print()
 
 			// An NFC tag was scanned to open up the main activity
 			if (NacNfc.wasScanned(intent))
@@ -476,6 +475,9 @@ class NacMainActivity
 		bottomNavigation = findViewById(R.id.bottom_navigation)
 		permissionRequestManager = NacPermissionRequestManager(this)
 		shutdownBroadcastReceiver = NacShutdownBroadcastReceiver()
+
+		// Set flag that cards need to be measured
+		sharedPreferences.cardIsMeasured = false
 
 		// Setup events from the shared preference
 		lifecycleScope.launch {
@@ -981,7 +983,9 @@ class NacMainActivity
 	{
 		// Create the appbar configuration. The two root destinations are show alarms and
 		// show timers
-		val appBarConfiguration = AppBarConfiguration(setOf(R.id.nacShowAlarmsFragment, R.id.nacShowTimersFragment))
+		val appBarConfiguration = AppBarConfiguration(
+			setOf(R.id.nacShowAlarmsFragment, R.id.nacShowTimersFragment, R.id.nacMainSettingFragment)
+		)
 
 		// Setup navigation with the toolbar
 		toolbar.setupWithNavController(navController, appBarConfiguration)
