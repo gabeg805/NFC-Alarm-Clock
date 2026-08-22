@@ -153,6 +153,9 @@
 	<string name="key_alarm_screen_show_music_info">pref_alarm_music_info</string>
 	<string name="key_alarm_screen_battery_saver">pref_alarm_screen_battery_saver</string>
 
+	<!-- Miscellaneous -->
+	<string name="key_misc_should_toggle_alarms_with_airplane_mode">pref_should_toggle_alarms_with_airplane_mode</string>
+
 	<!-- Appearance -->
 	<string name="key_settings_appearance">pref_screen_appearance</string>
 	<string name="key_color_theme">pref_theme_color</string>

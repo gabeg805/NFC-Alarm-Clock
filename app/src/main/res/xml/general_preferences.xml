@@ -67,4 +67,19 @@
 			/>
 	</com.nfcalarmclock.settings.preference.NacPreferenceCategory>
 
+	<!-- Miscellaneous -->
+	<com.nfcalarmclock.settings.preference.NacPreferenceCategory
+		android:title="@string/title_misc">
+
+		<com.nfcalarmclock.settings.preference.NacCheckboxPreference
+			android:title="@string/title_toggle_alarms_with_airplane_mode"
+			android:key="@string/key_misc_should_toggle_alarms_with_airplane_mode"
+			android:summaryOn="@string/description_toggle_alarms_with_airplane_mode_true"
+			android:summaryOff="@string/description_toggle_alarms_with_airplane_mode_false"
+			android:defaultValue="@bool/default_misc_should_toggle_alarms_with_airplane_mode"
+			app:allowDividerAbove="false"
+			app:allowDividerBelow="true"
+			/>
+	</com.nfcalarmclock.settings.preference.NacPreferenceCategory>
+
 </PreferenceScreen>

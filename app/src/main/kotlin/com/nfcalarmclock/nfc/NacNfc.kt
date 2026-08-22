@@ -112,7 +112,7 @@ fun NacAlarm.getNfcTagNamesForDismissing(nfcTags: MutableList<NacNfcTag>, prefix
 	return if (this.shouldUseNfcTagDismissOrder)
 	{
 		// Order the NFC tags based on how the user wants them ordered
-		return when (this.nfcTagDismissOrder)
+		when (this.nfcTagDismissOrder)
 		{
 			// Sequential. Show the first NFC tag
 			NacNfcTagDismissOrder.SEQUENTIAL -> nfcTags.getOrNull(0)?.getTextWithPrefix(prefix)
@@ -366,7 +366,7 @@ object NacNfc
 		{
 			buffer[0] = Character.forDigit(b.toInt() ushr 4 and 0x0F, 16)
 			buffer[1] = Character.forDigit(b.toInt() and 0x0F, 16)
-			id.append(buffer)
+			id.append(buffer.contentToString())
 		}
 
 		return id.toString()

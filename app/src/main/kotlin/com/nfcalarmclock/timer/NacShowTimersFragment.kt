@@ -144,7 +144,7 @@ class NacShowTimersFragment
 			override fun onCountdownFinished(timer: NacTimer)
 			{
 				// Get the card
-				val card = recyclerView.findViewHolderForItemId(timer.id) as NacTimerCardHolder? ?: return
+				val card = recyclerView.findViewHolderForItemId(timer.id) as? NacTimerCardHolder? ?: return
 
 				// Change the seconds text and progress to indicate done
 				card.secondsTextView.text = resources.getString(R.string.number0)
@@ -166,7 +166,7 @@ class NacShowTimersFragment
 			override fun onCountdownPaused(timer: NacTimer)
 			{
 				// Get the card
-				val card = recyclerView.findViewHolderForItemId(timer.id) as NacTimerCardHolder? ?: return
+				val card = recyclerView.findViewHolderForItemId(timer.id) as? NacTimerCardHolder? ?: return
 
 				// Set the visibility
 				card.setPauseVisibility()
@@ -178,7 +178,7 @@ class NacShowTimersFragment
 			override fun onCountdownReset(timer: NacTimer, secUntilFinished: Long)
 			{
 				// Get the card
-				val card = recyclerView.findViewHolderForItemId(timer.id) as NacTimerCardHolder? ?: return
+				val card = recyclerView.findViewHolderForItemId(timer.id) as? NacTimerCardHolder? ?: return
 
 				// Reset progress back to 0
 				card.progressIndicator.animateProgress(card.progressIndicator.progress, 0, 250,
@@ -198,7 +198,7 @@ class NacShowTimersFragment
 			override fun onCountdownTick(timer: NacTimer, secUntilFinished: Long, newProgress: Int)
 			{
 				// Get the card
-				val card = recyclerView.findViewHolderForItemId(timer.id) as NacTimerCardHolder? ?: return
+				val card = recyclerView.findViewHolderForItemId(timer.id) as? NacTimerCardHolder? ?: return
 
 				// Animation is still running so do nothing
 				if (isRunningStartingAnimation[timer.id] == true)
@@ -223,7 +223,7 @@ class NacShowTimersFragment
 		NacActiveTimerService.OnCountupTickListener { timer, secOfRinging ->
 
 		// Get the card
-		val card = recyclerView.findViewHolderForItemId(timer.id) as NacTimerCardHolder? ?: return@OnCountupTickListener
+		val card = recyclerView.findViewHolderForItemId(timer.id) as? NacTimerCardHolder? ?: return@OnCountupTickListener
 
 		// Update the time
 		card.updateHourMinuteSecondsTextViews(secOfRinging)
@@ -237,7 +237,7 @@ class NacShowTimersFragment
 		NacActiveTimerService.OnServiceStoppedListener { timer ->
 
 			// Get the card
-			val card = recyclerView.findViewHolderForItemId(timer.id) as NacTimerCardHolder? ?: return@OnServiceStoppedListener
+			val card = recyclerView.findViewHolderForItemId(timer.id) as? NacTimerCardHolder? ?: return@OnServiceStoppedListener
 
 			// Update views back to normal
 			card.setResetVisibility()
@@ -528,7 +528,7 @@ class NacShowTimersFragment
 	fun initTimerCard(timer: NacTimer)
 	{
 		// Get the card
-		val card = recyclerView.findViewHolderForItemId(timer.id) as NacTimerCardHolder? ?: return
+		val card = recyclerView.findViewHolderForItemId(timer.id) as? NacTimerCardHolder? ?: return
 
 		// Initialize the card
 		initTimerCard(card)
@@ -807,7 +807,7 @@ class NacShowTimersFragment
 	private fun setupTimerCardAdapter()
 	{
 		// Bound view holder
-		timerCardAdapter.onViewHolderBoundListener = NacBaseCardAdapter.OnViewHolderBoundListener { card, index ->
+		timerCardAdapter.onViewHolderBoundListener = NacBaseCardAdapter.OnViewHolderBoundListener { card, _ ->
 
 			// Timer was just started so do a little circular animation from 0% to 100%
 			// on the first tick and then reset the running animation flag

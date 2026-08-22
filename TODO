@@ -2,34 +2,37 @@
 TODO
 ----
 
-* Make active alarm slide buttons bigger
+* Add alarms from phone to emulator to test alarm order and sorting.
 
-* Darken color of expanded alarm card?
+* Do fresh install on emulator and test giong to timer. The top bar was not
+  showing and it was making the  fragment look a little strange.
+
+* Make airplane mode toggle alarms, not just disable
+
+* Airplane mode receiver: Intent#ACTION_AIRPLANE_MODE_CHANGED
+  Constant Value: "android.intent.action.AIRPLANE_MODE"
+
+* Make DateTime dialog scrollable on small screens.
 
 * Add labels to everything?
 
-* Change name of notification objects to notification builders
+* Have a way to test various settings, like gradually increase volume, etc.
 
 * When active alarm or timer is left. Then "nfcTags" has to get reinitialized
   and probably gets cleared. May need to save the current progress in
   onSavedInstanceState() or whatever it is called.
 
-* Update website with f-droid and izzy
-
-* Make DateTime dialog scrollable on small screens.
-
-* Have a way to test various settings, like gradually increase volume, etc.
-
 * Test NFC dismiss when app is not in focus and make sure scanning NFC isn't
   causing a loop.
-
-* Airplane mode receiver: Intent#ACTION_AIRPLANE_MODE_CHANGED
-  Constant Value: "android.intent.action.AIRPLANE_MODE"
 
 * When coming back from media fragment, the order of alarms was all weird. Why
   is that? This was after hitting cancel but occurred for OK as well. Also when
   going back to the media fragment after changing the directory, it would not
   reload to the path of the music that is selected for the alarm.
+
+
+
+* Update website with f-droid and izzy
 
 * A repeat option for the timer could simply be number of times to repeat?
   How would keep track of how many times it has been repeated?
@@ -39,18 +42,7 @@ TODO
 * When using TTS, volume seems to get louder when coming back to music, and
   then goes down a bit. Is that intentional? Scope revertVolume() as well.
 
-* Opened media activity, started on ringtone. Swipeed over to browse. Selected
-  Etta James I'd rather go blind. When I cam eback to main activity, the alarm
-  card was colored like it was expanded but it was not actually expanded. It
-  should have been expanded.
-
 * Alarm time in activity was not updating until turned on screen. May not be an important bug.
-
-* When updating to support API 36:
-
-    - Bottom padding of settings is wack, and possibly in main activity as well
-
-    - Test MediaActivity with edge-to-edge
 
 * Add languages for Pakistan, Japan, Thailand, Poland, Turkey, France,
   Serbia, Finland, Romania, Italy

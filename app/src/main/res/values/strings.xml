@@ -195,6 +195,8 @@
 	<string name="message_text_to_speech_network_required">Network connection may be required for voice to work</string>
 	<string name="message_volume_dismiss_priority">Volume dismiss will have priority</string>
 	<string name="message_volume_snooze_ignored">Volume snooze will be ignored</string>
+	<string name="message_toggle_alarms_with_airplane_mode_on">Disabling all alarms due to airplane mode change.</string>
+	<string name="message_toggle_alarms_with_airplane_mode_off">Enabling all alarms due to airplane mode change.</string>
 
 	<!-- Error messages -->
 	<string name="error_message_active_delete">Unable to delete an active alarm</string>
@@ -326,6 +328,7 @@
 	<string name="title_notifications">Notifications</string>
 	<string name="title_style">Style</string>
 	<string name="title_tweaks">Tweaks</string>
+	<string name="title_misc">Miscellaneous</string>
 	<string name="title_new_screen">New screen</string>
 	<string name="title_show_alarm_name">Show alarm name</string>
 	<string name="title_show_current_date_and_time">Show current date and time</string>
@@ -336,6 +339,7 @@
 	<string name="title_start_week_on">Start week on&#8230;</string>
 	<string name="title_expand_new_alarm">Expand new alarms</string>
 	<string name="title_next_alarm_format">Next alarm format&#8230;</string>
+	<string name="title_toggle_alarms_with_airplane_mode">Toggle alarms with airplane mode</string>
 	<string name="title_permissions">Permissions</string>
 	<string name="title_developer">Developer</string>
 	<string name="title_alignment">Alignment</string>
@@ -414,6 +418,8 @@
 	<string name="description_alarm_screen_show_music_info_false">Do not show music or ringtone information.</string>
 	<string name="description_alarm_screen_battery_saver_true">Save battery by keeping the screen off when an alarm is active. The screen will need to be turned on manually.</string>
 	<string name="description_alarm_screen_battery_saver_false">Screen will turn on automatically when an alarm is active.</string>
+	<string name="description_toggle_alarms_with_airplane_mode_true">Turning airplane mode on will disable all alarms, and turning airplane mode off will enable all alarms.  Note: The app must be in focus for this to work.</string>
+	<string name="description_toggle_alarms_with_airplane_mode_false">Alarms will be unaffected when airplane mode is turned on or off.</string>
 	<string name="description_color_theme">The theme color.</string>
 	<string name="description_color_name">e.g. Work</string>
 	<string name="description_color_days">e.g. Mon &#8231; Tue &#8231; Wed &#8231; Thu &#8231; Fri</string>

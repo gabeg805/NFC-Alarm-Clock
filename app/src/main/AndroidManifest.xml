@@ -178,6 +178,12 @@
 			android:exported="false"
 			/>
 
+		<!-- Disable active flag of erroneous active alarm -->
+		<service
+			android:name=".alarm.activealarm.NacDisableErroneousActiveAlarmService"
+			android:exported="false"
+			/>
+
 		<!-- Alarm manager broadcasts this so that the foreground service can be started. -->
 		<receiver
 			android:name=".alarm.activealarm.NacActiveAlarmBroadcastReceiver"

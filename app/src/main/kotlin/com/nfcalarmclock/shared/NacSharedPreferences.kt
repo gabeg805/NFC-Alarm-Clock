@@ -1848,6 +1848,24 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
+	 * Whether to toggle alarms with airplane mode.
+	 */
+	var shouldToggleAlarmsWithAirplaneMode: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.key_misc_should_toggle_alarms_with_airplane_mode)
+			val defaultValue = resources.getBoolean(R.bool.default_misc_should_toggle_alarms_with_airplane_mode)
+
+			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_misc_should_toggle_alarms_with_airplane_mode)
+
+			saveBoolean(key, value)
+		}
+
+	/**
 	 * Whether easy snooze is enabled or not.
 	 */
 	var shouldEasySnooze: Boolean

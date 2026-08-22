@@ -43,6 +43,7 @@ import com.nfcalarmclock.system.unregisterMyReceiver
 import com.nfcalarmclock.timer.db.NacTimer
 import com.nfcalarmclock.view.animateProgress
 import com.nfcalarmclock.view.calcContrastColor
+import com.nfcalarmclock.view.performHapticFeedback
 import com.nfcalarmclock.view.setupBackgroundColor
 import com.nfcalarmclock.view.setupRippleColor
 import com.nfcalarmclock.view.startTimerRingingAnimation
@@ -280,7 +281,7 @@ class NacActiveTimerFragment
 	/**
 	 * Listener for when the countup handler ticks.
 	 */
-	private val onCountupTickListener: NacActiveTimerService.OnCountupTickListener = NacActiveTimerService.OnCountupTickListener { timer, secOfRinging ->
+	private val onCountupTickListener: NacActiveTimerService.OnCountupTickListener = NacActiveTimerService.OnCountupTickListener { _, secOfRinging ->
 
 		// Update the time
 		updateHourMinuteSecondsTextViews(secOfRinging)
@@ -671,9 +672,20 @@ class NacActiveTimerFragment
 	 */
 	private fun setupAddTimeButtons()
 	{
-		add5sButton.setOnClickListener { service?.addTimeToCountdown(timer, 5) }
-		add30sButton.setOnClickListener { service?.addTimeToCountdown(timer, 30) }
-		add1mButton.setOnClickListener { service?.addTimeToCountdown(timer, 60) }
+		add5sButton.setOnClickListener {
+			service?.addTimeToCountdown(timer, 5)
+			it.performHapticFeedback()
+		}
+
+		add30sButton.setOnClickListener {
+			service?.addTimeToCountdown(timer, 30)
+			it.performHapticFeedback()
+		}
+
+		add1mButton.setOnClickListener {
+			service?.addTimeToCountdown(timer, 60)
+			it.performHapticFeedback()
+		}
 	}
 
 	/**
@@ -726,6 +738,9 @@ class NacActiveTimerFragment
 			service?.cancelCountdownTimer(timer)
 			service?.updateNotification(timer)
 
+			// Haptic feedback
+			it.performHapticFeedback()
+
 		}
 	}
 
@@ -766,6 +781,9 @@ class NacActiveTimerFragment
 			// Set the last click time
 			lastClickTimeResetButton = SystemClock.elapsedRealtime()
 
+			// Haptic feedback
+			it.performHapticFeedback()
+
 		}
 	}
 
@@ -801,6 +819,9 @@ class NacActiveTimerFragment
 				NacActiveTimerService.startTimerService(context, timer)
 				context.bindToService(NacActiveTimerService::class.java, serviceConnection)
 			}
+
+			// Haptic feedback
+			it.performHapticFeedback()
 
 		}
 	}
@@ -855,7 +876,13 @@ class NacActiveTimerFragment
 
 		// Click listener
 		stopButton.setOnClickListener {
+
+			// Dismiss timer
 			service?.dismiss(timer)
+
+			// Haptic feedback
+			it.performHapticFeedback()
+
 		}
 	}
 

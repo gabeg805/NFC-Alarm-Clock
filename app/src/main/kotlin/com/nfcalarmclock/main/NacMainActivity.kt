@@ -2,13 +2,17 @@ package com.nfcalarmclock.main
 
 import android.annotation.SuppressLint
 import android.app.PendingIntent
+import android.content.ComponentName
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
+import android.content.ServiceConnection
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.os.IBinder
 import android.provider.AlarmClock
 import android.view.View
 import android.view.ViewGroup
@@ -36,6 +40,8 @@ import com.nfcalarmclock.BuildConfig
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.NacAlarmViewModel
 import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmActivity
+import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmService
+import com.nfcalarmclock.alarm.activealarm.NacDisableErroneousActiveAlarmService
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.nfc.NacNfc
 import com.nfcalarmclock.nfc.NacNfcReaderMode
@@ -43,6 +49,8 @@ import com.nfcalarmclock.nfc.SCANNED_NFC_TAG_ID_BUNDLE_NAME
 import com.nfcalarmclock.ratemyapp.NacRateMyApp
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.NacBundle.BUNDLE_INTENT_ACTION
+import com.nfcalarmclock.system.bindToService
+import com.nfcalarmclock.system.broadcasts.airplanemode.NacAirplaneModeBroadcastReceiver
 import com.nfcalarmclock.system.broadcasts.shutdown.NacShutdownBroadcastReceiver
 import com.nfcalarmclock.system.disableActivityAlias
 import com.nfcalarmclock.system.getDeviceProtectedStorageContext
@@ -54,6 +62,7 @@ import com.nfcalarmclock.system.media.getMediaArtist
 import com.nfcalarmclock.system.media.getMediaTitle
 import com.nfcalarmclock.system.media.getMediaType
 import com.nfcalarmclock.system.permission.NacPermissionRequestManager
+import com.nfcalarmclock.system.registerMyReceiver
 import com.nfcalarmclock.system.registerMyShutdownBroadcastReceiver
 import com.nfcalarmclock.system.scheduler.NacScheduler
 import com.nfcalarmclock.system.toBundle
@@ -132,9 +141,51 @@ class NacMainActivity
 	private lateinit var shutdownBroadcastReceiver: NacShutdownBroadcastReceiver
 
 	/**
+	 * Airplane mode receiver.
+	 */
+	private lateinit var airplaneModeReceiver: NacAirplaneModeBroadcastReceiver
+
+	/**
 	 * Whether the bottom navigation view item was selected by the user or not.
 	 */
 	private var wasBottomNavigationSelectedByUser: Boolean = true
+
+	/**
+	 * Active alarm to use when starting alarm activity.
+	 */
+	private var activeAlarmForActivity: NacAlarm? = null
+
+	/**
+	 * Active alarm to use when starting alarm activity.
+	 */
+	private val activeAlarmServiceHandler: Handler by lazy { Handler(mainLooper) }
+
+	/**
+	 * Connection to the active alarm service.
+	 */
+	private val serviceConnection = object : ServiceConnection
+	{
+		@OptIn(UnstableApi::class)
+		override fun onServiceConnected(className: ComponentName, serviceBinder: IBinder)
+		{
+			println("SERVICE IS CONNECTED! : $activeAlarmForActivity")
+
+			// Do nothing if the alarm for the activity is not set
+			if (activeAlarmForActivity == null)
+			{
+				return
+			}
+
+			// Remove the handler callback
+			activeAlarmServiceHandler.removeCallbacksAndMessages(null)
+
+			// Start the alarm activity
+			NacActiveAlarmActivity.startAlarmActivity(this@NacMainActivity, activeAlarmForActivity)
+			activeAlarmForActivity = null
+		}
+
+		override fun onServiceDisconnected(className: ComponentName) {}
+	}
 
 	/**
 	 * What's new dialog. If it is set, then the dialog is currently being shown.
@@ -234,10 +285,30 @@ class NacMainActivity
 			}
 			else
 			{
-				// Show the active alarm activity
+				// TODO: Collapse icon is not shown when extrabelosummaryview is shown
+				// Bind to the active alarm service to ensure it is running, AND THEN start
+				// the alarm activity. This is to avoid the scenario when an alarm was marked as
+				// active, even after a user had disabled it. I am not sure how this was
+				// happening, as I could not replicate it, but this new process is to ensure
+				// that it does not happen anymore to people
 				if (activeAlarm != null)
 				{
-					NacActiveAlarmActivity.startAlarmActivity(this@NacMainActivity, activeAlarm)
+					// Alarm that will be passed into the activity
+					activeAlarmForActivity = activeAlarm
+
+					// Bind to the active alarm service
+					println("BIND FOR THE SERVICE")
+					bindToService(NacActiveAlarmService::class.java, serviceConnection)
+
+					// Handler to disable the active flag of the alarm in the event that the
+					// service is not bound within 5 sec
+					activeAlarmServiceHandler.postDelayed({
+						println("HELLO")
+						NacDisableErroneousActiveAlarmService.startService(this@NacMainActivity, activeAlarm)
+					}, 5000)
+
+					// Show the active alarm activity
+					//NacActiveAlarmActivity.startAlarmActivity(this@NacMainActivity, activeAlarm)
 				}
 			}
 
@@ -374,8 +445,10 @@ class NacMainActivity
 		{
 			// Start the alarm activity with the intent containing the NFC tag
 			// information in order to dismiss this alarm
+			println("Starting alarm activity and passing in NFC intent")
 			NacActiveAlarmActivity.startAlarmActivity(this@NacMainActivity, intent, activeAlarm)
 
+			println("Clearing NFC tag from intent")
 			intent = Intent(this@NacMainActivity, NacMainActivity::class.java)
 				.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
 		}
@@ -475,6 +548,7 @@ class NacMainActivity
 		bottomNavigation = findViewById(R.id.bottom_navigation)
 		permissionRequestManager = NacPermissionRequestManager(this)
 		shutdownBroadcastReceiver = NacShutdownBroadcastReceiver()
+		airplaneModeReceiver = NacAirplaneModeBroadcastReceiver()
 
 		// Set flag that cards need to be measured
 		sharedPreferences.cardIsMeasured = false
@@ -496,12 +570,29 @@ class NacMainActivity
 		// the main activity
 		disableActivityAlias(this)
 
+		// Register broadcast receivers
+		registerMyShutdownBroadcastReceiver(this, shutdownBroadcastReceiver)
+		registerMyReceiver(this, airplaneModeReceiver, IntentFilter(Intent.ACTION_AIRPLANE_MODE_CHANGED))
+
 		// Cleanup any extra media files in device encrypted storage and old zip files
 		// that were created when sending a statistics email
 		lifecycleScope.launch {
 			cleanupExtraMediaFilesInDeviceEncryptedStorage()
 			cleanupEmailZipFiles()
 		}
+	}
+
+	/**
+	 * Activity is destroyed.
+	 */
+	override fun onDestroy()
+	{
+		// Super
+		super.onDestroy()
+
+		// Cleanup
+		unregisterMyReceiver(this, shutdownBroadcastReceiver)
+		unregisterMyReceiver(this, airplaneModeReceiver)
 	}
 
 	/**
@@ -525,9 +616,6 @@ class NacMainActivity
 	{
 		// Super
 		super.onPause()
-
-		// Cleanup
-		unregisterMyReceiver(this, shutdownBroadcastReceiver)
 
 		// Stop NFC
 		NacNfc.disableReaderMode(this)
@@ -553,9 +641,6 @@ class NacMainActivity
 		setupNfc()
 		attemptToHandleNfcScanEvent()
 		setupWasNfcJustScannedToDismiss()
-
-		// Register the shutdown receiver
-		registerMyShutdownBroadcastReceiver(this, shutdownBroadcastReceiver)
 
 		// Determine which intent action to do
 		when (intent.action)
@@ -592,6 +677,23 @@ class NacMainActivity
 				setupInitialDialogToShow()
 			}
 		}
+	}
+
+	/**
+	 * Activity stopped.
+	 */
+	override fun onStop()
+	{
+		// Super
+		super.onStop()
+
+		// Unbind service
+		try
+		{
+			unbindService(serviceConnection)
+			println("UNBIND SERVICE")
+		}
+		catch (_: IllegalArgumentException) {}
 	}
 
 	/**

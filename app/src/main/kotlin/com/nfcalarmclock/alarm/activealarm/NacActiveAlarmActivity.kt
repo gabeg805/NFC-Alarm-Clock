@@ -171,6 +171,22 @@ class NacActiveAlarmActivity
 	 */
 	private val serviceConnection = object : ServiceConnection
 	{
+		/**
+		 * Binding to the service connection is dead.
+		 */
+		override fun onBindingDied(name: ComponentName?)
+		{
+			// Super
+			super.onBindingDied(name)
+
+			// Finish the activity
+			println("BINDING DIED")
+			finish()
+		}
+
+		/**
+		 * Service connected.
+		 */
 		override fun onServiceConnected(className: ComponentName, serviceBinder: IBinder)
 		{
 			// Set the active alarm service
@@ -179,6 +195,9 @@ class NacActiveAlarmActivity
 			//serviceBoundWatchdogHandler.removeCallbacksAndMessages(null)
 		}
 
+		/**
+		 * Service disconnected.
+		 */
 		override fun onServiceDisconnected(className: ComponentName) {}
 	}
 
@@ -290,6 +309,7 @@ class NacActiveAlarmActivity
 
 			// Parse the NFC ID
 			val nfcId = NacNfc.parseId(intent)
+			println("Alarm activity onResume() : NFC id : $nfcId")
 
 			// Get the list of NFC tags that can be used to dismiss the alarm, and
 			// order them based on how the user wants them ordered
@@ -304,6 +324,8 @@ class NacActiveAlarmActivity
 			// scanned
 			if (NacNfc.wasScanned(intent) && NacNfc.canDismissWithScannedNfc(this@NacActiveAlarmActivity, alarm, nfcId, nfcTags))
 			{
+				println("NFC was scanning and can be used to dismiss alarm!  Calling dismiss() on service? ${service != null}")
+				// TODO: Should I write to NacSharedPreferenecs.wasNfcJustScannedToDismiss in here?
 				// Dismiss the alarm service with NFC
 				service?.dismiss(usedNfc = true)
 				finish()
@@ -591,6 +613,8 @@ class NacActiveAlarmActivity
 
 		/**
 		 * Stop the alarm activity
+		 *
+		 * TODO: Delete this if no longer necessary.
 		 */
 		fun stopAlarmActivity(context: Context)
 		{

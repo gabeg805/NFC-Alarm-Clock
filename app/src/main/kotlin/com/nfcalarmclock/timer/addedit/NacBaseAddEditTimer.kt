@@ -142,19 +142,27 @@ abstract class NacBaseAddEditTimer
 	 */
 	protected fun appendTime(value: CharSequence)
 	{
-		// Get the hour, min, and sec
+		// Get the current hour, min, and sec
 		val hour = hourTextView.text.toString()
 		val min = minuteTextView.text
 		val sec = secondsTextView.text
-
-		// Time is already full
-		if (!hour.startsWith("0"))
-		{
-			return
-		}
+		val currentTime = "$hour$min$sec"
+		var newTime= currentTime
 
 		// Build the new time
-		val newTime = "${hour.toInt()}$min$sec$value"
+		value.forEach {
+
+			// Time is already full, do nothing
+			if (!newTime.startsWith("0"))
+			{
+				return@forEach
+			}
+
+			// Remove the first digit and append the current digit of the passed in value
+			newTime  = newTime.substring(1, 6)
+			newTime += it
+
+		}
 
 		// Set the new time
 		hourTextView.text = newTime.substring(0, 2)
@@ -624,6 +632,9 @@ abstract class NacBaseAddEditTimer
 			scrollView.smoothScrollTo(0, moreOptionsContainer.height)
 			//bottomNavigation.slideDown(250)
 
+			// Haptic feedback
+			it.performHapticFeedback()
+
 		}
 	}
 
@@ -877,6 +888,9 @@ abstract class NacBaseAddEditTimer
 				findNavController().popBackStack(R.id.nacShowTimersFragment, false)
 			}
 
+			// Haptic feedback
+			it.performHapticFeedback()
+
 		}
 	}
 
@@ -920,6 +934,9 @@ abstract class NacBaseAddEditTimer
 				NacActiveTimerService.startTimerService(context, timer)
 				findNavController().navigate(R.id.nacActiveTimerFragment, timer.toBundle())
 			}
+
+			// Haptic feedback
+			it.performHapticFeedback()
 
 		}
 	}
