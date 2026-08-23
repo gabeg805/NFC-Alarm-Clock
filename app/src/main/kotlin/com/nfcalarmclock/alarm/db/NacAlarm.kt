@@ -8,7 +8,10 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.nfcalarmclock.R
 import com.nfcalarmclock.nfc.NacNfcTagDismissOrder
+import com.nfcalarmclock.nfc.NacNfcTagViewModel
 import com.nfcalarmclock.nfc.db.NacNfcTag
+import com.nfcalarmclock.nfc.getNfcTagNamesForDismissing
+import com.nfcalarmclock.nfc.getNfcTagsForDismissing
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.NacCalendar
 import com.nfcalarmclock.system.NacCalendar.Day
@@ -23,6 +26,8 @@ import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import java.util.Calendar
 import java.util.EnumSet
 import java.util.Locale
@@ -1589,15 +1594,17 @@ open class NacAlarm()
 	/**
 	 * Toast the NFC ID message.
 	 */
-	fun toastNfcId(context: Context)
+	suspend fun toastNfcId(context: Context, nfcTagViewModel: NacNfcTagViewModel)
 	{
 		// Determine which message to show
 		val message = if (nfcTagId.isNotEmpty())
 		{
-			// Get the string to show a specific NFC tag
-			val nfcId = context.getString(R.string.message_show_nfc_tag_id)
+			// Get the prefix to show a specific NFC tag
+			val prefix = context.getString(R.string.message_show_nfc_tag_id)
+			val nfcTags = getNfcTagsForDismissing(nfcTagViewModel)
+			val nfcTagNames = getNfcTagNamesForDismissing(nfcTags, prefix, showAll = true)
 
-			"$nfcId: $nfcTagId"
+			"$prefix: $nfcTagNames"
 		}
 		else
 		{
@@ -1606,7 +1613,10 @@ open class NacAlarm()
 		}
 
 		// Toast the message
-		quickToast(context, message)
+		withContext(Dispatchers.Main)
+		{
+			quickToast(context, message)
+		}
 	}
 
 	/**

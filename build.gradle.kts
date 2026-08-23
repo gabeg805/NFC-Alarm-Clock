@@ -1,7 +1,7 @@
 // Top-level build file where you can add configuration options common to all sub-projects/modules.
 
 plugins {
-	id("com.android.application") version "9.1.1" apply false
+	id("com.android.application") version "9.2.1" apply false
 	id("com.google.dagger.hilt.android") version "2.59.2" apply false
 	// KSP version works by: <Kotlin version>-<KSP version>
 	// This combination of versions should be present in the KSP GitHub, or else do not

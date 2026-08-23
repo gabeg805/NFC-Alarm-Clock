@@ -10,6 +10,7 @@ import android.content.ServiceConnection
 import android.nfc.NfcAdapter
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.os.IBinder
 import android.view.Window
 import android.view.WindowManager
@@ -39,6 +40,7 @@ import com.nfcalarmclock.system.registerMyShutdownBroadcastReceiver
 import com.nfcalarmclock.system.unregisterMyReceiver
 import com.nfcalarmclock.view.quickToast
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
 /**
@@ -86,11 +88,11 @@ class NacActiveAlarmActivity
 	 */
 	private var service: NacActiveAlarmService? = null
 
-	///**
-	// * Service bound watchdog, to ensure that the service is actually bound. If it is not
-	// * after a timeout then the activity is stopped.
-	// */
-	//private val serviceBoundWatchdogHandler: Handler by lazy { Handler(mainLooper) }
+	/**
+	 * Service bound watchdog, to ensure that the service is actually bound. If it is not
+	 * after a timeout then the activity is stopped.
+	 */
+	private val serviceBoundWatchdogHandler: Handler by lazy { Handler(mainLooper) }
 
 	/**
 	 * Keyguard manager.
@@ -180,7 +182,6 @@ class NacActiveAlarmActivity
 			super.onBindingDied(name)
 
 			// Finish the activity
-			println("BINDING DIED")
 			finish()
 		}
 
@@ -192,7 +193,9 @@ class NacActiveAlarmActivity
 			// Set the active alarm service
 			val binder = serviceBinder as NacActiveAlarmService.NacLocalBinder
 			service = binder.getService()
-			//serviceBoundWatchdogHandler.removeCallbacksAndMessages(null)
+
+			// Remove the service watchdog
+			serviceBoundWatchdogHandler.removeCallbacksAndMessages(null)
 		}
 
 		/**
@@ -254,8 +257,8 @@ class NacActiveAlarmActivity
 		// Unregister device unlocked receiver
 		unregisterMyReceiver(this, deviceUnlockedBroadcastReceiver)
 
-		//// Stop the watchdog
-		//serviceBoundWatchdogHandler.removeCallbacksAndMessages(null)
+		// Stop the watchdog
+		serviceBoundWatchdogHandler.removeCallbacksAndMessages(null)
 	}
 
 	/**
@@ -309,7 +312,6 @@ class NacActiveAlarmActivity
 
 			// Parse the NFC ID
 			val nfcId = NacNfc.parseId(intent)
-			println("Alarm activity onResume() : NFC id : $nfcId")
 
 			// Get the list of NFC tags that can be used to dismiss the alarm, and
 			// order them based on how the user wants them ordered
@@ -327,8 +329,24 @@ class NacActiveAlarmActivity
 				println("NFC was scanning and can be used to dismiss alarm!  Calling dismiss() on service? ${service != null}")
 				// TODO: Should I write to NacSharedPreferenecs.wasNfcJustScannedToDismiss in here?
 				// Dismiss the alarm service with NFC
-				service?.dismiss(usedNfc = true)
-				finish()
+				if (service != null)
+				{
+					service!!.dismiss(usedNfc = true)
+				}
+				// Handler to dismiss the erroneous active alarm, in the event that the
+				// service is not bound within 2 sec, and then finish the activity
+				else
+				{
+					serviceBoundWatchdogHandler.postDelayed({
+						lifecycleScope.launch {
+							sharedPreferences.wasNfcJustScannedToDismiss = true
+							NacDismissErroneousActiveAlarmService.startService(this@NacActiveAlarmActivity, alarm)
+							delay(500)
+							finish()
+						}
+					}, 2000)
+				}
+
 			}
 
 			// Setup NFC for the layout handler
@@ -369,22 +387,6 @@ class NacActiveAlarmActivity
 
 		// Bind to the active alarm service
 		bindToService(NacActiveAlarmService::class.java, serviceConnection)
-
-		//// Start the watchdog
-		//serviceBoundWatchdogHandler.postDelayed({
-
-		//	if ((service == null) && (alarm != null))
-		//	{
-		//		lifecycleScope.launch {
-
-		//			alarm!!.dismiss()
-		//			alarmRepository.update(alarm!!)
-		//			finish()
-
-		//		}
-		//	}
-
-		//}, 10000)
 	}
 
 	/**

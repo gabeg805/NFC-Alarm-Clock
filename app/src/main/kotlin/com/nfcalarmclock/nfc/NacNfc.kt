@@ -107,9 +107,13 @@ suspend fun NacAlarm.getNfcTagsForDismissing(
  *
  * @return The list of NFC tags that can be used to dismiss this alarm.
  */
-fun NacAlarm.getNfcTagNamesForDismissing(nfcTags: MutableList<NacNfcTag>, prefix: String = ""): String?
+fun NacAlarm.getNfcTagNamesForDismissing(
+	nfcTags: MutableList<NacNfcTag>,
+	prefix: String = "",
+	showAll: Boolean = false
+): String?
 {
-	return if (this.shouldUseNfcTagDismissOrder)
+	return if (this.shouldUseNfcTagDismissOrder && !showAll)
 	{
 		// Order the NFC tags based on how the user wants them ordered
 		when (this.nfcTagDismissOrder)
@@ -345,7 +349,10 @@ object NacNfc
 
 	/**
 	 * Parse NFC tag ID to a readable format.
+	 *
+	 * Array to string is for the id.append() line.
 	 */
+	@Suppress("KotlinArrayToString")
 	fun parseId(nfcTag: Tag?): String?
 	{
 		// NFC tag is not defined
@@ -366,7 +373,7 @@ object NacNfc
 		{
 			buffer[0] = Character.forDigit(b.toInt() ushr 4 and 0x0F, 16)
 			buffer[1] = Character.forDigit(b.toInt() and 0x0F, 16)
-			id.append(buffer.contentToString())
+			id.append(buffer)
 		}
 
 		return id.toString()

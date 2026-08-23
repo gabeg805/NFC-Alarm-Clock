@@ -2,6 +2,14 @@
 TODO
 ----
 
+* Test start timer from NFC, as this code block was changed
+
+* Volume can dismiss NFC alarms
+
+* Reorder what's new
+
+* Should be able to scan NFC and if an alarm is snoozed but it matches, then dismiss it or start the dismiss process
+
 * Add alarms from phone to emulator to test alarm order and sorting.
 
 * Do fresh install on emulator and test giong to timer. The top bar was not

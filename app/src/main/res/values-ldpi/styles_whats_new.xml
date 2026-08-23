@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<!-- Parent -->
+	<style name="My.WhatsNew.Parent" parent="">
+		<item name="android:paddingVertical">@dimen/small</item>
+		<item name="android:paddingHorizontal">@dimen/normal</item>
+	</style>
+
+	<!-- Title -->
+	<style name="My.WhatsNew.Title" parent="Widget.TextView.Primary">
+		<item name="android:paddingBottom">@dimen/twoline</item>
+		<item name="android:textSize">@dimen/tsz_medium</item>
+		<item name="android:textStyle">bold</item>
+	</style>
+
+	<!-- RecyclerView -->
+	<style name="My.WhatsNew.RecyclerView" parent="">
+		<item name="layout_constraintHeight_default">percent</item>
+		<item name="layout_constraintHeight_percent">0.7</item>
+	</style>
+
+</resources>

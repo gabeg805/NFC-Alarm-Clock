@@ -831,6 +831,8 @@ class NacShowAlarmsFragment
 			card.onCardMediaClickedListener = OnCardMediaClickedListener { _, alarm ->
 
 				// Navigate to the media picker
+				// TODO: Add rv.layoutmanager.scrollToPosisiton(card position)
+				// That way, when onPause() is called and state is saved, it will go back to this card easy
 				findNavController().navigate(
 					R.id.action_nacShowAlarmsFragment_to_nacAlarmMainMediaPickerFragment,
 					alarm.toBundle()
@@ -976,7 +978,9 @@ class NacShowAlarmsFragment
 
 							// Show the NFC tag for the current alarm
 							item.setOnMenuItemClickListener { _ ->
-								alarm.toastNfcId(context)
+								lifecycleScope.launch {
+									alarm.toastNfcId(context, nfcTagViewModel)
+								}
 								true
 							}
 						}

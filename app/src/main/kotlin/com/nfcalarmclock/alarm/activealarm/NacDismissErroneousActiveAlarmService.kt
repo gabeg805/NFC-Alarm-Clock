@@ -14,17 +14,17 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 /**
- * Disable the active flag of an erroneously active alarm.
+ * Dismiss an erroneously active alarm.
  *
  * I am not sure how this happens, but an alarm remains active when it should not, so the app
  * (previously) attempted to start the alarm activity. Normally, this would be fine if the
  * service was running, but in this case, the service would not be running.
  *
  * Now, a check is run to ensure the service is running, and if a connection is not made, then
- * this service is started to disable the active flag of the alarm.
+ * this service is started to dismiss the alarm.
  */
 @AndroidEntryPoint
-class NacDisableErroneousActiveAlarmService
+class NacDismissErroneousActiveAlarmService
 	: NacLifecycleService()
 {
 
@@ -48,11 +48,10 @@ class NacDisableErroneousActiveAlarmService
 
 		lifecycleScope.launch {
 
-			// Disable the active flag of the alarm
+			// Dismiss the active alarm
 			if (alarm != null)
 			{
-				println("DISABLING ALARM")
-				alarm.isActive = false
+				alarm.dismiss()
 				alarmRepository.update(alarm)
 			}
 
@@ -77,7 +76,7 @@ class NacDisableErroneousActiveAlarmService
 		 */
 		fun getStartIntent(context: Context, alarm: NacAlarm?): Intent
 		{
-			return Intent(Intent.ACTION_DEFAULT, null, context, NacDisableErroneousActiveAlarmService::class.java)
+			return Intent(Intent.ACTION_DEFAULT, null, context, NacDismissErroneousActiveAlarmService::class.java)
 				.addAlarm(alarm)
 		}
 		/**

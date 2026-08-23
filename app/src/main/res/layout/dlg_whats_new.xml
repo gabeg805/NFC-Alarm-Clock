@@ -1,40 +1,43 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<androidx.constraintlayout.widget.ConstraintLayout
+	style="@style/My.WhatsNew.Parent"
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:id="@+id/whats_new_layout"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
-	android:paddingTop="@dimen/normal"
-	android:paddingBottom="@dimen/normal"
 	android:orientation="vertical">
 
+	<!-- Title -->
 	<TextView
-		style="@style/Widget.TextView.Primary"
+		style="@style/My.WhatsNew.Title"
 		android:id="@+id/whats_new_title"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"
-		android:paddingBottom="@dimen/nudge"
-		android:paddingStart="@dimen/large"
-		android:paddingEnd="@dimen/large"
-		android:textSize="@dimen/tsz_large"
-		android:textStyle="bold"
 		android:text="@string/title_whats_new"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
 		/>
 
+	<!-- What's new items -->
 	<androidx.recyclerview.widget.RecyclerView
+		style="@style/My.WhatsNew.RecyclerView"
 		android:id="@+id/whats_new_recyclerview"
 		android:contentDescription="@string/cd_whats_new"
-		android:layout_width="match_parent"
-		android:layout_height="wrap_content"
-		android:paddingStart="@dimen/large"
-		android:paddingEnd="@dimen/large"
+		android:layout_width="0dp"
+		android:layout_height="0dp"
 		android:clipToPadding="false"
 		android:descendantFocusability="blocksDescendants"
 		android:scrollbarFadeDuration="2000"
 		android:scrollbarStyle="outsideInset"
 		android:scrollbars="vertical"
+		app:layout_constraintTop_toBottomOf="@id/whats_new_title"
+		app:layout_constraintBottom_toTopOf="@id/ok_button"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
 		/>
+	<!--
+	-->
 
 	<!-- Ok button -->
 	<com.google.android.material.button.MaterialButton
@@ -42,8 +45,14 @@
 		android:id="@+id/ok_button"
 		android:layout_width="match_parent"
 		android:layout_marginTop="@dimen/medium"
+		android:layout_marginStart="@dimen/zero"
+		android:layout_marginEnd="@dimen/zero"
 		android:text="@string/action_ok"
 		app:backgroundTint="@color/orange"
+		app:layout_constraintTop_toBottomOf="@id/whats_new_recyclerview"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
 		/>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

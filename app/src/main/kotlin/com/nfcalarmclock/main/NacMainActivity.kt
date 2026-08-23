@@ -41,7 +41,7 @@ import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.NacAlarmViewModel
 import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmActivity
 import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmService
-import com.nfcalarmclock.alarm.activealarm.NacDisableErroneousActiveAlarmService
+import com.nfcalarmclock.alarm.activealarm.NacDismissErroneousActiveAlarmService
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.nfc.NacNfc
 import com.nfcalarmclock.nfc.NacNfcReaderMode
@@ -161,6 +161,11 @@ class NacMainActivity
 	private val activeAlarmServiceHandler: Handler by lazy { Handler(mainLooper) }
 
 	/**
+	 * Handler to set the "wasNfcJustScannedToDismiss" shared preference, after a delay.
+	 */
+	private val wasNfcJustScannedToDismissHandler: Handler by lazy { Handler(mainLooper) }
+
+	/**
 	 * Connection to the active alarm service.
 	 */
 	private val serviceConnection = object : ServiceConnection
@@ -168,8 +173,6 @@ class NacMainActivity
 		@OptIn(UnstableApi::class)
 		override fun onServiceConnected(className: ComponentName, serviceBinder: IBinder)
 		{
-			println("SERVICE IS CONNECTED! : $activeAlarmForActivity")
-
 			// Do nothing if the alarm for the activity is not set
 			if (activeAlarmForActivity == null)
 			{
@@ -297,14 +300,12 @@ class NacMainActivity
 					activeAlarmForActivity = activeAlarm
 
 					// Bind to the active alarm service
-					println("BIND FOR THE SERVICE")
 					bindToService(NacActiveAlarmService::class.java, serviceConnection)
 
-					// Handler to disable the active flag of the alarm in the event that the
+					// Handler to dismiss the erroneous active alarm in the event that the
 					// service is not bound within 5 sec
 					activeAlarmServiceHandler.postDelayed({
-						println("HELLO")
-						NacDisableErroneousActiveAlarmService.startService(this@NacMainActivity, activeAlarm)
+						NacDismissErroneousActiveAlarmService.startService(this@NacMainActivity, activeAlarm)
 					}, 5000)
 
 					// Show the active alarm activity
@@ -445,10 +446,9 @@ class NacMainActivity
 		{
 			// Start the alarm activity with the intent containing the NFC tag
 			// information in order to dismiss this alarm
-			println("Starting alarm activity and passing in NFC intent")
 			NacActiveAlarmActivity.startAlarmActivity(this@NacMainActivity, intent, activeAlarm)
 
-			println("Clearing NFC tag from intent")
+			// Clear the intent so the NFC intent does not get triggered again
 			intent = Intent(this@NacMainActivity, NacMainActivity::class.java)
 				.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
 		}
@@ -508,21 +508,17 @@ class NacMainActivity
 		// Start a timer from an NFC tag
 		else
 		{
-			lifecycleScope.launch {
-
-				// Get the first timer that contains the NFC ID and is able to start an
-				// NFC tag from a scan
-				val matchingTimer = timerViewModel.getAllTimers()
-					.firstOrNull { it.nfcTagIdList.contains(nfcId) && it.shouldScanningNfcTagStartTimer }
-
-				// Start the active timer service and fragment
-				if (matchingTimer != null)
-				{
-					NacActiveTimerService.startTimerService(this@NacMainActivity, matchingTimer)
-					navController.navigate(R.id.nacActiveTimerFragment, matchingTimer.toBundle())
+			timerViewModel.getAllTimers()
+				// Find the first timer that contains the NFC ID and is able to start an NFC tag
+				// from a scan
+				.firstOrNull {
+					it.nfcTagIdList.contains(nfcId) && it.shouldScanningNfcTagStartTimer
 				}
-
-			}
+				// Start the active timer service and fragment
+				?.let { t ->
+					NacActiveTimerService.startTimerService(this@NacMainActivity, t)
+					navController.navigate(R.id.nacActiveTimerFragment, t.toBundle())
+				}
 		}
 	}
 
@@ -638,7 +634,7 @@ class NacMainActivity
 		}
 
 		// Setup NFC
-		setupNfc()
+		setupNfcReaderMode()
 		attemptToHandleNfcScanEvent()
 		setupWasNfcJustScannedToDismiss()
 
@@ -648,14 +644,12 @@ class NacMainActivity
 			// Add alarm that was created from the SET_ALARM intent
 			AlarmClock.ACTION_SET_ALARM ->
 			{
-				println("addAlarmFromSetAlarmIntent()")
 				addAlarmFromSetAlarmIntent()
 			}
 
 			// Add timer that was created from the SET_TIMER intent
 			AlarmClock.ACTION_SET_TIMER ->
 			{
-				println("addTimerFromSetTimerIntent()")
 				addTimerFromSetTimerIntent()
 			}
 
@@ -691,7 +685,6 @@ class NacMainActivity
 		try
 		{
 			unbindService(serviceConnection)
-			println("UNBIND SERVICE")
 		}
 		catch (_: IllegalArgumentException) {}
 	}
@@ -960,28 +953,6 @@ class NacMainActivity
 			// Setup the flag when NFC was just scanned to dismiss
 			setupWasNfcJustScannedToDismiss()
 
-			// TODO: Remove comment
-			//// Set the bottom navigation visibility based on the current destination
-			//bottomNavigation.visibility = if ((destination.id == R.id.nacAlarmMainMediaPickerFragment)
-			//	|| (destination.id == R.id.nacAlarmMainMediaPickerFragment2)
-			//	|| (destination.id == R.id.nacTimerMainMediaPickerFragment)
-			//	|| (destination.id == R.id.nacActiveTimerFragment))
-			//	//|| (destination.id == R.id.nacMainSettingFragment)
-			//	//|| (destination.id == R.id.nacGeneralSettingFragment)
-			//	//|| (destination.id == R.id.nacAppearanceSettingFragment)
-			//	//|| (destination.id == R.id.nacNfcTagSettingFragment)
-			//	//|| (destination.id == R.id.nacStatisticsSettingFragment)
-			//	//|| (destination.id == R.id.nacAboutSettingFragment))
-			//{
-			//	// Media picker
-			//	View.GONE
-			//}
-			//else
-			//{
-			//	// Everything else
-			//	View.VISIBLE
-			//}
-
 			// Floating action button visibility
 			when (destination.id)
 			{
@@ -1033,9 +1004,9 @@ class NacMainActivity
 	}
 
 	/**
-	 * Setup NFC.
+	 * Setup NFC reader mode.
 	 */
-	private fun setupNfc()
+	private fun setupNfcReaderMode()
 	{
 		// Start NFC
 		if (NacNfc.exists(this))
@@ -1045,7 +1016,7 @@ class NacMainActivity
 				// NFC was just scanned to dismiss an alarm or timer so do nothing
 				if (sharedPreferences.wasNfcJustScannedToDismiss)
 				{
-					sharedPreferences.wasNfcJustScannedToDismiss = false
+					setupWasNfcJustScannedToDismiss()
 					return@enableReaderMode
 				}
 
@@ -1072,7 +1043,7 @@ class NacMainActivity
 			// Reader mode was disabled so re-enable it here
 			if (!status)
 			{
-				setupNfc()
+				setupNfcReaderMode()
 			}
 
 		}
@@ -1130,8 +1101,13 @@ class NacMainActivity
 			return
 		}
 
-		// Create a handler that disables the flag after a delay
-		Handler(mainLooper).postDelayed({
+		// Cleanup the handler
+		wasNfcJustScannedToDismissHandler.removeCallbacksAndMessages(null)
+
+		// Disable the flag after a delay
+		println("Preparing to disable was nfc just scanned flag")
+		wasNfcJustScannedToDismissHandler.postDelayed({
+			println("DISABLING WAS NFC JUST SCANNED FLAG")
 			sharedPreferences.wasNfcJustScannedToDismiss = false
 		}, 1000)
 

@@ -112,9 +112,6 @@ class NacWhatsNewDialog
 		// Setup the recyclerview
 		recyclerView.adapter = listAdapter
 		recyclerView.layoutManager = LinearLayoutManager(context)
-
-		// Set the height of the recyclerview
-		setupScrollableViewHeight(recyclerView, 60)
 	}
 
 	companion object

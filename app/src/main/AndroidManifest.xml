@@ -178,9 +178,9 @@
 			android:exported="false"
 			/>
 
-		<!-- Disable active flag of erroneous active alarm -->
+		<!-- Dismiss an erroneous active alarm -->
 		<service
-			android:name=".alarm.activealarm.NacDisableErroneousActiveAlarmService"
+			android:name=".alarm.activealarm.NacDismissErroneousActiveAlarmService"
 			android:exported="false"
 			/>
 
