@@ -24,7 +24,7 @@ class NacDayButton
 	/**
 	 * Listener for day change events.
 	 */
-	interface OnDayChangedListener
+	fun interface OnDayChangedListener
 	{
 		fun onDayChanged(button: NacDayButton)
 	}

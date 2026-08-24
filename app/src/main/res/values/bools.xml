@@ -20,12 +20,11 @@
 	<bool name="default_alarm_screen_show_music_info">true</bool>
 	<bool name="default_alarm_screen_battery_saver">false</bool>
 	<bool name="default_misc_should_toggle_alarms_with_airplane_mode">false</bool>
+
+	<!-- Appearance -->
 	<bool name="default_show_hide_vibrate_button">true</bool>
 	<bool name="default_show_hide_nfc_button">true</bool>
 	<bool name="default_show_hide_flashlight_button">true</bool>
-
-	<!--
-	<bool name="is_app_updated">false</bool>
-	-->
+	<bool name="default_style_should_show_card_button_labels">true</bool>
 
 </resources>

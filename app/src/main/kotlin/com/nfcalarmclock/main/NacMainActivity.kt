@@ -86,8 +86,6 @@ class NacMainActivity
 	: AppCompatActivity()
 {
 
-	// TODO: Add volume stop for timer
-
 	/**
 	 * Nav host fragment.
 	 */

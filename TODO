@@ -6,21 +6,10 @@ TODO
 
 * Volume can dismiss NFC alarms
 
-* Reorder what's new
-
-* Should be able to scan NFC and if an alarm is snoozed but it matches, then dismiss it or start the dismiss process
-
 * Add alarms from phone to emulator to test alarm order and sorting.
 
 * Do fresh install on emulator and test giong to timer. The top bar was not
   showing and it was making the  fragment look a little strange.
-
-* Make airplane mode toggle alarms, not just disable
-
-* Airplane mode receiver: Intent#ACTION_AIRPLANE_MODE_CHANGED
-  Constant Value: "android.intent.action.AIRPLANE_MODE"
-
-* Make DateTime dialog scrollable on small screens.
 
 * Add labels to everything?
 

@@ -6,6 +6,7 @@
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
 		<item>12.6.5-beta</item>
+		<item>Added &lt;b>button labels&lt;/b> to make it more obvious what buttons do. This can be changed in &lt;b>Settings > Appearance > Styles&lt;/b>.</item>
 		<item>Added option to &lt;b>toggle alarms&lt;/b> on/off when &lt;b>airplane mode&lt;/b> is changed.</item>
 		<item>Added option to &lt;b>dismiss&lt;/b> alarm with &lt;b>volume buttons&lt;/b>.</item>
 		<item>Added &lt;b>per-app language support&lt;/b>.</item>

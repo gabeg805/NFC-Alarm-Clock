@@ -131,20 +131,6 @@ class NacGeneralSettingFragment
 				}
 
 			}
-
-		// Check if API < 35, then edge-to-edge is not enforced and do not need to do
-		// anything
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM)
-		{
-			return
-		}
-
-		// TODO: Can maybe customize this more when going up to API 36, but for now opting out
-		//// Setup edge to edge for the recyclerview by using the margin that was saved in
-		//// the main settings fragment
-		//listView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-		//	topMargin = (activity as NacMainSettingActivity).rvTopMargin
-		//}
 	}
 
 	/**

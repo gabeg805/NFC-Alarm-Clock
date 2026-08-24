@@ -1,4 +1,4 @@
-package com.nfcalarmclock.alarm.options.startweekon
+package com.nfcalarmclock.settings.startweekon
 
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm

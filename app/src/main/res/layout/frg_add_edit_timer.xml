@@ -268,57 +268,45 @@
 
 				<!-- Repeat -->
 				<com.google.android.material.button.MaterialButton
-					style="@style/Widget.Button.Icon"
+					style="@style/My.Alarm.ToggleButtons"
 					android:id="@+id/timer_repeat"
-					android:layout_width="@dimen/touch"
-					android:layout_height="@dimen/touch"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
 					android:layout_weight="1"
-					android:checkable="true"
-					app:backgroundTint="@android:color/transparent"
-					app:iconTint="@color/card_toggle_button"
-					app:iconSize="@dimen/isz_large"
+					android:text="@string/title_alarm_repeat"
 					app:icon="@drawable/repeat"
 					/>
 
 				<!-- Vibrate -->
 				<com.google.android.material.button.MaterialButton
-					style="@style/Widget.Button.Icon"
+					style="@style/My.Alarm.ToggleButtons"
 					android:id="@+id/timer_vibrate"
-					android:layout_width="@dimen/touch"
-					android:layout_height="@dimen/touch"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
 					android:layout_weight="1"
-					android:checkable="true"
-					app:backgroundTint="@android:color/transparent"
-					app:iconTint="@color/card_toggle_button"
-					app:iconSize="@dimen/isz_large"
+					android:text="@string/title_alarm_vibrate"
 					app:icon="@drawable/vibrate"
 					/>
 
 				<!-- NFC -->
 				<com.google.android.material.button.MaterialButton
-					style="@style/Widget.Button.Icon"
+					style="@style/My.Alarm.ToggleButtons"
 					android:id="@+id/timer_nfc"
-					android:layout_width="@dimen/touch"
-					android:layout_height="@dimen/touch"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
 					android:layout_weight="1"
-					android:checkable="true"
-					app:backgroundTint="@android:color/transparent"
-					app:iconTint="@color/card_toggle_button"
-					app:iconSize="@dimen/isz_large"
-					app:icon="@drawable/tap_and_play"
+					android:text="@string/title_alarm_nfc"
+					app:icon="@drawable/nfc_32"
 					/>
 
 				<!-- Flashlight -->
 				<com.google.android.material.button.MaterialButton
-					style="@style/Widget.Button.Icon"
+					style="@style/My.Alarm.ToggleButtons"
 					android:id="@+id/timer_flashlight"
-					android:layout_width="@dimen/touch"
-					android:layout_height="@dimen/touch"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
 					android:layout_weight="1"
-					android:checkable="true"
-					app:backgroundTint="@android:color/transparent"
-					app:iconTint="@color/card_toggle_button"
-					app:iconSize="@dimen/isz_large"
+					android:text="@string/action_alarm_option_flashlight"
 					app:icon="@drawable/flashlight_on_32"
 					/>
 			</LinearLayout>
@@ -421,28 +409,24 @@
 
 				<!-- Stop -->
 				<com.google.android.material.button.MaterialButton
-					style="@style/Widget.Button.Icon"
+					style="@style/My.Alarm.OptionButtons"
 					android:id="@+id/timer_stop_options"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_weight="1"
-					android:minHeight="@dimen/isz_xxlarge"
-					app:iconSize="@dimen/isz_normal"
-					app:iconTint="@color/white"
+					android:text="@string/action_timer_stop"
 					app:icon="@drawable/stop_filled_32"
 					/>
 
 				<!-- Settings options -->
 				<com.google.android.material.button.MaterialButton
-					style="@style/Widget.Button.Icon"
+					style="@style/My.Alarm.OptionButtons"
 					android:id="@+id/timer_settings_options"
 					android:contentDescription="@string/cd_alarm_options"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_weight="1"
-					android:minHeight="@dimen/isz_xxlarge"
-					app:iconTint="@color/white"
-					app:iconSize="@dimen/isz_normal"
+					android:text="@string/title_settings"
 					app:icon="@drawable/settings"
 					/>
 			</LinearLayout>

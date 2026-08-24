@@ -178,44 +178,6 @@ class NacMainSettingFragment
 	}
 
 	/**
-	 * Called after the view is created.
-	 */
-	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
-	{
-		// Super
-		super.onViewCreated(view, savedInstanceState)
-
-		// Check if API < 35, then edge-to-edge is not enforced and do not need to do
-		// anything
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM)
-		{
-			return
-		}
-
-		// TODO: Can maybe customize this more when going up to API 36, but for now opting out
-		//// Setup edge to edge for the recyclerview
-		//listView.setupEdgeToEdge { insets ->
-
-		//	// Save the top margin value for the recyclerview
-		//	(activity as NacMainSettingActivity).rvTopMargin = insets.top
-
-		//}
-
-		//// Get the top margin value that was saved for the recyclerview
-		//val rvTopMargin = (activity as NacMainSettingActivity).rvTopMargin
-
-		//// When the main settings fragment is navigated back to, the above edge to edge
-		//// setup will not work. In this case, the margin needs to be set directly,
-		//// instead of being set in a window insets listener
-		//if (rvTopMargin > 0)
-		//{
-		//	listView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-		//		topMargin = rvTopMargin
-		//	}
-		//}
-	}
-
-	/**
 	 * Setup the Manage NFC tags preference.
 	 */
 	private fun setupManageNfcTags()

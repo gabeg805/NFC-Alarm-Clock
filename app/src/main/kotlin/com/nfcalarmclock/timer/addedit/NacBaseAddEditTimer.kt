@@ -128,6 +128,36 @@ abstract class NacBaseAddEditTimer
 	protected lateinit var mediaButton: MaterialButton
 
 	/**
+	 * Repeat button.
+	 */
+	protected lateinit var repeatButton: MaterialButton
+
+	/**
+	 * Vibrate button.
+	 */
+	protected lateinit var vibrateButton: MaterialButton
+
+	/**
+	 * NFC button.
+	 */
+	protected lateinit var nfcButton: MaterialButton
+
+	/**
+	 * Flashlight button.
+	 */
+	protected lateinit var flashlightButton: MaterialButton
+
+	/**
+	 * Stop options button.
+	 */
+	protected lateinit var stopOptionsButton: MaterialButton
+
+	/**
+	 * Settings options button.
+	 */
+	protected lateinit var settingsOptionsButton: MaterialButton
+
+	/**
 	 * Name of the timer before it is saved.
 	 */
 	protected var nameBeforeSaving: String = ""
@@ -300,11 +330,13 @@ abstract class NacBaseAddEditTimer
 		minuteTextView = view.findViewById(R.id.timer_minute)
 		secondsTextView = view.findViewById(R.id.timer_seconds)
 		moreOptionsContainer = view.findViewById(R.id.timer_more_options_container)
+		repeatButton = view.findViewById(R.id.timer_repeat)
+		vibrateButton = view.findViewById(R.id.timer_vibrate)
+		nfcButton = view.findViewById(R.id.timer_nfc)
+		flashlightButton = view.findViewById(R.id.timer_flashlight)
 		mediaButton = view.findViewById(R.id.timer_media)
-		val repeatButton: MaterialButton = view.findViewById(R.id.timer_repeat)
-		val vibrateButton: MaterialButton = view.findViewById(R.id.timer_vibrate)
-		val nfcButton: MaterialButton = view.findViewById(R.id.timer_nfc)
-		val flashlightButton: MaterialButton = view.findViewById(R.id.timer_flashlight)
+		stopOptionsButton = view.findViewById(R.id.timer_stop_options)
+		settingsOptionsButton = view.findViewById(R.id.timer_settings_options)
 		val volumeImageView: ImageView = view.findViewById(R.id.timer_volume_icon)
 		val volumeSeekBar: SeekBar = view.findViewById(R.id.timer_volume_slider)
 		val nameButton: MaterialButton = view.findViewById(R.id.timer_name)
@@ -322,15 +354,16 @@ abstract class NacBaseAddEditTimer
 		setupMoreButton()
 		setupMoreOptionsContainerVisibility()
 		setupSaveButton()
-		setupRepeatButton(repeatButton)
-		setupVibrateButton(vibrateButton)
-		setupNfcButton(nfcButton)
-		setupFlashlightButton(flashlightButton)
+		setupRepeatButton()
+		setupVibrateButton()
+		setupNfcButton()
+		setupFlashlightButton()
 		setupMediaButton()
 		setupVolume(volumeSeekBar, volumeImageView)
 		setupName(nameButton)
 		setupOptionsSection(view)
 		setupMediaPickerObserver()
+		setupButtonLabels()
 	}
 
 	/**
@@ -451,31 +484,58 @@ abstract class NacBaseAddEditTimer
 	}
 
 	/**
+	 * Setup the button labels.
+	 */
+	private fun setupButtonLabels()
+	{
+		// Show labels
+		if (sharedPreferences.shouldShowCardButtonLabels)
+		{
+			repeatButton.text = resources.getString(R.string.title_alarm_repeat)
+			vibrateButton.text = resources.getString(R.string.title_alarm_vibrate)
+			nfcButton.text = resources.getString(R.string.title_alarm_nfc)
+			flashlightButton.text = resources.getString(R.string.action_alarm_option_flashlight)
+			stopOptionsButton.text = resources.getString(R.string.action_timer_stop)
+			settingsOptionsButton.text = resources.getString(R.string.title_settings)
+		}
+		// Only show icons. Do not show labels
+		else
+		{
+			repeatButton.text = ""
+			vibrateButton.text = ""
+			nfcButton.text = ""
+			flashlightButton.text = ""
+			stopOptionsButton.text = ""
+			settingsOptionsButton.text = ""
+		}
+	}
+
+	/**
 	 * Setup the flashlight button.
 	 */
-	private fun setupFlashlightButton(button: MaterialButton)
+	private fun setupFlashlightButton()
 	{
 		// Color
-		button.setupRippleColor(sharedPreferences)
+		flashlightButton.setupRippleColor(sharedPreferences)
 
 		// Initial state
-		button.isChecked = timer.shouldUseFlashlight
+		flashlightButton.isChecked = timer.shouldUseFlashlight
 
 		// Hide the button and do nothing else
 		if (!sharedPreferences.shouldShowFlashlightButton)
 		{
-			button.visibility = View.GONE
+			flashlightButton.visibility = View.GONE
 			return
 		}
 
 		// Toggle on click
-		button.setOnClickListener {
+		flashlightButton.setOnClickListener {
 			timer.toggleUseFlashlight()
 			timer.toastFlashlight(requireContext())
 		}
 
 		// Show the quick navigate dialog on long click
-		button.setOnLongClickListener {
+		flashlightButton.setOnLongClickListener {
 			navigateTo(R.id.nacFlashlightOptionsDialog3)
 			true
 		}
@@ -719,23 +779,23 @@ abstract class NacBaseAddEditTimer
 	/**
 	 * Setup the NFC button.
 	 */
-	private fun setupNfcButton(button: MaterialButton)
+	private fun setupNfcButton()
 	{
 		// Color
-		button.setupRippleColor(sharedPreferences)
+		nfcButton.setupRippleColor(sharedPreferences)
 
 		// Initial state
-		button.isChecked = timer.shouldUseNfc
+		nfcButton.isChecked = timer.shouldUseNfc
 
 		// Hide the button and do nothing else
 		if (!sharedPreferences.shouldShowNfcButton)
 		{
-			button.visibility = View.GONE
+			nfcButton.visibility = View.GONE
 			return
 		}
 
 		// Click listener
-		button.setOnClickListener {
+		nfcButton.setOnClickListener {
 			timer.toggleUseNfc()
 			lifecycleScope.launch {
 				timer.toastNfc(requireContext(), nfcTagViewModel.getAllNfcTags())
@@ -743,7 +803,7 @@ abstract class NacBaseAddEditTimer
 		}
 
 		// Show the quick navigate dialog on long click
-		button.setOnLongClickListener {
+		nfcButton.setOnLongClickListener {
 			navigateTo(R.id.nacScanNfcTagDialog3)
 			true
 		}
@@ -816,8 +876,6 @@ abstract class NacBaseAddEditTimer
 	private fun setupOptionsSection(view: View)
 	{
 		// Get the views
-		val stopOptionsButton: MaterialButton = view.findViewById(R.id.timer_stop_options)
-		val settingsOptionsButton: MaterialButton = view.findViewById(R.id.timer_settings_options)
 		val optionsDivider1: View = view.findViewById(R.id.timer_options_divider1)
 		val optionsDivider2: View = view.findViewById(R.id.timer_options_divider2)
 
@@ -841,16 +899,16 @@ abstract class NacBaseAddEditTimer
 	/**
 	 * Setup the repeat button.
 	 */
-	private fun setupRepeatButton(button: MaterialButton)
+	private fun setupRepeatButton()
 	{
 		// Color
-		button.setupRippleColor(sharedPreferences)
+		repeatButton.setupRippleColor(sharedPreferences)
 
 		// Initial state
-		button.isChecked = timer.shouldRepeat
+		repeatButton.isChecked = timer.shouldRepeat
 
 		// Click listener
-		button.setOnClickListener {
+		repeatButton.setOnClickListener {
 			timer.toggleRepeat()
 			timer.toastRepeat(requireContext())
 		}
@@ -944,29 +1002,29 @@ abstract class NacBaseAddEditTimer
 	/**
 	 * Setup the vibrate button.
 	 */
-	private fun setupVibrateButton(button: MaterialButton)
+	private fun setupVibrateButton()
 	{
 		// Color
-		button.setupRippleColor(sharedPreferences)
+		vibrateButton.setupRippleColor(sharedPreferences)
 
 		// Initial state
-		button.isChecked = timer.shouldVibrate
+		vibrateButton.isChecked = timer.shouldVibrate
 
 		// Hide the button and do nothing else
 		if (!sharedPreferences.shouldShowVibrateButton)
 		{
-			button.visibility = View.GONE
+			vibrateButton.visibility = View.GONE
 			return
 		}
 
 		// Click listener
-		button.setOnClickListener {
+		vibrateButton.setOnClickListener {
 			timer.toggleVibrate()
 			timer.toastVibrate(requireContext())
 		}
 
 		// Show the quick navigate dialog on long click
-		button.setOnLongClickListener {
+		vibrateButton.setOnLongClickListener {
 			navigateTo(R.id.nacVibrateOptionsDialog3)
 			true
 		}

@@ -830,9 +830,12 @@ class NacShowAlarmsFragment
 			// Media
 			card.onCardMediaClickedListener = OnCardMediaClickedListener { _, alarm ->
 
+				// Move to the card position that was just clicked, before navigating to the
+				// media picker, that way, when onPause() is called and state is saved, it will
+				// go back to this card easy
+				recyclerView.layoutManager?.scrollToPosition(card.bindingAdapterPosition)
+
 				// Navigate to the media picker
-				// TODO: Add rv.layoutmanager.scrollToPosisiton(card position)
-				// That way, when onPause() is called and state is saved, it will go back to this card easy
 				findNavController().navigate(
 					R.id.action_nacShowAlarmsFragment_to_nacAlarmMainMediaPickerFragment,
 					alarm.toBundle()

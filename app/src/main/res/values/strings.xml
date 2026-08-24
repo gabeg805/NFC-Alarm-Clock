@@ -359,6 +359,8 @@
 	<string name="description_color">Hex color</string>
 	<string name="description_day_button_style_filled">Filled-in buttons.</string>
 	<string name="description_day_button_style_outlined">Outlined buttons.</string>
+	<string name="description_should_show_card_button_labels_true">Buttons will show the label underneath.</string>
+	<string name="description_should_show_card_button_labels_false">Buttons will only show the icon.</string>
 	<string name="description_media">Music or ringtone</string>
 	<string name="description_scan_nfc_tag_alarm">The scanned NFC tag will be required to dismiss this alarm when it goes off.</string>
 	<string name="description_scan_nfc_tag_timer">The scanned NFC tag will be required to dismiss this timer when it goes off.</string>

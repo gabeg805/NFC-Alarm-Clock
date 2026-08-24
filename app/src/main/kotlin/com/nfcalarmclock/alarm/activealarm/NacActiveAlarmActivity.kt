@@ -327,7 +327,6 @@ class NacActiveAlarmActivity
 			if (NacNfc.wasScanned(intent) && NacNfc.canDismissWithScannedNfc(this@NacActiveAlarmActivity, alarm, nfcId, nfcTags))
 			{
 				println("NFC was scanning and can be used to dismiss alarm!  Calling dismiss() on service? ${service != null}")
-				// TODO: Should I write to NacSharedPreferenecs.wasNfcJustScannedToDismiss in here?
 				// Dismiss the alarm service with NFC
 				if (service != null)
 				{

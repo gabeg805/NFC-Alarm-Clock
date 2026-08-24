@@ -285,53 +285,45 @@
 
 				<!-- Repeat -->
 				<com.google.android.material.button.MaterialButton
-					style="@style/My.Alarm.Buttons"
+					style="@style/My.Alarm.ToggleButtons"
 					android:id="@+id/nac_repeat"
-					android:layout_width="@dimen/touch"
-					android:layout_height="@dimen/touch"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
 					android:layout_weight="1"
-					android:checkable="true"
-					app:backgroundTint="@android:color/transparent"
-					app:iconTint="@color/card_toggle_button"
+					android:text="@string/title_alarm_repeat"
 					app:icon="@drawable/repeat"
 					/>
 
 				<!-- Vibrate -->
 				<com.google.android.material.button.MaterialButton
-					style="@style/My.Alarm.Buttons"
+					style="@style/My.Alarm.ToggleButtons"
 					android:id="@+id/nac_vibrate"
-					android:layout_width="@dimen/touch"
-					android:layout_height="@dimen/touch"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
 					android:layout_weight="1"
-					android:checkable="true"
-					app:backgroundTint="@android:color/transparent"
-					app:iconTint="@color/card_toggle_button"
+					android:text="@string/title_alarm_vibrate"
 					app:icon="@drawable/vibrate"
 					/>
 
 				<!-- NFC -->
 				<com.google.android.material.button.MaterialButton
-					style="@style/My.Alarm.Buttons"
+					style="@style/My.Alarm.ToggleButtons"
 					android:id="@+id/nac_nfc"
-					android:layout_width="@dimen/touch"
-					android:layout_height="@dimen/touch"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
 					android:layout_weight="1"
-					android:checkable="true"
-					app:backgroundTint="@android:color/transparent"
-					app:iconTint="@color/card_toggle_button"
+					android:text="@string/title_alarm_nfc"
 					app:icon="@drawable/nfc_32"
 					/>
 
 				<!-- Flashlight -->
 				<com.google.android.material.button.MaterialButton
-					style="@style/My.Alarm.Buttons"
+					style="@style/My.Alarm.ToggleButtons"
 					android:id="@+id/nac_flashlight"
-					android:layout_width="@dimen/touch"
-					android:layout_height="@dimen/touch"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
 					android:layout_weight="1"
-					android:checkable="true"
-					app:backgroundTint="@android:color/transparent"
-					app:iconTint="@color/card_toggle_button"
+					android:text="@string/action_alarm_option_flashlight"
 					app:icon="@drawable/flashlight_on_32"
 					/>
 			</LinearLayout> <!-- Repeat, Vibrate, NFC, Flashlight -->
@@ -434,41 +426,35 @@
 
 				<!-- Dismiss -->
 				<com.google.android.material.button.MaterialButton
-					style="@style/Widget.Button.Icon"
+					style="@style/My.Alarm.OptionButtons"
 					android:id="@+id/nac_dismiss_options"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_weight="1"
-					android:minHeight="@dimen/isz_xxlarge"
-					app:iconSize="@dimen/isz_normal"
-					app:iconTint="@color/white"
+					android:text="@string/action_alarm_dismiss"
 					app:icon="@drawable/dismiss"
 					/>
 
 				<!-- Snooze -->
 				<com.google.android.material.button.MaterialButton
-					style="@style/Widget.Button.Icon"
+					style="@style/My.Alarm.OptionButtons"
 					android:id="@+id/nac_snooze_options"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_weight="1"
-					android:minHeight="@dimen/isz_xxlarge"
-					app:iconTint="@color/white"
-					app:iconSize="@dimen/isz_normal"
+					android:text="@string/action_alarm_snooze"
 					app:icon="@drawable/snooze"
 					/>
 
 				<!-- More -->
 				<com.google.android.material.button.MaterialButton
-					style="@style/Widget.Button.Icon"
+					style="@style/My.Alarm.OptionButtons"
 					android:contentDescription="@string/cd_alarm_options"
 					android:id="@+id/nac_alarm_options"
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_weight="1"
-					android:minHeight="@dimen/isz_xxlarge"
-					app:iconTint="@color/white"
-					app:iconSize="@dimen/isz_normal"
+					android:text="@string/title_settings"
 					app:icon="@drawable/settings"
 					/>
 			</LinearLayout> <!-- Options -->

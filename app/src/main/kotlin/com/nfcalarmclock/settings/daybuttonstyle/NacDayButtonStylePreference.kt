@@ -1,4 +1,4 @@
-package com.nfcalarmclock.view.dayofweek
+package com.nfcalarmclock.settings.daybuttonstyle
 
 import android.content.Context
 import android.content.res.TypedArray
@@ -7,48 +7,37 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceViewHolder
 import com.nfcalarmclock.R
 import com.nfcalarmclock.shared.NacSharedPreferences
+import com.nfcalarmclock.view.dayofweek.NacDayButton
 
 /**
  * Preference that allows a user to select a style for the day buttons.
+ *
+ * @param context Context.
+ * @param attrs Attribute set.
+ * @param style Style.
  */
 class NacDayButtonStylePreference @JvmOverloads constructor(
-
-	/**
-	 * Context.
-	 */
 	context: Context,
-
-	/**
-	 * Context.
-	 */
 	attrs: AttributeSet? = null,
-
-	/**
-	 * Context.
-	 */
 	style: Int = 0
-
-	// Constructor
 ) : Preference(context, attrs, style),
-
-	// Interface
 	Preference.OnPreferenceClickListener
 {
 
 	/**
-	 * Day button.
+	 * Shared preferences.
 	 */
-	private var dayButton: NacDayButton? = null
+	private val sharedPreferences: NacSharedPreferences = NacSharedPreferences(context)
 
 	/**
 	 * Style value.
 	 */
-	private var styleValue = 0
+	private var styleValue: Int = 0
 
 	/**
-	 * Shared preferences.
+	 * Example button.
 	 */
-	private val sharedPreferences: NacSharedPreferences
+	private lateinit var exampleButton: NacDayButton
 
 	/**
 	 * Constructor.
@@ -57,7 +46,6 @@ class NacDayButtonStylePreference @JvmOverloads constructor(
 	{
 		layoutResource = R.layout.nac_preference_day_button
 		onPreferenceClickListener = this
-		sharedPreferences = NacSharedPreferences(context)
 	}
 
 	/**
@@ -84,10 +72,10 @@ class NacDayButtonStylePreference @JvmOverloads constructor(
 		super.onBindViewHolder(holder)
 
 		// Set the view
-		dayButton = holder.findViewById(R.id.widget) as NacDayButton
+		exampleButton = (holder.findViewById(R.id.widget) as NacDayButton)
 
 		// Setup the view
-		setupDayButton()
+		setupExampleButton()
 	}
 
 	/**
@@ -97,10 +85,10 @@ class NacDayButtonStylePreference @JvmOverloads constructor(
 	 */
 	override fun onGetDefaultValue(a: TypedArray, index: Int): Any
 	{
-		// Default style
+		// Default value
 		val def = context.resources.getInteger(R.integer.default_day_button_style)
 
-		// Get the style
+		// Get the value
 		return a.getInteger(index, def)
 	}
 
@@ -115,11 +103,13 @@ class NacDayButtonStylePreference @JvmOverloads constructor(
 		// Toggle the style
 		styleValue = style % 2 + 1
 
-		// Set the new style
-		dayButton!!.setStyle(styleValue)
+		// Set the new style. Note: If the size of the button is increased, when the style
+		// changes, the view will increase to fill that space, making the circle more like a
+		// rounded square
+		exampleButton.setStyle(styleValue)
 
-		// Setup the view
-		setupDayButton()
+		//// Setup the view
+		//setupDayButton()
 
 		// Persist the value
 		persistInt(styleValue)
@@ -153,18 +143,19 @@ class NacDayButtonStylePreference @JvmOverloads constructor(
 	}
 
 	/**
-	 * Setup the day button.
+	 * Setup the example day button.
 	 */
-	private fun setupDayButton()
+	private fun setupExampleButton()
 	{
 		// Get an example day
 		val daysOfWeek = context.resources.getStringArray(R.array.days_of_week_full)
 		val exampleDay = daysOfWeek[1]
 
 		// Setup the button
-		dayButton!!.setText(exampleDay)
-		dayButton!!.enable()
-		dayButton!!.button!!.isEnabled = false
+		println("setupDayButton()")
+		exampleButton.setText(exampleDay)
+		exampleButton.enable()
+		exampleButton.button!!.isEnabled = false
 	}
 
 }

@@ -1004,6 +1004,7 @@ class NacAlarmCardHolder(root: View)
 		setVolumeSeekBar()
 		setVolumeImageView()
 		setNameButton()
+		setupButtonLabels()
 	}
 
 	/**
@@ -1407,14 +1408,6 @@ class NacAlarmCardHolder(root: View)
 			// Set the new status in the button
 			repeatButton.isChecked = shouldRepeat
 		}
-
-		// Check if the repeat button is enabled status and the alarm is enabled status
-		// are different
-		//if (repeatButton.isEnabled != isEnabled)
-		//{
-		//	// Set the new is enabled status in the button
-		//	repeatButton.isEnabled = isEnabled
-		//}
 	}
 
 	/**
@@ -1598,6 +1591,35 @@ class NacAlarmCardHolder(root: View)
 				onCardAlarmOptionsClickedListener?.onCardAlarmOptionsClicked(this, alarm!!)
 			}
 
+		}
+	}
+
+	/**
+	 * Setup the button labels.
+	 */
+	private fun setupButtonLabels()
+	{
+		// Show labels
+		if (sharedPreferences.shouldShowCardButtonLabels)
+		{
+			repeatButton.text = context.resources.getString(R.string.title_alarm_repeat)
+			vibrateButton.text = context.resources.getString(R.string.title_alarm_vibrate)
+			nfcButton.text = context.resources.getString(R.string.title_alarm_nfc)
+			flashlightButton.text = context.resources.getString(R.string.action_alarm_option_flashlight)
+			dismissOptionsButton.text = context.resources.getString(R.string.action_alarm_dismiss)
+			snoozeOptionsButton.text = context.resources.getString(R.string.action_alarm_snooze)
+			alarmOptionsButton.text = context.resources.getString(R.string.title_settings)
+		}
+		// Only show icons. Do not show labels
+		else
+		{
+			repeatButton.text = ""
+			vibrateButton.text = ""
+			nfcButton.text = ""
+			flashlightButton.text = ""
+			dismissOptionsButton.text = ""
+			snoozeOptionsButton.text = ""
+			alarmOptionsButton.text = ""
 		}
 	}
 

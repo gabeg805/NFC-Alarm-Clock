@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content"
@@ -14,12 +15,16 @@
 	<include layout="@layout/nac_preference_text" />
 
 	<!-- Button -->
-	<com.nfcalarmclock.view.dayofweek.NacDayButton
+	<com.google.android.material.button.MaterialButton
+		style="@style/My.Alarm.OptionButtons"
 		android:id="@+id/widget"
-		android:layout_width="@dimen/isz_large"
-		android:layout_height="@dimen/isz_large"
-		android:layout_marginEnd="@dimen/tiny"
-		android:gravity="center"
-		android:text=""
+		android:layout_width="@dimen/isz_attention"
+		android:layout_height="@dimen/isz_attention"
+		android:backgroundTint="@android:color/transparent"
+		android:clickable="false"
+		android:focusable="false"
+		android:text="@string/action_alarm_snooze"
+		app:iconSize="@dimen/isz_large"
+		app:icon="@drawable/snooze"
 		/>
 </LinearLayout>

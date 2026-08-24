@@ -171,6 +171,7 @@
 	<string name="key_show_hide_nfc_button">pref_show_hide_nfc_button</string>
 	<string name="key_show_hide_flashlight_button">pref_show_hide_flashlight_button</string>
 	<string name="key_style_day_button">pref_day_button_style</string>
+	<string name="key_style_should_show_card_button_labels">pref_should_show_card_button_labels</string>
 	<string name="key_style_start_week_on">pref_start_week_on</string>
 	<string name="key_tweak_expand_new_alarm">pref_expand_new_alarm</string>
 	<string name="key_tweak_next_alarm_format">pref_time_remaining_format</string>

@@ -1,4 +1,4 @@
-package com.nfcalarmclock.alarm.options.startweekon
+package com.nfcalarmclock.settings.startweekon
 
 import android.content.Context
 import android.content.res.TypedArray

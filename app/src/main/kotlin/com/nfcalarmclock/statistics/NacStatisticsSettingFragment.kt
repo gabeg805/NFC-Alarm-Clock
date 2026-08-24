@@ -31,7 +31,6 @@ import java.util.Locale
 
 /**
  * Statistics fragment.
- * <p>
  * TODO: Highlighting the weekends in the dismiss/miss/snooze plot would be dope
  */
 @AndroidEntryPoint
@@ -146,16 +145,6 @@ class NacStatisticsSettingFragment
 
 		// Setup all the views that need to use the theme color
 		setupViewsWithThemeColor(root)
-
-		// TODO: Can maybe customize this more when going up to API 36, but for now opting out
-		// Setup edge to edge for the root view by using the margin that was saved in
-		// the main settings fragment. Edge-to-edge is enforced in API >= 35
-		//if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.VANILLA_ICE_CREAM)
-		//{
-		//	root.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-		//		topMargin = (activity as NacMainSettingActivity).rvTopMargin
-		//	}
-		//}
 	}
 
 	/**
@@ -172,17 +161,6 @@ class NacStatisticsSettingFragment
 
 		// Change the text of when statistics started
 		lifecycleScope.launch {
-
-			//// Get all the current alarms
-			//val allAlarms = alarmViewModel.getAllAlarms()
-
-			//// Iterate over each alarm
-			//for (alarm in allAlarms)
-			//{
-			//	// Add a created statistic. Use the repository so that
-			//	// everything is sequential
-			//	statisticViewModel.statisticRepository.insertCreated()
-			//}
 
 			// Get the root view
 			val root = requireView()

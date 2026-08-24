@@ -1,13 +1,11 @@
 package com.nfcalarmclock.settings
 
-import android.os.Build
 import android.os.Bundle
-import android.view.View
 import androidx.preference.Preference
 import androidx.preference.PreferenceManager
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.options.nextalarmformat.NacNextAlarmFormatPreference
-import com.nfcalarmclock.alarm.options.startweekon.NacStartWeekOnPreference
+import com.nfcalarmclock.settings.startweekon.NacStartWeekOnPreference
 import com.nfcalarmclock.system.getDeviceProtectedStorageContext
 import com.nfcalarmclock.settings.colorpicker.NacColorPickerPreference
 
@@ -36,6 +34,7 @@ class NacAppearanceSettingFragment
 		setupColorPreferences()
 		setupShowHideButtonPreferences()
 		setupDayButtonStylePreference()
+		setupCardButtonLabelsPreference()
 
 		// Setup on click listeners
 		setupColorPickerOnClickListeners()
@@ -56,26 +55,24 @@ class NacAppearanceSettingFragment
 	}
 
 	/**
-	 * Called after the view is created.
+	 * Setup the should show card button labels preference.
 	 */
-	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
+	private fun setupCardButtonLabelsPreference()
 	{
-		// Super
-		super.onViewCreated(view, savedInstanceState)
+		// Get the preference
+		val key = getString(R.string.key_style_should_show_card_button_labels)
+		val pref = findPreference<Preference>(key)
 
-		// Check if API < 35, then edge-to-edge is not enforced and do not need to do
-		// anything
-		if (Build.VERSION.SDK_INT < Build.VERSION_CODES.VANILLA_ICE_CREAM)
-		{
-			return
+		// Set the listener for when the preference is changed
+		pref!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
+
+			// Set flag to refresh the main activity
+			sharedPreferences!!.shouldRefreshMainActivity = true
+
+			// Return
+			true
+
 		}
-
-		// TODO: Can maybe customize this more when going up to API 36, but for now opting out
-		//// Setup edge to edge for the recyclerview by using the margin that was saved in
-		//// the main settings fragment
-		//listView.updateLayoutParams<ViewGroup.MarginLayoutParams> {
-		//	topMargin = (activity as NacMainSettingActivity).rvTopMargin
-		//}
 	}
 
 	/**
@@ -110,15 +107,12 @@ class NacAppearanceSettingFragment
 		// Iterate over each color preference
 		for (p in allPrefs)
 		{
-			// Set the on click listener
+			// Show the dialog for the on click listener
 			p!!.onPreferenceClickListener = Preference.OnPreferenceClickListener { pref ->
-
-				// Show the dialog
 				(pref as NacColorPickerPreference).showDialog(childFragmentManager)
 
 				// Return
 				true
-
 			}
 		}
 	}
@@ -177,11 +171,11 @@ class NacAppearanceSettingFragment
 	private fun setupDayButtonStylePreference()
 	{
 		// Get the preference
-		val dayButtonStyleKey = getString(R.string.key_style_day_button)
-		val dayButtonStylePref = findPreference<Preference>(dayButtonStyleKey)
+		val key = getString(R.string.key_style_day_button)
+		val pref = findPreference<Preference>(key)
 
 		// Set the listener for when the preference is changed
-		dayButtonStylePref!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
+		pref!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
 
 			// Set flag to refresh the main activity
 			sharedPreferences!!.shouldRefreshMainActivity = true

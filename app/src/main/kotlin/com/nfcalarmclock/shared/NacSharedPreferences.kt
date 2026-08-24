@@ -2118,6 +2118,18 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
+	 * Whether to show the labels underneath buttons in an alarm/timer card or not.
+	 */
+	val shouldShowCardButtonLabels: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.key_style_should_show_card_button_labels)
+			val defaultValue = resources.getBoolean(R.bool.default_style_should_show_card_button_labels)
+
+			return instance.getBoolean(key, defaultValue)
+		}
+
+	/**
 	 * Whether to show the current date and time or not.
 	 */
 	var shouldShowCurrentDateAndTime: Boolean

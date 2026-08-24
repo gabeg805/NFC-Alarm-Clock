@@ -128,7 +128,7 @@
 	<com.nfcalarmclock.settings.preference.NacPreferenceCategory
 		android:title="@string/title_style">
 
-		<com.nfcalarmclock.view.dayofweek.NacDayButtonStylePreference
+		<com.nfcalarmclock.settings.daybuttonstyle.NacDayButtonStylePreference
 			android:title="@string/title_day_button_style"
 			android:key="@string/key_style_day_button"
 			android:summary="@string/description_day_button_style_filled"
@@ -137,7 +137,16 @@
 			app:allowDividerBelow="false"
 			/>
 
-		<com.nfcalarmclock.alarm.options.startweekon.NacStartWeekOnPreference
+		<com.nfcalarmclock.settings.cardbuttonlabels.NacCardButtonLabelsPreference
+			android:title="Show labels on buttons"
+			android:key="@string/key_style_should_show_card_button_labels"
+			android:summary="@string/description_should_show_card_button_labels_true"
+			android:defaultValue="@bool/default_style_should_show_card_button_labels"
+			app:allowDividerAbove="false"
+			app:allowDividerBelow="false"
+			/>
+
+		<com.nfcalarmclock.settings.startweekon.NacStartWeekOnPreference
 			android:title="@string/title_start_week_on"
 			android:key="@string/key_style_start_week_on"
 			android:defaultValue="@integer/default_start_week_on_index"
