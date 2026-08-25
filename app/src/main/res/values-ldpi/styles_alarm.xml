@@ -12,6 +12,7 @@
 	<!-- Toggle buttons -->
 	<style name="My.Alarm.ToggleButtons" parent="Widget.Button.Icon">
 		<item name="android:checkable">true</item>
+		<item name="android:scrollbars">none</item>
 		<item name="android:textColor">@color/card_toggle_button</item>
 		<item name="android:textSize">@dimen/tsz_tiny</item>
 		<item name="backgroundTint">@android:color/transparent</item>
@@ -19,6 +20,17 @@
 		<item name="iconPadding">@dimen/twoline</item>
 		<item name="iconSize">@dimen/isz_large</item>
 		<item name="iconTint">@color/card_toggle_button</item>
+	</style>
+
+	<!-- Option buttons -->
+	<style name="My.Alarm.OptionButtons" parent="Widget.Button.Icon">
+		<item name="android:scrollbars">none</item>
+		<item name="android:textColor">@color/white_duller</item>
+		<item name="android:textSize">@dimen/tsz_tiny</item>
+		<item name="iconGravity">textTop</item>
+		<item name="iconPadding">@dimen/nudge</item>
+		<item name="iconSize">@dimen/isz_normal</item>
+		<item name="iconTint">@color/white</item>
 	</style>
 
 	<!-- Parent container -->

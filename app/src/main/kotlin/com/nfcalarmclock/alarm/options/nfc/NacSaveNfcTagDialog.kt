@@ -16,11 +16,11 @@ import com.google.android.material.textfield.TextInputLayout
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.NacGenericAlarmOptionsDialog
-import com.nfcalarmclock.nfc.db.NacNfcTag
 import com.nfcalarmclock.nfc.NacNfcTagViewModel
 import com.nfcalarmclock.nfc.SCANNED_NFC_TAG_ALREADY_EXISTS_BUNDLE_NAME
 import com.nfcalarmclock.nfc.SCANNED_NFC_TAG_ID_BUNDLE_NAME
-import com.nfcalarmclock.nfc.setNfcTagIds
+import com.nfcalarmclock.nfc.db.NacNfcTag
+import com.nfcalarmclock.nfc.toNfcIdString
 import com.nfcalarmclock.view.calcAlpha
 import com.nfcalarmclock.view.quickToast
 import com.nfcalarmclock.view.setupInputLayoutColor
@@ -111,7 +111,7 @@ open class NacSaveNfcTagDialog
 				.map { NacNfcTag("", it) }
 
 			// Set the NFC tag IDs to the alarm/timer
-			alarm.setNfcTagIds(nfcTags)
+			alarm.nfcTagId = nfcTags.toNfcIdString()
 		}
 		// Replace
 		else if (replaceRadioButton.isChecked)

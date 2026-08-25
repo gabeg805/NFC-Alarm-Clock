@@ -145,7 +145,7 @@ open class NacTextToSpeechDialog
 		get() = currentTimeCheckBox.isChecked || alarmNameCheckBox.isChecked
 
 	/**
-	 * Called when the Cancel button is clicked.
+	 * Cancel button is clicked.
 	 */
 	override fun onCancelClicked(alarm: NacAlarm?)
 	{
@@ -154,7 +154,7 @@ open class NacTextToSpeechDialog
 	}
 
 	/**
-	 * Called when the Ok button is clicked.
+	 * Ok button is clicked.
 	 */
 	override fun onOkClicked(alarm: NacAlarm?)
 	{

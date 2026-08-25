@@ -235,6 +235,7 @@
 	<string name="error_message_camera_in_use">Camera in use</string>
 	<string name="error_message_camera_max_in_use">Max cameras in use</string>
 	<string name="error_message_unable_to_launch_media_picker">Unable to launch system audio picker</string>
+	<string name="error_message_unable_to_preview_volume_options">Unable to preview when no media has been set</string>
 
 	<!-- Titles -->
 	<string name="title_timer_main">NFC Timer</string>
@@ -383,8 +384,8 @@
 	<string name="description_text_to_speech_speech_rate">How fast text-to-speech should speak.</string>
 	<string name="description_volume_gradually_increase_volume_alarm">Increase the volume of the alarm at a set frequency.</string>
 	<string name="description_volume_gradually_increase_volume_timer">Increase the volume of the timer at a set frequency.</string>
-	<string name="description_volume_restrict_volume_alarm">Volume cannot be changed when the alarm goes off.</string>
-	<string name="description_volume_restrict_volume_timer">Volume cannot be changed when the timer goes off.</string>
+	<string name="description_volume_restrict_volume_alarm">Volume cannot be decreased when the alarm goes off.</string>
+	<string name="description_volume_restrict_volume_timer">Volume cannot be decreased when the timer goes off.</string>
 	<string name="description_dismiss_options_auto_dismiss_alarm">Dismiss the alarm automatically after a set duration.</string>
 	<string name="description_dismiss_options_auto_dismiss_timer">Dismiss the timer automatically after a set duration.</string>
 	<string name="description_dismiss_options_dismiss_early">Dismiss the alarm early, before it is active.</string>

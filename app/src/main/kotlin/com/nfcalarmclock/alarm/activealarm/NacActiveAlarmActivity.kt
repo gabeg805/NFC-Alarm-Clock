@@ -21,6 +21,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.R
+import com.nfcalarmclock.alarm.NacAlarmViewModel
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.nfc.NacNfc
 import com.nfcalarmclock.nfc.NacNfcTagViewModel
@@ -28,6 +29,8 @@ import com.nfcalarmclock.nfc.db.NacNfcTag
 import com.nfcalarmclock.nfc.getNfcTagNamesForDismissing
 import com.nfcalarmclock.nfc.getNfcTagsForDismissing
 import com.nfcalarmclock.nfc.shouldUseNfc
+import com.nfcalarmclock.nfc.toNfcIdList
+import com.nfcalarmclock.nfc.toNfcIdString
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.NacBundle
 import com.nfcalarmclock.system.addAlarm
@@ -52,11 +55,10 @@ class NacActiveAlarmActivity
 	: AppCompatActivity()
 {
 
-	///**
-	// * Alarm repository.
-	// */
-	//@Inject
-	//lateinit var alarmRepository: NacAlarmRepository
+	/**
+	 * Alarm view model.
+	 */
+	private val alarmViewModel: NacAlarmViewModel by viewModels()
 
 	/**
 	 * NFC tag view model.
@@ -79,14 +81,25 @@ class NacActiveAlarmActivity
 	private var alarm: NacAlarm? = null
 
 	/**
-	 * List of NFC tags.
-	 */
-	private var nfcTags: MutableList<NacNfcTag>? = null
-
-	/**
 	 * Active alarm service.
 	 */
 	private var service: NacActiveAlarmService? = null
+
+	/**
+	 * List of NFC tags that are needed to dismiss the alarm.
+	 */
+	private var nfcTagsNeededToDismissList: MutableList<NacNfcTag>? = null
+
+	/**
+	 * Initial size of the list of NFC tags that are needed to dismiss the alarm, before a scan
+	 * check occurs. The scan check may change the list, hence why this is needed.
+	 */
+	private var initialSizeOfNfcTagsNeededToDismiss: Int = 0
+
+	/**
+	 * Flag whether the service can be dismissed with NFC once it is connected or not.
+	 */
+	private var canDisimssServiceWithNfcUponConnection: Boolean = false
 
 	/**
 	 * Service bound watchdog, to ensure that the service is actually bound. If it is not
@@ -124,7 +137,7 @@ class NacActiveAlarmActivity
 		override fun onReceive(context: Context, intent: Intent)
 		{
 			// Setup NFC
-			setupNfc()
+			startNfc()
 			setupLayoutHandlerNfc()
 		}
 	}
@@ -196,12 +209,51 @@ class NacActiveAlarmActivity
 
 			// Remove the service watchdog
 			serviceBoundWatchdogHandler.removeCallbacksAndMessages(null)
+
+			// Dismiss the service
+			if (canDisimssServiceWithNfcUponConnection)
+			{
+				service!!.dismiss(usedNfc = true)
+			}
 		}
 
 		/**
 		 * Service disconnected.
 		 */
 		override fun onServiceDisconnected(className: ComponentName) {}
+	}
+
+	/**
+	 * Handle when an NFC tag is scanned.
+	 *
+	 */
+	private fun handleNfcTagScanned()
+	{
+		println("NFC was scanning and can be used to dismiss alarm!  Calling dismiss() on service? ${service != null}")
+		// Dismiss the alarm service with NFC
+		if (service != null)
+		{
+			service!!.dismiss(usedNfc = true)
+		}
+		// Set flag that service can dismiss the alarm once it is connected, however,
+		// if the service does not get connected after 2 sec, there may be a problem
+		// with the alarm so use a handler to dismiss it
+		else
+		{
+			// Set the flag
+			canDisimssServiceWithNfcUponConnection = true
+
+			// Handler to dismiss the erroneous active alarm, in the event that the
+			// service is not bound within 2 sec, and then finish the activity
+			serviceBoundWatchdogHandler.postDelayed({
+				lifecycleScope.launch {
+					sharedPreferences.wasNfcJustScannedToDismiss = true
+					NacDismissErroneousActiveAlarmService.startService(this@NacActiveAlarmActivity, alarm)
+					delay(500)
+					finish()
+				}
+			}, 2000)
+		}
 	}
 
 	/**
@@ -218,32 +270,14 @@ class NacActiveAlarmActivity
 		// Set the alarm from the bundle
 		setAlarm(savedInstanceState)
 
-		// Setup the window
-		requestWindowFeature(Window.FEATURE_NO_TITLE)
-
-		// Check if the new alarm screen should be used
-		if (sharedPreferences.shouldUseNewAlarmScreen)
-		{
-			// Set the screen view
-			setContentView(R.layout.act_alarm_new)
-
-			// Set the layout handler
-			layoutHandler = NacSwipeLayoutHandler(this, alarm, onAlarmActionListener)
-		}
-		// Use the original alarm screen
-		else
-		{
-			// Set the screen view
-			setContentView(R.layout.act_alarm)
-
-			// Set the layout handler
-			layoutHandler = NacOriginalLayoutHandler(this, alarm, onAlarmActionListener)
-		}
-
 		// Setup
+		requestWindowFeature(Window.FEATURE_NO_TITLE)
+		setupAlarmScreen()
 		setupScreenOn()
-		registerMyReceiver(this, deviceUnlockedBroadcastReceiver, IntentFilter(Intent.ACTION_USER_UNLOCKED))
 		onBackPressedDispatcher.addCallback(this, onBackPressedCallback)
+
+		// Register device unlocked receiver
+		registerMyReceiver(this, deviceUnlockedBroadcastReceiver, IntentFilter(Intent.ACTION_USER_UNLOCKED))
 	}
 
 	/**
@@ -304,48 +338,27 @@ class NacActiveAlarmActivity
 		// Super
 		super.onResume()
 
-		// Setup NFC and the layout
-		setupNfc()
-		layoutHandler.setup(this)
-
 		lifecycleScope.launch {
 
-			// Parse the NFC ID
-			val nfcId = NacNfc.parseId(intent)
+			// Start NFC and run setup
+			startNfc()
+			layoutHandler.setup(this@NacActiveAlarmActivity)
+			setupNfcTags()
 
-			// Get the list of NFC tags that can be used to dismiss the alarm, and
-			// order them based on how the user wants them ordered
-			if (nfcTags == null)
+			// NFC tag was scanned. This checks if multiple NFC tags needed to be scanned in
+			// sequence as well
+			if (wasNfcTagScanned())
 			{
-				nfcTags = alarm!!.getNfcTagsForDismissing(nfcTagViewModel)
+				handleNfcTagScanned()
 			}
 
-			// NFC tag was scanned so check if it is able to dismiss the alarm. If
-			// multiple NFC tags need to be used to dismiss the alarm,
-			// canDismissWithScannedNfc() will handle removing the NFC tag that was just
-			// scanned
-			if (NacNfc.wasScanned(intent) && NacNfc.canDismissWithScannedNfc(this@NacActiveAlarmActivity, alarm, nfcId, nfcTags))
+			// Size of the NFC tags dismiss list changed during the scan check.
+			// Save the list to the alarm and update the database
+			if (nfcTagsNeededToDismissList!!.size != initialSizeOfNfcTagsNeededToDismiss)
 			{
-				println("NFC was scanning and can be used to dismiss alarm!  Calling dismiss() on service? ${service != null}")
-				// Dismiss the alarm service with NFC
-				if (service != null)
-				{
-					service!!.dismiss(usedNfc = true)
-				}
-				// Handler to dismiss the erroneous active alarm, in the event that the
-				// service is not bound within 2 sec, and then finish the activity
-				else
-				{
-					serviceBoundWatchdogHandler.postDelayed({
-						lifecycleScope.launch {
-							sharedPreferences.wasNfcJustScannedToDismiss = true
-							NacDismissErroneousActiveAlarmService.startService(this@NacActiveAlarmActivity, alarm)
-							delay(500)
-							finish()
-						}
-					}, 2000)
-				}
-
+				println("Size of NFC tags list changed! ${nfcTagsNeededToDismissList!!.size} | $initialSizeOfNfcTagsNeededToDismiss")
+				alarm!!.currentNfcTagsNeededToDismiss = nfcTagsNeededToDismissList!!.toNfcIdString()
+				alarmViewModel.update(alarm!!)
 			}
 
 			// Setup NFC for the layout handler
@@ -452,49 +465,91 @@ class NacActiveAlarmActivity
 	}
 
 	/**
+	 * Setup the alarm screen.
+	 */
+	private fun setupAlarmScreen()
+	{
+		// New alarm screen
+		if (sharedPreferences.shouldUseNewAlarmScreen)
+		{
+			// Set the screen view
+			setContentView(R.layout.act_alarm_new)
+
+			// Set the layout handler
+			layoutHandler = NacSwipeLayoutHandler(this, alarm, onAlarmActionListener)
+		}
+		// Original alarm screen
+		else
+		{
+			// Set the screen view
+			setContentView(R.layout.act_alarm)
+
+			// Set the layout handler
+			layoutHandler = NacOriginalLayoutHandler(this, alarm, onAlarmActionListener)
+		}
+	}
+
+	/**
 	 * Setup NFC for the layout handler.
 	 */
 	private fun setupLayoutHandlerNfc()
 	{
 		// NFC does not need to be used so do nothing with the layout handler
-		if (alarm?.shouldUseNfc(this) == true)
-		{
-			// Get the names of the NFC tags that can dismiss the alarm
-			val prefix = "(${resources.getString(R.string.message_show_nfc_tag_id)}) "
-			val nfcTagNames = alarm!!.getNfcTagNamesForDismissing(nfcTags!!, prefix)
-
-			// Setup the NFC tag
-			layoutHandler.setupNfcTag(this, nfcTagNames, keyguardManager.isDeviceLocked)
-		}
-	}
-
-	/**
-	 * Setup NFC.
-	 */
-	private fun setupNfc()
-	{
-		// NFC is not enabled
-		if (!NacNfc.isEnabled(this))
+		if (alarm?.shouldUseNfc(this) != true)
 		{
 			return
 		}
 
-		// NFC exists on the device. The device is NFC capable
-		if (NacNfc.exists(this))
-		{
-			// Create the intent
-			val intent = Intent(this, NacActiveAlarmActivity::class.java)
-				.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING)
+		// Get the names of the NFC tags that can dismiss the alarm
+		val prefix = "(${resources.getString(R.string.message_show_nfc_tag_id)}) "
+		val nfcTagNames = alarm!!.getNfcTagNamesForDismissing(nfcTagsNeededToDismissList!!, prefix)
 
-			// Start NFC
-			NacNfc.start(this, intent)
+		// Setup the NFC tag
+		layoutHandler.setupNfcTag(this, nfcTagNames, keyguardManager.isDeviceLocked)
+	}
+
+	/**
+	 * Setup the NFC tags member variable.
+	 *
+	 * It will contain the list of NFC tags that can be used to dismiss the alarm, and
+	 * will be ordered based on how the user wants them ordered (Sequential/Random)
+	 */
+	private suspend fun setupNfcTags()
+	{
+		// Already been setup
+		if (nfcTagsNeededToDismissList != null)
+		{
+			println("Already been setup : " + nfcTagsNeededToDismissList!!.map { it.nfcId })
+			// Set the size of the list
+			initialSizeOfNfcTagsNeededToDismiss = nfcTagsNeededToDismissList!!.size
+			return
 		}
-		// Unable to use NFC on this device
+
+		// Find the current list of NFC tags that need to be dismissed
+		val currentNfcTagsNeededToDismiss = alarmViewModel.findCurrentNfcTagsNeededToDismiss(alarm!!.id)
+
+		// The current list has not been saved yet
+		if (currentNfcTagsNeededToDismiss.isEmpty())
+		{
+			// Get the list
+			nfcTagsNeededToDismissList = alarm!!.getNfcTagsForDismissing(nfcTagViewModel)
+
+			// Save the list to the alarm and update the database
+			alarm!!.currentNfcTagsNeededToDismiss = nfcTagsNeededToDismissList!!.toNfcIdString()
+			alarmViewModel.update(alarm!!)
+		}
+		// The list has already been saved to the database
 		else
 		{
-			// Show a toast
-			quickToast(this, R.string.error_message_nfc_unsupported)
+			// Re-compute the list of NFC tags from the current list
+			nfcTagsNeededToDismissList = currentNfcTagsNeededToDismiss.toNfcIdList()
+				.map { nfcTagViewModel.findNfcTag(it) ?: NacNfcTag("", it) }
+				.toMutableList()
 		}
+
+		// Set the size of the list
+		println("Final computation : "+nfcTagsNeededToDismissList!!.map { it.nfcId })
+		initialSizeOfNfcTagsNeededToDismiss = nfcTagsNeededToDismissList!!.size
 	}
 
 	/**
@@ -532,6 +587,51 @@ class NacActiveAlarmActivity
 		{
 			window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 		}
+	}
+
+	/**
+	 * Start NFC.
+	 */
+	private fun startNfc()
+	{
+		// NFC is not enabled
+		if (!NacNfc.isEnabled(this))
+		{
+			return
+		}
+
+		// NFC exists on the device. The device is NFC capable
+		if (NacNfc.exists(this))
+		{
+			// Create the intent
+			val intent = Intent(this, NacActiveAlarmActivity::class.java)
+				.addFlags(Intent.FLAG_RECEIVER_REPLACE_PENDING)
+
+			// Start NFC
+			NacNfc.start(this, intent)
+		}
+		// Unable to use NFC on this device
+		else
+		{
+			// Show a toast
+			quickToast(this, R.string.error_message_nfc_unsupported)
+		}
+	}
+
+	/**
+	 * Check whether an NFC tag was scanned and if it can dismiss the alarm.
+	 *
+	 * If multiple NFC tags need to be used to dismiss the alarm, canDismissWithScannedNfc()
+	 * will handle removing the NFC tag that was just scanned.
+	 */
+	private fun wasNfcTagScanned(): Boolean
+	{
+		// Parse the NFC ID
+		val nfcId = NacNfc.parseId(intent)
+
+		// Run the check
+		return NacNfc.wasScanned(intent)
+				&& NacNfc.canDismissWithScannedNfc(this@NacActiveAlarmActivity, alarm, nfcId, nfcTagsNeededToDismissList)
 	}
 
 	companion object

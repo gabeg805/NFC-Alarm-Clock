@@ -109,4 +109,12 @@
 	<!-- Separator -->
 	<Space style="@style/Widget.AlarmOptionDialog.Separator" />
 
+	<!-- Preview button -->
+	<com.google.android.material.button.MaterialButton
+		style="@style/Widget.AlarmOptionDialog.Button"
+		android:id="@+id/preview_button"
+		android:layout_width="match_parent"
+		android:text="@string/action_preview"
+		/>
+
 </com.nfcalarmclock.view.alarmoptionlayout.NacAlarmOptionLayout>

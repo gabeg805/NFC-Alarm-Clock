@@ -46,7 +46,7 @@ interface NacAlarmDao
 	/**
 	 * Delete an alarm.
 	 *
-	 * @param  alarm  Alarm to delete.
+	 * @param alarm Alarm to delete.
 	 *
 	 * @return The number of rows deleted.
 	 */
@@ -56,12 +56,22 @@ interface NacAlarmDao
 	/**
 	 * Find an alarm.
 	 *
-	 * @param  id  The ID of the alarm to find.
+	 * @param id The ID of the alarm to find.
 	 *
 	 * @return The alarm with the ID.
 	 */
 	@Query("SELECT * FROM alarm WHERE id=:id")
 	suspend fun findAlarm(id: Long): NacAlarm?
+
+	/**
+	 * Find the current list of NFC tags needed to dismiss an alarm.
+	 *
+	 * @param id The ID of the alarm to find.
+	 *
+	 * @return The current list of NFC tags needed to dismiss an alarm.
+	 */
+	@Query("SELECT current_nfc_tags_needed_to_dismiss FROM alarm WHERE id=:id")
+	suspend fun findCurrentNfcTagsNeededToDismiss(id: Long): String
 
 	/**
 	 * Get an active alarm, the alarm that has been active the longest.
@@ -94,7 +104,7 @@ interface NacAlarmDao
 	/**
 	 * Insert an alarm.
 	 *
-	 * @param  alarm  The alarm to insert.
+	 * @param alarm The alarm to insert.
 	 *
 	 * @return The row ID of the alarm that was inserted.
 	 */
@@ -104,7 +114,7 @@ interface NacAlarmDao
 	/**
 	 * Update an existing alarm.
 	 *
-	 * @param  alarm  The alarm to update.
+	 * @param alarm The alarm to update.
 	 *
 	 * @return The number of alarms updated.
 	 */

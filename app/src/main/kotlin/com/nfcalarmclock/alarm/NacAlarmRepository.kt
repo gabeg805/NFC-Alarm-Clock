@@ -11,14 +11,11 @@ import javax.inject.Inject
 
 /**
  * Alarm repository.
+ *
+ * @param alarmDao Data access object for an alarm.
  */
 class NacAlarmRepository @Inject constructor(
-
-	/**
-	 * Data access object for an alarm.
-	 */
 	private val alarmDao: NacAlarmDao
-
 )
 {
 
@@ -48,6 +45,15 @@ class NacAlarmRepository @Inject constructor(
 	 * @return An alarm with the given ID.
 	 */
 	suspend fun findAlarm(id: Long): NacAlarm? = alarmDao.findAlarm(id)
+
+	/**
+	 * Find the current list of NFC tags needed to dismiss an alarm.
+	 *
+	 * @param id The ID of the alarm to find.
+	 *
+	 * @return The current list of NFC tags needed to dismiss an alarm.
+	 */
+	suspend fun findCurrentNfcTagsNeededToDismiss(id: Long): String = alarmDao.findCurrentNfcTagsNeededToDismiss(id)
 
 	/**
 	 * An active alarm.

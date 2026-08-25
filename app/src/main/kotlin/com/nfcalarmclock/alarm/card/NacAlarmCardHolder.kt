@@ -466,7 +466,7 @@ class NacAlarmCardHolder(root: View)
 	 */
 	private val heightCollapsed: Int
 		// Check if the alarm is snoozed or will alarm soon
-		get() = if (alarm!!.isSnoozed || alarm!!.willAlarmSoon())
+		get() = if ((alarm!!.snoozeCount > 0) || alarm!!.willAlarmSoon())
 		{
 			// Show a little extra space for stuff right beneath the summary
 			sharedPreferences.cardHeightCollapsedDismiss
@@ -669,7 +669,7 @@ class NacAlarmCardHolder(root: View)
 			quickToast(context, R.string.error_message_active_modify)
 		}
 		// Alarm is snoozed
-		else if (alarm!!.isSnoozed)
+		else if (alarm!!.snoozeCount > 0)
 		{
 			// Show a toast that unable to modify a snoozed alarm
 			quickToast(context, R.string.error_message_snoozed_modify)

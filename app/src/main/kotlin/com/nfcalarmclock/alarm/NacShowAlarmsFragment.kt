@@ -436,8 +436,9 @@ class NacShowAlarmsFragment
 		// Super
 		super.onPause()
 
-		// Save scroll position of recyclerview?
+		// Save scroll position of recyclerview and sort order of alarms
 		alarmViewModel.recyclerViewState = recyclerView.layoutManager?.onSaveInstanceState()
+		alarmViewModel.sortOrderedAlarmIds = alarmCardAdapter.currentList.map { it.id }
 
 		// Clear the alarm options dialogs
 		var i = 0
@@ -448,7 +449,6 @@ class NacShowAlarmsFragment
 
 		// Cleanup
 		unregisterMyReceiver(requireContext(), timeTickReceiver)
-		// TODO: Can this cause the message stopping and not restarting jank? Check onResume()
 		nextAlarmMessageHandler.removeCallbacksAndMessages(null)
 	}
 
@@ -1132,18 +1132,28 @@ class NacShowAlarmsFragment
 			// position
 			alarmViewModel.recyclerViewState = recyclerView.layoutManager?.onSaveInstanceState()
 
-			// No cards are expanded
-			if (alarmViewModel.expandedAlarmIds.isEmpty())
+			// Restore the saved sorted order of alarms
+			if (alarmViewModel.sortOrderedAlarmIds.size == alarms.size)
 			{
-				// Merge and sort the alarms
-				alarmCardAdapterLiveData.mergeSort(alarms)
+				alarmCardAdapterLiveData.mergeSort(alarms, order = alarmViewModel.sortOrderedAlarmIds)
+				alarmViewModel.sortOrderedAlarmIds = emptyList()
 			}
-			// One or more cards is expanded
+			// Normal merge/sort logic
 			else
 			{
-				// Merge the alarms but do not sort yet
-				alarmCardAdapterLiveData.merge(alarms, copiedIds = recentlyCopiedAlarmIds)
+				// No cards are expanded
+				if (alarmViewModel.expandedAlarmIds.isEmpty())
+				{
+					// Merge and sort the alarms
+					alarmCardAdapterLiveData.mergeSort(alarms)
+				}
+				// One or more cards is expanded
+				else
+				{
+					// Merge the alarms but do not sort yet
+					alarmCardAdapterLiveData.merge(alarms, copiedIds = recentlyCopiedAlarmIds)
 
+				}
 			}
 
 		}

@@ -188,14 +188,6 @@ fun NacTimer.removeNfcTag(nfcTag: NacNfcTag): Boolean
 }
 
 /**
- * Set the NFC tag IDs from a list.
- */
-fun NacAlarm.setNfcTagIds(nfcTags: List<NacNfcTag>)
-{
-	this.nfcTagId = nfcTags.joinToString(" || ") { it.nfcId }
-}
-
-/**
  * Whether NFC should be used with the alarm.
  *
  * @return True if NFC should be used, and False otherwise.
@@ -206,8 +198,35 @@ fun NacAlarm.shouldUseNfc(
 ): Boolean
 {
 	return NacNfc.exists(context)
-			&& this.shouldUseNfc
-			&& sharedPreferences.shouldShowNfcButton
+		&& this.shouldUseNfc
+		&& sharedPreferences.shouldShowNfcButton
+}
+
+/**
+ * Convert a list of NacNfcTags to a NFC ID string.
+ */
+fun List<NacNfcTag>.toNfcIdString(): String
+{
+	return this.joinToString(" || ") { it.nfcId }
+}
+
+/**
+ * Convert an NFC ID string to a list of NFC ID strings.
+ */
+fun String.toNfcIdList(): List<String>
+{
+	// No NFC ID
+	return if (this.isEmpty())
+	{
+		emptyList()
+	}
+	// Try to split the NFC IDs with regex
+	else
+	{
+		val regex = Regex(" \\|\\| ")
+
+		this.split(regex)
+	}
 }
 
 /**

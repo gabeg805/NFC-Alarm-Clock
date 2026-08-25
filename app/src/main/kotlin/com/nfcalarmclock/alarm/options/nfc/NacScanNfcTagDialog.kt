@@ -27,7 +27,7 @@ import com.nfcalarmclock.nfc.NacNfcTagViewModel
 import com.nfcalarmclock.nfc.SCANNED_NFC_TAG_ALREADY_EXISTS_BUNDLE_NAME
 import com.nfcalarmclock.nfc.SCANNED_NFC_TAG_ID_BUNDLE_NAME
 import com.nfcalarmclock.nfc.db.NacNfcTag
-import com.nfcalarmclock.nfc.setNfcTagIds
+import com.nfcalarmclock.nfc.toNfcIdString
 import com.nfcalarmclock.system.navigate
 import com.nfcalarmclock.view.calcAlpha
 import com.nfcalarmclock.view.quickToast
@@ -173,7 +173,7 @@ open class NacScanNfcTagDialog
 	 */
 	override fun onOkClicked(alarm: NacAlarm?)
 	{
-		alarm?.setNfcTagIds(selectedNfcTags.filter { !it.isEmpty })
+		alarm?.nfcTagId = selectedNfcTags.filter { !it.isEmpty }.toNfcIdString()
 		alarm?.shouldUseNfcTagDismissOrder = dismissOrderSwitch.isChecked
 		alarm?.nfcTagDismissOrder = NacAlarm.calcNfcTagDismissOrderFromIndex(selectedDismissOrder)
 	}

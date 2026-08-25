@@ -2,32 +2,23 @@
 TODO
 ----
 
+* Change AlarmOptions fragment so that if fragment argument is null, just build
+  a generic jank from NacSharedPreferences
+
+* Check if media exists when importing alarms
+
 * Test start timer from NFC, as this code block was changed
 
 * Volume can dismiss NFC alarms
 
-* Add alarms from phone to emulator to test alarm order and sorting.
-
 * Do fresh install on emulator and test giong to timer. The top bar was not
   showing and it was making the  fragment look a little strange.
-
-* Add labels to everything?
-
-* Have a way to test various settings, like gradually increase volume, etc.
-
-* When active alarm or timer is left. Then "nfcTags" has to get reinitialized
-  and probably gets cleared. May need to save the current progress in
-  onSavedInstanceState() or whatever it is called.
 
 * Test NFC dismiss when app is not in focus and make sure scanning NFC isn't
   causing a loop.
 
-* When coming back from media fragment, the order of alarms was all weird. Why
-  is that? This was after hitting cancel but occurred for OK as well. Also when
-  going back to the media fragment after changing the directory, it would not
-  reload to the path of the music that is selected for the alarm.
-
-
+* When going back to the media fragment after changing the directory, it would
+  not reload to the path of the music that is selected for the alarm.
 
 * Update website with f-droid and izzy
 

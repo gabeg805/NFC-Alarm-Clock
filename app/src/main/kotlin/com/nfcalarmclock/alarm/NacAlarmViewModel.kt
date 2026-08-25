@@ -14,6 +14,7 @@ import javax.inject.Inject
  * Alarm view model.
  *
  * @param alarmRepository Alarm repository.
+ * @param savedState Saved state.
  */
 @HiltViewModel
 class NacAlarmViewModel @Inject constructor(
@@ -60,25 +61,25 @@ class NacAlarmViewModel @Inject constructor(
 			savedState[SAVE_STATE_REYCYCLERVIEW_SCROLL_STATE] = value
 		}
 
-	///**
-	// * List of alarm IDs that are in sort order, how they are displayed to the user.
-	// */
-	//var sortOrderedAlarmIds: List<Long>
-	//	get()
-	//	{
-	//		// Saved state item is not present. Initialize it to an empty list
-	//		if (savedState[SAVE_STATE_SORT_ORDERED_ALARM_IDS] as Any? == null)
-	//		{
-	//			savedState[SAVE_STATE_SORT_ORDERED_ALARM_IDS] = ArrayList<Long>()
-	//		}
+	/**
+	 * List of alarm IDs that are in sort order, how they are displayed to the user.
+	 */
+	var sortOrderedAlarmIds: List<Long>
+		get()
+		{
+			// Saved state item is not present. Initialize it to an empty list
+			if (savedState[SAVE_STATE_SORT_ORDERED_ALARM_IDS] as Any? == null)
+			{
+				savedState[SAVE_STATE_SORT_ORDERED_ALARM_IDS] = ArrayList<Long>()
+			}
 
-	//		// Return
-	//		return (savedState[SAVE_STATE_SORT_ORDERED_ALARM_IDS] as List<Long>?)!!
-	//	}
-	//	set(value)
-	//	{
-	//		savedState[SAVE_STATE_SORT_ORDERED_ALARM_IDS] = value
-	//	}
+			// Return
+			return (savedState[SAVE_STATE_SORT_ORDERED_ALARM_IDS] as List<Long>?)!!
+		}
+		set(value)
+		{
+			savedState[SAVE_STATE_SORT_ORDERED_ALARM_IDS] = value
+		}
 
 	/**
 	 * Count the number of alarms.
@@ -110,6 +111,15 @@ class NacAlarmViewModel @Inject constructor(
 	 */
 	@Suppress("unused")
 	suspend fun findAlarm(id: Long): NacAlarm? = alarmRepository.findAlarm(id)
+
+	/**
+	 * Find the current list of NFC tags needed to dismiss an alarm.
+	 *
+	 * @param id The ID of the alarm to find.
+	 *
+	 * @return The current list of NFC tags needed to dismiss an alarm.
+	 */
+	suspend fun findCurrentNfcTagsNeededToDismiss(id: Long): String = alarmRepository.findCurrentNfcTagsNeededToDismiss(id)
 
 	/**
 	 * Get an active alarm.
@@ -187,11 +197,11 @@ class NacAlarmViewModel @Inject constructor(
 		 */
 		const val SAVE_STATE_REYCYCLERVIEW_SCROLL_STATE = "com.nfcalarmclock.alarm.SAVE_STATE_REYCYCLERVIEW_SCROLL_STATE"
 
-		///**
-		// * Key for the save instance state that will contain the list of alarm IDs that
-		// * are in sort order, how they are displayed to the user.
-		// */
-		//const val SAVE_STATE_SORT_ORDERED_ALARM_IDS = "com.nfcalarmclock.alarm.SAVE_STATE_SORT_ORDERED_ALARM_IDS"
+		/**
+		 * Key for the save instance state that will contain the list of alarm IDs that
+		 * are in sort order, how they are displayed to the user.
+		 */
+		const val SAVE_STATE_SORT_ORDERED_ALARM_IDS = "com.nfcalarmclock.alarm.SAVE_STATE_SORT_ORDERED_ALARM_IDS"
 
 	}
 

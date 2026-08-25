@@ -12,6 +12,7 @@ import com.nfcalarmclock.nfc.NacNfcTagViewModel
 import com.nfcalarmclock.nfc.db.NacNfcTag
 import com.nfcalarmclock.nfc.getNfcTagNamesForDismissing
 import com.nfcalarmclock.nfc.getNfcTagsForDismissing
+import com.nfcalarmclock.nfc.toNfcIdList
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.NacCalendar
 import com.nfcalarmclock.system.NacCalendar.Day
@@ -51,19 +52,13 @@ fun String.normalizeName(): String
  * Next alarm object.
  *
  * Really just a container for a NacAlarm and Calendar.
+ *
+ * @param alarm Alarm object corresponding to the next alarm that will run.
+ * @param calendar Calendar object corresponding to the next date and time the alarm will run.
  */
 class NacNextAlarm(
-
-	/**
-	 * Alarm object corresponding to the next alarm that will run.
-	 */
 	val alarm: NacAlarm,
-
-	/**
-	 * Calendar object corresponding to the next date and time the alarm will run.
-	 */
 	val calendar: Calendar
-
 )
 
 /**
@@ -233,6 +228,12 @@ open class NacAlarm()
 	 */
 	@ColumnInfo(name = "nfc_tag_dismiss_order", defaultValue = "2")
 	var nfcTagDismissOrder: Int = 2
+
+	/**
+	 * Current list of NFC tags needed to dismiss the alarm.
+	 */
+	@ColumnInfo(name = "current_nfc_tags_needed_to_dismiss", defaultValue = "")
+	var currentNfcTagsNeededToDismiss: String = ""
 
 	/**
 	 * Whether the alarm should use the flashlight or not.
@@ -503,12 +504,6 @@ open class NacAlarm()
 	var shouldSkipNextAlarm: Boolean = false
 
 	/**
-	 * Check if the alarm has a sound that will be played when it goes off.
-	 */
-	val hasMedia: Boolean
-		get() = mediaPath.isNotEmpty()
-
-	/**
 	 * Check if the alarm can be snoozed.
 	 *
 	 * @return True if the alarm can be snoozed, and False otherwise.
@@ -517,16 +512,10 @@ open class NacAlarm()
 		get() = (snoozeCount < maxSnooze) || (maxSnooze < 0)
 
 	/**
-	 * Check if the alarm is snoozed.
-	 */
-	val isSnoozed: Boolean
-		get() = snoozeCount > 0
-
-	/**
 	 * Check if the alarm is being used, by being active or snoozed.
 	 */
 	val isInUse: Boolean
-		get() = isActive || isSnoozed
+		get() = isActive || (snoozeCount > 0)
 
 	/**
 	 * Check if the next alarm will be skipped, and there is only one day that the alarm,
@@ -553,19 +542,7 @@ open class NacAlarm()
 	val nfcTagIdList: List<String>
 		get()
 		{
-			// Create the regex
-			val regex = Regex(" \\|\\| ")
-
-			return if (nfcTagId.isEmpty())
-			{
-				// No NFC ID
-				emptyList()
-			}
-			else
-			{
-				// Try to split the NFC IDs
-				nfcTagId.split(regex)
-			}
+			return nfcTagId.toNfcIdList()
 		}
 
 	/**
@@ -1116,6 +1093,7 @@ open class NacAlarm()
 		timeActive = 0
 		snoozeCount = 0
 		timeOfDismissEarlyAlarm = 0
+		currentNfcTagsNeededToDismiss = ""
 
 		// Date is set
 		if (date.isNotEmpty())
@@ -1382,22 +1360,12 @@ open class NacAlarm()
 			+ audioSource.hashCode()
 			+ name.hashCode()
 			+ ttsVoice.hashCode()
-			+ hasMedia.hashCode()
 			+ canSnooze.hashCode()
-			+ isSnoozed.hashCode()
 			+ isInUse.hashCode()
 			+ isNextSkippedAndFinal.hashCode()
 			+ shouldUseTts.hashCode()
 			+ nameNormalized.hashCode()
 			+ nfcTagIdList.hashCode())
-	}
-
-	/**
-	 * Increment the snooze count by 1.
-	 */
-	private fun incrementSnoozeCount()
-	{
-		snoozeCount += 1
 	}
 
 	/**
@@ -1524,9 +1492,8 @@ open class NacAlarm()
 		val cal = Calendar.getInstance()
 		cal.add(Calendar.SECOND, snoozeDuration)
 
-		// Increment the snooze count. The "isSnoozed" variable checks the
-		// snooze count so this basically makes "isSnoozed" true
-		incrementSnoozeCount()
+		// Increment the snooze count
+		snoozeCount += 1
 
 		return cal
 	}

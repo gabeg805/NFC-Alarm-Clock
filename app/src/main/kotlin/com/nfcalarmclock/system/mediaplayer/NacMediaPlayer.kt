@@ -3,7 +3,7 @@ package com.nfcalarmclock.system.mediaplayer
 import android.content.Context
 import android.media.AudioManager
 import android.net.Uri
-import android.os.Handler
+import androidx.core.net.toUri
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.Player.COMMAND_SET_REPEAT_MODE
@@ -11,7 +11,6 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.view.quickToast
 import com.nfcalarmclock.system.isUserUnlocked
 import com.nfcalarmclock.system.media.NacAudioAttributes
 import com.nfcalarmclock.system.media.NacAudioManager
@@ -19,8 +18,8 @@ import com.nfcalarmclock.system.media.NacMedia
 import com.nfcalarmclock.system.media.findFirstValidLocalMedia
 import com.nfcalarmclock.system.media.isMediaDirectory
 import com.nfcalarmclock.system.media.isMediaValid
+import com.nfcalarmclock.view.quickToast
 import java.io.File
-import androidx.core.net.toUri
 
 /**
  * Wrapper for the MediaPlayer class.
@@ -83,11 +82,6 @@ class NacMediaPlayer(
 	}
 
 	/**
-	 * Handler to add some delay if looping media.
-	 */
-	private val handler: Handler = Handler(context.mainLooper)
-
-	/**
 	 * Media player.
 	 */
 	val exoPlayer: ExoPlayer = ExoPlayer.Builder(context)
@@ -146,14 +140,6 @@ class NacMediaPlayer(
 
 		// Duck the volume
 		audioAttributes.duckVolume()
-	}
-
-	/**
-	 * Cleanup the handler.
-	 */
-	private fun cleanupHandler()
-	{
-		handler.removeCallbacksAndMessages(null)
 	}
 
 	/**
@@ -268,13 +254,18 @@ class NacMediaPlayer(
 	/**
 	 * Play the media associated with the given alarm.
 	 *
-	 *
 	 * This can play an entire directory (playlist) or a single media file.
 	 *
-	 * @param  alarm   The alarm to get the media path from.
+	 * @param alarm The alarm to get the media path from.
 	 */
 	fun playAlarm(alarm: NacAlarm): Uri?
 	{
+		// Set shuffle mode (can be true or false) when playing a media directory
+		if (alarm.mediaType.isMediaDirectory())
+		{
+			exoPlayer.shuffleModeEnabled = alarm.shouldShuffleMedia
+		}
+
 		// Merge alarm with audio attributes
 		audioAttributes.merge(alarm)
 
@@ -420,9 +411,6 @@ class NacMediaPlayer(
 	{
 		// Abandon audio focus
 		NacAudioManager.abandonFocus(context, audioAttributes)
-
-		// Cleanup the handler
-		cleanupHandler()
 
 		// Release the media player resources
 		exoPlayer.release()

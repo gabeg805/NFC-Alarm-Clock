@@ -3,12 +3,19 @@ package com.nfcalarmclock.alarm.options.volume
 import android.widget.AdapterView
 import android.widget.RelativeLayout
 import androidx.appcompat.widget.SwitchCompat
+import androidx.media3.common.util.UnstableApi
+import com.google.android.material.button.MaterialButton
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
 import com.google.android.material.textfield.TextInputLayout
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.NacGenericAlarmOptionsDialog
+import com.nfcalarmclock.system.getAlarm
+import com.nfcalarmclock.system.getDeviceProtectedStorageContext
+import com.nfcalarmclock.system.media.NacAudioAttributes
+import com.nfcalarmclock.system.mediaplayer.NacMediaPlayer
 import com.nfcalarmclock.view.calcAlpha
+import com.nfcalarmclock.view.quickToast
 import com.nfcalarmclock.view.setTextFromIndex
 import com.nfcalarmclock.view.setupInputLayoutColor
 import com.nfcalarmclock.view.setupSwitchColor
@@ -16,6 +23,7 @@ import com.nfcalarmclock.view.setupSwitchColor
 /**
  * Volume options for an alarm.
  */
+@UnstableApi
 open class NacVolumeOptionsDialog
 	: NacGenericAlarmOptionsDialog()
 {
@@ -24,6 +32,11 @@ open class NacVolumeOptionsDialog
 	 * Layout resource ID.
 	 */
 	override val layoutId = R.layout.dlg_volume_options
+
+	/**
+	 * Preview button.
+	 */
+	private lateinit var previewButton: MaterialButton
 
 	/**
 	 * Gradually increase volume switch.
@@ -41,9 +54,53 @@ open class NacVolumeOptionsDialog
 	private lateinit var restrictVolumeSwitch: SwitchCompat
 
 	/**
+	 * Audio attributes.
+	 */
+	private var audioAttributes: NacAudioAttributes? = null
+
+	/**
+	 * Volume manager (gradually increase, restrict, snooze/dismiss with volume buttons).
+	 */
+	private var volumeManager: NacVolumeManager? = null
+
+	/**
+	 * Media player.
+	 */
+	private var mediaPlayer: NacMediaPlayer? = null
+
+	/**
 	 * Selected gradually increase volume wait time.
 	 */
 	private var selectedWaitTime: Int = 0
+
+	/**
+	 * Cleanup resources.
+	 */
+	private fun cleanup()
+	{
+		// Cleanup volume resources
+		volumeManager?.cleanup()
+
+		// Cleanup the media player
+		mediaPlayer?.release()
+	}
+
+	/**
+	 * Get the alarm/timer argument from the fragment.
+	 */
+	override fun getFragmentArgument(): NacAlarm?
+	{
+		return arguments?.getAlarm() ?: NacAlarm.build(sharedPreferences)
+	}
+
+	/**
+	 * Cancel button is clicked.
+	 */
+	override fun onCancelClicked(alarm: NacAlarm?)
+	{
+		// Cleanup resources
+		cleanup()
+	}
 
 	/**
 	 * Ok button is clicked.
@@ -51,9 +108,10 @@ open class NacVolumeOptionsDialog
 	override fun onOkClicked(alarm: NacAlarm?)
 	{
 		// Update the alarm
-		alarm?.shouldGraduallyIncreaseVolume = graduallyIncreaseVolumeSwitch.isChecked
-		alarm?.graduallyIncreaseVolumeWaitTime = selectedWaitTime
-		alarm?.shouldRestrictVolume = restrictVolumeSwitch.isChecked
+		updateAlarm(alarm)
+
+		// Cleanup resources
+		cleanup()
 	}
 
 	/**
@@ -72,20 +130,104 @@ open class NacVolumeOptionsDialog
 	}
 
 	/**
+	 * Set the preview button text.
+	 */
+	private fun setPreviewText(state: Boolean)
+	{
+		// Check if preview is running
+		if (state)
+		{
+			// Change the text of the button back
+			previewButton.text = resources.getString(R.string.action_preview)
+		}
+		// Preview not running
+		else
+		{
+			// Change the text of the button to indicate that a preview is running
+			previewButton.text = resources.getString(R.string.action_stop_preview)
+		}
+	}
+
+	/**
 	 * Setup all alarm options.
 	 */
 	override fun setupAlarmOptions(alarm: NacAlarm?)
 	{
-		// Get the alarm, or build a new one, to get default values
-		val a = alarm ?: NacAlarm.build(sharedPreferences)
+		// Media can be previewed
+		if (alarm!!.mediaPath.isNotEmpty())
+		{
+			val context = requireContext()
+			val deviceContext = getDeviceProtectedStorageContext(context)
+
+			// Set member variables for preview to work
+			audioAttributes = NacAudioAttributes(context, alarm)
+			mediaPlayer = NacMediaPlayer(deviceContext, null)
+			volumeManager = NacVolumeManager(context, alarm, audioAttributes!!)
+
+			// Setup the media player
+			mediaPlayer!!.onAudioFocusChangeListener = object : NacMediaPlayer.OnAudioFocusChangeListener
+			{
+				// Empty override functions so that nothing happens when audio
+				// focus is lost. This means that audio should keep playing even if
+				// audio focus is lost
+				override fun onAudioFocusLoss(mediaPlayer: NacMediaPlayer)
+				{
+				}
+
+				override fun onAudioFocusLossTransient(mediaPlayer: NacMediaPlayer)
+				{
+				}
+			}
+		}
 
 		// Set the default selected values
-		selectedWaitTime = a.graduallyIncreaseVolumeWaitTime
+		selectedWaitTime = alarm.graduallyIncreaseVolumeWaitTime
 
 		// Setup the views
-		setupGraduallyIncreaseVolume(a.shouldGraduallyIncreaseVolume, a.graduallyIncreaseVolumeWaitTime)
+		setupGraduallyIncreaseVolume(alarm.shouldGraduallyIncreaseVolume, alarm.graduallyIncreaseVolumeWaitTime)
 		setGraduallyIncreaseVolumeUsability()
-		setupRestrictVolume(a.shouldRestrictVolume)
+		setupRestrictVolume(alarm.shouldRestrictVolume)
+	}
+
+	/**
+	 * Setup any extra buttons.
+	 */
+	override fun setupExtraButtons(alarm: NacAlarm?)
+	{
+		// Get the button
+		previewButton = dialog!!.findViewById(R.id.preview_button)
+
+		// Setup the button
+		setupSecondaryButton(previewButton, listener = {
+
+			// Unable to preview because no media to play
+			if (alarm!!.mediaPath.isEmpty())
+			{
+				quickToast(requireContext(), R.string.error_message_unable_to_preview_volume_options)
+				return@setupSecondaryButton
+			}
+
+			// Set the button text
+			setPreviewText(mediaPlayer!!.wasPlaying)
+
+			// Stop preview
+			if (mediaPlayer!!.wasPlaying)
+			{
+				volumeManager!!.cleanup()
+				mediaPlayer!!.stop()
+			}
+			// Start preview
+			else
+			{
+				// Update the alarm for volume manager
+				updateAlarm(alarm)
+
+				// Setup the volume and media player
+				volumeManager!!.setup(alarm)
+				mediaPlayer!!.playAlarm(alarm)
+			}
+
+		})
 	}
 
 	/**
@@ -150,6 +292,16 @@ open class NacVolumeOptionsDialog
 			restrictVolumeSwitch.isChecked = !restrictVolumeSwitch.isChecked
 
 		}
+	}
+
+	/**
+	 * Update the alarm.
+	 */
+	private fun updateAlarm(alarm: NacAlarm?)
+	{
+		alarm?.shouldGraduallyIncreaseVolume = graduallyIncreaseVolumeSwitch.isChecked
+		alarm?.graduallyIncreaseVolumeWaitTime = selectedWaitTime
+		alarm?.shouldRestrictVolume = restrictVolumeSwitch.isChecked
 	}
 
 }

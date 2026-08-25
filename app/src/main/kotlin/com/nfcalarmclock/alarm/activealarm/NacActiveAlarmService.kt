@@ -20,6 +20,7 @@ import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.dismissoptions.NacDismissEarlyService
 import com.nfcalarmclock.alarm.options.missedalarm.NacMissedAlarmNotification
 import com.nfcalarmclock.alarm.options.upcomingreminder.NacUpcomingReminderService
+import com.nfcalarmclock.alarm.options.volume.NacVolumeManager
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.statistics.NacAlarmStatisticRepository
 import com.nfcalarmclock.system.NacLifecycleService
@@ -597,9 +598,10 @@ class NacActiveAlarmService
 		// Add a volume key press listener so that the volume keys can dismiss/snooze the alarm
 		if (alarm!!.shouldVolumeDismiss || alarm!!.shouldVolumeSnooze)
 		{
-			wakeupProcess!!.onVolumeKeyPressListener = NacWakeupProcess.OnVolumeKeyPressListener {
+			wakeupProcess!!.volumeManager.onVolumeKeyPressListener = NacVolumeManager.OnVolumeKeyPressListener {
 
 				// Dismiss
+				// TODO: Fix bug where this can dismiss NFC alarms
 				if (alarm!!.shouldVolumeDismiss)
 				{
 					dismissAlarmService(this, alarm)

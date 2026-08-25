@@ -32,8 +32,8 @@ android {
 		applicationId = "com.nfcalarmclock"
 		minSdk = 24
 		targetSdk = 36
-		versionCode = 587
-		versionName = "12.6.5-beta015"
+		versionCode = 588
+		versionName = "12.6.5-beta016"
 	}
 
 	// Configuration for signing the app on release builds. The keystore.properties file must exist
