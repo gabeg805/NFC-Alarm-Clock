@@ -158,16 +158,14 @@ abstract class NacMusicPickerFragment<T: NacAlarm>
 		{
 			val uri = metadata.toExternalUri()
 
-			// File was selected
+			// File was selected. Play the file
 			if (browser.isSelected)
 			{
-				// Play the file
 				play(uri)
 			}
-			// File was deselected
+			// File was deselected. Stop any media that is already playing
 			else
 			{
-				// Stop any media that is already playing
 				mediaPlayer?.exoPlayer?.stop()
 			}
 		}
@@ -491,7 +489,7 @@ abstract class NacMusicPickerFragment<T: NacAlarm>
 		}
 
 		// Show the dialog
-		dialog.show(childFragmentManager, NacDirectorySelectedWarningDialog.Companion.TAG)
+		dialog.show(childFragmentManager, NacDirectorySelectedWarningDialog.TAG)
 	}
 
 }

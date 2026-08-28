@@ -64,6 +64,16 @@ interface NacAlarmDao
 	suspend fun findAlarm(id: Long): NacAlarm?
 
 	/**
+	 * Find an alarm as a LiveData object.
+	 *
+	 * @param id The ID of the alarm to find.
+	 *
+	 * @return The alarm with the ID.
+	 */
+	@Query("SELECT * FROM alarm WHERE id=:id")
+	fun findAlarmLiveData(id: Long): LiveData<NacAlarm?>
+
+	/**
 	 * Find the current list of NFC tags needed to dismiss an alarm.
 	 *
 	 * @param id The ID of the alarm to find.

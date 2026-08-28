@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+
+	<!-- Active/Selected Dot style -->
+	<item android:state_selected="true">
+		<inset android:inset="@dimen/nudge">
+			<shape android:shape="oval">
+				<solid android:color="@color/orange" />
+				<size android:width="10dp" android:height="10dp" />
+			</shape>
+		</inset>
+	</item>
+
+	<!-- Inactive/Unselected Dot style -->
+	<item android:state_selected="false">
+		<inset android:inset="@dimen/nudge">
+			<shape android:shape="oval">
+				<solid android:color="@color/gray_dark2" />
+				<size android:width="10dp" android:height="10dp" />
+			</shape>
+		</inset>
+	</item>
+</selector>

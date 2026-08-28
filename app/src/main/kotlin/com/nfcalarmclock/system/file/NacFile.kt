@@ -170,6 +170,18 @@ fun String.toRelativePath(pattern: String = ""): String
 }
 
 /**
+ * Convert Metadata files to external Uris.
+ *
+ * @return Metadata files as external Uris.
+ */
+fun List<NacFile.Metadata>.filesToExternalUris(): List<Uri>
+{
+	// Filter to only get files, then map to transform the Metadata object to an external URI
+	return this.filter { it.isFile }
+		.map { it.toExternalUri() }
+}
+
+/**
  * Generic file object.
  */
 object NacFile

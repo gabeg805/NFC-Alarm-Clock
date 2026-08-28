@@ -1,9 +1,7 @@
 package com.nfcalarmclock.settings
 
 import android.app.Activity
-import android.os.Build
 import android.os.Bundle
-import android.view.View
 import androidx.preference.Preference
 import com.nfcalarmclock.BuildConfig
 import com.nfcalarmclock.R
@@ -78,6 +76,7 @@ class NacAboutSettingFragment
 		// Version
 		if (preferenceKey == versionKey)
 		{
+			sharedPreferences?.shouldShowOnboardingScreen = true
 			// Create the What's New dialog
 			val dialog = NacWhatsNewDialog()
 

@@ -2,9 +2,7 @@ package com.nfcalarmclock.settings
 
 import android.animation.AnimatorInflater
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
-import android.view.View
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope

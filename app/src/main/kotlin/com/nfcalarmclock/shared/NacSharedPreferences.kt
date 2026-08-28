@@ -2166,6 +2166,18 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
+	 * Whether to show or hide the flashlight button.
+	 */
+	val shouldShowFlashlightButton: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.key_show_hide_flashlight_button)
+			val defaultValue = true
+
+			return instance.getBoolean(key, defaultValue)
+		}
+
+	/**
 	 * Whether the Manage NFC Tags preference should be visible or not.
 	 */
 	var shouldShowManageNfcTagsPreference: Boolean
@@ -2202,6 +2214,36 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
+	 * Whether to show or hide the NFC button.
+	 */
+	val shouldShowNfcButton: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.key_show_hide_nfc_button)
+			val defaultValue = true
+
+			return instance.getBoolean(key, defaultValue)
+		}
+
+	/**
+	 * Whether to show the onboarding screen not.
+	 */
+	var shouldShowOnboardingScreen: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.key_app_should_show_onboarding_screen)
+			val defaultValue = true
+
+			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_app_should_show_onboarding_screen)
+
+			saveBoolean(key, value)
+		}
+
+	/**
 	 * Whether to show a reminder or not.
 	 */
 	var shouldShowReminder: Boolean
@@ -2217,30 +2259,6 @@ class NacSharedPreferences(context: Context)
 			val key = resources.getString(R.string.key_default_alarm_reminder_should_show_reminder)
 
 			saveBoolean(key, value)
-		}
-
-	/**
-	 * Whether to show or hide the flashlight button.
-	 */
-	val shouldShowFlashlightButton: Boolean
-		get()
-		{
-			val key = resources.getString(R.string.key_show_hide_flashlight_button)
-			val defaultValue = true
-
-			return instance.getBoolean(key, defaultValue)
-		}
-
-	/**
-	 * Whether to show or hide the NFC button.
-	 */
-	val shouldShowNfcButton: Boolean
-		get()
-		{
-			val key = resources.getString(R.string.key_show_hide_nfc_button)
-			val defaultValue = true
-
-			return instance.getBoolean(key, defaultValue)
 		}
 
 	/**

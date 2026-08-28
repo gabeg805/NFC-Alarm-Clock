@@ -269,7 +269,7 @@
 	<string name="title_permission_storage">Lagerung</string>
 	<string name="title_permission_foreground_service">Vordergrunddienst</string>
 	<string name="title_permission_full_screen_intent">Vollbild</string>
-	<string name="title_permission_schedule_alarm">Planen Sie genaue Alarme</string>
+	<string name="title_permission_schedule_exact_alarm">Planen Sie genaue Alarme</string>
 	<string name="title_permission_set_alarm">Alarm einstellen</string>
 	<string name="title_permission_show_notifications">Benachrichtigungen aktivieren</string>
 	<string name="title_permission_system_alert_window">Anzeige über anderen Apps</string>

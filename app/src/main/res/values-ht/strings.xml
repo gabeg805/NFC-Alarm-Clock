@@ -269,7 +269,7 @@
 	<string name="title_permission_storage">Depo</string>
 	<string name="title_permission_foreground_service">Sèvis premye plan</string>
 	<string name="title_permission_full_screen_intent">Ekran konplè</string>
-	<string name="title_permission_schedule_alarm">Orè egzak alam yo</string>
+	<string name="title_permission_schedule_exact_alarm">Orè egzak alam yo</string>
 	<string name="title_permission_set_alarm">Mete alam</string>
 	<string name="title_permission_show_notifications">Aktive notifikasyon</string>
 	<string name="title_permission_system_alert_window">Montre sou lòt aplikasyon yo</string>

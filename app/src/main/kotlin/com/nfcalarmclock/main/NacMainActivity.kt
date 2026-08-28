@@ -212,6 +212,7 @@ class NacMainActivity
 			return previousVersion.isNotEmpty()
 				&& (BuildConfig.VERSION_NAME != previousVersion)
 				&& (whatsNewDialog == null)
+				&& !sharedPreferences.shouldShowOnboardingScreen
 		}
 
 	/**
@@ -268,10 +269,12 @@ class NacMainActivity
 
 			// Get any active alarm or timer
 			val activeAlarm = alarmViewModel.getActiveAlarm()
+			println("Attempting to handle NFC scan event.  Found active alarm?  ${activeAlarm != null}")
 
 			// An NFC tag was scanned to open up the main activity
 			if (NacNfc.wasScanned(intent))
 			{
+				println("NFC WAS SCANNED!")
 				// Alarm
 				if (activeAlarm != null)
 				{
@@ -470,6 +473,7 @@ class NacMainActivity
 			// Get the current fragment and destination ID
 			val currentFragment = navHostFragment.childFragmentManager.primaryNavigationFragment
 			val destinationId = navController.currentDestination?.id
+			println("Active timer in progress!  Trying to go to:  $destinationId")
 
 			// Determine what to do based on the current destination
 			when (destinationId)
@@ -478,6 +482,7 @@ class NacMainActivity
 				// Show timers
 				R.id.nacShowTimersFragment ->
 				{
+					println("Navigate to show timers")
 					val fragment = currentFragment as NacShowTimersFragment
 					fragment.attemptDismissWithScannedNfc(nfcId)
 				}
@@ -485,6 +490,7 @@ class NacMainActivity
 				// Active timer
 				R.id.nacActiveTimerFragment ->
 				{
+					println("Navigate to ACTIVE timers")
 					val fragment = currentFragment as NacActiveTimerFragment
 					fragment.attemptDismissWithScannedNfc(nfcId)
 				}
@@ -492,6 +498,7 @@ class NacMainActivity
 				// Something else
 				else ->
 				{
+					println("Navigate to show timers with NFC ID in tow??")
 					// Add the NFC tag that was scanned to a bundle
 					val bundle = Bundle().apply {
 						putString(SCANNED_NFC_TAG_ID_BUNDLE_NAME, nfcId)
@@ -506,6 +513,7 @@ class NacMainActivity
 		// Start a timer from an NFC tag
 		else
 		{
+			println("Trying to start a timer from NFC tag")
 			timerViewModel.getAllTimers()
 				// Find the first timer that contains the NFC ID and is able to start an NFC tag
 				// from a scan
@@ -546,23 +554,24 @@ class NacMainActivity
 
 		// Set flag that cards need to be measured
 		sharedPreferences.cardIsMeasured = false
+		println("onCreate()!!!!!!!!!  :  ${Build.MODEL} | ${Build.MANUFACTURER} | ${Build.PRODUCT} | ${Build.DEVICE}")
+
+		// Disable the activity alias so that tapping an NFC tag will NOT open
+		// the main activity
+		disableActivityAlias(this)
+
+		// Setup UI
+		setupEdgeToEdge()
+		setupToolbar()
+		setupBottomNavigationView()
+		setupNavController()
+		setupFloatingActionButton()
+		setupNfcReaderModeObserver()
 
 		// Setup events from the shared preference
 		lifecycleScope.launch {
 			setupEventsFromSharedPreferences()
 		}
-
-		// Setup UI
-		setupEdgeToEdge()
-		setupToolbar()
-		setupFloatingActionButton()
-		setupBottomNavigationView()
-		setupNavController()
-		setupNfcReaderModeObserver()
-
-		// Disable the activity alias so that tapping an NFC tag will NOT open
-		// the main activity
-		disableActivityAlias(this)
 
 		// Register broadcast receivers
 		registerMyShutdownBroadcastReceiver(this, shutdownBroadcastReceiver)
@@ -628,6 +637,12 @@ class NacMainActivity
 		{
 			// Refresh the activity
 			refreshMainActivity()
+			return
+		}
+
+		// Do not proceed with setup when showing onboarding
+		if (sharedPreferences.shouldShowOnboardingScreen)
+		{
 			return
 		}
 
@@ -714,6 +729,7 @@ class NacMainActivity
 		// Item selected listener
 		bottomNavigation.setOnItemSelectedListener { item ->
 
+			println("Item selected : $item | $wasBottomNavigationSelectedByUser")
 			// User did not selected a bottom navigation item so do not navigate anywhere
 			if (!wasBottomNavigationSelectedByUser)
 			{
@@ -918,6 +934,10 @@ class NacMainActivity
 			// Request for the user to rate my app
 			NacRateMyApp.request(this, sharedPreferences)
 		}
+		else
+		{
+			println("DO NOTHING")
+		}
 	}
 
 	/**
@@ -925,9 +945,21 @@ class NacMainActivity
 	 */
 	private fun setupNavController()
 	{
+		// Navigate to onboarding
+		println("Current destination????   ${navController.currentDestination} | Show onboarding?  ${sharedPreferences.shouldShowOnboardingScreen}")
+		if (sharedPreferences.shouldShowOnboardingScreen)
+		{
+			navController.navigate(R.id.action_global_nacOnboardingFragment)
+		}
+
 		// Destination changed listener
 		navController.addOnDestinationChangedListener { _, destination, _ ->
 
+			println("Nav destination : $destination")
+			// Setup the flag when NFC was just scanned to dismiss
+			setupWasNfcJustScannedToDismiss()
+
+			// Toolbar visibility
 			toolbar.visibility = if ((destination.id == R.id.nacGeneralSettingFragment)
 				|| (destination.id == R.id.nacAppearanceSettingFragment)
 				|| (destination.id == R.id.nacNfcTagSettingFragment)
@@ -948,9 +980,6 @@ class NacMainActivity
 				View.GONE
 			}
 
-			// Setup the flag when NFC was just scanned to dismiss
-			setupWasNfcJustScannedToDismiss()
-
 			// Floating action button visibility
 			when (destination.id)
 			{
@@ -963,6 +992,9 @@ class NacMainActivity
 				// Everything else
 				else -> floatingActionButton.hide()
 			}
+
+			// Bottom navigation visibility
+			bottomNavigation.visibility = if (destination.id == R.id.nacOnboardingFragment) View.GONE else View.VISIBLE
 
 			// Get the bottom navigation ID to go to
 			val bottomNavId = when (destination.id)
@@ -1068,17 +1100,20 @@ class NacMainActivity
 				@Suppress("CascadeIf")
 				if (navController.currentDestination?.id == R.id.nacActiveTimerFragment)
 				{
+					println("Navigating to show timers")
 					navController.navigate(R.id.action_global_nacShowTimersFragment)
 				}
 				// From add timer and no timers have been saved yet, go back to show alarms
 				else if ((navController.currentDestination?.id == R.id.nacAddTimerFragment)
 					&& (timerViewModel.count() == 0))
 				{
+					println("Navigating to show alarms")
 					navController.navigate(R.id.action_global_nacShowAlarmsFragment)
 				}
 				// Normal navigate up
 				else
 				{
+					println("Navigating to up")
 					navController.navigateUp(appBarConfiguration)
 				}
 

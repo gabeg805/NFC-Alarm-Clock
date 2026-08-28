@@ -3,6 +3,8 @@ package com.nfcalarmclock.db
 import android.annotation.SuppressLint
 import android.content.Context
 import android.database.sqlite.SQLiteConstraintException
+import android.net.Uri
+import androidx.core.net.toUri
 import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.DeleteColumn
@@ -44,7 +46,13 @@ import com.nfcalarmclock.statistics.db.NacAlarmMissedStatisticDao
 import com.nfcalarmclock.statistics.db.NacAlarmSnoozedStatistic
 import com.nfcalarmclock.statistics.db.NacAlarmSnoozedStatisticDao
 import com.nfcalarmclock.statistics.db.NacStatisticTypeConverters
+import com.nfcalarmclock.system.file.NacFileTree
+import com.nfcalarmclock.system.file.filesToExternalUris
 import com.nfcalarmclock.system.getDeviceProtectedStorageContext
+import com.nfcalarmclock.system.media.NacMedia
+import com.nfcalarmclock.system.media.buildLocalMediaPath
+import com.nfcalarmclock.system.media.getMediaArtist
+import com.nfcalarmclock.system.media.getMediaTitle
 import com.nfcalarmclock.system.scheduler.NacScheduler
 import com.nfcalarmclock.timer.db.NacTimer
 import com.nfcalarmclock.timer.db.NacTimerDao
@@ -60,6 +68,7 @@ import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import java.io.File
+import java.util.TreeMap
 import javax.inject.Singleton
 
 /**
@@ -528,9 +537,15 @@ abstract class NacAlarmDatabase
 		private suspend fun copyAlarmsFromDb(
 			context: Context,
 			db: NacAlarmDatabase,
-			importDb: NacAlarmDatabase
+			importDb: NacAlarmDatabase,
+			fileTree: NacFileTree,
+			allMediaFiles: List<Uri>,
+			allRingtones: TreeMap<String, String>
 		)
 		{
+			// Get the device context
+			val deviceContext = getDeviceProtectedStorageContext(context)
+
 			// Get the dao
 			val alarmDao = db.alarmDao()
 			val alarmCreatedStatisticDao = db.alarmCreatedStatisticDao()
@@ -538,21 +553,74 @@ abstract class NacAlarmDatabase
 			// Get the alarms
 			val allAlarms = alarmDao.getAllAlarms()
 
-			// Copy all the alarms
+			// Copy all alarms that do not (fuzzy) match any existing alarms
 			importDb.alarmDao().getAllAlarms().forEach { a ->
 
 				if (allAlarms.all { !it.fuzzyEquals(a) })
 				{
+					println("Alarm media : ${a.mediaPath} | ${a.localMediaPath}")
+					// Get the media uri
+					val uri = a.mediaPath.toUri()
+
+					// Unable to find media so clear it for the alarm
+					if (a.mediaType == NacMedia.TYPE_DIRECTORY)
+					{
+						println("THIS IS A DIRECTORY")
+						//val origDirectory = fileTree.directory
+						//fileTree.cd(a.mediaPath)
+						val dir = File(a.mediaPath)
+						if (dir.exists() && dir.isDirectory)
+						{
+							println("DIR EXISTS!!!")
+						}
+						else
+						{
+							println("CLEARING MEDIA")
+							a.mediaPath = ""
+							a.mediaTitle = ""
+							a.mediaArtist = ""
+							a.mediaType = 0
+							a.localMediaPath = ""
+						}
+
+					}
+					else if (allMediaFiles.contains(uri))
+					{
+						println("HUZZAHHHH FOUND!!")
+						// TODO GET MEDIA ARTIST AND TITLE AND TYPE?
+						a.mediaArtist = uri.getMediaArtist(deviceContext)
+						a.mediaTitle = uri.getMediaTitle(deviceContext)
+						a.mediaType = NacMedia.TYPE_FILE
+						a.localMediaPath = buildLocalMediaPath(deviceContext, a.mediaArtist, a.mediaTitle, a.mediaType)
+					}
+					else if (allRingtones.values.contains(a.mediaPath))
+					{
+						println("CONTAINS RINGTONE! ${a.mediaTitle} | ${allRingtones.firstNotNullOf { it.value == a.mediaPath }}")
+						// TODO GET RINGTONE ARTIST AND TITLE AND TYPE?
+						a.mediaArtist = uri.getMediaArtist(deviceContext)
+						a.mediaTitle = uri.getMediaTitle(deviceContext)
+						a.mediaType = NacMedia.TYPE_RINGTONE
+						a.localMediaPath = buildLocalMediaPath(deviceContext, a.mediaArtist, a.mediaTitle, a.mediaType)
+					}
+					else
+					{
+						println("CLEARING MEDIA")
+						a.mediaPath = ""
+						a.mediaTitle = ""
+						a.mediaArtist = ""
+						a.mediaType = 0
+						a.localMediaPath = ""
+					}
+
 					// Clear the ID
 					a.id = 0
 
 					// Insert the alarm
 					val rowId = alarmDao.insert(a)
 
-					// Check that the insert worked
+					// The insert worked. Schedule the alarm
 					if (rowId > 0)
 					{
-						// Schedule the alarm
 						a.id = rowId
 						NacScheduler.update(context, a)
 					}
@@ -663,13 +731,34 @@ abstract class NacAlarmDatabase
 			val importDb = databaseBuilder(context, NacAlarmDatabase::class.java, dbFile.path)
 				.build()
 
+			// Create a file tree from the path
+			val fileTree = NacFileTree("")
+
+			// Scan the tree
+			fileTree.scan(context)
+
+			// Get all media files and ringtones
+			//val allMediaFiles = NacFileTree.getFiles(context, "", true)
+			val allMediaFiles = fileTree.recursiveLs().filesToExternalUris()
+			val allRingtones = NacMedia.getRingtones(context)
+
+			// Get the files as external uris
+
+			println("PRINTING MEDIA FILES : ${allMediaFiles.size}")
+			println("PRINTING RINGTONE FILES : ${allRingtones.size}")
+			println(allRingtones.keys)
+			println(allRingtones.values)
+
 			// Copy all the alarms
-			copyAlarmsFromDb(context, db, importDb)
+			println("COPY ALL ALARMS")
+			copyAlarmsFromDb(context, db, importDb, fileTree, allMediaFiles, allRingtones)
 
 			// Copy all the timers
-			copyTimersFromDb(db, importDb)
+			println("COPY ALL TIMERS")
+			copyTimersFromDb(db, importDb, allMediaFiles, allRingtones)
 
 			// Copy created statistics
+			println("COPY ALL STATS")
 			copyCreatedStatisticsFromDb(db, importDb)
 
 			// Copy deleted statistics
@@ -685,13 +774,16 @@ abstract class NacAlarmDatabase
 			copySnoozedStatisticsFromDb(db, importDb)
 
 			// Copy NFC tags
+			println("COPY ALL NFC TAGS")
 			copyNfcTagsFromDb(db, importDb)
 
 			// Close the import database
+			println("CLOSE DB")
 			importDb.close()
 
 			// Show success message
 			withContext(Dispatchers.Main) {
+				println("SHOW TOAST")
 				quickToast(context, R.string.message_import_completed)
 			}
 		}
@@ -791,7 +883,9 @@ abstract class NacAlarmDatabase
 		 */
 		private suspend fun copyTimersFromDb(
 			db: NacAlarmDatabase,
-			importDb: NacAlarmDatabase
+			importDb: NacAlarmDatabase,
+			allMediaFiles: List<Uri>,
+			allRingtones: TreeMap<String, String>
 		)
 		{
 			// Get the dao
@@ -800,7 +894,7 @@ abstract class NacAlarmDatabase
 			// Get the timers
 			val allTimers = timerDao.getAllTimers()
 
-			// Copy all the timers
+			// Copy all the timers that do not (fuzzy) match any existing alarms
 			importDb.timerDao().getAllTimers().forEach { t ->
 
 				// Make sure none of the timers in the database already match the

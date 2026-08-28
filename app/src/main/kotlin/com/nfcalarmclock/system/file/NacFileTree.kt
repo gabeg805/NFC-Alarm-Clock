@@ -190,7 +190,8 @@ class NacFileTree(path: String)
 		): List<Uri>
 		{
 			// File path is empty
-			if (filePath.isNullOrEmpty())
+			//if (filePath.isNullOrEmpty())
+			if (filePath == null)
 			{
 				return emptyList()
 			}
@@ -211,11 +212,8 @@ class NacFileTree(path: String)
 				tree.lsSort()
 			}
 
-			// Iterate over each file and filter to only get files, then map to
-			// transform the Metadata object to an external URI
-			return allFiles
-				.filter { it.isFile }
-				.map { it.toExternalUri() }
+			// Convert files to external uris
+			return allFiles.filesToExternalUris()
 		}
 
 	}

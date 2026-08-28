@@ -275,6 +275,7 @@ class NacActiveAlarmService
 		// Enable the activity alias so that tapping an NFC tag will open the main
 		// activity
 		enableActivityAlias(this)
+		println("service: ON CREATE")
 
 		// Set the previous app version as the current version, if it is not set
 		if (sharedPreferences.previousAppVersion.isEmpty())
@@ -328,6 +329,7 @@ class NacActiveAlarmService
 		super.onStartCommand(intent, flags, startId)
 
 		// Setup the service
+		println("service: ON START COMMAND")
 		setupActiveAlarmService(intent)
 
 		// Setup the service and disable any reminder notification that may be present
@@ -348,6 +350,7 @@ class NacActiveAlarmService
 			// Alarms are equal. Start the alarm activity
 			ACTION_EQUAL_ALARMS ->
 			{
+				println("service: EQUAL ALARMS START ACTIVITY")
 				NacActiveAlarmActivity.startAlarmActivity(this, alarm!!)
 				return START_STICKY
 
@@ -537,6 +540,7 @@ class NacActiveAlarmService
 			alarm!!.timeActive += System.currentTimeMillis() - startTime
 
 			// Update the alarm, write to the stats table, and reschedule the alarm
+			println("SNOOZING ALARM : ${alarm!!.currentNfcTagsNeededToDismiss}")
 			alarmRepository.update(alarm!!)
 			statisticRepository.insertSnoozed(alarm, alarm!!.snoozeDuration.toLong())
 			NacScheduler.update(this@NacActiveAlarmService, alarm!!, cal)
@@ -569,6 +573,7 @@ class NacActiveAlarmService
 		wakeLock = acquireWakeLock(alarm!!.autoDismissTime, WAKELOCK_TAG)
 
 		// Start the alarm activity
+		println("service: START ALARM SERVICE (and activity) : ${alarm!!.currentNfcTagsNeededToDismiss}")
 		NacActiveAlarmActivity.startAlarmActivity(this, alarm!!)
 
 		// Wait for auto dismiss and auto snooze
@@ -585,6 +590,17 @@ class NacActiveAlarmService
 
 			alarmRepository.update(alarm!!)
 		}
+
+		// Alarm live data observer
+		alarmRepository.findAlarmLiveData(alarm!!.id).observe(this) { a ->
+			println("CHANGE! ${a?.currentNfcTagsNeededToDismiss}")
+			if (a?.currentNfcTagsNeededToDismiss?.isNotEmpty() == true)
+			{
+				println("UPDATING CURRENT NFC TAGS")
+				alarm!!.currentNfcTagsNeededToDismiss = a.currentNfcTagsNeededToDismiss
+			}
+		}
+
 	}
 
 	/**

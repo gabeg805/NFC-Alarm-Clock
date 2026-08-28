@@ -4,6 +4,9 @@
 	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:id="@+id/nav_main_fragments"
 	app:startDestination="@id/nacShowAlarmsFragment">
+	<!--
+	app:startDestination="@id/nacSplashScreenFragment">
+	-->
 
 	<!-- Global actions -->
 	<action
@@ -17,6 +20,12 @@
 		app:destination="@id/nacShowTimersFragment"
 		app:popUpTo="@id/nacShowAlarmsFragment"
 		app:popUpToInclusive="false" />
+
+	<action
+		android:id="@+id/action_global_nacOnboardingFragment"
+		app:destination="@id/nacOnboardingFragment"
+		app:popUpTo="@id/nacShowAlarmsFragment"
+		app:popUpToInclusive="true" />
 
 	<!-- Show alarms -->
 	<fragment
@@ -135,5 +144,9 @@
 		android:id="@+id/nacAlarmMainMediaPickerFragment2"
 		android:name="com.nfcalarmclock.alarm.options.mediapicker.NacAlarmMainMediaPickerFragment"
 		android:label="@string/title_select_media" />
+	<fragment
+		android:id="@+id/nacOnboardingFragment"
+		android:name="com.nfcalarmclock.onboarding.NacOnboardingFragment"
+		android:label="NacOnboardingFragment" />
 
 </navigation>

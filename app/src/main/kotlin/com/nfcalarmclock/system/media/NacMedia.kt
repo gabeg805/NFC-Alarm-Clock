@@ -95,7 +95,7 @@ fun copyDocumentToDeviceEncryptedStorageAndCheckMetadata(context: Context, docum
 	{
 		// Show error toast
 		quickToast(context, R.string.error_message_unable_to_select_file)
-		return null
+		null
 	}
 }
 

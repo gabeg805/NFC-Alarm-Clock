@@ -269,7 +269,7 @@
 	<string name="title_permission_storage">Armazenar</string>
 	<string name="title_permission_foreground_service">Serviço de primeiro plano</string>
 	<string name="title_permission_full_screen_intent">Tela cheia</string>
-	<string name="title_permission_schedule_alarm">Programe alarmes exatos</string>
+	<string name="title_permission_schedule_exact_alarm">Programe alarmes exatos</string>
 	<string name="title_permission_set_alarm">Definir alarme</string>
 	<string name="title_permission_show_notifications">Mostrar notificações</string>
 	<string name="title_permission_system_alert_window">Exibir sobre outros aplicativos</string>

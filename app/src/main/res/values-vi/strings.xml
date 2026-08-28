@@ -269,7 +269,7 @@
 	<string name="title_permission_storage">Kho</string>
 	<string name="title_permission_foreground_service">Dịch vụ tiền cảnh</string>
 	<string name="title_permission_full_screen_intent">Toàn màn hình</string>
-	<string name="title_permission_schedule_alarm">Lên lịch báo động chính xác</string>
+	<string name="title_permission_schedule_exact_alarm">Lên lịch báo động chính xác</string>
 	<string name="title_permission_set_alarm">Đặt báo thức</string>
 	<string name="title_permission_show_notifications">Bật thông báo?</string>
 	<string name="title_permission_system_alert_window">Hiển thị trên các ứng dụng khác</string>

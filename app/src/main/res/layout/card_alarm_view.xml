@@ -9,6 +9,7 @@
 	app:contentPaddingLeft="@dimen/normal"
 	app:contentPaddingRight="@dimen/normal"
 	app:cardBackgroundColor="?attr/colorCard"
+	app:cardCornerRadius="@dimen/zero"
 	tools:ignore="RtlSymmetry">
 
 	<LinearLayout

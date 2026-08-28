@@ -27,45 +27,50 @@ class NacAppUpdatedBroadcastReceiver
 	 */
 	override fun onReceive(context: Context, intent: Intent) = goAsync {
 
-		// Check that the action is correct
-		if (intent.action == Intent.ACTION_MY_PACKAGE_REPLACED)
+		// Action is incorrect
+		if (intent.action != Intent.ACTION_MY_PACKAGE_REPLACED)
 		{
-			// Move shared preferences to device protected storage
-			NacSharedPreferences.moveToDeviceProtectedStorage(context)
-
-			// Get the database. Before opening it, a check will run to move the database
-			// to device protected storage
-			val db = NacAlarmDatabase.getInstance(context)
-			val sharedPreferences = NacSharedPreferences(context)
-
-			// Get all the alarms
-			val alarmDao = db.alarmDao()
-			val allAlarms = alarmDao.getAllAlarms()
-
-			// Reschedule all the alarms
-			NacScheduler.updateAll(context, allAlarms)
-
-			// Check if should fix any auto dismiss, auto snooze, or snooze duration values
-			// that are set to 0 in alarms.
-			if (!sharedPreferences.eventFixZeroAutoDismissAndSnooze)
-			{
-				sharedPreferences.runEventFixZeroAutoDismissAndSnooze(
-					allAlarms,
-					onAlarmChanged = { alarm ->
-
-						// Update the database and reschedule the alarm
-						alarmDao.update(alarm)
-						NacScheduler.update(context, alarm)
-
-					})
-			}
-
-			// Save the next alarm
-			sharedPreferences.saveNextAlarm(allAlarms)
-
-			// Refresh widgets
-			refreshAllWidgets(context)
+			return@goAsync
 		}
+
+		// Move shared preferences to device protected storage
+		NacSharedPreferences.moveToDeviceProtectedStorage(context)
+
+		// Get the database. Before opening it, a check will run to move the database
+		// to device protected storage
+		val db = NacAlarmDatabase.getInstance(context)
+		val sharedPreferences = NacSharedPreferences(context)
+
+		// Get all the alarms
+		val alarmDao = db.alarmDao()
+		val allAlarms = alarmDao.getAllAlarms()
+
+		// Reschedule all the alarms
+		NacScheduler.updateAll(context, allAlarms)
+
+		// Check if should fix any auto dismiss, auto snooze, or snooze duration values
+		// that are set to 0 in alarms.
+		if (!sharedPreferences.eventFixZeroAutoDismissAndSnooze)
+		{
+			sharedPreferences.runEventFixZeroAutoDismissAndSnooze(
+				allAlarms,
+				onAlarmChanged = { alarm ->
+
+					// Update the database and reschedule the alarm
+					alarmDao.update(alarm)
+					NacScheduler.update(context, alarm)
+
+				})
+		}
+
+		// Save the next alarm
+		sharedPreferences.saveNextAlarm(allAlarms)
+
+		// App already installed so do not show onboarding screen
+		sharedPreferences.shouldShowOnboardingScreen = false
+
+		// Refresh widgets
+		refreshAllWidgets(context)
 
 	}
 

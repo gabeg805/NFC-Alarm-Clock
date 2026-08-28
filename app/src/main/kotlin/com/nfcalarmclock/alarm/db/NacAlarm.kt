@@ -590,6 +590,7 @@ open class NacAlarm()
 		nfcTagId = input.readString() ?: ""
 		shouldUseNfcTagDismissOrder = input.readInt() != 0
 		nfcTagDismissOrder = input.readInt()
+		currentNfcTagsNeededToDismiss = input.readString() ?: ""
 
 		// Flashlight
 		shouldUseFlashlight = input.readInt() != 0
@@ -1007,6 +1008,7 @@ open class NacAlarm()
 		alarm.nfcTagId = nfcTagId
 		alarm.shouldUseNfcTagDismissOrder = shouldUseNfcTagDismissOrder
 		alarm.nfcTagDismissOrder = nfcTagDismissOrder
+		alarm.currentNfcTagsNeededToDismiss = currentNfcTagsNeededToDismiss
 
 		// Flashlight
 		alarm.shouldUseFlashlight = shouldUseFlashlight
@@ -1210,6 +1212,7 @@ open class NacAlarm()
 			&& (nfcTagId == alarm.nfcTagId)
 			&& (shouldUseNfcTagDismissOrder == alarm.shouldUseNfcTagDismissOrder)
 			&& (nfcTagDismissOrder == alarm.nfcTagDismissOrder)
+			&& (currentNfcTagsNeededToDismiss == alarm.currentNfcTagsNeededToDismiss)
 			&& (shouldUseFlashlight == alarm.shouldUseFlashlight)
 			&& (flashlightStrengthLevel == alarm.flashlightStrengthLevel)
 			&& (graduallyIncreaseFlashlightStrengthLevelWaitTime == alarm.graduallyIncreaseFlashlightStrengthLevelWaitTime)
@@ -1313,6 +1316,7 @@ open class NacAlarm()
 			+ shouldUseNfc.hashCode()
 			+ shouldUseNfcTagDismissOrder.hashCode()
 			+ nfcTagDismissOrder
+			+ currentNfcTagsNeededToDismiss.hashCode()
 			+ shouldUseFlashlight.hashCode()
 			+ flashlightStrengthLevel
 			+ graduallyIncreaseFlashlightStrengthLevelWaitTime
@@ -1398,6 +1402,7 @@ open class NacAlarm()
 		println("Nfc Tag Id            : $nfcTagId")
 		println("Should NFC Dismiss Ord: $shouldUseNfcTagDismissOrder")
 		println("Nfc Tag Dismiss Order : $nfcTagDismissOrder")
+		println("Current Nfc Tag Needed: $currentNfcTagsNeededToDismiss")
 		println("Use Flashlight        : $shouldUseFlashlight")
 		println("Flashlight Strength   : $flashlightStrengthLevel")
 		println("Grad Inc Flash        : $graduallyIncreaseFlashlightStrengthLevelWaitTime")
@@ -1779,6 +1784,7 @@ open class NacAlarm()
 		output.writeString(nfcTagId)
 		output.writeInt(if (shouldUseNfcTagDismissOrder) 1 else 0)
 		output.writeInt(nfcTagDismissOrder)
+		output.writeString(currentNfcTagsNeededToDismiss)
 
 		// Flashlight
 		output.writeInt(if (shouldUseFlashlight) 1 else 0)
@@ -1909,6 +1915,7 @@ open class NacAlarm()
 			alarm.nfcTagId = shared.nfcTagId
 			alarm.shouldUseNfcTagDismissOrder = shared.shouldUseNfcTagDismissOrder
 			alarm.nfcTagDismissOrder = shared.nfcTagDismissOrder
+			alarm.currentNfcTagsNeededToDismiss = ""
 
 			// Flashlight
 			alarm.shouldUseFlashlight = shared.shouldUseFlashlight

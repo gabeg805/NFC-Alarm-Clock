@@ -43,6 +43,10 @@
 	<string name="word_timers">Timers</string>
 	<string name="word_reminder">Reminder</string>
 	<string name="word_more">More</string>
+	<string name="word_allow">Allow</string>
+	<string name="word_back">Back</string>
+	<string name="word_next">Next</string>
+	<string name="word_finish">Finish</string>
 	<string name="letter_h">h</string>
 	<string name="letter_m">m</string>
 	<string name="letter_s">s</string>
@@ -67,6 +71,7 @@
 	<string name="state_unknown">Unknown</string>
 
 	<!-- Actions -->
+	<string name="action_get_started">Get Started</string>
 	<string name="action_alarm_snooze">Snooze</string>
 	<string name="action_alarm_dismiss">Dismiss</string>
 	<string name="action_alarm_dismiss_early">Dismiss early</string>
@@ -277,7 +282,7 @@
 	<string name="title_permission_storage">Storage</string>
 	<string name="title_permission_foreground_service">Foreground service</string>
 	<string name="title_permission_full_screen_intent">Full screen</string>
-	<string name="title_permission_schedule_alarm">Schedule exact alarms</string>
+	<string name="title_permission_schedule_exact_alarm">Schedule exact alarms</string>
 	<string name="title_permission_set_alarm">Set alarm</string>
 	<string name="title_permission_show_notifications">Show notifications</string>
 	<string name="title_permission_system_alert_window">Display over other apps</string>
@@ -342,12 +347,27 @@
 	<string name="title_next_alarm_format">Next alarm format&#8230;</string>
 	<string name="title_toggle_alarms_with_airplane_mode">Toggle alarms with airplane mode</string>
 	<string name="title_permissions">Permissions</string>
+	<string name="title_how_to_use_features">How to use some features</string>
+	<string name="title_how_to_copy">Swipe right to copy</string>
+	<string name="title_how_to_delete">Swipe left to delete</string>
+	<string name="title_how_to_get_more_options">Long press for more options</string>
+	<string name="title_how_to_change_appearance">Settings > Appearance</string>
 	<string name="title_developer">Developer</string>
 	<string name="title_alignment">Alignment</string>
 	<string name="title_position">Position</string>
 	<string name="title_only_show_app_alarms">Only show app alarms</string>
 
 	<!-- Descriptions -->
+	<string name="description_onboarding_welcome">Welcome to the most customizable alarm clock app you have ever used</string>
+	<string name="description_onboarding_permissions">The app needs some permissions to work properly</string>
+	<string name="description_onboarding_permission_post_notifications_request">Allows the app to start and stay running when not already in focus.  Required for alarms to run when the app is in the background.</string>
+	<string name="description_onboarding_permission_schedule_exact_alarm_request">Allows alarms to run precisely when scheduled.</string>
+	<string name="description_onboarding_permission_system_alert_window_request">This is a special permission. It is used to ensure that the alarm screen is shown, which is required if your alarm will play audio.</string>
+	<string name="description_onboarding_how_to_use_features">Some stuff can be hidden or confusing. Here is how to do those things</string>
+	<string name="description_onboarding_how_to_copy">Swipe an alarm or timer to the right to copy it.</string>
+	<string name="description_onboarding_how_to_delete">Swipe an alarm or timer to the left to delete it.</string>
+	<string name="description_onboarding_how_to_get_more_options">Long press on almost any button in an expanded alarm/timer to access more options.  You can even try it on an alarm card to get options like "Skip next alarm" and more.</string>
+	<string name="description_onboarding_how_to_change_appearance">Go to Settings > Appearance to find all the customization options, and get the app looking the way you want it to look.</string>
 	<string name="description_slide_to_snooze">Slide to snooze</string>
 	<string name="description_slide_to_dismiss">Slide to dismiss</string>
 	<string name="description_alarm_activity">Scan NFC tag to dismiss the alarm.</string>

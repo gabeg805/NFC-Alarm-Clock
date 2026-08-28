@@ -269,7 +269,7 @@
 	<string name="title_permission_storage">भंडारण</string>
 	<string name="title_permission_foreground_service">अग्रभूमि सेवा</string>
 	<string name="title_permission_full_screen_intent">पूर्ण स्क्रीन</string>
-	<string name="title_permission_schedule_alarm">सटीक अलार्म शेड्यूल करें</string>
+	<string name="title_permission_schedule_exact_alarm">सटीक अलार्म शेड्यूल करें</string>
 	<string name="title_permission_set_alarm">चेतावनी तय करें</string>
 	<string name="title_permission_show_notifications">सूचनाएं दिखाएं</string>
 	<string name="title_permission_system_alert_window">अन्य ऐप्स पर प्रदर्शित करें</string>

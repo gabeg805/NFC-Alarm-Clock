@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+	style="@style/Widget.MyOnboarding.Page.Parent"
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent">
+
+	<!-- App icon -->
+	<ImageView
+		android:layout_width="@dimen/isz_attention"
+		android:layout_height="@dimen/isz_attention"
+		android:contentDescription="@string/app_name"
+		android:src="@mipmap/app"
+		app:layout_constraintBottom_toTopOf="@id/onboarding_title"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		/>
+
+	<!-- Title -->
+	<TextView
+		android:id="@+id/onboarding_title"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:paddingTop="@dimen/normal"
+		android:paddingBottom="@dimen/normal"
+		android:gravity="center_horizontal"
+		android:textColor="@color/white"
+		android:textSize="@dimen/tsz_attention"
+		android:textStyle="bold"
+		android:text="@string/app_name"
+		app:layout_constraintTop_toTopOf="parent"
+		app:layout_constraintBottom_toBottomOf="parent"
+		/>
+
+	<!-- Description -->
+	<TextView
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:paddingStart="@dimen/normal"
+		android:paddingEnd="@dimen/normal"
+		android:gravity="center_horizontal"
+		android:textColor="@color/white_dull"
+		android:textSize="@dimen/tsz_small"
+		android:text="@string/description_onboarding_welcome"
+		app:layout_constraintTop_toBottomOf="@id/onboarding_title"
+		app:layout_constraintBottom_toTopOf="@id/onboarding_get_started_button"
+		app:layout_constraintVertical_bias="0"
+		/>
+
+	<!-- Get started button -->
+	<com.google.android.material.button.MaterialButton
+		style="@style/Widget.MyOnboarding.Welcome.Button"
+		android:id="@+id/onboarding_get_started_button"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:text="@string/action_get_started"
+		app:layout_constraintBottom_toBottomOf="parent"
+		app:layout_constraintStart_toStartOf="parent"
+		app:layout_constraintEnd_toEndOf="parent"
+		/>
+</androidx.constraintlayout.widget.ConstraintLayout>

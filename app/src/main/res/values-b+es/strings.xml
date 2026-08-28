@@ -269,7 +269,7 @@
 	<string name="title_permission_storage">Almacenamiento</string>
 	<string name="title_permission_foreground_service">Servicio en primer plano</string>
 	<string name="title_permission_full_screen_intent">Pantalla completa</string>
-	<string name="title_permission_schedule_alarm">Programe alarmas exactas</string>
+	<string name="title_permission_schedule_exact_alarm">Programe alarmas exactas</string>
 	<string name="title_permission_set_alarm">Programar una alarma</string>
 	<string name="title_permission_show_notifications">Permitir notificaciones</string>
 	<string name="title_permission_system_alert_window">Mostrar sobre otras aplicaciones</string>

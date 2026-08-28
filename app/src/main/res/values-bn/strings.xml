@@ -269,7 +269,7 @@
 	<string name="title_permission_storage">স্টোরেজ</string>
 	<string name="title_permission_foreground_service">ফোরগ্রাউন্ড পরিষেবা</string>
 	<string name="title_permission_full_screen_intent">পূর্ণ পর্দা</string>
-	<string name="title_permission_schedule_alarm">সঠিক অ্যালার্ম নির্ধারণ করুন</string>
+	<string name="title_permission_schedule_exact_alarm">সঠিক অ্যালার্ম নির্ধারণ করুন</string>
 	<string name="title_permission_set_alarm">অ্যালার্ম সেট করুন</string>
 	<string name="title_permission_show_notifications">বিজ্ঞপ্তি দেখান</string>
 	<string name="title_permission_system_alert_window">অন্যান্য অ্যাপের উপরে প্রদর্শন করুন</string>

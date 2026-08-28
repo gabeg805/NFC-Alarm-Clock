@@ -47,6 +47,13 @@ class NacAlarmRepository @Inject constructor(
 	suspend fun findAlarm(id: Long): NacAlarm? = alarmDao.findAlarm(id)
 
 	/**
+	 * Find an alarm as a LiveData object.
+	 *
+	 * @return An alarm with the given ID.
+	 */
+	fun findAlarmLiveData(id: Long): LiveData<NacAlarm?> = alarmDao.findAlarmLiveData(id)
+
+	/**
 	 * Find the current list of NFC tags needed to dismiss an alarm.
 	 *
 	 * @param id The ID of the alarm to find.

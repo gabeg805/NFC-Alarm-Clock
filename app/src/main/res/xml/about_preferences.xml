@@ -82,7 +82,7 @@
 
 		<com.nfcalarmclock.system.permission.NacRequiredPermissionPreference
 			android:key="@string/key_settings_about_schedule_alarm"
-			android:title="@string/title_permission_schedule_alarm"
+			android:title="@string/title_permission_schedule_exact_alarm"
 			android:summary="@string/description_permission_schedule_alarm"
 			app:iconSpaceReserved="false"
 			app:allowDividerBelow="false"
