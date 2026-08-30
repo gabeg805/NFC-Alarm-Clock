@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import com.nfcalarmclock.alarm.NacAlarmRepository
+import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.scheduler.NacScheduler
 import com.nfcalarmclock.system.goAsync
@@ -32,22 +33,26 @@ class NacTimeChangeBroadcastReceiver
 	*/
 	override fun onReceive(context: Context, intent: Intent) = goAsync {
 
-		// Check that the intent action is correct
-		if ((intent.action == Intent.ACTION_DATE_CHANGED)
-			|| (intent.action == Intent.ACTION_TIME_CHANGED)
-			|| (intent.action == Intent.ACTION_TIMEZONE_CHANGED)
-			|| (intent.action == Intent.ACTION_LOCALE_CHANGED))
+		// Intent action is incorrect
+		if ((intent.action != Intent.ACTION_DATE_CHANGED)
+			&& (intent.action != Intent.ACTION_TIME_CHANGED)
+			&& (intent.action != Intent.ACTION_TIMEZONE_CHANGED)
+			&& (intent.action != Intent.ACTION_LOCALE_CHANGED))
 		{
-			// Get all the alarms
-			val sharedPreferences = NacSharedPreferences(context)
-			val allAlarms = alarmRepository.getAllAlarms()
-
-			// Update all the alarms
-			NacScheduler.updateAll(context, allAlarms)
-
-			// Save the next alarm
-			sharedPreferences.saveNextAlarm(allAlarms)
+			return@goAsync
 		}
+
+		NacLog.i("Date/time/timezone/locale change broadcast received. Rescheduling all alarms")
+
+		// Get all the alarms
+		val sharedPreferences = NacSharedPreferences(context)
+		val allAlarms = alarmRepository.getAllAlarms()
+
+		// Update all the alarms
+		NacScheduler.updateAll(context, allAlarms)
+
+		// Save the next alarm
+		sharedPreferences.saveNextAlarm(allAlarms)
 
 	}
 

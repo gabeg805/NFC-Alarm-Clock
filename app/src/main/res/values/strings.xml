@@ -200,8 +200,6 @@
 	<string name="message_text_to_speech_network_required">Network connection may be required for voice to work</string>
 	<string name="message_volume_dismiss_priority">Volume dismiss will have priority</string>
 	<string name="message_volume_snooze_ignored">Volume snooze will be ignored</string>
-	<string name="message_toggle_alarms_with_airplane_mode_on">Disabling all alarms due to airplane mode change.</string>
-	<string name="message_toggle_alarms_with_airplane_mode_off">Enabling all alarms due to airplane mode change.</string>
 
 	<!-- Error messages -->
 	<string name="error_message_active_delete">Unable to delete an active alarm</string>
@@ -223,6 +221,8 @@
 	<string name="error_message_text_to_speech_audio_focus">Unable to use text-to-speech</string>
 	<string name="error_message_enter_timer_duration">Enter a duration</string>
 	<string name="error_message_unable_to_dismiss_early">Unable to find alarm to dismiss early</string>
+	<string name="error_message_unable_to_volume_dismiss_nfc_alarm">Unable to dismiss NFC alarm with volume button</string>
+	<string name="error_message_unable_to_email">Unable to draft email</string>
 	<string name="error_message_unable_to_email_statistics">Unable to email statistics</string>
 	<string name="error_message_unable_to_shine_flashlight">Unable to shine flashlight — %1$s</string>
 	<string name="error_message_unable_to_get_flashlight_characteristics">Unable to get flashlight information</string>
@@ -318,6 +318,7 @@
 	<string name="title_setting_general">General</string>
 	<string name="title_setting_appearance">Appearance</string>
 	<string name="title_setting_about">About</string>
+	<string name="title_setting_help">Help</string>
 	<string name="title_setting_statistics">Statistics</string>
 	<string name="title_setting_manage_nfc_tags">Manage NFC tags</string>
 	<string name="title_setting_support">Support development</string>
@@ -347,6 +348,9 @@
 	<string name="title_next_alarm_format">Next alarm format&#8230;</string>
 	<string name="title_toggle_alarms_with_airplane_mode">Toggle alarms with airplane mode</string>
 	<string name="title_permissions">Permissions</string>
+	<string name="title_help_debug_mode">Debug mode</string>
+	<string name="title_help_share_logs">Share logs with developer</string>
+	<string name="title_help_send_email">Send email</string>
 	<string name="title_how_to_use_features">How to use some features</string>
 	<string name="title_how_to_copy">Swipe right to copy</string>
 	<string name="title_how_to_delete">Swipe left to delete</string>
@@ -427,10 +431,13 @@
 	<string name="description_setting_general">General alarm settings</string>
 	<string name="description_setting_appearance">Customize how the app looks</string>
 	<string name="description_setting_about">Information about the app</string>
+	<string name="description_setting_help">Let me know about any issues or suggestions</string>
 	<string name="description_setting_statistics">See how long you have snoozed for, and more</string>
 	<string name="description_setting_manage_nfc_tags">Delete or rename saved NFC tags</string>
 	<string name="description_setting_support">Support would be greatly appreciated, but no pressure! This app will always be free</string>
 	<string name="description_setting_import_export">Import or export all your saved data</string>
+	<string name="description_toggle_alarms_with_airplane_mode_on">Disabling all alarms due to airplane mode change.</string>
+	<string name="description_toggle_alarms_with_airplane_mode_off">Enabling all alarms due to airplane mode change.</string>
 	<string name="description_use_new_screen_true">Use the new alarm screen, where you swipe to snooze or dismiss the alarm.</string>
 	<string name="description_use_new_screen_false">Do not use the new alarm screen. Use the original screen with simple buttons to snooze or dismiss the alarm.</string>
 	<string name="description_alarm_screen_show_alarm_name_true">Show the alarm name in the alarm screen.</string>
@@ -476,6 +483,10 @@
 	<string name="description_permission_system_alert_window">Ensure that the alarm screen is shown, which is a requirement for audio to play, if the app is in the background and has not been used in a while.  Should only affect Android 15.</string>
 	<string name="description_permission_boot">Restore alarms when your device is turned on.  Android will delete alarms when your device is turned off.</string>
 	<string name="description_permission_wakelock">Prevent your device from sleeping so that an activated alarm will continue to go off.</string>
+	<string name="message_debug_mode_on">Write to a log file in order to debug a problem. May slightly impact performance.</string>
+	<string name="message_debug_mode_off">Do not write to a log file. This is the normal mode.</string>
+	<string name="message_share_logs_with_developer">Email me the logs in order to determine why a problem occurred.</string>
+	<string name="message_send_email">Feel free to email me with any issues, questions, or suggestions.</string>
 	<string name="description_audio_sources_alarm">The audio channel to play the alarm on.</string>
 	<string name="description_audio_sources_timer">The audio channel to play the timer on.</string>
 	<string name="description_widget_alarm_example">The alarm shown in the preview is just an example.</string>
@@ -605,6 +616,11 @@
 	<plurals name="number_of_snoozes_left">
 		<item quantity="one">(%1$d remaining)</item>
 		<item quantity="other">(%1$d remaining)</item>
+	</plurals>
+
+	<plurals name="import_cleared_media_due_to_not_found">
+		<item quantity="one">Cleared media in %1$d alarm/timer due to media not found</item>
+		<item quantity="other">Cleared media in %1$d alarms/timers due to media not found</item>
 	</plurals>
 
 	<plurals name="tts_say_reminder">

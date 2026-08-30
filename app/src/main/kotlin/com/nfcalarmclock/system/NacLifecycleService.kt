@@ -5,6 +5,7 @@ import android.os.Build
 import android.os.PowerManager
 import androidx.lifecycle.LifecycleService
 import com.nfcalarmclock.R
+import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.view.toast
 
 /**
@@ -54,6 +55,8 @@ abstract class NacLifecycleService
 			{
 				toast(this, R.string.error_message_unable_to_start_foreground_service)
 			}
+
+			NacLog.e("Unable to start foreground service", e)
 		}
 	}
 
@@ -63,6 +66,8 @@ abstract class NacLifecycleService
 	@Suppress("deprecation")
 	fun stopThisService()
 	{
+		NacLog.i("Stopping this service")
+
 		// Stop the foreground service using the updated form of
 		// stopForeground() for API >= 33
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)

@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import com.nfcalarmclock.db.NacAlarmDatabase
+import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.goAsync
 import com.nfcalarmclock.system.scheduler.NacScheduler
@@ -27,7 +28,7 @@ class NacAppUpdatedBroadcastReceiver
 	 */
 	override fun onReceive(context: Context, intent: Intent) = goAsync {
 
-		// Action is incorrect
+		// Intent action is incorrect
 		if (intent.action != Intent.ACTION_MY_PACKAGE_REPLACED)
 		{
 			return@goAsync
@@ -35,6 +36,8 @@ class NacAppUpdatedBroadcastReceiver
 
 		// Move shared preferences to device protected storage
 		NacSharedPreferences.moveToDeviceProtectedStorage(context)
+
+		NacLog.i("App update broadcast received")
 
 		// Get the database. Before opening it, a check will run to move the database
 		// to device protected storage

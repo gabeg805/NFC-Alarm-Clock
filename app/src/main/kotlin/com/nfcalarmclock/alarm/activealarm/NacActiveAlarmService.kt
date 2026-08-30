@@ -21,6 +21,8 @@ import com.nfcalarmclock.alarm.options.dismissoptions.NacDismissEarlyService
 import com.nfcalarmclock.alarm.options.missedalarm.NacMissedAlarmNotification
 import com.nfcalarmclock.alarm.options.upcomingreminder.NacUpcomingReminderService
 import com.nfcalarmclock.alarm.options.volume.NacVolumeManager
+import com.nfcalarmclock.log.NacLog
+import com.nfcalarmclock.nfc.toNfcIdList
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.statistics.NacAlarmStatisticRepository
 import com.nfcalarmclock.system.NacLifecycleService
@@ -153,6 +155,8 @@ class NacActiveAlarmService
 	@UnstableApi
 	private fun cleanup()
 	{
+		NacLog.i("Cleaning up active alarm service")
+
 		// Clean the wakeup process
 		wakeupProcess?.cleanup()
 
@@ -183,6 +187,8 @@ class NacActiveAlarmService
 	{
 		// Update the alarm
 		lifecycleScope.launch {
+
+			NacLog.i("Dismissing the active alarm service")
 
 			// Dismiss the alarm
 			alarm!!.dismiss()
@@ -260,6 +266,8 @@ class NacActiveAlarmService
 		// Super
 		super.onBind(intent)
 
+		NacLog.i("Binding the active alarm service")
+
 		return binder
 	}
 
@@ -272,10 +280,11 @@ class NacActiveAlarmService
 		// Super
 		super.onCreate()
 
+		NacLog.i("Creating the active alarm service")
+
 		// Enable the activity alias so that tapping an NFC tag will open the main
 		// activity
 		enableActivityAlias(this)
-		println("service: ON CREATE")
 
 		// Set the previous app version as the current version, if it is not set
 		if (sharedPreferences.previousAppVersion.isEmpty())
@@ -292,6 +301,8 @@ class NacActiveAlarmService
 	{
 		// Super
 		super.onDestroy()
+
+		NacLog.i("Destroying the active alarm service")
 
 		// Disable the activity alias so that tapping an NFC tag will not do anything
 		disableActivityAlias(this)
@@ -328,8 +339,9 @@ class NacActiveAlarmService
 		// Super
 		super.onStartCommand(intent, flags, startId)
 
+		NacLog.i("Starting the active alarm service")
+
 		// Setup the service
-		println("service: ON START COMMAND")
 		setupActiveAlarmService(intent)
 
 		// Setup the service and disable any reminder notification that may be present
@@ -343,6 +355,8 @@ class NacActiveAlarmService
 			NacUpcomingReminderService.stopService(this, alarm)
 		}
 
+		NacLog.i("Preparing active alarm service action : $intentAction")
+
 		// Check the intent action
 		when (intentAction)
 		{
@@ -350,7 +364,6 @@ class NacActiveAlarmService
 			// Alarms are equal. Start the alarm activity
 			ACTION_EQUAL_ALARMS ->
 			{
-				println("service: EQUAL ALARMS START ACTIVITY")
 				NacActiveAlarmActivity.startAlarmActivity(this, alarm!!)
 				return START_STICKY
 
@@ -421,6 +434,8 @@ class NacActiveAlarmService
 		// Active alarm was found
 		if (activeAlarm != null)
 		{
+			NacLog.i("Restarting active alarm service with another alarm")
+
 			// Start the alarm service for the active alarm
 			startAlarmService(this, activeAlarm)
 		}
@@ -489,6 +504,7 @@ class NacActiveAlarmService
 		// No alarm found, so set the action to stop the service
 		if (alarm == null)
 		{
+			NacLog.i("Unable to find alarm in active alarm service intent")
 			intentAction = ACTION_STOP_SERVICE
 		}
 	}
@@ -507,6 +523,8 @@ class NacActiveAlarmService
 		showForegroundNotification {
 			startForeground(notification.id, notification.build())
 		}
+
+		NacLog.i("Showing active alarm notification in active alarm service")
 	}
 
 	/**
@@ -521,6 +539,8 @@ class NacActiveAlarmService
 		showForegroundNotification {
 			startForeground(notification.id, notification.build())
 		}
+
+		NacLog.i("Showing skip alarm notification in active alarm service")
 	}
 
 	/**
@@ -539,8 +559,9 @@ class NacActiveAlarmService
 			// Update the time the alarm was active
 			alarm!!.timeActive += System.currentTimeMillis() - startTime
 
+			NacLog.i("Snoozing the active alarm service : ${alarm!!.id} | ${alarm!!.timeActive}")
+
 			// Update the alarm, write to the stats table, and reschedule the alarm
-			println("SNOOZING ALARM : ${alarm!!.currentNfcTagsNeededToDismiss}")
 			alarmRepository.update(alarm!!)
 			statisticRepository.insertSnoozed(alarm, alarm!!.snoozeDuration.toLong())
 			NacScheduler.update(this@NacActiveAlarmService, alarm!!, cal)
@@ -572,8 +593,9 @@ class NacActiveAlarmService
 		// Acquire the wakelock
 		wakeLock = acquireWakeLock(alarm!!.autoDismissTime, WAKELOCK_TAG)
 
+		NacLog.i("Starting the active alarm activity from the service")
+
 		// Start the alarm activity
-		println("service: START ALARM SERVICE (and activity) : ${alarm!!.currentNfcTagsNeededToDismiss}")
 		NacActiveAlarmActivity.startAlarmActivity(this, alarm!!)
 
 		// Wait for auto dismiss and auto snooze
@@ -593,10 +615,9 @@ class NacActiveAlarmService
 
 		// Alarm live data observer
 		alarmRepository.findAlarmLiveData(alarm!!.id).observe(this) { a ->
-			println("CHANGE! ${a?.currentNfcTagsNeededToDismiss}")
 			if (a?.currentNfcTagsNeededToDismiss?.isNotEmpty() == true)
 			{
-				println("UPDATING CURRENT NFC TAGS")
+				NacLog.i("Updating current nfc tags : ${a.currentNfcTagsNeededToDismiss.toNfcIdList().size}")
 				alarm!!.currentNfcTagsNeededToDismiss = a.currentNfcTagsNeededToDismiss
 			}
 		}
@@ -616,15 +637,26 @@ class NacActiveAlarmService
 		{
 			wakeupProcess!!.volumeManager.onVolumeKeyPressListener = NacVolumeManager.OnVolumeKeyPressListener {
 
-				// Dismiss
-				// TODO: Fix bug where this can dismiss NFC alarms
+				// Volume dismiss
 				if (alarm!!.shouldVolumeDismiss)
 				{
-					dismissAlarmService(this, alarm)
+					// Unable to dismiss NFC alarm with volume press
+					if (alarm!!.shouldUseNfc)
+					{
+						NacLog.e("Unable to dismiss NFC alarm with a volume press")
+						quickToast(this, R.string.error_message_unable_to_volume_dismiss_nfc_alarm)
+					}
+					// Dismiss regular alarm with volume press
+					else
+					{
+						NacLog.i("Volume press to dismiss the alarm")
+						dismissAlarmService(this, alarm)
+					}
 				}
-				// Snooze
+				// Volume snooze
 				else
 				{
+					NacLog.i("Volume press to (attempt) snooze the alarm")
 					snoozeAlarmService(this, alarm)
 				}
 
@@ -635,6 +667,7 @@ class NacActiveAlarmService
 		// earlier versions as well, need to ensure that the activity is in focus before
 		// trying to request audio focus, otherwise any media or TTS will fail
 		wakeupProcessDelayHandler.postDelayed({
+			NacLog.i("Starting the wakeup process from the active alarm service")
 			wakeupProcess!!.start()
 		}, 1000)
 	}
@@ -707,6 +740,8 @@ class NacActiveAlarmService
 				}
 			}
 
+			NacLog.i("Auto dismiss the active alarm service")
+
 			// Auto dismiss the alarm. This will stop the service
 			dismiss(wasMissed = true)
 
@@ -733,7 +768,10 @@ class NacActiveAlarmService
 		val delay = alarm!!.autoSnoozeTime*1000L - 750
 
 		// Automatically snooze the alarm
-		autoSnoozeHandler.postDelayed({ snooze() }, delay)
+		autoSnoozeHandler.postDelayed({
+			NacLog.i("Auto snoozing the active alarm service")
+			snooze()
+		}, delay)
 	}
 
 	companion object

@@ -7,17 +7,18 @@ import android.content.res.ColorStateList
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.button.MaterialButton
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.NacAlarmViewModel
+import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.statistics.db.NacAlarmStatistic
 import com.nfcalarmclock.system.file.zipFiles
 import com.nfcalarmclock.system.NacCalendar
+import com.nfcalarmclock.system.sendEmail
 import com.nfcalarmclock.view.quickToast
 import com.nfcalarmclock.view.calcContrastColor
 import com.nfcalarmclock.view.setupThemeColor
@@ -79,6 +80,8 @@ class NacStatisticsSettingFragment
 		val allDismissed = statisticViewModel.getAllDismissedStatistics()
 		val allMissed = statisticViewModel.getAllMissedStatistics()
 		val allSnoozed = statisticViewModel.getAllSnoozedStatistics()
+
+		NacLog.i("Exporting all statistics")
 
 		// Created
 		val createdFilename = writeToFile(
@@ -152,6 +155,8 @@ class NacStatisticsSettingFragment
 	 */
 	private fun resetStatistics()
 	{
+		NacLog.i("Reseting all statistics")
+
 		// Delete all statistics
 		statisticViewModel.deleteAllCreated()
 		statisticViewModel.deleteAllDeleted()
@@ -302,12 +307,9 @@ class NacStatisticsSettingFragment
 			// Create the dialog
 			val dialog = AreYouSureResetStatisticsDialog()
 
-			// Setup the dialog
+			// Reset statistics on button click in dialog
 			dialog.onResetStatisticsListener = AreYouSureResetStatisticsDialog.OnResetStatisticsListener {
-
-				// Reset statistics
 				resetStatistics()
-
 			}
 
 			// Show the dialog
@@ -401,41 +403,25 @@ class NacStatisticsSettingFragment
 	/**
 	 * Send an email.
 	 */
-	private fun sendEmail(attachmentPath: String, timestamp: String)
+	private fun sendEmail(attachment: String, timestamp: String)
 	{
 		// Get the subject of the email
 		val context = requireContext()
 		val title = getString(R.string.message_statistics_email_subject)
 		val subject = "$title $timestamp"
 
-		// Create the attachment URI
-		val attachmentUri = FileProvider.getUriForFile(
-			context,
-			"com.nfcalarmclock.fileprovider",
-			File(attachmentPath))
+		NacLog.i("Sending email with attachment : $attachment")
 
-		// Build the intent
-		println(attachmentUri)
-		val intent = Intent(Intent.ACTION_SEND).apply {
-
-			type = "application/zip"
-			putExtra(Intent.EXTRA_SUBJECT, subject)
-			putExtra(Intent.EXTRA_STREAM, attachmentUri)
-			addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
-
-		}
-
-		// Check if can resolve the package manager? Not sure what this really does
-		if (intent.resolveActivity(context.packageManager) != null)
-		{
-			// Start the activity
-			startActivity(intent)
-		}
-		else
-		{
-			// Show toast error message
-			quickToast(requireContext(), R.string.error_message_unable_to_email_statistics)
-		}
+		// Send the email
+		context.sendEmail(
+			Intent.ACTION_SEND,
+			type = "application/zip",
+			subject = subject,
+			attachment = File(attachment),
+			onError = {
+				quickToast(context, R.string.error_message_unable_to_email_statistics)
+			}
+		)
 	}
 
 	/**

@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import com.nfcalarmclock.alarm.NacAlarmRepository
+import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.system.scheduler.NacScheduler
 import com.nfcalarmclock.system.goAsync
 import dagger.hilt.android.AndroidEntryPoint
@@ -31,16 +32,20 @@ class NacStartupBroadcastReceiver
 	 */
 	override fun onReceive(context: Context, intent: Intent) = goAsync {
 
-		// Check that the intent action is correct
-		if ((intent.action == Intent.ACTION_BOOT_COMPLETED)
-			|| (intent.action == Intent.ACTION_LOCKED_BOOT_COMPLETED))
+		// Intent action is incorrect
+		if ((intent.action != Intent.ACTION_BOOT_COMPLETED)
+			&& (intent.action != Intent.ACTION_LOCKED_BOOT_COMPLETED))
 		{
-			// Get all the alarms
-			val alarms = alarmRepository.getAllAlarms()
-
-			// Update all the alarms
-			NacScheduler.updateAll(context, alarms)
+			return@goAsync
 		}
+
+		NacLog.i("Device startup broadcast received. Scheduling all alarms")
+
+		// Get all the alarms
+		val alarms = alarmRepository.getAllAlarms()
+
+		// Update all the alarms
+		NacScheduler.updateAll(context, alarms)
 
 	}
 

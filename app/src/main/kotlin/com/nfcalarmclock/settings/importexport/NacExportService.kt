@@ -6,6 +6,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.sqlite.db.SimpleSQLiteQuery
 import com.nfcalarmclock.R
 import com.nfcalarmclock.db.NacAlarmDatabase
+import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.NacLifecycleService
 import com.nfcalarmclock.system.file.zipFiles
@@ -30,6 +31,8 @@ class NacExportService
 		// Super
 		super.onStartCommand(intent, flags, startId)
 
+		NacLog.i("Starting export service")
+
 		// Get the Uri
 		val uri = intent?.data
 
@@ -49,6 +52,7 @@ class NacExportService
 			// Unable to open the Uri
 			else
 			{
+				NacLog.e("Unable to export files")
 				quickToast(this, R.string.error_message_unable_to_open_import_export_stream)
 			}
 
@@ -80,18 +84,26 @@ class NacExportService
 		// Build the list of files to zip
 		val files = listOf(csvFile, dbFile, dbShm, dbWal)
 
+		NacLog.i("Writing shared preferences to a csv")
+
 		// Write the shared preferences to a csv file
 		sharedPreferences.writeToCsv(context, csvFile)
 
 		lifecycleScope.launch {
+
+			NacLog.i("Checkpointing the database")
 
 			// Checkpoint the database so that it does not need to be closed
 			NacAlarmDatabase.getInstance(deviceContext)
 				.alarmDao()
 				.checkpoint(SimpleSQLiteQuery("pragma wal_checkpoint(full)"))
 
+			NacLog.i("Writing shared preferences and database to a zip")
+
 			// Zip the files
 			zipFiles(outputStream, files)
+
+			NacLog.i("Export completed")
 
 			// Show success message
 			quickToast(context, R.string.message_export_completed)

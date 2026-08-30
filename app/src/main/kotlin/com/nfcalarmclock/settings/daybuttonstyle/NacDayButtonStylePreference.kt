@@ -152,7 +152,6 @@ class NacDayButtonStylePreference @JvmOverloads constructor(
 		val exampleDay = daysOfWeek[1]
 
 		// Setup the button
-		println("setupDayButton()")
 		exampleButton.setText(exampleDay)
 		exampleButton.enable()
 		exampleButton.button!!.isEnabled = false

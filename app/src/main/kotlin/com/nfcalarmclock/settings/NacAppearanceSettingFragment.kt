@@ -8,6 +8,7 @@ import com.nfcalarmclock.alarm.options.nextalarmformat.NacNextAlarmFormatPrefere
 import com.nfcalarmclock.settings.startweekon.NacStartWeekOnPreference
 import com.nfcalarmclock.system.getDeviceProtectedStorageContext
 import com.nfcalarmclock.settings.colorpicker.NacColorPickerPreference
+import com.nfcalarmclock.settings.preference.NacSwitchPreference
 
 /**
  * Appearance fragment.
@@ -52,6 +53,31 @@ class NacAppearanceSettingFragment
 
 		// Initialize the color settings
 		init()
+		setupAlarmScreen()
+	}
+
+	/**
+	 * Setup the preferences for the alarm screen.
+	 */
+	private fun setupAlarmScreen()
+	{
+		// Get the new alarm screen preference
+		val newScreenKey = getString(R.string.key_use_new_alarm_screen)
+		val newScreenPref = findPreference<NacSwitchPreference>(newScreenKey)!!
+
+		// Setup the dependent alarm screen preferences
+		setupDependentNewAlarmScreenPreferences(newScreenPref.isChecked)
+
+		// Set the listener for when the new screen preference is changed
+		newScreenPref.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, status ->
+
+			// Set the usability of the dependent preferences
+			setupDependentNewAlarmScreenPreferences(status as Boolean)
+
+			// Return
+			true
+
+		}
 	}
 
 	/**
@@ -184,6 +210,24 @@ class NacAppearanceSettingFragment
 			true
 
 		}
+	}
+
+	/**
+	 * Setup the preferences that are dependent on the new alarm screen.
+	 */
+	private fun setupDependentNewAlarmScreenPreferences(enabled: Boolean)
+	{
+		// Get the keys
+		val currentDateAndTimeKey = getString(R.string.key_alarm_screen_show_current_date_and_time)
+		val musicInfoKey = getString(R.string.key_alarm_screen_show_music_info)
+
+		// Get the dependent preferences
+		val currentDateAndTimePref = findPreference<NacSwitchPreference>(currentDateAndTimeKey)!!
+		val musicInfoPref = findPreference<NacSwitchPreference>(musicInfoKey)!!
+
+		// Set the usability of those preferences
+		currentDateAndTimePref.isEnabled = enabled
+		musicInfoPref.isEnabled = enabled
 	}
 
 	/**

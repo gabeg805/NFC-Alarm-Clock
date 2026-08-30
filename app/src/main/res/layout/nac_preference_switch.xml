@@ -11,9 +11,31 @@
 	android:orientation="horizontal"
 	tools:ignore="UselessParent">
 
+	<!-- Icon frame, to set padding and width without affecting image size -->
+	<LinearLayout
+		android:id="@+id/icon_frame"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:paddingTop="@dimen/nudge"
+		android:paddingBottom="@dimen/nudge"
+		android:paddingEnd="@dimen/tiny"
+		android:minWidth="56dp"
+		android:visibility="gone"
+		tools:ignore="RtlSymmetry">
+
+		<!-- Icon -->
+		<ImageView
+			android:id="@+id/icon"
+			android:layout_width="wrap_content"
+			android:layout_height="wrap_content"
+			/>
+	</LinearLayout>
+
+	<!-- Icon -->
 	<include layout="@layout/nac_preference_text" />
 
-	<com.google.android.material.checkbox.MaterialCheckBox
+	<!-- Switch -->
+	<androidx.appcompat.widget.SwitchCompat
 		android:id="@+id/widget"
 		android:layout_width="wrap_content"
 		android:layout_height="wrap_content"

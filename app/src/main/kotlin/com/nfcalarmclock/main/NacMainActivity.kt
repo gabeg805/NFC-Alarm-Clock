@@ -43,6 +43,7 @@ import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmActivity
 import com.nfcalarmclock.alarm.activealarm.NacActiveAlarmService
 import com.nfcalarmclock.alarm.activealarm.NacDismissErroneousActiveAlarmService
 import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.nfc.NacNfc
 import com.nfcalarmclock.nfc.NacNfcReaderMode
 import com.nfcalarmclock.nfc.SCANNED_NFC_TAG_ID_BUNDLE_NAME
@@ -269,12 +270,12 @@ class NacMainActivity
 
 			// Get any active alarm or timer
 			val activeAlarm = alarmViewModel.getActiveAlarm()
-			println("Attempting to handle NFC scan event.  Found active alarm?  ${activeAlarm != null}")
 
 			// An NFC tag was scanned to open up the main activity
 			if (NacNfc.wasScanned(intent))
 			{
-				println("NFC WAS SCANNED!")
+				NacLog.i("NFC was scanned")
+
 				// Alarm
 				if (activeAlarm != null)
 				{
@@ -297,6 +298,8 @@ class NacMainActivity
 				// that it does not happen anymore to people
 				if (activeAlarm != null)
 				{
+					NacLog.i("Binding to active alarm service")
+
 					// Alarm that will be passed into the activity
 					activeAlarmForActivity = activeAlarm
 
@@ -306,6 +309,7 @@ class NacMainActivity
 					// Handler to dismiss the erroneous active alarm in the event that the
 					// service is not bound within 5 sec
 					activeAlarmServiceHandler.postDelayed({
+						NacLog.w("Active alarm service was not bound after 5 sec. Starting the dismiss erroneous active alarm service")
 						NacDismissErroneousActiveAlarmService.startService(this@NacMainActivity, activeAlarm)
 					}, 5000)
 
@@ -473,7 +477,8 @@ class NacMainActivity
 			// Get the current fragment and destination ID
 			val currentFragment = navHostFragment.childFragmentManager.primaryNavigationFragment
 			val destinationId = navController.currentDestination?.id
-			println("Active timer in progress!  Trying to go to:  $destinationId")
+
+			NacLog.i("Active timer in progress.  Trying to go to: ${navController.currentDestination}")
 
 			// Determine what to do based on the current destination
 			when (destinationId)
@@ -482,7 +487,6 @@ class NacMainActivity
 				// Show timers
 				R.id.nacShowTimersFragment ->
 				{
-					println("Navigate to show timers")
 					val fragment = currentFragment as NacShowTimersFragment
 					fragment.attemptDismissWithScannedNfc(nfcId)
 				}
@@ -490,7 +494,6 @@ class NacMainActivity
 				// Active timer
 				R.id.nacActiveTimerFragment ->
 				{
-					println("Navigate to ACTIVE timers")
 					val fragment = currentFragment as NacActiveTimerFragment
 					fragment.attemptDismissWithScannedNfc(nfcId)
 				}
@@ -498,7 +501,8 @@ class NacMainActivity
 				// Something else
 				else ->
 				{
-					println("Navigate to show timers with NFC ID in tow??")
+					NacLog.i("Navigate to show timers with NFC ID in tow")
+
 					// Add the NFC tag that was scanned to a bundle
 					val bundle = Bundle().apply {
 						putString(SCANNED_NFC_TAG_ID_BUNDLE_NAME, nfcId)
@@ -513,7 +517,6 @@ class NacMainActivity
 		// Start a timer from an NFC tag
 		else
 		{
-			println("Trying to start a timer from NFC tag")
 			timerViewModel.getAllTimers()
 				// Find the first timer that contains the NFC ID and is able to start an NFC tag
 				// from a scan
@@ -522,6 +525,8 @@ class NacMainActivity
 				}
 				// Start the active timer service and fragment
 				?.let { t ->
+					NacLog.i("Starting a timer from an NFC tag")
+
 					NacActiveTimerService.startTimerService(this@NacMainActivity, t)
 					navController.navigate(R.id.nacActiveTimerFragment, t.toBundle())
 				}
@@ -543,6 +548,8 @@ class NacMainActivity
 		// Set the content view
 		setContentView(R.layout.act_main)
 
+		NacLog.i("Creating main activity")
+
 		// Set member variables
 		sharedPreferences = NacSharedPreferences(this)
 		toolbar = findViewById(R.id.tb_top_bar)
@@ -554,7 +561,6 @@ class NacMainActivity
 
 		// Set flag that cards need to be measured
 		sharedPreferences.cardIsMeasured = false
-		println("onCreate()!!!!!!!!!  :  ${Build.MODEL} | ${Build.MANUFACTURER} | ${Build.PRODUCT} | ${Build.DEVICE}")
 
 		// Disable the activity alias so that tapping an NFC tag will NOT open
 		// the main activity
@@ -593,6 +599,8 @@ class NacMainActivity
 		// Super
 		super.onDestroy()
 
+		NacLog.i("Destroying main activity")
+
 		// Cleanup
 		unregisterMyReceiver(this, shutdownBroadcastReceiver)
 		unregisterMyReceiver(this, airplaneModeReceiver)
@@ -607,6 +615,8 @@ class NacMainActivity
 	{
 		// Super
 		super.onNewIntent(intent)
+
+		NacLog.i("New intent received in main activity")
 
 		// Set the intent
 		setIntent(intent)
@@ -707,6 +717,8 @@ class NacMainActivity
 	 */
 	private fun refreshMainActivity()
 	{
+		NacLog.i("Refreshing main activity")
+
 		// Disable that flag indicating that the main activity should refresh
 		sharedPreferences.shouldRefreshMainActivity = false
 
@@ -729,7 +741,6 @@ class NacMainActivity
 		// Item selected listener
 		bottomNavigation.setOnItemSelectedListener { item ->
 
-			println("Item selected : $item | $wasBottomNavigationSelectedByUser")
 			// User did not selected a bottom navigation item so do not navigate anywhere
 			if (!wasBottomNavigationSelectedByUser)
 			{
@@ -886,6 +897,8 @@ class NacMainActivity
 				sharedPreferences.delayShowingWhatsNewDialogCounter = 1
 			}
 
+			NacLog.i("Request app permissions")
+
 			// Request permissions
 			permissionRequestManager.requestPermissions(this, onDone = {
 
@@ -899,6 +912,8 @@ class NacMainActivity
 		// Attempt to show the What's new dialog
 		else if (shouldShowWhatsNewDialog && delayCounter == 0)
 		{
+			NacLog.i("Show what's new dialog")
+
 			// Show the What's New dialog
 			whatsNewDialog = NacWhatsNewDialog.show(supportFragmentManager,
 				listener = {
@@ -931,12 +946,10 @@ class NacMainActivity
 		// Check if should request to show the rate my app flow
 		else if (NacRateMyApp.shouldRequest(sharedPreferences))
 		{
+			NacLog.i("Request to rate my app")
+
 			// Request for the user to rate my app
 			NacRateMyApp.request(this, sharedPreferences)
-		}
-		else
-		{
-			println("DO NOTHING")
 		}
 	}
 
@@ -946,16 +959,17 @@ class NacMainActivity
 	private fun setupNavController()
 	{
 		// Navigate to onboarding
-		println("Current destination????   ${navController.currentDestination} | Show onboarding?  ${sharedPreferences.shouldShowOnboardingScreen}")
 		if (sharedPreferences.shouldShowOnboardingScreen)
 		{
+			NacLog.i("Navigating to user onboarding")
 			navController.navigate(R.id.action_global_nacOnboardingFragment)
 		}
 
 		// Destination changed listener
 		navController.addOnDestinationChangedListener { _, destination, _ ->
 
-			println("Nav destination : $destination")
+			NacLog.i("Navigating to destination : $destination")
+
 			// Setup the flag when NFC was just scanned to dismiss
 			setupWasNfcJustScannedToDismiss()
 
@@ -965,6 +979,7 @@ class NacMainActivity
 				|| (destination.id == R.id.nacNfcTagSettingFragment)
 				|| (destination.id == R.id.nacStatisticsSettingFragment)
 				|| (destination.id == R.id.nacAboutSettingFragment)
+				|| (destination.id == R.id.nacHelpSettingFragment)
 				|| (destination.id == R.id.nacAlarmMainMediaPickerFragment)
 				|| (destination.id == R.id.nacAlarmMainMediaPickerFragment2)
 				|| (destination.id == R.id.nacTimerMainMediaPickerFragment)
@@ -994,7 +1009,17 @@ class NacMainActivity
 			}
 
 			// Bottom navigation visibility
-			bottomNavigation.visibility = if (destination.id == R.id.nacOnboardingFragment) View.GONE else View.VISIBLE
+			bottomNavigation.visibility = if ((destination.id == R.id.nacOnboardingFragment)
+				|| (destination.id == R.id.nacAlarmMainMediaPickerFragment)
+				|| (destination.id == R.id.nacAlarmMainMediaPickerFragment2)
+				|| (destination.id == R.id.nacTimerMainMediaPickerFragment))
+			{
+				View.GONE
+			}
+			else
+			{
+				View.VISIBLE
+			}
 
 			// Get the bottom navigation ID to go to
 			val bottomNavId = when (destination.id)
@@ -1018,6 +1043,7 @@ class NacMainActivity
 				R.id.nacStatisticsSettingFragment     -> R.id.bottom_navigation_settings
 				R.id.nacAboutSettingFragment          -> R.id.bottom_navigation_settings
 				R.id.nacAlarmMainMediaPickerFragment2 -> R.id.bottom_navigation_settings
+				R.id.nacHelpSettingFragment           -> R.id.bottom_navigation_settings
 
 				// Everything else
 				else -> R.id.bottom_navigation_alarm
@@ -1100,20 +1126,20 @@ class NacMainActivity
 				@Suppress("CascadeIf")
 				if (navController.currentDestination?.id == R.id.nacActiveTimerFragment)
 				{
-					println("Navigating to show timers")
+					NacLog.i("Navigating to show timers")
 					navController.navigate(R.id.action_global_nacShowTimersFragment)
 				}
 				// From add timer and no timers have been saved yet, go back to show alarms
 				else if ((navController.currentDestination?.id == R.id.nacAddTimerFragment)
 					&& (timerViewModel.count() == 0))
 				{
-					println("Navigating to show alarms")
+					NacLog.i("Navigating to show alarms")
 					navController.navigate(R.id.action_global_nacShowAlarmsFragment)
 				}
 				// Normal navigate up
 				else
 				{
-					println("Navigating to up")
+					NacLog.i("Navigating up from : ${navController.currentDestination}")
 					navController.navigateUp(appBarConfiguration)
 				}
 
@@ -1138,9 +1164,10 @@ class NacMainActivity
 		wasNfcJustScannedToDismissHandler.removeCallbacksAndMessages(null)
 
 		// Disable the flag after a delay
-		println("Preparing to disable was nfc just scanned flag")
+		NacLog.i("Preparing to disable NFC just scanned flag")
+
 		wasNfcJustScannedToDismissHandler.postDelayed({
-			println("DISABLING WAS NFC JUST SCANNED FLAG")
+			NacLog.i("Disabling NFC just scanned flag")
 			sharedPreferences.wasNfcJustScannedToDismiss = false
 		}, 1000)
 

@@ -45,12 +45,12 @@
 		app:allowDividerAbove="true"
 		/>
 
-	<!-- Import/export -->
+	<!-- Help -->
 	<Preference
-		android:icon="@drawable/import_export"
-		android:key="@string/key_settings_import_export"
-		android:title="@string/title_setting_import_export"
-		android:summary="@string/description_setting_import_export"
+		android:icon="@drawable/live_help_32"
+		android:key="@string/key_settings_help"
+		android:title="@string/title_setting_help"
+		android:summary="@string/description_setting_help"
 		/>
 
 	<!-- Support -->
@@ -59,6 +59,15 @@
 		android:key="@string/key_settings_support"
 		android:title="@string/title_setting_support"
 		android:summary="@string/description_setting_support"
+		/>
+
+	<!-- Import/export -->
+	<Preference
+		android:icon="@drawable/import_export"
+		android:key="@string/key_settings_import_export"
+		android:title="@string/title_setting_import_export"
+		android:summary="@string/description_setting_import_export"
+		app:allowDividerAbove="true"
 		/>
 
 </PreferenceScreen>

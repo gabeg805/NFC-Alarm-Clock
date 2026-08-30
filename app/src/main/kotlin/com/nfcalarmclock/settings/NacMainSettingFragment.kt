@@ -88,6 +88,7 @@ class NacMainSettingFragment
 		val statisticsKey = getString(R.string.key_settings_statistics)
 		val manageNfcTagsKey = getString(R.string.key_settings_manage_nfc_tags)
 		val aboutKey = getString(R.string.key_settings_about)
+		val helpKey = getString(R.string.key_settings_help)
 		val supportKey = getString(R.string.key_settings_support)
 		val importExportKey = getString(R.string.key_settings_import_export)
 
@@ -110,6 +111,9 @@ class NacMainSettingFragment
 
 			// About
 			aboutKey -> destinationId = R.id.action_nacMainSettingFragment_to_nacAboutSettingFragment
+
+			// Help
+			helpKey -> destinationId = R.id.action_nacMainSettingFragment_to_nacHelpSettingFragment
 
 			// Import/export
 			importExportKey ->

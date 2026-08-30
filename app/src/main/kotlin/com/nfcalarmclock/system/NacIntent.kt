@@ -129,7 +129,7 @@ fun Intent.getSetAlarm(context: Context): NacAlarm?
 	if (this.hasExtra(AlarmClock.EXTRA_DAYS))
 	{
 		val extraDays = this.getIntegerArrayListExtra(AlarmClock.EXTRA_DAYS)
-		val days = NacCalendar.Day.Companion.NONE
+		val days = NacCalendar.Day.NONE
 		isSet = true
 
 		// Iterate over each day

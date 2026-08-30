@@ -14,7 +14,6 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.migration.AutoMigrationSpec
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.db.NacAlarmDao
 import com.nfcalarmclock.alarm.db.NacAlarmTypeConverters
@@ -32,6 +31,7 @@ import com.nfcalarmclock.db.NacAlarmDatabase.RenameShouldDeleteAlarmAfterDismiss
 import com.nfcalarmclock.db.NacAlarmDatabase.UpdateRepeatFrequencyFrom0To1Migration
 import com.nfcalarmclock.db.NacAlarmDatabase.UpdateRepeatFrequencyUnitFrom0To1Migration
 import com.nfcalarmclock.db.NacOldDatabase.Companion.read
+import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.nfc.db.NacNfcTag
 import com.nfcalarmclock.nfc.db.NacNfcTagDao
 import com.nfcalarmclock.shared.NacSharedPreferences
@@ -47,7 +47,6 @@ import com.nfcalarmclock.statistics.db.NacAlarmSnoozedStatistic
 import com.nfcalarmclock.statistics.db.NacAlarmSnoozedStatisticDao
 import com.nfcalarmclock.statistics.db.NacStatisticTypeConverters
 import com.nfcalarmclock.system.file.NacFileTree
-import com.nfcalarmclock.system.file.filesToExternalUris
 import com.nfcalarmclock.system.getDeviceProtectedStorageContext
 import com.nfcalarmclock.system.media.NacMedia
 import com.nfcalarmclock.system.media.buildLocalMediaPath
@@ -56,7 +55,6 @@ import com.nfcalarmclock.system.media.getMediaTitle
 import com.nfcalarmclock.system.scheduler.NacScheduler
 import com.nfcalarmclock.timer.db.NacTimer
 import com.nfcalarmclock.timer.db.NacTimerDao
-import com.nfcalarmclock.view.quickToast
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -66,10 +64,76 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.cancel
 import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import java.io.File
 import java.util.TreeMap
 import javax.inject.Singleton
+
+/**
+ * Update the media attributes when copying from another database.
+ *
+ * @return 0 if the media exists on this device and 1 if the media does not exist and
+ *         the attributes needed to be cleared.
+ */
+fun NacAlarm.updateMediaFromDb(
+	deviceContext: Context,
+	allMediaFiles: List<Uri>,
+	allRingtones: TreeMap<String, String>
+): Int
+{
+	// Get the media uri
+	val uri = mediaPath.toUri()
+
+	// Directory media type
+	if (mediaType == NacMedia.TYPE_DIRECTORY)
+	{
+		val dir = File(mediaPath)
+
+		// Directory exists and is in fact a directory
+		if (dir.exists() && dir.isDirectory)
+		{
+			return 0
+		}
+	}
+	// Media file exists
+	else if (allMediaFiles.contains(uri))
+	{
+		mediaArtist = uri.getMediaArtist(deviceContext)
+		mediaTitle = uri.getMediaTitle(deviceContext)
+		mediaType = NacMedia.TYPE_FILE
+		localMediaPath = buildLocalMediaPath(deviceContext, mediaArtist, mediaTitle, mediaType)
+
+		return 0
+	}
+	// Ringtone exists
+	else if (allRingtones.values.contains(mediaPath))
+	{
+		mediaArtist = uri.getMediaArtist(deviceContext)
+		mediaTitle = uri.getMediaTitle(deviceContext)
+		mediaType = NacMedia.TYPE_RINGTONE
+		localMediaPath = buildLocalMediaPath(deviceContext, mediaArtist, mediaTitle, mediaType)
+
+		return 0
+	}
+
+	// Log for alarm vs timer
+	if (this is NacTimer)
+	{
+		NacLog.w("Clearing media : Duration=${duration} | Name=${nameNormalized} | Media type=${mediaType} | Media path=${mediaPath}")
+	}
+	else
+	{
+		NacLog.w("Clearing media : Time=${"%02d".format(hour)}:${"%02d".format(minute)} | Days=${days} | Name=${nameNormalized} | Media type=${mediaType} | Media path=${mediaPath}")
+	}
+
+	// Clear media
+	mediaPath = ""
+	mediaTitle = ""
+	mediaArtist = ""
+	mediaType = 0
+	localMediaPath = ""
+
+	return 1
+}
 
 /**
  * Store alarms in a Room database.
@@ -538,79 +602,32 @@ abstract class NacAlarmDatabase
 			context: Context,
 			db: NacAlarmDatabase,
 			importDb: NacAlarmDatabase,
-			fileTree: NacFileTree,
 			allMediaFiles: List<Uri>,
 			allRingtones: TreeMap<String, String>
-		)
+		): Int
 		{
+			NacLog.i("Copying all alarms from other database")
+
 			// Get the device context
 			val deviceContext = getDeviceProtectedStorageContext(context)
 
-			// Get the dao
+			// Get the dao and all alarms
 			val alarmDao = db.alarmDao()
 			val alarmCreatedStatisticDao = db.alarmCreatedStatisticDao()
-
-			// Get the alarms
 			val allAlarms = alarmDao.getAllAlarms()
+
+			// Keep track of the number of the number of alarms that have their media cleared
+			// because the file does not exist on this device
+			var clearedMediaNum = 0
 
 			// Copy all alarms that do not (fuzzy) match any existing alarms
 			importDb.alarmDao().getAllAlarms().forEach { a ->
 
+				// Make sure none of the alarms in the database already match the
+				// one that will be inserted
 				if (allAlarms.all { !it.fuzzyEquals(a) })
 				{
-					println("Alarm media : ${a.mediaPath} | ${a.localMediaPath}")
-					// Get the media uri
-					val uri = a.mediaPath.toUri()
-
-					// Unable to find media so clear it for the alarm
-					if (a.mediaType == NacMedia.TYPE_DIRECTORY)
-					{
-						println("THIS IS A DIRECTORY")
-						//val origDirectory = fileTree.directory
-						//fileTree.cd(a.mediaPath)
-						val dir = File(a.mediaPath)
-						if (dir.exists() && dir.isDirectory)
-						{
-							println("DIR EXISTS!!!")
-						}
-						else
-						{
-							println("CLEARING MEDIA")
-							a.mediaPath = ""
-							a.mediaTitle = ""
-							a.mediaArtist = ""
-							a.mediaType = 0
-							a.localMediaPath = ""
-						}
-
-					}
-					else if (allMediaFiles.contains(uri))
-					{
-						println("HUZZAHHHH FOUND!!")
-						// TODO GET MEDIA ARTIST AND TITLE AND TYPE?
-						a.mediaArtist = uri.getMediaArtist(deviceContext)
-						a.mediaTitle = uri.getMediaTitle(deviceContext)
-						a.mediaType = NacMedia.TYPE_FILE
-						a.localMediaPath = buildLocalMediaPath(deviceContext, a.mediaArtist, a.mediaTitle, a.mediaType)
-					}
-					else if (allRingtones.values.contains(a.mediaPath))
-					{
-						println("CONTAINS RINGTONE! ${a.mediaTitle} | ${allRingtones.firstNotNullOf { it.value == a.mediaPath }}")
-						// TODO GET RINGTONE ARTIST AND TITLE AND TYPE?
-						a.mediaArtist = uri.getMediaArtist(deviceContext)
-						a.mediaTitle = uri.getMediaTitle(deviceContext)
-						a.mediaType = NacMedia.TYPE_RINGTONE
-						a.localMediaPath = buildLocalMediaPath(deviceContext, a.mediaArtist, a.mediaTitle, a.mediaType)
-					}
-					else
-					{
-						println("CLEARING MEDIA")
-						a.mediaPath = ""
-						a.mediaTitle = ""
-						a.mediaArtist = ""
-						a.mediaType = 0
-						a.localMediaPath = ""
-					}
+					clearedMediaNum += a.updateMediaFromDb(deviceContext, allMediaFiles, allRingtones)
 
 					// Clear the ID
 					a.id = 0
@@ -627,9 +644,17 @@ abstract class NacAlarmDatabase
 
 					// Insert the created statistic
 					alarmCreatedStatisticDao.insert(NacAlarmCreatedStatistic())
-				}
 
+				}
 			}
+
+			// Log the number of alarms that had their media cleared
+			if (clearedMediaNum > 0)
+			{
+				NacLog.w("Cleared media attributes from $clearedMediaNum alarms")
+			}
+
+			return clearedMediaNum
 		}
 
 		/**
@@ -640,6 +665,8 @@ abstract class NacAlarmDatabase
 			importDb: NacAlarmDatabase
 		)
 		{
+			NacLog.i("Copying all created statistics from other database")
+
 			// Get the dao and all the stats
 			val dao = db.alarmCreatedStatisticDao()
 			val allStats = dao.getAll()
@@ -666,6 +693,8 @@ abstract class NacAlarmDatabase
 			importDb: NacAlarmDatabase
 		)
 		{
+			NacLog.i("Copying all deleted statistics from other database")
+
 			// Get the dao and all the stats
 			val dao = db.alarmDeletedStatisticDao()
 			val allStats = dao.getAll()
@@ -692,6 +721,8 @@ abstract class NacAlarmDatabase
 			importDb: NacAlarmDatabase
 		)
 		{
+			NacLog.i("Copying all dismissed statistics from other database")
+
 			// Get the dao and all the stats
 			val dao = db.alarmDismissedStatisticDao()
 			val allStats = dao.getAll()
@@ -722,7 +753,7 @@ abstract class NacAlarmDatabase
 		suspend fun copyFromDb(
 			context: Context,
 			dbFile: File,
-		)
+		): Int
 		{
 			// Open the main app database
 			val db = getInstance(context)
@@ -731,34 +762,23 @@ abstract class NacAlarmDatabase
 			val importDb = databaseBuilder(context, NacAlarmDatabase::class.java, dbFile.path)
 				.build()
 
-			// Create a file tree from the path
-			val fileTree = NacFileTree("")
-
-			// Scan the tree
-			fileTree.scan(context)
+			NacLog.i("Scanning for all songs and ringtones to ensure imported alarm media exists on this device")
 
 			// Get all media files and ringtones
-			//val allMediaFiles = NacFileTree.getFiles(context, "", true)
-			val allMediaFiles = fileTree.recursiveLs().filesToExternalUris()
+			val allMediaFiles = NacFileTree.getFiles(context, "", recursive = true)
 			val allRingtones = NacMedia.getRingtones(context)
 
-			// Get the files as external uris
-
-			println("PRINTING MEDIA FILES : ${allMediaFiles.size}")
-			println("PRINTING RINGTONE FILES : ${allRingtones.size}")
-			println(allRingtones.keys)
-			println(allRingtones.values)
+			// Keep track of the number of the number of alarms/timers that have their media cleared
+			// because the file does not exist on this device
+			var clearedMediaNum = 0
 
 			// Copy all the alarms
-			println("COPY ALL ALARMS")
-			copyAlarmsFromDb(context, db, importDb, fileTree, allMediaFiles, allRingtones)
+			clearedMediaNum += copyAlarmsFromDb(context, db, importDb, allMediaFiles, allRingtones)
 
 			// Copy all the timers
-			println("COPY ALL TIMERS")
-			copyTimersFromDb(db, importDb, allMediaFiles, allRingtones)
+			clearedMediaNum += copyTimersFromDb(context, db, importDb, allMediaFiles, allRingtones)
 
 			// Copy created statistics
-			println("COPY ALL STATS")
 			copyCreatedStatisticsFromDb(db, importDb)
 
 			// Copy deleted statistics
@@ -774,18 +794,14 @@ abstract class NacAlarmDatabase
 			copySnoozedStatisticsFromDb(db, importDb)
 
 			// Copy NFC tags
-			println("COPY ALL NFC TAGS")
 			copyNfcTagsFromDb(db, importDb)
 
 			// Close the import database
-			println("CLOSE DB")
 			importDb.close()
 
-			// Show success message
-			withContext(Dispatchers.Main) {
-				println("SHOW TOAST")
-				quickToast(context, R.string.message_import_completed)
-			}
+			NacLog.i("Closed database after import from other database")
+
+			return clearedMediaNum
 		}
 
 		/**
@@ -796,6 +812,8 @@ abstract class NacAlarmDatabase
 			importDb: NacAlarmDatabase
 		)
 		{
+			NacLog.i("Copying all missed statistics from other database")
+
 			// Get the dao and all the stats
 			val dao = db.alarmMissedStatisticDao()
 			val allStats = dao.getAll()
@@ -828,6 +846,8 @@ abstract class NacAlarmDatabase
 			importDb: NacAlarmDatabase
 		)
 		{
+			NacLog.i("Copying all NFC tags from other database")
+
 			// Get the dao and all the stats
 			val dao = db.nfcTagDao()
 			val allNfcTags = dao.getAllNfcTags()
@@ -854,6 +874,8 @@ abstract class NacAlarmDatabase
 			importDb: NacAlarmDatabase
 		)
 		{
+			NacLog.i("Copying all snoozed statistics from other database")
+
 			// Get the dao and all the stats
 			val dao = db.alarmSnoozedStatisticDao()
 			val allStats = dao.getAll()
@@ -882,17 +904,25 @@ abstract class NacAlarmDatabase
 		 * Copy timers from another database.
 		 */
 		private suspend fun copyTimersFromDb(
+			context: Context,
 			db: NacAlarmDatabase,
 			importDb: NacAlarmDatabase,
 			allMediaFiles: List<Uri>,
 			allRingtones: TreeMap<String, String>
-		)
+		): Int
 		{
-			// Get the dao
-			val timerDao = db.timerDao()
+			NacLog.i("Copying all timers from other database")
 
-			// Get the timers
+			// Get the device context
+			val deviceContext = getDeviceProtectedStorageContext(context)
+
+			// Get the dao and all timers
+			val timerDao = db.timerDao()
 			val allTimers = timerDao.getAllTimers()
+
+			// Keep track of the number of the number of timers that have their media cleared
+			// because the file does not exist on this device
+			var clearedMediaNum = 0
 
 			// Copy all the timers that do not (fuzzy) match any existing alarms
 			importDb.timerDao().getAllTimers().forEach { t ->
@@ -901,6 +931,8 @@ abstract class NacAlarmDatabase
 				// one that will be inserted
 				if (allTimers.all { !it.fuzzyEquals(t) })
 				{
+					clearedMediaNum += t.updateMediaFromDb(deviceContext, allMediaFiles, allRingtones)
+
 					// Clear the ID
 					t.id = 0
 
@@ -909,6 +941,14 @@ abstract class NacAlarmDatabase
 				}
 
 			}
+
+			// Log the number of timers that had their media cleared
+			if (clearedMediaNum > 0)
+			{
+				NacLog.w("Cleared media attributes from $clearedMediaNum timers")
+			}
+
+			return clearedMediaNum
 		}
 
 		/**

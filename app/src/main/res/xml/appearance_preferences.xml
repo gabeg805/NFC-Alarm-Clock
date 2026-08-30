@@ -78,7 +78,7 @@
 	<com.nfcalarmclock.settings.preference.NacPreferenceCategory
 		android:title="@string/title_notifications">
 
-		<com.nfcalarmclock.settings.preference.NacCheckboxPreference
+		<com.nfcalarmclock.settings.preference.NacSwitchPreference
 			android:title="@string/title_missed_alarms"
 			android:key="@string/key_missed_alarm"
 			android:summaryOn="@string/description_missed_alarm_true"
@@ -93,7 +93,7 @@
 	<com.nfcalarmclock.settings.preference.NacPreferenceCategory
 		android:title="Show/hide alarm options">
 
-		<com.nfcalarmclock.settings.preference.NacCheckboxPreference
+		<com.nfcalarmclock.settings.preference.NacSwitchPreference
 			android:title="@string/title_alarm_vibrate"
 			android:key="@string/key_show_hide_vibrate_button"
 			android:summaryOn="@string/description_show_hide_vibrate_button_true"
@@ -103,7 +103,7 @@
 			app:allowDividerBelow="false"
 			/>
 
-		<com.nfcalarmclock.settings.preference.NacCheckboxPreference
+		<com.nfcalarmclock.settings.preference.NacSwitchPreference
 			android:title="@string/title_alarm_nfc"
 			android:key="@string/key_show_hide_nfc_button"
 			android:summaryOn="@string/description_show_hide_nfc_button_true"
@@ -113,7 +113,7 @@
 			app:allowDividerBelow="false"
 			/>
 
-		<com.nfcalarmclock.settings.preference.NacCheckboxPreference
+		<com.nfcalarmclock.settings.preference.NacSwitchPreference
 			android:title="@string/action_alarm_option_flashlight"
 			android:key="@string/key_show_hide_flashlight_button"
 			android:summaryOn="@string/description_show_hide_flashlight_button_true"
@@ -158,7 +158,7 @@
 	<com.nfcalarmclock.settings.preference.NacPreferenceCategory
 		android:title="@string/title_tweaks">
 
-		<com.nfcalarmclock.settings.preference.NacCheckboxPreference
+		<com.nfcalarmclock.settings.preference.NacSwitchPreference
 			android:title="@string/title_expand_new_alarm"
 			android:key="@string/key_tweak_expand_new_alarm"
 			android:summaryOn="@string/description_expand_new_alarm_true"
@@ -173,7 +173,61 @@
 			android:key="@string/key_tweak_next_alarm_format"
 			android:defaultValue="@integer/default_next_alarm_format_index"
 			app:allowDividerAbove="false"
-			app:allowDividerBelow="false"
+			app:allowDividerBelow="true"
 			/>
 	</com.nfcalarmclock.settings.preference.NacPreferenceCategory>
+
+	<!-- Alarm screen -->
+	<com.nfcalarmclock.settings.preference.NacPreferenceCategory
+		android:title="@string/title_alarm_screen">
+
+		<com.nfcalarmclock.settings.preference.NacSwitchPreference
+			android:title="@string/title_new_screen"
+			android:key="@string/key_use_new_alarm_screen"
+			android:summaryOn="@string/description_use_new_screen_true"
+			android:summaryOff="@string/description_use_new_screen_false"
+			android:defaultValue="@bool/default_use_new_alarm_screen"
+			app:allowDividerAbove="false"
+			app:allowDividerBelow="false"
+			/>
+
+		<com.nfcalarmclock.settings.preference.NacSwitchPreference
+			android:title="@string/title_show_alarm_name"
+			android:key="@string/key_alarm_screen_show_alarm_name"
+			android:summaryOn="@string/description_alarm_screen_show_alarm_name_true"
+			android:summaryOff="@string/description_alarm_screen_show_alarm_name_false"
+			android:defaultValue="@bool/default_alarm_screen_show_alarm_name"
+			/>
+
+		<com.nfcalarmclock.settings.preference.NacSwitchPreference
+			android:title="@string/title_show_current_date_and_time"
+			android:key="@string/key_alarm_screen_show_current_date_and_time"
+			android:summaryOn="@string/description_alarm_screen_show_current_date_and_time_true"
+			android:summaryOff="@string/description_alarm_screen_show_current_date_and_time_false"
+			android:defaultValue="@bool/default_alarm_screen_show_current_date_and_time"
+			app:allowDividerAbove="false"
+			app:allowDividerBelow="false"
+			/>
+
+		<com.nfcalarmclock.settings.preference.NacSwitchPreference
+			android:title="@string/title_show_music_info"
+			android:key="@string/key_alarm_screen_show_music_info"
+			android:summaryOn="@string/description_alarm_screen_show_music_info_true"
+			android:summaryOff="@string/description_alarm_screen_show_music_info_false"
+			android:defaultValue="@bool/default_alarm_screen_show_music_info"
+			app:allowDividerAbove="false"
+			app:allowDividerBelow="false"
+			/>
+
+		<com.nfcalarmclock.settings.preference.NacSwitchPreference
+			android:title="@string/title_battery_saver"
+			android:key="@string/key_alarm_screen_battery_saver"
+			android:summaryOn="@string/description_alarm_screen_battery_saver_true"
+			android:summaryOff="@string/description_alarm_screen_battery_saver_false"
+			android:defaultValue="@bool/default_alarm_screen_battery_saver"
+			app:allowDividerAbove="false"
+			app:allowDividerBelow="true"
+			/>
+	</com.nfcalarmclock.settings.preference.NacPreferenceCategory>
+
 </PreferenceScreen>

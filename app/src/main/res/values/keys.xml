@@ -10,6 +10,7 @@
 	<string name="key_app_rating_counter">app_rating_counter</string>
 	<string name="key_app_start_statistics">app_start_statistics</string>
 	<string name="key_app_should_show_onboarding_screen">app_should_show_onboarding_screen</string>
+	<string name="key_app_should_write_to_log">app_should_write_to_log</string>
 	<string name="sys_previous_volume">sys_previous_volume</string>
 
 	<!-- Next alarm -->
@@ -200,6 +201,12 @@
 	<string name="key_settings_about_wakelock">pref_about_wakelock</string>
 	<string name="key_settings_about_full_screen_intent">pref_about_full_screen_intent</string>
 	<string name="key_settings_about_foreground_service">pref_about_foreground_service</string>
+
+	<!-- Help -->
+	<string name="key_settings_help">pref_screen_help</string>
+	<!-- Debug mode is an app level key -->
+	<string name="key_settings_help_email_logs">pref_help_email_logs</string>
+	<string name="key_settings_help_email_suggestion">pref_help_email_suggestion</string>
 
 	<!-- Support -->
 	<string name="key_settings_support">pref_screen_support</string>

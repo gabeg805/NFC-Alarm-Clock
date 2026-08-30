@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.NacAlarmRepository
+import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.goAsync
 import com.nfcalarmclock.system.scheduler.NacScheduler
@@ -44,12 +45,13 @@ class NacAirplaneModeBroadcastReceiver
 
 		// Intent action is NOT correct
 		// Shared preference is not set
-		// Airplane mode is disabled
 		if ((intent.action != Intent.ACTION_AIRPLANE_MODE_CHANGED)
 			|| !shared.shouldToggleAlarmsWithAirplaneMode)
 		{
 			return@goAsync
 		}
+
+		NacLog.i("Airplane mode broadcast received. ${if (state) "Disabling" else "Enabling"} all alarms")
 
 		// Disable each alarm that is not active
 		alarmRepository.getAllAlarms().forEach { a ->
@@ -75,11 +77,11 @@ class NacAirplaneModeBroadcastReceiver
 			// Choose the correct message based on the airplane mode state
 			val message = if (state)
 			{
-				R.string.message_toggle_alarms_with_airplane_mode_on
+				R.string.description_toggle_alarms_with_airplane_mode_on
 			}
 			else
 			{
-				R.string.message_toggle_alarms_with_airplane_mode_off
+				R.string.description_toggle_alarms_with_airplane_mode_off
 			}
 
 			// Show toast

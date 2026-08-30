@@ -42,7 +42,10 @@ class NacOnboardingFragment : Fragment()
 				0 -> NacOnboardingWelcomePageFragment()
 				1 -> NacOnboardingPermissionsPageFragment()
 				2 -> NacOnboardingHowToPageFragment()
-				else -> throw IllegalArgumentException("Invalid onboarding position: $position")
+				else ->
+				{
+					throw IllegalArgumentException("Invalid onboarding position: $position")
+				}
 			}
 		}
 

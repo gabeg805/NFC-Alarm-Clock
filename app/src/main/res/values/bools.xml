@@ -4,6 +4,7 @@
 	<!-- App -->
 	<bool name="default_app_start_statistics">true</bool>
 	<bool name="default_app_should_refresh_main_activity">false</bool>
+	<bool name="default_app_should_write_to_log">false</bool>
 	<bool name="default_was_app_supported">false</bool>
 
 	<!-- Card -->

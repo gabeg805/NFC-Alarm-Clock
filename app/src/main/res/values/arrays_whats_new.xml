@@ -11,6 +11,7 @@
 		<item>Added option to dismiss alarm with &lt;b> volume buttons &lt;/b></item>
 		<item>Added &lt;b> preview &lt;/b> to volume options.</item>
 		<item>Added &lt;b> onboarding &lt;/b> screen for new users.</item>
+		<item>Added &lt;b> Help &lt;/b> section in Settings.</item>
 		<item>Added per-app language support.</item>
 		<item>Updated to support &lt;b> Android 16 &lt;/b></item>
 		<item>Updated &lt;b> widget &lt;/b> so the date follows the locale format.</item>

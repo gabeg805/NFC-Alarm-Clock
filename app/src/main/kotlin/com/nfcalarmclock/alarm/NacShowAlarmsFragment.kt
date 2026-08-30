@@ -66,6 +66,7 @@ import com.nfcalarmclock.alarm.options.upcomingreminder.NacUpcomingReminderServi
 import com.nfcalarmclock.card.NacBaseCardAdapter
 import com.nfcalarmclock.card.NacBaseCardTouchHelperCallback
 import com.nfcalarmclock.card.NacCardLayoutManager
+import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.main.NacMainActivity
 import com.nfcalarmclock.nfc.NacNfcTagViewModel
 import com.nfcalarmclock.shared.NacSharedPreferences
@@ -272,6 +273,8 @@ class NacShowAlarmsFragment
 		// Get the alarm from the intent
 		arguments?.getAlarm()?.let { alarm ->
 
+			NacLog.i("Adding alarm from set alarm intent")
+
 			// Add the alarm
 			addAlarm(alarm) {
 				recentlyAddedAlarmIds.add(alarm.id)
@@ -308,6 +311,8 @@ class NacShowAlarmsFragment
 	 */
 	private fun copyAlarm(alarm: NacAlarm)
 	{
+		NacLog.i("Copying alarm")
+
 		// Create a copy of the alarm
 		val copiedAlarm = alarm.copy()
 
@@ -327,6 +332,8 @@ class NacShowAlarmsFragment
 	 */
 	private fun deleteAlarm(alarm: NacAlarm)
 	{
+		NacLog.i("Deleting alarm")
+
 		// Get the local media path
 		val localMediaPath = alarm.localMediaPath
 
@@ -375,6 +382,8 @@ class NacShowAlarmsFragment
 		// Get the alarm from the intent
 		arguments?.getAlarm()?.let { alarm ->
 
+			NacLog.i("Dismissing alarm early from intent")
+
 			// Dismiss the alarm early and update it
 			alarm.dismissEarly()
 			updateAlarm(alarm)
@@ -403,6 +412,8 @@ class NacShowAlarmsFragment
 	 */
 	private fun measureCard(card: NacAlarmCardHolder)
 	{
+		NacLog.i("Measuring alarm card")
+
 		// Array that will store the heights
 		val heights = IntArray(3)
 
@@ -425,6 +436,7 @@ class NacShowAlarmsFragment
 		savedInstanceState: Bundle?
 	): View?
 	{
+		NacLog.i("Creating show alarms fragment")
 		return inflater.inflate(R.layout.frg_show_alarms, container, false)
 	}
 
@@ -606,6 +618,7 @@ class NacShowAlarmsFragment
 	 */
 	private fun restoreAlarm(alarm: NacAlarm)
 	{
+		NacLog.i("Restoring alarm")
 		addAlarm(alarm, R.string.message_alarm_restore)
 	}
 
@@ -997,6 +1010,7 @@ class NacShowAlarmsFragment
 
 							// Skip the next alarm
 							item.setOnMenuItemClickListener { _ ->
+								NacLog.i("Skip next alarm : ${card.alarm!!.id}")
 								card.skipNextAlarm()
 								true
 							}
@@ -1011,6 +1025,7 @@ class NacShowAlarmsFragment
 
 							// Unskip the next alarm
 							item.setOnMenuItemClickListener { _ ->
+								NacLog.i("Unskip next alarm : ${card.alarm!!.id}")
 								card.unskipNextAlarm()
 								true
 							}
@@ -1069,6 +1084,8 @@ class NacShowAlarmsFragment
 			// Create the alarm
 			val alarm = NacAlarm.build(sharedPreferences)
 
+			NacLog.i("Adding alarm")
+
 			// Add the alarm. When it is added, it will be scrolled to and interacted with
 			addAlarm(alarm) {
 				recentlyAddedAlarmIds.add(alarm.id)
@@ -1081,6 +1098,8 @@ class NacShowAlarmsFragment
 	 */
 	private fun setupForAppFirstRun()
 	{
+		NacLog.i("Setting up for first run of app")
+
 		// Set the flags indicating that this is no longer the app's first run
 		// and that statistics does not need to be started, since they have already started
 		sharedPreferences.appFirstRun = false

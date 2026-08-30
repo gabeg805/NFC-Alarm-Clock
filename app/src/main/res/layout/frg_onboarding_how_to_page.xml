@@ -31,6 +31,7 @@
 		android:id="@+id/onboarding_scrollview"
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
+		android:layout_marginTop="@dimen/large"
 		app:layout_constraintTop_toBottomOf="@id/onboarding_description"
 		app:layout_constraintBottom_toBottomOf="parent">
 

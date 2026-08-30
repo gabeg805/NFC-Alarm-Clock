@@ -23,6 +23,7 @@ import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.NacAlarmViewModel
 import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.nfc.NacNfc
 import com.nfcalarmclock.nfc.NacNfcTagViewModel
 import com.nfcalarmclock.nfc.db.NacNfcTag
@@ -206,7 +207,8 @@ class NacActiveAlarmActivity
 			// Set the active alarm service
 			val binder = serviceBinder as NacActiveAlarmService.NacLocalBinder
 			service = binder.getService()
-			println("ON SERVICE CONNECTED")
+
+			NacLog.i("Active alarm activity connected to service")
 
 			// Remove the service watchdog
 			serviceBoundWatchdogHandler.removeCallbacksAndMessages(null)
@@ -214,6 +216,7 @@ class NacActiveAlarmActivity
 			// Dismiss the service
 			if (canDisimssServiceWithNfcUponConnection)
 			{
+				NacLog.i("Dismissing service with NFC after connecting")
 				service!!.dismiss(usedNfc = true)
 			}
 		}
@@ -230,10 +233,10 @@ class NacActiveAlarmActivity
 	 */
 	private fun handleNfcTagScanned()
 	{
-		println("NFC was scanning and can be used to dismiss alarm!  Calling dismiss() on service? ${service != null}")
 		// Dismiss the alarm service with NFC
 		if (service != null)
 		{
+			NacLog.i("Dismissing the active alarm service with NFC from the activity")
 			service!!.dismiss(usedNfc = true)
 		}
 		// Set flag that service can dismiss the alarm once it is connected, however,
@@ -241,6 +244,8 @@ class NacActiveAlarmActivity
 		// with the alarm so use a handler to dismiss it
 		else
 		{
+			NacLog.i("Active alarm service has not been bound yet, but will be dismiss with NFC upon connection")
+
 			// Set the flag
 			canDisimssServiceWithNfcUponConnection = true
 
@@ -248,6 +253,8 @@ class NacActiveAlarmActivity
 			// service is not bound within 2 sec, and then finish the activity
 			serviceBoundWatchdogHandler.postDelayed({
 				lifecycleScope.launch {
+					NacLog.w("Active alarm service was not bound after 2 sec. Starting the dismiss erroneous active alarm service")
+
 					sharedPreferences.wasNfcJustScannedToDismiss = true
 					NacDismissErroneousActiveAlarmService.startService(this@NacActiveAlarmActivity, alarm)
 					delay(500)
@@ -265,11 +272,12 @@ class NacActiveAlarmActivity
 		// Super
 		super.onCreate(savedInstanceState)
 
+		NacLog.i("Creating active alarm activity")
+
 		// Setup the shared preferences
 		sharedPreferences = NacSharedPreferences(this)
 
 		// Set the alarm from the bundle
-		println("ON CREATE")
 		setAlarm(savedInstanceState)
 
 		// Setup
@@ -290,6 +298,8 @@ class NacActiveAlarmActivity
 		// Super
 		super.onDestroy()
 
+		NacLog.i("Destroying active alarm activity")
+
 		// Unregister device unlocked receiver
 		unregisterMyReceiver(this, deviceUnlockedBroadcastReceiver)
 
@@ -307,6 +317,8 @@ class NacActiveAlarmActivity
 	{
 		// Super
 		super.onNewIntent(intent)
+
+		NacLog.i("New intent received in active alarm activity")
 
 		// Set the intent
 		setIntent(intent)
@@ -352,22 +364,23 @@ class NacActiveAlarmActivity
 			if (wasNfcTagScanned())
 			{
 				handleNfcTagScanned()
-				println("YO Current size : ${nfcTagsNeededToDismissList?.size} | Initial : $initialSizeOfNfcTagsNeededToDismiss")
 				return@launch
 			}
-			println("Current size : ${nfcTagsNeededToDismissList?.size} | Initial : $initialSizeOfNfcTagsNeededToDismiss")
+
+			NacLog.i("Current num of NFC tags needed to dismiss : ${nfcTagsNeededToDismissList?.size} | Initial num : $initialSizeOfNfcTagsNeededToDismiss")
 
 			// Size of the NFC tags dismiss list changed during the scan check.
 			// Save the list to the alarm and update the database
 			if (nfcTagsNeededToDismissList!!.size != initialSizeOfNfcTagsNeededToDismiss)
 			{
+				NacLog.i("List size of NFC tags needed to dismiss changed")
+
 				// Get an up to date alarm to ensure that all the necessary flags and whatnot
 				// (such as isActive) are set on the alarm
 				val upToDateAlarm = alarmViewModel.findAlarm(alarm!!.id)
 				alarm = upToDateAlarm ?: alarm
 
 				// Save the list and update the database
-				println("Size of NFC tags list changed! ${nfcTagsNeededToDismissList!!.size} | $initialSizeOfNfcTagsNeededToDismiss")
 				alarm!!.currentNfcTagsNeededToDismiss = nfcTagsNeededToDismissList!!.toNfcIdString()
 				alarmViewModel.update(alarm!!)
 			}
@@ -408,8 +421,9 @@ class NacActiveAlarmActivity
 		// Super
 		super.onStart()
 
+		NacLog.i("Starting active alarm activity")
+
 		// Bind to the active alarm service
-		println("BIND TO SERVICE")
 		bindToService(NacActiveAlarmService::class.java, serviceConnection)
 	}
 
@@ -420,6 +434,8 @@ class NacActiveAlarmActivity
 	{
 		// Super
 		super.onStop()
+
+		NacLog.i("Stopping active alarm activity")
 
 		// Remove the back press callback
 		onBackPressedCallback.remove()
@@ -436,6 +452,8 @@ class NacActiveAlarmActivity
 	{
 		// Super
 		super.onWindowFocusChanged(hasFocus)
+
+		NacLog.i("Window focus changed in active alarm activity")
 
 		// Check if the window focus has changed
 		if (hasFocus)
@@ -531,7 +549,8 @@ class NacActiveAlarmActivity
 		// Already been setup
 		if (nfcTagsNeededToDismissList != null)
 		{
-			println("Already been setup : " + nfcTagsNeededToDismissList!!.map { it.nfcId })
+			NacLog.i("NFC tags needed to dismiss already setup : ${nfcTagsNeededToDismissList!!.size}")
+
 			// Set the size of the list
 			initialSizeOfNfcTagsNeededToDismiss = nfcTagsNeededToDismissList!!.size
 			return
@@ -539,7 +558,8 @@ class NacActiveAlarmActivity
 
 		// Find the current list of NFC tags that need to be dismissed
 		val currentNfcTagsNeededToDismiss = alarmViewModel.findCurrentNfcTagsNeededToDismiss(alarm!!.id)
-		println("Current jank : $currentNfcTagsNeededToDismiss")
+
+		NacLog.i("Current NFC tags needed to dismiss : ${currentNfcTagsNeededToDismiss.toNfcIdList().size}")
 
 		// The current list has not been saved yet
 		if (currentNfcTagsNeededToDismiss.isEmpty())
@@ -552,8 +572,9 @@ class NacActiveAlarmActivity
 			val upToDateAlarm = alarmViewModel.findAlarm(alarm!!.id)
 			alarm = upToDateAlarm ?: alarm
 
+			NacLog.i("Writing the updated list of NFC tags needed to dismiss to the db :  ${alarm!!.isActive} | ${nfcTagsNeededToDismissList?.size}")
+
 			// Save the list to the alarm and update the database
-			println("Writing to db, is alarm active?  ${alarm!!.isActive} | ${upToDateAlarm?.isActive}")
 			alarm!!.currentNfcTagsNeededToDismiss = nfcTagsNeededToDismissList!!.toNfcIdString()
 			alarmViewModel.update(alarm!!)
 		}
@@ -566,8 +587,9 @@ class NacActiveAlarmActivity
 				.toMutableList()
 		}
 
+		NacLog.i("Final setup of NFC tags needed to dismiss : ${nfcTagsNeededToDismissList!!.size}")
+
 		// Set the size of the list
-		println("Final computation : "+nfcTagsNeededToDismissList!!.map { it.nfcId })
 		initialSizeOfNfcTagsNeededToDismiss = nfcTagsNeededToDismissList!!.size
 	}
 
@@ -657,11 +679,6 @@ class NacActiveAlarmActivity
 	{
 
 		/**
-		 * Stop the activity action.
-		 */
-		private const val ACTION_STOP_ACTIVITY = "com.nfcalarmclock.ACTION_STOP_ALARM_ACTIVITY"
-
-		/**
 		 * Create an intent that will be used to start the Alarm activity.
 		 *
 		 * @param context A context.
@@ -729,26 +746,6 @@ class NacActiveAlarmActivity
 
 			// Start the activity
 			context.startActivity(updatedIntent)
-		}
-
-		/**
-		 * Stop the alarm activity
-		 *
-		 * TODO: Delete this if no longer necessary.
-		 */
-		fun stopAlarmActivity(context: Context)
-		{
-			// Create the intent and its flags
-			val intent = Intent(context, NacActiveAlarmActivity::class.java)
-			val flags = (Intent.FLAG_ACTIVITY_NEW_TASK
-				or Intent.FLAG_ACTIVITY_CLEAR_TASK)
-
-			// Add the flags to the intent
-			intent.addFlags(flags)
-			intent.action = ACTION_STOP_ACTIVITY
-
-			// Start the activity
-			context.startActivity(intent)
 		}
 
 	}

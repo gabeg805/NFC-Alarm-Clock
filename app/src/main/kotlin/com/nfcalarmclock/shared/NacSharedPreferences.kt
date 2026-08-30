@@ -2310,42 +2310,6 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
-	 * Whether volume dismiss is enabled or not.
-	 */
-	var shouldVolumeDismiss: Boolean
-		get()
-		{
-			val key = resources.getString(R.string.key_default_alarm_dismiss_should_use_volume_dismiss)
-			val defaultValue = false
-
-			return instance.getBoolean(key, defaultValue)
-		}
-		set(value)
-		{
-			val key = resources.getString(R.string.key_default_alarm_dismiss_should_use_volume_dismiss)
-
-			saveBoolean(key, value)
-		}
-
-	/**
-	 * Whether volume snooze is enabled or not.
-	 */
-	var shouldVolumeSnooze: Boolean
-		get()
-		{
-			val key = resources.getString(R.string.key_default_alarm_snooze_should_use_volume_snooze)
-			val defaultValue = false
-
-			return instance.getBoolean(key, defaultValue)
-		}
-		set(value)
-		{
-			val key = resources.getString(R.string.key_default_alarm_snooze_should_use_volume_snooze)
-
-			saveBoolean(key, value)
-		}
-
-	/**
 	 * Whether the flashlight should be used or not for an alarm.
 	 */
 	var shouldUseFlashlight: Boolean
@@ -2559,6 +2523,54 @@ class NacSharedPreferences(context: Context)
 			val key = resources.getString(R.string.key_default_timer_vibrate_should_vibrate_pattern)
 
 			saveBoolean(key, value)
+		}
+
+	/**
+	 * Whether volume dismiss is enabled or not.
+	 */
+	var shouldVolumeDismiss: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.key_default_alarm_dismiss_should_use_volume_dismiss)
+			val defaultValue = false
+
+			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_alarm_dismiss_should_use_volume_dismiss)
+
+			saveBoolean(key, value)
+		}
+
+	/**
+	 * Whether volume snooze is enabled or not.
+	 */
+	var shouldVolumeSnooze: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.key_default_alarm_snooze_should_use_volume_snooze)
+			val defaultValue = false
+
+			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_alarm_snooze_should_use_volume_snooze)
+
+			saveBoolean(key, value)
+		}
+
+	/**
+	 * Whether to write to the log or not.
+	 */
+	val shouldWriteToLog: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.key_app_should_write_to_log)
+			val defaultValue = false
+
+			return instance.getBoolean(key, defaultValue)
 		}
 
 	/**

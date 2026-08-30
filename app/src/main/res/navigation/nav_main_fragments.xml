@@ -115,6 +115,9 @@
 		<action
 			android:id="@+id/action_nacMainSettingFragment_to_nacAboutSettingFragment"
 			app:destination="@id/nacAboutSettingFragment" />
+		<action
+			android:id="@+id/action_nacMainSettingFragment_to_nacHelpSettingFragment"
+			app:destination="@id/nacHelpSettingFragment" />
 	</fragment>
 	<fragment
 		android:id="@+id/nacGeneralSettingFragment"
@@ -144,6 +147,10 @@
 		android:id="@+id/nacAlarmMainMediaPickerFragment2"
 		android:name="com.nfcalarmclock.alarm.options.mediapicker.NacAlarmMainMediaPickerFragment"
 		android:label="@string/title_select_media" />
+	<fragment
+		android:id="@+id/nacHelpSettingFragment"
+		android:name="com.nfcalarmclock.settings.NacHelpSettingFragment"
+		android:label="@string/title_setting_help" />
 	<fragment
 		android:id="@+id/nacOnboardingFragment"
 		android:name="com.nfcalarmclock.onboarding.NacOnboardingFragment"

@@ -2,22 +2,22 @@ package com.nfcalarmclock.settings.preference
 
 import android.content.Context
 import android.util.AttributeSet
+import androidx.appcompat.widget.SwitchCompat
 import androidx.preference.PreferenceViewHolder
-import com.google.android.material.checkbox.MaterialCheckBox
 import com.nfcalarmclock.R
 import com.nfcalarmclock.shared.NacSharedPreferences
-import com.nfcalarmclock.view.setupCheckBoxColor
+import com.nfcalarmclock.view.setupSwitchColor
 
 /**
- * Preference with a checkbox button.
+ * Preference with a switch button.
  *
  * @param context Context.
  * @param attrs Attribute set.
  */
-class NacCheckboxPreference(
+class NacSwitchPreference(
 	context: Context,
 	attrs: AttributeSet?
-) : NacCompoundButtonPreference(context, attrs, R.layout.nac_preference_checkbox)
+) : NacCompoundButtonPreference(context, attrs, R.layout.nac_preference_switch)
 {
 
 	/**
@@ -32,7 +32,7 @@ class NacCheckboxPreference(
 		val shared = NacSharedPreferences(context)
 
 		// Setup the color
-		(compoundButton as MaterialCheckBox).setupCheckBoxColor(shared)
+		(compoundButton as SwitchCompat).setupSwitchColor(shared)
 	}
 
 }

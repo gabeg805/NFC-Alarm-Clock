@@ -4,6 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import com.nfcalarmclock.alarm.NacAlarmRepository
+import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.system.scheduler.NacScheduler
 import com.nfcalarmclock.system.goAsync
 import com.nfcalarmclock.timer.NacTimerRepository
@@ -43,34 +44,38 @@ class NacShutdownBroadcastReceiver
 	 */
 	override fun onReceive(context: Context, intent: Intent) = goAsync {
 
-		// Check that the intent action is correct
-		if ((intent.action == Intent.ACTION_SHUTDOWN)
-			|| (intent.action == Intent.ACTION_REBOOT))
+		// Intent action is incorrect
+		if ((intent.action != Intent.ACTION_SHUTDOWN)
+			&& (intent.action != Intent.ACTION_REBOOT))
 		{
-			// Get the active alarms from the repository
-			val alarms = alarmRepository.getActiveAlarms()
-			val timers = timerRepository.getAllActiveTimers()
+			return@goAsync
+		}
 
-			// Iterate over each active alarm
-			for (a in alarms)
-			{
-				// Dismiss the alarm
-				a.dismiss()
+		NacLog.i("Shutdown/reboot broadcast received. Dismissing and disabling all alarms and timers")
 
-				// Update the repo now that the alarm is no longer active
-				alarmRepository.update(a)
+		// Get the active alarms from the repository
+		val alarms = alarmRepository.getActiveAlarms()
+		val timers = timerRepository.getAllActiveTimers()
 
-				// Cancel the alarm
-				NacScheduler.cancel(context, a)
-			}
+		// Iterate over each active alarm
+		for (a in alarms)
+		{
+			// Dismiss the alarm
+			a.dismiss()
 
-			// Iterate over each active timer
-			for (t in timers)
-			{
-				// Set the timer to inactive and update the repo
-				t.isActive = false
-				timerRepository.update(t)
-			}
+			// Update the repo now that the alarm is no longer active
+			alarmRepository.update(a)
+
+			// Cancel the alarm
+			NacScheduler.cancel(context, a)
+		}
+
+		// Iterate over each active timer
+		for (t in timers)
+		{
+			// Set the timer to inactive and update the repo
+			t.isActive = false
+			timerRepository.update(t)
 		}
 
 	}

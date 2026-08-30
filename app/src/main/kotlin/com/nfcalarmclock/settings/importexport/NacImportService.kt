@@ -5,11 +5,15 @@ import android.content.Intent
 import androidx.lifecycle.lifecycleScope
 import com.nfcalarmclock.R
 import com.nfcalarmclock.db.NacAlarmDatabase
+import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.NacLifecycleService
 import com.nfcalarmclock.system.file.unzipFile
 import com.nfcalarmclock.view.quickToast
+import com.nfcalarmclock.view.toast
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.io.InputStream
 
@@ -21,12 +25,18 @@ class NacImportService
 {
 
 	/**
-	 * Called when the service is started.
+	 * Delay finishing the service to ensure the database has enough time to import.
+	 */
+
+	/**
+	 * Service is started.
 	 */
 	override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int
 	{
 		// Super
 		super.onStartCommand(intent, flags, startId)
+
+		NacLog.i("Starting import service")
 
 		// Get the Uri
 		val uri = intent?.data
@@ -41,12 +51,15 @@ class NacImportService
 			if (inputStream != null)
 			{
 				quickToast(this, R.string.message_import_started)
-				import(this, inputStream)
+				lifecycleScope.launch {
+					import(this@NacImportService, inputStream)
+				}
 				return START_NOT_STICKY
 			}
 			// Unable to open the Uri
 			else
 			{
+				NacLog.e("Unable to import files")
 				quickToast(this, R.string.error_message_unable_to_open_import_export_stream)
 			}
 
@@ -61,14 +74,16 @@ class NacImportService
 	/**
 	 * Import the shared preferences and database files from a zip file.
 	 */
-	fun import(context: Context, inputStream: InputStream)
+	suspend fun import(context: Context, inputStream: InputStream)
 	{
-		// Flags for the two types of files that can be found
-		var wasCsvFound = false
-		var wasDbFound = false
-
 		// Get the shared preferences
 		val sharedPreferences = NacSharedPreferences(context)
+
+		// Keep track of the number of the number of alarms/timers that have their media cleared
+		// because the file does not exist on this device
+		var clearedMediaNum = 0
+
+		NacLog.i("Unzipping import file")
 
 		// Unzip the files and iterate over each one
 		unzipFile(inputStream, context.filesDir).forEach {
@@ -79,37 +94,52 @@ class NacImportService
 			// CSV file
 			if (it.endsWith(".csv"))
 			{
+				NacLog.i("Importing shared preferences")
+
 				// Copy data from the imported csv file and then delete the file
 				sharedPreferences.copyFromCsv(context, file)
 				file.delete()
 
 				// Set the refresh main activity flag
 				sharedPreferences.shouldRefreshMainActivity = true
-				wasCsvFound = true
 			}
 			// Database file
 			else if (it.endsWith(".db"))
 			{
+				NacLog.i("Importing database")
+
 				// Copy data from the imported database. Use regular context so that the
 				// imported database can be opened from the regular context filesDir
-				lifecycleScope.launch {
-					NacAlarmDatabase.copyFromDb(context, file)
-					file.delete()
-					stopThisService()
-				}
+				clearedMediaNum = NacAlarmDatabase.copyFromDb(context, file)
+				file.delete()
 
 				// Set the refresh main activity flag
 				sharedPreferences.shouldRefreshMainActivity = true
-				wasDbFound = true
 			}
 
 		}
 
-		// Stop the service if only the csv file was found
-		if (wasCsvFound && !wasDbFound)
-		{
-			stopThisService()
+		NacLog.i("Import completed")
+
+		// Show success message
+		withContext(Dispatchers.Main) {
+
+			// Toast number of alarms/timers had media cleared
+			if (clearedMediaNum > 0)
+			{
+				val message = resources.getQuantityString(
+					R.plurals.import_cleared_media_due_to_not_found,
+					clearedMediaNum,
+					clearedMediaNum)
+				toast(context, message)
+			}
+
+			// Toast import completed
+			quickToast(context, R.string.message_import_completed)
 		}
+
+		// Done with the import so stop the service
+		stopThisService()
 	}
 
 }

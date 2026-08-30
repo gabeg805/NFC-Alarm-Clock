@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.preference.PreferenceScreen
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto">
+
+	<!-- Debug -->
+	<com.nfcalarmclock.settings.preference.NacPreferenceCategory
+		android:title="Debug">
+
+		<!-- Write to log -->
+		<com.nfcalarmclock.settings.preference.NacSwitchPreference
+			android:key="@string/key_app_should_write_to_log"
+			android:title="Debug mode"
+			android:icon="@drawable/bug_report_32"
+			android:summaryOn="@string/message_debug_mode_on"
+			android:summaryOff="@string/message_debug_mode_off"
+			android:defaultValue="@bool/default_app_should_write_to_log"
+			app:allowDividerAbove="false"
+			app:allowDividerBelow="false"
+			/>
+
+		<!-- Email logs -->
+		<Preference
+			android:key="@string/key_settings_help_email_logs"
+			android:title="@string/title_help_share_logs"
+			android:icon="@drawable/share_32"
+			android:summary="@string/message_share_logs_with_developer"
+			app:allowDividerAbove="false"
+			app:allowDividerBelow="true"
+			/>
+	</com.nfcalarmclock.settings.preference.NacPreferenceCategory>
+
+	<!-- Email -->
+	<com.nfcalarmclock.settings.preference.NacPreferenceCategory
+		android:title="@string/action_email">
+
+		<!-- Send regular email -->
+		<Preference
+			android:key="@string/key_settings_help_email_suggestion"
+			android:title="@string/title_help_send_email"
+			android:icon="@drawable/send_32"
+			android:summary="@string/message_send_email"
+			app:allowDividerAbove="false"
+			app:allowDividerBelow="false"
+			/>
+	</com.nfcalarmclock.settings.preference.NacPreferenceCategory>
+</androidx.preference.PreferenceScreen>

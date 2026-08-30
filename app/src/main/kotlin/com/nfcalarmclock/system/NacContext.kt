@@ -8,13 +8,16 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.ServiceConnection
 import android.content.pm.PackageManager
+import android.net.Uri
 import androidx.core.content.ContextCompat
+import androidx.core.content.FileProvider
 import androidx.core.os.UserManagerCompat
 import com.nfcalarmclock.system.broadcasts.shutdown.NacShutdownBroadcastReceiver
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
+import java.io.File
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
@@ -163,6 +166,83 @@ fun Context.bindToService(cls: Class<*>, serviceConnection: ServiceConnection)
 	val intent = Intent(this, cls)
 
 	this.bindService(intent, serviceConnection, 0)
+}
+
+/**
+ * Send an email.
+ */
+fun Context.sendEmail(
+	action: String,
+	type: String = "",
+	subject: String = "",
+	to: String = "",
+	attachment: File? = null,
+	attachmentList: Array<File>? = null,
+	onError: () -> Unit = {}
+)
+{
+	// Build the email intent
+	val intent = Intent(action)
+		.apply {
+			this.type = type
+
+			// Subject
+			putExtra(Intent.EXTRA_SUBJECT, subject)
+
+			// Send to address
+			if (to.isNotEmpty())
+			{
+				putExtra(Intent.EXTRA_EMAIL, arrayOf(to))
+			}
+
+			// Single attachment
+			if (attachment != null)
+			{
+				val uri = FileProvider.getUriForFile(
+					this@sendEmail,
+					"com.nfcalarmclock.fileprovider",
+					attachment
+				)
+
+				putExtra(Intent.EXTRA_STREAM, uri)
+			}
+
+			// Multiple attachments
+			if (attachmentList != null)
+			{
+				val uriList = ArrayList<Uri>()
+
+				attachmentList.forEach { a ->
+					val u = FileProvider.getUriForFile(
+						this@sendEmail,
+						"com.nfcalarmclock.fileprovider",
+						a
+					)
+
+					uriList.add(u)
+				}
+
+				putParcelableArrayListExtra(Intent.EXTRA_STREAM, uriList)
+
+			}
+
+			// Allow another app to read the attached URIs. Only needed if there are attachments
+			if ((attachment != null) || (attachmentList != null))
+			{
+				addFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION)
+			}
+		}
+
+	// Ensure that there is an activity that is able to handle the intent
+	if (intent.resolveActivity(packageManager) != null)
+	{
+		startActivity(intent)
+	}
+	// Error occurred
+	else
+	{
+		onError()
+	}
 }
 
 /**
