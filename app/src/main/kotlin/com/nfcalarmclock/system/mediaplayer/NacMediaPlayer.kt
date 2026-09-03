@@ -11,6 +11,7 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.exoplayer.ExoPlayer
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.system.isUserUnlocked
 import com.nfcalarmclock.system.media.NacAudioAttributes
 import com.nfcalarmclock.system.media.NacAudioManager
@@ -246,7 +247,7 @@ class NacMediaPlayer(
 		}
 
 		// Prepare to play the media
-		exoPlayer.setAudioAttributes(audioAttributes.audioAttributes, false)
+		exoPlayer.setAudioAttributes(audioAttributes.audioAttributesMedia3, false)
 		exoPlayer.prepare()
 		exoPlayer.play()
 	}
@@ -363,7 +364,7 @@ class NacMediaPlayer(
 		}
 		catch (e: IllegalStateException)
 		{
-			println("NacMediaPlayer : playMediaItem() : ${e.toString()}")
+			NacLog.e("NacMediaPlayer : playMediaItem : ${e.toString()}", throwable = e)
 		}
 
 		// Play the media item
@@ -384,7 +385,7 @@ class NacMediaPlayer(
 		}
 		catch (e: IllegalStateException)
 		{
-			println("NacMediaPlayer : playMediaItems() : ${e.toString()}")
+			NacLog.e("NacMediaPlayer : playMediaItems : ${e.toString()}", throwable = e)
 		}
 
 		// Play the media items

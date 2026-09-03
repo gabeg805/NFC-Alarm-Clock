@@ -344,7 +344,7 @@ class NacWakeupProcess(
 		// Vibrate
 		if (shouldVibrate)
 		{
-			vibrator?.vibrate(alarm)
+			vibrator?.vibrateAlarm(alarm)
 		}
 
 		// Flashlight

@@ -2,11 +2,13 @@ package com.nfcalarmclock.alarm.options.vibrate
 
 import android.content.Context
 import android.os.Build
-import android.os.Handler
+import android.os.VibrationAttributes
 import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
+import android.media.AudioAttributes
 import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.log.NacLog
 
 /**
  * Vibrate the device.
@@ -22,8 +24,7 @@ class NacVibrator(context: Context)
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
 		{
 			// Get the manager
-			val manager = context.getSystemService(
-				Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
+			val manager = context.getSystemService(Context.VIBRATOR_MANAGER_SERVICE) as VibratorManager
 
 			// Return the vibrator
 			manager.defaultVibrator
@@ -33,18 +34,6 @@ class NacVibrator(context: Context)
 		{
 			context.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
 		}
-
-	/**
-	 * Vibrate handler to vibrate the device at periodic intervals.
-	 */
-	private val handler: Handler = Handler(context.mainLooper)
-
-	/**
-	 * Count the number of times the vibration has been repeated.
-	 *
-	 * This is only used for custom patterns.
-	 */
-	private var currentRepeatCount: Int = 0
 
 	/**
 	 * Flag if the vibrator is running.
@@ -59,37 +48,60 @@ class NacVibrator(context: Context)
 		// Stop any current vibrations
 		vibrator.cancel()
 
-		// Stop any future vibrations from occuring
-		handler.removeCallbacksAndMessages(null)
-
 		// Clear the flag
 		isRunning = false
 	}
 
 	/**
-	 * Do the vibration.
+	 * Vibrate the device using on/off timings.
 	 */
 	@Suppress("deprecation")
-	private fun doVibrate(duration: Long)
+	private fun vibrate(timings: List<Long>)
 	{
-		// Cancel the previous vibration, if any
-		cleanup()
-
-		// Check if the new API needs to be used
+		// API 26+
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
 		{
-			// Create the vibration effect
-			val effect = VibrationEffect.createOneShot(duration,
-				VibrationEffect.DEFAULT_AMPLITUDE)
+			// Match amplitudes to the timings list (0 for pause, DEFAULT_AMPLITUDE for vibrate)
+			val amplitudes: MutableList<Int> = ArrayList()
+			val repeatPattern = timings.size / 3
 
-			// Vibrate
-			vibrator.vibrate(effect)
+			// Timings list is built around a pause, vibrate, pause sequence, so build the
+			// amplitude list the same way
+			repeat(repeatPattern) {
+				amplitudes.addAll(listOf(0, VibrationEffect.DEFAULT_AMPLITUDE, 0))
+			}
+
+			// This vibration sequence uses a pattern that ends with a different wait than
+			// wait in between vibrations. Add another wait at the end to account for this pattern
+			if (amplitudes.size != timings.size)
+			{
+				amplitudes.add(0)
+			}
+
+			// Create a vibration that will repeat indefinitely (that is what the 0 is for)
+			val effect = VibrationEffect.createWaveform(timings.toLongArray(), amplitudes.toIntArray(), 0)
+
+			// Vibrate (API 33+)
+			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
+			{
+				val attr = VibrationAttributes.createForUsage(VibrationAttributes.USAGE_ALARM)
+				vibrator.vibrate(effect, attr)
+			}
+			// Vibrate (API 26-32)
+			else
+			{
+				val attr = AudioAttributes.Builder()
+					.setUsage(AudioAttributes.USAGE_ALARM)
+					.build()
+				vibrator.vibrate(effect, attr)
+			}
 		}
-		// The old API can be used
+		// API 25-
 		else
 		{
 			// Vibrate
-			vibrator.vibrate(duration)
+			@Suppress("DEPRECATION")
+			vibrator.vibrate(timings.toLongArray(), 0)
 		}
 
 		// Set the flag
@@ -99,12 +111,14 @@ class NacVibrator(context: Context)
 	/**
 	 * Vibrate the device for an alarm.
 	 */
-	fun vibrate(alarm: NacAlarm)
+	fun vibrateAlarm(alarm: NacAlarm)
 	{
 		// Vibrate with a pattern
 		if (alarm.shouldVibratePattern)
 		{
-			vibrate(
+			NacLog.i("Vibrating for ${alarm.vibrateDuration} ms, then waiting for ${alarm.vibrateWaitTime} ms. Repeat ${alarm.vibrateRepeatPattern} times, then wait for ${alarm.vibrateWaitTimeAfterPattern} ms (indefinitely)")
+
+			vibrateWithPattern(
 				alarm.vibrateDuration,
 				alarm.vibrateWaitTime,
 				alarm.vibrateRepeatPattern,
@@ -113,20 +127,22 @@ class NacVibrator(context: Context)
 		// Vibrate normally
 		else
 		{
-			vibrate(alarm.vibrateDuration, alarm.vibrateWaitTime)
+			NacLog.i("Vibrating for ${alarm.vibrateDuration} ms, then waiting for ${alarm.vibrateWaitTime} ms (indefinitely)")
+
+			vibrateNormally(alarm.vibrateDuration, alarm.vibrateWaitTime)
 		}
 	}
 
 	/**
-	 * Vibrate the device.
+	 * Vibrate the device normally.
 	 */
-	fun vibrate(duration: Long, wait: Long)
+	fun vibrateNormally(duration: Long, wait: Long)
 	{
-		// Vibrate
-		doVibrate(duration)
+		// Vibrate pattern will be: pause 0ms, vibrate <duration> ms, pause <wait> ms
+		val timings = listOf(0, duration, wait)
 
-		// Wait for a period of time before vibrating the device again
-		handler.postDelayed({ vibrate(duration, wait) }, duration+wait)
+		// Vibrate
+		vibrate(timings)
 	}
 
 	/**
@@ -137,35 +153,25 @@ class NacVibrator(context: Context)
 	 * @param repeatPattern Number of times to repeat a pattern.
 	 * @param waitAfterPattern Amount of time (ms) to wait after a pattern is complete.
 	 */
-	fun vibrate(
+	fun vibrateWithPattern(
 		duration: Long,
 		wait: Long,
 		repeatPattern: Int,
 		waitAfterPattern: Long)
 	{
+		val timings: MutableList<Long> = ArrayList()
+
+		// Vibrate pattern will be: pause 0ms, vibrate <duration> ms, pause <wait> ms
+		// Repeat this for <repeatPattern> times
+		repeat(repeatPattern) {
+			timings.addAll(listOf(0, duration, wait))
+		}
+
+		// Lastly, add a wait of <waitAfterPattern> ms
+		timings.add(waitAfterPattern)
+
 		// Vibrate
-		doVibrate(duration)
-
-		// Increase the count
-		currentRepeatCount = (currentRepeatCount+1) % repeatPattern
-
-		// Get the correct wait time based on how many repetitions have occurred
-		val newWaitTime = if (currentRepeatCount == 0)
-		{
-			// The repeat count has been reached, so the wait time should be the pattern
-			// wait time
-			waitAfterPattern
-		}
-		else
-		{
-			// Wait normally
-			wait
-		}
-
-		// Wait for a period of time before vibrating the device again
-		handler.postDelayed({
-			vibrate(duration, wait, repeatPattern, waitAfterPattern)
-		}, duration+newWaitTime)
+		vibrate(timings)
 	}
 
 }

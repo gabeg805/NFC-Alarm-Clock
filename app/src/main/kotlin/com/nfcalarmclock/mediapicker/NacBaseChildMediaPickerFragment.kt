@@ -11,6 +11,7 @@ import androidx.media3.common.util.UnstableApi
 import androidx.navigation.fragment.findNavController
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.addMediaInfo
 import com.nfcalarmclock.system.getMediaArtist
@@ -214,6 +215,7 @@ abstract class NacBaseChildMediaPickerFragment<T: NacAlarm>
 		else
 		{
 			println("Not enough space to make a backup!")
+			NacLog.w("Not enough space to make a backup!")
 		}
 	}
 

@@ -59,14 +59,12 @@ abstract class NacRadioButtonPromptDialog
 	 */
 	override fun onOkClicked(alarm: NacAlarm?)
 	{
-		println("MY OK CLICKED")
 		// Find the radio button that is selected
 		val radioButtonID: Int = radioGroup.checkedRadioButtonId
 		val radioButton: View = radioGroup.findViewById(radioButtonID)
 
 		// Set the currently selected index
 		currentlySelectedIndex = radioGroup.indexOfChild(radioButton)
-		println("Currently selected : $currentlySelectedIndex")
 	}
 
 	/**
@@ -137,7 +135,6 @@ abstract class NacRadioButtonPromptDialog
 			// Set the view ID and text for the radio button
 			button.id = id
 			button.text = item
-			println("Adding radio button : $item")
 
 			// Set the default selected radio button
 			if (index == defaultIndex)

@@ -21,6 +21,12 @@ import com.nfcalarmclock.shared.NacSharedPreferences
 
 /**
  * Onboard the user into using the app.
+ *
+ * TODO: Change functionality for 0 permissions. Also check if already have permissions before showing item.
+ *
+ * API 27 = 0 permissions
+ * API 29 = 0 permissions
+ * API 30 = 0 permissions
  */
 class NacOnboardingFragment : Fragment()
 {

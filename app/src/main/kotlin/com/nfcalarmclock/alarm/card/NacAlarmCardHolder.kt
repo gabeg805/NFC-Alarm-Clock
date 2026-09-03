@@ -28,6 +28,7 @@ import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.card.NacBaseCardHolder
 import com.nfcalarmclock.card.NacHeightAnimator
+import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.system.NacCalendar.Day
 import com.nfcalarmclock.system.toDayString
 import com.nfcalarmclock.view.dayofweek.NacDayOfWeek
@@ -359,6 +360,11 @@ class NacAlarmCardHolder(root: View)
 	 * Color animator for highlighting the card.
 	 */
 	private var highlightAnimator: Animator? = null
+
+	/**
+	 * Expand/collapse icon animator.
+	 */
+	private var expandCollapseAnimator: ObjectAnimator? = null
 
 	/**
 	 * Listener for when the alarm options button is clicked.
@@ -770,7 +776,8 @@ class NacAlarmCardHolder(root: View)
 	private fun doCollapse()
 	{
 		// Animate rotation of the expand/collapse button
-		ObjectAnimator.ofFloat(expandButton, "rotation", expandButton.rotation, 0f)
+		expandCollapseAnimator?.cancel()
+		expandCollapseAnimator = ObjectAnimator.ofFloat(expandButton, "rotation", expandButton.rotation, 0f)
 			.apply {
 				duration = 250
 				start()
@@ -808,7 +815,8 @@ class NacAlarmCardHolder(root: View)
 	private fun doExpand()
 	{
 		// Animate rotation of the expand/collapse button
-		ObjectAnimator.ofFloat(expandButton, "rotation", expandButton.rotation, 180f)
+		expandCollapseAnimator?.cancel()
+		expandCollapseAnimator = ObjectAnimator.ofFloat(expandButton, "rotation", expandButton.rotation, 180f)
 			.apply {
 				duration = 300
 				start()
@@ -1734,7 +1742,8 @@ class NacAlarmCardHolder(root: View)
 					// Repeat frequency is every 1 week
 					if ((alarm!!.repeatFrequency == 1) && (alarm!!.repeatFrequencyUnits == 4))
 					{
-						println("Change to daily")
+						NacLog.i("Changing repeat frequency to daily")
+
 						// Change to daily
 						alarm!!.repeatFrequency = 1
 						alarm!!.repeatFrequencyUnits = 3
@@ -1755,7 +1764,8 @@ class NacAlarmCardHolder(root: View)
 							// weekly, with few exceptions
 							if ((alarm!!.repeatFrequency == 1) && (alarm!!.repeatFrequencyUnits == 3))
 							{
-								println("Change to weekly")
+								NacLog.i("Changing repeat frequency to weekly")
+
 								// Change to weekly
 								alarm!!.repeatFrequency = 1
 								alarm!!.repeatFrequencyUnits = 4
@@ -1772,7 +1782,8 @@ class NacAlarmCardHolder(root: View)
 									// minute/hour/day repeat frequencies
 									alarm!!.days = EnumSet.of(day)
 									dayOfWeek.setDays(alarm!!.days)
-									println("Only active : $day")
+
+									NacLog.i("Custom repeat frequency. Only active : $day")
 								}
 							}
 						}
@@ -1781,7 +1792,8 @@ class NacAlarmCardHolder(root: View)
 						else -> {}
 					}
 				}
-				println("Repeat : ${alarm!!.repeatFrequency} | ${alarm!!.repeatFrequencyUnits}")
+
+				NacLog.i("Repeat : ${alarm!!.repeatFrequency} | ${alarm!!.repeatFrequencyUnits}")
 
 				// Clear the date
 				alarm!!.date = ""

@@ -364,7 +364,7 @@
 	<!-- Descriptions -->
 	<string name="description_onboarding_welcome">Welcome to the most customizable alarm clock app you have ever used</string>
 	<string name="description_onboarding_permissions">The app needs some permissions to work properly</string>
-	<string name="description_onboarding_permission_post_notifications_request">Allows the app to start and stay running when not already in focus.  Required for alarms to run when the app is in the background.</string>
+	<string name="description_onboarding_permission_post_notifications_request">Required for alarms to run. Allows the app to start and stay running when not already in focus.</string>
 	<string name="description_onboarding_permission_schedule_exact_alarm_request">Allows alarms to run precisely when scheduled.</string>
 	<string name="description_onboarding_permission_system_alert_window_request">This is a special permission. It is used to ensure that the alarm screen is shown, which is required if your alarm will play audio.</string>
 	<string name="description_onboarding_how_to_use_features">Some stuff can be hidden or confusing. Here is how to do those things</string>

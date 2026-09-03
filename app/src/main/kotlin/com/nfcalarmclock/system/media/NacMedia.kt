@@ -13,6 +13,7 @@ import androidx.core.net.toUri
 import androidx.media3.common.MediaItem
 import androidx.media3.common.MediaMetadata
 import com.nfcalarmclock.R
+import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.system.file.NacFileTree.Companion.getFiles
 import com.nfcalarmclock.system.file.basename
 import com.nfcalarmclock.system.file.strip
@@ -344,9 +345,9 @@ private fun parseMediaDuration(millis: String): String
 				minutes, seconds)
 		}
 	}
-	catch (_: NumberFormatException)
+	catch (e: NumberFormatException)
 	{
-		println("NacMedia : getDuration : NumberFormatException!")
+		NacLog.e("NacMedia : parseMediaDuration : ${e.toString()}", throwable = e)
 		""
 	}
 }
@@ -697,12 +698,14 @@ private fun Uri.queryColumn(context: Context, column: String): String
 	// "Volume external_primary not found"
 	catch (e: IllegalArgumentException)
 	{
+		NacLog.e("NacMedia : queryColumn : First ${e.toString()}", throwable = e)
 		e.printStackTrace()
 		return value
 	}
 	// Security exception
 	catch (e: SecurityException)
 	{
+		NacLog.e("NacMedia : queryColumn : ${e.toString()}", throwable = e)
 		e.printStackTrace()
 		return value
 	}
@@ -732,7 +735,7 @@ private fun Uri.queryColumn(context: Context, column: String): String
 	// Something happened, unable to get the string
 	catch (e: IllegalArgumentException)
 	{
-		println("NacMedia : getColumnFromCursor : IllegalArgumentException!")
+		NacLog.e("NacMedia : queryColumn : Second ${e.toString()}", throwable = e)
 		e.printStackTrace()
 	}
 

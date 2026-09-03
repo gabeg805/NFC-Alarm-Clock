@@ -4,6 +4,7 @@ import android.content.Context
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import com.nfcalarmclock.R
+import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.system.media.NacAudioAttributes
 import com.nfcalarmclock.system.media.NacAudioManager
 import com.nfcalarmclock.system.toBundle
@@ -90,14 +91,14 @@ class NacTextToSpeech(
 		@Deprecated("Deprecated in Java")
 		override fun onError(utteranceId: String)
 		{
-			println("On speaking error : $utteranceId")
+			NacLog.e("On speaking error : $utteranceId")
 		}
 
 		/**
 		 */
 		override fun onError(utteranceId: String, errorCode: Int)
 		{
-			println("On speaking error : $utteranceId | $errorCode")
+			NacLog.e("On speaking error : $utteranceId | $errorCode")
 		}
 
 	}
@@ -279,10 +280,9 @@ class NacTextToSpeech(
 			}
 
 			// Speak the message
-			val androidAttrs = attrs.audioAttributes.audioAttributesV21.audioAttributes
 			val bundle = attrs.toBundle()
 
-			textToSpeech.setAudioAttributes(androidAttrs)
+			textToSpeech.setAudioAttributes(attrs.audioAttributes)
 			textToSpeech.speak(message, TextToSpeech.QUEUE_FLUSH, bundle,
 				UTTERANCE_ID)
 

@@ -38,7 +38,7 @@ object NacScheduler
 
 		// Get the calendar for the next alarm
 		val nextAlarmCal = NacCalendar.getNextAlarmDay(alarm, ignoreSkip = true)!!
-		println("NacScheduler : Next alarm : ${calendarToString(nextAlarmCal, "EEE MMM dd HH:mm:ss z yyyy")}")
+		//NacLog.i("NacScheduler : Next alarm : ${calendarToString(nextAlarmCal, "EEE MMM dd HH:mm:ss z yyyy")}")
 
 		// Add the alarm
 		addAlarm(context, alarm, nextAlarmCal)

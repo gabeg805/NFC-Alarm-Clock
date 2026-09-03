@@ -94,7 +94,6 @@ abstract class NacBaseNotificationBuilder(
 	@RequiresApi(Build.VERSION_CODES.O)
 	protected open fun createChannel(): NotificationChannel
 	{
-		//println("Id : $channelId | Name : $channelName | Import : $channelImportance")
 		// Create the channel
 		val channel = NotificationChannel(channelId, channelName, channelImportance)
 

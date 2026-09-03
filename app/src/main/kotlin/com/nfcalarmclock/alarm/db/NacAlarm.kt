@@ -7,6 +7,7 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.nfcalarmclock.R
+import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.nfc.NacNfcTagDismissOrder
 import com.nfcalarmclock.nfc.NacNfcTagViewModel
 import com.nfcalarmclock.nfc.db.NacNfcTag
@@ -740,11 +741,25 @@ open class NacAlarm()
 	/**
 	 * Add the weeks repeat frequency to the alarm time.
 	 */
-	fun addRepeatFrequencyWeeksToTime()
+	fun addRepeatFrequencyWeeksToTime(alarmCal: Calendar)
 	{
+		// Normal weekly alarm. Do nothing
+		if (repeatFrequency == 1)
+		{
+			return
+		}
+
 		// Get the next alarm day
-		val nextCal = NacCalendar.getNextAlarmDay(this)!!
-		println("NacAlarm: Next cal : ${calendarToString(nextCal, "EEE MMM dd HH:mm:ss z yyyy")}")
+		val nextCal = if (days.isEmpty())
+		{
+			alarmCal
+		}
+		else
+		{
+			NacCalendar.getNextAlarmDay(this)!!
+		}
+
+		println("addRepeatFreqWeeksToTime() : ${calendarToString(nextCal, "EEE MMM dd HH:mm:ss z yyyy")}")
 
 		// Ensure that the days to run before starting does not have any extra
 		// days selected. These would be days that do not match the alarm days.
@@ -797,9 +812,13 @@ open class NacAlarm()
 
 		// Create a calendar from the alarm
 		val alarmCal = NacCalendar.alarmToCalendar(this)
+		NacLog.i("addRepeatFrequency initial cal : ${calendarToString(alarmCal, "EEE MMM dd HH:mm:ss z yyyy")}")
+		println("addRepeatFrequency initial cal : ${calendarToString(alarmCal, "EEE MMM dd HH:mm:ss z yyyy")}")
 
 		// Add the repeat frequency to the calendar
 		alarmCal.add(repeatFrequencyUnits.toCalendarField(), repeatFrequency)
+		NacLog.i("addRepeatFrequency after add cal : ${calendarToString(alarmCal, "EEE MMM dd HH:mm:ss z yyyy")}")
+		println("addRepeatFrequency after add cal : ${calendarToString(alarmCal, "EEE MMM dd HH:mm:ss z yyyy")}")
 
 		// Check repeat frequency units
 		when (repeatFrequencyUnits)
@@ -814,7 +833,7 @@ open class NacAlarm()
 			3 -> addRepeatFrequencyDaysToTime(alarmCal)
 
 			// Weekly
-			4 -> addRepeatFrequencyWeeksToTime()
+			4 -> addRepeatFrequencyWeeksToTime(alarmCal)
 
 			// Month
 			5 -> addRepeatFrequencyMonthsToTime(alarmCal)
@@ -1097,10 +1116,9 @@ open class NacAlarm()
 		timeOfDismissEarlyAlarm = 0
 		currentNfcTagsNeededToDismiss = ""
 
-		// Date is set
+		// Clear the date
 		if (date.isNotEmpty())
 		{
-			// Clear the date
 			date = ""
 		}
 

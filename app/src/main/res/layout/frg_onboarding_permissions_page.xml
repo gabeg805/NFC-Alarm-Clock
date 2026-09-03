@@ -63,8 +63,6 @@
 				app:layout_constraintEnd_toStartOf="@id/onboarding_notification_allow_button"
 				/>
 			<!--
-				android:text="@string/description_permission_post_notifications"
-				android:text="Allows the app to run when not in focus.  Without this, alarms will not run if the app is in the background."
 			-->
 
 			<!-- Allow button -->

@@ -32,8 +32,8 @@ android {
 		applicationId = "com.nfcalarmclock"
 		minSdk = 24
 		targetSdk = 36
-		versionCode = 599
-		versionName = "12.6.5-beta027"
+		versionCode = 603
+		versionName = "12.6.5-beta031"
 	}
 
 	// Configuration for signing the app on release builds. The keystore.properties file must exist
@@ -152,6 +152,9 @@ dependencies {
 	implementation("androidx.cardview:cardview:1.0.0")
 	implementation("androidx.coordinatorlayout:coordinatorlayout:1.3.0")
 	implementation("androidx.constraintlayout:constraintlayout:2.2.2")
+	implementation("androidx.recyclerview:recyclerview:1.4.0")
+	implementation("androidx.viewpager:viewpager:1.1.0")
+	implementation("com.google.android.material:material:1.14.0")
 	// Upgrading to 1.19.0 requires API 37
 	implementation("androidx.core:core-ktx:1.18.0")
 	implementation("androidx.fragment:fragment-ktx:1.9.0")
@@ -160,9 +163,6 @@ dependencies {
 	implementation("androidx.media3:media3-exoplayer:1.11.0")
 	implementation("androidx.media3:media3-common:1.11.0")
 	implementation("androidx.preference:preference-ktx:1.2.1")
-	implementation("androidx.recyclerview:recyclerview:1.4.0")
-	implementation("androidx.viewpager:viewpager:1.1.0")
-	implementation("com.google.android.material:material:1.14.0")
 	implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.11.0")
 	implementation("androidx.dynamicanimation:dynamicanimation:1.1.0")
 	implementation("androidx.navigation:navigation-fragment-ktx:2.9.8")

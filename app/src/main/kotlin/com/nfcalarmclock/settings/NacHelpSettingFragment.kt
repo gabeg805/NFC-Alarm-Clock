@@ -123,7 +123,6 @@ class NacHelpSettingFragment
 		// Get the preference
 		val key = getString(R.string.key_settings_help_email_suggestion)
 		val pref = findPreference<Preference>(key)
-		println(address)
 
 		// Set the click listener
 		pref!!.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->

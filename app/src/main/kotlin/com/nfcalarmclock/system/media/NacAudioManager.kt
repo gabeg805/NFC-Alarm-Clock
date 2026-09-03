@@ -1,6 +1,7 @@
 package com.nfcalarmclock.system.media
 
 import android.content.Context
+import android.media.AudioAttributes
 import android.media.AudioFocusRequest
 import android.media.AudioManager
 import android.media.AudioManager.OnAudioFocusChangeListener
@@ -59,7 +60,7 @@ object NacAudioManager
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
 		{
 			var builder = AudioFocusRequest.Builder(focusGainType)
-				.setAudioAttributes(attrs.audioAttributesV21)
+				.setAudioAttributes(attrs.audioAttributes)
 
 			// Set the listener only if it is not null
 			if (listener != null)
@@ -128,7 +129,7 @@ object NacAudioManager
 		// Check if the source is not set
 		if (source.isNullOrEmpty())
 		{
-			return C.USAGE_UNKNOWN
+			return AudioAttributes.USAGE_UNKNOWN
 		}
 
 		// Get all the audio sources
@@ -137,12 +138,12 @@ object NacAudioManager
 		// Alarm
 		return when(source)
 		{
-			audioSources[0] -> C.USAGE_ALARM
-			audioSources[1] -> C.USAGE_VOICE_COMMUNICATION
-			audioSources[2] -> C.USAGE_MEDIA
-			audioSources[3] -> C.USAGE_NOTIFICATION
-			audioSources[4] -> C.USAGE_NOTIFICATION_RINGTONE
-			else            -> C.USAGE_MEDIA
+			audioSources[0] -> AudioAttributes.USAGE_ALARM
+			audioSources[1] -> AudioAttributes.USAGE_VOICE_COMMUNICATION
+			audioSources[2] -> AudioAttributes.USAGE_MEDIA
+			audioSources[3] -> AudioAttributes.USAGE_NOTIFICATION
+			audioSources[4] -> AudioAttributes.USAGE_NOTIFICATION_RINGTONE
+			else            -> AudioAttributes.USAGE_MEDIA
 		}
 	}
 
@@ -156,12 +157,31 @@ object NacAudioManager
 		// Alarm
 		return when (usage)
 		{
-			C.USAGE_ALARM                 -> AudioManager.STREAM_ALARM
-			C.USAGE_VOICE_COMMUNICATION   -> AudioManager.STREAM_VOICE_CALL
-			C.USAGE_MEDIA                 -> AudioManager.STREAM_MUSIC
-			C.USAGE_NOTIFICATION          -> AudioManager.STREAM_NOTIFICATION
-			C.USAGE_NOTIFICATION_RINGTONE -> AudioManager.STREAM_RING
-			else                          -> AudioManager.USE_DEFAULT_STREAM_TYPE
+			AudioAttributes.USAGE_ALARM                 -> AudioManager.STREAM_ALARM
+			AudioAttributes.USAGE_VOICE_COMMUNICATION   -> AudioManager.STREAM_VOICE_CALL
+			AudioAttributes.USAGE_MEDIA                 -> AudioManager.STREAM_MUSIC
+			AudioAttributes.USAGE_NOTIFICATION          -> AudioManager.STREAM_NOTIFICATION
+			AudioAttributes.USAGE_NOTIFICATION_RINGTONE -> AudioManager.STREAM_RING
+			else                                        -> AudioManager.USE_DEFAULT_STREAM_TYPE
+		}
+	}
+
+	/**
+	 * Get the media3 usage from a normal AudioAttributes usage type.
+	 *
+	 * @return The media3 usage from a normal AudioAttributes usage type.
+	 */
+	fun usageToUsageMedia3(usage: Int): Int
+	{
+		// Alarm
+		return when (usage)
+		{
+			AudioAttributes.USAGE_ALARM                 -> C.USAGE_ALARM
+			AudioAttributes.USAGE_VOICE_COMMUNICATION   -> C.USAGE_VOICE_COMMUNICATION
+			AudioAttributes.USAGE_MEDIA                 -> C.USAGE_MEDIA
+			AudioAttributes.USAGE_NOTIFICATION          -> C.USAGE_NOTIFICATION
+			AudioAttributes.USAGE_NOTIFICATION_RINGTONE -> C.USAGE_NOTIFICATION_RINGTONE
+			else                                        -> C.USAGE_UNKNOWN
 		}
 	}
 

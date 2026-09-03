@@ -6,6 +6,7 @@ import android.text.format.DateFormat
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.db.NacNextAlarm
+import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.system.NacCalendar.Day
 import com.nfcalarmclock.system.NacCalendar.Day.Companion.WEEK
 import com.nfcalarmclock.system.NacCalendar.Day.Companion.WEEKDAY
@@ -517,7 +518,7 @@ object NacCalendar
 			}
 			catch (e: IndexOutOfBoundsException)
 			{
-				println("Error from trying parse date! ${e.toString()}")
+				NacLog.e("Error from trying parse date!", throwable = e)
 			}
 		}
 
@@ -879,7 +880,8 @@ object NacCalendar
 			// Check if there was only one calendar in the list, but the alarm is scheduled to be repeated
 			if ((calendars.size == 1) && alarm.shouldRepeat)
 			{
-				println("SKIPPIO. Should skip alarm but do not ignore skip and only one calendar in list: ${alarm.repeatFrequency} | ${alarm.repeatFrequencyUnits} | ${alarm.repeatFrequencyDaysToRunBeforeStarting}")
+				NacLog.i("SKIPPIO. Should skip alarm but do not ignore skip and only one calendar in list: ${alarm.repeatFrequency} | ${alarm.repeatFrequencyUnits} | ${alarm.repeatFrequencyDaysToRunBeforeStarting}")
+
 				// Add the repeat frequency to the calendar
 				nextDay.add(alarm.repeatFrequencyUnits.toCalendarField(), alarm.repeatFrequency)
 				nextDay

@@ -7,11 +7,11 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.LinearLayout
-import android.widget.RelativeLayout
 import android.widget.SeekBar
 import android.widget.SeekBar.OnSeekBarChangeListener
 import android.widget.TextView
 import androidx.annotation.OptIn
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.doOnLayout
 import androidx.core.view.doOnNextLayout
 import androidx.core.view.isVisible
@@ -116,6 +116,32 @@ abstract class NacBaseAddEditTimer
 	 * Second textview.
 	 */
 	protected lateinit var secondsTextView: TextView
+
+	/**
+	 * Number pad container.
+	 */
+	protected lateinit var numpadContainer: LinearLayout
+
+	/**
+	 * Number pad buttons.
+	 */
+	protected lateinit var numpad1: MaterialButton
+	protected lateinit var numpad2: MaterialButton
+	protected lateinit var numpad3: MaterialButton
+	protected lateinit var numpad4: MaterialButton
+	protected lateinit var numpad5: MaterialButton
+	protected lateinit var numpad6: MaterialButton
+	protected lateinit var numpad7: MaterialButton
+	protected lateinit var numpad8: MaterialButton
+	protected lateinit var numpad9: MaterialButton
+	protected lateinit var numpad0: MaterialButton
+	protected lateinit var numpad00: MaterialButton
+	protected lateinit var numpadDel: MaterialButton
+
+	/**
+	 * Start button.
+	 */
+	protected lateinit var startButton: MaterialButton
 
 	/**
 	 * More options container.
@@ -354,6 +380,7 @@ abstract class NacBaseAddEditTimer
 		setupMoreButton()
 		setupMoreOptionsContainerVisibility()
 		setupSaveButton()
+		setupTimeAndNumpadButtonSizes()
 		setupRepeatButton()
 		setupVibrateButton()
 		setupNfcButton()
@@ -364,6 +391,73 @@ abstract class NacBaseAddEditTimer
 		setupOptionsSection(view)
 		setupMediaPickerObserver()
 		setupButtonLabels()
+	}
+
+	/**
+	 * Setup the sizes of the time and number pad buttons.
+	 */
+	protected fun setupTimeAndNumpadButtonSizes()
+	{
+		// Ensure the number pad is laid out
+		numpadContainer.doOnLayout {
+
+			// Clear the percent height constraint and make the height wrap content
+			numpadContainer.updateLayoutParams<ConstraintLayout.LayoutParams> {
+				matchConstraintPercentHeight = -1f
+				height = ConstraintLayout.LayoutParams.WRAP_CONTENT
+			}
+
+			// Calculate a good button size based on the 3x5 columns and rows, and use the min
+			// of the width/height so that the button can be circular
+			val totalWidth = numpadContainer.width - numpadContainer.paddingStart - numpadContainer.paddingEnd
+			val totalHeight = numpadContainer.height - numpadContainer.paddingTop - numpadContainer.paddingBottom
+			val cellWidth = totalWidth / 3
+			val cellHeight = totalHeight / 5
+			val buttonSize = minOf(cellWidth, cellHeight)
+
+			// All buttons that will have their size changed
+			val allButtons = arrayOf(
+				numpad1, numpad2, numpad3,
+				numpad4, numpad5, numpad6,
+				numpad7, numpad8, numpad9,
+				numpad00, numpad0, numpadDel,
+				startButton,
+			)
+
+			// Update the size of all the buttons
+			allButtons.forEach { b ->
+
+				// Update the width and height
+				val params = b.layoutParams as LinearLayout.LayoutParams
+				params.width = buttonSize
+				params.height = buttonSize
+
+				// Force layout update
+				b.layoutParams = params
+
+			}
+
+			// Ensure the hour is laid out
+			hourTextView.doOnLayout {
+
+				// Update the attributes of the hour (this is the main time view that the other
+				// time views follow)
+				hourTextView.updateLayoutParams<ConstraintLayout.LayoutParams> {
+
+					// Clear the percent height constraint
+					matchConstraintPercentHeight = -1f
+
+					// Make the height the remaining in the scrollview, though subtracting
+					// hour height is odd. Shouldn't that be the margin instead? It seems to
+					// be working for now, so I won't change it yet
+					//height = ConstraintLayout.LayoutParams.WRAP_CONTENT
+					height = scrollView.height - numpadContainer.height - hourTextView.height
+
+				}
+
+			}
+		}
+
 	}
 
 	/**
@@ -495,7 +589,7 @@ abstract class NacBaseAddEditTimer
 			vibrateButton.text = resources.getString(R.string.title_alarm_vibrate)
 			nfcButton.text = resources.getString(R.string.title_alarm_nfc)
 			flashlightButton.text = resources.getString(R.string.action_alarm_option_flashlight)
-			stopOptionsButton.text = resources.getString(R.string.action_timer_stop)
+			stopOptionsButton.text = resources.getString(R.string.action_alarm_dismiss)
 			settingsOptionsButton.text = resources.getString(R.string.title_settings)
 		}
 		// Only show icons. Do not show labels
@@ -708,7 +802,6 @@ abstract class NacBaseAddEditTimer
 	{
 		// Get the views
 		val view = requireView()
-		val numberpadContainer: RelativeLayout = view.findViewById(R.id.timer_numberpad_container)
 		val moreOptionsDivider: View = view.findViewById(R.id.timer_more_options_divider)
 
 		// More options container is already visible so do nothing
@@ -723,13 +816,6 @@ abstract class NacBaseAddEditTimer
 		// Remove constraint toptotopof from hour and determine what the padding should be
 		// After the hour textview has been laid out
 		scrollView.doOnLayout {
-
-			// Get the location of the hour textview and numberpad container on screen
-			val hourLocation = IntArray(2)
-			val numberpadContainerLocation = IntArray(2)
-
-			hourTextView.getLocationOnScreen(hourLocation)
-			numberpadContainer.getLocationOnScreen(numberpadContainerLocation)
 
 			// Update the top and bottom margins to match the current spacing of the
 			// views while the more options container is invisible. That way, when making
@@ -746,6 +832,7 @@ abstract class NacBaseAddEditTimer
 				{
 					delayScrollingUp()
 				}
+
 			}
 
 		}
@@ -816,18 +903,19 @@ abstract class NacBaseAddEditTimer
 	{
 		// Get the views
 		val view = requireView()
-		val numpad1: MaterialButton = view.findViewById(R.id.timer_numberpad1)
-		val numpad2: MaterialButton = view.findViewById(R.id.timer_numberpad2)
-		val numpad3: MaterialButton = view.findViewById(R.id.timer_numberpad3)
-		val numpad4: MaterialButton = view.findViewById(R.id.timer_numberpad4)
-		val numpad5: MaterialButton = view.findViewById(R.id.timer_numberpad5)
-		val numpad6: MaterialButton = view.findViewById(R.id.timer_numberpad6)
-		val numpad7: MaterialButton = view.findViewById(R.id.timer_numberpad7)
-		val numpad8: MaterialButton = view.findViewById(R.id.timer_numberpad8)
-		val numpad9: MaterialButton = view.findViewById(R.id.timer_numberpad9)
-		val numpad0: MaterialButton = view.findViewById(R.id.timer_numberpad0)
-		val numpad00: MaterialButton = view.findViewById(R.id.timer_numberpad00)
-		val numpadDel: MaterialButton = view.findViewById(R.id.timer_numberpad_del)
+		numpadContainer = view.findViewById(R.id.timer_numberpad_container)
+		numpad1 = view.findViewById(R.id.timer_numberpad1)
+		numpad2 = view.findViewById(R.id.timer_numberpad2)
+		numpad3 = view.findViewById(R.id.timer_numberpad3)
+		numpad4 = view.findViewById(R.id.timer_numberpad4)
+		numpad5 = view.findViewById(R.id.timer_numberpad5)
+		numpad6 = view.findViewById(R.id.timer_numberpad6)
+		numpad7 = view.findViewById(R.id.timer_numberpad7)
+		numpad8 = view.findViewById(R.id.timer_numberpad8)
+		numpad9 = view.findViewById(R.id.timer_numberpad9)
+		numpad0 = view.findViewById(R.id.timer_numberpad0)
+		numpad00 = view.findViewById(R.id.timer_numberpad00)
+		numpadDel = view.findViewById(R.id.timer_numberpad_del)
 
 		// Setup numberpad colors
 		numpad1.setupRippleColor(sharedPreferences)
@@ -961,7 +1049,7 @@ abstract class NacBaseAddEditTimer
 		// Get the view
 		val context = requireContext()
 		val view = requireView()
-		val startButton: MaterialButton = view.findViewById(R.id.timer_start_button)
+		startButton = view.findViewById(R.id.timer_start_button)
 
 		// Get the contrast color
 		val contrastColor = calcContrastColor(sharedPreferences.themeColor)

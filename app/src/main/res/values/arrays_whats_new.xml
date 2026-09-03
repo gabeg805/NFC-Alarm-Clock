@@ -6,7 +6,7 @@
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
 		<item>12.6.5-beta</item>
-		<item>Added &lt;b> button labels &lt;/b> to make it more obvious what buttons do. This can be changed in &lt;b> Settings > Appearance > Styles &lt;/b></item>
+		<item>Added button &lt;b> labels &lt;/b> to make it more obvious what buttons do. This can be changed in &lt;b> Settings > Appearance > Styles &lt;/b></item>
 		<item>Added option to toggle alarms on/off when &lt;b> airplane mode &lt;/b> is changed.</item>
 		<item>Added option to dismiss alarm with &lt;b> volume buttons &lt;/b></item>
 		<item>Added &lt;b> preview &lt;/b> to volume options.</item>
@@ -20,6 +20,7 @@
 		<item>Improved &lt;b> set date &lt;/b> so the time is also saved when the date is set.</item>
 		<item>Improved &lt;b> missed alarm &lt;/b> notification so it shows the name and time of the alarm that was missed.</item>
 		<item>Increased size of snooze and dismiss buttons in &lt;b> alarm screen &lt;/b></item>
+		<item>Fixed issue with &lt;b> vibrate &lt;/b> affecting some phones.</item>
 		<item>Fixed issue with &lt;b> import &lt;/b> and &lt;b> export &lt;/b></item>
 		<item>Fixed issue where &lt;b> alarm screen &lt;/b> would, on rare occasions, not close after dismissing alarm, causing a buggy loop.</item>
 		<item>Fixed minor issue with &lt;b> dismiss early &lt;/b> notification.</item>

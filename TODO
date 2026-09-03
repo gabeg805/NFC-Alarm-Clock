@@ -2,23 +2,10 @@
 TODO
 ----
 
+* Update NacAlarm docstrings to include units of columns
+
 * Change AlarmOptions fragment so that if fragment argument is null, just build
   a generic jank from NacSharedPreferences
-
-* Check if media exists when importing alarms
-
-* Test start timer from NFC, as this code block was changed
-
-* Volume can dismiss NFC alarms
-
-* Do fresh install on emulator and test giong to timer. The top bar was not
-  showing and it was making the  fragment look a little strange.
-
-* Test NFC dismiss when app is not in focus and make sure scanning NFC isn't
-  causing a loop.
-
-* When going back to the media fragment after changing the directory, it would
-  not reload to the path of the music that is selected for the alarm.
 
 * Update website with f-droid and izzy
 
@@ -27,15 +14,16 @@ TODO
 
 * Add default timer in Settings
 
-* When using TTS, volume seems to get louder when coming back to music, and
-  then goes down a bit. Is that intentional? Scope revertVolume() as well.
-
-* Alarm time in activity was not updating until turned on screen. May not be an important bug.
-
 * Add languages for Pakistan, Japan, Thailand, Poland, Turkey, France,
   Serbia, Finland, Romania, Italy
 
 ------
 Issues
 ------
+
+* When using TTS, volume seems to get louder when coming back to music, and
+  then goes down a bit. Is that intentional? Scope revertVolume() as well.
+
+* Alarm time in activity was not updating until turned on screen. May not be an
+  important bug.
 

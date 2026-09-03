@@ -3,6 +3,7 @@ package com.nfcalarmclock.alarm.options.vibrate
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.widget.SwitchCompat
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.slider.Slider
 import com.nfcalarmclock.R
@@ -11,6 +12,8 @@ import com.nfcalarmclock.alarm.options.NacGenericAlarmOptionsDialog
 import com.nfcalarmclock.view.calcAlpha
 import com.nfcalarmclock.view.setupProgressAndThumbColor
 import com.nfcalarmclock.view.setupSwitchColor
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 /**
  * Vibrate options for an alarm.
@@ -356,26 +359,34 @@ open class NacVibrateOptionsDialog
 	 */
 	private fun startVibrator()
 	{
-		// Cleanup the vibrator
-		vibrator.cleanup()
+		lifecycleScope.launch {
 
-		// Get the values
-		val duration = vibrateOnSlider.value.toLong()
-		val wait = vibrateOffSlider.value.toLong()
+			// Cleanup the vibrator
+			vibrator.cleanup()
 
-		// Vibrate with a pattern
-		if (customPatternSwitch.isChecked)
-		{
-			vibrator.vibrate(
-				duration,
-				wait,
-				customPatternRepeatSlider.value.toInt(),
-				customPatternWaitSlider.value.toLong())
-		}
-		// Vibrate normally
-		else
-		{
-			vibrator.vibrate(duration, wait)
+			// Wait a bit to ensure the cleanup does not conflict and cancel out the startup
+			delay(500)
+
+			// Get the values
+			val duration = vibrateOnSlider.value.toLong()
+			val wait = vibrateOffSlider.value.toLong()
+
+			// Vibrate with a pattern
+			if (customPatternSwitch.isChecked)
+			{
+				vibrator.vibrateWithPattern(
+					duration,
+					wait,
+					customPatternRepeatSlider.value.toInt(),
+					customPatternWaitSlider.value.toLong()
+				)
+			}
+			// Vibrate normally
+			else
+			{
+				vibrator.vibrateNormally(duration, wait)
+			}
+
 		}
 	}
 

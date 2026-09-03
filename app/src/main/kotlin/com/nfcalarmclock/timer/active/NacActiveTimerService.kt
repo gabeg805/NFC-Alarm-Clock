@@ -16,6 +16,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.activealarm.NacWakeupProcess
+import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.nfc.shouldUseNfc
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.NacCalendar
@@ -655,7 +656,7 @@ class NacActiveTimerService
 		}
 		else
 		{
-			println("TIMER IS NULL STOPPING PREMATURELY")
+			NacLog.e("In active timer service, but no timer found. Not continuing setup")
 			return START_NOT_STICKY
 		}
 

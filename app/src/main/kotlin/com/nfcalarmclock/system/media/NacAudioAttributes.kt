@@ -1,29 +1,22 @@
 package com.nfcalarmclock.system.media
 
 import android.content.Context
+import android.media.AudioAttributes
 import android.media.AudioFocusRequest
 import android.media.AudioManager
-import android.os.Build
-import androidx.media3.common.AudioAttributes
 import androidx.media3.common.C
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.shared.NacSharedPreferences
 
 /**
  * Audio attributes.
+ *
+ * @param context Context.
+ * @param source Audio source.
  */
 class NacAudioAttributes(
-
-	/**
-	 * Context.
-	 */
 	private val context: Context,
-
-	/**
-	 * Source.
-	 */
 	source: String = ""
-
 )
 {
 
@@ -52,15 +45,18 @@ class NacAudioAttributes(
 	 */
 	val audioAttributes: AudioAttributes
 		get() = AudioAttributes.Builder()
-					.setContentType(C.AUDIO_CONTENT_TYPE_MUSIC)
-					.setUsage(audioUsage)
-					.build()
+			.setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+			.setUsage(audioUsage)
+			.build()
 
 	/**
-	 * Audio attributes v21.
+	 * Audio attributes.
 	 */
-	val audioAttributesV21: android.media.AudioAttributes
-		get() = audioAttributes.audioAttributesV21.audioAttributes
+	val audioAttributesMedia3: androidx.media3.common.AudioAttributes
+		get() = androidx.media3.common.AudioAttributes.Builder()
+					.setContentType(C.AUDIO_CONTENT_TYPE_MUSIC)
+					.setUsage(NacAudioManager.usageToUsageMedia3(audioAttributes.usage))
+					.build()
 
 	/**
 	 * Audio manager.
@@ -78,14 +74,7 @@ class NacAudioAttributes(
 	 * Audio stream.
 	 */
 	val stream: Int
-		get() = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-		{
-			audioAttributesV21.volumeControlStream
-		}
-		else
-		{
-			NacAudioManager.usageToStream(audioUsage)
-		}
+		get() = NacAudioManager.usageToStream(audioUsage)
 
 	/**
 	 * Volume of the stream.

@@ -34,16 +34,6 @@ class NacAboutSettingFragment
 
 		// Set the version name as the summary
 		versionPref!!.summary = BuildConfig.VERSION_NAME
-
-		// Check if the system alert window permission is needed
-		if (!NacSystemAlertWindowPermission.isCorrectAndroidVersion)
-		{
-			val systemAlertWindowKey = getString(R.string.key_settings_about_system_alert_window)
-			val systemAlertWindowPref = findPreference<Preference>(systemAlertWindowKey)
-
-			// Hide the system alert window preference
-			systemAlertWindowPref?.isVisible = false
-		}
 	}
 
 	/**

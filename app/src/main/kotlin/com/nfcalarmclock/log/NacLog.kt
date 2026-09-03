@@ -47,9 +47,9 @@ object NacLog
 
 			// In a method so get the class name and method, such as:
 			// NacMainActivity:onCreate
-			return if ((index > 0) && (index+3 in stackTrace.indices))
+			return if ((index > 0) && (index+2 in stackTrace.indices))
 			{
-				val element = stackTrace[index+3]
+				val element = stackTrace[index+2]
 				val className = element.className.substringAfterLast('.')
 				"${className.padEnd(40, ' ').substring(0, 40)}${element.methodName.padEnd(30, ' ').substring(0, 30)}"
 			}

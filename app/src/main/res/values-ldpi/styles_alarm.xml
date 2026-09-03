@@ -98,6 +98,7 @@
 
 	<!-- Snooze/dismiss row -->
 	<style name="My.Alarm.Active.SnoozeDismissRow" parent="">
+		<item name="android:layout_width">match_parent</item>
 		<item name="android:layout_height">@dimen/action_row_height</item>
 		<item name="android:layout_marginBottom">@dimen/xxxlarge</item>
 		<item name="android:layout_marginStart">@dimen/small</item>

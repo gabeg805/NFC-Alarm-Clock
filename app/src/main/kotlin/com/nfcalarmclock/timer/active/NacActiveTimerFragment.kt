@@ -28,6 +28,7 @@ import androidx.navigation.fragment.findNavController
 import com.google.android.material.button.MaterialButton
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.nfcalarmclock.R
+import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.nfc.NacNfc
 import com.nfcalarmclock.nfc.NacNfcTagViewModel
 import com.nfcalarmclock.nfc.SCANNED_NFC_TAG_ID_BUNDLE_NAME
@@ -537,7 +538,7 @@ class NacActiveTimerFragment
 		// Stop the fragment if there is no timer
 		else
 		{
-			println("POPPING BACK STACK")
+			NacLog.e("In active timer fragment, but no timer found. Popping back stack and going back")
 			findNavController().popBackStack()
 			return
 		}

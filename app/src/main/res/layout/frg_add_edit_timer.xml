@@ -2,6 +2,7 @@
 <androidx.core.widget.NestedScrollView
 	xmlns:android="http://schemas.android.com/apk/res/android"
 	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
 	android:id="@+id/timer_scrollview"
 	android:layout_width="match_parent"
 	android:layout_height="match_parent"
@@ -13,11 +14,10 @@
 
 		<!-- Hour -->
 		<TextView
-			style="@style/My.Timer.TimeText.Active"
+			style="@style/My.Timer.TimeText.Main"
 			android:id="@+id/timer_hour"
-			android:layout_marginTop="@dimen/medium"
-			android:layout_marginBottom="@dimen/medium"
 			android:text="@string/number00"
+			android:gravity="center_vertical"
 			app:layout_constraintTop_toTopOf="parent"
 			app:layout_constraintBottom_toTopOf="@id/timer_numberpad_container"
 			app:layout_constraintStart_toStartOf="parent"
@@ -74,174 +74,185 @@
 			/>
 
 		<!-- Number pad container -->
-		<RelativeLayout
+		<LinearLayout
 			style="@style/My.Timer.NumberpadContainer"
 			android:id="@+id/timer_numberpad_container"
 			android:layout_width="match_parent"
-			android:layout_height="wrap_content"
-			app:layout_constraintBottom_toTopOf="@id/timer_start_button">
+			android:layout_height="0dp"
+			android:orientation="vertical"
+			app:layout_constraintTop_toBottomOf="@id/timer_hour"
+			app:layout_constraintBottom_toTopOf="@id/timer_more_options_divider">
 
 			<!-- Number pad 1-3 -->
-			<com.google.android.material.button.MaterialButton
-				style="@style/My.Timer.NumberpadButton"
-				android:id="@+id/timer_numberpad1"
-				android:layout_toStartOf="@id/timer_numberpad2"
-				android:text="@string/number1"
-				/>
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="0dp"
+				android:layout_weight="1"
+				android:gravity="center"
+				android:orientation="horizontal">
 
-			<com.google.android.material.button.MaterialButton
-				style="@style/My.Timer.NumberpadButton"
-				android:id="@+id/timer_numberpad2"
-				android:layout_centerHorizontal="true"
-				android:text="@string/number2"
-				/>
+				<com.google.android.material.button.MaterialButton
+					style="@style/My.Timer.NumberpadButton"
+					android:id="@+id/timer_numberpad1"
+					android:text="@string/number1"
+					/>
 
-			<com.google.android.material.button.MaterialButton
-				style="@style/My.Timer.NumberpadButton"
-				android:id="@+id/timer_numberpad3"
-				android:layout_toEndOf="@id/timer_numberpad2"
-				android:text="@string/number3"
-				/>
+				<com.google.android.material.button.MaterialButton
+					style="@style/My.Timer.NumberpadButton"
+					android:id="@+id/timer_numberpad2"
+					android:text="@string/number2"
+					/>
+
+				<com.google.android.material.button.MaterialButton
+					style="@style/My.Timer.NumberpadButton"
+					android:id="@+id/timer_numberpad3"
+					android:text="@string/number3"
+					/>
+			</LinearLayout>
 
 			<!-- Number pad 4-6 -->
-			<com.google.android.material.button.MaterialButton
-				style="@style/My.Timer.NumberpadButton"
-				android:id="@+id/timer_numberpad4"
-				android:layout_alignTop="@id/timer_numberpad5"
-				android:layout_toStartOf="@id/timer_numberpad5"
-				android:layout_marginTop="@dimen/zero"
-				android:text="@string/number4"
-				/>
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="0dp"
+				android:layout_weight="1"
+				android:gravity="center"
+				android:orientation="horizontal">
 
-			<com.google.android.material.button.MaterialButton
-				style="@style/My.Timer.NumberpadButton"
-				android:id="@+id/timer_numberpad5"
-				android:layout_below="@id/timer_numberpad2"
-				android:layout_centerHorizontal="true"
-				android:text="@string/number5"
-				/>
+				<com.google.android.material.button.MaterialButton
+						style="@style/My.Timer.NumberpadButton"
+						android:id="@+id/timer_numberpad4"
+						android:text="@string/number4"
+						/>
 
-			<com.google.android.material.button.MaterialButton
-				style="@style/My.Timer.NumberpadButton"
-				android:id="@+id/timer_numberpad6"
-				android:layout_alignTop="@id/timer_numberpad5"
-				android:layout_toEndOf="@id/timer_numberpad5"
-				android:layout_marginTop="@dimen/zero"
-				android:text="@string/number6"
-				/>
+				<com.google.android.material.button.MaterialButton
+					style="@style/My.Timer.NumberpadButton"
+					android:id="@+id/timer_numberpad5"
+					android:text="@string/number5"
+					/>
+
+				<com.google.android.material.button.MaterialButton
+					style="@style/My.Timer.NumberpadButton"
+					android:id="@+id/timer_numberpad6"
+					android:text="@string/number6"
+					/>
+			</LinearLayout>
 
 			<!-- Number pad 7-9 -->
-			<com.google.android.material.button.MaterialButton
-				style="@style/My.Timer.NumberpadButton"
-				android:id="@+id/timer_numberpad7"
-				android:layout_alignTop="@id/timer_numberpad8"
-				android:layout_toStartOf="@id/timer_numberpad8"
-				android:layout_marginTop="@dimen/zero"
-				android:text="@string/number7"
-				/>
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="0dp"
+				android:layout_weight="1"
+				android:gravity="center"
+				android:orientation="horizontal">
 
-			<com.google.android.material.button.MaterialButton
-				style="@style/My.Timer.NumberpadButton"
-				android:id="@+id/timer_numberpad8"
-				android:layout_below="@id/timer_numberpad5"
-				android:layout_centerHorizontal="true"
-				android:text="@string/number8"
-				/>
+				<com.google.android.material.button.MaterialButton
+						style="@style/My.Timer.NumberpadButton"
+						android:id="@+id/timer_numberpad7"
+						android:text="@string/number7"
+						/>
 
-			<com.google.android.material.button.MaterialButton
-				style="@style/My.Timer.NumberpadButton"
-				android:id="@+id/timer_numberpad9"
-				android:layout_alignTop="@id/timer_numberpad8"
-				android:layout_toEndOf="@id/timer_numberpad8"
-				android:layout_marginTop="@dimen/zero"
-				android:text="@string/number9"
-				/>
+				<com.google.android.material.button.MaterialButton
+					style="@style/My.Timer.NumberpadButton"
+					android:id="@+id/timer_numberpad8"
+					android:text="@string/number8"
+					/>
+
+				<com.google.android.material.button.MaterialButton
+					style="@style/My.Timer.NumberpadButton"
+					android:id="@+id/timer_numberpad9"
+					android:text="@string/number9"
+					/>
+			</LinearLayout>
 
 			<!-- Number pad 0 and del -->
-			<com.google.android.material.button.MaterialButton
-				style="@style/My.Timer.NumberpadButton"
-				android:id="@+id/timer_numberpad00"
-				android:layout_alignTop="@id/timer_numberpad0"
-				android:layout_toStartOf="@id/timer_numberpad0"
-				android:layout_marginTop="@dimen/zero"
-				android:text="@string/number00"
-				/>
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="0dp"
+				android:layout_weight="1"
+				android:gravity="center"
+				android:orientation="horizontal">
 
-			<com.google.android.material.button.MaterialButton
-				style="@style/My.Timer.NumberpadButton"
-				android:id="@+id/timer_numberpad0"
-				android:layout_below="@id/timer_numberpad8"
-				android:layout_centerHorizontal="true"
-				android:text="@string/number0"
-				/>
+				<com.google.android.material.button.MaterialButton
+					style="@style/My.Timer.NumberpadButton"
+					android:id="@+id/timer_numberpad00"
+					android:text="@string/number00"
+					/>
 
-			<com.google.android.material.button.MaterialButton
-				style="@style/My.Timer.NumberpadDeleteButton"
-				android:id="@+id/timer_numberpad_del"
-				android:layout_alignTop="@id/timer_numberpad0"
-				android:layout_toEndOf="@id/timer_numberpad0"
-				android:layout_marginTop="@dimen/zero"
-				app:icon="@drawable/backspace_32"
-				/>
-		</RelativeLayout>
+				<com.google.android.material.button.MaterialButton
+					style="@style/My.Timer.NumberpadButton"
+					android:id="@+id/timer_numberpad0"
+					android:text="@string/number0"
+					/>
 
-		<!-- Guide to center start button between numberpad and more options -->
-		<View
-			android:id="@+id/timer_guide_for_start_button"
-			android:layout_width="match_parent"
-			android:layout_height="@dimen/line"
-			android:background="@color/gray_dark"
-			android:visibility="invisible"
-			app:layout_constraintTop_toBottomOf="@id/timer_numberpad_container"
-			app:layout_constraintBottom_toTopOf="@id/timer_more_options_divider"
-			/>
+				<com.google.android.material.button.MaterialButton
+					style="@style/My.Timer.NumberpadDeleteButton"
+					android:id="@+id/timer_numberpad_del"
+					app:icon="@drawable/backspace_32"
+					/>
+			</LinearLayout>
 
-		<!-- Start timer -->
-		<com.google.android.material.button.MaterialButton
-			style="@style/My.Timer.ActionButton"
-			android:id="@+id/timer_start_button"
-			android:backgroundTint="?attr/colorAccent"
-			app:icon="@drawable/play"
-			app:layout_constraintTop_toTopOf="@id/timer_guide_for_start_button"
-			app:layout_constraintBottom_toBottomOf="@id/timer_guide_for_start_button"
-			app:layout_constraintStart_toStartOf="parent"
-			app:layout_constraintEnd_toEndOf="parent"
-			/>
+			<LinearLayout
+				style="@style/My.Timer.ActionRow"
+				android:layout_width="match_parent"
+				android:layout_height="0dp"
+				android:layout_weight="1"
+				android:gravity="center"
+				android:orientation="horizontal">
 
-		<!-- More button -->
-		<com.google.android.material.button.MaterialButton
-			style="@style/My.Timer.MoreButton"
-			android:id="@+id/timer_more_button"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@string/word_more"
-			app:icon="@drawable/expand"
-			app:layout_constraintTop_toTopOf="@id/timer_start_button"
-			app:layout_constraintBottom_toBottomOf="@id/timer_start_button"
-			app:layout_constraintStart_toStartOf="parent"
-			/>
+				<!-- More button -->
+				<com.google.android.material.button.MaterialButton
+					style="@style/My.Timer.MoreButton"
+					android:id="@+id/timer_more_button"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/word_more"
+					app:icon="@drawable/expand"
+					/>
 
-		<!-- Save timer -->
-		<com.google.android.material.button.MaterialButton
-			style="@style/My.Timer.SaveButton"
-			android:id="@+id/timer_save_button"
-			android:layout_width="wrap_content"
-			android:layout_height="wrap_content"
-			android:text="@string/action_save"
-			app:icon="@drawable/save_32"
-			app:layout_constraintTop_toTopOf="@id/timer_start_button"
-			app:layout_constraintBottom_toBottomOf="@id/timer_start_button"
-			app:layout_constraintEnd_toEndOf="parent"
-			/>
+				<Space
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					tools:ignore="NestedWeights"
+					/>
+
+				<!-- Start timer -->
+				<com.google.android.material.button.MaterialButton
+					style="@style/My.Timer.StartButton"
+					android:id="@+id/timer_start_button"
+					android:backgroundTint="?attr/colorAccent"
+					app:icon="@drawable/play"
+					/>
+
+				<Space
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					tools:ignore="NestedWeights"
+					/>
+
+				<!-- Save timer -->
+				<com.google.android.material.button.MaterialButton
+					style="@style/My.Timer.SaveButton"
+					android:id="@+id/timer_save_button"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="@string/action_save"
+					app:icon="@drawable/save_32"
+					/>
+			</LinearLayout>
+		</LinearLayout>
 
 		<!-- More options divider -->
 		<View
 			android:id="@+id/timer_more_options_divider"
 			android:layout_width="match_parent"
 			android:layout_height="@dimen/line"
+			android:layout_marginTop="@dimen/medium"
 			android:alpha="0.75"
 			android:background="?attr/colorAccent"
 			android:visibility="invisible"
+			app:layout_constraintTop_toBottomOf="@id/timer_numberpad_container"
 			app:layout_constraintBottom_toTopOf="@id/timer_more_options_container"
 			/>
 
@@ -255,6 +266,7 @@
 			android:orientation="vertical"
 			android:background="?attr/colorCardExpanded"
 			android:visibility="gone"
+			app:layout_constraintTop_toBottomOf="@id/timer_more_options_divider"
 			app:layout_constraintBottom_toBottomOf="parent">
 
 			<!-- Repeat, Vibrate, NFC, Flashlight -->
@@ -414,8 +426,8 @@
 					android:layout_width="wrap_content"
 					android:layout_height="wrap_content"
 					android:layout_weight="1"
-					android:text="@string/action_timer_stop"
-					app:icon="@drawable/stop_filled_32"
+					android:text="@string/action_alarm_dismiss"
+					app:icon="@drawable/dismiss"
 					/>
 
 				<!-- Settings options -->

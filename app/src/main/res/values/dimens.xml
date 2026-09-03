@@ -29,7 +29,7 @@
 	<dimen name="isz_attention">54dp</dimen>
 	<dimen name="isz_focus">72dp</dimen>
 	<dimen name="isz_action_button">78dp</dimen>
-	<dimen name="isz_numpad">92dp</dimen>
+	<dimen name="isz_numpad">88dp</dimen>
 	<dimen name="isz_actionpad">88dp</dimen>
 	<dimen name="isz_dismiss_large">30dp</dimen>
 
