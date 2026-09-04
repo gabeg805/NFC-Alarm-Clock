@@ -211,7 +211,6 @@
 	<string name="error_message_google_play_billing">Google Play स्टोर से कनेक्ट करते समय त्रुटि</string>
 	<string name="error_message_text_to_speech_audio_focus">टेक्स्ट-टू-स्पीच का उपयोग करने में असमर्थ</string>
 	<string name="error_message_enter_timer_duration">अवधि दर्ज करें</string>
-	<string name="error_message_unable_to_dismiss_early">जल्दी बंद करने के लिए अलार्म नहीं मिल सका</string>
 	<string name="error_message_unable_to_email_statistics">आंकड़े ईमेल करने में असमर्थ</string>
 	<string name="error_message_unable_to_shine_flashlight">टॉर्च चमकाने में असमर्थ — %1$s</string>
 	<string name="error_message_unable_to_get_flashlight_characteristics">टॉर्च संबंधी जानकारी प्राप्त करने में असमर्थ</string>
@@ -244,7 +243,7 @@
 	<string name="title_select_nfc_tag">NFC टैग चुनें</string>
 	<string name="title_nfc_tag_dismiss_order">आदेश खारिज करें</string>
 	<string name="title_start_timer_on_nfc_tag_scan">स्कैन पर टाइमर प्रारंभ करें</string>
-	<string name="title_add_or_replace_nfc_tag">जोड़ें या बदलें...</string>
+	<string name="title_add_or_replace_nfc_tag">जोड़ें या बदलें…</string>
 	<string name="title_using_nfc_tag">एनएफसी टैग का उपयोग:</string>
 	<string name="title_save_nfc_tag">NFC टैग सहेजें</string>
 	<string name="title_delete_nfc_tag">NFC टैग हटाएं</string>

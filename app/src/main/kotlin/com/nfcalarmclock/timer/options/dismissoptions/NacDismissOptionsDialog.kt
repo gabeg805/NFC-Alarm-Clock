@@ -23,9 +23,9 @@ class NacDismissOptionsDialog
 	/**
 	 * Get the alarm/timer argument from the fragment.
 	 */
-	override fun getFragmentArgument(): NacAlarm?
+	override fun getFragmentArgument(): NacAlarm
 	{
-		return arguments?.getTimer()
+		return arguments?.getTimer() ?: NacTimer.build(sharedPreferences)
 	}
 
 	/**

@@ -3,14 +3,17 @@ package com.nfcalarmclock.timer.options.volume
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.volume.NacVolumeOptionsDialog
 import com.nfcalarmclock.system.getTimer
+import com.nfcalarmclock.timer.db.NacTimer
 
 /**
  * Volume options for a timer.
  */
+@UnstableApi
 class NacVolumeOptionsDialog
 	: NacVolumeOptionsDialog()
 {
@@ -18,9 +21,9 @@ class NacVolumeOptionsDialog
 	/**
 	 * Get the alarm/timer argument from the fragment.
 	 */
-	override fun getFragmentArgument(): NacAlarm?
+	override fun getFragmentArgument(): NacAlarm
 	{
-		return arguments?.getTimer()
+		return arguments?.getTimer() ?: NacTimer.build(sharedPreferences)
 	}
 
 	/**

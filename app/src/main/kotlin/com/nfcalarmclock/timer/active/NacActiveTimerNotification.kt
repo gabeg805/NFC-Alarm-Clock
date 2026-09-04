@@ -32,7 +32,7 @@ class NacActiveTimerNotification(
 	/**
 	 * @see NacBaseNotificationBuilder.id
 	 */
-	public override val id: Int
+	override val id: Int
 		get() = calcId(timer)
 
 	/**

@@ -30,22 +30,19 @@ open class NacAudioSourceDialog
 	/**
 	 * Called when the Ok button is clicked.
 	 */
-	override fun onOkClicked(alarm: NacAlarm?)
+	override fun onOkClicked(alarm: NacAlarm)
 	{
 		// Update the alarm
-		alarm?.audioSource = radioGroup.getCheckedText()
+		alarm.audioSource = radioGroup.getCheckedText()
 	}
 
 	/**
 	 * Setup all alarm options.
 	 */
-	override fun setupAlarmOptions(alarm: NacAlarm?)
+	override fun setupAlarmOptions(alarm: NacAlarm)
 	{
-		// Get the alarm, or build a new one, to get default values
-		val a = alarm ?: NacAlarm.build(sharedPreferences)
-
 		// Set the default index
-		defaultSelectedIndex = array.indexOf(a.audioSource)
+		defaultSelectedIndex = array.indexOf(alarm.audioSource)
 
 		// Super
 		super.setupAlarmOptions(alarm)

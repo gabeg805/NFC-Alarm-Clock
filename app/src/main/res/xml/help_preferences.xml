@@ -10,7 +10,7 @@
 		<!-- Write to log -->
 		<com.nfcalarmclock.settings.preference.NacSwitchPreference
 			android:key="@string/key_app_should_write_to_log"
-			android:title="Debug mode"
+			android:title="@string/title_help_debug_mode"
 			android:icon="@drawable/bug_report_32"
 			android:summaryOn="@string/message_debug_mode_on"
 			android:summaryOff="@string/message_debug_mode_off"

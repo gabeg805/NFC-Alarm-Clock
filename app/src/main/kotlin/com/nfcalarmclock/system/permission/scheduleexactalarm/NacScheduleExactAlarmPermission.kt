@@ -23,7 +23,7 @@ object NacScheduleExactAlarmPermission
 	 */
 	val isCorrectAndroidVersion: Boolean
 		get() {
-			// Permission only required for API level 31 <= x < 33
+			// Permission only required for API 31 and 32
 			return (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
 				&& (Build.VERSION.SDK_INT < Build.VERSION_CODES.TIRAMISU)
 		}

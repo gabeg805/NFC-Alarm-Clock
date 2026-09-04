@@ -3,6 +3,7 @@ package com.nfcalarmclock.timer.options.nfc
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.nfc.NacSaveNfcTagDialog
 import com.nfcalarmclock.system.getTimer
+import com.nfcalarmclock.timer.db.NacTimer
 import dagger.hilt.android.AndroidEntryPoint
 
 /**
@@ -16,9 +17,9 @@ class NacSaveNfcTagDialog
 	/**
 	 * Get the alarm/timer argument from the fragment.
 	 */
-	override fun getFragmentArgument(): NacAlarm?
+	override fun getFragmentArgument(): NacAlarm
 	{
-		return arguments?.getTimer()
+		return arguments?.getTimer() ?: NacTimer.build(sharedPreferences)
 	}
 
 }

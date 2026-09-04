@@ -14,6 +14,7 @@
 		android:layout_width="@dimen/isz_medium"
 		android:layout_height="@dimen/isz_medium"
 		android:layout_gravity="center"
+		android:contentDescription="@string/cd_request_permission_icon"
 		/>
 
 	<TextView

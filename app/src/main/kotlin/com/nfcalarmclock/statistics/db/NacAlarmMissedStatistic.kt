@@ -1,7 +1,6 @@
 package com.nfcalarmclock.statistics.db
 
 import androidx.room.Entity
-import androidx.room.Index
 import com.nfcalarmclock.alarm.db.NacAlarm
 import dagger.Module
 import dagger.Provides

@@ -267,7 +267,7 @@ class NacColorPickerDialog
 			if (!isHexString(editTextColor) || !canParseColor(editTextColor))
 			{
 				// Show error hint message
-				inputLayout.setError(getString(R.string.error_message_select_color))
+				inputLayout.error = getString(R.string.error_message_select_color)
 				return@setOnEditorActionListener false
 			}
 

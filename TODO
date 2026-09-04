@@ -2,10 +2,15 @@
 TODO
 ----
 
-* Update NacAlarm docstrings to include units of columns
+* Look at log and make slight changes
 
-* Change AlarmOptions fragment so that if fragment argument is null, just build
-  a generic jank from NacSharedPreferences
+* Log more in timers vs alarms
+
+* Add check if media path is empty do nothing
+
+* Update NacAlarm with media type values
+
+* Test running alarms when app is not in view
 
 * Update website with f-droid and izzy
 

@@ -49,8 +49,7 @@ abstract class NacPermissionRequestDialog
 	/**
 	 * The name of the permission.
 	 */
-	open val permission: String
-		get() = ""
+	open val permission: String = ""
 
 	/**
 	 * Position of this dialog in the permission request manager.

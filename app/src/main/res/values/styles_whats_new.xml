@@ -3,8 +3,10 @@
 
 	<!-- Parent -->
 	<style name="My.WhatsNew.Parent" parent="">
-		<item name="android:paddingVertical">@dimen/normal</item>
-		<item name="android:paddingHorizontal">@dimen/large</item>
+		<item name="android:paddingTop">@dimen/normal</item>
+		<item name="android:paddingBottom">@dimen/normal</item>
+		<item name="android:paddingStart">@dimen/large</item>
+		<item name="android:paddingEnd">@dimen/large</item>
 	</style>
 
 	<!-- Title -->

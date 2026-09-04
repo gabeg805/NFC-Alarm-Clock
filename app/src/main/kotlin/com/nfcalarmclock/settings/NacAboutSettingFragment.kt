@@ -66,8 +66,6 @@ class NacAboutSettingFragment
 		// Version
 		if (preferenceKey == versionKey)
 		{
-			sharedPreferences?.shouldShowOnboardingScreen = true
-			println("Should SHOW ONBOARDING : ${sharedPreferences?.shouldShowOnboardingScreen} | ${sharedPreferences?.appFirstRun}")
 			// Create the What's New dialog
 			val dialog = NacWhatsNewDialog()
 

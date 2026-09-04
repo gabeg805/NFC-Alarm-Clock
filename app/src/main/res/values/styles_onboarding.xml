@@ -26,6 +26,7 @@
 
 	<!-- Main description -->
 	<style name="Widget.MyOnboarding.Main.Description" parent="">
+		<item name="android:paddingBottom">@dimen/medium</item>
 		<item name="android:paddingStart">@dimen/normal</item>
 		<item name="android:paddingEnd">@dimen/normal</item>
 		<item name="android:gravity">center_horizontal</item>
@@ -35,14 +36,10 @@
 
 	<!-- Section title -->
 	<style name="Widget.MyOnboarding.Section.Title" parent="">
-		<item name="android:layout_marginTop">@dimen/xxlarge</item>
+		<item name="android:layout_marginTop">@dimen/xxxlarge</item>
 		<item name="android:textColor">@color/white</item>
 		<item name="android:textSize">@dimen/tsz_medium</item>
 		<item name="android:textStyle">bold</item>
-	</style>
-
-	<style name="Widget.MyOnboarding.Section.FirstTitle" parent="Widget.MyOnboarding.Section.Title">
-		<item name="android:layout_marginTop">@dimen/huge</item>
 	</style>
 
 	<!-- Section description -->

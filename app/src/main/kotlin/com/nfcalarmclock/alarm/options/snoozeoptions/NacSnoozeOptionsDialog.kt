@@ -70,23 +70,23 @@ class NacSnoozeOptionsDialog
 	/**
 	 * Called when the Ok button is clicked.
 	 */
-	override fun onOkClicked(alarm: NacAlarm?)
+	override fun onOkClicked(alarm: NacAlarm)
 	{
 		// Update the alarm
-		alarm?.shouldAutoSnooze = autoSnoozeSwitch.isChecked
-		alarm?.autoSnoozeTime = selectedAutoSnoozeTime
-		alarm?.maxSnooze = selectedMaxSnooze
-		alarm?.snoozeDuration = selectedSnoozeDurationTime
-		alarm?.shouldEasySnooze = easySnoozeSwitch.isChecked
-		alarm?.shouldVolumeSnooze = volumeSnoozeSwitch.isChecked
+		alarm.shouldAutoSnooze = autoSnoozeSwitch.isChecked
+		alarm.autoSnoozeTime = selectedAutoSnoozeTime
+		alarm.maxSnooze = selectedMaxSnooze
+		alarm.snoozeDuration = selectedSnoozeDurationTime
+		alarm.shouldEasySnooze = easySnoozeSwitch.isChecked
+		alarm.shouldVolumeSnooze = volumeSnoozeSwitch.isChecked
 	}
 
 	/**
 	 * Called when the alarm should be saved.
 	 */
-	override fun onSaveAlarm(alarm: NacAlarm?)
+	override fun onSaveAlarm(alarm: NacAlarm)
 	{
-		onSaveAlarmListener?.onSaveAlarm(alarm!!)
+		onSaveAlarmListener?.onSaveAlarm(alarm)
 	}
 
 	/**
@@ -108,25 +108,22 @@ class NacSnoozeOptionsDialog
 	/**
 	 * Setup all alarm options.
 	 */
-	override fun setupAlarmOptions(alarm: NacAlarm?)
+	override fun setupAlarmOptions(alarm: NacAlarm)
 	{
-		// Get the alarm, or build a new one, to get default values
-		val a = alarm ?: NacAlarm.build(sharedPreferences)
-
 		// Set the default selected values
-		val defaultAutoSnoozeTime = a.autoSnoozeTime.takeIf { it > 0 } ?: 300
-		val defaultSnoozeDuration = a.snoozeDuration.takeIf { it > 0 } ?: 300
+		val defaultAutoSnoozeTime = alarm.autoSnoozeTime.takeIf { it > 0 } ?: 300
+		val defaultSnoozeDuration = alarm.snoozeDuration.takeIf { it > 0 } ?: 300
 		selectedAutoSnoozeTime = defaultAutoSnoozeTime
-		selectedMaxSnooze = a.maxSnooze
+		selectedMaxSnooze = alarm.maxSnooze
 		selectedSnoozeDurationTime = defaultSnoozeDuration
 
 		// Setup the views
-		setupAutoSnooze(a.shouldAutoSnooze, defaultAutoSnoozeTime)
+		setupAutoSnooze(alarm.shouldAutoSnooze, defaultAutoSnoozeTime)
 		setAutoSnoozeUsability()
-		setupMaxSnooze(a.maxSnooze)
+		setupMaxSnooze(alarm.maxSnooze)
 		setupSnoozeDuration(defaultSnoozeDuration)
-		setupEasySnooze(a.shouldEasySnooze)
-		setupVolumeSnooze(a.shouldVolumeSnooze, a.shouldVolumeDismiss)
+		setupEasySnooze(alarm.shouldEasySnooze)
+		setupVolumeSnooze(alarm.shouldVolumeSnooze, alarm.shouldVolumeDismiss)
 	}
 
 	/**

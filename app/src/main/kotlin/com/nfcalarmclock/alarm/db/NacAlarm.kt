@@ -155,13 +155,7 @@ open class NacAlarm()
 	var repeatFrequencyUnits: Int = 4
 
 	/**
-	 * Units for the frequency at which to repeat the alarm.
-	 *
-	 * 1 = Minutes
-	 * 2 = Hours
-	 * 3 = Days
-	 * 4 = Weeks
-	 * 5 = Months
+	 * Days to run before starting the repeat frequency.
 	 */
 	@ColumnInfo(name = "repeat_frequency_days_to_run_before_starting", defaultValue = "127")
 	var repeatFrequencyDaysToRunBeforeStarting: EnumSet<Day> = Day.WEEK
@@ -173,13 +167,13 @@ open class NacAlarm()
 	var shouldVibrate: Boolean = false
 
 	/**
-	 * Duration to vibrate the device for.
+	 * Duration to vibrate the device for. [Units: millisec]
 	 */
 	@ColumnInfo(name = "vibrate_duration", defaultValue = "500")
 	var vibrateDuration: Long = 500
 
 	/**
-	 * Amount of time to wait in between vibrations.
+	 * Amount of time to wait in between vibrations. [Units: millisec]
 	 */
 	@ColumnInfo(name = "vibrate_wait_time", defaultValue = "1000")
 	var vibrateWaitTime: Long = 1000
@@ -198,7 +192,7 @@ open class NacAlarm()
 
 	/**
 	 * Amount of time to wait after the vibration has been repeated the set number of
-	 * times.
+	 * times. [Units: millisec]
 	 */
 	@ColumnInfo(name = "vibrate_wait_time_after_pattern", defaultValue = "3000")
 	var vibrateWaitTimeAfterPattern: Long = 3000
@@ -249,8 +243,8 @@ open class NacAlarm()
 	var flashlightStrengthLevel: Int = 0
 
 	/**
-	 * Amount of time, in seconds, to wait before gradually increasing the flashlight
-	 * strength level another step.
+	 * Amount of time to wait before gradually increasing the flashlight strength level
+	 * another step. [Units: sec]
 	 */
 	@ColumnInfo(name = "gradually_increase_flashlight_strength_level_wait_time", defaultValue = "5")
 	var graduallyIncreaseFlashlightStrengthLevelWaitTime: Int = 5
@@ -262,13 +256,13 @@ open class NacAlarm()
 	var shouldBlinkFlashlight: Boolean = false
 
 	/**
-	 * Number of seconds to turn on the flashlight.
+	 * Number of seconds to turn on the flashlight. [Units: sec]
 	 */
 	@ColumnInfo(name = "flashlight_on_duration", defaultValue = "1.0")
 	var flashlightOnDuration: String = "1.0"
 
 	/**
-	 * Number of seconds to turn off the flashlight.
+	 * Number of seconds to turn off the flashlight. [Units: sec]
 	 */
 	@ColumnInfo(name = "flashlight_off_duration", defaultValue = "1.0")
 	var flashlightOffDuration: String = "1.0"
@@ -354,7 +348,7 @@ open class NacAlarm()
 	var shouldSayName: Boolean = false
 
 	/**
-	 * Frequency at which to play text-to-speech, in units of minutes.
+	 * Frequency at which to play text-to-speech. [Units: min]
 	 */
 	@ColumnInfo(name = "tts_frequency", defaultValue = "0")
 	var ttsFrequency: Int = 0
@@ -378,8 +372,7 @@ open class NacAlarm()
 	var shouldGraduallyIncreaseVolume: Boolean = false
 
 	/**
-	 * Amount of time, in seconds, to wait before gradually increasing the
-	 * volume another step.
+	 * Amount of time to wait before gradually increasing the volume another step. [Units: sec]
 	 */
 	@ColumnInfo(name = "gradually_increase_volume_wait_time", defaultValue = "5")
 	var graduallyIncreaseVolumeWaitTime: Int = 5
@@ -397,7 +390,7 @@ open class NacAlarm()
 	var shouldAutoDismiss: Boolean = true
 
 	/**
-	 * Time in which to auto dismiss the alarm (seconds).
+	 * Time in which to auto dismiss the alarm. [Units: sec]
 	 */
 	@ColumnInfo(name = "auto_dismiss_time", defaultValue = "900")
 	var autoDismissTime: Int = 900
@@ -409,7 +402,7 @@ open class NacAlarm()
 	var canDismissEarly: Boolean = false
 
 	/**
-	 * Amount of time to allow a user to dismiss early by (minutes).
+	 * Amount of time to allow a user to dismiss early by. [Units: min]
 	 */
 	@ColumnInfo(name = "dismiss_early_time", defaultValue = "30")
 	var dismissEarlyTime: Int = 30
@@ -445,7 +438,7 @@ open class NacAlarm()
 	var shouldAutoSnooze: Boolean = false
 
 	/**
-	 * Time in which to auto snooze the alarm (seconds).
+	 * Time in which to auto snooze the alarm. [Units: sec]
 	 */
 	@ColumnInfo(name = "auto_snooze_time", defaultValue = "300")
 	var autoSnoozeTime: Int = 300
@@ -457,7 +450,7 @@ open class NacAlarm()
 	var maxSnooze: Int = -1
 
 	/**
-	 * Snooze duration (seconds).
+	 * Snooze duration. [Units: sec]
 	 */
 	@ColumnInfo(name = "snooze_duration", defaultValue = "300")
 	var snoozeDuration: Int = 300
@@ -481,13 +474,13 @@ open class NacAlarm()
 	var shouldShowReminder: Boolean = false
 
 	/**
-	 * The time to start showing a reminder (minutes).
+	 * The time to start showing a reminder. [Units: min]
 	 */
 	@ColumnInfo(name = "time_to_show_reminder", defaultValue = "5")
 	var timeToShowReminder: Int = 5
 
 	/**
-	 * Frequency at which to show the reminder, in units of minutes.
+	 * Frequency at which to show the reminder. [Units: min]
 	 */
 	@ColumnInfo(name = "reminder_frequency", defaultValue = "0")
 	var reminderFrequency: Int = 0
@@ -740,6 +733,15 @@ open class NacAlarm()
 
 	/**
 	 * Add the weeks repeat frequency to the alarm time.
+	 *
+	 * TODO: An alarm that runs on a single day. If you change the repeat frequency to > 1 and
+	 * choose the days to run before starting to be the same day, the alarm will work normally.
+	 * However, if you deselect that day so there are no days to run before starting, the next
+	 * alarm will be correct, but there will be no date set. This means that if the device is
+	 * reset, the day when the alarm should run will be forgotten and have to be recomputed,
+	 * potentially to a further date than anticipated.
+	 *
+	 * TODO: Consider how this should be wrt days to run before starting. Should it be required?
 	 */
 	fun addRepeatFrequencyWeeksToTime(alarmCal: Calendar)
 	{
@@ -759,7 +761,7 @@ open class NacAlarm()
 			NacCalendar.getNextAlarmDay(this)!!
 		}
 
-		println("addRepeatFreqWeeksToTime() : ${calendarToString(nextCal, "EEE MMM dd HH:mm:ss z yyyy")}")
+		NacLog.i("Next cal : ${calendarToString(nextCal, "EEE MMM dd HH:mm:ss z yyyy")} | Days to run before : $repeatFrequencyDaysToRunBeforeStarting | Days : $days")
 
 		// Ensure that the days to run before starting does not have any extra
 		// days selected. These would be days that do not match the alarm days.
@@ -770,12 +772,10 @@ open class NacAlarm()
 			// Get any overlap between the days to run before starting and the days selected for the alarm
 			val daysToRunOverlap = EnumSet.copyOf(repeatFrequencyDaysToRunBeforeStarting)
 			daysToRunOverlap.retainAll(days)
-			println("Quick check of days : $days | $repeatFrequencyDaysToRunBeforeStarting | $daysToRunOverlap")
 
 			// There is no overlap between the days to run before starting and the days selected for the alarm
 			if (daysToRunOverlap.isEmpty())
 			{
-				println("No days overlap! Clear the days to run before starting")
 				// Clear the days to run as it probably had extra days that were not needed
 				repeatFrequencyDaysToRunBeforeStarting = EnumSet.noneOf(Day::class.java)
 			}
@@ -813,12 +813,10 @@ open class NacAlarm()
 		// Create a calendar from the alarm
 		val alarmCal = NacCalendar.alarmToCalendar(this)
 		NacLog.i("addRepeatFrequency initial cal : ${calendarToString(alarmCal, "EEE MMM dd HH:mm:ss z yyyy")}")
-		println("addRepeatFrequency initial cal : ${calendarToString(alarmCal, "EEE MMM dd HH:mm:ss z yyyy")}")
 
 		// Add the repeat frequency to the calendar
 		alarmCal.add(repeatFrequencyUnits.toCalendarField(), repeatFrequency)
 		NacLog.i("addRepeatFrequency after add cal : ${calendarToString(alarmCal, "EEE MMM dd HH:mm:ss z yyyy")}")
-		println("addRepeatFrequency after add cal : ${calendarToString(alarmCal, "EEE MMM dd HH:mm:ss z yyyy")}")
 
 		// Check repeat frequency units
 		when (repeatFrequencyUnits)

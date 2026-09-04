@@ -47,6 +47,7 @@ import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.nfc.NacNfc
 import com.nfcalarmclock.nfc.NacNfcReaderMode
 import com.nfcalarmclock.nfc.SCANNED_NFC_TAG_ID_BUNDLE_NAME
+import com.nfcalarmclock.onboarding.NacOnboardingFragment
 import com.nfcalarmclock.ratemyapp.NacRateMyApp
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.NacBundle.BUNDLE_INTENT_ACTION
@@ -885,8 +886,8 @@ class NacMainActivity
 		// Get the delay counter for showing the what's new dialog
 		val delayCounter = sharedPreferences.delayShowingWhatsNewDialogCounter
 
-		// Check if there are any permissions that need to be requested
-		if (permissionRequestManager.count() > 0)
+		// Missing permissions that should be requested
+		if (permissionRequestManager.isMissingPermissions)
 		{
 			// Check if the what's new dialog should be shown
 			if (shouldShowWhatsNewDialog)
@@ -966,9 +967,17 @@ class NacMainActivity
 		}
 
 		// Destination changed listener
-		navController.addOnDestinationChangedListener { _, destination, _ ->
+		navController.addOnDestinationChangedListener { _, destination, bundle ->
 
 			NacLog.i("Navigating to destination : $destination")
+
+			// Previous destination was onboarding
+			if (bundle?.getBoolean(NacOnboardingFragment.ONBOARDING_NAV_KEY) == true)
+			{
+				// Re-run the permission request manager in case permissions were not allowed
+				permissionRequestManager.refresh(this)
+				setupInitialDialogToShow()
+			}
 
 			// Setup the flag when NFC was just scanned to dismiss
 			setupWasNfcJustScannedToDismiss()

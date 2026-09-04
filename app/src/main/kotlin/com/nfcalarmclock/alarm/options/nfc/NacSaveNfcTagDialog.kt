@@ -92,12 +92,12 @@ open class NacSaveNfcTagDialog
 	/**
 	 * Add or replace the NFC tag.
 	 */
-	private fun addOrReplaceNfcTag(alarm: NacAlarm?)
+	private fun addOrReplaceNfcTag(alarm: NacAlarm)
 	{
 		// Radio buttons are not shown so do nothing
-		if (!addOrReplaceRadioGroup.isVisible || (alarm == null))
+		if (!addOrReplaceRadioGroup.isVisible)
 		{
-			alarm?.nfcTagId = nfcTagId
+			alarm.nfcTagId = nfcTagId
 			return
 		}
 
@@ -123,7 +123,7 @@ open class NacSaveNfcTagDialog
 	/**
 	 * Called when the cancel button is clicked.
 	 */
-	override fun onCancelClicked(alarm: NacAlarm?)
+	override fun onCancelClicked(alarm: NacAlarm)
 	{
 		// Add or replace the NFC tag
 		addOrReplaceNfcTag(alarm)
@@ -135,7 +135,7 @@ open class NacSaveNfcTagDialog
 	/**
 	 * Update the alarm with selected options.
 	 */
-	override fun onOkClicked(alarm: NacAlarm?)
+	override fun onOkClicked(alarm: NacAlarm)
 	{
 		// Get the name
 		val nfcName = editText.text.toString().trim()
@@ -163,7 +163,7 @@ open class NacSaveNfcTagDialog
 	/**
 	 * Setup all alarm options.
 	 */
-	override fun setupAlarmOptions(alarm: NacAlarm?)
+	override fun setupAlarmOptions(alarm: NacAlarm)
 	{
 		// Get all the NFC tags
 		lifecycleScope.launch {
@@ -182,7 +182,7 @@ open class NacSaveNfcTagDialog
 	/**
 	 * Setup the add or replace views.
 	 */
-	private fun setupAddOrReplace(alarm: NacAlarm?)
+	private fun setupAddOrReplace(alarm: NacAlarm)
 	{
 		// Get the views
 		val title: TextView = dialog!!.findViewById(R.id.save_nfc_tag_add_or_replace_title)
@@ -190,7 +190,7 @@ open class NacSaveNfcTagDialog
 		val separator: Space = dialog!!.findViewById(R.id.save_nfc_tag_separator)
 
 		// Get the visibility depending on if the alarm/timer has NFC tags set or not
-		val visibility = if (alarm?.nfcTagId?.isNotEmpty() == true) View.VISIBLE else View.GONE
+		val visibility = if (alarm.nfcTagId.isNotEmpty()) View.VISIBLE else View.GONE
 
 		// Set the visibility
 		title.visibility = visibility
@@ -212,7 +212,7 @@ open class NacSaveNfcTagDialog
 	/**
 	 * Setup the Cancel button.
 	 */
-	override fun setupCancelButton(alarm: NacAlarm?)
+	override fun setupCancelButton(alarm: NacAlarm)
 	{
 		// Super
 		super.setupCancelButton(alarm)
@@ -227,7 +227,7 @@ open class NacSaveNfcTagDialog
 	/**
 	 * Setup the save NFC tag views.
 	 */
-	private fun setupSaveNfcTag(alarm: NacAlarm?)
+	private fun setupSaveNfcTag(alarm: NacAlarm)
 	{
 		// Get the views
 		val okButton: MaterialButton = dialog!!.findViewById(R.id.ok_button)
@@ -291,7 +291,7 @@ open class NacSaveNfcTagDialog
 	/**
 	 * Setup OK button.
 	 */
-	override fun setupOkButton(alarm: NacAlarm?)
+	override fun setupOkButton(alarm: NacAlarm)
 	{
 		// Super
 		super.setupOkButton(alarm)

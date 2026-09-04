@@ -171,11 +171,11 @@ open class NacScanNfcTagDialog
 	/**
 	 * OK buton is clicked.
 	 */
-	override fun onOkClicked(alarm: NacAlarm?)
+	override fun onOkClicked(alarm: NacAlarm)
 	{
-		alarm?.nfcTagId = selectedNfcTags.filter { !it.isEmpty }.toNfcIdString()
-		alarm?.shouldUseNfcTagDismissOrder = dismissOrderSwitch.isChecked
-		alarm?.nfcTagDismissOrder = NacAlarm.calcNfcTagDismissOrderFromIndex(selectedDismissOrder)
+		alarm.nfcTagId = selectedNfcTags.filter { !it.isEmpty }.toNfcIdString()
+		alarm.shouldUseNfcTagDismissOrder = dismissOrderSwitch.isChecked
+		alarm.nfcTagDismissOrder = NacAlarm.calcNfcTagDismissOrderFromIndex(selectedDismissOrder)
 	}
 
 	/**
@@ -252,7 +252,7 @@ open class NacScanNfcTagDialog
 			return
 		}
 		// The NFC ID is already being used by the alarm/timer
-		else if (item!!.nfcTagIdList.contains(nfcId))
+		else if (item.nfcTagIdList.contains(nfcId))
 		{
 			lifecycleScope.launch {
 				withContext(Dispatchers.Main)
@@ -300,7 +300,7 @@ open class NacScanNfcTagDialog
 					val newItem = navController.currentBackStackEntry?.savedStateHandle?.get<NacAlarm>("YOYOYO")
 
 					// Save the item and dismiss
-					onSaveAlarm(newItem)
+					onSaveAlarm(newItem!!)
 					dismiss()
 
 				})
@@ -311,11 +311,11 @@ open class NacScanNfcTagDialog
 	/**
 	 * Use any NFC tag was clicked.
 	 */
-	open fun onUseAnyNfcTagClicked(alarm: NacAlarm?)
+	open fun onUseAnyNfcTagClicked(alarm: NacAlarm)
 	{
 		// Clear the NFC tag ID and NFC tag dismiss order
-		alarm?.nfcTagId = ""
-		alarm?.shouldUseNfcTagDismissOrder = false
+		alarm.nfcTagId = ""
+		alarm.shouldUseNfcTagDismissOrder = false
 
 		// Save the alarm and dismiss
 		onSaveAlarm(alarm)
@@ -423,13 +423,10 @@ open class NacScanNfcTagDialog
 	/**
 	 * Setup all alarm options.
 	 */
-	override fun setupAlarmOptions(alarm: NacAlarm?)
+	override fun setupAlarmOptions(alarm: NacAlarm)
 	{
-		// Get the alarm, or build a new one, to get default values
-		val a = alarm ?: NacAlarm.build(sharedPreferences)
-
 		// Set the default selected values
-		selectedDismissOrder = NacAlarm.calcNfcTagDismissOrderIndex(a.nfcTagDismissOrder)
+		selectedDismissOrder = NacAlarm.calcNfcTagDismissOrderIndex(alarm.nfcTagDismissOrder)
 
 		// Setup the views
 		lifecycleScope.launch {
@@ -437,7 +434,7 @@ open class NacScanNfcTagDialog
 			setupAllAndSelectedNfcTags(alarm)
 			setupStartTimerOnScan(alarm)
 			setupSelectNfcTag()
-			setupDismissOrder(a.shouldUseNfcTagDismissOrder, a.nfcTagDismissOrder)
+			setupDismissOrder(alarm.shouldUseNfcTagDismissOrder, alarm.nfcTagDismissOrder)
 			setOkButtonVisibility()
 
 		}
@@ -446,12 +443,12 @@ open class NacScanNfcTagDialog
 	/**
 	 * Setup the start timer on scan.
 	 */
-	open fun setupStartTimerOnScan(alarm: NacAlarm?) {}
+	open fun setupStartTimerOnScan(alarm: NacAlarm) {}
 
 	/**
 	 * Setup all and selected NFC tags.
 	 */
-	private suspend fun setupAllAndSelectedNfcTags(alarm: NacAlarm?)
+	private suspend fun setupAllAndSelectedNfcTags(alarm: NacAlarm)
 	{
 		// Get the alarm NFC IDs and all the NFC tags
 		allNfcTags = nfcTagViewModel.getAllNfcTags()
@@ -460,7 +457,7 @@ open class NacScanNfcTagDialog
 
 				// Add any NFC IDs that are currently selected, but are not saved to the
 				// table
-				alarm!!.nfcTagIdList.reversed().forEach { id ->
+				alarm.nfcTagIdList.reversed().forEach { id ->
 					if (this.none { it.nfcId == id })
 					{
 						add(0, NacNfcTag("", id))
@@ -470,7 +467,7 @@ open class NacScanNfcTagDialog
 			}
 
 		// Set the selected NFC tags based on the alarm
-		selectedNfcTags = alarm!!.nfcTagIdList.mapNotNull { id ->
+		selectedNfcTags = alarm.nfcTagIdList.mapNotNull { id ->
 				allNfcTags.find { it.nfcId == id }
 			}
 			.toMutableList()
@@ -538,7 +535,7 @@ open class NacScanNfcTagDialog
 	/**
 	 * Setup any extra buttons.
 	 */
-	override fun setupExtraButtons(alarm: NacAlarm?)
+	override fun setupExtraButtons(alarm: NacAlarm)
 	{
 		// Get the views
 		val useAnyButton: MaterialButton = dialog!!.findViewById(R.id.use_any_nfc_tag_button)
@@ -547,7 +544,7 @@ open class NacScanNfcTagDialog
 
 		// Get the visibility. If the alarm/timer does not have any NFC tags set, then it
 		// does not need to be shown
-		val visibility = if (alarm?.nfcTagId?.isNotEmpty() == true) View.VISIBLE else View.GONE
+		val visibility = if (alarm.nfcTagId.isNotEmpty()) View.VISIBLE else View.GONE
 
 		// Set the visibility
 		useAnyButton.visibility = visibility

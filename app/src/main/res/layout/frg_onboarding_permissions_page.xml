@@ -39,16 +39,28 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content">
 
+			<!-- No permissions needed title -->
+			<TextView
+				style="@style/Widget.MyOnboarding.Section.Title"
+				android:id="@+id/onboarding_no_permissions_needed_title"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="@string/title_no_permissions_needed"
+				android:visibility="gone"
+				app:layout_constraintTop_toTopOf="parent"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintEnd_toEndOf="parent"
+				/>
+
 			<!-- Notification title -->
 			<TextView
-				style="@style/Widget.MyOnboarding.Section.FirstTitle"
+				style="@style/Widget.MyOnboarding.Section.Title"
 				android:id="@+id/onboarding_notification_title"
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:text="@string/title_permission_show_notifications"
 				app:layout_constraintTop_toTopOf="parent"
 				app:layout_constraintStart_toStartOf="parent"
-				app:layout_goneMarginTop="@dimen/normal"
 				/>
 
 			<!-- Notification description -->
@@ -62,10 +74,8 @@
 				app:layout_constraintStart_toStartOf="parent"
 				app:layout_constraintEnd_toStartOf="@id/onboarding_notification_allow_button"
 				/>
-			<!--
-			-->
 
-			<!-- Allow button -->
+			<!-- Notification allow button -->
 			<com.google.android.material.button.MaterialButton
 				style="@style/Widget.MyOnboarding.Permission.Button.Allow"
 				android:id="@+id/onboarding_notification_allow_button"
@@ -77,39 +87,19 @@
 				app:layout_constraintEnd_toEndOf="parent"
 				/>
 
-			<!-- Schedule exact alarm title -->
-			<TextView
-				style="@style/Widget.MyOnboarding.Section.Title"
-				android:id="@+id/onboarding_schedule_exact_alarm_title"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:text="@string/title_permission_schedule_exact_alarm"
-				app:layout_constraintTop_toBottomOf="@id/onboarding_notification_description"
-				app:layout_constraintStart_toStartOf="parent"
-				/>
-
-			<!-- System alert description -->
-			<TextView
-				style="@style/Widget.MyOnboarding.Section.Description"
-				android:id="@+id/onboarding_schedule_exact_alarm_description"
-				android:layout_width="0dp"
-				android:layout_height="wrap_content"
-				android:text="@string/description_onboarding_permission_schedule_exact_alarm_request"
-				app:layout_constraintTop_toBottomOf="@id/onboarding_schedule_exact_alarm_title"
-				app:layout_constraintStart_toStartOf="parent"
-				app:layout_constraintEnd_toStartOf="@id/onboarding_schedule_exact_alarm_allow_button"
-				/>
-
-			<!-- System alert allow button -->
-			<com.google.android.material.button.MaterialButton
-				style="@style/Widget.MyOnboarding.Permission.Button.Allow"
-				android:id="@+id/onboarding_schedule_exact_alarm_allow_button"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				app:layout_constraintTop_toTopOf="@id/onboarding_schedule_exact_alarm_title"
-				app:layout_constraintBottom_toBottomOf="@id/onboarding_schedule_exact_alarm_description"
-				app:layout_constraintStart_toEndOf="@id/onboarding_schedule_exact_alarm_description"
-				app:layout_constraintEnd_toEndOf="parent"
+			<!-- Notification check mark -->
+			<ImageView
+				android:id="@+id/onboarding_notification_check_mark"
+				android:layout_width="@dimen/isz_xlarge"
+				android:layout_height="@dimen/isz_xlarge"
+				android:src="@drawable/check_32"
+				android:visibility="gone"
+				android:contentDescription="@string/cd_permission_check_mark"
+				app:layout_constraintTop_toTopOf="@id/onboarding_notification_title"
+				app:layout_constraintBottom_toBottomOf="@id/onboarding_notification_description"
+				app:layout_constraintStart_toStartOf="@id/onboarding_notification_allow_button"
+				app:layout_constraintEnd_toEndOf="@id/onboarding_notification_allow_button"
+				app:tint="@color/green"
 				/>
 
 			<!-- System alert (display over other apps) title -->
@@ -119,7 +109,7 @@
 				android:layout_width="wrap_content"
 				android:layout_height="wrap_content"
 				android:text="@string/title_permission_system_alert_window"
-				app:layout_constraintTop_toBottomOf="@id/onboarding_schedule_exact_alarm_description"
+				app:layout_constraintTop_toBottomOf="@id/onboarding_notification_description"
 				app:layout_constraintStart_toStartOf="parent"
 				/>
 
@@ -145,6 +135,21 @@
 				app:layout_constraintBottom_toBottomOf="@id/onboarding_system_alert_description"
 				app:layout_constraintStart_toEndOf="@id/onboarding_system_alert_description"
 				app:layout_constraintEnd_toEndOf="parent"
+				/>
+
+			<!-- System alert check mark -->
+			<ImageView
+				android:id="@+id/onboarding_system_alert_check_mark"
+				android:layout_width="@dimen/isz_xlarge"
+				android:layout_height="@dimen/isz_xlarge"
+				android:src="@drawable/check_32"
+				android:visibility="gone"
+				android:contentDescription="@string/cd_permission_check_mark"
+				app:layout_constraintTop_toTopOf="@id/onboarding_system_alert_title"
+				app:layout_constraintBottom_toBottomOf="@id/onboarding_system_alert_description"
+				app:layout_constraintStart_toStartOf="@id/onboarding_system_alert_allow_button"
+				app:layout_constraintEnd_toEndOf="@id/onboarding_system_alert_allow_button"
+				app:tint="@color/green"
 				/>
 		</androidx.constraintlayout.widget.ConstraintLayout>
 	</ScrollView>

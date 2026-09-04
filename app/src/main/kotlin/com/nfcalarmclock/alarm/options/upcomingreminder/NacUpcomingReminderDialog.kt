@@ -84,13 +84,13 @@ class NacUpcomingReminderDialog
 	/**
 	 * Called when the Ok button is clicked.
 	 */
-	override fun onOkClicked(alarm: NacAlarm?)
+	override fun onOkClicked(alarm: NacAlarm)
 	{
 		// Update the alarm
-		alarm?.shouldShowReminder = showReminderSwitch.isChecked
-		alarm?.timeToShowReminder = selectedHowEarlyTime
-		alarm?.reminderFrequency = selectedHowFreqTime
-		alarm?.shouldUseTtsForReminder = useTtsSwitch.isChecked
+		alarm.shouldShowReminder = showReminderSwitch.isChecked
+		alarm.timeToShowReminder = selectedHowEarlyTime
+		alarm.reminderFrequency = selectedHowFreqTime
+		alarm.shouldUseTtsForReminder = useTtsSwitch.isChecked
 	}
 
 	/**
@@ -142,20 +142,17 @@ class NacUpcomingReminderDialog
 	/**
 	 * Setup all alarm options.
 	 */
-	override fun setupAlarmOptions(alarm: NacAlarm?)
+	override fun setupAlarmOptions(alarm: NacAlarm)
 	{
-		// Get the alarm, or build a new one, to get default values
-		val a = alarm ?: NacAlarm.build(sharedPreferences)
-
 		// Set the default selected values
-		selectedHowEarlyTime = a.timeToShowReminder
-		selectedHowFreqTime = a.reminderFrequency
+		selectedHowEarlyTime = alarm.timeToShowReminder
+		selectedHowFreqTime = alarm.reminderFrequency
 
 		// Setup the views
-		setupShowReminder(a.shouldShowReminder)
-		setupHowEarly(a.timeToShowReminder)
-		setupHowFrequent(a.reminderFrequency)
-		setupUseTts(a.shouldUseTts && a.shouldUseTtsForReminder)
+		setupShowReminder(alarm.shouldShowReminder)
+		setupHowEarly(alarm.timeToShowReminder)
+		setupHowFrequent(alarm.reminderFrequency)
+		setupUseTts(alarm.shouldUseTts && alarm.shouldUseTtsForReminder)
 		setHowEarlyUsability()
 		setHowFrequentUsability()
 		setUseTtsUsability()

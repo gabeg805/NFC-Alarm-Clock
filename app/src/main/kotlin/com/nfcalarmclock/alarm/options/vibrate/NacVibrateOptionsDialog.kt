@@ -100,7 +100,7 @@ open class NacVibrateOptionsDialog
 	/**
 	 * Called when the cancel button is clicked.
 	 */
-	override fun onCancelClicked(alarm: NacAlarm?)
+	override fun onCancelClicked(alarm: NacAlarm)
 	{
 		// Cleanup the preview if it is running
 		vibrator.cleanup()
@@ -109,17 +109,17 @@ open class NacVibrateOptionsDialog
 	/**
 	 * Update the alarm with selected options.
 	 */
-	override fun onOkClicked(alarm: NacAlarm?)
+	override fun onOkClicked(alarm: NacAlarm)
 	{
 		// Cleanup the preview if it is running
 		vibrator.cleanup()
 
 		// Update the alarm
-		alarm?.vibrateDuration = vibrateOnSlider.value.toLong()
-		alarm?.vibrateWaitTime = vibrateOffSlider.value.toLong()
-		alarm?.shouldVibratePattern = customPatternSwitch.isChecked
-		alarm?.vibrateRepeatPattern = customPatternRepeatSlider.value.toInt()
-		alarm?.vibrateWaitTimeAfterPattern = customPatternWaitSlider.value.toLong()
+		alarm.vibrateDuration = vibrateOnSlider.value.toLong()
+		alarm.vibrateWaitTime = vibrateOffSlider.value.toLong()
+		alarm.shouldVibratePattern = customPatternSwitch.isChecked
+		alarm.vibrateRepeatPattern = customPatternRepeatSlider.value.toInt()
+		alarm.vibrateWaitTimeAfterPattern = customPatternWaitSlider.value.toLong()
 	}
 
 	/**
@@ -140,18 +140,15 @@ open class NacVibrateOptionsDialog
 	/**
 	 * Setup all alarm options.
 	 */
-	override fun setupAlarmOptions(alarm: NacAlarm?)
+	override fun setupAlarmOptions(alarm: NacAlarm)
 	{
 		// Get the vibrator
 		val context = requireContext()
 		vibrator = NacVibrator(context)
 
-		// Get the alarm, or build a new one, to get default values
-		val a = alarm ?: NacAlarm.build(sharedPreferences)
-
 		// Setup the views
-		setupVibrationDuration(a.vibrateDuration, a.vibrateWaitTime)
-		setupCustomPattern(a.shouldVibratePattern, a.vibrateRepeatPattern, a.vibrateWaitTimeAfterPattern)
+		setupVibrationDuration(alarm.vibrateDuration, alarm.vibrateWaitTime)
+		setupCustomPattern(alarm.shouldVibratePattern, alarm.vibrateRepeatPattern, alarm.vibrateWaitTimeAfterPattern)
 		setCustomPatternUsability()
 	}
 
@@ -324,7 +321,7 @@ open class NacVibrateOptionsDialog
 	/**
 	 * Setup any extra buttons.
 	 */
-	override fun setupExtraButtons(alarm: NacAlarm?)
+	override fun setupExtraButtons(alarm: NacAlarm)
 	{
 		// Get the button
 		val previewButton: MaterialButton = dialog!!.findViewById(R.id.preview_button)

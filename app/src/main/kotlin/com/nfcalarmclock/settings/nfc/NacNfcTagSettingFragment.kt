@@ -136,7 +136,7 @@ class NacNfcTagSettingFragment
 				}
 
 				// Show the dialog
-				deleteNfcTagDialog.show(childFragmentManager, NacDeleteNfcTagDialog.Companion.TAG)
+				deleteNfcTagDialog.show(childFragmentManager, NacDeleteNfcTagDialog.TAG)
 			}
 
 			/**
@@ -166,7 +166,7 @@ class NacNfcTagSettingFragment
 				}
 
 				// Show the dialog
-				renameNfcTagDialog.show(childFragmentManager, NacRenameNfcTagDialog.Companion.TAG)
+				renameNfcTagDialog.show(childFragmentManager, NacRenameNfcTagDialog.TAG)
 			}
 
 		}

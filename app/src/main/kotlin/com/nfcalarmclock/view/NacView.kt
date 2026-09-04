@@ -73,6 +73,36 @@ fun CircularProgressIndicator.animateProgress(
 }
 
 /**
+ * Animate hide.
+ */
+fun View.animateHide(duration: Long)
+{
+	this.animate()
+		.setDuration(duration)
+		.alpha(0f)
+		.apply {
+			withEndAction {
+				visibility = View.INVISIBLE
+			}
+		}
+		.start()
+}
+
+/**
+ * Animate show.
+ */
+fun View.animateShow(duration: Long)
+{
+	visibility = View.VISIBLE
+	alpha = 0f
+
+	this.animate()
+		.setDuration(duration)
+		.alpha(1f)
+		.start()
+}
+
+/**
  * Determine the correct alpha to use, depending on the state.
  */
 fun calcAlpha(state: Boolean, alpha: Float = 0.4f): Float
@@ -506,8 +536,8 @@ fun showSnackbar(
 	// Setup the snackbar
 	snackbar.setAction(action, onClickListener ?: View.OnClickListener { })
 	snackbar.setActionTextColor(textColor)
-	snackbar.setAnchorView(view)
-	snackbar.setAnimationMode(Snackbar.ANIMATION_MODE_FADE)
+	snackbar.anchorView = view
+	snackbar.animationMode = Snackbar.ANIMATION_MODE_FADE
 
 	// Add callback if listener is set
 	if (!shouldReuseSnackbar)

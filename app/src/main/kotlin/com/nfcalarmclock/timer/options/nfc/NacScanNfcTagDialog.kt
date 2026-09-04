@@ -45,9 +45,9 @@ class NacScanNfcTagDialog
 	/**
 	 * Get the alarm/timer argument from the fragment.
 	 */
-	override fun getFragmentArgument(): NacAlarm?
+	override fun getFragmentArgument(): NacAlarm
 	{
-		return arguments?.getTimer()
+		return arguments?.getTimer() ?: NacTimer.build(sharedPreferences)
 	}
 
 	/**
@@ -72,22 +72,22 @@ class NacScanNfcTagDialog
 	/**
 	 * OK buton is clicked.
 	 */
-	override fun onOkClicked(alarm: NacAlarm?)
+	override fun onOkClicked(alarm: NacAlarm)
 	{
 		// Super
 		super.onOkClicked(alarm)
 
 		// Set the start timer on scan flag
-		(alarm as NacTimer?)?.shouldScanningNfcTagStartTimer = startTimerOnScanSwitch.isChecked
+		(alarm as NacTimer).shouldScanningNfcTagStartTimer = startTimerOnScanSwitch.isChecked
 	}
 
 	/**
 	 * Use any NFC tag was clicked.
 	 */
-	override fun onUseAnyNfcTagClicked(alarm: NacAlarm?)
+	override fun onUseAnyNfcTagClicked(alarm: NacAlarm)
 	{
 		// Clear the start timer on NFC scan flag
-		(alarm as NacTimer?)?.shouldScanningNfcTagStartTimer = false
+		(alarm as NacTimer).shouldScanningNfcTagStartTimer = false
 
 		// Super
 		super.onUseAnyNfcTagClicked(alarm)
@@ -101,15 +101,19 @@ class NacScanNfcTagDialog
 		// Super
 		super.onViewCreated(view, savedInstanceState)
 
-		// Change the description for the timer
+		// Get the views
 		val scanNfcTagDescription: TextView = view.findViewById(R.id.scan_nfc_tag_description)
+		val selectNfcTagDescription: TextView = view.findViewById(R.id.select_nfc_tag_description)
+
+		// Change the description for the timer
 		scanNfcTagDescription.setText(R.string.description_scan_nfc_tag_timer)
+		selectNfcTagDescription.setText(R.string.description_select_nfc_tag_timer)
 	}
 
 	/**
 	 * Setup the start timer on scan.
 	 */
-	override fun setupStartTimerOnScan(alarm: NacAlarm?)
+	override fun setupStartTimerOnScan(alarm: NacAlarm)
 	{
 		// Get the views
 		val relativeLayout: RelativeLayout = dialog!!.findViewById(R.id.start_timer_on_nfc_tag_scan_container)
@@ -133,7 +137,7 @@ class NacScanNfcTagDialog
 		}
 
 		// Set the description depending on how many NFC tags are used
-		if ((alarm != null) && (alarm.nfcTagId.isNotEmpty()))
+		if (alarm.nfcTagId.isNotEmpty())
 		{
 			// Determine the string to use
 			val stringId = if (alarm.nfcTagIdList.size == 1)

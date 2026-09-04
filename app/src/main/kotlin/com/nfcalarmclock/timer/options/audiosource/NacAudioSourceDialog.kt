@@ -7,6 +7,7 @@ import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.audiosource.NacAudioSourceDialog
 import com.nfcalarmclock.system.getTimer
+import com.nfcalarmclock.timer.db.NacTimer
 
 /**
  * Select the audio source that the media should be played from.
@@ -18,9 +19,9 @@ class NacAudioSourceDialog
 	/**
 	 * Get the alarm/timer argument from the fragment.
 	 */
-	override fun getFragmentArgument(): NacAlarm?
+	override fun getFragmentArgument(): NacAlarm
 	{
-		return arguments?.getTimer()
+		return arguments?.getTimer() ?: NacTimer.build(sharedPreferences)
 	}
 
 	/**

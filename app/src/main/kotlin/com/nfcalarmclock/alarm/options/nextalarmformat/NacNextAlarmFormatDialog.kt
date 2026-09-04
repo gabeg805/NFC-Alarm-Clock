@@ -48,7 +48,7 @@ class NacNextAlarmFormatDialog
 	/**
 	 * Called when the Ok button is clicked.
 	 */
-	override fun onOkClicked(alarm: NacAlarm?)
+	override fun onOkClicked(alarm: NacAlarm)
 	{
 		// Super
 		super.onOkClicked(alarm)

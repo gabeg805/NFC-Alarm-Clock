@@ -63,15 +63,15 @@ abstract class NacGenericAlarmOptionsDialog
 	/**
 	 * Get the alarm/timer argument from the fragment.
 	 */
-	open fun getFragmentArgument(): NacAlarm?
+	open fun getFragmentArgument(): NacAlarm
 	{
-		return arguments?.getAlarm()
+		return arguments?.getAlarm() ?: NacAlarm.build(sharedPreferences)
 	}
 
 	/**
 	 * Cancel button is clicked.
 	 */
-	open fun onCancelClicked(alarm: NacAlarm?) {}
+	open fun onCancelClicked(alarm: NacAlarm) {}
 
 	/**
 	 * Create the view.
@@ -88,7 +88,7 @@ abstract class NacGenericAlarmOptionsDialog
 	/**
 	 * Primary button is clicked.
 	 */
-	open fun onPrimaryButtonClicked(alarm: NacAlarm?)
+	open fun onPrimaryButtonClicked(alarm: NacAlarm)
 	{
 		try
 		{
@@ -111,12 +111,12 @@ abstract class NacGenericAlarmOptionsDialog
 	/**
 	 * Ok button is clicked.
 	 */
-	abstract fun onOkClicked(alarm: NacAlarm?)
+	abstract fun onOkClicked(alarm: NacAlarm)
 
 	/**
 	 * Alarm should be saved.
 	 */
-	open fun onSaveAlarm(alarm: NacAlarm?)
+	open fun onSaveAlarm(alarm: NacAlarm)
 	{
 		// Get the nav controller
 		val navController = findNavController()
@@ -138,7 +138,7 @@ abstract class NacGenericAlarmOptionsDialog
 	/**
 	 * Secondary button is clicked.
 	 */
-	open fun onSecondaryButtonClicked(alarm: NacAlarm?)
+	open fun onSecondaryButtonClicked(alarm: NacAlarm)
 	{
 		try
 		{
@@ -179,12 +179,12 @@ abstract class NacGenericAlarmOptionsDialog
 	/**
 	 * Setup all alarm options.
 	 */
-	abstract fun setupAlarmOptions(alarm: NacAlarm?)
+	abstract fun setupAlarmOptions(alarm: NacAlarm)
 
 	/**
 	 * Setup the Cancel button.
 	 */
-	open fun setupCancelButton(alarm: NacAlarm?)
+	open fun setupCancelButton(alarm: NacAlarm)
 	{
 		// Get the cancel button
 		val cancelButton: MaterialButton = dialog!!.findViewById(R.id.cancel_button)
@@ -196,7 +196,7 @@ abstract class NacGenericAlarmOptionsDialog
 	/**
 	 * Setup any extra buttons.
 	 */
-	open fun setupExtraButtons(alarm: NacAlarm?) {}
+	open fun setupExtraButtons(alarm: NacAlarm) {}
 
 	/**
 	 * Setup the minutes and second dropdown views of an option.
@@ -285,7 +285,7 @@ abstract class NacGenericAlarmOptionsDialog
 	/**
 	 * Setup the OK button.
 	 */
-	open fun setupOkButton(alarm: NacAlarm?)
+	open fun setupOkButton(alarm: NacAlarm)
 	{
 		// Get the ok button
 		val okButton: MaterialButton = dialog!!.findViewById(R.id.ok_button)
@@ -297,7 +297,7 @@ abstract class NacGenericAlarmOptionsDialog
 	/**
 	 * Setup the scroll view.
 	 */
-	open fun setupScrollView(alarm: NacAlarm?)
+	open fun setupScrollView(alarm: NacAlarm)
 	{
 		// Get the views
 		val container: LinearLayout = dialog!!.findViewById(R.id.alarm_option_container)

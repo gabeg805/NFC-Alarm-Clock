@@ -88,7 +88,7 @@ open class NacVolumeOptionsDialog
 	/**
 	 * Get the alarm/timer argument from the fragment.
 	 */
-	override fun getFragmentArgument(): NacAlarm?
+	override fun getFragmentArgument(): NacAlarm
 	{
 		return arguments?.getAlarm() ?: NacAlarm.build(sharedPreferences)
 	}
@@ -96,7 +96,7 @@ open class NacVolumeOptionsDialog
 	/**
 	 * Cancel button is clicked.
 	 */
-	override fun onCancelClicked(alarm: NacAlarm?)
+	override fun onCancelClicked(alarm: NacAlarm)
 	{
 		// Cleanup resources
 		cleanup()
@@ -105,7 +105,7 @@ open class NacVolumeOptionsDialog
 	/**
 	 * Ok button is clicked.
 	 */
-	override fun onOkClicked(alarm: NacAlarm?)
+	override fun onOkClicked(alarm: NacAlarm)
 	{
 		// Update the alarm
 		updateAlarm(alarm)
@@ -151,10 +151,10 @@ open class NacVolumeOptionsDialog
 	/**
 	 * Setup all alarm options.
 	 */
-	override fun setupAlarmOptions(alarm: NacAlarm?)
+	override fun setupAlarmOptions(alarm: NacAlarm)
 	{
 		// Media can be previewed
-		if (alarm!!.mediaPath.isNotEmpty())
+		if (alarm.mediaPath.isNotEmpty())
 		{
 			val context = requireContext()
 			val deviceContext = getDeviceProtectedStorageContext(context)
@@ -192,7 +192,7 @@ open class NacVolumeOptionsDialog
 	/**
 	 * Setup any extra buttons.
 	 */
-	override fun setupExtraButtons(alarm: NacAlarm?)
+	override fun setupExtraButtons(alarm: NacAlarm)
 	{
 		// Get the button
 		previewButton = dialog!!.findViewById(R.id.preview_button)
@@ -201,7 +201,7 @@ open class NacVolumeOptionsDialog
 		setupSecondaryButton(previewButton, listener = {
 
 			// Unable to preview because no media to play
-			if (alarm!!.mediaPath.isEmpty())
+			if (alarm.mediaPath.isEmpty())
 			{
 				quickToast(requireContext(), R.string.error_message_unable_to_preview_volume_options)
 				return@setupSecondaryButton
@@ -297,11 +297,11 @@ open class NacVolumeOptionsDialog
 	/**
 	 * Update the alarm.
 	 */
-	private fun updateAlarm(alarm: NacAlarm?)
+	private fun updateAlarm(alarm: NacAlarm)
 	{
-		alarm?.shouldGraduallyIncreaseVolume = graduallyIncreaseVolumeSwitch.isChecked
-		alarm?.graduallyIncreaseVolumeWaitTime = selectedWaitTime
-		alarm?.shouldRestrictVolume = restrictVolumeSwitch.isChecked
+		alarm.shouldGraduallyIncreaseVolume = graduallyIncreaseVolumeSwitch.isChecked
+		alarm.graduallyIncreaseVolumeWaitTime = selectedWaitTime
+		alarm.shouldRestrictVolume = restrictVolumeSwitch.isChecked
 	}
 
 }

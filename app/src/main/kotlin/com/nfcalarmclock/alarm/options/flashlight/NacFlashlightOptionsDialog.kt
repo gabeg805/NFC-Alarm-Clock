@@ -76,7 +76,7 @@ open class NacFlashlightOptionsDialog
 	/**
 	 * Called when the cancel button is clicked.
 	 */
-	override fun onCancelClicked(alarm: NacAlarm?)
+	override fun onCancelClicked(alarm: NacAlarm)
 	{
 		// Cleanup the flashlight
 		flashlight.cleanup()
@@ -85,16 +85,16 @@ open class NacFlashlightOptionsDialog
 	/**
 	 * Update the alarm with selected options.
 	 */
-	override fun onOkClicked(alarm: NacAlarm?)
+	override fun onOkClicked(alarm: NacAlarm)
 	{
 		// Cleanup the preview if it is running
 		flashlight.cleanup()
 
 		// Update the alarm
-		alarm?.flashlightStrengthLevel = brightnessSlider.value.toInt()
-		alarm?.shouldBlinkFlashlight = blinkSwitch.isChecked
-		alarm?.flashlightOnDuration = selectedBlinkOnDuration
-		alarm?.flashlightOffDuration = selectedBlinkOffDuration
+		alarm.flashlightStrengthLevel = brightnessSlider.value.toInt()
+		alarm.shouldBlinkFlashlight = blinkSwitch.isChecked
+		alarm.flashlightOnDuration = selectedBlinkOnDuration
+		alarm.flashlightOffDuration = selectedBlinkOffDuration
 	}
 
 	/**
@@ -115,21 +115,18 @@ open class NacFlashlightOptionsDialog
 	/**
 	 * Setup all alarm options.
 	 */
-	override fun setupAlarmOptions(alarm: NacAlarm?)
+	override fun setupAlarmOptions(alarm: NacAlarm)
 	{
 		// Create the flashlight
 		flashlight = NacFlashlight(requireContext())
 
-		// Get the alarm, or build a new one, to get default values
-		val a = alarm ?: NacAlarm.build(sharedPreferences)
-
 		// Set the default selected values
-		selectedBlinkOnDuration = if (a.flashlightOnDuration == "0") "1.0" else a.flashlightOnDuration
-		selectedBlinkOffDuration = if (a.flashlightOffDuration == "0") "1.0" else a.flashlightOffDuration
+		selectedBlinkOnDuration = if (alarm.flashlightOnDuration == "0") "1.0" else alarm.flashlightOnDuration
+		selectedBlinkOffDuration = if (alarm.flashlightOffDuration == "0") "1.0" else alarm.flashlightOffDuration
 
 		// Setup the views
-		setupBrightnessLevel(a.flashlightStrengthLevel)
-		setupBlinkFlashlight(a.shouldBlinkFlashlight, a.flashlightOnDuration, a.flashlightOffDuration)
+		setupBrightnessLevel(alarm.flashlightStrengthLevel)
+		setupBlinkFlashlight(alarm.shouldBlinkFlashlight, alarm.flashlightOnDuration, alarm.flashlightOffDuration)
 		setBlinkFlashlightUsability()
 	}
 
@@ -289,7 +286,7 @@ open class NacFlashlightOptionsDialog
 	/**
 	 * Setup any extra buttons.
 	 */
-	override fun setupExtraButtons(alarm: NacAlarm?)
+	override fun setupExtraButtons(alarm: NacAlarm)
 	{
 		// Get the button
 		val previewButton: MaterialButton = dialog!!.findViewById(R.id.preview_button)

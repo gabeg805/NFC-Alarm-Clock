@@ -394,73 +394,6 @@ abstract class NacBaseAddEditTimer
 	}
 
 	/**
-	 * Setup the sizes of the time and number pad buttons.
-	 */
-	protected fun setupTimeAndNumpadButtonSizes()
-	{
-		// Ensure the number pad is laid out
-		numpadContainer.doOnLayout {
-
-			// Clear the percent height constraint and make the height wrap content
-			numpadContainer.updateLayoutParams<ConstraintLayout.LayoutParams> {
-				matchConstraintPercentHeight = -1f
-				height = ConstraintLayout.LayoutParams.WRAP_CONTENT
-			}
-
-			// Calculate a good button size based on the 3x5 columns and rows, and use the min
-			// of the width/height so that the button can be circular
-			val totalWidth = numpadContainer.width - numpadContainer.paddingStart - numpadContainer.paddingEnd
-			val totalHeight = numpadContainer.height - numpadContainer.paddingTop - numpadContainer.paddingBottom
-			val cellWidth = totalWidth / 3
-			val cellHeight = totalHeight / 5
-			val buttonSize = minOf(cellWidth, cellHeight)
-
-			// All buttons that will have their size changed
-			val allButtons = arrayOf(
-				numpad1, numpad2, numpad3,
-				numpad4, numpad5, numpad6,
-				numpad7, numpad8, numpad9,
-				numpad00, numpad0, numpadDel,
-				startButton,
-			)
-
-			// Update the size of all the buttons
-			allButtons.forEach { b ->
-
-				// Update the width and height
-				val params = b.layoutParams as LinearLayout.LayoutParams
-				params.width = buttonSize
-				params.height = buttonSize
-
-				// Force layout update
-				b.layoutParams = params
-
-			}
-
-			// Ensure the hour is laid out
-			hourTextView.doOnLayout {
-
-				// Update the attributes of the hour (this is the main time view that the other
-				// time views follow)
-				hourTextView.updateLayoutParams<ConstraintLayout.LayoutParams> {
-
-					// Clear the percent height constraint
-					matchConstraintPercentHeight = -1f
-
-					// Make the height the remaining in the scrollview, though subtracting
-					// hour height is odd. Shouldn't that be the margin instead? It seems to
-					// be working for now, so I won't change it yet
-					//height = ConstraintLayout.LayoutParams.WRAP_CONTENT
-					height = scrollView.height - numpadContainer.height - hourTextView.height
-
-				}
-
-			}
-		}
-
-	}
-
-	/**
 	 * Save the timer.
 	 */
 	protected fun saveTimer(unit: () -> Unit)
@@ -1085,6 +1018,82 @@ abstract class NacBaseAddEditTimer
 			it.performHapticFeedback()
 
 		}
+	}
+
+	/**
+	 * Setup the sizes of the time and number pad buttons.
+	 */
+	protected fun setupTimeAndNumpadButtonSizes()
+	{
+		// Ensure the number pad is laid out
+		numpadContainer.doOnLayout {
+
+			// Clear the percent height constraint and make the height wrap content
+			numpadContainer.updateLayoutParams<ConstraintLayout.LayoutParams> {
+				matchConstraintPercentHeight = -1f
+				height = ConstraintLayout.LayoutParams.WRAP_CONTENT
+			}
+
+			// Calculate a good button size based on the 3x5 columns and rows, and use the min
+			// of the width/height so that the button can be circular
+			val totalWidth = numpadContainer.width - numpadContainer.paddingStart - numpadContainer.paddingEnd
+			val totalHeight = numpadContainer.height - numpadContainer.paddingTop - numpadContainer.paddingBottom
+			val cellWidth = totalWidth / 3
+			val cellHeight = totalHeight / 5
+			val buttonSize = minOf(cellWidth, cellHeight)
+
+			// All buttons that will have their size changed
+			val allButtons = arrayOf(
+				numpad1, numpad2, numpad3,
+				numpad4, numpad5, numpad6,
+				numpad7, numpad8, numpad9,
+				numpad00, numpad0, numpadDel,
+				startButton,
+			)
+
+			// Update the size of all the buttons
+			allButtons.forEach { b ->
+
+				// Update the width and height
+				val params = b.layoutParams as LinearLayout.LayoutParams
+				params.width = buttonSize
+				params.height = buttonSize
+
+				// Force layout update, but do not do it when a layout pass is already occuring?
+				// Can change the alpha of all buttons and show them in the post?
+				b.layoutParams = params
+				//b.post {
+				//	b.layoutParams = params
+				//}
+
+			}
+
+			// Ensure the hour is laid out
+			hourTextView.doOnLayout {
+
+				// Update the attributes of the hour (this is the main time view that the other
+				// time views follow)
+				hourTextView.updateLayoutParams<ConstraintLayout.LayoutParams> {
+
+					// Clear the percent height constraint
+					matchConstraintPercentHeight = -1f
+
+					// Make the height the remaining in the scrollview, though subtracting
+					// hour height is odd. Shouldn't that be the margin instead? It seems to
+					// be working for now, so I won't change it yet
+					//height = ConstraintLayout.LayoutParams.WRAP_CONTENT
+					val newHeight = scrollView.height - numpadContainer.height - hourTextView.height
+
+					if (newHeight > 0)
+					{
+						height = newHeight
+					}
+
+				}
+
+			}
+		}
+
 	}
 
 	/**

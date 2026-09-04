@@ -18,15 +18,12 @@ import com.nfcalarmclock.BuildConfig
 import com.nfcalarmclock.R
 import com.nfcalarmclock.onboarding.NacOnboardingWelcomePageFragment.Companion.GET_STARTED_CLICK_REQUEST_KEY
 import com.nfcalarmclock.shared.NacSharedPreferences
+import com.nfcalarmclock.system.permission.postnotifications.NacPostNotificationsPermission
+import com.nfcalarmclock.system.permission.scheduleexactalarm.NacScheduleExactAlarmPermission
+import com.nfcalarmclock.system.permission.systemalertwindow.NacSystemAlertWindowPermission
 
 /**
  * Onboard the user into using the app.
- *
- * TODO: Change functionality for 0 permissions. Also check if already have permissions before showing item.
- *
- * API 27 = 0 permissions
- * API 29 = 0 permissions
- * API 30 = 0 permissions
  */
 class NacOnboardingFragment : Fragment()
 {
@@ -118,6 +115,10 @@ class NacOnboardingFragment : Fragment()
 		// Super
 		super.onViewCreated(view, savedInstanceState)
 
+		// Get the context and shared preferences
+		val context = requireContext()
+		val sharedPreferences = NacSharedPreferences(context)
+
 		// Get views
 		viewPager = view.findViewById(R.id.onboarding_viewpager)
 		val tabLayout: TabLayout = view.findViewById(R.id.onboarding_tab_layout_indicator)
@@ -135,7 +136,26 @@ class NacOnboardingFragment : Fragment()
 
 		// Fragment result from welcome page
 		childFragmentManager.setFragmentResultListener(GET_STARTED_CLICK_REQUEST_KEY, viewLifecycleOwner) { _, _ ->
-			viewPager.currentItem = 1
+
+			// API 24-30 = NONE
+			// API 31 = Schedule (automatically given)
+			// API 32 = Schedule (automatically given)
+			// API 33 = Schedule (automatically given) and Notification
+			// API 34 = Notification
+			// API 35 = Notification and System Alert
+			// API 36 = Notification
+			if (NacPostNotificationsPermission.shouldRequestPermission(context, sharedPreferences)
+				|| NacScheduleExactAlarmPermission.shouldRequestPermission(context, sharedPreferences)
+				|| NacSystemAlertWindowPermission.shouldRequestPermission(context, sharedPreferences))
+			{
+				viewPager.currentItem = 1
+			}
+			// API 24-30 do not require extra permissions
+			else
+			{
+				viewPager.currentItem = 2
+			}
+
 		}
 
 		// Page change callback
@@ -202,12 +222,25 @@ class NacOnboardingFragment : Fragment()
 
 				// Navigate to show alarms
 				val navController = findNavController()
+				val bundle = Bundle().apply {
+					putBoolean(ONBOARDING_NAV_KEY, true)
+				}
 
 				navController.popBackStack()
-				navController.navigate(R.id.action_global_nacShowAlarmsFragment)
+				navController.navigate(R.id.action_global_nacShowAlarmsFragment, bundle)
 			}
 
 		}
+	}
+
+	companion object
+	{
+
+		/**
+		 * Key for navigation bundle to indicate that the destination came from onboarding.
+		 */
+		const val ONBOARDING_NAV_KEY = "ONBOARDING_NAV_KEY"
+
 	}
 
 }

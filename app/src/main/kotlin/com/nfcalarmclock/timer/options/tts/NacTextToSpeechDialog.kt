@@ -7,6 +7,7 @@ import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.tts.NacTextToSpeechDialog
 import com.nfcalarmclock.system.getTimer
+import com.nfcalarmclock.timer.db.NacTimer
 
 /**
  * Text to speech options for a timer.
@@ -18,9 +19,9 @@ class NacTextToSpeechDialog
 	/**
 	 * Get the alarm/timer argument from the fragment.
 	 */
-	override fun getFragmentArgument(): NacAlarm?
+	override fun getFragmentArgument(): NacAlarm
 	{
-		return arguments?.getTimer()
+		return arguments?.getTimer() ?: NacTimer.build(sharedPreferences)
 	}
 
 	/**

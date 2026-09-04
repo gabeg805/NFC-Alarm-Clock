@@ -220,7 +220,6 @@
 	<string name="error_message_google_play_billing">Error when connecting to the Google Play Store</string>
 	<string name="error_message_text_to_speech_audio_focus">Unable to use text-to-speech</string>
 	<string name="error_message_enter_timer_duration">Enter a duration</string>
-	<string name="error_message_unable_to_dismiss_early">Unable to find alarm to dismiss early</string>
 	<string name="error_message_unable_to_volume_dismiss_nfc_alarm">Unable to dismiss NFC alarm with volume button</string>
 	<string name="error_message_unable_to_email">Unable to draft email</string>
 	<string name="error_message_unable_to_email_statistics">Unable to email statistics</string>
@@ -348,12 +347,12 @@
 	<string name="title_next_alarm_format">Next alarm format&#8230;</string>
 	<string name="title_toggle_alarms_with_airplane_mode">Toggle alarms with airplane mode</string>
 	<string name="title_permissions">Permissions</string>
+	<string name="title_no_permissions_needed">No permissions needed!</string>
 	<string name="title_help_debug_mode">Debug mode</string>
 	<string name="title_help_share_logs">Share logs with developer</string>
 	<string name="title_help_send_email">Send email</string>
 	<string name="title_how_to_use_features">How to use some features</string>
-	<string name="title_how_to_copy">Swipe right to copy</string>
-	<string name="title_how_to_delete">Swipe left to delete</string>
+	<string name="title_how_to_copy_and_delete">Swipe to copy and delete</string>
 	<string name="title_how_to_get_more_options">Long press for more options</string>
 	<string name="title_how_to_change_appearance">Settings > Appearance</string>
 	<string name="title_developer">Developer</string>
@@ -365,11 +364,9 @@
 	<string name="description_onboarding_welcome">Welcome to the most customizable alarm clock app you have ever used</string>
 	<string name="description_onboarding_permissions">The app needs some permissions to work properly</string>
 	<string name="description_onboarding_permission_post_notifications_request">Required for alarms to run. Allows the app to start and stay running when not already in focus.</string>
-	<string name="description_onboarding_permission_schedule_exact_alarm_request">Allows alarms to run precisely when scheduled.</string>
-	<string name="description_onboarding_permission_system_alert_window_request">This is a special permission. It is used to ensure that the alarm screen is shown, which is required if your alarm will play audio.</string>
+	<string name="description_onboarding_permission_system_alert_window_request">This is a special permission. Used to ensure that the alarm screen is shown and audio can be played. Only required on Android 15, or if there is device-specific issue where alarms are not running.</string>
 	<string name="description_onboarding_how_to_use_features">Some stuff can be hidden or confusing. Here is how to do those things</string>
-	<string name="description_onboarding_how_to_copy">Swipe an alarm or timer to the right to copy it.</string>
-	<string name="description_onboarding_how_to_delete">Swipe an alarm or timer to the left to delete it.</string>
+	<string name="description_onboarding_how_to_copy_and_delete">Swipe an alarm or timer right to copy and left to delete.</string>
 	<string name="description_onboarding_how_to_get_more_options">Long press on almost any button in an expanded alarm/timer to access more options.  You can even try it on an alarm card to get options like "Skip next alarm" and more.</string>
 	<string name="description_onboarding_how_to_change_appearance">Go to Settings > Appearance to find all the customization options, and get the app looking the way you want it to look.</string>
 	<string name="description_slide_to_snooze">Slide to snooze</string>
@@ -521,6 +518,12 @@
 	<string name="cd_skip_next_alarm">Skip next alarm.</string>
 	<string name="cd_delete_alarm_after_dismissed">Delete alarm after it is dismissed.</string>
 	<string name="cd_clock_widget_alarm_icon">Next alarm</string>
+	<string name="cd_permission_check_mark">Check mark indicating permission was granted</string>
+	<string name="cd_request_permission_icon">Request permission icon</string>
+	<string name="cd_swipe">Swipe</string>
+	<string name="cd_long_press">Long press</string>
+	<string name="cd_customize">Customize</string>
+	<string name="cd_preference_icon">Preference icon</string>
 
 	<!-- Plurals -->
 	<plurals name="alarm">

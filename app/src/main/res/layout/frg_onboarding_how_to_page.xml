@@ -32,6 +32,7 @@
 		android:layout_width="match_parent"
 		android:layout_height="0dp"
 		android:layout_marginTop="@dimen/large"
+		android:scrollbarFadeDuration="5000"
 		app:layout_constraintTop_toBottomOf="@id/onboarding_description"
 		app:layout_constraintBottom_toBottomOf="parent">
 
@@ -39,108 +40,115 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content">
 
-			<!-- Swipe to copy title -->
-			<TextView
-				style="@style/Widget.MyOnboarding.Section.FirstTitle"
-				android:id="@+id/onboarding_swipe_to_copy_title"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:text="@string/title_how_to_copy"
-				app:layout_constraintTop_toTopOf="parent"
-				/>
-
-			<!-- Swipe to copy description -->
-			<TextView
-				style="@style/Widget.MyOnboarding.Section.Description"
-				android:id="@+id/onboarding_swipe_to_copy_description"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:text="@string/description_onboarding_how_to_copy"
-				app:layout_constraintTop_toBottomOf="@id/onboarding_swipe_to_copy_title"
-				/>
-
-			<!-- Swipe to copy image -->
-			<!--
+			<!-- Swipe to copy/delete image -->
 			<ImageView
-				android:id="@+id/onboarding_swipe_to_copy_image"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="@dimen/normal"
-				android:src="@mipmap/swipe_to_copy"
-				app:layout_constraintTop_toBottomOf="@id/onboarding_swipe_to_copy_description"
+				android:id="@+id/onboarding_swipe_to_copy_and_delete_image"
+				android:layout_width="@dimen/isz_xxlarge"
+				android:layout_height="@dimen/isz_xxlarge"
+				android:src="@drawable/swipe_32"
+				android:contentDescription="@string/cd_swipe"
+				app:layout_constraintTop_toTopOf="@id/onboarding_swipe_to_copy_and_delete_title"
+				app:layout_constraintBottom_toBottomOf="@id/onboarding_swipe_to_copy_and_delete_description"
+				app:layout_constraintStart_toStartOf="parent"
 				/>
-				-->
 
-			<!-- Swipe to delete title -->
+			<!-- Swipe to copy/delete title -->
 			<TextView
 				style="@style/Widget.MyOnboarding.Section.Title"
-				android:id="@+id/onboarding_swipe_to_delete_title"
-				android:layout_width="match_parent"
+				android:id="@+id/onboarding_swipe_to_copy_and_delete_title"
+				android:layout_width="0dp"
 				android:layout_height="wrap_content"
-				android:text="@string/title_how_to_delete"
-				app:layout_constraintTop_toBottomOf="@id/onboarding_swipe_to_copy_description"
+				android:layout_marginStart="@dimen/large"
+				android:text="@string/title_how_to_copy_and_delete"
+				app:layout_constraintTop_toTopOf="parent"
+				app:layout_constraintStart_toEndOf="@id/onboarding_swipe_to_copy_and_delete_image"
+				app:layout_constraintEnd_toEndOf="parent"
 				/>
 
-			<!-- Swipe to delete description -->
+			<!-- Swipe to copy/delete description -->
 			<TextView
 				style="@style/Widget.MyOnboarding.Section.Description"
-				android:id="@+id/onboarding_swipe_to_delete_description"
-				android:layout_width="match_parent"
+				android:id="@+id/onboarding_swipe_to_copy_and_delete_description"
+				android:layout_width="0dp"
 				android:layout_height="wrap_content"
-				android:text="@string/description_onboarding_how_to_delete"
-				app:layout_constraintTop_toBottomOf="@id/onboarding_swipe_to_delete_title"
+				android:text="@string/description_onboarding_how_to_copy_and_delete"
+				app:layout_constraintTop_toBottomOf="@id/onboarding_swipe_to_copy_and_delete_title"
+				app:layout_constraintStart_toStartOf="@id/onboarding_swipe_to_copy_and_delete_title"
+				app:layout_constraintEnd_toEndOf="parent"
 				/>
 
-			<!-- Swipe to delete image -->
-			<!--
+			<!-- Long press image -->
 			<ImageView
-				android:id="@+id/onboarding_swipe_to_delete_image"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:layout_marginTop="@dimen/normal"
-				android:src="@mipmap/swipe_to_delete"
-				app:layout_constraintTop_toBottomOf="@id/onboarding_swipe_to_delete_description"
+				android:id="@+id/onboarding_long_press_image"
+				android:layout_width="@dimen/isz_xxlarge"
+				android:layout_height="@dimen/isz_xxlarge"
+				android:src="@drawable/touch_app_32"
+				android:contentDescription="@string/cd_long_press"
+				app:layout_constraintTop_toTopOf="@id/onboarding_long_press_title"
+				app:layout_constraintBottom_toBottomOf="@id/onboarding_long_press_description"
+				app:layout_constraintStart_toStartOf="parent"
 				/>
-				-->
 
 			<!-- Long press title -->
 			<TextView
 				style="@style/Widget.MyOnboarding.Section.Title"
 				android:id="@+id/onboarding_long_press_title"
-				android:layout_width="match_parent"
+				android:layout_width="0dp"
 				android:layout_height="wrap_content"
+				android:layout_marginStart="@dimen/large"
 				android:text="@string/title_how_to_get_more_options"
-				app:layout_constraintTop_toBottomOf="@id/onboarding_swipe_to_delete_description"
+				app:layout_constraintTop_toBottomOf="@id/onboarding_swipe_to_copy_and_delete_description"
+				app:layout_constraintStart_toEndOf="@id/onboarding_long_press_image"
+				app:layout_constraintEnd_toEndOf="parent"
 				/>
 
 			<!-- Long press description -->
 			<TextView
 				style="@style/Widget.MyOnboarding.Section.Description"
 				android:id="@+id/onboarding_long_press_description"
-				android:layout_width="match_parent"
+				android:layout_width="0dp"
 				android:layout_height="wrap_content"
 				android:text="@string/description_onboarding_how_to_get_more_options"
 				app:layout_constraintTop_toBottomOf="@id/onboarding_long_press_title"
+				app:layout_constraintStart_toStartOf="@id/onboarding_long_press_title"
+				app:layout_constraintEnd_toEndOf="parent"
+				/>
+
+			<!-- Settings appearance image -->
+			<ImageView
+				android:id="@+id/onboarding_settings_appearance_image"
+				android:layout_width="@dimen/isz_xxlarge"
+				android:layout_height="@dimen/isz_xxlarge"
+				android:src="@drawable/palette"
+				android:contentDescription="@string/cd_customize"
+				app:layout_constraintTop_toTopOf="@id/onboarding_settings_appearance_title"
+				app:layout_constraintBottom_toBottomOf="@id/onboarding_settings_appearance_description"
+				app:layout_constraintStart_toStartOf="parent"
 				/>
 
 			<!-- Settings appearance title -->
 			<TextView
 				style="@style/Widget.MyOnboarding.Section.Title"
 				android:id="@+id/onboarding_settings_appearance_title"
-				android:layout_width="match_parent"
+				android:layout_width="0dp"
 				android:layout_height="wrap_content"
+				android:layout_marginStart="@dimen/large"
 				android:text="@string/title_how_to_change_appearance"
 				app:layout_constraintTop_toBottomOf="@id/onboarding_long_press_description"
+				app:layout_constraintStart_toEndOf="@id/onboarding_settings_appearance_image"
+				app:layout_constraintEnd_toEndOf="parent"
 				/>
 
 			<!-- Settings appearance description -->
 			<TextView
 				style="@style/Widget.MyOnboarding.Section.Description"
 				android:id="@+id/onboarding_settings_appearance_description"
-				android:layout_width="match_parent"
+				android:layout_width="0dp"
 				android:layout_height="wrap_content"
 				android:text="@string/description_onboarding_how_to_change_appearance"
 				app:layout_constraintTop_toBottomOf="@id/onboarding_settings_appearance_title"
+				app:layout_constraintStart_toStartOf="@id/onboarding_settings_appearance_title"
+				app:layout_constraintEnd_toEndOf="parent"
 				/>
 		</androidx.constraintlayout.widget.ConstraintLayout>
 	</ScrollView>

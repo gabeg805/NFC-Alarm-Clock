@@ -124,20 +124,20 @@ class NacRepeatOptionsDialog
 	/**
 	 * Called when the Ok button is clicked.
 	 */
-	override fun onOkClicked(alarm: NacAlarm?)
+	override fun onOkClicked(alarm: NacAlarm)
 	{
 		// Update the alarm
-		alarm?.shouldRepeat = true
-		alarm?.shouldSkipNextAlarm = false
-		alarm?.repeatFrequency = selectedRepeatFrequencyValue
-		alarm?.repeatFrequencyUnits = selectedRepeatFrequencyUnits
-		alarm?.repeatFrequencyDaysToRunBeforeStarting = selectedDaysToRunBeforeFrequency
+		alarm.shouldRepeat = true
+		alarm.shouldSkipNextAlarm = false
+		alarm.repeatFrequency = selectedRepeatFrequencyValue
+		alarm.repeatFrequencyUnits = selectedRepeatFrequencyUnits
+		alarm.repeatFrequencyDaysToRunBeforeStarting = selectedDaysToRunBeforeFrequency
 
 		// Weekly frequency unit
 		if (selectedRepeatFrequencyUnits == 4)
 		{
 			// Days are empty
-			if (alarm?.days?.isEmpty() == true)
+			if (alarm.days.isEmpty())
 			{
 				// Every 1 week or no days to run before starting were selected
 				if ((selectedRepeatFrequencyValue == 1) || selectedDaysToRunBeforeFrequency.isEmpty())
@@ -157,8 +157,8 @@ class NacRepeatOptionsDialog
 		else
 		{
 			// Clear various alarm attributes
-			alarm?.repeatFrequencyDaysToRunBeforeStarting = Day.NONE
-			alarm?.setDays(0)
+			alarm.repeatFrequencyDaysToRunBeforeStarting = Day.NONE
+			alarm.setDays(0)
 		}
 	}
 
@@ -183,7 +183,7 @@ class NacRepeatOptionsDialog
 	/**
 	 * Setup all alarm options.
 	 */
-	override fun setupAlarmOptions(alarm: NacAlarm?)
+	override fun setupAlarmOptions(alarm: NacAlarm)
 	{
 		// Get the context
 		val context = requireContext()
@@ -205,16 +205,13 @@ class NacRepeatOptionsDialog
 			context.resources.getQuantityString(R.plurals.standalone_unit_month, 5),
 		).toTypedArray()
 
-		// Get the alarm, or build a new one, to get default values
-		val a = alarm ?: NacAlarm.build(sharedPreferences)
-
 		// Set the default selected values
-		selectedRepeatFrequencyValue = a.repeatFrequency
-		selectedRepeatFrequencyUnits = a.repeatFrequencyUnits
-		selectedDaysToRunBeforeFrequency = a.repeatFrequencyDaysToRunBeforeStarting
+		selectedRepeatFrequencyValue = alarm.repeatFrequency
+		selectedRepeatFrequencyUnits = alarm.repeatFrequencyUnits
+		selectedDaysToRunBeforeFrequency = alarm.repeatFrequencyDaysToRunBeforeStarting
 
 		// Setup the views
-		setupRepeatFrequency(a.repeatFrequency, a.repeatFrequencyUnits)
+		setupRepeatFrequency(alarm.repeatFrequency, alarm.repeatFrequencyUnits)
 		setupDaysToRun(selectedDaysToRunBeforeFrequency)
 		setDaysToRunUsability()
 	}

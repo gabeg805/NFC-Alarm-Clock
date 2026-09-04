@@ -147,7 +147,7 @@ open class NacTextToSpeechDialog
 	/**
 	 * Cancel button is clicked.
 	 */
-	override fun onCancelClicked(alarm: NacAlarm?)
+	override fun onCancelClicked(alarm: NacAlarm)
 	{
 		// Shutdown the text-to-speech resource
 		ttsHelper.textToSpeech.shutdown()
@@ -156,19 +156,19 @@ open class NacTextToSpeechDialog
 	/**
 	 * Ok button is clicked.
 	 */
-	override fun onOkClicked(alarm: NacAlarm?)
+	override fun onOkClicked(alarm: NacAlarm)
 	{
 		// Update the alarm
-		alarm?.shouldSayCurrentTime = currentTimeCheckBox.isChecked
-		alarm?.shouldSayName = alarmNameCheckBox.isChecked
-		alarm?.ttsFrequency = selectedTtsFreq
-		alarm?.ttsSpeechRate = ttsSpeechRateSlider.value
+		alarm.shouldSayCurrentTime = currentTimeCheckBox.isChecked
+		alarm.shouldSayName = alarmNameCheckBox.isChecked
+		alarm.ttsFrequency = selectedTtsFreq
+		alarm.ttsSpeechRate = ttsSpeechRateSlider.value
 
 		// Set the voice if TTS is initialized, otherwise the user probably was not able
 		// to change it so it does not need to change
 		if (ttsHelper.isInitialized)
 		{
-			alarm?.ttsVoice = selectedTtsVoiceName
+			alarm.ttsVoice = selectedTtsVoiceName
 		}
 
 		// Shutdown the text-to-speech resource
@@ -252,20 +252,17 @@ open class NacTextToSpeechDialog
 	/**
 	 * Setup all alarm options.
 	 */
-	override fun setupAlarmOptions(alarm: NacAlarm?)
+	override fun setupAlarmOptions(alarm: NacAlarm)
 	{
-		// Get the alarm, or build a new one, to get default values
-		val a = alarm ?: NacAlarm.build(sharedPreferences)
-
 		// Set the default selected values
-		selectedTtsFreq = a.ttsFrequency
+		selectedTtsFreq = alarm.ttsFrequency
 
 		// Setup the views
-		setupTtsHelper(a.ttsVoice)
-		setupTtsWhatToSay(a.shouldSayCurrentTime, a.shouldSayName)
-		setupTtsSpeakFrequency(a.ttsFrequency)
+		setupTtsHelper(alarm.ttsVoice)
+		setupTtsWhatToSay(alarm.shouldSayCurrentTime, alarm.shouldSayName)
+		setupTtsSpeakFrequency(alarm.ttsFrequency)
 		setupTtsVoice()
-		setupTtsSpeechRate(a.ttsSpeechRate, a.name)
+		setupTtsSpeechRate(alarm.ttsSpeechRate, alarm.name)
 		setTtsSpeakFrequencyUsability()
 		setTtsSpeechRateUsability()
 		setTtsVoiceUsability()
@@ -289,7 +286,7 @@ open class NacTextToSpeechDialog
 	/**
 	 * Setup any extra buttons.
 	 */
-	override fun setupExtraButtons(alarm: NacAlarm?)
+	override fun setupExtraButtons(alarm: NacAlarm)
 	{
 		// Get the button
 		previewButton = dialog!!.findViewById(R.id.preview_button)
@@ -311,12 +308,9 @@ open class NacTextToSpeechDialog
 			// Preview not running
 			else
 			{
-				// Get the alarm name
-				val name = alarm?.name?.takeIf { it.isNotEmpty() } ?: ""
-
 				// Start TTS
 				// TODO: Check if "allVoices" is initialized before starting
-				startTextToSpeech(name)
+				startTextToSpeech(alarm.name)
 			}
 
 		})

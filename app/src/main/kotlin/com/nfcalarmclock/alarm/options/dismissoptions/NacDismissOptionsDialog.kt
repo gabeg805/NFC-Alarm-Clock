@@ -85,24 +85,24 @@ open class NacDismissOptionsDialog
 	/**
 	 * Ok button is clicked.
 	 */
-	override fun onOkClicked(alarm: NacAlarm?)
+	override fun onOkClicked(alarm: NacAlarm)
 	{
 		// Update the alarm
-		alarm?.shouldAutoDismiss = autoDismissSwitch.isChecked
-		alarm?.autoDismissTime = selectedAutoDismissTime
-		alarm?.canDismissEarly = dismissEarlySwitch.isChecked
-		alarm?.shouldShowDismissEarlyNotification = dismissEarlyNotificationSwitch.isChecked
-		alarm?.dismissEarlyTime = selectedDismissEarlyTime
-		alarm?.shouldDeleteAfterDismissed = deleteAfterDismissedSwitch.isChecked
-		alarm?.shouldVolumeDismiss = volumeDismissSwitch.isChecked
+		alarm.shouldAutoDismiss = autoDismissSwitch.isChecked
+		alarm.autoDismissTime = selectedAutoDismissTime
+		alarm.canDismissEarly = dismissEarlySwitch.isChecked
+		alarm.shouldShowDismissEarlyNotification = dismissEarlyNotificationSwitch.isChecked
+		alarm.dismissEarlyTime = selectedDismissEarlyTime
+		alarm.shouldDeleteAfterDismissed = deleteAfterDismissedSwitch.isChecked
+		alarm.shouldVolumeDismiss = volumeDismissSwitch.isChecked
 	}
 
 	/**
 	 * Alarm should be saved.
 	 */
-	override fun onSaveAlarm(alarm: NacAlarm?)
+	override fun onSaveAlarm(alarm: NacAlarm)
 	{
-		onSaveAlarmListener?.onSaveAlarm(alarm!!)
+		onSaveAlarmListener?.onSaveAlarm(alarm)
 	}
 
 	/**
@@ -140,21 +140,18 @@ open class NacDismissOptionsDialog
 	/**
 	 * Setup all alarm options.
 	 */
-	override fun setupAlarmOptions(alarm: NacAlarm?)
+	override fun setupAlarmOptions(alarm: NacAlarm)
 	{
-		// Get the alarm, or build a new one, to get default values
-		val a = alarm ?: NacAlarm.build(sharedPreferences)
-
 		// Set the default selected values
-		val defaultAutoDismissTime = a.autoDismissTime.takeIf { it > 0 } ?: 900
+		val defaultAutoDismissTime = alarm.autoDismissTime.takeIf { it > 0 } ?: 900
 		selectedAutoDismissTime = defaultAutoDismissTime
-		selectedDismissEarlyTime = a.dismissEarlyTime
+		selectedDismissEarlyTime = alarm.dismissEarlyTime
 
 		// Setup the views
-		setupAutoDismiss(a.shouldAutoDismiss, defaultAutoDismissTime)
-		setupDismissEarly(a.canDismissEarly, a.shouldShowDismissEarlyNotification, a.dismissEarlyTime)
-		setupShouldDeleteAlarmAfterDismissed(a.shouldDeleteAfterDismissed)
-		setupVolumeDismiss(a.shouldVolumeDismiss, a.shouldVolumeSnooze)
+		setupAutoDismiss(alarm.shouldAutoDismiss, defaultAutoDismissTime)
+		setupDismissEarly(alarm.canDismissEarly, alarm.shouldShowDismissEarlyNotification, alarm.dismissEarlyTime)
+		setupShouldDeleteAlarmAfterDismissed(alarm.shouldDeleteAfterDismissed)
+		setupVolumeDismiss(alarm.shouldVolumeDismiss, alarm.shouldVolumeSnooze)
 		setAutoDismissUsability()
 		setDismissEarlyUsability()
 	}

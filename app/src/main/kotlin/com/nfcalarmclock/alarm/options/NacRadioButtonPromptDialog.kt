@@ -57,7 +57,7 @@ abstract class NacRadioButtonPromptDialog
 	/**
 	 * Called when the Ok button is clicked.
 	 */
-	override fun onOkClicked(alarm: NacAlarm?)
+	override fun onOkClicked(alarm: NacAlarm)
 	{
 		// Find the radio button that is selected
 		val radioButtonID: Int = radioGroup.checkedRadioButtonId
@@ -72,7 +72,7 @@ abstract class NacRadioButtonPromptDialog
 	 *
 	 * Do nothing by default for this type of dialog.
 	 */
-	override fun setupAlarmOptions(alarm: NacAlarm?)
+	override fun setupAlarmOptions(alarm: NacAlarm)
 	{
 		// Get the views
 		val title: TextView = dialog!!.findViewById(R.id.prompt_title)
