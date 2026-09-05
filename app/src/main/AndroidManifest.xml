@@ -184,6 +184,12 @@
 			android:exported="false"
 			/>
 
+		<!-- Disable NFC just scanned flag -->
+		<service
+			android:name=".nfc.NacDisableNfcJustScannedFlagService"
+			android:exported="false"
+			/>
+
 		<!-- Alarm manager broadcasts this so that the foreground service can be started. -->
 		<receiver
 			android:name=".alarm.activealarm.NacActiveAlarmBroadcastReceiver"

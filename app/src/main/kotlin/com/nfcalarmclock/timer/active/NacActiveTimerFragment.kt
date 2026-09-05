@@ -29,6 +29,7 @@ import com.google.android.material.button.MaterialButton
 import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.nfcalarmclock.R
 import com.nfcalarmclock.log.NacLog
+import com.nfcalarmclock.nfc.NacDisableNfcJustScannedFlagService
 import com.nfcalarmclock.nfc.NacNfc
 import com.nfcalarmclock.nfc.NacNfcTagViewModel
 import com.nfcalarmclock.nfc.SCANNED_NFC_TAG_ID_BUNDLE_NAME
@@ -412,6 +413,9 @@ class NacActiveTimerFragment
 
 			// Set the NFC just scanned flag
 			sharedPreferences.wasNfcJustScannedToDismiss = true
+
+			// Disable the NFC just scanned flag (after a delay)
+			NacDisableNfcJustScannedFlagService.startService(context)
 		}
 
 		// Setup the scan NFC tag textview, in the event that more NFC tags need to be

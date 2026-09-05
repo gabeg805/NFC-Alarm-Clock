@@ -287,6 +287,11 @@ open class NacAlarm()
 
 	/**
 	 * Type of media.
+	 *
+	 * TYPE_NONE      = 0
+	 * TYPE_RINGTONE  = 1
+	 * TYPE_FILE      = 2
+	 * TYPE_DIRECTORY = 5
 	 */
 	@ColumnInfo(name = "media_type", defaultValue = "0")
 	var mediaType: Int = 0

@@ -83,8 +83,13 @@ fun NacAlarm.updateMediaFromDb(
 	// Get the media uri
 	val uri = mediaPath.toUri()
 
+	// No media, so do nothing
+	if (mediaPath.isEmpty())
+	{
+		return 0
+	}
 	// Directory media type
-	if (mediaType == NacMedia.TYPE_DIRECTORY)
+	else if (mediaType == NacMedia.TYPE_DIRECTORY)
 	{
 		val dir = File(mediaPath)
 

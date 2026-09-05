@@ -2,16 +2,6 @@
 TODO
 ----
 
-* Look at log and make slight changes
-
-* Log more in timers vs alarms
-
-* Add check if media path is empty do nothing
-
-* Update NacAlarm with media type values
-
-* Test running alarms when app is not in view
-
 * Update website with f-droid and izzy
 
 * A repeat option for the timer could simply be number of times to repeat?

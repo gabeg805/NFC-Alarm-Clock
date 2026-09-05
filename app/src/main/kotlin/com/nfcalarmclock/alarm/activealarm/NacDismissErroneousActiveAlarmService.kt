@@ -67,24 +67,12 @@ class NacDismissErroneousActiveAlarmService
 	{
 
 		/**
-		 * Create an intent that will be used to start the service.
-		 *
-		 * @param context A context.
-		 * @param alarm   An alarm.
-		 *
-		 * @return The service intent.
-		 */
-		fun getStartIntent(context: Context, alarm: NacAlarm?): Intent
-		{
-			return Intent(Intent.ACTION_DEFAULT, null, context, NacDismissErroneousActiveAlarmService::class.java)
-				.addAlarm(alarm)
-		}
-		/**
 		 * Start the foreground service.
 		 */
 		fun startService(context: Context, alarm: NacAlarm?)
 		{
-			val intent = getStartIntent(context, alarm)
+			val intent = Intent(Intent.ACTION_DEFAULT, null, context, NacDismissErroneousActiveAlarmService::class.java)
+				.addAlarm(alarm)
 
 			context.startService(intent)
 		}

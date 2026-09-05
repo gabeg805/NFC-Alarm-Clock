@@ -479,7 +479,7 @@ class NacMainActivity
 			val currentFragment = navHostFragment.childFragmentManager.primaryNavigationFragment
 			val destinationId = navController.currentDestination?.id
 
-			NacLog.i("Active timer in progress.  Trying to go to: ${navController.currentDestination}")
+			NacLog.i("Active timer in progress. Trying to go/pass NFC ID to: ${navController.currentDestination}")
 
 			// Determine what to do based on the current destination
 			when (destinationId)
@@ -1087,6 +1087,8 @@ class NacMainActivity
 
 				// Parse the NFC ID
 				val nfcId = NacNfc.parseId(tag) ?: return@enableReaderMode
+
+				NacLog.i("NFC reader detected scan")
 
 				// Handle an NFC tag being scanned
 				lifecycleScope.launch {

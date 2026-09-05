@@ -49,9 +49,15 @@ object NacLog
 			// NacMainActivity:onCreate
 			return if ((index > 0) && (index+2 in stackTrace.indices))
 			{
+				val maxLength = 30
 				val element = stackTrace[index+2]
 				val className = element.className.substringAfterLast('.')
-				"${className.padEnd(40, ' ').substring(0, 40)}${element.methodName.padEnd(30, ' ').substring(0, 30)}"
+				val methodName = element.methodName
+				val combined = className.substring(0, if (className.length >= maxLength) maxLength else className.length) + ":" + methodName.substring(0, if (methodName.length >= maxLength) maxLength else methodName.length)
+
+				// Return
+				combined.padEnd(maxLength*2 + 1, ' ')
+				//"${className.padEnd(40, ' ').substring(0, 40)}:${element.methodName.padEnd(30, ' ').substring(0, 30)}"
 			}
 			// Default to returning the global tag when the stack has not been setup yet
 			else
@@ -194,7 +200,7 @@ object NacLog
 								} ?: ""
 
 							// Example message:
-							// 2026-08-28 18:12:34.567 FINE NacMainActivity onCreate Example message
+							// 2026-08-28 18:12:34.567  FINE  NacMainActivity  onCreate  Example message
 							return "$timestamp  ${level.padEnd(7, ' ')}  $message$exceptionMessage\n"
 						}
 

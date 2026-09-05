@@ -24,6 +24,7 @@ import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.NacAlarmViewModel
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.log.NacLog
+import com.nfcalarmclock.nfc.NacDisableNfcJustScannedFlagService
 import com.nfcalarmclock.nfc.NacNfc
 import com.nfcalarmclock.nfc.NacNfcTagViewModel
 import com.nfcalarmclock.nfc.db.NacNfcTag
@@ -257,6 +258,7 @@ class NacActiveAlarmActivity
 
 					sharedPreferences.wasNfcJustScannedToDismiss = true
 					NacDismissErroneousActiveAlarmService.startService(this@NacActiveAlarmActivity, alarm)
+					NacDisableNfcJustScannedFlagService.startService(this@NacActiveAlarmActivity)
 					delay(500)
 					finish()
 				}

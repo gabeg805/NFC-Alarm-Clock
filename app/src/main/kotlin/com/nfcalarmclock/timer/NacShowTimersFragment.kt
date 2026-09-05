@@ -31,6 +31,7 @@ import com.nfcalarmclock.R
 import com.nfcalarmclock.card.NacBaseCardAdapter
 import com.nfcalarmclock.card.NacBaseCardTouchHelperCallback
 import com.nfcalarmclock.card.NacCardLayoutManager
+import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.main.NacMainActivity
 import com.nfcalarmclock.nfc.SCANNED_NFC_TAG_ID_BUNDLE_NAME
 import com.nfcalarmclock.nfc.shouldUseNfc
@@ -325,11 +326,11 @@ class NacShowTimersFragment
 	@RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
 	private fun addTimerFromSetTimerIntent(timer: NacTimer)
 	{
+		NacLog.i("Adding timer from set timer intent")
+
+		// Add the timer and navigate to the edit timer fragment
 		addTimer(timer, onInsertListener = {
-
-			// Navigate to the edit timer fragment
 			findNavController().navigate(R.id.action_nacShowTimersFragment_to_nacEditTimerFragment, timer.toBundle())
-
 		})
 	}
 
@@ -371,6 +372,7 @@ class NacShowTimersFragment
 				{
 					if ((nfcTagIdList.size == 1) || !t.shouldUseNfcTagDismissOrder)
 					{
+						NacLog.i("Dismissing timer that contains NFC ID and has NFC list of 1 (${nfcTagIdList.size}) or does not use an NFC dismiss order (${t.shouldUseNfcTagDismissOrder})")
 						service?.dismiss(t)
 					}
 					else
@@ -394,6 +396,7 @@ class NacShowTimersFragment
 			// Now try dismiss one of the timers that accepts any NFC tag to dismiss
 			if (anyNfcTimer != null)
 			{
+				NacLog.i("Dismissing timer that has an empty NFC tag ID, so it accepts any for dismissal")
 				service?.dismiss(anyNfcTimer)
 			}
 
@@ -401,6 +404,7 @@ class NacShowTimersFragment
 			// NFC, but NFC is still accepted to dismiss if a user wants to
 			if (nonNfcTimer != null)
 			{
+				NacLog.i("Dismissing timer that has NFC disabled so NFC is optional (enabled=required)")
 				service?.dismiss(nonNfcTimer)
 			}
 		}
@@ -414,6 +418,8 @@ class NacShowTimersFragment
 	@RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
 	private fun copyTimer(timer: NacTimer)
 	{
+		NacLog.i("Copying timer")
+
 		// Create a copy of the timer
 		val copiedTimer = timer.copy()
 
@@ -429,6 +435,8 @@ class NacShowTimersFragment
 	@RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
 	private fun deleteTimer(timer: NacTimer)
 	{
+		NacLog.i("Deleting timer")
+
 		// Get the local media path
 		val localMediaPath = timer.localMediaPath
 
@@ -543,6 +551,7 @@ class NacShowTimersFragment
 		savedInstanceState: Bundle?
 	): View?
 	{
+		NacLog.i("Creating show timers fragment")
 		return inflater.inflate(R.layout.frg_show_timers, container, false)
 	}
 
@@ -679,6 +688,7 @@ class NacShowTimersFragment
 	@RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
 	private fun restoreTimer(timer: NacTimer)
 	{
+		NacLog.i("Restoring timer")
 		addTimer(timer, R.string.message_timer_restore)
 	}
 
@@ -751,7 +761,6 @@ class NacShowTimersFragment
 		val padding = resources.getDimensionPixelSize(R.dimen.medium)
 		val drawable = ContextCompat.getDrawable(context, R.drawable.card_divider)
 		val divider = InsetDrawable(drawable, padding, 0, padding, 0)
-		//val divider = InsetDrawable(drawable, 0, 0, 0, 0)
 
 		// Create the item decoration
 		val decoration = DividerItemDecoration(context, LinearLayoutManager.VERTICAL)

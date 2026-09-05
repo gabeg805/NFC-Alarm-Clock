@@ -22,6 +22,7 @@ import com.nfcalarmclock.alarm.options.missedalarm.NacMissedAlarmNotification
 import com.nfcalarmclock.alarm.options.upcomingreminder.NacUpcomingReminderService
 import com.nfcalarmclock.alarm.options.volume.NacVolumeManager
 import com.nfcalarmclock.log.NacLog
+import com.nfcalarmclock.nfc.NacDisableNfcJustScannedFlagService
 import com.nfcalarmclock.nfc.toNfcIdList
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.statistics.NacAlarmStatisticRepository
@@ -230,6 +231,12 @@ class NacActiveAlarmService
 
 			// Clear the dismiss early notification
 			NacDismissEarlyService.stopService(this@NacActiveAlarmService, alarm)
+
+			// Disable the NFC just scanned flag (after a delay)
+			if (usedNfc)
+			{
+				NacDisableNfcJustScannedFlagService.startService(this@NacActiveAlarmService)
+			}
 
 			// Restart any other active alarm or stop the service
 			restartOtherActiveAlarmOrStop(R.string.message_alarm_dismiss)
