@@ -154,6 +154,19 @@ open class NacTextToSpeechDialog
 	}
 
 	/**
+	 * View is destroyed.
+	 */
+	override fun onDestroyView()
+	{
+		// Super
+		super.onDestroyView()
+
+		// Shutdown the text-to-speech resource so it does not keep talking when the dialog is
+		// closed
+		ttsHelper.textToSpeech.shutdown()
+	}
+
+	/**
 	 * Ok button is clicked.
 	 */
 	override fun onOkClicked(alarm: NacAlarm)
@@ -180,7 +193,7 @@ open class NacTextToSpeechDialog
 	 */
 	private fun setPreviewText(state: Boolean)
 	{
-		// Check if preview is running
+		// Preview is running
 		if (state)
 		{
 			// Change the text of the button back
@@ -294,6 +307,13 @@ open class NacTextToSpeechDialog
 		// Setup the button
 		setupSecondaryButton(previewButton, listener = {
 
+			// Voices not initialized yet so do nothing
+			if (!this::allVoices.isInitialized)
+			{
+				return@setupSecondaryButton
+			}
+
+			// Get the speaking state
 			val state = ttsHelper.isSpeaking()
 
 			// Set the button text
@@ -309,7 +329,6 @@ open class NacTextToSpeechDialog
 			else
 			{
 				// Start TTS
-				// TODO: Check if "allVoices" is initialized before starting
 				startTextToSpeech(alarm.name)
 			}
 
@@ -564,6 +583,12 @@ open class NacTextToSpeechDialog
 	 */
 	private fun startTextToSpeech(name: String = "")
 	{
+		// TTS is not initialized yet so do nothing
+		if (!ttsHelper.isInitialized || !this::allVoices.isInitialized)
+		{
+			return
+		}
+
 		// Stop speaking if currently speaking
 		if (ttsHelper.isSpeaking())
 		{

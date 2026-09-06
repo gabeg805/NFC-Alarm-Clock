@@ -91,27 +91,17 @@ class NacDismissEarlyService
 		}
 
 		/**
-		 * Get an intent that will be used to clear the notification and stop the service.
-		 *
-		 * @return An intent that will be used to clear the notification and stop the service.
-		 */
-		fun getStopIntent(context: Context, alarm: NacAlarm?): Intent
-		{
-			// Create the intent with the alarm service
-			return Intent(ACTION_STOP_SERVICE, null, context, NacDismissEarlyService::class.java)
-				.addAlarm(alarm)
-		}
-
-		/**
 		 * Stop the service.
 		 */
 		fun stopService(context: Context, alarm: NacAlarm?)
 		{
 			// Create the stop intent
-			val intent = getStopIntent(context, alarm)
+			val intent = Intent(ACTION_STOP_SERVICE, null, context, NacDismissEarlyService::class.java)
+				.addAlarm(alarm)
 
-			// Start the intent to stop the service
-			context.startService(intent)
+
+			// Stop the service
+			context.stopService(intent)
 		}
 
 	}

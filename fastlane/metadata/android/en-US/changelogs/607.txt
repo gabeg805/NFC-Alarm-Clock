@@ -1,0 +1,15 @@
+Added button labels.
+Added airplane mode toggle alarms option.
+Added option to dismiss alarm with volume buttons.
+Added preview to volume options.
+Added onboarding screen.
+Added Help section in Settings.
+Updated to support Android 16.
+Updated widget date locale.
+Updated dismiss with (multiple) NFC logic.
+Improved alarm card swiping.
+Improved set date.
+Improved missed alarm notification.
+Fixed issue with vibrate.
+Fixed issue with import/export.
+Fixed rare issue with alarm screen buggy loop.

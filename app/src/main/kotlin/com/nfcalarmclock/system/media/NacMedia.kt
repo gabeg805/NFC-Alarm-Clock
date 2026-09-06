@@ -26,6 +26,7 @@ import com.nfcalarmclock.system.media.NacMedia.TYPE_NONE
 import com.nfcalarmclock.system.media.NacMedia.TYPE_RINGTONE
 import java.io.File
 import java.io.FileNotFoundException
+import java.io.IOException
 import java.util.Locale
 import java.util.TreeMap
 import java.util.concurrent.TimeUnit
@@ -136,12 +137,44 @@ fun File.queryMediaMetadata(): Triple<String?, String?, String?>
 {
 	// Build the metadata retriever
 	val metadataRetriever = MediaMetadataRetriever()
-		.apply { setDataSource(this@queryMediaMetadata.path) }
+
+	// Set the path to the media file
+	try
+	{
+		metadataRetriever.setDataSource(this.path)
+	}
+	// Catch if the path is invalid
+	catch (e: IllegalArgumentException)
+	{
+		NacLog.e("Unable to read media metadata from '${this.path}'", throwable = e)
+
+		// Release resources
+		try
+		{
+			metadataRetriever.release()
+		}
+		catch (i: IOException)
+		{
+			NacLog.e("Unable to close media metadata retriever before using it", throwable = i)
+		}
+
+		return Triple(null, null, null)
+	}
 
 	// Get metadata from file
 	val artist = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_ARTIST)
 	val title = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_TITLE)
 	val hasAudio = metadataRetriever.extractMetadata(MediaMetadataRetriever.METADATA_KEY_HAS_AUDIO)
+
+	// Release resources
+	try
+	{
+		metadataRetriever.release()
+	}
+	catch (i: IOException)
+	{
+		NacLog.e("Unable to close media metadata retriever after using it", throwable = i)
+	}
 
 	return Triple(artist, title, hasAudio)
 }
@@ -237,6 +270,8 @@ fun copyMediaToDeviceEncryptedStorage(
 
 	try
 	{
+		NacLog.i("Attempting to copy '${srcUri.path}' -> '${dstUri.path}'")
+
 		// Copy the file to the local media path
 		deviceContext.openFileOutput(dstName, Context.MODE_PRIVATE).use { fileOutput ->
 

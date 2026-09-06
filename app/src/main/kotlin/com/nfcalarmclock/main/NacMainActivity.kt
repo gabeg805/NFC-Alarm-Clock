@@ -11,6 +11,7 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.os.DeadObjectException
 import android.os.Handler
 import android.os.IBinder
 import android.provider.AlarmClock
@@ -1073,9 +1074,15 @@ class NacMainActivity
 	 */
 	private fun setupNfcReaderMode()
 	{
-		// Start NFC
-		if (NacNfc.exists(this))
+		// NFC does not exist
+		if (!NacNfc.exists(this))
 		{
+			return
+		}
+
+		try
+		{
+			// Start NFC reader mode
 			NacNfc.enableReaderMode(this) { tag ->
 
 				// NFC was just scanned to dismiss an alarm or timer so do nothing
@@ -1096,6 +1103,14 @@ class NacMainActivity
 				}
 
 			}
+		}
+		catch (e: NullPointerException)
+		{
+			NacLog.e("Unable to enable reader mode when presumably NFC checks package permissions", throwable = e)
+		}
+		catch (e: DeadObjectException)
+		{
+			NacLog.e("Unable to enable reader mode due to dead object", throwable = e)
 		}
 	}
 

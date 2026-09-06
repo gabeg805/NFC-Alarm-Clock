@@ -261,6 +261,8 @@ class NacActiveTimerService
 	 */
 	fun addTimeToCountdown(timer: NacTimer, sec: Long)
 	{
+		NacLog.i("Adding $sec sec to active timer (id=${timer.id})")
+
 		// Get the countdown timer and the times. Do nothing if countdown timer does not exist
 		val countdownTimer = allCountdownTimers[timer.id] ?: return
 		val totalDurationMillis = allTotalDurationMillis[timer.id]!!
@@ -387,6 +389,8 @@ class NacActiveTimerService
 	@UnstableApi
 	fun cleanup(timer: NacTimer, shouldStop: Boolean = false)
 	{
+		NacLog.i("Cleaning up timer (id=${timer.id}). Should stop? $shouldStop")
+
 		// Clean the wakeup process
 		allWakeupProcesses[timer.id]?.cleanup()
 
@@ -462,6 +466,8 @@ class NacActiveTimerService
 	{
 		// Update the timer
 		lifecycleScope.launch {
+
+			NacLog.i("Dismissing active timer service")
 
 			// Dismiss the timer
 			timer.isActive = false
@@ -613,6 +619,8 @@ class NacActiveTimerService
 		// Super
 		super.onDestroy()
 
+		NacLog.i("Destroying the active timer service")
+
 		// Update the timer so it is no longer marked as active in the database
 		lifecycleScope.launch {
 			allTimers.forEach { t ->
@@ -687,6 +695,7 @@ class NacActiveTimerService
 
 			// Pause
 			ACTION_PAUSE_TIMER -> {
+				NacLog.i("Pausing active timer (id=${timer.id})")
 				cancelCountdownTimer(timer)
 				updateNotification(timer)
 				allOnCountdownTimerChangedListeners[timer.id]?.forEach { it.onCountdownPaused(timer) }
@@ -694,6 +703,7 @@ class NacActiveTimerService
 
 			// Resume
 			ACTION_RESUME_TIMER -> {
+				NacLog.i("Resuming active timer (id=${timer.id})")
 				startCountdownTimer(timer)
 				updateNotification(timer)
 			}
@@ -757,6 +767,8 @@ class NacActiveTimerService
 	@RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
 	fun resetCountdownTimer(timer: NacTimer)
 	{
+		NacLog.i("Resetting active timer (id=${timer.id})")
+
 		// Cancel the countdown
 		cancelCountdownTimer(timer)
 
@@ -794,9 +806,12 @@ class NacActiveTimerService
 	@SuppressLint("MissingPermission")
 	private fun showActiveTimerNotification(timer: NacTimer)
 	{
+		NacLog.i("Showing active timer notification (id=${timer.id})")
+
 		// Notification already is shown for this timer
 		if (timer.id in allNotifications)
 		{
+			NacLog.w("Notification is already shown (id=${timer.id})")
 			return
 		}
 
@@ -813,6 +828,8 @@ class NacActiveTimerService
 	@UnstableApi
 	private fun startActiveTimerService(timer: NacTimer)
 	{
+		NacLog.i("Starting active timer service (id=${timer.id})")
+
 		// Set the active flag and update the timer in the database
 		lifecycleScope.launch {
 			timer.isActive = true
@@ -828,6 +845,8 @@ class NacActiveTimerService
 	 */
 	fun startCountdownTimer(timer: NacTimer)
 	{
+		NacLog.i("Starting countdown timer (id=${timer.id})")
+
 		// Get the time until finished
 		val millisUntilFinished = allMillisUntilFinished[timer.id]!!
 

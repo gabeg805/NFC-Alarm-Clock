@@ -843,16 +843,25 @@ class NacShowAlarmsFragment
 			// Media
 			card.onCardMediaClickedListener = OnCardMediaClickedListener { _, alarm ->
 
-				// Move to the card position that was just clicked, before navigating to the
-				// media picker, that way, when onPause() is called and state is saved, it will
-				// go back to this card easy
-				recyclerView.layoutManager?.scrollToPosition(card.bindingAdapterPosition)
+				// Get the nav controller
+				val navController = findNavController()
 
-				// Navigate to the media picker
-				findNavController().navigate(
-					R.id.action_nacShowAlarmsFragment_to_nacAlarmMainMediaPickerFragment,
-					alarm.toBundle()
-				)
+				// Ensure the current destination matches the nav map. This check is absurd,
+				// but may be necessary if the user clicks the view really fast, or with two
+				// fingers
+				if (navController.currentDestination?.id == R.id.nacShowAlarmsFragment)
+				{
+					// Move to the card position that was just clicked, before navigating to the
+					// media picker, that way, when onPause() is called and state is saved, it will
+					// go back to this card easy
+					recyclerView.layoutManager?.scrollToPosition(card.bindingAdapterPosition)
+
+					// Navigate to the media picker
+					navController.navigate(
+						R.id.action_nacShowAlarmsFragment_to_nacAlarmMainMediaPickerFragment,
+						alarm.toBundle()
+					)
+				}
 
 			}
 
@@ -1217,9 +1226,16 @@ class NacShowAlarmsFragment
 				val index = alarms.indexOfFirst { it.id == id }
 
 				// Scroll down to that alarm card if it is not visible
-				if ((index < firstIndex) || (index > lastIndex))
+				if ((index >= 0) && (index < firstIndex) || (index > lastIndex))
 				{
-					recyclerView.smoothScrollToPosition(index)
+					try
+					{
+						recyclerView.smoothScrollToPosition(index)
+					}
+					catch (e: IllegalArgumentException)
+					{
+						NacLog.e("Unable to scroll to position '$index'. First = $firstIndex | Last = $lastIndex", throwable = e)
+					}
 				}
 			}
 
