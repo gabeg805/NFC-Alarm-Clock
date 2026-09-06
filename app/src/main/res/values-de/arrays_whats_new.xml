@@ -5,6 +5,25 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.0</item>
+		<item>Schaltflächen wurden Beschriftungen hinzugefügt, um die Funktion der Schaltflächen deutlicher zu machen. Dies kann unter Einstellungen > Darstellung > Stile geändert werden.</item>
+		<item>Es wurde eine Option hinzugefügt, um Alarme ein- und auszuschalten, wenn &lt;b>Flugmodus&lt;/b> geändert wird.</item>
+		<item>Option zum Ausschalten des Alarms mit den Lautstärketasten hinzugefügt.</item>
+		<item>Die Lautstärkeoptionen wurden um &lt;b>Vorschau&lt;/b> ergänzt.</item>
+		<item>Hinzugefügt wurde ein Onboarding-Bildschirm für neue Benutzer.</item>
+		<item>Im Bereich Einstellungen wurde der Abschnitt Hilfe hinzugefügt.</item>
+		<item>Sprachunterstützung pro App hinzugefügt.</item>
+		<item>Aktualisiert zur Unterstützung von &lt;b>Android 16&lt;/b>.</item>
+		<item>Aktualisiertes &lt;b> Widget &lt;/b> sodass das Datum dem lokalen Format entspricht.</item>
+		<item>Die Logik für das Schließen von NFC-Scans wurde aktualisiert, wenn mehrere NFC-Tags gescannt werden müssen. Die Funktion kann nun pausiert werden, und bereits gescannte NFC-Tags müssen nicht erneut gescannt werden.</item>
+		<item>Verbesserte Alarmkarte: Ermöglicht das Kopieren/Löschen durch Wischen, wenn die Karte ausgeklappt ist.</item>
+		<item>Verbesserte Funktion &lt;b> Datum festlegen &lt;/b> sodass die Uhrzeit auch beim Festlegen des Datums gespeichert wird.</item>
+		<item>Verbesserte &lt;b> verpasste Alarme &lt;/b> Benachrichtigung, die nun den Namen und die Uhrzeit des verpassten Alarms anzeigt.</item>
+		<item>Vergrößerte Größe der Schlummer- und Abbruch-Schaltflächen im &lt;b>Alarmbildschirm&lt;/b>.</item>
+		<item>Problem mit &lt;b>Vibration&lt;/b> behoben, das einige Telefone betraf.</item>
+		<item>Problem mit &lt;b> import &lt;/b> und &lt;b> export &lt;/b> behoben.</item>
+		<item>Problem behoben, bei dem sich &lt;b> Alarmbildschirm &lt;/b> in seltenen Fällen nach dem Abweisen des Alarms nicht schloss, was zu einer fehlerhaften Schleife führte.</item>
+		<item>Ein kleiner Fehler mit der Benachrichtigung &lt;b> vorzeitig schließen&lt;/b> wurde behoben.</item>
 		<item>12.6.4</item>
 		<item>Problem behoben, bei dem ein Alarm oder Timer über &lt;b>NFC&lt;/b> abgebrochen werden konnte, wenn die Option &lt;b>Abbruchreihenfolge&lt;/b> ebenfalls aktiviert war.</item>
 		<item>Problem behoben, bei dem die Verwendung von &lt;b>Taschenlampenblinken&lt;/b> zu einem Absturz führte.</item>

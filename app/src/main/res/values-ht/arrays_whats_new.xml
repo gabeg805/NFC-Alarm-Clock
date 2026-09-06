@@ -5,6 +5,25 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.0</item>
+		<item>Yo ajoute &lt;b> etikèt bouton &lt;/b> pou fè li pi klè sa bouton yo fè. Ou ka chanje sa nan &lt;b> Anviwònman > Aparans > Stil&lt;/b>.</item>
+		<item>Te ajoute opsyon pou aktive/dezaktive alam yo lè &lt;b> mòd avyon &lt;/b> chanje.</item>
+		<item>Te ajoute yon opsyon pou fèmen alam lan avèk &lt;b> bouton volim&lt;/b>.</item>
+		<item>Te ajoute &lt;b> preview &lt;/b> nan opsyon volim yo.</item>
+		<item>Te ajoute yon ekran &lt;b> entegrasyon &lt;/b> pou nouvo itilizatè yo.</item>
+		<item>Te ajoute seksyon &lt;b> Èd &lt;/b> nan Anviwònman yo.</item>
+		<item>Te ajoute sipò lang pou chak aplikasyon.</item>
+		<item>Mizajou pou sipòte &lt;b> Android 16&lt;/b>.</item>
+		<item>Mizajou &lt;b> widjèt &lt;/b> pou dat la swiv fòma lokal la.</item>
+		<item>Mizajou lojik &lt;b> ranvwaye ak NFC &lt;/b> lè plizyè etikèt NFC bezwen eskane. Kounye a ou ka lib pou w repete epi etikèt NFC ki te deja eskane yo pa bezwen eskane ankò.</item>
+		<item>Amelyore &lt;b> kat alam &lt;/b> pou pèmèt glise pou kopye/efase lè kat la louvri.</item>
+		<item>Amelyore &lt;b> mete dat &lt;/b> pou lè a sove tou lè dat la fikse.</item>
+		<item>Amelyorasyon nan notifikasyon &lt;b> alam rate &lt;/b> pou li montre non ak lè alam ki te rate a.</item>
+		<item>Ogmante gwosè bouton "snooze" ak "reject" nan &lt;b> ekran alam lan&lt;/b>.</item>
+		<item>Pwoblèm ak &lt;b> vibre &lt;/b> ki te afekte kèk telefòn yo rezoud.</item>
+		<item>Pwoblèm rezoud ak &lt;b> enpòtasyon &lt;/b> ak &lt;b> ekspòtasyon&lt;/b>.</item>
+		<item>Pwoblèm nan rezoud kote, nan okazyon ra, &lt;b> ekran alam lan &lt;/b> pa t ap fèmen apre yo te fin fèmen alam lan, sa ki te lakòz yon bouk buggy.</item>
+		<item>Ti pwoblèm ki te genyen ak &lt;b> rejte notifikasyon bonè &lt;/b> la rezoud.</item>
 		<item>12.6.4</item>
 		<item>Pwoblèm nan rezoud lè w ap itilize &lt;b>NFC&lt;/b> pou fèmen yon alam oswa yon revèy, men opsyon &lt;b>lòd fèmen&lt;/b> yo te deja configuré tou.</item>
 		<item>Pwoblèm nan rezoud kote itilizasyon &lt;b>kliyote flach&lt;/b> te ka lakòz yon aksidan.</item>

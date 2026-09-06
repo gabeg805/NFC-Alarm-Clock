@@ -5,6 +5,25 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.0</item>
+		<item>Se han añadido &lt;b> etiquetas &lt;/b>a los botones para que sea más obvio lo que hacen. Esto se puede cambiar en &lt;b> Ajustes > Apariencia > Estilos&lt;/b>.</item>
+		<item>Se agregó la opción de activar/desactivar las alarmas cuando se cambia el &lt;b>modo avión&lt;/b>.</item>
+		<item>Se agregó la opción de descartar la alarma con los &lt;b>botones de volumen&lt;/b>.</item>
+		<item>Se agregó &lt;b> vista previa &lt;/b> a las opciones de volumen.</item>
+		<item>Se ha añadido la pantalla de incorporación para nuevos usuarios.</item>
+		<item>Se agregó la sección &lt;b> Ayuda &lt;/b> en Configuración.</item>
+		<item>Se agregó compatibilidad con idiomas por aplicación.</item>
+		<item>Actualizado para ser compatible con &lt;b> Android 16 &lt;/b>.</item>
+		<item>Se actualizó el &lt;b>widget&lt;/b> para que la fecha siga el formato de la configuración regional.</item>
+		<item>Se actualizó la lógica de &lt;b>descartar con NFC&lt;/b> cuando se necesitan escanear varias etiquetas NFC. Ahora se puede posponer la visualización y las etiquetas NFC que ya se han escaneado no necesitan volver a escanearse.</item>
+		<item>&lt;b>Tarjeta de alarma&lt;/b> mejorada para permitir copiar/eliminar deslizando el dedo cuando la tarjeta está expandida.</item>
+		<item>Se ha mejorado la configuración de la &lt;b>fecha&lt;/b> para que la hora también se guarde al configurar la fecha.</item>
+		<item>Se ha mejorado la notificación de &lt;b>alarmas perdidas&lt;/b> para que muestre el nombre y la hora de la alarma que se perdió.</item>
+		<item>Aumento del tamaño de los botones de posponer y descartar en la &lt;b>pantalla de alarma&lt;/b>.</item>
+		<item>Se solucionó un problema con la &lt;b>vibración&lt;/b> que afectaba a algunos teléfonos.</item>
+		<item>Se solucionó un problema con &lt;b> importar &lt;/b> y &lt;b> exportar &lt;/b>.</item>
+		<item>Se solucionó un problema por el cual la &lt;b>pantalla de alarma&lt;/b> no se cerraba, en raras ocasiones, después de descartar la alarma, lo que provocaba un bucle con errores.</item>
+		<item>Se solucionó un problema menor con la notificación de descarte anticipado.</item>
 		<item>12.6.4</item>
 		<item>Se solucionó un problema que ocurría al usar &lt;b>NFC&lt;/b> para descartar una alarma o un temporizador, pero las opciones &lt;b>orden de descarte&lt;/b> también se habían configurado.</item>
 		<item>Se solucionó un problema por el cual el uso de &lt;b>parpadeo de linterna&lt;/b> provocaba un fallo.</item>

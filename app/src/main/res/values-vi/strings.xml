@@ -43,6 +43,10 @@
 	<string name="word_timers">Bộ hẹn giờ</string>
 	<string name="word_reminder">Lời nhắc nhở</string>
 	<string name="word_more">Hơn</string>
+	<string name="word_allow">Cho phép</string>
+	<string name="word_back">Mặt sau</string>
+	<string name="word_next">Kế tiếp</string>
+	<string name="word_finish">Hoàn thành</string>
 	<string name="letter_h">giờ</string>
 	<string name="letter_m">tôi</string>
 	<string name="letter_s">S</string>
@@ -67,6 +71,7 @@
 	<string name="state_unknown">không xác định</string>
 
 	<!-- Actions -->
+	<string name="action_get_started">Bắt đầu</string>
 	<string name="action_alarm_snooze">Giấc ngủ ngắn</string>
 	<string name="action_alarm_dismiss">Miễn nhiệm</string>
 	<string name="action_alarm_dismiss_early">Sa thải sớm</string>
@@ -184,13 +189,17 @@
 	<string name="message_will_run_in_named_alarm">&lt;b&gt;%1$s&lt;/b&gt; sẽ chạy trong %2$s.</string>
 	<string name="message_next_alarm_on">Báo thức tiếp theo vào %1$s</string>
 	<string name="message_next_alarm_in">Báo thức tiếp theo sau %1$s</string>
+	<string name="message_export_started">Đang xuất khẩu…</string>
 	<string name="message_export_completed">Xuất khẩu hoàn tất</string>
+	<string name="message_import_started">Đang nhập khẩu…</string>
 	<string name="message_import_completed">Nhập khẩu hoàn tất</string>
 	<string name="message_selected_alarm_song_not_available">Bài hát đã chọn để báo thức không khả dụng</string>
 	<string name="message_milliseconds">%1$d giây</string>
 	<string name="message_text_to_speech_default_voice">Giọng nói mặc định</string>
 	<string name="message_text_to_speech_voice">Giọng nói %1$d</string>
 	<string name="message_text_to_speech_network_required">Có thể cần kết nối mạng để giọng nói hoạt động</string>
+	<string name="message_volume_dismiss_priority">Việc loại bỏ theo số lượng lớn sẽ được ưu tiên.</string>
+	<string name="message_volume_snooze_ignored">Chức năng tạm dừng âm lượng sẽ bị bỏ qua.</string>
 
 	<!-- Error messages -->
 	<string name="error_message_active_delete">Không thể xóa báo thức đang hoạt động</string>
@@ -211,6 +220,8 @@
 	<string name="error_message_google_play_billing">Lỗi khi kết nối với Cửa hàng Google Play</string>
 	<string name="error_message_text_to_speech_audio_focus">Không thể sử dụng tính năng chuyển văn bản thành giọng nói</string>
 	<string name="error_message_enter_timer_duration">Nhập thời lượng</string>
+	<string name="error_message_unable_to_volume_dismiss_nfc_alarm">Không thể tắt báo thức NFC bằng nút âm lượng</string>
+	<string name="error_message_unable_to_email">Không thể soạn thảo email</string>
 	<string name="error_message_unable_to_email_statistics">Không thể gửi số liệu thống kê qua email</string>
 	<string name="error_message_unable_to_shine_flashlight">Không thể chiếu đèn pin — %1$s</string>
 	<string name="error_message_unable_to_get_flashlight_characteristics">Không thể lấy thông tin đèn pin</string>
@@ -228,6 +239,7 @@
 	<string name="error_message_camera_in_use">Máy ảnh đang sử dụng</string>
 	<string name="error_message_camera_max_in_use">Số lượng máy ảnh tối đa đang sử dụng</string>
 	<string name="error_message_unable_to_launch_media_picker">Không thể khởi chạy trình chọn âm thanh hệ thống</string>
+	<string name="error_message_unable_to_preview_volume_options">Không thể xem trước khi chưa có phương tiện nào được thiết lập.</string>
 
 	<!-- Titles -->
 	<string name="title_timer_main">Bộ hẹn giờ NFC</string>
@@ -256,6 +268,7 @@
 	<string name="title_active_timers">Bộ hẹn giờ hoạt động</string>
 	<string name="title_upcoming_reminders">Lời nhắc sắp tới</string>
 	<string name="title_dismissed_alarms">Đã loại bỏ cảnh báo</string>
+	<string name="title_missed_alarm">Bỏ lỡ báo thức</string>
 	<string name="title_missed_alarms">Báo thức bị bỏ lỡ</string>
 	<string name="title_snoozed_alarms">Báo thức được báo lại</string>
 	<string name="title_created_alarms">Đã tạo báo thức</string>
@@ -292,6 +305,7 @@
 	<string name="title_dismiss_options_dismiss_early">Giải tán sớm</string>
 	<string name="title_dismiss_options_dismiss_early_notification">Bỏ qua thông báo sớm</string>
 	<string name="title_dismiss_options_delete_after_dismissed">Xóa sau khi đã xóa</string>
+	<string name="title_dismiss_options_volume_dismiss">Bỏ qua âm lượng</string>
 	<string name="title_snooze_options_auto_snooze">Tự động báo lại</string>
 	<string name="title_snooze_options_max_snooze">Báo lại tối đa</string>
 	<string name="title_snooze_options_snooze_duration">Thời gian báo lại</string>
@@ -303,6 +317,7 @@
 	<string name="title_setting_general">Tổng quan</string>
 	<string name="title_setting_appearance">Vẻ bề ngoài</string>
 	<string name="title_setting_about">Về</string>
+	<string name="title_setting_help">Giúp đỡ</string>
 	<string name="title_setting_statistics">Số liệu thống kê</string>
 	<string name="title_setting_manage_nfc_tags">Quản lý thẻ NFC</string>
 	<string name="title_setting_support">Hỗ trợ phát triển</string>
@@ -319,6 +334,7 @@
 	<string name="title_notifications">Thông báo</string>
 	<string name="title_style">Phong cách</string>
 	<string name="title_tweaks">Tinh chỉnh</string>
+	<string name="title_misc">Khác</string>
 	<string name="title_new_screen">Màn hình mới</string>
 	<string name="title_show_alarm_name">Hiển thị tên cảnh báo</string>
 	<string name="title_show_current_date_and_time">Hiển thị ngày và giờ hiện tại</string>
@@ -329,13 +345,30 @@
 	<string name="title_start_week_on">Bắt đầu tuần vào&#8230;</string>
 	<string name="title_expand_new_alarm">Mở rộng cảnh báo mới</string>
 	<string name="title_next_alarm_format">Định dạng cảnh báo tiếp theo&#8230;</string>
+	<string name="title_toggle_alarms_with_airplane_mode">Bật/tắt báo thức khi ở chế độ máy bay</string>
 	<string name="title_permissions">Quyền</string>
+	<string name="title_no_permissions_needed">Không cần xin phép!</string>
+	<string name="title_help_debug_mode">Chế độ gỡ lỗi</string>
+	<string name="title_help_share_logs">Chia sẻ nhật ký với nhà phát triển</string>
+	<string name="title_help_send_email">Gửi email</string>
+	<string name="title_how_to_use_features">Hướng dẫn sử dụng một số tính năng</string>
+	<string name="title_how_to_copy_and_delete">Vuốt để sao chép và xóa</string>
+	<string name="title_how_to_get_more_options">Nhấn giữ để xem thêm tùy chọn</string>
+	<string name="title_how_to_change_appearance">Cài đặt > Giao diện</string>
 	<string name="title_developer">Nhà phát triển</string>
 	<string name="title_alignment">Căn chỉnh</string>
 	<string name="title_position">Chức vụ</string>
 	<string name="title_only_show_app_alarms">Chỉ hiển thị báo thức ứng dụng</string>
 
 	<!-- Descriptions -->
+	<string name="description_onboarding_welcome">Chào mừng bạn đến với ứng dụng báo thức có khả năng tùy chỉnh cao nhất mà bạn từng sử dụng!</string>
+	<string name="description_onboarding_permissions">Ứng dụng cần một số quyền để hoạt động bình thường.</string>
+	<string name="description_onboarding_permission_post_notifications_request">Cần thiết để chức năng báo thức hoạt động. Cho phép ứng dụng khởi động và tiếp tục chạy ngay cả khi không được chọn làm đối tượng hiển thị.</string>
+	<string name="description_onboarding_permission_system_alert_window_request">Đây là một quyền đặc biệt. Quyền này được sử dụng để đảm bảo màn hình báo thức hiển thị và âm thanh có thể phát. Chỉ cần thiết trên Android 15, hoặc nếu có sự cố cụ thể trên thiết bị khiến báo thức không hoạt động.</string>
+	<string name="description_onboarding_how_to_use_features">Một số thứ có thể bị ẩn hoặc gây nhầm lẫn. Dưới đây là cách thực hiện những việc đó.</string>
+	<string name="description_onboarding_how_to_copy_and_delete">Vuốt báo thức hoặc hẹn giờ sang phải để sao chép và sang trái để xóa.</string>
+	<string name="description_onboarding_how_to_get_more_options">Nhấn giữ vào hầu hết mọi nút trong cửa sổ báo thức/hẹn giờ mở rộng để truy cập thêm tùy chọn. Bạn thậm chí có thể thử trên thẻ báo thức để có các tùy chọn như "Bỏ qua báo thức tiếp theo" và nhiều hơn nữa.</string>
+	<string name="description_onboarding_how_to_change_appearance">Vào Cài đặt > Giao diện để tìm tất cả các tùy chọn tùy chỉnh và thiết lập giao diện ứng dụng theo ý muốn của bạn.</string>
 	<string name="description_slide_to_snooze">Trượt để báo lại</string>
 	<string name="description_slide_to_dismiss">Trượt để loại bỏ</string>
 	<string name="description_alarm_activity">Quét thẻ NFC để loại bỏ cảnh báo.</string>
@@ -348,6 +381,8 @@
 	<string name="description_color">màu lục giác</string>
 	<string name="description_day_button_style_filled">Các nút điền đầy đủ.</string>
 	<string name="description_day_button_style_outlined">Các nút được phác thảo.</string>
+	<string name="description_should_show_card_button_labels_true">Các nút sẽ hiển thị nhãn bên dưới.</string>
+	<string name="description_should_show_card_button_labels_false">Các nút chỉ hiển thị biểu tượng.</string>
 	<string name="description_media">Nhạc hoặc nhạc chuông</string>
 	<string name="description_scan_nfc_tag_alarm">Thẻ NFC đã quét sẽ được yêu cầu loại bỏ cảnh báo này khi nó kêu.</string>
 	<string name="description_scan_nfc_tag_timer">Thẻ NFC được quét sẽ được yêu cầu để tắt bộ hẹn giờ này khi nó tắt.</string>
@@ -370,14 +405,16 @@
 	<string name="description_text_to_speech_speech_rate">Tốc độ chuyển văn bản thành giọng nói nên nói như thế nào.</string>
 	<string name="description_volume_gradually_increase_volume_alarm">Tăng âm lượng báo thức theo tần suất đã đặt.</string>
 	<string name="description_volume_gradually_increase_volume_timer">Tăng âm lượng của bộ hẹn giờ theo tần số đã đặt.</string>
-	<string name="description_volume_restrict_volume_alarm">Không thể thay đổi âm lượng khi báo thức kêu.</string>
-	<string name="description_volume_restrict_volume_timer">Không thể thay đổi âm lượng khi hết giờ.</string>
+	<string name="description_volume_restrict_volume_alarm">Không thể giảm âm lượng khi chuông báo thức reo.</string>
+	<string name="description_volume_restrict_volume_timer">Không thể giảm âm lượng khi hết giờ hẹn.</string>
 	<string name="description_dismiss_options_auto_dismiss_alarm">Tự động tắt báo thức sau một khoảng thời gian đã cài đặt.</string>
 	<string name="description_dismiss_options_auto_dismiss_timer">Tự động tắt bộ hẹn giờ sau khoảng thời gian đã đặt.</string>
 	<string name="description_dismiss_options_dismiss_early">Tắt báo thức sớm, trước khi báo thức hoạt động.</string>
 	<string name="description_dismiss_options_dismiss_early_notification">Hiển thị thông báo khi có thể tắt báo thức sớm.</string>
 	<string name="description_dismiss_options_delete_after_dismissed_alarm">Báo thức sẽ bị xóa sau khi bạn tắt nó.</string>
 	<string name="description_dismiss_options_delete_after_dismissed_timer">Bộ đếm thời gian sẽ bị xóa sau khi bạn tắt nó.</string>
+	<string name="description_dismiss_options_volume_dismiss_alarm">Tắt báo thức bằng cách nhấn nút tăng hoặc giảm âm lượng.</string>
+	<string name="description_dismiss_options_volume_dismiss_timer">Tắt bộ đếm thời gian bằng cách nhấn nút tăng hoặc giảm âm lượng.</string>
 	<string name="description_snooze_options_auto_snooze">Tự động báo lại báo thức sau khoảng thời gian đã cài đặt.</string>
 	<string name="description_snooze_options_max_snooze">Số lần báo thức có thể được báo lại tối đa.</string>
 	<string name="description_snooze_options_snooze_duration">Khoảng thời gian để báo lại báo thức.</string>
@@ -391,11 +428,14 @@
 	<string name="description_setting_general">Cài đặt báo thức chung</string>
 	<string name="description_setting_appearance">Tùy chỉnh giao diện của ứng dụng</string>
 	<string name="description_setting_about">Thông tin về ứng dụng</string>
+	<string name="description_setting_help">Hãy cho tôi biết nếu bạn có bất kỳ vấn đề hoặc đề xuất nào.</string>
 	<string name="description_setting_statistics">Xem bạn đã tạm ẩn trong bao lâu và hơn thế nữa</string>
 	<string name="description_setting_manage_nfc_tags">Xóa hoặc đổi tên các thẻ NFC đã lưu</string>
 	<string name="description_setting_support">Hỗ trợ sẽ được đánh giá rất cao, nhưng không có áp lực! Ứng dụng này sẽ luôn miễn phí</string>
 	<string name="description_setting_import_export">Nhập hoặc xuất tất cả dữ liệu đã lưu của bạn</string>
 	<string name="description_use_new_screen_true">Sử dụng màn hình báo thức mới, nơi bạn vuốt để báo lại hoặc loại bỏ báo thức.</string>
+	<string name="description_toggle_alarms_with_airplane_mode_on">Tắt tất cả báo thức do chuyển sang chế độ máy bay.</string>
+	<string name="description_toggle_alarms_with_airplane_mode_off">Kích hoạt tất cả các cảnh báo do thay đổi chế độ máy bay.</string>
 	<string name="description_use_new_screen_false">Không sử dụng màn hình báo động mới. Sử dụng màn hình gốc với các nút đơn giản để báo lại hoặc tắt báo thức.</string>
 	<string name="description_alarm_screen_show_alarm_name_true">Hiển thị tên cảnh báo trên màn hình cảnh báo.</string>
 	<string name="description_alarm_screen_show_alarm_name_false">Không hiển thị tên cảnh báo.\n</string>
@@ -405,6 +445,8 @@
 	<string name="description_alarm_screen_show_music_info_false">Không hiển thị thông tin nhạc hoặc nhạc chuông.</string>
 	<string name="description_alarm_screen_battery_saver_true">Tiết kiệm pin bằng cách tắt màn hình khi báo thức đang hoạt động. Màn hình sẽ cần được bật thủ công.</string>
 	<string name="description_alarm_screen_battery_saver_false">Màn hình sẽ tự động bật khi có báo thức.</string>
+	<string name="description_toggle_alarms_with_airplane_mode_true">Bật chế độ máy bay sẽ vô hiệu hóa tất cả các báo thức, và tắt chế độ máy bay sẽ kích hoạt lại tất cả các báo thức. Lưu ý: Ứng dụng phải đang được chọn để chức năng này hoạt động.</string>
+	<string name="description_toggle_alarms_with_airplane_mode_false">Chức năng báo thức sẽ không bị ảnh hưởng khi chế độ máy bay được bật hoặc tắt.</string>
 	<string name="description_color_theme">Màu chủ đề.</string>
 	<string name="description_color_name">ví dụ. Công việc</string>
 	<string name="description_color_days">ví dụ. T2 &#8231; T3 &#8231; T4 &#8231; T5 &#8231; T6</string>
@@ -422,6 +464,8 @@
 	<string name="description_show_hide_flashlight_button_false">Ẩn nút đèn pin khi mở rộng báo thức.</string>
 	<string name="description_expand_new_alarm_true">Cảnh báo được sao chép hoặc tạo bằng &#8220;+&#8221; nút được mở rộng.</string>
 	<string name="description_expand_new_alarm_false">Báo động không được mở rộng.</string>
+	<string name="description_start_week_on">Tuần lễ được hiển thị trên thẻ báo thức mở rộng sẽ bắt đầu vào ngày này.</string>
+	<string name="description_next_alarm_format">Định dạng cần sử dụng khi hiển thị thời gian báo thức tiếp theo sẽ chạy.</string>
 	<string name="description_next_alarm_format_time_in">Báo thức tiếp theo sau 7 giờ 30 phút</string>
 	<string name="description_next_alarm_format_time_on">Báo thức tiếp theo vào Thứ Hai lúc 7:00 sáng</string>
 	<string name="description_permission_disable_battery_optimization">Ứng dụng sẽ không được chuyển sang chế độ ngủ, cho phép kích hoạt báo thức như bình thường.</string>
@@ -436,6 +480,10 @@
 	<string name="description_permission_system_alert_window">Đảm bảo màn hình báo thức được hiển thị (đây là yêu cầu bắt buộc để phát âm thanh) nếu ứng dụng đang chạy nền và không được sử dụng trong một thời gian. Chỉ áp dụng cho Android 15.</string>
 	<string name="description_permission_boot">Khôi phục báo thức khi thiết bị của bạn được bật. Android sẽ xóa báo thức khi thiết bị của bạn tắt.</string>
 	<string name="description_permission_wakelock">Ngăn chặn thiết bị của bạn chuyển sang chế độ ngủ để báo thức được kích hoạt sẽ tiếp tục kêu.</string>
+	<string name="message_debug_mode_on">Ghi vào tệp nhật ký để gỡ lỗi sự cố. Có thể ảnh hưởng nhẹ đến hiệu năng.</string>
+	<string name="message_debug_mode_off">Không ghi vào tệp nhật ký. Đây là chế độ hoạt động bình thường.</string>
+	<string name="message_share_logs_with_developer">Hãy gửi nhật ký lỗi cho tôi qua email để tôi có thể xác định nguyên nhân gây ra sự cố.</string>
+	<string name="message_send_email">Nếu có bất kỳ vấn đề, câu hỏi hoặc đề xuất nào, vui lòng gửi email cho tôi.</string>
 	<string name="description_audio_sources_alarm">Kênh âm thanh để phát báo thức.</string>
 	<string name="description_audio_sources_timer">Kênh âm thanh để phát bộ đếm thời gian.</string>
 	<string name="description_widget_alarm_example">Báo thức hiển thị trong bản xem trước chỉ là một ví dụ.</string>
@@ -470,6 +518,12 @@
 	<string name="cd_skip_next_alarm">Bỏ qua báo thức tiếp theo.</string>
 	<string name="cd_delete_alarm_after_dismissed">Xóa báo thức sau khi nó đã tắt.</string>
 	<string name="cd_clock_widget_alarm_icon">Báo động tiếp theo</string>
+	<string name="cd_permission_check_mark">Dấu tích biểu thị sự cho phép đã được cấp</string>
+	<string name="cd_request_permission_icon">Biểu tượng yêu cầu quyền</string>
+	<string name="cd_swipe">Vuốt</string>
+	<string name="cd_long_press">Nhấn giữ</string>
+	<string name="cd_customize">Tùy chỉnh</string>
+	<string name="cd_preference_icon">Biểu tượng tùy chọn</string>
 
 	<!-- Plurals -->
 	<plurals name="alarm">
@@ -546,6 +600,10 @@
 
 	<plurals name="number_of_snoozes_left">
 		<item quantity="other">(%1$d còn lại)</item>
+	</plurals>
+
+	<plurals name="import_cleared_media_due_to_not_found">
+		<item quantity="other">Đã xóa phương tiện trong báo thức/hẹn giờ %1$d do không tìm thấy phương tiện.</item>
 	</plurals>
 
 	<plurals name="tts_say_reminder">

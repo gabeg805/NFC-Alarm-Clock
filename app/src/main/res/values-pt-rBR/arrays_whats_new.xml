@@ -5,6 +5,25 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.0</item>
+		<item>Adicionamos rótulos aos botões para tornar mais óbvio o que cada botão faz. Isso pode ser alterado em &lt;b>Configurações > Aparência > Estilos&lt;/b>.</item>
+		<item>Adicionada opção para ativar/desativar alarmes quando o &lt;b>modo avião&lt;/b> for alterado.</item>
+		<item>Adicionada opção para dispensar o alarme com os &lt;b>botões de volume&lt;/b>.</item>
+		<item>Adicionada pré-visualização às opções de volume.</item>
+		<item>Adicionada tela de &lt;b> integração &lt;/b> para novos usuários.</item>
+		<item>Adicionada a seção &lt;b>Ajuda&lt;/b> em Configurações.</item>
+		<item>Adicionada a opção de suporte a idiomas por aplicativo.</item>
+		<item>Atualizado para oferecer suporte ao &lt;b>Android 16&lt;/b></item>
+		<item>&lt;b>Widget&lt;/b> atualizado para que a data siga o formato de localidade.</item>
+		<item>Atualização da lógica &lt;b> descartar com NFC &lt;/b> quando várias etiquetas NFC precisam ser lidas. Agora é possível adiar a leitura e as etiquetas NFC que já foram lidas não precisam ser lidas novamente.</item>
+		<item>Melhoria do &lt;b>cartão de alarme&lt;/b> para permitir deslizar para copiar/excluir quando o cartão estiver expandido.</item>
+		<item>Melhoria na configuração de &lt;b>data &lt;/b>, de forma que a hora também seja salva ao definir a data.</item>
+		<item>Notificação aprimorada de alarmes perdidos, exibindo agora o nome e a hora do alarme perdido.</item>
+		<item>Aumentamos o tamanho dos botões de soneca e desativação na tela do alarme.</item>
+		<item>Corrigido problema com a função de vibração que afetava alguns telefones.</item>
+		<item>Problema corrigido com &lt;b>importação&lt;/b> e &lt;b>exportação&lt;/b></item>
+		<item>Corrigido o problema em que a tela de alarme, em raras ocasiões, não fechava após o alarme ser desativado, causando um loop infinito.</item>
+		<item>Corrigido um pequeno problema com a notificação de &lt;b>dispensa antecipada&lt;/b>.</item>
 		<item>12.6.4</item>
 		<item>Corrigido problema que ocorria ao usar &lt;b>NFC&lt;/b> para dispensar um alarme ou temporizador, mas as opções de &lt;b>ordem de dispensa&lt;/b> também haviam sido definidas.</item>
 		<item>Corrigido problema em que o uso de &lt;b>piscar lanterna&lt;/b> causava travamento.</item>

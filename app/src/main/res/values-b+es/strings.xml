@@ -43,6 +43,10 @@
 	<string name="word_timers">Temporizadores</string>
 	<string name="word_reminder">Recordatorio</string>
 	<string name="word_more">Más</string>
+	<string name="word_allow">Permitir</string>
+	<string name="word_back">Atrás</string>
+	<string name="word_next">Próximo</string>
+	<string name="word_finish">Finalizar</string>
 	<string name="letter_h">h</string>
 	<string name="letter_m">metro</string>
 	<string name="letter_s">s</string>
@@ -67,6 +71,7 @@
 	<string name="state_unknown">Desconocido</string>
 
 	<!-- Actions -->
+	<string name="action_get_started">Comience</string>
 	<string name="action_alarm_snooze">Posponer</string>
 	<string name="action_alarm_dismiss">Descartar</string>
 	<string name="action_alarm_dismiss_early">Descartar temprano</string>
@@ -184,13 +189,17 @@
 	<string name="message_will_run_in_named_alarm">&lt;b&gt;%1$s&lt;/b&gt; se activará en %2$s.</string>
 	<string name="message_next_alarm_on">Próxima alarma el %1$s</string>
 	<string name="message_next_alarm_in">Próxima alarma en %1$s</string>
+	<string name="message_export_started">Exportador…</string>
 	<string name="message_export_completed">Exportación completada</string>
+	<string name="message_import_started">Importador…</string>
 	<string name="message_import_completed">Importación completada</string>
 	<string name="message_selected_alarm_song_not_available">Canción elegida para alarma no disponible</string>
 	<string name="message_milliseconds">%1$d milisegundos</string>
 	<string name="message_text_to_speech_default_voice">Voz predeterminada</string>
 	<string name="message_text_to_speech_voice">Voz %1$d</string>
 	<string name="message_text_to_speech_network_required">Es posible que se requiera una conexión de red para que la voz funcione</string>
+	<string name="message_volume_dismiss_priority">El volumen de descarte tendrá prioridad</string>
+	<string name="message_volume_snooze_ignored">Se ignorará la función de posponer volumen.</string>
 
 	<!-- Error messages -->
 	<string name="error_message_active_delete">Incapaz de borrar una alarma activa</string>
@@ -211,6 +220,8 @@
 	<string name="error_message_google_play_billing">Error al conectarse a Google Play Store</string>
 	<string name="error_message_text_to_speech_audio_focus">Incapaz de usar texto-a-voz</string>
 	<string name="error_message_enter_timer_duration">Introduzca una duración</string>
+	<string name="error_message_unable_to_volume_dismiss_nfc_alarm">No se puede desactivar la alarma NFC con el botón de volumen.</string>
+	<string name="error_message_unable_to_email">No se puede redactar el correo electrónico</string>
 	<string name="error_message_unable_to_email_statistics">No se pueden enviar estadísticas por correo electrónico</string>
 	<string name="error_message_unable_to_shine_flashlight">No se puede encender la linterna — %1$s</string>
 	<string name="error_message_unable_to_get_flashlight_characteristics">No se puede obtener información de la linterna</string>
@@ -228,6 +239,7 @@
 	<string name="error_message_camera_in_use">Cámara en uso</string>
 	<string name="error_message_camera_max_in_use">Máximo de cámaras en uso</string>
 	<string name="error_message_unable_to_launch_media_picker">No se puede iniciar el selector de audio del sistema</string>
+	<string name="error_message_unable_to_preview_volume_options">No se puede previsualizar cuando no se ha configurado ningún medio.</string>
 
 	<!-- Titles -->
 	<string name="title_timer_main">Temporizador NFC</string>
@@ -256,6 +268,7 @@
 	<string name="title_active_timers">Temporizadores activos</string>
 	<string name="title_upcoming_reminders">Próximos recordatorios</string>
 	<string name="title_dismissed_alarms">Alarmas descartadas</string>
+	<string name="title_missed_alarm">Alarma omitida</string>
 	<string name="title_missed_alarms">Alarmas perdidas</string>
 	<string name="title_snoozed_alarms">Alarmas pospuestas</string>
 	<string name="title_created_alarms">Alarmas creadas</string>
@@ -292,6 +305,7 @@
 	<string name="title_dismiss_options_dismiss_early">Despedida temprana</string>
 	<string name="title_dismiss_options_dismiss_early_notification">Rechazar notificación anticipada</string>
 	<string name="title_dismiss_options_delete_after_dismissed">Eliminar después de descartar</string>
+	<string name="title_dismiss_options_volume_dismiss">Volumen descartar</string>
 	<string name="title_snooze_options_auto_snooze">Posponer automáticamente</string>
 	<string name="title_snooze_options_max_snooze">Dormitar la máxima numero de veces</string>
 	<string name="title_snooze_options_snooze_duration">Duracion de dormitar</string>
@@ -303,6 +317,7 @@
 	<string name="title_setting_general">General</string>
 	<string name="title_setting_appearance">Apariencia</string>
 	<string name="title_setting_about">Acerca</string>
+	<string name="title_setting_help">Ayuda</string>
 	<string name="title_setting_statistics">Estadísticas</string>
 	<string name="title_setting_manage_nfc_tags">Administrar etiquetas NFC</string>
 	<string name="title_setting_support">Apoyar el desarrollo</string>
@@ -319,6 +334,7 @@
 	<string name="title_notifications">Notificaciones</string>
 	<string name="title_style">Style</string>
 	<string name="title_tweaks">Modificaciones</string>
+	<string name="title_misc">Misceláneas</string>
 	<string name="title_new_screen">Nueva pantalla</string>
 	<string name="title_show_alarm_name">Muestra nombre de alarma</string>
 	<string name="title_show_current_date_and_time">Mostrar fecha y hora actuales</string>
@@ -329,13 +345,30 @@
 	<string name="title_start_week_on">Empieza la semana&#8230;</string>
 	<string name="title_expand_new_alarm">Expandir alarmas nuevas</string>
 	<string name="title_next_alarm_format">Estilo de la proxima alarma&#8230;</string>
+	<string name="title_toggle_alarms_with_airplane_mode">Activar/desactivar las alarmas con el modo avión</string>
 	<string name="title_permissions">Permisos</string>
+	<string name="title_no_permissions_needed">¡No se necesitan permisos!</string>
+	<string name="title_help_debug_mode">Modo de depuración</string>
+	<string name="title_help_share_logs">Comparta los registros con el desarrollador.</string>
+	<string name="title_help_send_email">Enviar correo electrónico</string>
+	<string name="title_how_to_use_features">Cómo usar algunas funciones</string>
+	<string name="title_how_to_copy_and_delete">Desliza para copiar y eliminar</string>
+	<string name="title_how_to_get_more_options">Mantén pulsado para ver más opciones.</string>
+	<string name="title_how_to_change_appearance">Ajustes > Apariencia</string>
 	<string name="title_developer">Creador de la aplicacion</string>
 	<string name="title_alignment">Alineación</string>
 	<string name="title_position">Posición</string>
 	<string name="title_only_show_app_alarms">Mostrar solo alarmas de aplicaciones</string>
 
 	<!-- Descriptions -->
+	<string name="description_onboarding_welcome">Bienvenido a la aplicación de despertador más personalizable que jamás hayas usado.</string>
+	<string name="description_onboarding_permissions">La aplicación necesita algunos permisos para funcionar correctamente.</string>
+	<string name="description_onboarding_permission_post_notifications_request">Necesario para que funcionen las alarmas. Permite que la aplicación se inicie y permanezca en ejecución aunque no esté en primer plano.</string>
+	<string name="description_onboarding_permission_system_alert_window_request">Este es un permiso especial. Se utiliza para garantizar que se muestre la pantalla de alarma y se reproduzca el audio. Solo es necesario en Android 15 o si existe un problema específico del dispositivo que impide que las alarmas se activen.</string>
+	<string name="description_onboarding_how_to_use_features">Algunas cosas pueden estar ocultas o resultar confusas. Aquí te explicamos cómo hacer esas cosas.</string>
+	<string name="description_onboarding_how_to_copy_and_delete">Desliza el dedo hacia la derecha para copiar una alarma o un temporizador, y hacia la izquierda para eliminarlo.</string>
+	<string name="description_onboarding_how_to_get_more_options">Mantén pulsado casi cualquier botón de una alarma o temporizador ampliado para acceder a más opciones. Incluso puedes probarlo en una tarjeta de alarma para ver opciones como "Omitir la siguiente alarma" y otras.</string>
+	<string name="description_onboarding_how_to_change_appearance">Ve a Ajustes > Apariencia para encontrar todas las opciones de personalización y conseguir que la aplicación tenga el aspecto que tú quieras.</string>
 	<string name="description_slide_to_snooze">Deslizar para posponer</string>
 	<string name="description_slide_to_dismiss">Deslizar para descartar</string>
 	<string name="description_alarm_activity">Escanea una etiqueta de NFC para descartar la alarma.</string>
@@ -348,6 +381,8 @@
 	<string name="description_color">Color</string>
 	<string name="description_day_button_style_filled">Botones rellenos</string>
 	<string name="description_day_button_style_outlined">Botones delineados</string>
+	<string name="description_should_show_card_button_labels_true">Los botones mostrarán la etiqueta que aparece debajo.</string>
+	<string name="description_should_show_card_button_labels_false">Los botones solo mostrarán el icono.</string>
 	<string name="description_media">Música o tono de llamada</string>
 	<string name="description_scan_nfc_tag_alarm">Se requerirá la etiqueta NFC escaneada para descartar esta alarma cuando suene.</string>
 	<string name="description_scan_nfc_tag_timer">Se requerirá la etiqueta NFC escaneada para desactivar este temporizador cuando se active.</string>
@@ -370,14 +405,16 @@
 	<string name="description_text_to_speech_speech_rate">¿Qué tan rápido debe hablar el texto a voz?</string>
 	<string name="description_volume_gradually_increase_volume_alarm">Aumente el volumen de la alarma a una frecuencia establecida.</string>
 	<string name="description_volume_gradually_increase_volume_timer">Aumenta el volumen del temporizador a una frecuencia establecida.</string>
-	<string name="description_dismiss_options_auto_dismiss_alarm">Descartar la alarma automáticamente después de un período de tiempo establecido.</string>
-	<string name="description_dismiss_options_auto_dismiss_timer">Desactivar el temporizador automáticamente después de un tiempo determinado.</string>
+	<string name="description_volume_restrict_volume_alarm">El volumen no se puede bajar cuando suena la alarma.</string>
+	<string name="description_volume_restrict_volume_timer">El volumen no se puede disminuir cuando finaliza el temporizador.</string>
 	<string name="description_dismiss_options_dismiss_early">Desactive la alarma de forma anticipada, antes de que se active.</string>
 	<string name="description_dismiss_options_dismiss_early_notification">Mostrar una notificación cuando la alarma pueda desactivarse antes de tiempo.</string>
 	<string name="description_dismiss_options_delete_after_dismissed_alarm">La alarma se eliminará después de que se desestime.</string>
 	<string name="description_dismiss_options_delete_after_dismissed_timer">El temporizador se eliminará después de que se cierre.</string>
 	<string name="description_snooze_options_auto_snooze">Posponer la alarma automáticamente después de una duración establecida.</string>
 	<string name="description_snooze_options_max_snooze">Número máximo de veces que se puede posponer la alarma.</string>
+	<string name="description_dismiss_options_volume_dismiss_alarm">Desactive la alarma pulsando el botón de subir o bajar volumen.</string>
+	<string name="description_dismiss_options_volume_dismiss_timer">Desactive el temporizador pulsando el botón de subir o bajar volumen.</string>
 	<string name="description_snooze_options_snooze_duration">Cantidad de tiempo durante el cual se debe posponer la alarma.</string>
 	<string name="description_snooze_options_easy_snooze">Posponga la alarma tocando en cualquier parte de la pantalla de alarma.</string>
 	<string name="description_snooze_options_volume_snooze">Para posponer la alarma, pulse el botón de subir o bajar el volumen.</string>
@@ -391,10 +428,13 @@
 	<string name="description_setting_about">Información acerca de esta aplicacion</string>
 	<string name="description_setting_statistics">Mira cuanto tiempo has pospuesto sus alarmas, y más</string>
 	<string name="description_setting_manage_nfc_tags">Eliminar o cambiar el nombre de las etiquetas NFC guardadas</string>
+	<string name="description_setting_help">Avísame si tienes algún problema o sugerencia.</string>
 	<string name="description_setting_support">Se agradecería mucho el apoyo, ¡pero no hay presión! Esta aplicación siempre será gratis</string>
 	<string name="description_setting_import_export">Importa o exporta todos tus datos guardados</string>
 	<string name="description_use_new_screen_true">Utilice la nueva pantalla de alarma, donde desliza el dedo para posponero descartar la alarma.</string>
 	<string name="description_use_new_screen_false">No utilice la nueva pantalla de alarma. Utilice la pantalla original con botones simples para posponer o descartar la alarma.</string>
+	<string name="description_toggle_alarms_with_airplane_mode_on">Desactivación de todas las alarmas debido al cambio al modo avión.</string>
+	<string name="description_toggle_alarms_with_airplane_mode_off">Activación de todas las alarmas debido al cambio al modo avión.</string>
 	<string name="description_alarm_screen_show_alarm_name_true">Muestra el nombre de la alarma en la pantalla de alarma.</string>
 	<string name="description_alarm_screen_show_alarm_name_false">No mostrar el nombre de la alarma.</string>
 	<string name="description_alarm_screen_show_current_date_and_time_true">Muestra la fecha y hora actuales en la pantalla de alarma.</string>
@@ -405,6 +445,8 @@
 	<string name="description_alarm_screen_battery_saver_false">La pantalla se encenderá automáticamente cuando una alarma esté activa.</string>
 	<string name="description_color_theme">Color del tema.</string>
 	<string name="description_color_name">p.ej. Trabajo</string>
+	<string name="description_toggle_alarms_with_airplane_mode_true">Activar el modo avión desactivará todas las alarmas, y desactivarlo las activará. Nota: La aplicación debe estar en primer plano para que esto funcione.</string>
+	<string name="description_toggle_alarms_with_airplane_mode_false">Las alarmas no se verán afectadas al activar o desactivar el modo avión.</string>
 	<string name="description_color_days">p.ej. Lun &#8231; Mar &#8231; Mie &#8231; Jue &#8231; Vie</string>
 	<string name="description_color_time">p.ej. 12:30</string>
 	<string name="description_color_am">Colorida si esta en la hora de alarma AM.</string>
@@ -422,6 +464,8 @@
 	<string name="description_expand_new_alarm_false">Alarmas no se expanden.</string>
 	<string name="description_next_alarm_format_time_in">Próxima alarma en 7 horas 30 minutos</string>
 	<string name="description_next_alarm_format_time_on">Próxima alarma Lun 7:00 AM</string>
+	<string name="description_start_week_on">La semana que se muestra en la tarjeta de alarma ampliada comenzará en este día.</string>
+	<string name="description_next_alarm_format">El formato que se debe usar para mostrar cuándo se activará la próxima alarma.</string>
 	<string name="description_permission_disable_battery_optimization">La aplicación no se pondrá en suspensión, lo que permitirá que las alarmas se activen con normalidad.</string>
 	<string name="description_permission_nfc">Detectar las etiquetas NFC para descartar una alarma.</string>
 	<string name="description_permission_storage">Lea la música almacenada en su dispositivo.</string>
@@ -436,6 +480,10 @@
 	<string name="description_permission_wakelock">Evitar que el dispositivo entre en estado de inactividad para que las alarmas continúan de sonar.</string>
 	<string name="description_audio_sources_alarm">El canal de audio para reproducir la alarma.</string>
 	<string name="description_audio_sources_timer">El canal de audio en el que se reproducirá el temporizador.</string>
+	<string name="message_debug_mode_on">Escribe en un archivo de registro para depurar un problema. Esto puede afectar ligeramente al rendimiento.</string>
+	<string name="message_debug_mode_off">No escriba en un archivo de registro. Este es el modo normal.</string>
+	<string name="message_share_logs_with_developer">Envíame los registros por correo electrónico para poder determinar por qué se produjo el problema.</string>
+	<string name="message_send_email">No dudes en enviarme un correo electrónico con cualquier problema, pregunta o sugerencia.</string>
 	<string name="description_widget_alarm_example">La alarma que se muestra en la vista previa es solo un ejemplo.</string>
 	<string name="description_text_to_speech_voice">La voz a utilizar para la conversión de texto a voz.</string>
 	<string name="description_only_show_app_alarms">Sólo las alarmas de esta aplicación se mostrarán en el widget.</string>
@@ -468,6 +516,12 @@
 	<string name="cd_skip_next_alarm">Saltar la siguiente alarma.</string>
 	<string name="cd_delete_alarm_after_dismissed">Eliminar la alarma después de descartarla.</string>
 	<string name="cd_clock_widget_alarm_icon">Próxima alarma</string>
+	<string name="cd_permission_check_mark">Marque la casilla que indica que se concedió el permiso.</string>
+	<string name="cd_request_permission_icon">Icono de solicitud de permiso</string>
+	<string name="cd_swipe">Golpe fuerte</string>
+	<string name="cd_long_press">Pulsación larga</string>
+	<string name="cd_customize">Personalizar</string>
+	<string name="cd_preference_icon">Icono de preferencia</string>
 
 	<!-- Plurals -->
 	<plurals name="alarm">
@@ -582,6 +636,11 @@
 		<item quantity="one">(%1$d restante)</item>
 		<item quantity="many">(%1$d restantes)</item>
 		<item quantity="other">(%1$d restantes)</item>
+	</plurals>
+
+	<plurals name="import_cleared_media_due_to_not_found">
+		<item quantity="one">Se borraron los medios en %1$d alarma/temporizador debido a que no se encontraron medios.</item>
+		<item quantity="other">Se borraron los medios en %1$d alarmas/temporizadores debido a que no se encontraron medios.</item>
 	</plurals>
 
 	<plurals name="tts_say_reminder">

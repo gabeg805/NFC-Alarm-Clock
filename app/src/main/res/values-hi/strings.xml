@@ -43,6 +43,10 @@
 	<string name="word_timers">टाइमर</string>
 	<string name="word_reminder">अनुस्मारक</string>
 	<string name="word_more">अधिक</string>
+	<string name="word_allow">अनुमति दें</string>
+	<string name="word_back">पीछे</string>
+	<string name="word_next">अगला</string>
+	<string name="word_finish">खत्म करना</string>
 	<string name="letter_h">एच</string>
 	<string name="letter_m">एम</string>
 	<string name="letter_s">एस</string>
@@ -67,6 +71,7 @@
 	<string name="state_unknown">अज्ञात</string>
 
 	<!-- Actions -->
+	<string name="action_get_started">शुरू हो जाओ</string>
 	<string name="action_alarm_snooze">दिन में झपकी लेना</string>
 	<string name="action_alarm_dismiss">नकार देना</string>
 	<string name="action_alarm_dismiss_early">जल्दी बर्खास्त करें</string>
@@ -184,13 +189,17 @@
 	<string name="message_will_run_in_named_alarm">&lt;b&gt;%1$s&lt;/b&gt; %2$s में चलेगा.</string>
 	<string name="message_next_alarm_on">अगला अलार्म %1$s पर</string>
 	<string name="message_next_alarm_in">अगला अलार्म %1$s में</string>
+	<string name="message_export_started">निर्यात…</string>
 	<string name="message_export_completed">निर्यात पूर्ण हुआ</string>
+	<string name="message_import_started">आयात हो रहा है…</string>
 	<string name="message_import_completed">आयात पूर्ण हुआ</string>
 	<string name="message_selected_alarm_song_not_available">अलार्म के लिए चुना गया गाना उपलब्ध नहीं है</string>
 	<string name="message_milliseconds">%1$d मि.से.</string>
 	<string name="message_text_to_speech_default_voice">डिफ़ॉल्ट आवाज़</string>
 	<string name="message_text_to_speech_voice">आवाज़ %1$d</string>
 	<string name="message_text_to_speech_network_required">आवाज़ के काम करने के लिए नेटवर्क कनेक्शन की आवश्यकता हो सकती है</string>
+	<string name="message_volume_dismiss_priority">वॉल्यूम डिसमिस को प्राथमिकता दी जाएगी</string>
+	<string name="message_volume_snooze_ignored">वॉल्यूम स्नूज़ को अनदेखा कर दिया जाएगा</string>
 
 	<!-- Error messages -->
 	<string name="error_message_active_delete">सक्रिय अलार्म को हटाने में असमर्थ</string>
@@ -211,6 +220,8 @@
 	<string name="error_message_google_play_billing">Google Play स्टोर से कनेक्ट करते समय त्रुटि</string>
 	<string name="error_message_text_to_speech_audio_focus">टेक्स्ट-टू-स्पीच का उपयोग करने में असमर्थ</string>
 	<string name="error_message_enter_timer_duration">अवधि दर्ज करें</string>
+	<string name="error_message_unable_to_volume_dismiss_nfc_alarm">वॉल्यूम बटन से NFC अलार्म बंद नहीं हो रहा है</string>
+	<string name="error_message_unable_to_email">ईमेल ड्राफ्ट करने में असमर्थ</string>
 	<string name="error_message_unable_to_email_statistics">आंकड़े ईमेल करने में असमर्थ</string>
 	<string name="error_message_unable_to_shine_flashlight">टॉर्च चमकाने में असमर्थ — %1$s</string>
 	<string name="error_message_unable_to_get_flashlight_characteristics">टॉर्च संबंधी जानकारी प्राप्त करने में असमर्थ</string>
@@ -228,6 +239,7 @@
 	<string name="error_message_camera_in_use">उपयोग में कैमरा</string>
 	<string name="error_message_camera_max_in_use">अधिकतम उपयोग में कैमरे</string>
 	<string name="error_message_unable_to_launch_media_picker">सिस्टम ऑडियो पिकर लॉन्च करने में असमर्थ</string>
+	<string name="error_message_unable_to_preview_volume_options">जब कोई मीडिया सेट नहीं किया गया हो तो पूर्वावलोकन संभव नहीं है</string>
 
 	<!-- Titles -->
 	<string name="title_timer_main">एनएफसी टाइमर</string>
@@ -256,6 +268,7 @@
 	<string name="title_active_timers">सक्रिय टाइमर</string>
 	<string name="title_upcoming_reminders">आगामी अनुस्मारक</string>
 	<string name="title_dismissed_alarms">अलार्म खारिज कर दिया</string>
+	<string name="title_missed_alarm">अलार्म नहीं बजा</string>
 	<string name="title_missed_alarms">छूटे हुए अलार्म</string>
 	<string name="title_snoozed_alarms">स्नूज़ किए गए अलार्म</string>
 	<string name="title_created_alarms">अलार्म बनाए गए</string>
@@ -292,6 +305,7 @@
 	<string name="title_dismiss_options_dismiss_early">जल्दी बर्खास्त करें</string>
 	<string name="title_dismiss_options_dismiss_early_notification">प्रारंभिक अधिसूचना खारिज करें</string>
 	<string name="title_dismiss_options_delete_after_dismissed">खारिज करने के बाद हटाएं</string>
+	<string name="title_dismiss_options_volume_dismiss">वॉल्यूम बंद करें</string>
 	<string name="title_snooze_options_auto_snooze">ऑटो-स्नूज़</string>
 	<string name="title_snooze_options_max_snooze">अधिकतम झपकी</string>
 	<string name="title_snooze_options_snooze_duration">दिन में झपकी अवधि</string>
@@ -303,6 +317,7 @@
 	<string name="title_setting_general">सामान्य</string>
 	<string name="title_setting_appearance">उपस्थिति</string>
 	<string name="title_setting_about">के बारे में</string>
+	<string name="title_setting_help">मदद</string>
 	<string name="title_setting_statistics">आंकड़े</string>
 	<string name="title_setting_manage_nfc_tags">NFC टैग प्रबंधित करें</string>
 	<string name="title_setting_support">विकास का समर्थन करें</string>
@@ -319,6 +334,7 @@
 	<string name="title_notifications">सूचनाएं</string>
 	<string name="title_style">शैली</string>
 	<string name="title_tweaks">बदलाव</string>
+	<string name="title_misc">मिश्रित</string>
 	<string name="title_new_screen">नई स्क्रीन</string>
 	<string name="title_show_alarm_name">अलार्म का नाम दिखाएं</string>
 	<string name="title_show_current_date_and_time">वर्तमान दिनांक और समय दिखाएँ</string>
@@ -329,13 +345,30 @@
 	<string name="title_start_week_on">सप्ताह की शुरुआत&#8230;</string>
 	<string name="title_expand_new_alarm">नये अलार्म का विस्तार करें</string>
 	<string name="title_next_alarm_format">अगला अलार्म प्रारूप&#8230;</string>
+	<string name="title_toggle_alarms_with_airplane_mode">एयरप्लेन मोड के साथ अलार्म को चालू/बंद करें</string>
 	<string name="title_permissions">अनुमतियां</string>
+	<string name="title_no_permissions_needed">किसी अनुमति की आवश्यकता नहीं!</string>
+	<string name="title_help_debug_mode">डिबग मोड</string>
+	<string name="title_help_share_logs">डेवलपर के साथ लॉग साझा करें</string>
+	<string name="title_help_send_email">ईमेल भेजें</string>
+	<string name="title_how_to_use_features">कुछ सुविधाओं का उपयोग कैसे करें</string>
+	<string name="title_how_to_copy_and_delete">कॉपी करने और हटाने के लिए स्वाइप करें</string>
+	<string name="title_how_to_get_more_options">अधिक विकल्पों के लिए देर तक दबाएं</string>
+	<string name="title_how_to_change_appearance">सेटिंग्स > दिखावट</string>
 	<string name="title_developer">डेवलपर</string>
 	<string name="title_alignment">संरेखण</string>
 	<string name="title_position">पद</string>
 	<string name="title_only_show_app_alarms">केवल ऐप अलार्म दिखाएं</string>
 
 	<!-- Descriptions -->
+	<string name="description_onboarding_welcome">अब तक इस्तेमाल किए गए सबसे अनुकूलन योग्य अलार्म घड़ी ऐप में आपका स्वागत है।</string>
+	<string name="description_onboarding_permissions">ऐप को ठीक से काम करने के लिए कुछ अनुमतियों की आवश्यकता है।</string>
+	<string name="description_onboarding_permission_post_notifications_request">अलार्म चलने के लिए आवश्यक है। यह ऐप को तब भी शुरू होने और चलते रहने की अनुमति देता है जब वह पहले से ही फोकस में न हो।</string>
+	<string name="description_onboarding_permission_system_alert_window_request">यह एक विशेष अनुमति है। इसका उपयोग यह सुनिश्चित करने के लिए किया जाता है कि अलार्म स्क्रीन दिखाई दे और ऑडियो चल सके। यह केवल Android 15 पर या डिवाइस से संबंधित किसी समस्या के कारण अलार्म न बजने की स्थिति में आवश्यक है।</string>
+	<string name="description_onboarding_how_to_use_features">कुछ चीज़ें छिपी हुई या भ्रामक हो सकती हैं। यहाँ बताया गया है कि उन चीज़ों को कैसे किया जाए।</string>
+	<string name="description_onboarding_how_to_copy_and_delete">अलार्म या टाइमर को कॉपी करने के लिए दाईं ओर स्वाइप करें और डिलीट करने के लिए बाईं ओर स्वाइप करें।</string>
+	<string name="description_onboarding_how_to_get_more_options">विस्तारित अलार्म/टाइमर में लगभग किसी भी बटन को देर तक दबाकर आप अधिक विकल्प प्राप्त कर सकते हैं। आप अलार्म कार्ड पर भी इसे आज़मा सकते हैं, जिससे आपको "अगला अलार्म छोड़ें" जैसे विकल्प मिलेंगे।</string>
+	<string name="description_onboarding_how_to_change_appearance">सभी अनुकूलन विकल्पों को खोजने के लिए सेटिंग्स > दिखावट पर जाएं और ऐप को अपनी इच्छानुसार प्रदर्शित करें।</string>
 	<string name="description_slide_to_snooze">स्नूज़ करने के लिए स्लाइड करें</string>
 	<string name="description_slide_to_dismiss">खारिज करने के लिए स्लाइड करें</string>
 	<string name="description_alarm_activity">अलार्म बंद करने के लिए NFC टैग को स्कैन करें।</string>
@@ -348,6 +381,8 @@
 	<string name="description_color">हेक्स रंग</string>
 	<string name="description_day_button_style_filled">भरे हुए बटन.</string>
 	<string name="description_day_button_style_outlined">रेखांकित बटन.</string>
+	<string name="description_should_show_card_button_labels_true">बटन दबाने पर उसके नीचे का लेबल दिखाई देगा।</string>
+	<string name="description_should_show_card_button_labels_false">बटनों पर केवल आइकन ही दिखाई देगा।</string>
 	<string name="description_media">संगीत या रिंगटोन</string>
 	<string name="description_scan_nfc_tag_alarm">जब यह अलार्म बजेगा तो उसे बंद करने के लिए स्कैन किए गए NFC टैग की आवश्यकता होगी।</string>
 	<string name="description_scan_nfc_tag_timer">जब यह टाइमर बंद हो जाएगा तो इसे बंद करने के लिए स्कैन किए गए NFC टैग की आवश्यकता होगी।</string>
@@ -370,14 +405,16 @@
 	<string name="description_text_to_speech_speech_rate">टेक्स्ट-टू-स्पीच को कितनी तेजी से बोलना चाहिए।</string>
 	<string name="description_volume_gradually_increase_volume_alarm">अलार्म की आवाज़ को निर्धारित आवृत्ति पर बढ़ाएँ।</string>
 	<string name="description_volume_gradually_increase_volume_timer">टाइमर की आवाज़ को निर्धारित आवृत्ति पर बढ़ाएँ।</string>
-	<string name="description_volume_restrict_volume_alarm">अलार्म बजने पर वॉल्यूम नहीं बदला जा सकता।</string>
-	<string name="description_volume_restrict_volume_timer">टाइमर बंद होने पर वॉल्यूम नहीं बदला जा सकता।</string>
+	<string name="description_volume_restrict_volume_alarm">अलार्म बजने पर आवाज़ कम नहीं की जा सकती।</string>
+	<string name="description_volume_restrict_volume_timer">टाइमर बंद होने के बाद वॉल्यूम कम नहीं किया जा सकता है।</string>
 	<string name="description_dismiss_options_auto_dismiss_alarm">निर्धारित अवधि के बाद अलार्म स्वचालित रूप से बंद हो जाएगा।</string>
 	<string name="description_dismiss_options_auto_dismiss_timer">निर्धारित अवधि के बाद टाइमर को स्वचालित रूप से बंद कर दें।</string>
 	<string name="description_dismiss_options_dismiss_early">अलार्म को सक्रिय होने से पहले ही बंद कर दें।</string>
 	<string name="description_dismiss_options_dismiss_early_notification">अलार्म को समय से पहले बंद करने के लिए अधिसूचना दिखाएं।</string>
 	<string name="description_dismiss_options_delete_after_dismissed_alarm">अलार्म बंद होने के बाद उसे हटा दिया जाएगा।</string>
 	<string name="description_dismiss_options_delete_after_dismissed_timer">टाइमर को खारिज करने के बाद उसे हटा दिया जाएगा।</string>
+	<string name="description_dismiss_options_volume_dismiss_alarm">वॉल्यूम बढ़ाने या घटाने वाले बटन को दबाकर अलार्म बंद करें।</string>
+	<string name="description_dismiss_options_volume_dismiss_timer">वॉल्यूम बढ़ाने या घटाने वाले बटन को दबाकर टाइमर को बंद करें।</string>
 	<string name="description_snooze_options_auto_snooze">निर्धारित अवधि के बाद अलार्म स्वचालित रूप से बंद हो जाएगा।</string>
 	<string name="description_snooze_options_max_snooze">अलार्म को अधिकतम कितनी बार स्नूज़ किया जा सकता है।</string>
 	<string name="description_snooze_options_snooze_duration">अलार्म को स्नूज़ करने के लिए समय की मात्रा.</string>
@@ -391,10 +428,13 @@
 	<string name="description_setting_general">सामान्य अलार्म सेटिंग्स</string>
 	<string name="description_setting_appearance">ऐप का लुक कस्टमाइज़ करें</string>
 	<string name="description_setting_about">ऐप के बारे में जानकारी</string>
+	<string name="description_setting_help">अगर आपको कोई समस्या या सुझाव हो तो मुझे बताएं।</string>
 	<string name="description_setting_statistics">देखें कि आपने कितने समय तक स्नूज़ किया है, और भी बहुत कुछ</string>
 	<string name="description_setting_manage_nfc_tags">सहेजे गए NFC टैग्स को हटाएं या उनका नाम बदलें</string>
 	<string name="description_setting_support">सहायता की बहुत सराहना की जाएगी, लेकिन कोई दबाव नहीं! यह ऐप हमेशा मुफ़्त रहेगा</string>
 	<string name="description_setting_import_export">अपना समस्त सहेजा गया डेटा आयात या निर्यात करें</string>
+	<string name="description_toggle_alarms_with_airplane_mode_on">एयरप्लेन मोड में बदलाव के कारण सभी अलार्म निष्क्रिय किए जा रहे हैं।</string>
+	<string name="description_toggle_alarms_with_airplane_mode_off">एयरप्लेन मोड में बदलाव के कारण सभी अलार्म सक्रिय किए जा रहे हैं।</string>
 	<string name="description_use_new_screen_true">नई अलार्म स्क्रीन का उपयोग करें, जहां आप अलार्म को बंद करने या बंद करने के लिए स्वाइप कर सकते हैं।</string>
 	<string name="description_use_new_screen_false">नई अलार्म स्क्रीन का इस्तेमाल न करें। अलार्म को बंद करने या बंद करने के लिए साधारण बटन वाली मूल स्क्रीन का इस्तेमाल करें।</string>
 	<string name="description_alarm_screen_show_alarm_name_true">अलार्म स्क्रीन पर अलार्म का नाम दिखाएँ.</string>
@@ -405,6 +445,8 @@
 	<string name="description_alarm_screen_show_music_info_false">संगीत या रिंगटोन की जानकारी न दिखाएं.</string>
 	<string name="description_alarm_screen_battery_saver_true">अलार्म चालू होने पर स्क्रीन को बंद रखकर बैटरी बचाएं। स्क्रीन को मैन्युअल रूप से चालू करना होगा।</string>
 	<string name="description_alarm_screen_battery_saver_false">अलार्म सक्रिय होने पर स्क्रीन स्वचालित रूप से चालू हो जाएगी।</string>
+	<string name="description_toggle_alarms_with_airplane_mode_true">एयरप्लेन मोड चालू करने से सभी अलार्म बंद हो जाएंगे, और एयरप्लेन मोड बंद करने से सभी अलार्म चालू हो जाएंगे। ध्यान दें: इसके लिए ऐप का फोकस में होना आवश्यक है।</string>
+	<string name="description_toggle_alarms_with_airplane_mode_false">एयरप्लेन मोड चालू या बंद होने पर भी अलार्म पर कोई असर नहीं पड़ेगा।</string>
 	<string name="description_color_theme">थीम रंग.</string>
 	<string name="description_color_name">जैसे काम</string>
 	<string name="description_color_days">जैसे सोम &#8231; मंगल &#8231; बुध &#8231; गुरु &#8231; शुक्र</string>
@@ -422,6 +464,8 @@
 	<string name="description_show_hide_flashlight_button_false">अलार्म का विस्तार करते समय टॉर्च बटन छिपाएँ।</string>
 	<string name="description_expand_new_alarm_true">&#8220;+&#8221; बटन से कॉपी किए गए या बनाए गए अलार्म विस्तारित हो जाते हैं।</string>
 	<string name="description_expand_new_alarm_false">अलार्म का विस्तार नहीं किया गया है।</string>
+	<string name="description_start_week_on">विस्तारित अलार्म कार्ड में दर्शाया गया सप्ताह इसी दिन से शुरू होगा।</string>
+	<string name="description_next_alarm_format">अगला अलार्म कब बजेगा, यह दिखाने के लिए उपयोग किया जाने वाला प्रारूप।</string>
 	<string name="description_next_alarm_format_time_in">अगला अलार्म 7 घंटे 30 मिनट में</string>
 	<string name="description_next_alarm_format_time_on">अगला अलार्म सोमवार को सुबह 7:00 बजे</string>
 	<string name="description_permission_disable_battery_optimization">ऐप को स्लीप मोड में नहीं रखा जाएगा, जिससे अलार्म सामान्य रूप से सक्रिय हो सकेंगे।</string>
@@ -436,6 +480,10 @@
 	<string name="description_permission_system_alert_window">सुनिश्चित करें कि अलार्म स्क्रीन दिखाई दे रही है, जो ऑडियो चलाने के लिए ज़रूरी है, अगर ऐप बैकग्राउंड में है और कुछ समय से इस्तेमाल नहीं किया गया है। यह केवल Android 15 पर ही लागू होगा।</string>
 	<string name="description_permission_boot">जब आपका डिवाइस चालू हो तो अलार्म पुनर्स्थापित करें। जब आपका डिवाइस बंद हो तो Android अलार्म हटा देगा।</string>
 	<string name="description_permission_wakelock">अपने डिवाइस को स्लीप मोड में जाने से रोकें ताकि सक्रिय अलार्म लगातार बजता रहे।</string>
+	<string name="message_debug_mode_on">किसी समस्या को ठीक करने के लिए लॉग फ़ाइल में लिखें। इससे प्रदर्शन पर थोड़ा असर पड़ सकता है।</string>
+	<string name="message_debug_mode_off">लॉग फ़ाइल में कुछ भी न लिखें। यह सामान्य मोड है।</string>
+	<string name="message_share_logs_with_developer">समस्या उत्पन्न होने का कारण पता लगाने के लिए कृपया मुझे लॉग ईमेल करें।</string>
+	<string name="message_send_email">किसी भी समस्या, प्रश्न या सुझाव के लिए बेझिझक मुझे ईमेल करें।</string>
 	<string name="description_audio_sources_alarm">अलार्म बजाने के लिए ऑडियो चैनल.</string>
 	<string name="description_audio_sources_timer">टाइमर चलाने के लिए ऑडियो चैनल.</string>
 	<string name="description_widget_alarm_example">पूर्वावलोकन में दिखाया गया अलार्म केवल एक उदाहरण है।</string>
@@ -470,6 +518,12 @@
 	<string name="cd_skip_next_alarm">अगला अलार्म छोड़ें.</string>
 	<string name="cd_delete_alarm_after_dismissed">अलार्म बंद होने के बाद उसे हटा दें.</string>
 	<string name="cd_clock_widget_alarm_icon">अगला अलार्म</string>
+	<string name="cd_permission_check_mark">अनुमति मिल जाने का संकेत देने वाला सही का निशान लगाएँ।</string>
+	<string name="cd_request_permission_icon">अनुमति अनुरोध आइकन</string>
+	<string name="cd_swipe">कड़ी चोट</string>
+	<string name="cd_long_press">देर तक दबाए रखें</string>
+	<string name="cd_customize">अनुकूलित करें</string>
+	<string name="cd_preference_icon">वरीयता आइकन</string>
 
 	<!-- Plurals -->
 	<plurals name="alarm">
@@ -513,27 +567,27 @@
 	</plurals>
 
 	<plurals name="standalone_unit_minute">
-		<item quantity="one">मिनट</item>
+		<item quantity="one" tools:ignore="ImpliedQuantity">मिनट</item>
 		<item quantity="other">मिनट</item>
 	</plurals>
 
 	<plurals name="standalone_unit_hour">
-		<item quantity="one">घंटा</item>
+		<item quantity="one" tools:ignore="ImpliedQuantity">घंटा</item>
 		<item quantity="other">घंटे</item>
 	</plurals>
 
 	<plurals name="standalone_unit_day">
-		<item quantity="one">दिन</item>
+		<item quantity="one" tools:ignore="ImpliedQuantity">दिन</item>
 		<item quantity="other">दिन</item>
 	</plurals>
 
 	<plurals name="standalone_unit_week">
-		<item quantity="one">सप्ताह</item>
+		<item quantity="one" tools:ignore="ImpliedQuantity">सप्ताह</item>
 		<item quantity="other">हफ्तों</item>
 	</plurals>
 
 	<plurals name="standalone_unit_month">
-		<item quantity="one">महीना</item>
+		<item quantity="one" tools:ignore="ImpliedQuantity">महीना</item>
 		<item quantity="other">महीने</item>
 	</plurals>
 
@@ -565,6 +619,10 @@
 	<plurals name="number_of_snoozes_left">
 		<item quantity="one">(%1$d शेष)</item>
 		<item quantity="other">(%1$d शेष)</item>
+	</plurals>
+	<plurals name="import_cleared_media_due_to_not_found">
+		<item quantity="one">मीडिया न मिलने के कारण %1$d अलार्म/टाइमर में मीडिया साफ़ कर दिया गया।</item>
+		<item quantity="other">मीडिया न मिलने के कारण %1$d अलार्म/टाइमर में मीडिया साफ़ कर दिया गया।</item>
 	</plurals>
 
 	<plurals name="tts_say_reminder">

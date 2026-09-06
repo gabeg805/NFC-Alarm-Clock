@@ -5,6 +5,25 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.0</item>
+		<item>Đã thêm nhãn cho nút để làm rõ hơn chức năng của các nút. Bạn có thể thay đổi điều này trong &lt;b>Cài đặt > Giao diện > Kiểu dáng&lt;/b>.</item>
+		<item>Đã thêm tùy chọn bật/tắt báo thức khi chế độ &lt;b>máy bay&lt;/b> được thay đổi.</item>
+		<item>Đã thêm tùy chọn tắt báo thức bằng các nút âm lượng.</item>
+		<item>Đã thêm &lt;b> xem trước &lt;/b> vào tùy chọn âm lượng.</item>
+		<item>Đã thêm màn hình &lt;b>hướng dẫn sử dụng&lt;/b> cho người dùng mới.</item>
+		<item>Đã thêm mục &lt;b>Trợ giúp&lt;/b> trong phần Cài đặt.</item>
+		<item>Đã thêm hỗ trợ ngôn ngữ riêng cho từng ứng dụng.</item>
+		<item>Đã cập nhật để hỗ trợ &lt;b>Android 16&lt;/b>.</item>
+		<item>Đã cập nhật tiện ích để ngày tháng tuân theo định dạng ngôn ngữ địa phương.</item>
+		<item>Đã cập nhật logic &lt;b> bỏ qua bằng NFC &lt;/b> khi cần quét nhiều thẻ NFC. Giờ đây, bạn có thể tạm dừng thông báo và các thẻ NFC đã được quét trước đó không cần phải quét lại.</item>
+		<item>Cải tiến thẻ báo động cho phép vuốt để sao chép/xóa khi thẻ được mở rộng.</item>
+		<item>Đã cải tiến chức năng &lt;b>thiết lập ngày&lt;/b> để thời gian cũng được lưu khi thiết lập ngày.</item>
+		<item>Cải thiện thông báo &lt;b>bỏ lỡ báo thức&lt;/b> để hiển thị tên và thời gian của báo thức bị bỏ lỡ.</item>
+		<item>Tăng kích thước các nút tạm dừng và tắt báo thức trên màn hình báo thức.</item>
+		<item>Đã khắc phục sự cố &lt;b>rung&lt;/b> ảnh hưởng đến một số điện thoại.</item>
+		<item>Đã khắc phục sự cố với &lt;b>import&lt;/b> và &lt;b>export&lt;/b>.</item>
+		<item>Đã khắc phục sự cố màn hình báo động trong một số trường hợp hiếm hoi không đóng lại sau khi tắt báo động, gây ra lỗi lặp lại.</item>
+		<item>Đã khắc phục sự cố nhỏ với thông báo &lt;b>hủy bỏ sớm&lt;/b>.</item>
 		<item>12.6.4</item>
 		<item>Đã khắc phục sự cố khi sử dụng &lt;b>NFC&lt;/b> để tắt báo thức hoặc hẹn giờ, nhưng tùy chọn &lt;b>lệnh tắt&lt;/b> cũng đã được thiết lập.</item>
 		<item>Đã khắc phục sự cố khiến việc sử dụng &lt;b>nháy đèn pin&lt;/b> bị sập.</item>

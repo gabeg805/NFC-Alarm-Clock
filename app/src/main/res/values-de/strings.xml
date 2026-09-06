@@ -43,6 +43,10 @@
 	<string name="word_timers">Timer</string>
 	<string name="word_reminder">Erinnerung</string>
 	<string name="word_more">Mehr</string>
+	<string name="word_allow">Erlauben</string>
+	<string name="word_back">Zurück</string>
+	<string name="word_next">Nächste</string>
+	<string name="word_finish">Beenden</string>
 	<string name="letter_h">H</string>
 	<string name="letter_m">M</string>
 	<string name="letter_s">S</string>
@@ -67,6 +71,7 @@
 	<string name="state_unknown">Unbekannt</string>
 
 	<!-- Actions -->
+	<string name="action_get_started">Los geht\'s</string>
 	<string name="action_alarm_snooze">Schlummern</string>
 	<string name="action_alarm_dismiss">Zurückweisen</string>
 	<string name="action_alarm_dismiss_early">Frühzeitig entlassen</string>
@@ -184,13 +189,17 @@
 	<string name="message_will_run_in_named_alarm">&lt;b&gt;%1$s&lt;/b&gt; wird in %2$s.</string>
 	<string name="message_next_alarm_on">Nächster Wecker am %1$s</string>
 	<string name="message_next_alarm_in">Nächster Alarm in %1$s</string>
+	<string name="message_export_started">Exportieren…</string>
 	<string name="message_export_completed">Export abgeschlossen</string>
+	<string name="message_import_started">Importiert…</string>
 	<string name="message_import_completed">Import abgeschlossen</string>
 	<string name="message_selected_alarm_song_not_available">Ausgewähltes Lied für den Wecker nicht verfügbar</string>
 	<string name="message_milliseconds">%1$d ms</string>
 	<string name="message_text_to_speech_default_voice">Standardstimme</string>
 	<string name="message_text_to_speech_voice">Stimme %1$d</string>
 	<string name="message_text_to_speech_network_required">Für die Sprachfunktion ist möglicherweise eine Netzwerkverbindung erforderlich</string>
+	<string name="message_volume_dismiss_priority">Lautstärkeregelung hat Priorität</string>
+	<string name="message_volume_snooze_ignored">Die Schlummerfunktion für die Lautstärke wird ignoriert.</string>
 
 	<!-- Error messages -->
 	<string name="error_message_active_delete">Ein aktiver Alarm kann nicht gelöscht werden</string>
@@ -211,6 +220,8 @@
 	<string name="error_message_google_play_billing">Fehler beim Verbinden mit dem Google Play Store</string>
 	<string name="error_message_text_to_speech_audio_focus">Text-to-Speech kann nicht verwendet werden</string>
 	<string name="error_message_enter_timer_duration">Geben Sie eine Dauer ein.</string>
+	<string name="error_message_unable_to_volume_dismiss_nfc_alarm">NFC-Alarm lässt sich nicht mit der Lautstärketaste ausschalten</string>
+	<string name="error_message_unable_to_email">E-Mail konnte nicht verfasst werden</string>
 	<string name="error_message_unable_to_email_statistics">Statistiken können nicht per E-Mail versendet werden</string>
 	<string name="error_message_unable_to_shine_flashlight">Taschenlampe kann nicht leuchten — %1$s</string>
 	<string name="error_message_unable_to_get_flashlight_characteristics">Taschenlampeninformationen können nicht abgerufen werden.</string>
@@ -228,6 +239,7 @@
 	<string name="error_message_camera_in_use">Kamera im Einsatz</string>
 	<string name="error_message_camera_max_in_use">Max. genutzte Kameras</string>
 	<string name="error_message_unable_to_launch_media_picker">System-Audio-Picker kann nicht gestartet werden</string>
+	<string name="error_message_unable_to_preview_volume_options">Vorschau nicht möglich, wenn keine Medien ausgewählt wurden.</string>
 
 	<!-- Titles -->
 	<string name="title_timer_main">NFC-Timer</string>
@@ -256,6 +268,7 @@
 	<string name="title_active_timers">Aktive Timer</string>
 	<string name="title_upcoming_reminders">Bevorstehende Erinnerungen</string>
 	<string name="title_dismissed_alarms">Abgelehnte Alarme</string>
+	<string name="title_missed_alarm">Alarm verpasst</string>
 	<string name="title_missed_alarms">Verpasste Alarme</string>
 	<string name="title_snoozed_alarms">Schlummernde Alarme</string>
 	<string name="title_created_alarms">Erstellte Alarme</string>
@@ -292,6 +305,7 @@
 	<string name="title_dismiss_options_dismiss_early">Frühzeitig entlassen</string>
 	<string name="title_dismiss_options_dismiss_early_notification">Frühe Benachrichtigung ablehnen</string>
 	<string name="title_dismiss_options_delete_after_dismissed">Löschen nach Abweisung</string>
+	<string name="title_dismiss_options_volume_dismiss">Lautstärke reduzieren</string>
 	<string name="title_snooze_options_auto_snooze">Automatische Schlummerfunktion</string>
 	<string name="title_snooze_options_max_snooze">Max döst</string>
 	<string name="title_snooze_options_snooze_duration">Schlummerdauer</string>
@@ -303,6 +317,7 @@
 	<string name="title_setting_general">Allgemein</string>
 	<string name="title_setting_appearance">Aussehen</string>
 	<string name="title_setting_about">Über</string>
+	<string name="title_setting_help">Helfen</string>
 	<string name="title_setting_statistics">Statistiken</string>
 	<string name="title_setting_manage_nfc_tags">NFC-Tags verwalten</string>
 	<string name="title_setting_support">Entwicklung unterstützen</string>
@@ -319,6 +334,7 @@
 	<string name="title_notifications">Benachrichtigungen</string>
 	<string name="title_style">Stil</string>
 	<string name="title_tweaks">Optimierungen</string>
+	<string name="title_misc">Verschiedenes</string>
 	<string name="title_new_screen">Neuer Bildschirm</string>
 	<string name="title_show_alarm_name">Alarmnamen anzeigen</string>
 	<string name="title_show_current_date_and_time">Aktuelles Datum und Uhrzeit anzeigen</string>
@@ -329,13 +345,30 @@
 	<string name="title_start_week_on">Beginnen Sie die Woche am&#8230;</string>
 	<string name="title_expand_new_alarm">Neue Alarme erweitern</string>
 	<string name="title_next_alarm_format">Nächstes Alarmformat&#8230;</string>
+	<string name="title_toggle_alarms_with_airplane_mode">Alarme im Flugmodus umschalten</string>
 	<string name="title_permissions">Berechtigungen</string>
+	<string name="title_no_permissions_needed">Keine Berechtigungen erforderlich!</string>
+	<string name="title_help_debug_mode">Debug-Modus</string>
+	<string name="title_help_share_logs">Protokolle mit dem Entwickler teilen</string>
+	<string name="title_help_send_email">E-Mail senden</string>
+	<string name="title_how_to_use_features">Wie man einige Funktionen nutzt</string>
+	<string name="title_how_to_copy_and_delete">Zum Kopieren und Löschen wischen</string>
+	<string name="title_how_to_get_more_options">Langes Drücken für weitere Optionen</string>
+	<string name="title_how_to_change_appearance">Einstellungen > Darstellung</string>
 	<string name="title_developer">Entwickler</string>
 	<string name="title_alignment">Ausrichtung</string>
 	<string name="title_position">Position</string>
 	<string name="title_only_show_app_alarms">Nur App-Alarme anzeigen</string>
 
 	<!-- Descriptions -->
+	<string name="description_onboarding_welcome">Willkommen bei der individuellsten Wecker-App, die Sie je benutzt haben.</string>
+	<string name="description_onboarding_permissions">Die App benötigt einige Berechtigungen, um ordnungsgemäß zu funktionieren.</string>
+	<string name="description_onboarding_permission_post_notifications_request">Erforderlich, damit Alarme funktionieren. Ermöglicht es der App, zu starten und im Hintergrund zu laufen, auch wenn sie nicht im Vordergrund ist.</string>
+	<string name="description_onboarding_permission_system_alert_window_request">Dies ist eine spezielle Berechtigung. Sie stellt sicher, dass der Alarmbildschirm angezeigt und Audio wiedergegeben wird. Sie ist nur unter Android 15 erforderlich oder wenn ein gerätespezifisches Problem vorliegt, das die Alarme deaktiviert.</string>
+	<string name="description_onboarding_how_to_use_features">Manche Dinge können versteckt oder verwirrend sein. Hier erfahren Sie, wie Sie diese Dinge angehen.</string>
+	<string name="description_onboarding_how_to_copy_and_delete">Wischen Sie einen Alarm oder Timer nach rechts, um ihn zu kopieren, und nach links, um ihn zu löschen.</string>
+	<string name="description_onboarding_how_to_get_more_options">Durch langes Drücken auf fast jede beliebige Taste in einem erweiterten Wecker/Timer erhalten Sie Zugriff auf weitere Optionen. Sie können dies sogar auf einer Weckerkarte ausprobieren, um Optionen wie „Nächsten Wecker überspringen“ und mehr zu erhalten.</string>
+	<string name="description_onboarding_how_to_change_appearance">Unter Einstellungen > Darstellung finden Sie alle Anpassungsoptionen und können die App so gestalten, wie Sie es wünschen.</string>
 	<string name="description_slide_to_snooze">Zum Schlummern schieben</string>
 	<string name="description_slide_to_dismiss">Zum Schließen schieben</string>
 	<string name="description_alarm_activity">Scannen Sie den NFC-Tag, um den Alarm auszuschalten.</string>
@@ -348,6 +381,8 @@
 	<string name="description_color">Hex-Farbe</string>
 	<string name="description_day_button_style_filled">Ausgefüllte Schaltflächen.</string>
 	<string name="description_day_button_style_outlined">Umrandete Schaltflächen.</string>
+	<string name="description_should_show_card_button_labels_true">Unter den Schaltflächen wird die jeweilige Beschriftung angezeigt.</string>
+	<string name="description_should_show_card_button_labels_false">Auf den Schaltflächen wird nur das Symbol angezeigt.</string>
 	<string name="description_media">Musik oder Klingelton</string>
 	<string name="description_scan_nfc_tag_alarm">Um den Alarm zu deaktivieren, wenn er losgeht, ist der gescannte NFC-Tag erforderlich.</string>
 	<string name="description_scan_nfc_tag_timer">Der gescannte NFC-Tag wird benötigt, um diesen Timer nach Ablauf der Zeit zu deaktivieren.</string>
@@ -370,14 +405,16 @@
 	<string name="description_text_to_speech_speech_rate">Wie schnell Text-to-Speech sprechen soll.</string>
 	<string name="description_volume_gradually_increase_volume_alarm">Erhöhen Sie die Lautstärke des Alarms in festgelegten Intervallen.</string>
 	<string name="description_volume_gradually_increase_volume_timer">Erhöhen Sie die Lautstärke des Timers mit einer festgelegten Frequenz.</string>
-	<string name="description_volume_restrict_volume_alarm">Wenn ein Alarm losgeht, kann die Lautstärke nicht geändert werden.</string>
-	<string name="description_volume_restrict_volume_timer">Die Lautstärke kann nicht mehr geändert werden, wenn der Timer abgelaufen ist.</string>
+	<string name="description_volume_restrict_volume_alarm">Die Lautstärke kann nicht verringert werden, wenn der Alarm ertönt.</string>
+	<string name="description_volume_restrict_volume_timer">Die Lautstärke kann nicht verringert werden, wenn der Timer abgelaufen ist.</string>
 	<string name="description_dismiss_options_auto_dismiss_alarm">Beenden Sie den Alarm automatisch nach einer festgelegten Dauer.</string>
 	<string name="description_dismiss_options_auto_dismiss_timer">Der Timer wird nach einer festgelegten Dauer automatisch beendet.</string>
 	<string name="description_dismiss_options_dismiss_early">Deaktivieren Sie den Alarm frühzeitig, bevor er aktiv wird.</string>
 	<string name="description_dismiss_options_dismiss_early_notification">Eine Benachrichtigung anzeigen, wenn der Alarm vorzeitig beendet werden kann.</string>
 	<string name="description_dismiss_options_delete_after_dismissed_alarm">Nach dem Aufheben wird der Alarm gelöscht.</string>
 	<string name="description_dismiss_options_delete_after_dismissed_timer">Der Timer wird nach dem Schließen gelöscht.</string>
+	<string name="description_dismiss_options_volume_dismiss_alarm">Den Alarm durch Drücken der Lautstärketaste (Lauter/Leiser) ausschalten.</string>
+	<string name="description_dismiss_options_volume_dismiss_timer">Den Timer durch Drücken der Lautstärketaste (Lauter/Leiser) beenden.</string>
 	<string name="description_snooze_options_auto_snooze">Schalten Sie den Alarm nach einer festgelegten Dauer automatisch stummen.</string>
 	<string name="description_snooze_options_max_snooze">Maximale Anzahl der Schlummervorgänge des Alarms.</string>
 	<string name="description_snooze_options_snooze_duration">Zeitspanne für die Schlummerfunktion des Alarms.</string>
@@ -391,10 +428,13 @@
 	<string name="description_setting_general">Allgemeine Alarmeinstellungen</string>
 	<string name="description_setting_appearance">Passen Sie das Aussehen der App an</string>
 	<string name="description_setting_about">Informationen zur App</string>
+	<string name="description_setting_help">Bitte teilen Sie mir etwaige Probleme oder Verbesserungsvorschläge mit.</string>
 	<string name="description_setting_statistics">Sehen Sie, wie lange Sie geschlafen haben und mehr</string>
 	<string name="description_setting_manage_nfc_tags">Gespeicherte NFC-Tags löschen oder umbenennen</string>
 	<string name="description_setting_support">Für Unterstützung wäre ich sehr dankbar, aber bitte keinen Druck! Diese App wird immer kostenlos sein</string>
 	<string name="description_setting_import_export">Importieren oder exportieren Sie alle Ihre gespeicherten Daten</string>
+	<string name="description_toggle_alarms_with_airplane_mode_on">Aufgrund der Änderung des Flugmodus werden alle Alarme deaktiviert.</string>
+	<string name="description_toggle_alarms_with_airplane_mode_off">Alle Alarme werden aufgrund der Änderung des Flugmodus aktiviert.</string>
 	<string name="description_use_new_screen_true">Verwenden Sie den neuen Weckerbildschirm, auf dem Sie durch Wischen die Schlummerfunktion aktivieren oder den Wecker ausschalten können.</string>
 	<string name="description_use_new_screen_false">Verwenden Sie nicht den neuen Alarmbildschirm. Verwenden Sie den Originalbildschirm mit einfachen Schaltflächen zum Schlummern oder Deaktivieren des Alarms.</string>
 	<string name="description_alarm_screen_show_alarm_name_true">Zeigen Sie den Alarmnamen im Alarmbildschirm an.</string>
@@ -405,6 +445,8 @@
 	<string name="description_alarm_screen_show_music_info_false">Keine Musik- oder Klingeltoninformationen anzeigen.</string>
 	<string name="description_alarm_screen_battery_saver_true">Sparen Sie Akku, indem Sie den Bildschirm ausgeschaltet lassen, wenn ein Alarm aktiv ist. Der Bildschirm muss manuell eingeschaltet werden.</string>
 	<string name="description_alarm_screen_battery_saver_false">Der Bildschirm wird automatisch eingeschaltet, wenn ein Alarm aktiv ist.</string>
+	<string name="description_toggle_alarms_with_airplane_mode_true">Durch Aktivieren des Flugmodus werden alle Alarme deaktiviert, durch Deaktivieren werden sie wieder aktiviert. Hinweis: Die App muss im Vordergrund sein, damit dies funktioniert.</string>
+	<string name="description_toggle_alarms_with_airplane_mode_false">Alarme funktionieren weiterhin, egal ob der Flugmodus ein- oder ausgeschaltet ist.</string>
 	<string name="description_color_theme">Die Themenfarbe.</string>
 	<string name="description_color_name">z.B. Arbeit</string>
 	<string name="description_color_days">z.B. Mo &#8231; Di &#8231; Mi &#8231; Do &#8231; Fr</string>
@@ -422,6 +464,8 @@
 	<string name="description_show_hide_flashlight_button_false">Blenden Sie die Taschenlampentaste aus, wenn Sie einen Alarm erweitern.</string>
 	<string name="description_expand_new_alarm_true">Alarme, die mit der Schaltfläche „+“ kopiert oder erstellt wurden, werden erweitert.</string>
 	<string name="description_expand_new_alarm_false">Alarme werden nicht erweitert.</string>
+	<string name="description_start_week_on">Die in der erweiterten Alarmkarte angezeigte Woche beginnt an diesem Tag.</string>
+	<string name="description_next_alarm_format">Das Format, das verwendet werden soll, um anzuzeigen, wann der nächste Alarm ausgelöst wird.</string>
 	<string name="description_next_alarm_format_time_in">Nächster Alarm in 7 Stunden 30 Minuten</string>
 	<string name="description_next_alarm_format_time_on">Nächster Alarm am Mo. 7:00 Uhr</string>
 	<string name="description_permission_disable_battery_optimization">Die App wird nicht in den Ruhezustand versetzt, sodass Alarme wie gewohnt aktiviert werden können.</string>
@@ -436,6 +480,10 @@
 	<string name="description_permission_system_alert_window">Stellen Sie sicher, dass der Alarmbildschirm angezeigt wird, da dies für die Audiowiedergabe erforderlich ist, wenn die App im Hintergrund läuft und längere Zeit nicht verwendet wurde. Betrifft vermutlich nur Android 15.</string>
 	<string name="description_permission_boot">Stellen Sie Alarme wieder her, wenn Ihr Gerät eingeschaltet wird. Android löscht Alarme, wenn Ihr Gerät ausgeschaltet wird.</string>
 	<string name="description_permission_wakelock">Verhindern Sie den Ruhezustand Ihres Geräts, damit ein aktivierter Alarm weiterhin ausgelöst wird.</string>
+	<string name="message_debug_mode_on">Um ein Problem zu beheben, wird in eine Protokolldatei geschrieben. Dies kann die Leistung geringfügig beeinträchtigen.</string>
+	<string name="message_debug_mode_off">Es wird nicht in eine Protokolldatei geschrieben. Dies ist der Normalmodus.</string>
+	<string name="message_share_logs_with_developer">Senden Sie mir die Protokolldateien per E-Mail, damit ich die Ursache des Problems ermitteln kann.</string>
+	<string name="message_send_email">Bei Problemen, Fragen oder Anregungen können Sie mir gerne eine E-Mail schreiben.</string>
 	<string name="description_audio_sources_alarm">Der Audiokanal, auf dem der Alarm abgespielt werden soll.</string>
 	<string name="description_audio_sources_timer">Der Audiokanal, auf dem der Timer abgespielt werden soll.</string>
 	<string name="description_widget_alarm_example">Der in der Vorschau angezeigte Alarm ist nur ein Beispiel.</string>
@@ -470,6 +518,12 @@
 	<string name="cd_skip_next_alarm">Nächsten Alarm überspringen.</string>
 	<string name="cd_delete_alarm_after_dismissed">Alarm löschen, nachdem er abgewiesen wurde.</string>
 	<string name="cd_clock_widget_alarm_icon">Nächster Alarm</string>
+	<string name="cd_permission_check_mark">Häkchen, das anzeigt, dass die Genehmigung erteilt wurde.</string>
+	<string name="cd_request_permission_icon">Symbol für Berechtigungsanfrage</string>
+	<string name="cd_swipe">Wischen</string>
+	<string name="cd_long_press">Langes Drücken</string>
+	<string name="cd_customize">Anpassen</string>
+	<string name="cd_preference_icon">Einstellungssymbol</string>
 
 	<!-- Plurals -->
 	<plurals name="alarm">
@@ -565,6 +619,11 @@
 	<plurals name="number_of_snoozes_left">
 		<item quantity="one">(%1$d verbleibend)</item>
 		<item quantity="other">(%1$d verbleibend)</item>
+	</plurals>
+
+	<plurals name="import_cleared_media_due_to_not_found">
+		<item quantity="one">Medien in %1$d Alarm/Timer gelöscht, da Medien nicht gefunden wurden</item>
+		<item quantity="other">Medien in %1$d Alarmen/Timern gelöscht, da Medien nicht gefunden wurden</item>
 	</plurals>
 
 	<plurals name="tts_say_reminder">
