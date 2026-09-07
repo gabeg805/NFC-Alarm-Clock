@@ -32,7 +32,7 @@ android {
 		applicationId = "com.nfcalarmclock"
 		minSdk = 24
 		targetSdk = 36
-		versionCode = 607
+		versionCode = 608
 		versionName = "12.7.0"
 	}
 

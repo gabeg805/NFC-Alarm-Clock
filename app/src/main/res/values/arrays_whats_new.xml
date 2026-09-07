@@ -5,7 +5,7 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
-		<item>12.6.5-beta</item>
+		<item>12.7.0</item>
 		<item>Added button &lt;b> labels &lt;/b> to make it more obvious what buttons do. This can be changed in &lt;b> Settings > Appearance > Styles&lt;/b>.</item>
 		<item>Added option to toggle alarms on/off when &lt;b> airplane mode &lt;/b> is changed.</item>
 		<item>Added option to dismiss alarm with &lt;b> volume buttons.&lt;/b>.</item>
