@@ -48,7 +48,7 @@ abstract class NacLifecycleService
 		try
 		{
 			// Start the service in the foreground
-			NacLog.i("Starting foreground service", offsetIndex = 2)
+			NacLog.i("Starting foreground service", offsetIndex = 1)
 			unit()
 		}
 		catch (e: Exception)

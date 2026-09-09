@@ -93,15 +93,13 @@ fun Bundle.getAlarm(): NacAlarm?
 	{
 		this.classLoader = NacAlarm::class.java.classLoader
 
-		NacLog.i("Test offset index read alarm from bundle", offsetIndex = 2)
-
 		// Bundle compat handles SDK versioning and a bug in Android 13 that results in
 		// NullPointerException
 		BundleCompat.getParcelable(this, ALARM_PARCEL_NAME, NacAlarm::class.java)
 	}
 	catch (e: Exception)
 	{
-		NacLog.e("Unable to read alarm from bundle", throwable = e, offsetIndex = 2)
+		NacLog.e("Unable to read alarm from bundle", throwable = e, offsetIndex = 1)
 		null
 	}
 }
@@ -118,15 +116,13 @@ fun Bundle.getTimer(): NacTimer?
 		{
 			this.classLoader = NacTimer::class.java.classLoader
 
-			NacLog.i("Test offset index read timer from bundle", offsetIndex = 2)
-
 			// Bundle compat handles SDK versioning and a bug in Android 13 that results in
 			// NullPointerException
 			BundleCompat.getParcelable(this, TIMER_PARCEL_NAME, NacTimer::class.java)
 		}
 		catch (e: Exception)
 		{
-			NacLog.e("Unable to read timer from bundle", throwable = e, offsetIndex = 2)
+			NacLog.e("Unable to read timer from bundle", throwable = e, offsetIndex = 1)
 			null
 		}
 }
