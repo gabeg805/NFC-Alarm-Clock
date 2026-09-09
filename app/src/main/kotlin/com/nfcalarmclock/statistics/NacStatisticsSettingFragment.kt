@@ -410,7 +410,7 @@ class NacStatisticsSettingFragment
 		val title = getString(R.string.message_statistics_email_subject)
 		val subject = "$title $timestamp"
 
-		NacLog.i("Sending email with attachment : $attachment")
+		NacLog.i("Sending email with attachment=$attachment")
 
 		// Send the email
 		context.sendEmail(

@@ -461,6 +461,9 @@ class NacShowAlarmsFragment
 			i++
 		}
 
+		// Dismiss the snackbar
+		currentSnackbar?.dismiss()
+
 		// Cleanup
 		unregisterMyReceiver(requireContext(), timeTickReceiver)
 		nextAlarmMessageHandler.removeCallbacksAndMessages(null)

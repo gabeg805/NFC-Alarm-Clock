@@ -43,6 +43,8 @@ class NacClockWidgetProvider : AppWidgetProvider()
 			|| (intent?.action == Intent.ACTION_LOCALE_CHANGED)
 			|| (intent?.action == AlarmManager.ACTION_NEXT_ALARM_CLOCK_CHANGED))
 		{
+			NacLog.i("Widget provider onReceive(). Action=${intent.action}")
+
 			// Refresh all widgets
 			refreshAllWidgets(context)
 		}
@@ -56,6 +58,8 @@ class NacClockWidgetProvider : AppWidgetProvider()
 		appWidgetManager: AppWidgetManager,
 		appWidgetIds: IntArray)
 	{
+		NacLog.i("Widget provider onUpdate()")
+
 		// Refresh all widgets
 		refreshAllWidgets(
 			context,
@@ -74,7 +78,7 @@ internal fun refreshAllWidgets(
 	appWidgetIds: IntArray = appWidgetManager.getAppWidgetIds(ComponentName(context, NacClockWidgetProvider::class.java))
 )
 {
-	NacLog.i("Refreshing all widgets", offsetIndex = 1)
+	NacLog.i("Refreshing all widgets", offsetIndex = 2)
 
 	for (id in appWidgetIds)
 	{

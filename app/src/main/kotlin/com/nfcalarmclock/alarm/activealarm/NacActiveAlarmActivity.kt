@@ -369,7 +369,7 @@ class NacActiveAlarmActivity
 				return@launch
 			}
 
-			NacLog.i("Current num of NFC tags needed to dismiss : ${nfcTagsNeededToDismissList?.size} | Initial num : $initialSizeOfNfcTagsNeededToDismiss")
+			NacLog.i("NFC tags needed to dismiss. nfcSize=${nfcTagsNeededToDismissList?.size} | initialSize=$initialSizeOfNfcTagsNeededToDismiss")
 
 			// Size of the NFC tags dismiss list changed during the scan check.
 			// Save the list to the alarm and update the database
@@ -551,7 +551,7 @@ class NacActiveAlarmActivity
 		// Already been setup
 		if (nfcTagsNeededToDismissList != null)
 		{
-			NacLog.i("NFC tags needed to dismiss already setup : ${nfcTagsNeededToDismissList!!.size}")
+			NacLog.i("NFC tags needed to dismiss already setup. size=${nfcTagsNeededToDismissList!!.size}")
 
 			// Set the size of the list
 			initialSizeOfNfcTagsNeededToDismiss = nfcTagsNeededToDismissList!!.size
@@ -561,7 +561,7 @@ class NacActiveAlarmActivity
 		// Find the current list of NFC tags that need to be dismissed
 		val currentNfcTagsNeededToDismiss = alarmViewModel.findCurrentNfcTagsNeededToDismiss(alarm!!.id)
 
-		NacLog.i("Current NFC tags needed to dismiss : ${currentNfcTagsNeededToDismiss.toNfcIdList().size}")
+		NacLog.i("Current NFC tags needed to dismiss. size=${currentNfcTagsNeededToDismiss.toNfcIdList().size}")
 
 		// The current list has not been saved yet
 		if (currentNfcTagsNeededToDismiss.isEmpty())
@@ -574,7 +574,7 @@ class NacActiveAlarmActivity
 			val upToDateAlarm = alarmViewModel.findAlarm(alarm!!.id)
 			alarm = upToDateAlarm ?: alarm
 
-			NacLog.i("Writing the updated list of NFC tags needed to dismiss to the db :  ${alarm!!.isActive} | ${nfcTagsNeededToDismissList?.size}")
+			NacLog.i("Writing the updated list of NFC tags needed to dismiss to the db. isActive=${alarm!!.isActive} | nfcSize=${nfcTagsNeededToDismissList?.size}")
 
 			// Save the list to the alarm and update the database
 			alarm!!.currentNfcTagsNeededToDismiss = nfcTagsNeededToDismissList!!.toNfcIdString()
@@ -589,7 +589,7 @@ class NacActiveAlarmActivity
 				.toMutableList()
 		}
 
-		NacLog.i("Final setup of NFC tags needed to dismiss : ${nfcTagsNeededToDismissList!!.size}")
+		NacLog.i("Final setup of NFC tags needed to dismiss. nfcSize=${nfcTagsNeededToDismissList!!.size}")
 
 		// Set the size of the list
 		initialSizeOfNfcTagsNeededToDismiss = nfcTagsNeededToDismissList!!.size

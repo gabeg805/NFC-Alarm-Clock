@@ -766,7 +766,7 @@ open class NacAlarm()
 			NacCalendar.getNextAlarmDay(this)!!
 		}
 
-		NacLog.i("Next cal : ${calendarToString(nextCal, "EEE MMM dd HH:mm:ss z yyyy")} | Days to run before : $repeatFrequencyDaysToRunBeforeStarting | Days : $days")
+		NacLog.i("nextCal=${calendarToString(nextCal, "EEE MMM dd HH:mm:ss z yyyy")} | daysToRunBefore=$repeatFrequencyDaysToRunBeforeStarting | days=$days")
 
 		// Ensure that the days to run before starting does not have any extra
 		// days selected. These would be days that do not match the alarm days.
@@ -817,11 +817,11 @@ open class NacAlarm()
 
 		// Create a calendar from the alarm
 		val alarmCal = NacCalendar.alarmToCalendar(this)
-		NacLog.i("addRepeatFrequency initial cal : ${calendarToString(alarmCal, "EEE MMM dd HH:mm:ss z yyyy")}")
+		NacLog.i("addRepeatFrequency initial cal=${calendarToString(alarmCal, "EEE MMM dd HH:mm:ss z yyyy")}")
 
 		// Add the repeat frequency to the calendar
 		alarmCal.add(repeatFrequencyUnits.toCalendarField(), repeatFrequency)
-		NacLog.i("addRepeatFrequency after add cal : ${calendarToString(alarmCal, "EEE MMM dd HH:mm:ss z yyyy")}")
+		NacLog.i("addRepeatFrequency after add cal=${calendarToString(alarmCal, "EEE MMM dd HH:mm:ss z yyyy")}")
 
 		// Check repeat frequency units
 		when (repeatFrequencyUnits)

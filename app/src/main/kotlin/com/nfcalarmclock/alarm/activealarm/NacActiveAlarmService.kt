@@ -375,7 +375,7 @@ class NacActiveAlarmService
 			NacUpcomingReminderService.stopService(this, alarm)
 		}
 
-		NacLog.i("Preparing active alarm service action : $intentAction")
+		NacLog.i("Preparing active alarm service. Action=$intentAction")
 
 		// Check the intent action
 		when (intentAction)
@@ -578,7 +578,7 @@ class NacActiveAlarmService
 			// Update the time the alarm was active
 			alarm!!.timeActive += System.currentTimeMillis() - startTime
 
-			NacLog.i("Snoozing the active alarm service : ${alarm!!.id} | ${alarm!!.timeActive}")
+			NacLog.i("Snoozing the active alarm service: id=${alarm!!.id} | timeActive=${alarm!!.timeActive}")
 
 			// Update the alarm, write to the stats table, and reschedule the alarm
 			alarmRepository.update(alarm!!)
@@ -646,7 +646,7 @@ class NacActiveAlarmService
 		alarmRepository.findAlarmLiveData(alarm!!.id).observe(this) { a ->
 			if (a?.currentNfcTagsNeededToDismiss?.isNotEmpty() == true)
 			{
-				NacLog.i("Updating current nfc tags : ${a.currentNfcTagsNeededToDismiss.toNfcIdList().size}")
+				NacLog.i("Updating current nfc tags: ${a.currentNfcTagsNeededToDismiss.toNfcIdList().size}")
 				alarm!!.currentNfcTagsNeededToDismiss = a.currentNfcTagsNeededToDismiss
 			}
 		}

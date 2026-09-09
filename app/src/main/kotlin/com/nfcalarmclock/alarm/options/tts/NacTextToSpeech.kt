@@ -91,14 +91,14 @@ class NacTextToSpeech(
 		@Deprecated("Deprecated in Java")
 		override fun onError(utteranceId: String)
 		{
-			NacLog.e("On speaking error : $utteranceId")
+			NacLog.e("On speaking error. utteranceId=$utteranceId")
 		}
 
 		/**
 		 */
 		override fun onError(utteranceId: String, errorCode: Int)
 		{
-			NacLog.e("On speaking error : $utteranceId | $errorCode")
+			NacLog.e("On speaking error. utteranceId=$utteranceId | errorCode=$errorCode")
 		}
 
 	}

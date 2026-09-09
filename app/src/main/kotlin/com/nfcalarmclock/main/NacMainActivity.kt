@@ -986,7 +986,7 @@ class NacMainActivity
 		// Destination changed listener
 		navController.addOnDestinationChangedListener { _, destination, bundle ->
 
-			NacLog.i("Navigating to destination : $destination")
+			NacLog.i("Navigating to destination. $destination")
 
 			// Previous destination was onboarding
 			if (bundle?.getBoolean(NacOnboardingFragment.ONBOARDING_NAV_KEY) == true)
@@ -1183,7 +1183,7 @@ class NacMainActivity
 				// Normal navigate up
 				else
 				{
-					NacLog.i("Navigating up from : ${navController.currentDestination}")
+					NacLog.i("Navigating up from destination=${navController.currentDestination}")
 					navController.navigateUp(appBarConfiguration)
 				}
 

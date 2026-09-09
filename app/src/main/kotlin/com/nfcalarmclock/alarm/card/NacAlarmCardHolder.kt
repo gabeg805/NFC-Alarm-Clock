@@ -1783,7 +1783,7 @@ class NacAlarmCardHolder(root: View)
 									alarm!!.days = EnumSet.of(day)
 									dayOfWeek.setDays(alarm!!.days)
 
-									NacLog.i("Custom repeat frequency. Only active : $day")
+									NacLog.i("Custom repeat frequency only 1 day can be active. day=$day")
 								}
 							}
 						}
@@ -1793,7 +1793,7 @@ class NacAlarmCardHolder(root: View)
 					}
 				}
 
-				NacLog.i("Repeat : ${alarm!!.repeatFrequency} | ${alarm!!.repeatFrequencyUnits}")
+				NacLog.i("repeatFreq=${alarm!!.repeatFrequency} | repeatFreqUnits=${alarm!!.repeatFrequencyUnits}")
 
 				// Clear the date
 				alarm!!.date = ""
