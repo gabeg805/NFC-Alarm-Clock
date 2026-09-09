@@ -5,6 +5,13 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.1</item>
+		<item>Corrigido o problema de intermitência da &lt;b>lanterna&lt;/b>, onde as durações de ligar/desligar estavam vazias.</item>
+		<item>Corrigido o artefato visual que estava sendo exibido no &lt;b>Android 15&lt;/b>.</item>
+		<item>Corrigido problema com alarme/temporizador que afetava o &lt;b>Android 13&lt;/b>.</item>
+		<item>Corrigido o problema que causava a tentativa de atualização de &lt;b>widgets&lt;/b> quando o dispositivo estava bloqueado.</item>
+		<item>Corrigido o problema que exibia a caixa de diálogo &lt;b>hora&lt;/b> após a mudança de orientação da tela ou o fechamento do aplicativo, o que causava uma falha.</item>
+		<item>O &lt;b>modo de depuração&lt;/b> foi atualizado para fornecer registros mais informativos.</item>
 		<item>12.7.0</item>
 		<item>Adicionamos rótulos aos botões para tornar mais óbvio o que cada botão faz. Isso pode ser alterado em &lt;b>Configurações > Aparência > Estilos&lt;/b>.</item>
 		<item>Adicionada opção para ativar/desativar alarmes quando o &lt;b>modo avião&lt;/b> for alterado.</item>

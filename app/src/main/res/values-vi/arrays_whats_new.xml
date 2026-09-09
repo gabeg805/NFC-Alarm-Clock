@@ -5,6 +5,13 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.1</item>
+		<item>Đã khắc phục sự cố nhấp nháy của &lt;b>đèn pin&lt;/b> khi thời gian bật/tắt bị trống.</item>
+		<item>Đã khắc phục lỗi hiển thị hình ảnh bất thường trong &lt;b>Android 15&lt;/b>.</item>
+		<item>Đã khắc phục sự cố báo thức/hẹn giờ ảnh hưởng đến &lt;b>Android 13&lt;/b>.</item>
+		<item>Đã khắc phục lỗi cố gắng làm mới &lt;b>widget&lt;/b> khi thiết bị bị khóa.</item>
+		<item>Đã khắc phục lỗi hiển thị hộp thoại &lt;b>thời gian&lt;/b> sau khi màn hình thay đổi hướng hoặc ứng dụng bị đóng, dẫn đến sự cố treo máy.</item>
+		<item>Đã cập nhật &lt;b>chế độ gỡ lỗi&lt;/b> để có nhật ký chi tiết hơn.</item>
 		<item>12.7.0</item>
 		<item>Đã thêm nhãn cho nút để làm rõ hơn chức năng của các nút. Bạn có thể thay đổi điều này trong &lt;b>Cài đặt > Giao diện > Kiểu dáng&lt;/b>.</item>
 		<item>Đã thêm tùy chọn bật/tắt báo thức khi chế độ &lt;b>máy bay&lt;/b> được thay đổi.</item>

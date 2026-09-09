@@ -1,0 +1,6 @@
+Fixed flashlight blink issue where on/off durations were empty.
+Fixed visual artifact being shown in Android 15.
+Fixed alarm/timer issue affecting Android 13.
+Fixed attempting to refresh widgets when device is locked.
+Fixed showing time dialog after screen changed orientation or the app was closed, resulting in a crash.
+Updated debug mode to have more informative logs.

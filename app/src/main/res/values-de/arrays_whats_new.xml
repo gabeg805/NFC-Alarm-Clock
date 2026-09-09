@@ -5,6 +5,13 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.1</item>
+		<item>Problem mit dem Blinken der &lt;b>Taschenlampe&lt;/b> behoben, bei dem die Ein-/Ausschaltzeiten leer waren.</item>
+		<item>Behebung eines visuellen Artefakts in &lt;b>Android 15&lt;/b>.</item>
+		<item>Problem mit Alarm/Timer behoben, das &lt;b>Android 13&lt;/b> betraf.</item>
+		<item>Problem behoben: Versuch, &lt;b>Widgets&lt;/b> zu aktualisieren, wenn das Gerät gesperrt ist.</item>
+		<item>Behoben wurde das Problem, dass nach einer Änderung der Bildschirmausrichtung oder dem Schließen der App der &lt;b>Zeitdialog&lt;/b> angezeigt wurde, was zu einem Absturz führte.</item>
+		<item>Aktualisierter &lt;b>Debug-Modus&lt;/b>, um aussagekräftigere Protokolle zu erhalten.</item>
 		<item>12.7.0</item>
 		<item>Schaltflächen wurden Beschriftungen hinzugefügt, um die Funktion der Schaltflächen deutlicher zu machen. Dies kann unter Einstellungen > Darstellung > Stile geändert werden.</item>
 		<item>Es wurde eine Option hinzugefügt, um Alarme ein- und auszuschalten, wenn &lt;b>Flugmodus&lt;/b> geändert wird.</item>

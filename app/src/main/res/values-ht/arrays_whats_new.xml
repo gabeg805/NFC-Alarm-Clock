@@ -5,6 +5,13 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.1</item>
+		<item>Pwoblèm &lt;b>flach&lt;/b> la te rezoud kote dire limen/etenn yo te vid.</item>
+		<item>Pwoblèm atifak vizyèl ki te parèt nan &lt;b>Android 15&lt;/b> la korije.</item>
+		<item>Pwoblèm alam/minit ki afekte &lt;b>Android 13&lt;/b> la rezoud.</item>
+		<item>Pwoblèm nan rezoud lè aparèy la te bloke paske yo t ap eseye rafrechi &lt;b>widjèt yo&lt;/b>.</item>
+		<item>Pwoblèm nan te korije lè dyalòg &lt;b>tan&lt;/b> la te parèt apre ekran an te chanje oryantasyon oubyen aplikasyon an te fèmen, sa ki te lakòz yon aksidan.</item>
+		<item>Mizajou &lt;b>mòd debogaj&lt;/b> pou gen plis enfòmasyon sou jounal yo.</item>
 		<item>12.7.0</item>
 		<item>Yo ajoute &lt;b> etikèt bouton &lt;/b> pou fè li pi klè sa bouton yo fè. Ou ka chanje sa nan &lt;b> Anviwònman > Aparans > Stil&lt;/b>.</item>
 		<item>Te ajoute opsyon pou aktive/dezaktive alam yo lè &lt;b> mòd avyon &lt;/b> chanje.</item>

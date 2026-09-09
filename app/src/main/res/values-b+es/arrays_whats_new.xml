@@ -5,6 +5,13 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.1</item>
+		<item>Se solucionó el problema de parpadeo de la &lt;b>linterna&lt;/b>, donde las duraciones de encendido/apagado estaban vacías.</item>
+		<item>Se ha corregido un artefacto visual que se mostraba en &lt;b>Android 15&lt;/b>.</item>
+		<item>Se solucionó un problema con la alarma/temporizador que afectaba a &lt;b>Android 13&lt;/b>.</item>
+		<item>Se solucionó el problema que provocaba que se intentaran actualizar los &lt;b>widgets&lt;/b> cuando el dispositivo estaba bloqueado.</item>
+		<item>Se solucionó el problema que mostraba el cuadro de diálogo &lt;b>hora&lt;/b> después de que la orientación de la pantalla cambiara o se cerrara la aplicación, lo que provocaba un fallo.</item>
+		<item>Se ha actualizado el &lt;b>modo de depuración&lt;/b> para que los registros sean más informativos.</item>
 		<item>12.7.0</item>
 		<item>Se han añadido &lt;b> etiquetas &lt;/b>a los botones para que sea más obvio lo que hacen. Esto se puede cambiar en &lt;b> Ajustes > Apariencia > Estilos&lt;/b>.</item>
 		<item>Se agregó la opción de activar/desactivar las alarmas cuando se cambia el &lt;b>modo avión&lt;/b>.</item>
