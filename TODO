@@ -2,6 +2,10 @@
 TODO
 ----
 
+* Make new alarm screen snooze positioning better
+
+* Add blackout times for repeat frequency
+
 * Think of a better way to handle the was NFC just scanned preference logic.
 
 * Update website with f-droid and izzy

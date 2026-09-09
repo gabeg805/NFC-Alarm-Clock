@@ -1,14 +1,13 @@
 package com.nfcalarmclock.settings
 
-import android.app.Activity
 import android.os.Bundle
 import androidx.preference.Preference
 import com.nfcalarmclock.BuildConfig
 import com.nfcalarmclock.R
+import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.system.permission.ignorebatteryoptimization.NacIgnoreBatteryOptimizationPermission
 import com.nfcalarmclock.system.permission.postnotifications.NacPostNotificationsPermission
 import com.nfcalarmclock.system.permission.readmediaaudio.NacReadMediaAudioPermission
-import com.nfcalarmclock.system.permission.scheduleexactalarm.NacScheduleExactAlarmPermission
 import com.nfcalarmclock.system.permission.systemalertwindow.NacSystemAlertWindowPermission
 import com.nfcalarmclock.view.quickToast
 import com.nfcalarmclock.whatsnew.NacWhatsNewDialog
@@ -25,6 +24,8 @@ class NacAboutSettingFragment
 	 */
 	override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?)
 	{
+		NacLog.i("Creating about settings screen")
+
 		// Inflate the XML file and add the hierarchy to the current preference
 		addPreferencesFromResource(R.xml.about_preferences)
 
@@ -41,6 +42,7 @@ class NacAboutSettingFragment
 	 */
 	override fun onPreferenceTreeClick(preference: Preference): Boolean
 	{
+		val activity = requireActivity()
 		val context = requireContext()
 		val preferenceKey = preference.key
 
@@ -70,6 +72,7 @@ class NacAboutSettingFragment
 			val dialog = NacWhatsNewDialog()
 
 			// Show the What's New dialog
+			NacLog.i("Showing what's new dialog")
 			dialog.show(childFragmentManager, NacWhatsNewDialog.TAG)
 		}
 		// Disable battery optimization
@@ -79,13 +82,13 @@ class NacAboutSettingFragment
 			// Show toast to the user saying that the app already has the permission
 			if (NacIgnoreBatteryOptimizationPermission.hasPermission(context))
 			{
+				NacLog.i("App already has ignore battery optimization permission")
 				quickToast(context, messageId)
 			}
 			// Request the permission
 			else
 			{
-				val activity: Activity = requireActivity()
-
+				NacLog.i("Requestion ignore battery optimization permission")
 				NacIgnoreBatteryOptimizationPermission.requestPermission(activity)
 			}
 
@@ -93,6 +96,7 @@ class NacAboutSettingFragment
 		// NFC
 		else if (preferenceKey == nfcKey)
 		{
+			NacLog.i("App already has NFC permission")
 			quickToast(context, messageId)
 		}
 		// Storage
@@ -102,13 +106,13 @@ class NacAboutSettingFragment
 			// Show toast to the user saying that the app already has the permission
 			if (NacReadMediaAudioPermission.hasPermission(context))
 			{
+				NacLog.i("App already has read media audio permission")
 				quickToast(context, messageId)
 			}
 			// Request the permission
 			else
 			{
-				val activity: Activity = requireActivity()
-
+				NacLog.i("Requestion read media audio permission")
 				NacReadMediaAudioPermission.requestPermission(activity, 0)
 			}
 
@@ -116,37 +120,31 @@ class NacAboutSettingFragment
 		// Vibrate
 		else if (preferenceKey == vibrateKey)
 		{
+			NacLog.i("App already has vibrate permission")
 			quickToast(context, messageId)
 		}
 		// Foreground service
 		else if (preferenceKey == foregroundServiceKey)
 		{
+			NacLog.i("App already has foreground service permission")
 			quickToast(context, messageId)
 		}
 		// Full screen
 		else if (preferenceKey == fullScreenKey)
 		{
+			NacLog.i("App already has full screen permission")
 			quickToast(context, messageId)
 		}
 		// Schedule exact alarms
 		else if (preferenceKey == scheduleAlarmsKey)
 		{
-
-			// Show toast to the user saying that the app already has the permission
-			if (NacScheduleExactAlarmPermission.hasPermission(context))
-			{
-				quickToast(context, messageId)
-			}
-			// Request the permission
-			else
-			{
-				NacScheduleExactAlarmPermission.requestPermission(requireActivity())
-			}
-
+			NacLog.i("App already has schedule exact alarms permission")
+			quickToast(context, messageId)
 		}
 		// Set alarm
 		else if (preferenceKey == setAlarmKey)
 		{
+			NacLog.i("App already has set alarm permission")
 			quickToast(context, messageId)
 		}
 		// Show notifications
@@ -156,13 +154,13 @@ class NacAboutSettingFragment
 			// Show toast to the user saying that the app already has the permission
 			if (NacPostNotificationsPermission.hasPermission(context))
 			{
+				NacLog.i("App already has post notifications permission")
 				quickToast(context, messageId)
 			}
 			// Request the permission
 			else
 			{
-				val activity: Activity = requireActivity()
-
+				NacLog.i("Requestion post notifications permission")
 				NacPostNotificationsPermission.requestPermission(activity, 0)
 			}
 
@@ -174,13 +172,13 @@ class NacAboutSettingFragment
 			// Show toast to the user saying that the app already has the permission
 			if (NacSystemAlertWindowPermission.hasPermission(context))
 			{
+				NacLog.i("App already has system alert window permission")
 				quickToast(context, messageId)
 			}
 			// Request the permission
 			else
 			{
-				val activity: Activity = requireActivity()
-
+				NacLog.i("Requestion system alert window permission")
 				NacSystemAlertWindowPermission.requestPermission(activity)
 			}
 
@@ -188,11 +186,13 @@ class NacAboutSettingFragment
 		// Startup
 		else if (preferenceKey == startupKey)
 		{
+			NacLog.i("App already has startup permission")
 			quickToast(context, messageId)
 		}
 		// Wakelock
 		else if (preferenceKey == wakelockKey)
 		{
+			NacLog.i("App already has wakelock permission")
 			quickToast(context, messageId)
 		}
 

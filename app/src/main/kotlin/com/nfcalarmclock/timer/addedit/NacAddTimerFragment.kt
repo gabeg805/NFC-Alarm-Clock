@@ -6,6 +6,7 @@ import androidx.activity.OnBackPressedCallback
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.nfcalarmclock.R
+import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.timer.db.NacTimer
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -29,11 +30,13 @@ class NacAddTimerFragment
 				// No timers so go back to show alarms fragment
 				if (timerViewModel.count() == 0)
 				{
+					NacLog.i("No timers so going back to show alarms fragment")
 					findNavController().navigate(R.id.action_global_nacShowAlarmsFragment)
 				}
 				// Normal pop back stack
 				else
 				{
+					NacLog.i("Timers exist so normal back stack pop")
 					findNavController().popBackStack()
 				}
 
@@ -56,6 +59,7 @@ class NacAddTimerFragment
 	override fun navigateToMediaPicker(bundle: Bundle)
 	{
 		// Navigate to the media picker
+		NacLog.i("Navigating to media picker")
 		findNavController().navigate(R.id.action_nacAddTimerFragment_to_nacTimerMainMediaPickerFragment, bundle)
 	}
 
@@ -66,6 +70,8 @@ class NacAddTimerFragment
 	{
 		// Super
 		super.onStop()
+
+		NacLog.i("Stopping add timer fragment")
 
 		// Remove the back press callback
 		onBackPressedCallback.remove()

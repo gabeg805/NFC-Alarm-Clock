@@ -36,38 +36,38 @@ object NacLog
 	/**
 	 * Information on where this log message was called.
 	 */
-	private val callerInfo: String
-		get()
+	private fun callerInfo(offsetIndex: Int = 0): String
+	{
+		// Get the current stack trace
+		val stackTrace = Thread.currentThread().stackTrace
+
+		// Find the index where this class is being used
+		val index = stackTrace.indexOfFirst { it.className == NacLog::class.java.name }
+
+		// In a method so get the class name and method, such as:
+		// NacMainActivity:onCreate
+		return if ((index > 0) && (index+2+offsetIndex in stackTrace.indices))
 		{
-			// Get the current stack trace
-			val stackTrace = Thread.currentThread().stackTrace
+			val maxLength = 30
+			val element = stackTrace[index+2+offsetIndex]
+			val className = element.className.substringAfterLast('.')
+			val methodName = element.methodName
 
-			// Find the index where this class is being used
-			val index = stackTrace.indexOfFirst { it.className == NacLog::class.java.name }
-
-			// In a method so get the class name and method, such as:
-			// NacMainActivity:onCreate
-			return if ((index > 0) && (index+2 in stackTrace.indices))
-			{
-				val maxLength = 30
-				val element = stackTrace[index+2]
-				val className = element.className.substringAfterLast('.')
-				val methodName = element.methodName
-
-				// Return
-				"${className.padEnd(maxLength, ' ').substring(0, maxLength)}  ${methodName.padEnd(maxLength, ' ').substring(0, maxLength)}"
-			}
-			// Default to returning the global tag when the stack has not been setup yet
-			else
-			{
-				GLOBAL_TAG
-			}
+			// Return
+			"${className.padEnd(maxLength, ' ').substring(0, maxLength)}  ${methodName.padEnd(maxLength, ' ').substring(0, maxLength)}"
 		}
+		// Default to returning the global tag when the stack has not been setup yet
+		else
+		{
+			GLOBAL_TAG
+		}
+	}
 
 	/**
 	 * Close the logger.
 	 */
-	fun close() {
+	fun close()
+	{
 		try
 		{
 			// Flush the buffer to write it to the log and then close the logger
@@ -82,7 +82,7 @@ object NacLog
 	/**
 	 * Debug log message.
 	 */
-	fun d(message: String)
+	fun d(message: String, offsetIndex: Int = 0)
 	{
 		// Do not log
 		if (!shouldWriteToLog)
@@ -91,13 +91,13 @@ object NacLog
 		}
 
 		// Log to file
-		logToFile(Level.FINE, "$callerInfo  $message")
+		logToFile(Level.FINE, "${callerInfo(offsetIndex)}  $message")
 	}
 
 	/**
 	 * Error log message.
 	 */
-	fun e(message: String, throwable: Throwable? = null)
+	fun e(message: String, throwable: Throwable? = null, offsetIndex: Int = 0)
 	{
 		// Do not log
 		if (!shouldWriteToLog)
@@ -107,13 +107,13 @@ object NacLog
 
 
 		// Log to file
-		logToFile(Level.SEVERE, "$callerInfo  $message", throwable)
+		logToFile(Level.SEVERE, "${callerInfo(offsetIndex)}  $message", throwable)
 	}
 
 	/**
 	 * Info log message.
 	 */
-	fun i(message: String, throwable: Throwable? = null)
+	fun i(message: String, throwable: Throwable? = null, offsetIndex: Int = 0)
 	{
 		// Do not log
 		if (!shouldWriteToLog)
@@ -123,7 +123,7 @@ object NacLog
 
 
 		// Log to file
-		logToFile(Level.INFO, "$callerInfo  $message", throwable)
+		logToFile(Level.INFO, "${callerInfo(offsetIndex)}  $message", throwable)
 	}
 
 	/**
@@ -242,7 +242,7 @@ object NacLog
 	/**
 	 * Warning log message.
 	 */
-	fun w(message: String, throwable: Throwable? = null)
+	fun w(message: String, throwable: Throwable? = null, offsetIndex: Int = 0)
 	{
 		// Do not log
 		if (!shouldWriteToLog)
@@ -252,7 +252,7 @@ object NacLog
 
 
 		// Log to file
-		logToFile(Level.WARNING, "$callerInfo  $message", throwable)
+		logToFile(Level.WARNING, "${callerInfo(offsetIndex)}  $message", throwable)
 	}
 
 }

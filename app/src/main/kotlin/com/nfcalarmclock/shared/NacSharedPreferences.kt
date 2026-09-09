@@ -1017,7 +1017,7 @@ class NacSharedPreferences(context: Context)
 			val key = resources.getString(R.string.key_default_alarm_flashlight_off_duration)
 			val defaultValue = "1"
 
-			return instance.getString(key, defaultValue) ?: ""
+			return instance.getString(key, defaultValue) ?: defaultValue
 		}
 		set(value)
 		{
@@ -1035,7 +1035,7 @@ class NacSharedPreferences(context: Context)
 			val key = resources.getString(R.string.key_default_timer_flashlight_off_duration)
 			val defaultValue = "1"
 
-			return instance.getString(key, defaultValue) ?: ""
+			return instance.getString(key, defaultValue) ?: defaultValue
 		}
 		set(value)
 		{
@@ -1053,7 +1053,7 @@ class NacSharedPreferences(context: Context)
 			val key = resources.getString(R.string.key_default_alarm_flashlight_on_duration)
 			val defaultValue = "1"
 
-			return instance.getString(key, defaultValue) ?: ""
+			return instance.getString(key, defaultValue) ?: defaultValue
 		}
 		set(value)
 		{
@@ -1071,7 +1071,7 @@ class NacSharedPreferences(context: Context)
 			val key = resources.getString(R.string.key_default_timer_flashlight_on_duration)
 			val defaultValue = "1"
 
-			return instance.getString(key, defaultValue) ?: ""
+			return instance.getString(key, defaultValue) ?: defaultValue
 		}
 		set(value)
 		{
@@ -3046,24 +3046,6 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
-	 * Whether the SCHEDULE_EXACT_ALARM permission was requested.
-	 */
-	var wasScheduleExactAlarmPermissionRequested: Boolean
-		get()
-		{
-			val key = resources.getString(R.string.key_permission_schedule_exact_alarm_requested)
-			val defaultValue = false
-
-			return instance.getBoolean(key, defaultValue)
-		}
-		set(value)
-		{
-			val key = resources.getString(R.string.key_permission_schedule_exact_alarm_requested)
-
-			saveBoolean(key, value)
-		}
-
-	/**
 	 * Whether the SYSTEM_ALERT_WINDOW permission was requested.
 	 */
 	var wasSystemAlertWindowPermissionRequested: Boolean
@@ -3134,6 +3116,8 @@ class NacSharedPreferences(context: Context)
 	{
 		return listOf(
 			resources.getString(R.string.key_app_first_run),
+			resources.getString(R.string.key_app_should_show_onboarding_screen),
+			resources.getString(R.string.key_app_should_write_to_log),
 			resources.getString(R.string.key_main_should_refresh_activity),
 			resources.getString(R.string.key_main_card_height_collapsed),
 			resources.getString(R.string.key_main_card_height_collapsed_dismiss),

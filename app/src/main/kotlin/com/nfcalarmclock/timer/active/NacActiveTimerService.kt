@@ -438,12 +438,14 @@ class NacActiveTimerService
 			// naturally close the notification (by replacing it)
 			if (notificationId == foregroundNotificationId)
 			{
+				NacLog.i("Changing foreground notification timer to another, since current timer is done?")
 				val newForegroundTimer = allTimers.first { it.id != timer.id }
 				updateNotification(newForegroundTimer, foreground = true)
 			}
 			// Close the notification
 			else
 			{
+				NacLog.i("Closing foreground notification timer")
 				val notificationManagerCompat = NotificationManagerCompat.from(this)
 				notificationManagerCompat.cancel(notificationId)
 			}
@@ -452,6 +454,7 @@ class NacActiveTimerService
 		// Stop the service when no timers are using it
 		if (shouldStop && allTimers.isEmpty())
 		{
+			NacLog.i("Stopping active timer service as all timers are done")
 			stopThisService()
 		}
 	}
@@ -497,11 +500,13 @@ class NacActiveTimerService
 			// Repeat timer
 			if (timer.shouldRepeat)
 			{
+				NacLog.i("Timer should repeat, so repeating active timer service")
 				startTimerService(this@NacActiveTimerService, timer)
 			}
 			// Timer does not repeat and there are no more timers using the service
 			else if (allTimers.isEmpty())
 			{
+				NacLog.i("No more timers. Stopping active timer service")
 				stopThisService()
 			}
 
@@ -590,6 +595,8 @@ class NacActiveTimerService
 		// Super
 		super.onBind(intent)
 
+		NacLog.i("Active timer service is bound")
+
 		// Set the bound flag
 		isBound = true
 
@@ -604,6 +611,8 @@ class NacActiveTimerService
 	{
 		// Super
 		super.onCreate()
+
+		NacLog.i("Creating active timer service")
 
 		// Enable the activity alias so that tapping an NFC tag will open the main
 		// activity
@@ -648,6 +657,8 @@ class NacActiveTimerService
 	{
 		// Super
 		super.onStartCommand(intent, flags, startId)
+
+		NacLog.i("Starting active timer service. Action=${intent?.action}")
 
 		// Attempt to get the timer from the intent
 		val timer = intent?.getTimer()
@@ -895,6 +906,8 @@ class NacActiveTimerService
 			@RequiresPermission(Manifest.permission.POST_NOTIFICATIONS)
 			override fun onFinish()
 			{
+				NacLog.i("Timer countdown is finished")
+
 				// Set the milliseconds until finished
 				this@NacActiveTimerService.allMillisUntilFinished[timer.id] = 0
 
@@ -1023,6 +1036,8 @@ class NacActiveTimerService
 			return
 		}
 
+		NacLog.i("Waiting for timer auto dismiss (${timer.id})")
+
 		// Amount of time until the timer is automatically dismissed
 		val delay = timer.autoDismissTime*1000L
 
@@ -1031,6 +1046,8 @@ class NacActiveTimerService
 
 		// Automatically dismiss the timer
 		handler.postDelayed({
+
+			NacLog.i("Timer was auto dismissed (${timer.id})")
 
 			// TODO: Should show missed timer notification?
 			// Auto dismiss the timer. This will stop the service

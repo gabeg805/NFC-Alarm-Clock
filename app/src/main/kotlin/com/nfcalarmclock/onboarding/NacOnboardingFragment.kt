@@ -19,7 +19,6 @@ import com.nfcalarmclock.R
 import com.nfcalarmclock.onboarding.NacOnboardingWelcomePageFragment.Companion.GET_STARTED_CLICK_REQUEST_KEY
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.permission.postnotifications.NacPostNotificationsPermission
-import com.nfcalarmclock.system.permission.scheduleexactalarm.NacScheduleExactAlarmPermission
 import com.nfcalarmclock.system.permission.systemalertwindow.NacSystemAlertWindowPermission
 
 /**
@@ -145,7 +144,6 @@ class NacOnboardingFragment : Fragment()
 			// API 35 = Notification and System Alert
 			// API 36 = Notification
 			if (NacPostNotificationsPermission.shouldRequestPermission(context, sharedPreferences)
-				|| NacScheduleExactAlarmPermission.shouldRequestPermission(context, sharedPreferences)
 				|| NacSystemAlertWindowPermission.shouldRequestPermission(context, sharedPreferences))
 			{
 				viewPager.currentItem = 1

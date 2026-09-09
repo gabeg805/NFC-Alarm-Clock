@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.android.material.button.MaterialButton
 import com.nfcalarmclock.R
+import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.view.dialog.NacBottomSheetDialogFragment
 
 class NacImportExportDialog
@@ -45,6 +46,7 @@ class NacImportExportDialog
 		container: ViewGroup?,
 		savedInstanceState: Bundle?): View?
 	{
+		NacLog.i("Creating import/export dialog")
 		return inflater.inflate(R.layout.dlg_import_export, container, false)
 	}
 
@@ -63,6 +65,8 @@ class NacImportExportDialog
 		// Setup the export button
 		setupPrimaryButton(exportButton, listener = {
 
+			NacLog.i("Clicked export button")
+
 			// Call the listener
 			onExportListener?.onExport()
 
@@ -73,6 +77,8 @@ class NacImportExportDialog
 
 		// Setup the import button
 		setupSecondaryButton(importButton, listener = {
+
+			NacLog.i("Clicked import button")
 
 			// Call the listener
 			onImportListener?.onImport()

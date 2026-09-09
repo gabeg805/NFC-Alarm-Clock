@@ -9,6 +9,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import androidx.preference.Preference
 import com.nfcalarmclock.R
+import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.settings.importexport.NacExportService
 import com.nfcalarmclock.settings.importexport.NacImportExportDialog
 import com.nfcalarmclock.settings.importexport.NacImportService
@@ -62,9 +63,10 @@ class NacMainSettingFragment
 	/**
 	 * Called when the preferences are created.
 	 */
-	override fun onCreatePreferences(savedInstanceState: Bundle?,
-		rootKey: String?)
+	override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?)
 	{
+		NacLog.i("Creating main settings screen")
+
 		// Inflate the XML file and add the hierarchy to the current preference
 		addPreferencesFromResource(R.xml.main_preferences)
 
@@ -125,6 +127,7 @@ class NacMainSettingFragment
 				dialog.onImportListener = NacImportExportDialog.OnImportListener {
 
 					// Launch the file chooser
+					NacLog.i("Launching import")
 					importContent.launch("application/zip")
 
 				}
@@ -146,6 +149,7 @@ class NacMainSettingFragment
 					val filename = "${appName}_${timestamp}.zip"
 
 					// Launch the file chooser
+					NacLog.i("Launching export")
 					exportContent.launch(filename)
 
 				}
@@ -217,9 +221,13 @@ class NacMainSettingFragment
 	 */
 	private fun showSupportFlow()
 	{
+		NacLog.i("Showing support flow")
+
+		// Get the support setting
 		val fragmentActivity = requireActivity()
 		val support = NacSupportSetting(fragmentActivity)
 
+		// Setup the listener
 		support.onSupportEventListener = NacSupportSetting.OnSupportEventListener {
 
 			// Make sure the following things are run on the UI thread

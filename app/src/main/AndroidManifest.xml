@@ -241,17 +241,6 @@
 			</intent-filter>
 		</receiver>
 
-		<!-- Refresh alarms when the Schedule Exact Alarm permission is changed -->
-		<receiver
-			android:name=".system.permission.scheduleexactalarm.NacScheduleExactAlarmPermissionChangedBroadcastReceiver"
-			android:enabled="true"
-			android:exported="false">
-
-			<intent-filter>
-				<action android:name="android.app.action.SCHEDULE_EXACT_ALARM_PERMISSION_STATE_CHANGED" />
-			</intent-filter>
-		</receiver>
-
 		<!-- Restore alarms after the app is updated. Alarms are lost after an update -->
 		<receiver
 			android:name=".system.broadcasts.appupdate.NacAppUpdatedBroadcastReceiver"

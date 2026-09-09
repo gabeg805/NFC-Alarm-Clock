@@ -15,6 +15,7 @@ import com.nfcalarmclock.alarm.options.dismissoptions.NacDismissOptionsDialog
 import com.nfcalarmclock.alarm.options.name.NacNameDialog
 import com.nfcalarmclock.alarm.options.snoozeoptions.NacSnoozeOptionsDialog
 import com.nfcalarmclock.card.NacCardPreference
+import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.nfc.NacNfcTagViewModel
 import com.nfcalarmclock.system.addMediaInfo
 import com.nfcalarmclock.system.daysToValue
@@ -54,6 +55,8 @@ class NacGeneralSettingFragment
 	 */
 	override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?)
 	{
+		NacLog.i("Creating general settings screen")
+
 		// Get the device protected storage context, if available
 		val deviceContext = getDeviceProtectedStorageContext(requireContext())
 

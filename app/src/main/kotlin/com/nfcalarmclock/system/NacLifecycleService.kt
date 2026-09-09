@@ -24,6 +24,8 @@ abstract class NacLifecycleService
 	 */
 	protected fun acquireWakeLock(timeoutSec: Int, wakeLockTag: String): PowerManager.WakeLock
 	{
+		NacLog.i("Acquiring wakelock", offsetIndex = 1)
+
 		// Get the power manager and timeout for the wakelock
 		val powerManager = getSystemService(POWER_SERVICE) as PowerManager
 		val timeout = timeoutSec * 1000L
@@ -46,6 +48,7 @@ abstract class NacLifecycleService
 		try
 		{
 			// Start the service in the foreground
+			NacLog.i("Starting foreground service", offsetIndex = 1)
 			unit()
 		}
 		catch (e: Exception)
@@ -56,7 +59,7 @@ abstract class NacLifecycleService
 				toast(this, R.string.error_message_unable_to_start_foreground_service)
 			}
 
-			NacLog.e("Unable to start foreground service", e)
+			NacLog.e("Unable to start foreground service", throwable = e, offsetIndex = 1)
 		}
 	}
 
@@ -66,7 +69,7 @@ abstract class NacLifecycleService
 	@Suppress("deprecation")
 	fun stopThisService()
 	{
-		NacLog.i("Stopping this service")
+		NacLog.i("Stopping this service", offsetIndex = 1)
 
 		// Stop the foreground service using the updated form of
 		// stopForeground() for API >= 33

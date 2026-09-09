@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.core.net.toUri
+import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
@@ -18,6 +19,9 @@ import com.nfcalarmclock.system.media.buildLocalMediaPath
 import com.nfcalarmclock.system.media.getMediaArtist
 import com.nfcalarmclock.system.media.getMediaTitle
 import com.nfcalarmclock.view.setupThemeColor
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 /**
  * Pick a ringtone.
@@ -106,7 +110,11 @@ abstract class NacRingtonePickerFragment<T: NacAlarm>
 		localMediaPath = buildLocalMediaPath(deviceContext, mediaArtist, mediaTitle, mediaType)
 
 		// Copy the file to device encrypted storage
-		copyMediaToDeviceEncryptedStorage(deviceContext)
+		activity.lifecycleScope.launch {
+			withContext(Dispatchers.IO) {
+				copyMediaToDeviceEncryptedStorage(deviceContext)
+			}
+		}
 
 		// Super
 		super.onOkClicked()

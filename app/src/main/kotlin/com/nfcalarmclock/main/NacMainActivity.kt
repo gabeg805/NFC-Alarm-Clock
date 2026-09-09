@@ -180,6 +180,8 @@ class NacMainActivity
 				return
 			}
 
+			NacLog.i("Active alarm service connected. Starting active alarm activity")
+
 			// Remove the handler callback
 			activeAlarmServiceHandler.removeCallbacksAndMessages(null)
 
@@ -229,6 +231,8 @@ class NacMainActivity
 		// Navigate to the show alarms fragment with that alarm
 		if (alarm != null)
 		{
+			NacLog.i("Adding alarm from SET_ALARM intent")
+
 			// Create a bundle with the alarm and intent action
 			val bundle = alarm.toBundle()
 				.apply {
@@ -251,6 +255,8 @@ class NacMainActivity
 		// Navigate to the show timers fragment with that timer
 		if (timer != null)
 		{
+			NacLog.i("Adding timer from SET_TIMER intent")
+
 			// Create a bundle with the timer and intent action
 			val bundle = timer.toBundle()
 				.apply {
@@ -451,6 +457,8 @@ class NacMainActivity
 		if (((intent.flags and Intent.FLAG_GRANT_READ_URI_PERMISSION) == 0) &&
 			((intent.flags and Intent.FLAG_GRANT_WRITE_URI_PERMISSION) == 0))
 		{
+			NacLog.i("Scanned NFC tag will be propagated to acticve alarm activity")
+
 			// Start the alarm activity with the intent containing the NFC tag
 			// information in order to dismiss this alarm
 			NacActiveAlarmActivity.startAlarmActivity(this@NacMainActivity, intent, activeAlarm)
@@ -632,6 +640,8 @@ class NacMainActivity
 		// Super
 		super.onPause()
 
+		NacLog.i("Pausing main activity")
+
 		// Stop NFC
 		NacNfc.disableReaderMode(this)
 	}
@@ -643,6 +653,8 @@ class NacMainActivity
 	{
 		// Super
 		super.onResume()
+
+		NacLog.i("Resuming main activity")
 
 		// Check if the main activity should be refreshed
 		if (sharedPreferences.shouldRefreshMainActivity)
@@ -705,6 +717,8 @@ class NacMainActivity
 	{
 		// Super
 		super.onStop()
+
+		NacLog.i("Stopping main activity")
 
 		// Unbind service
 		try
@@ -808,6 +822,8 @@ class NacMainActivity
 			return
 		}
 
+		NacLog.i("Setting up edge-to-edge")
+
 		// Get the views
 		val protectionLayout: ProtectionLayout = findViewById(R.id.protection_layout)
 		val constraintLayout: ConstraintLayout = findViewById(R.id.constraint_layout)
@@ -899,7 +915,7 @@ class NacMainActivity
 				sharedPreferences.delayShowingWhatsNewDialogCounter = 1
 			}
 
-			NacLog.i("Request app permissions")
+			NacLog.i("Requesting app permissions")
 
 			// Request permissions
 			permissionRequestManager.requestPermissions(this, onDone = {
@@ -914,7 +930,7 @@ class NacMainActivity
 		// Attempt to show the What's new dialog
 		else if (shouldShowWhatsNewDialog && delayCounter == 0)
 		{
-			NacLog.i("Show what's new dialog")
+			NacLog.i("Showing what's new dialog")
 
 			// Show the What's New dialog
 			whatsNewDialog = NacWhatsNewDialog.show(supportFragmentManager,
@@ -948,7 +964,7 @@ class NacMainActivity
 		// Check if should request to show the rate my app flow
 		else if (NacRateMyApp.shouldRequest(sharedPreferences))
 		{
-			NacLog.i("Request to rate my app")
+			NacLog.i("Requesting rate my app")
 
 			// Request for the user to rate my app
 			NacRateMyApp.request(this, sharedPreferences)
@@ -1077,6 +1093,7 @@ class NacMainActivity
 		// NFC does not exist
 		if (!NacNfc.exists(this))
 		{
+			NacLog.w("Skipping NFC reader mode setup as NFC does not exist/is disabled on device")
 			return
 		}
 
@@ -1125,6 +1142,7 @@ class NacMainActivity
 			// Reader mode was disabled so re-enable it here
 			if (!status)
 			{
+				NacLog.i("NFC reader mode observer detected change. Was disabled so re-enable it")
 				setupNfcReaderMode()
 			}
 

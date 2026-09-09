@@ -5,6 +5,13 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.1</item>
+		<item>Fixed &lt;b>flashlight&lt;/b> blink issue where on/off durations were empty.</item>
+		<item>Fixed visual artifact being shown in &lt;b>Android 15&lt;/b>.</item>
+		<item>Fixed alarm/timer issue affecting &lt;b>Android 13&lt;/b>.</item>
+		<item>Fixed attempting to refresh &lt;b>widgets&lt;/b> when device is locked.</item>
+		<item>Fixed showing &lt;b>time&lt;/b> dialog after screen changed orientation or the app was closed, resulting in a crash.</item>
+		<item>Updated &lt;b>debug mode&lt;/b> to have more informative logs.</item>
 		<item>12.7.0</item>
 		<item>Added button &lt;b> labels &lt;/b> to make it more obvious what buttons do. This can be changed in &lt;b> Settings > Appearance > Styles&lt;/b>.</item>
 		<item>Added option to toggle alarms on/off when &lt;b> airplane mode &lt;/b> is changed.</item>

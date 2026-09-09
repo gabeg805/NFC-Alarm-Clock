@@ -121,8 +121,8 @@ open class NacFlashlightOptionsDialog
 		flashlight = NacFlashlight(requireContext())
 
 		// Set the default selected values
-		selectedBlinkOnDuration = if (alarm.flashlightOnDuration == "0") "1.0" else alarm.flashlightOnDuration
-		selectedBlinkOffDuration = if (alarm.flashlightOffDuration == "0") "1.0" else alarm.flashlightOffDuration
+		selectedBlinkOnDuration = if (alarm.flashlightOnDuration.isEmpty() || (alarm.flashlightOnDuration == "0")) "1.0" else alarm.flashlightOnDuration
+		selectedBlinkOffDuration = if (alarm.flashlightOffDuration.isEmpty() || (alarm.flashlightOffDuration == "0")) "1.0" else alarm.flashlightOffDuration
 
 		// Setup the views
 		setupBrightnessLevel(alarm.flashlightStrengthLevel)

@@ -4,6 +4,7 @@ import android.content.Context
 import android.media.AudioManager
 import android.net.Uri
 import androidx.core.net.toUri
+import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.Player.COMMAND_SET_REPEAT_MODE
@@ -24,21 +25,14 @@ import java.io.File
 
 /**
  * Wrapper for the MediaPlayer class.
+ *
+ * @param context Application context.
+ * @param listener Exo player listener.
  */
 @UnstableApi
 class NacMediaPlayer(
-
-	/**
-	 * Application context.
-	 */
 	private val context: Context,
-
-	/**
-	 * Exo player listener.
-	 */
 	listener: Player.Listener? = null
-
-	// Interface
 ) : AudioManager.OnAudioFocusChangeListener
 {
 
@@ -87,6 +81,7 @@ class NacMediaPlayer(
 	 */
 	val exoPlayer: ExoPlayer = ExoPlayer.Builder(context)
 		.setLooper(context.mainLooper)
+		.setWakeMode(C.WAKE_MODE_LOCAL)
 		.build()
 
 	/**
@@ -123,10 +118,12 @@ class NacMediaPlayer(
 	 */
 	init
 	{
-		// Check if the listener is not null
+		// Add the analytics listener for logging any issues
+		exoPlayer.addAnalyticsListener(NacMediaLogger())
+
+		// Set the listener
 		if (listener != null)
 		{
-			// Set the listener
 			exoPlayer.addListener(listener)
 		}
 	}

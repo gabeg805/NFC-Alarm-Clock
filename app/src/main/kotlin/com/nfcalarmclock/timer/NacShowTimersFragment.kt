@@ -254,6 +254,8 @@ class NacShowTimersFragment
 	{
 		override fun onServiceConnected(className: ComponentName, serviceBinder: IBinder)
 		{
+			NacLog.i("Connected to active timer service")
+
 			// Set the active timer service
 			val binder = serviceBinder as NacActiveTimerService.NacLocalBinder
 			service = binder.getService()
@@ -487,6 +489,8 @@ class NacShowTimersFragment
 		// Ringing
 		if (service?.isTimerRinging(card.timer!!) == true)
 		{
+			NacLog.i("Timer is ringing")
+
 			// Get the seconds that the timer has been ringing
 			val secOfRinging = service!!.getSecOfRinging(card.timer!!)
 
@@ -498,6 +502,8 @@ class NacShowTimersFragment
 		// Paused
 		else if (service?.isTimerPaused(card.timer!!) == true)
 		{
+			NacLog.i("Timer is paused")
+
 			// Get the seconds until finished and current progress
 			val secUntilFinished = service!!.getSecUntilFinished(card.timer!!)
 			val progress = service!!.getProgress(card.timer!!)
@@ -510,6 +516,8 @@ class NacShowTimersFragment
 		// Active
 		else if (service?.isTimerActive(card.timer!!) == true)
 		{
+			NacLog.i("Timer is active")
+
 			// Get the seconds until finished and current progress
 			val secUntilFinished = service!!.getSecUntilFinished(card.timer!!)
 			val progress = service!!.getProgress(card.timer!!)
@@ -526,6 +534,7 @@ class NacShowTimersFragment
 		// Normal, not doing anything
 		else
 		{
+			NacLog.i("Normal timer")
 			card.setResetVisibility()
 		}
 	}
@@ -566,6 +575,8 @@ class NacShowTimersFragment
 		// Super
 		super.onResume()
 
+		NacLog.i("Resuming show timers fragment")
+
 		// Get the intent action and timer from the fragment arguments bundle. These
 		// could be null, but if an action occurred, they will not be
 		val action = arguments?.getString(NacBundle.BUNDLE_INTENT_ACTION)
@@ -600,6 +611,8 @@ class NacShowTimersFragment
 		// Super
 		super.onStart()
 
+		NacLog.i("Starting show timers fragment")
+
 		// Bind to the active timer service
 		requireContext().bindToService(NacActiveTimerService::class.java, serviceConnection)
 	}
@@ -611,6 +624,8 @@ class NacShowTimersFragment
 	{
 		// Super
 		super.onStop()
+
+		NacLog.i("Stopping show timers fragment")
 
 		// Unbind from the active timer service
 		requireContext().unbindService(serviceConnection)
@@ -734,18 +749,16 @@ class NacShowTimersFragment
 			lifecycleScope.launch {
 				if (timerViewModel.count() == 0)
 				{
+					NacLog.i("No timers found so navigating to add timer fragment")
 					findNavController().navigate(R.id.nacAddTimerFragment)
 				}
 			}
 
 		}
 
-		// Observe any changes to the timers in the adapter
+		// Observe any changes to the timers in the adapter and update the list
 		timerCardAdapterLiveData.observe(viewLifecycleOwner) { timers ->
-
-			// Update the timer adapter
 			timerCardAdapter.submitList(timers)
-
 		}
 	}
 
@@ -868,12 +881,15 @@ class NacShowTimersFragment
 				// Resume the timer
 				if (service?.isTimerPaused(timer) == true)
 				{
+					NacLog.i("Resuming timer")
 					service!!.startCountdownTimer(timer)
 					service!!.updateNotification(timer)
 				}
 				// Start the timer
 				else
 				{
+					NacLog.i("Starting timer")
+
 					// Set the flag that the animation is running
 					isRunningStartingAnimation[timer.id] = true
 
@@ -888,12 +904,15 @@ class NacShowTimersFragment
 
 			// Pause timer listener
 			card.onPauseTimerClickedListener = NacTimerCardHolder.OnPauseTimerClickedListener { timer ->
+				NacLog.i("Pausing timer")
 				service?.cancelCountdownTimer(timer)
 				service?.updateNotification(timer)
 			}
 
 			// Reset timer listener
 			card.onResetTimerClickedListener = NacTimerCardHolder.OnResetTimerClickedListener { timer ->
+
+				NacLog.i("Reseting timer")
 
 				// Clear the running starting animation flag
 				isRunningStartingAnimation[timer.id] = false
@@ -905,6 +924,7 @@ class NacShowTimersFragment
 				// Stop the service when no timers are using it
 				if (service?.allTimersReadOnly?.isEmpty() == true)
 				{
+					NacLog.i("All timers are done. Stopping active timer service")
 					service!!.stopThisService()
 				}
 
@@ -912,6 +932,8 @@ class NacShowTimersFragment
 
 			// Stop timer listener
 			card.onStopTimerClickedListener = NacTimerCardHolder.OnStopTimerClickedListener { timer ->
+
+				NacLog.i("Stopping timer")
 
 				// Dismiss the timer
 				service?.dismiss(timer)

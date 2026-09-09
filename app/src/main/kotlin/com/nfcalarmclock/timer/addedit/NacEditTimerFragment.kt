@@ -3,6 +3,7 @@ package com.nfcalarmclock.timer.addedit
 import android.os.Bundle
 import androidx.navigation.fragment.findNavController
 import com.nfcalarmclock.R
+import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.system.getTimer
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -28,6 +29,7 @@ class NacEditTimerFragment
 	override fun navigateToMediaPicker(bundle: Bundle)
 	{
 		// Navigate to the media picker
+		NacLog.i("Navigating to media picker")
 		findNavController().navigate(R.id.action_nacEditTimerFragment_to_nacTimerMainMediaPickerFragment, bundle)
 	}
 

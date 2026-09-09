@@ -1,6 +1,7 @@
 package com.nfcalarmclock
 
 import android.app.Application
+import android.os.Build
 import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.shared.NacSharedPreferences
 import dagger.hilt.android.HiltAndroidApp
@@ -28,7 +29,7 @@ class NacNfcAlarmClockApplication : Application()
 
 		// Initialize logger
 		NacLog.init(this, sharedPreferences)
-		NacLog.i("Starting app")
+		NacLog.i("Starting app v${BuildConfig.VERSION_NAME} (Android API ${Build.VERSION.SDK_INT})")
 	}
 
 }

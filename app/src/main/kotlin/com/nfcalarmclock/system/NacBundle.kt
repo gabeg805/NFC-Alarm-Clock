@@ -1,10 +1,10 @@
 package com.nfcalarmclock.system
 
-import android.os.BadParcelableException
-import android.os.Build
 import android.os.Bundle
 import android.speech.tts.TextToSpeech
+import androidx.core.os.BundleCompat
 import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.system.NacBundle.ALARM_PARCEL_NAME
 import com.nfcalarmclock.system.NacBundle.MEDIA_ARTIST_KEY
 import com.nfcalarmclock.system.NacBundle.MEDIA_PATH_KEY
@@ -13,8 +13,8 @@ import com.nfcalarmclock.system.NacBundle.MEDIA_TYPE_KEY
 import com.nfcalarmclock.system.NacBundle.RECURSIVELY_PLAY_MEDIA_KEY
 import com.nfcalarmclock.system.NacBundle.SHUFFLE_MEDIA_KEY
 import com.nfcalarmclock.system.NacBundle.TIMER_PARCEL_NAME
-import com.nfcalarmclock.timer.db.NacTimer
 import com.nfcalarmclock.system.media.NacAudioAttributes
+import com.nfcalarmclock.timer.db.NacTimer
 
 /**
  * Add an alarm to a bundle.
@@ -93,36 +93,16 @@ fun Bundle.getAlarm(): NacAlarm?
 	{
 		this.classLoader = NacAlarm::class.java.classLoader
 
-		// Use the updated form of Bundle.getParcelable() for API >= 33
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-		{
-			this.getParcelable(ALARM_PARCEL_NAME, NacAlarm::class.java)
-		}
-		// Use the old form of getting parcelable
-		else
-		{
-			this.getParcelable(ALARM_PARCEL_NAME)
-		}
+		NacLog.i("Test offset index read alarm from bundle", offsetIndex = 2)
+
+		// Bundle compat handles SDK versioning and a bug in Android 13 that results in
+		// NullPointerException
+		BundleCompat.getParcelable(this, ALARM_PARCEL_NAME, NacAlarm::class.java)
 	}
-	catch (_: BadParcelableException)
+	catch (e: Exception)
 	{
-		try
-		{
-			// Use the updated form of Bundle.getParcelable() for API >= 33
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-			{
-				this.getParcelable(ALARM_PARCEL_NAME, NacAlarm::class.java)
-			}
-			// Use the old form of getting parcelable
-			else
-			{
-				this.getParcelable(ALARM_PARCEL_NAME)
-			}
-		}
-		catch (_: RuntimeException)
-		{
-			null
-		}
+		NacLog.e("Unable to read alarm from bundle", throwable = e, offsetIndex = 2)
+		null
 	}
 }
 
@@ -138,36 +118,16 @@ fun Bundle.getTimer(): NacTimer?
 		{
 			this.classLoader = NacTimer::class.java.classLoader
 
-			// Use the updated form of Bundle.getParcelable() for API >= 33
-			if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-			{
-				this.getParcelable(TIMER_PARCEL_NAME, NacTimer::class.java)
-			}
-			// Use the old form of getting parcelable
-			else
-			{
-				this.getParcelable(TIMER_PARCEL_NAME)
-			}
+			NacLog.i("Test offset index read timer from bundle", offsetIndex = 2)
+
+			// Bundle compat handles SDK versioning and a bug in Android 13 that results in
+			// NullPointerException
+			BundleCompat.getParcelable(this, TIMER_PARCEL_NAME, NacTimer::class.java)
 		}
-		catch (_: BadParcelableException)
+		catch (e: Exception)
 		{
-			try
-			{
-				// Use the updated form of Bundle.getParcelable() for API >= 33
-				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU)
-				{
-					this.getParcelable(TIMER_PARCEL_NAME, NacTimer::class.java)
-				}
-				// Use the old form of getting parcelable
-				else
-				{
-					this.getParcelable(TIMER_PARCEL_NAME)
-				}
-			}
-			catch (_: RuntimeException)
-			{
-				null
-			}
+			NacLog.e("Unable to read timer from bundle", throwable = e, offsetIndex = 2)
+			null
 		}
 }
 

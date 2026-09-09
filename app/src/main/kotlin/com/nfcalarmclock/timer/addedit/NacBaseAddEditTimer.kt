@@ -28,6 +28,7 @@ import com.google.android.material.button.MaterialButton
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.normalizeName
 import com.nfcalarmclock.alarm.options.name.NacNameDialog
+import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.nfc.NacNfcTagViewModel
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.NacCalendar
@@ -309,6 +310,7 @@ abstract class NacBaseAddEditTimer
 	private fun navigateTo(destinationId: Int)
 	{
 		// Navigate to the destination
+		NacLog.i("Timer options navigating to: $destinationId")
 		NacTimerOptionsDialog.navigateTo(navController, destinationId, timer)
 			?.observe(viewLifecycleOwner) { t ->
 				timer = t
@@ -329,6 +331,7 @@ abstract class NacBaseAddEditTimer
 		savedInstanceState: Bundle?
 	): View?
 	{
+		NacLog.i("Creating add/edit timer fragment", offsetIndex = 1)
 		return inflater.inflate(R.layout.frg_add_edit_timer, container, false)
 	}
 
@@ -403,11 +406,13 @@ abstract class NacBaseAddEditTimer
 			// Update the timer
 			if (timerViewModel.exists(timer.id))
 			{
+				NacLog.i("Updating timer")
 				timerViewModel.update(timer, unit = unit)
 			}
 			// Add the timer to the table
 			else
 			{
+				NacLog.i("Saving timer")
 				timerViewModel.insert(timer, unit = unit)
 			}
 
@@ -423,6 +428,8 @@ abstract class NacBaseAddEditTimer
 		val hour = hourTextView.text.toString().toLong()
 		val minute = minuteTextView.text.toString().toLong()
 		val seconds = secondsTextView.text.toString().toLong()
+
+		NacLog.i("Setting timer duration: H=$hour M=$minute S=$seconds")
 
 		// Set the duration
 		timer.duration = seconds + minute*60 + hour*3600
@@ -557,12 +564,14 @@ abstract class NacBaseAddEditTimer
 
 		// Toggle on click
 		flashlightButton.setOnClickListener {
+			NacLog.i("Flashlight clicked=${!timer.shouldUseFlashlight}")
 			timer.toggleUseFlashlight()
 			timer.toastFlashlight(requireContext())
 		}
 
 		// Show the quick navigate dialog on long click
 		flashlightButton.setOnLongClickListener {
+			NacLog.i("Long clicked flashlight button. Showing flashlight options dialog")
 			navigateTo(R.id.nacFlashlightOptionsDialog3)
 			true
 		}
@@ -648,6 +657,8 @@ abstract class NacBaseAddEditTimer
 		// Show the media picker
 		mediaButton.setOnClickListener {
 
+			NacLog.i("Media button clicked")
+
 			// Create a bundle with the media info
 			val bundle = Bundle()
 				.addMediaInfo(
@@ -669,6 +680,8 @@ abstract class NacBaseAddEditTimer
 	 */
 	private fun setupMediaPickerObserver()
 	{
+		NacLog.i("Timer setting up media picker observer")
+
 		// Get the saved state handle
 		val savedStateHandle = findNavController().currentBackStackEntry?.savedStateHandle
 
@@ -714,6 +727,8 @@ abstract class NacBaseAddEditTimer
 
 		// Setup more button click
 		moreButton.setOnClickListener {
+
+			NacLog.i("More button clicked. Scrolling down to show extra options")
 
 			// Scroll down and hide the bottom navigation view
 			scrollView.smoothScrollTo(0, moreOptionsContainer.height)
@@ -785,6 +800,8 @@ abstract class NacBaseAddEditTimer
 		// Show a dialog to set a new name
 		button.setOnClickListener { _ ->
 
+			NacLog.i("Showing name dialog")
+
 			NacNameDialog.create(
 				nameBeforeSaving,
 				onNameEnteredListener = { name ->
@@ -816,6 +833,7 @@ abstract class NacBaseAddEditTimer
 
 		// Click listener
 		nfcButton.setOnClickListener {
+			NacLog.i("NFC clicked=${!timer.shouldUseNfc}")
 			timer.toggleUseNfc()
 			lifecycleScope.launch {
 				timer.toastNfc(requireContext(), nfcTagViewModel.getAllNfcTags())
@@ -824,6 +842,7 @@ abstract class NacBaseAddEditTimer
 
 		// Show the quick navigate dialog on long click
 		nfcButton.setOnLongClickListener {
+			NacLog.i("Long clicked NFC button. Showing NFC options dialog")
 			navigateTo(R.id.nacScanNfcTagDialog3)
 			true
 		}
@@ -907,12 +926,14 @@ abstract class NacBaseAddEditTimer
 
 		// Stop/dismiss options dialog on click
 		stopOptionsButton.setOnClickListener {
+			NacLog.i("Showing dismiss options dialog")
 			NacDismissOptionsDialog.create(timer)
 				.show(parentFragmentManager, NacDismissOptionsDialog.TAG)
 		}
 
 		// Settings options dialog on click
 		settingsOptionsButton.setOnClickListener {
+			NacLog.i("Showing settings options dialog")
 			navigateTo(R.id.nacTimerOptionsDialog)
 		}
 	}
@@ -930,6 +951,7 @@ abstract class NacBaseAddEditTimer
 
 		// Click listener
 		repeatButton.setOnClickListener {
+			NacLog.i("Repeat clicked=${!timer.shouldRepeat}")
 			timer.toggleRepeat()
 			timer.toastRepeat(requireContext())
 		}
@@ -995,6 +1017,8 @@ abstract class NacBaseAddEditTimer
 		// On click listener
 		startButton.setOnClickListener {
 
+			NacLog.i("Start button clicked")
+
 			// Set the duration
 			setDuration()
 
@@ -1010,6 +1034,7 @@ abstract class NacBaseAddEditTimer
 
 			// Save the timer, then start the timer and go to the active timer fragment
 			saveTimer {
+				NacLog.i("Starting active timer service")
 				NacActiveTimerService.startTimerService(context, timer)
 				findNavController().navigate(R.id.nacActiveTimerFragment, timer.toBundle())
 			}
@@ -1116,12 +1141,14 @@ abstract class NacBaseAddEditTimer
 
 		// Click listener
 		vibrateButton.setOnClickListener {
+			NacLog.i("Vibrate clicked=${!timer.shouldVibrate}")
 			timer.toggleVibrate()
 			timer.toastVibrate(requireContext())
 		}
 
 		// Show the quick navigate dialog on long click
 		vibrateButton.setOnLongClickListener {
+			NacLog.i("Long clicked vibrate button. Showing vibrate options dialog")
 			navigateTo(R.id.nacVibrateOptionsDialog3)
 			true
 		}
@@ -1168,7 +1195,10 @@ abstract class NacBaseAddEditTimer
 			/**
 			 * Stop touching the seekbar.
 			 */
-			override fun onStopTrackingTouch(seekBar: SeekBar) {}
+			override fun onStopTrackingTouch(seekBar: SeekBar)
+			{
+				NacLog.i("Timer volume=${timer.volume}")
+			}
 
 		})
 	}

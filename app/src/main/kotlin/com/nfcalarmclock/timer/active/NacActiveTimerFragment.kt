@@ -432,6 +432,7 @@ class NacActiveTimerFragment
 		savedInstanceState: Bundle?
 	): View?
 	{
+		NacLog.i("Creating active timer fragment")
 		return inflater.inflate(R.layout.frg_active_timer, container, false)
 	}
 
@@ -442,6 +443,8 @@ class NacActiveTimerFragment
 	{
 		// Super
 		super.onPause()
+
+		NacLog.i("Pausing active timer fragment")
 
 		// Unregister the broadcast receivers
 		unregisterMyReceiver(requireContext(), nfcAdapterStateChangedBroadcastReceiver)
@@ -454,6 +457,8 @@ class NacActiveTimerFragment
 	{
 		// Super
 		super.onResume()
+
+		NacLog.i("Resuming active timer fragment")
 
 		// Attempt to get the ID of an NFC tag that was scanned
 		val nfcId = arguments?.getString(SCANNED_NFC_TAG_ID_BUNDLE_NAME)
@@ -498,6 +503,8 @@ class NacActiveTimerFragment
 		// Super
 		super.onStart()
 
+		NacLog.i("Starting active timer fragment")
+
 		// Bind to the active timer service
 		requireContext().bindToService(NacActiveTimerService::class.java, serviceConnection)
 	}
@@ -509,6 +516,8 @@ class NacActiveTimerFragment
 	{
 		// Super
 		super.onStop()
+
+		NacLog.i("Stopping active timer fragment")
 
 		// Remove the back press callback
 		onBackPressedCallback.remove()

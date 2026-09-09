@@ -5,6 +5,7 @@ import androidx.preference.Preference
 import androidx.preference.PreferenceManager
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.options.nextalarmformat.NacNextAlarmFormatPreference
+import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.settings.startweekon.NacStartWeekOnPreference
 import com.nfcalarmclock.system.getDeviceProtectedStorageContext
 import com.nfcalarmclock.settings.colorpicker.NacColorPickerPreference
@@ -48,6 +49,8 @@ class NacAppearanceSettingFragment
 	 */
 	override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?)
 	{
+		NacLog.i("Creating appearance settings screen")
+
 		// Set device protected storage as the storage location to use
 		preferenceManager.setStorageDeviceProtected()
 
@@ -90,7 +93,9 @@ class NacAppearanceSettingFragment
 		val pref = findPreference<Preference>(key)
 
 		// Set the listener for when the preference is changed
-		pref!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
+		pref!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+
+			NacLog.i("Changed card button label preference to: $newValue. Main activity will be refreshed")
 
 			// Set flag to refresh the main activity
 			sharedPreferences!!.shouldRefreshMainActivity = true
@@ -135,6 +140,8 @@ class NacAppearanceSettingFragment
 		{
 			// Show the dialog for the on click listener
 			p!!.onPreferenceClickListener = Preference.OnPreferenceClickListener { pref ->
+
+				NacLog.i("Showing color picker dialog for '${pref.key}'")
 				(pref as NacColorPickerPreference).showDialog(childFragmentManager)
 
 				// Return
@@ -169,7 +176,9 @@ class NacAppearanceSettingFragment
 			val pref = findPreference<Preference>(k)
 
 			// Set the listener for when the prference is changed
-			pref!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { p, _ ->
+			pref!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { p, newValue ->
+
+				NacLog.i("Color preference '${pref.key}' change to: $newValue. Main activity will be refreshed")
 
 				// Set flag to refresh the main activity
 				sharedPreferences!!.shouldRefreshMainActivity = true
@@ -201,7 +210,9 @@ class NacAppearanceSettingFragment
 		val pref = findPreference<Preference>(key)
 
 		// Set the listener for when the preference is changed
-		pref!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
+		pref!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+
+			NacLog.i("Day button style changed to: $newValue. Main activity will be refreshed")
 
 			// Set flag to refresh the main activity
 			sharedPreferences!!.shouldRefreshMainActivity = true
@@ -243,6 +254,7 @@ class NacAppearanceSettingFragment
 		pref!!.onPreferenceClickListener = Preference.OnPreferenceClickListener { p ->
 
 			// Show the dialog
+			NacLog.i("Showing next alarm format dialog")
 			(p as NacNextAlarmFormatPreference).showDialog(childFragmentManager)
 
 			// Return
@@ -271,7 +283,9 @@ class NacAppearanceSettingFragment
 			val pref = findPreference<Preference>(k)
 
 			// Set the listener for when the prference is changed
-			pref!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
+			pref!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
+
+				NacLog.i("Show hide '${pref.key}' button changed to: $newValue. Main activity will be refreshed")
 
 				// Set flag to refresh the main activity
 				sharedPreferences!!.shouldRefreshMainActivity = true
@@ -296,6 +310,7 @@ class NacAppearanceSettingFragment
 		pref!!.onPreferenceClickListener = Preference.OnPreferenceClickListener { p ->
 
 			// Show the dialog
+			NacLog.i("Showing start week on dialog")
 			(p as NacStartWeekOnPreference).showDialog(childFragmentManager)
 
 			// Return

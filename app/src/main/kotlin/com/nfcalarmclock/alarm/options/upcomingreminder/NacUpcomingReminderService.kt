@@ -8,6 +8,7 @@ import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.tts.NacTextToSpeech
 import com.nfcalarmclock.alarm.options.tts.NacTranslate
+import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.system.NacCalendar
 import com.nfcalarmclock.system.NacLifecycleService
 import com.nfcalarmclock.system.addAlarm
@@ -61,6 +62,8 @@ class NacUpcomingReminderService
 		// Super
 		super.onStartCommand(intent, flags, startId)
 
+		NacLog.i("Starting upcoming reminder service. Action=${intent?.action}")
+
 		// Attempt to get the alarm from the intent
 		val alarm = intent?.getAlarm()
 
@@ -81,6 +84,8 @@ class NacUpcomingReminderService
 			// Clear the reminder by stopping the service
 			ACTION_STOP_SERVICE ->
 			{
+				NacLog.i("Stopping upcoming reminder service")
+
 				// Cancel any remaining reminders
 				if (alarm != null)
 				{
@@ -193,6 +198,8 @@ class NacUpcomingReminderService
 	 */
 	private fun startReminderProcess(alarm: NacAlarm)
 	{
+		NacLog.i("Starting reminder process")
+
 		// Get the calendar for when the next alarm will run and when the next
 		// reminder will run
 		val nextAlarmCal = NacCalendar.getNextAlarmDay(alarm)!!
@@ -258,8 +265,8 @@ class NacUpcomingReminderService
 			// Create the stop intent
 			val intent = getStopIntent(context, alarm)
 
-			// Start the intent to stop the service
-			context.startService(intent)
+			// Stop the service
+			context.stopService(intent)
 		}
 
 	}

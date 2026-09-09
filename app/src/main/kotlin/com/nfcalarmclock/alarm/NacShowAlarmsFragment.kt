@@ -428,7 +428,7 @@ class NacShowAlarmsFragment
 	}
 
 	/**
-	 * Called to create the root view.
+	 * Create the root view.
 	 */
 	override fun onCreateView(
 		inflater: LayoutInflater,
@@ -441,12 +441,14 @@ class NacShowAlarmsFragment
 	}
 
 	/**
-	 * Called when the activity is paused.
+	 * Fragment is paused.
 	 */
 	override fun onPause()
 	{
 		// Super
 		super.onPause()
+
+		NacLog.i("Pausing show alarms fragment")
 
 		// Save scroll position of recyclerview and sort order of alarms
 		alarmViewModel.recyclerViewState = recyclerView.layoutManager?.onSaveInstanceState()
@@ -465,7 +467,7 @@ class NacShowAlarmsFragment
 	}
 
 	/**
-	 * Called when the activity is resumed.
+	 * Fragment is resumed.
 	 */
 	@SuppressLint("UnsafeIntentLaunch")
 	@OptIn(UnstableApi::class)
@@ -473,6 +475,8 @@ class NacShowAlarmsFragment
 	{
 		// Super
 		super.onResume()
+
+		NacLog.i("Resuming show alarms fragment")
 
 		// Get the intent action and alarm from the fragment arguments bundle. These
 		// could be null, but if an action occurred, they will not be
@@ -501,7 +505,29 @@ class NacShowAlarmsFragment
 	}
 
 	/**
-	 * Called when the activity is created.
+	 * Fragment is stopped.
+	 */
+	override fun onStart()
+	{
+		// Super
+		super.onStart()
+
+		NacLog.i("Starting show alarms fragment")
+	}
+
+	/**
+	 * Fragment is stopped.
+	 */
+	override fun onStop()
+	{
+		// Super
+		super.onStop()
+
+		NacLog.i("Stopping show alarms fragment")
+	}
+
+	/**
+	 * Root view is created.
 	 */
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
 	{
@@ -691,18 +717,16 @@ class NacShowAlarmsFragment
 				// Expand the card and change its color
 				card.doExpandWithColor()
 			}
-			// Index is not part of the expanded cards, but the card is expanded.
-			// A card should not be in this state, however, it has been seen to
-			// happen after a new install.
+			// Index is not part of the expanded cards, but the card is expanded. A card should
+			// not be in this state, however, it has been seen to happen after a new install.
 			//
-			// Expand an alarm, click on the media
-			// button, select a ringtone, (maybe) change some other component of an
-			// alarm such as an audio option, click on the card to collapse it, and
-			// then copy the alarm. For some reason, the card will act as if it is
-			// expanded
+			// Expand an alarm, click on the media button, select a ringtone, (maybe) change
+			// some other component of an alarm such as an audio option, click on the card to
+			// collapse it, and then copy the alarm. For some reason, the card will act as if
+			// it is expanded
 			//
-			// Note: This could occur because by default, the alarm card shows all
-			//       the widgets, which could explain why it thinks it is expanded.
+			// Note: This could occur because by default, the alarm card shows all the widgets,
+			//       which could explain why it thinks it is expanded.
 			else if (card.isExpanded)
 			{
 				// Collapse the card
@@ -759,12 +783,9 @@ class NacShowAlarmsFragment
 
 			}
 
-			// Expanded listener
+			// Expanded listener. Add the ID to the expanded list
 			card.onCardExpandedListener = OnCardExpandedListener { _, alarm ->
-
-				// Add the ID to the expanded list
 				alarmViewModel.expandedAlarmIds.add(alarm.id)
-
 			}
 
 			// Updated listener
@@ -777,11 +798,13 @@ class NacShowAlarmsFragment
 
 			// Time
 			card.onCardTimeClickedListener = OnCardTimeClickedListener { _, alarm ->
+				NacLog.i("Showing time dialog")
 				showTimeDialog(card, alarm)
 			}
 
 			// Switch
 			card.onCardSwitchChangedListener = OnCardSwitchChangedListener { _, alarm ->
+				NacLog.i("Saving isEnabled=${alarm.isEnabled}")
 				updateAllAlarmReferences(card, alarm)
 			}
 
@@ -792,12 +815,14 @@ class NacShowAlarmsFragment
 				if (alarm.shouldUseNfc)
 				{
 					// Start the alarm service
+					NacLog.i("Starting active alarm service so user can dismiss alarm")
 					startAlarmService(context, alarm)
 				}
 				// NFC not required to dismiss the alarm
 				else
 				{
 					// Dismiss the alarm service
+					NacLog.i("Dismissing active alarm service since NFC not required")
 					dismissAlarmService(context, alarm)
 				}
 
@@ -805,28 +830,33 @@ class NacShowAlarmsFragment
 
 			// Dismiss early
 			card.onCardDismissEarlyClickedListener = OnCardDismissEarlyClickedListener { _, alarm ->
+				NacLog.i("Dismissing alarm early")
 				updateAllAlarmReferences(card, alarm)
 			}
 
 			// Days
 			card.onCardDaysChangedListener = OnCardDaysChangedListener { _, alarm ->
+				NacLog.i("Saving days=${alarm.days}")
 				updateAllAlarmReferences(card, alarm)
 			}
 
 			// Repeat
 			card.onCardUseRepeatChangedListener = OnCardUseRepeatChangedListener { _, alarm ->
+				NacLog.i("Saving shouldRepeat=${alarm.shouldRepeat}")
 				updateAlarm(alarm)
 				alarm.toastRepeat(context)
 			}
 
 			// Vibrate
 			card.onCardUseVibrateChangedListener = OnCardUseVibrateChangedListener { _, alarm ->
+				NacLog.i("Saving shouldVibrate=${alarm.shouldVibrate}")
 				updateAlarm(alarm)
 				alarm.toastVibrate(context)
 			}
 
 			// NFC
 			card.onCardUseNfcChangedListener = OnCardUseNfcChangedListener { _, alarm ->
+				NacLog.i("Saving shouldUseNfc=${alarm.shouldUseNfc}")
 				updateAlarm(alarm)
 
 				lifecycleScope.launch {
@@ -836,12 +866,15 @@ class NacShowAlarmsFragment
 
 			// Flashlight
 			card.onCardUseFlashlightChangedListener = OnCardUseFlashlightChangedListener { _, alarm ->
+				NacLog.i("Saving shouldUseFlashlight=${alarm.shouldUseFlashlight}")
 				updateAlarm(alarm)
 				alarm.toastFlashlight(context)
 			}
 
 			// Media
 			card.onCardMediaClickedListener = OnCardMediaClickedListener { _, alarm ->
+
+				NacLog.i("Showing media picker")
 
 				// Get the nav controller
 				val navController = findNavController()
@@ -867,16 +900,21 @@ class NacShowAlarmsFragment
 
 			// Volume
 			card.onCardVolumeChangedListener = OnCardVolumeChangedListener { _, alarm ->
+				NacLog.i("Saving volume=${alarm.volume}")
 				updateAlarm(alarm)
 			}
 
 			// Name
 			card.onCardNameClickedListener = OnCardNameClickedListener { _, alarm ->
 
+				NacLog.i("Showing name dialog")
+
 				// Show the dialog
 				NacNameDialog.create(
 					alarm.name,
 					onNameEnteredListener = { name ->
+
+						NacLog.i("Saving alarm name")
 
 						// Reset the skip next alarm flag
 						alarm.shouldSkipNextAlarm = false
@@ -896,10 +934,15 @@ class NacShowAlarmsFragment
 			// Dismiss options
 			card.onCardDismissOptionsClickedListener = OnCardDismissOptionsClickedListener { _, alarm ->
 
+				NacLog.i("Showing dismiss options")
+
 				// Show the dialog
 				NacDismissOptionsDialog.create(
 					alarm,
-					onSaveAlarmListener = { updateAlarm(it) })
+					onSaveAlarmListener = {
+						NacLog.i("Saving dismiss options")
+						updateAlarm(it)
+					})
 					.show(parentFragmentManager, NacDismissOptionsDialog.TAG)
 
 			}
@@ -907,10 +950,15 @@ class NacShowAlarmsFragment
 			// Snooze options
 			card.onCardSnoozeOptionsClickedListener = OnCardSnoozeOptionsClickedListener { _, alarm ->
 
+				NacLog.i("Showing snooze options")
+
 				// Show the dialog
 				NacSnoozeOptionsDialog.create(
 					alarm,
-					onSaveAlarmListener = { updateAlarm(it) })
+					onSaveAlarmListener = {
+						NacLog.i("Saving snooze options")
+						updateAlarm(it)
+					})
 					.show(parentFragmentManager, NacSnoozeOptionsDialog.TAG)
 
 			}
@@ -918,10 +966,13 @@ class NacShowAlarmsFragment
 			// Alarm options
 			card.onCardAlarmOptionsClickedListener = OnCardAlarmOptionsClickedListener { _, alarm ->
 
+				NacLog.i("Showing alarm options")
+
 				// Show the dialog
 				NacAlarmOptionsDialog.navigate(navController, alarm)
 					?.observe(viewLifecycleOwner) { a ->
 
+						NacLog.i("Saving alarm options")
 
 						// Update all alarm references, since repeat options can just when
 						// the alarm will run
@@ -944,6 +995,8 @@ class NacShowAlarmsFragment
 
 			// Repeat, vibrate, NFC, and flashlight long click listener
 			card.onCardButtonLongClickedListener = NacAlarmCardHolder.OnCardButtonLongClickedListener { _, alarm, destinationId ->
+
+				NacLog.i("Long clicked on button. Navigating to: $destinationId")
 
 				// Show the dialog
 				NacAlarmOptionsDialog.quickNavigate(navController, destinationId, alarm)
@@ -989,6 +1042,7 @@ class NacShowAlarmsFragment
 						{
 							// Show the next time the alarm will run
 							item.setOnMenuItemClickListener { _ ->
+								NacLog.i("Showing next alarm")
 								showAlarmSnackbar(alarm)
 								true
 							}
@@ -1004,6 +1058,7 @@ class NacShowAlarmsFragment
 							// Show the NFC tag for the current alarm
 							item.setOnMenuItemClickListener { _ ->
 								lifecycleScope.launch {
+									NacLog.i("Toasting alarm NFC ID")
 									alarm.toastNfcId(context, nfcTagViewModel)
 								}
 								true
@@ -1019,7 +1074,7 @@ class NacShowAlarmsFragment
 
 							// Skip the next alarm
 							item.setOnMenuItemClickListener { _ ->
-								NacLog.i("Skip next alarm : ${card.alarm!!.id}")
+								NacLog.i("Skip next alarm: ${card.alarm!!.id}")
 								card.skipNextAlarm()
 								true
 							}
@@ -1034,7 +1089,7 @@ class NacShowAlarmsFragment
 
 							// Unskip the next alarm
 							item.setOnMenuItemClickListener { _ ->
-								NacLog.i("Unskip next alarm : ${card.alarm!!.id}")
+								NacLog.i("Unskip next alarm: ${card.alarm!!.id}")
 								card.unskipNextAlarm()
 								true
 							}
@@ -1241,9 +1296,8 @@ class NacShowAlarmsFragment
 
 		}
 
-		// Set the shared preference whether to show the Manage NFC tags
-		// preference or not. It will be shown if there are NFC tags to
-		// manage
+		// Set the shared preference whether to show the Manage NFC tags preference or not. It
+		// will be shown if there are NFC tags to manage
 		nfcTagViewModel.allNfcTags.observe(viewLifecycleOwner) {
 			sharedPreferences.shouldShowManageNfcTagsPreference = it.isNotEmpty()
 		}
@@ -1409,6 +1463,8 @@ class NacShowAlarmsFragment
 		// further because the expanded card messes with the initial scroll
 		if (sharedPreferences.expandNewAlarm)
 		{
+			NacLog.i("Showing and expanding new alarm")
+
 			card.expand {
 				showTimeDialog(card, alarm)
 				recyclerView.smoothScrollToPosition(card.bindingAdapterPosition+2)
@@ -1461,9 +1517,20 @@ class NacShowAlarmsFragment
 	 */
 	private fun showTimeDialog(card: NacAlarmCardHolder, alarm: NacAlarm)
 	{
+		// Ensure that the dialog can be shown to avoid the exception:
+		// IllegalStateException: Can not perform this action after onSaveInstanceState
+		if (parentFragmentManager.isStateSaved)
+		{
+			NacLog.w("Cannot show the time dialog after onSaveInstanceState() has been called")
+			return
+		}
+
+		// Show the dialog
 		NacDateAndTimePickerDialog.create(
 			alarm,
 			onDateClearedListener = {
+
+				NacLog.i("Date cleared")
 
 				// Clear the date
 				alarm.date = ""
@@ -1488,6 +1555,8 @@ class NacShowAlarmsFragment
 				alarm.hour = hour
 				alarm.minute = min
 
+				NacLog.i("Date and time selected: Date=${alarm.date} | Time=${hour.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')}")
+
 				// Enable the alarm and clear the skip next alarm flag
 				alarm.isEnabled = true
 				alarm.shouldSkipNextAlarm = false
@@ -1508,6 +1577,8 @@ class NacShowAlarmsFragment
 
 			},
 			onTimeSelectedListener = { _, hour, min ->
+
+				NacLog.i("Time selected=${hour.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')}")
 
 				// Set the time
 				alarm.hour = hour

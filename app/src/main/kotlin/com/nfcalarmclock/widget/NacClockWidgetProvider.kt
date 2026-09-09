@@ -13,6 +13,7 @@ import android.util.TypedValue
 import android.view.View
 import android.widget.RemoteViews
 import com.nfcalarmclock.R
+import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.main.NacMainActivity
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.NacCalendar
@@ -73,6 +74,8 @@ internal fun refreshAllWidgets(
 	appWidgetIds: IntArray = appWidgetManager.getAppWidgetIds(ComponentName(context, NacClockWidgetProvider::class.java))
 )
 {
+	NacLog.i("Refreshing all widgets", offsetIndex = 1)
+
 	for (id in appWidgetIds)
 	{
 		refreshWidget(context, appWidgetManager, id)

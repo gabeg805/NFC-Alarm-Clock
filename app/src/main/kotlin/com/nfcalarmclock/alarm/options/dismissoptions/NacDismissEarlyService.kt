@@ -6,6 +6,7 @@ import android.os.IBinder
 import androidx.annotation.OptIn
 import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.system.NacLifecycleService
 import com.nfcalarmclock.system.addAlarm
 import com.nfcalarmclock.system.getAlarm
@@ -38,6 +39,8 @@ class NacDismissEarlyService
 	{
 		// Super
 		super.onStartCommand(intent, flags, startId)
+
+		NacLog.i("Starting dismiss early service. Action=${intent?.action}")
 
 		// Attempt to get the alarm from the intent
 		val alarm = intent?.getAlarm()

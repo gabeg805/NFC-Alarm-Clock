@@ -9,7 +9,7 @@ import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.goAsync
 import com.nfcalarmclock.system.scheduler.NacScheduler
-import com.nfcalarmclock.view.quickToast
+import com.nfcalarmclock.view.toast
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -85,7 +85,7 @@ class NacAirplaneModeBroadcastReceiver
 			}
 
 			// Show toast
-			quickToast(context, message)
+			toast(context, message)
 		}
 
 	}

@@ -3,9 +3,11 @@ package com.nfcalarmclock.settings
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
 import androidx.preference.Preference
 import androidx.preference.PreferenceManager
+import com.nfcalarmclock.BuildConfig
 import com.nfcalarmclock.R
 import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.system.getDeviceProtectedStorageContext
@@ -31,12 +33,12 @@ class NacHelpSettingFragment
 		get()
 		{
 			val appName = resources.getString(R.string.app_name)
-			val dot = "."
-			val ext = "com"
 			val alphabet = "abcdefghijklmnopqrstuvwxyz"
-			val name = "${alphabet[2]}${alphabet[14]}${alphabet[13]}${alphabet[19]}${alphabet[0]}${alphabet[2]}${alphabet[19]}@"
+			val symbols = "!@#$%^&*()_+<>?,./"
+			val name = "${alphabet[2]}${alphabet[14]}${alphabet[13]}${alphabet[19]}${alphabet[0]}${alphabet[2]}${alphabet[19]}"
+			val ext = "${alphabet[2]}${alphabet[14]}${alphabet[12]}"
 
-			return "$name${appName.lowercase().replace(" ", "")}$dot$ext"
+			return "$name${symbols[1]}${appName.lowercase().replace(" ", "")}${symbols[16]}$ext"
 		}
 
 	/**
@@ -44,6 +46,8 @@ class NacHelpSettingFragment
 	 */
 	override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?)
 	{
+		NacLog.i("Creating help settings screen")
+
 		// Get the device protected storage context, if available
 		val deviceContext = getDeviceProtectedStorageContext(requireContext())
 
@@ -108,8 +112,10 @@ class NacHelpSettingFragment
 			val context = requireContext()
 
 			// Re-initialize the logger
+			NacLog.i("Debug mode changed to: ${sharedPreferences!!.shouldWriteToLog}")
 			NacLog.close()
 			NacLog.init(context, sharedPreferences!!)
+			NacLog.i("Re-initializing log in app v${BuildConfig.VERSION_NAME} (Android API ${Build.VERSION.SDK_INT})")
 
 		}
 	}
@@ -126,6 +132,8 @@ class NacHelpSettingFragment
 
 		// Set the click listener
 		pref!!.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
+
+			NacLog.i("Preparing to send email")
 
 			// Prepare for the email
 			val context = requireContext()
@@ -159,6 +167,7 @@ class NacHelpSettingFragment
 		pref!!.onPreferenceClickListener = Preference.OnPreferenceClickListener { _ ->
 
 			// Close log so no lock files are present and all messages are flushed
+			NacLog.i("Preparing to share logs")
 			NacLog.close()
 
 			// Prepare for the email

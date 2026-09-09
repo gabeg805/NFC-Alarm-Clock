@@ -179,6 +179,10 @@ class NacFlashlight(private val context: Context)
 	 */
 	fun blink(onTime: String, offTime: String)
 	{
+		// Ensure that the on/off durations cannot be empty
+		val onTime = onTime.ifEmpty { "1.0" }
+		val offTime = offTime.ifEmpty { "1.0" }
+
 		// Setup the handlers
 		val mainLooper = Looper.getMainLooper()
 		onHandler = Handler(mainLooper)

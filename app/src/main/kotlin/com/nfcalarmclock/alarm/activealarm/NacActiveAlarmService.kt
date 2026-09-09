@@ -9,6 +9,7 @@ import android.os.Build
 import android.os.Handler
 import android.os.IBinder
 import android.os.PowerManager.WakeLock
+import android.os.UserManager
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.lifecycleScope
@@ -144,6 +145,7 @@ class NacActiveAlarmService
 			lifecycleScope.launch {
 				withContext(Dispatchers.Main)
 				{
+					NacLog.w("Unable to snooze alarm")
 					quickToast(this@NacActiveAlarmService, R.string.error_message_snooze)
 				}
 			}
@@ -189,7 +191,7 @@ class NacActiveAlarmService
 		// Update the alarm
 		lifecycleScope.launch {
 
-			NacLog.i("Dismissing the active alarm service")
+			NacLog.i("Dismissing active alarm service")
 
 			// Dismiss the alarm
 			alarm!!.dismiss()
@@ -212,6 +214,7 @@ class NacActiveAlarmService
 			// This will also write to the stats table
 			if (alarm!!.shouldDeleteAfterDismissed)
 			{
+				NacLog.i("Deleting active alarm after dismiss")
 				alarmRepository.delete(alarm!!)
 				statisticRepository.insertDeleted(alarm)
 				NacScheduler.cancel(this@NacActiveAlarmService, alarm!!)
@@ -242,7 +245,17 @@ class NacActiveAlarmService
 			restartOtherActiveAlarmOrStop(R.string.message_alarm_dismiss)
 
 			// Refresh widgets
-			refreshAllWidgets(this@NacActiveAlarmService)
+			val userManager = getSystemService(USER_SERVICE) as UserManager
+
+			if (userManager.isUserUnlocked)
+			{
+				refreshAllWidgets(this@NacActiveAlarmService)
+			}
+			// Device is most likely locked so widgets are unavailable
+			else
+			{
+				NacLog.w("Device is locked so cannot refresh widgets")
+			}
 
 		}
 	}
@@ -384,13 +397,11 @@ class NacActiveAlarmService
 
 				lifecycleScope.launch {
 
+					NacLog.i("Skipping alarm")
+
 					// Skip the alarm
 					alarm!!.skipAlarm()
-
-					// Update the database
 					alarmRepository.update(alarm!!)
-
-					// Reschedule the next alarm
 					NacScheduler.update(this@NacActiveAlarmService, alarm!!)
 
 					// Stop the service
@@ -451,6 +462,7 @@ class NacActiveAlarmService
 		{
 			// Show toast that the alarm was snoozed/dismissed and stop the service
 			withContext(Dispatchers.Main) {
+				NacLog.i("No other active alarms. Stopping service")
 				quickToast(this@NacActiveAlarmService, messageId)
 				stopThisService()
 			}
@@ -511,7 +523,7 @@ class NacActiveAlarmService
 		// No alarm found, so set the action to stop the service
 		if (alarm == null)
 		{
-			NacLog.i("Unable to find alarm in active alarm service intent")
+			NacLog.w("Unable to find alarm in active alarm service intent")
 			intentAction = ACTION_STOP_SERVICE
 		}
 	}
@@ -583,7 +595,17 @@ class NacActiveAlarmService
 			restartOtherActiveAlarmOrStop(R.string.message_alarm_snooze)
 
 			// Refresh widgets
-			refreshAllWidgets(this@NacActiveAlarmService)
+			val userManager = getSystemService(USER_SERVICE) as UserManager
+
+			if (userManager.isUserUnlocked)
+			{
+				refreshAllWidgets(this@NacActiveAlarmService)
+			}
+			// Device is most likely locked so widgets are unavailable
+			else
+			{
+				NacLog.w("Device is locked so cannot refresh widgets")
+			}
 
 		}
 	}
@@ -600,7 +622,7 @@ class NacActiveAlarmService
 		// Acquire the wakelock
 		wakeLock = acquireWakeLock(alarm!!.autoDismissTime, WAKELOCK_TAG)
 
-		NacLog.i("Starting the active alarm activity from the service")
+		NacLog.i("Starting active alarm activity from the service")
 
 		// Start the alarm activity
 		NacActiveAlarmActivity.startAlarmActivity(this, alarm!!)
