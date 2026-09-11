@@ -130,6 +130,7 @@ class NacUpcomingReminderService
 		val audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
 		val audioAttributes = NacAudioAttributes(this, alarm)
 		val sharedPreferences = NacSharedPreferences(this)
+		val stream = audioAttributes.stream
 
 		// Start the wakeup process
 		val textToSpeech = NacTextToSpeech(this, object: NacTextToSpeech.OnSpeakingListener {
@@ -140,7 +141,7 @@ class NacUpcomingReminderService
 			override fun onDoneSpeaking()
 			{
 				// Revert the volume back to what it was
-				audioManager.setStreamVolume(audioAttributes.stream, sharedPreferences.previousVolume)
+				audioManager.setStreamVolume(stream, sharedPreferences.previousVolume)
 			}
 
 			/**
@@ -153,13 +154,13 @@ class NacUpcomingReminderService
 		})
 
 		// Save the current volume level so it can be reverted later
-		audioManager.saveCurrentVolume(sharedPreferences, audioAttributes.stream)
+		audioManager.saveCurrentVolume(sharedPreferences, stream)
 
 		// Set the volume to the alarm volume and save the volume level so
 		// that it can be correctly reverted back once the wakeup process
 		// is complete
-		val alarmVolumeIndex = alarm.toStreamVolume(audioManager, audioAttributes.stream)
-		audioManager.setStreamVolume(audioAttributes.stream, alarmVolumeIndex)
+		val alarmVolumeIndex = alarm.toStreamVolume(audioManager, stream)
+		audioManager.setStreamVolume(stream, alarmVolumeIndex)
 
 		// Get the phrase that should be said for the reminder
 		val timeUntilNextAlarm = getMinutesUntilNextAlarm(nextAlarmCal)

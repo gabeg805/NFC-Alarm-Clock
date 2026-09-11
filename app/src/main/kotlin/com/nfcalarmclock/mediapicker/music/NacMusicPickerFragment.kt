@@ -21,7 +21,6 @@ import com.google.android.material.progressindicator.CircularProgressIndicator
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.mediapicker.NacBaseChildMediaPickerFragment
-import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.file.NacFile
 import com.nfcalarmclock.system.file.basename
 import com.nfcalarmclock.system.file.browser.NacFileBrowser
@@ -425,12 +424,11 @@ abstract class NacMusicPickerFragment<T: NacAlarm>
 
 		// Get the views
 		val context = requireContext()
-		val shared = NacSharedPreferences(context)
 		val fab: FloatingActionButton = root.findViewById(R.id.fab_launch_file_browser)
 
 		// Setup the floating action button
 		fab.visibility = View.VISIBLE
-		fab.setupThemeColor(shared)
+		fab.setupThemeColor(sharedPreferences)
 
 		// Set the click listener
 		fab.setOnClickListener {

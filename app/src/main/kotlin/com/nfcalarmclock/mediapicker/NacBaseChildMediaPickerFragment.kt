@@ -56,7 +56,7 @@ abstract class NacBaseChildMediaPickerFragment<T: NacAlarm>
 	/**
 	 * Shared preferences.
 	 */
-	private lateinit var sharedPreferences: NacSharedPreferences
+	lateinit var sharedPreferences: NacSharedPreferences
 
 	/**
 	 * Listener when OK is clicked.
