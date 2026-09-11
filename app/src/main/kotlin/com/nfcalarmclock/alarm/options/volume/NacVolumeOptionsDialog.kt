@@ -82,7 +82,7 @@ open class NacVolumeOptionsDialog
 		volumeManager?.cleanup()
 
 		// Cleanup the media player
-		mediaPlayer?.release()
+		mediaPlayer?.release(requireContext())
 	}
 
 	/**
@@ -222,9 +222,11 @@ open class NacVolumeOptionsDialog
 				// Update the alarm for volume manager
 				updateAlarm(alarm)
 
-				// Setup the volume and media player
+				// Setup volume and media player
+				val context = requireContext()
+
 				volumeManager!!.setup(alarm)
-				mediaPlayer!!.playAlarm(alarm)
+				mediaPlayer!!.playAlarm(context, alarm)
 			}
 
 		})

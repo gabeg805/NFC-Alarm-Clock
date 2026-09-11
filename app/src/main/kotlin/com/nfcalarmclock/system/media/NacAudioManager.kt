@@ -8,6 +8,93 @@ import android.media.AudioManager.OnAudioFocusChangeListener
 import android.os.Build
 import androidx.media3.common.C
 import com.nfcalarmclock.R
+import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.log.NacLog
+import com.nfcalarmclock.shared.NacSharedPreferences
+
+/**
+ * Convert an alarm volume to a stream volume.
+ *
+ * Note a stream volume is an index.
+ */
+fun NacAlarm.toStreamVolume(audioManager: AudioManager, stream: Int): Int
+{
+	val maxVolume = audioManager.getSafeMaxStreamVolume(stream)
+	return (maxVolume * this.volume / 100.0f).toInt()
+}
+
+/**
+ * Get the maximum stream volume.
+ *
+ * @param stream A stream. Cannot be AudioManager.USE_DEFAULT_STREAM_TYPE.
+ *
+ * @return The maximum stream volume.
+ */
+fun AudioManager.getSafeMaxStreamVolume(stream: Int): Int
+{
+	return if (stream != AudioManager.USE_DEFAULT_STREAM_TYPE)
+	{
+		this.getStreamMaxVolume(stream)
+	}
+	else
+	{
+		0
+	}
+}
+
+/**
+ * Get the stream volume.
+ *
+ * @param stream A stream. Cannot be AudioManager.USE_DEFAULT_STREAM_TYPE.
+ *
+ * @return The stream volume.
+ */
+fun AudioManager.getSafeStreamVolume(stream: Int): Int
+{
+	return if (stream != AudioManager.USE_DEFAULT_STREAM_TYPE)
+	{
+		this.getStreamVolume(stream)
+	}
+	else
+	{
+		0
+	}
+}
+
+/**
+ * Save the current volume to shared preferences.
+ */
+fun AudioManager.saveCurrentVolume(sharedPreferences: NacSharedPreferences, stream: Int)
+{
+	sharedPreferences.previousVolume = this.getSafeStreamVolume(stream)
+}
+
+/**
+ * Set the stream volume.
+ *
+ * @param stream Stream to set the volume for.
+ * @param volumeIndex Volume index to set as the volume for the stream.
+ */
+fun AudioManager.setStreamVolume(stream: Int, volumeIndex: Int)
+{
+	// Unable to change the volume because the volume is fixed or because the
+	// stream is invalid
+	if (this.isVolumeFixed || (stream == AudioManager.USE_DEFAULT_STREAM_TYPE))
+	{
+		NacLog.w("Cannot set volume=$volumeIndex for stream=$stream. isVolumeFixed=$isVolumeFixed", offsetIndex = 1)
+		return
+	}
+
+	// Set the stream volume
+	try
+	{
+		this.setStreamVolume(stream, volumeIndex, 0)
+	}
+	catch (e: SecurityException)
+	{
+		NacLog.e("Unable to set volume=$volumeIndex for stream=$stream due to security exception", throwable = e, offsetIndex = 1)
+	}
+}
 
 /**
  * Audio manager.

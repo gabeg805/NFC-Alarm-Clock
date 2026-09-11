@@ -13,27 +13,31 @@ import androidx.media3.exoplayer.ExoPlayer
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.log.NacLog
+import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.isUserUnlocked
 import com.nfcalarmclock.system.media.NacAudioAttributes
 import com.nfcalarmclock.system.media.NacAudioManager
 import com.nfcalarmclock.system.media.NacMedia
 import com.nfcalarmclock.system.media.findFirstValidLocalMedia
+import com.nfcalarmclock.system.media.getSafeStreamVolume
 import com.nfcalarmclock.system.media.isMediaDirectory
 import com.nfcalarmclock.system.media.isMediaValid
+import com.nfcalarmclock.system.media.saveCurrentVolume
+import com.nfcalarmclock.system.media.setStreamVolume
 import com.nfcalarmclock.view.quickToast
 import java.io.File
 
 /**
- * Wrapper for the MediaPlayer class.
+ * Wrapper for the ExoPlayer class.
  *
  * @param context Application context.
- * @param listener Exo player listener.
+ * @param listener ExoPlayer listener.
  */
 @UnstableApi
 class NacMediaPlayer(
-	private val context: Context,
+	context: Context,
 	listener: Player.Listener? = null
-) : AudioManager.OnAudioFocusChangeListener
+)
 {
 
 	/**
@@ -53,9 +57,9 @@ class NacMediaPlayer(
 		/**
 		 * Audio focus is gained.
 		 */
-		fun onAudioFocusGain(mediaPlayer: NacMediaPlayer)
+		fun onAudioFocusGain(context: Context, mediaPlayer: NacMediaPlayer)
 		{
-			mediaPlayer.play()
+			mediaPlayer.play(context)
 		}
 
 		/**
@@ -85,9 +89,19 @@ class NacMediaPlayer(
 		.build()
 
 	/**
+	 * Audio manager.
+	 */
+	val audioManager: AudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+
+	/**
 	 * Audio attributes.
 	 */
 	val audioAttributes: NacAudioAttributes = NacAudioAttributes(context)
+
+	/**
+	 * Shared preferences.
+	 */
+	private val sharedPreferences: NacSharedPreferences = NacSharedPreferences(context)
 
 	/**
 	 * Flag indicating whether to gain transient audio focus, when requesting
@@ -110,8 +124,7 @@ class NacMediaPlayer(
 	 * Listener for any audio focus changes.
 	 */
 	var onAudioFocusChangeListener: OnAudioFocusChangeListener =
-		object: OnAudioFocusChangeListener
-		{}
+		object: OnAudioFocusChangeListener {}
 
 	/**
 	 * Constructor.
@@ -136,79 +149,16 @@ class NacMediaPlayer(
 		// Set the was playing flag
 		wasPlaying = exoPlayer.isPlaying
 
+		// Get stream and current volume
+		val stream = audioAttributes.stream
+		val currentVolume = audioManager.getSafeStreamVolume(stream)
+
+		// Save current volume
+		audioManager.saveCurrentVolume(sharedPreferences, stream)
+
 		// Duck the volume
-		audioAttributes.duckVolume()
-	}
-
-	/**
-	 * Change media state when audio focus changes.
-	 */
-	override fun onAudioFocusChange(focusChange: Int)
-	{
-		// Revert ducking
-		audioAttributes.revertDucking()
-
-		// Check what type of focus change occurred
-		when (focusChange)
-		{
-
-			// Gain audio focus
-			AudioManager.AUDIOFOCUS_GAIN ->
-			{
-				onAudioFocusChangeListener.onAudioFocusGain(this)
-			}
-
-			// Loss of audio focus
-			AudioManager.AUDIOFOCUS_LOSS ->
-			{
-				onAudioFocusChangeListener.onAudioFocusLoss(this)
-			}
-
-			// Transient loss of audio focus
-			AudioManager.AUDIOFOCUS_LOSS_TRANSIENT ->
-			{
-				onAudioFocusChangeListener.onAudioFocusLossTransient(this)
-			}
-
-			// Transient lose audio focus but can duck audio
-			AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK ->
-			{
-				onAudioFocusChangeListener.onAudioFocusDuck(this)
-			}
-
-		}
-	}
-
-	/**
-	 * Request audio focus.
-	 *
-	 * @return True if the audio focus request was granted, and False otherwise.
-	 */
-	private fun requestAudioFocus(): Boolean
-	{
-		// Request to gain audio focus
-		val request: Boolean = if (shouldGainTransientAudioFocus)
-		{
-			// Gain transient
-			NacAudioManager.requestFocusGainTransient(context, this, audioAttributes)
-		}
-		else
-		{
-			// Gain
-			NacAudioManager.requestFocusGain(context, this, audioAttributes)
-		}
-
-		// Unable to gain audio focus
-		if (!request)
-		{
-			// Show toast with error message
-			if (shouldShowToasts)
-			{
-				quickToast(context, R.string.error_message_play_audio)
-			}
-		}
-
-		return request
+		audioManager.setStreamVolume(stream, currentVolume/2)
+		audioAttributes.wasDucking = true
 	}
 
 	/**
@@ -225,14 +175,17 @@ class NacMediaPlayer(
 
 	/**
 	 * Play the media item(s) that are already set.
+	 *
+	 * @param context Context.
 	 */
-	fun play()
+	fun play(context: Context)
 	{
 		// Set the was playing flag
+		// TODO: Can this move after audio focus request?
 		wasPlaying = true
 
 		// Unable to gain audio focus
-		if (!requestAudioFocus())
+		if (!requestAudioFocus(context))
 		{
 			return
 		}
@@ -254,9 +207,10 @@ class NacMediaPlayer(
 	 *
 	 * This can play an entire directory (playlist) or a single media file.
 	 *
+	 * @param context Context.
 	 * @param alarm The alarm to get the media path from.
 	 */
-	fun playAlarm(alarm: NacAlarm): Uri?
+	fun playAlarm(context: Context, alarm: NacAlarm): Uri?
 	{
 		// Set shuffle mode (can be true or false) when playing a media directory
 		if (alarm.mediaType.isMediaDirectory())
@@ -265,7 +219,7 @@ class NacMediaPlayer(
 		}
 
 		// Merge alarm with audio attributes
-		audioAttributes.merge(alarm)
+		audioAttributes.merge(context, alarm)
 
 		// Check if file/directory exists
 		var uri: Uri? = alarm.mediaPath.toUri()
@@ -283,7 +237,9 @@ class NacMediaPlayer(
 				// If the recursive flag is set, it will also include the media in
 				// subdirectories as. Similarly, if shuffle is set, it will shuffle the
 				// media
-				playDirectory(alarm.mediaPath,
+				playDirectory(
+					context,
+					alarm.mediaPath,
 					recursive = alarm.shouldRecursivelyPlayMedia,
 					shuffle = alarm.shouldShuffleMedia)
 				return uri
@@ -314,7 +270,7 @@ class NacMediaPlayer(
 		if (uri != null)
 		{
 			// Play the file
-			playUri(uri)
+			playUri(context, uri)
 			return uri
 		}
 		else
@@ -331,10 +287,13 @@ class NacMediaPlayer(
 	/**
 	 * Play the media in a directory as a playlist.
 	 *
+	 * @param context Context.
 	 * @param path Path to a directory.
 	 * @param recursive Whether to recursively search a directory or not.
+	 * @param shuffle Whether to shuffle the list of songs when playing or not.
 	 */
 	private fun playDirectory(
+		context: Context,
 		path: String,
 		recursive: Boolean = false,
 		shuffle: Boolean = false)
@@ -344,15 +303,16 @@ class NacMediaPlayer(
 			recursive = recursive, shuffle = shuffle)
 
 		// Play the media items
-		playMediaItems(items)
+		playMediaItems(context, items)
 	}
 
 	/**
 	 * Play a media item.
 	 *
+	 * @param context Context.
 	 * @param  item  A media item.
 	 */
-	private fun playMediaItem(item: MediaItem)
+	private fun playMediaItem(context: Context, item: MediaItem)
 	{
 		try
 		{
@@ -365,15 +325,16 @@ class NacMediaPlayer(
 		}
 
 		// Play the media item
-		play()
+		play(context)
 	}
 
 	/**
 	 * Play a list of media items.
 	 *
+	 * @param context Context.
 	 * @param  items  List of media items.
 	 */
-	private fun playMediaItems(items: List<MediaItem>)
+	private fun playMediaItems(context: Context, items: List<MediaItem>)
 	{
 		try
 		{
@@ -386,32 +347,116 @@ class NacMediaPlayer(
 		}
 
 		// Play the media items
-		play()
+		play(context)
 	}
- /**
+
+	/**
 	 * Play the media with the given Uri.
 	 *
-	 * @param  uri  The Uri of the content to play.
+	 * @param context Context.
+	 * @param uri The Uri of the content to play.
 	 */
-	fun playUri(uri: Uri)
+	fun playUri(context: Context, uri: Uri)
 	{
 		// Convert the URI to a media item
 		val item = NacMedia.buildMediaItemFromFile(context, uri)
 
 		// Play the media item
-		playMediaItem(item)
+		playMediaItem(context, item)
 	}
 
 	/**
 	 * Release the media player.
+	 *
+	 * @param context Context.
 	 */
-	fun release()
+	fun release(context: Context)
 	{
 		// Abandon audio focus
 		NacAudioManager.abandonFocus(context, audioAttributes)
 
 		// Release the media player resources
 		exoPlayer.release()
+	}
+
+	/**
+	 * Request audio focus.
+	 *
+	 * @param context Context.
+	 *
+	 * @return True if the audio focus request was granted, and False otherwise.
+	 */
+	private fun requestAudioFocus(context: Context): Boolean
+	{
+		// Listener for when audio focus changes
+		val listener = AudioManager.OnAudioFocusChangeListener { focusChange ->
+
+			// Revert ducking
+			if (audioAttributes.wasDucking)
+			{
+				// Reset the ducking flag
+				audioAttributes.wasDucking = false
+
+				// Revert the volume back to what it was
+				audioManager.setStreamVolume(audioAttributes.stream, sharedPreferences.previousVolume)
+			}
+
+			// Check what type of focus change occurred
+			when (focusChange)
+			{
+
+				// Gain audio focus
+				AudioManager.AUDIOFOCUS_GAIN ->
+				{
+					onAudioFocusChangeListener.onAudioFocusGain(context, this@NacMediaPlayer)
+				}
+
+				// Loss of audio focus
+				AudioManager.AUDIOFOCUS_LOSS ->
+				{
+					onAudioFocusChangeListener.onAudioFocusLoss(this@NacMediaPlayer)
+				}
+
+				// Transient loss of audio focus
+				AudioManager.AUDIOFOCUS_LOSS_TRANSIENT ->
+				{
+					onAudioFocusChangeListener.onAudioFocusLossTransient(this@NacMediaPlayer)
+				}
+
+				// Transient lose audio focus but can duck audio
+				AudioManager.AUDIOFOCUS_LOSS_TRANSIENT_CAN_DUCK ->
+				{
+					onAudioFocusChangeListener.onAudioFocusDuck(this@NacMediaPlayer)
+				}
+
+			}
+
+		}
+
+		// Request to gain audio focus
+		val request: Boolean = if (shouldGainTransientAudioFocus)
+		{
+			// Gain transient
+			NacAudioManager.requestFocusGainTransient(context, listener, audioAttributes)
+		}
+		else
+		{
+			// Gain
+			NacAudioManager.requestFocusGain(context, listener, audioAttributes)
+		}
+
+		// Unable to gain audio focus
+		if (!request)
+		{
+			// Show toast with error message
+			if (shouldShowToasts)
+			{
+				NacLog.e("Unable to request audio focus. shouldGainTransient=$shouldGainTransientAudioFocus")
+				quickToast(context, R.string.error_message_play_audio)
+			}
+		}
+
+		return request
 	}
 
 	/**

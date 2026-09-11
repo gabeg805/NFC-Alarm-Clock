@@ -23,6 +23,7 @@ import com.nfcalarmclock.system.getShuffleMedia
 import com.nfcalarmclock.system.media.NacMedia
 import com.nfcalarmclock.system.media.copyMediaToDeviceEncryptedStorage
 import com.nfcalarmclock.system.media.doesDeviceHaveFreeSpace
+import com.nfcalarmclock.system.media.saveCurrentVolume
 import com.nfcalarmclock.system.mediaplayer.NacMediaPlayer
 import com.nfcalarmclock.view.quickToast
 
@@ -48,14 +49,19 @@ abstract class NacBaseChildMediaPickerFragment<T: NacAlarm>
 	protected var item: T? = null
 
 	/**
+	 * Media player.
+	 */
+	lateinit var mediaPlayer: NacMediaPlayer
+
+	/**
+	 * Shared preferences.
+	 */
+	private lateinit var sharedPreferences: NacSharedPreferences
+
+	/**
 	 * Listener when OK is clicked.
 	 */
 	var onOkClickedListener: OnOkClickedListener? = null
-
-	/**
-	 * Media player.
-	 */
-	var mediaPlayer: NacMediaPlayer? = null
 
 	/**
 	 * Media path.
@@ -239,7 +245,7 @@ abstract class NacBaseChildMediaPickerFragment<T: NacAlarm>
 		mediaType = NacMedia.TYPE_NONE
 
 		// Stop any media that is already playing
-		mediaPlayer?.exoPlayer?.stop()
+		mediaPlayer.exoPlayer.stop()
 	}
 
 	/**
@@ -250,7 +256,8 @@ abstract class NacBaseChildMediaPickerFragment<T: NacAlarm>
 		// Super
 		super.onCreate(savedInstanceState)
 
-		// Get the bundle
+		// Get the context and bundle
+		val context = requireContext()
 		val bundle = arguments ?: Bundle()
 
 		// Set the fragment item
@@ -268,12 +275,12 @@ abstract class NacBaseChildMediaPickerFragment<T: NacAlarm>
 			recursivelyPlayMedia = bundle.getRecursivelyPlayMedia()
 		}
 
-		// Create the media player
-		val context = requireContext()
+		// Create the lateinit vars
 		mediaPlayer = NacMediaPlayer(context)
+		sharedPreferences =  NacSharedPreferences(context)
 
 		// Gain transient audio focus
-		mediaPlayer!!.shouldGainTransientAudioFocus = true
+		mediaPlayer.shouldGainTransientAudioFocus = true
 	}
 
 	/**
@@ -285,7 +292,7 @@ abstract class NacBaseChildMediaPickerFragment<T: NacAlarm>
 		super.onDestroy()
 
 		// Cleanup the media player
-		mediaPlayer?.release()
+		mediaPlayer.release(requireContext())
 	}
 
 	/**
@@ -327,13 +334,14 @@ abstract class NacBaseChildMediaPickerFragment<T: NacAlarm>
 	 */
 	protected fun play(uri: Uri)
 	{
+		val context = requireContext()
 		val path = uri.toString()
 
 		// Invalid URI path since it does not start with "content://"
 		if (!path.startsWith("content://"))
 		{
-			// Show an error toast
-			quickToast(requireContext(), R.string.error_message_play_audio)
+			NacLog.e("Unable to play audio uri=$path")
+			quickToast(context, R.string.error_message_play_audio)
 			return
 		}
 
@@ -342,13 +350,13 @@ abstract class NacBaseChildMediaPickerFragment<T: NacAlarm>
 		mediaPath = path
 
 		// Stop any media that is already playing
-		mediaPlayer?.exoPlayer?.stop()
+		mediaPlayer.exoPlayer.stop()
 
 		// Save the current volume
-		mediaPlayer!!.audioAttributes.saveCurrentVolume()
+		mediaPlayer.audioManager.saveCurrentVolume(sharedPreferences, mediaPlayer.audioAttributes.stream)
 
 		// Play the media
-		mediaPlayer!!.playUri(uri)
+		mediaPlayer.playUri(context, uri)
 	}
 
 	/**

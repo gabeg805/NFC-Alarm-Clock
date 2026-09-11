@@ -121,8 +121,8 @@ class NacWakeupProcess(
 			// Empty override functions so that nothing happens when audio
 			// focus is lost. This means that audio should keep playing even if
 			// audio focus is lost
-			override fun onAudioFocusLoss(mediaPlayer: NacMediaPlayer) { }
-			override fun onAudioFocusLossTransient(mediaPlayer: NacMediaPlayer) { }
+			override fun onAudioFocusLoss(mediaPlayer: NacMediaPlayer) {}
+			override fun onAudioFocusLossTransient(mediaPlayer: NacMediaPlayer) {}
 
 		}
 
@@ -201,7 +201,7 @@ class NacWakeupProcess(
 		flashlight?.cleanup()
 
 		// Cleanup the media player
-		mediaPlayer?.release()
+		mediaPlayer?.release(context)
 
 		// Cleanup the text-to-speech engine
 		textToSpeech?.cleanup()
@@ -231,13 +231,13 @@ class NacWakeupProcess(
 		// Media player was playing music, so continue playing what was playing before
 		if (mediaPlayer.wasPlaying)
 		{
-			mediaPlayer.play()
+			mediaPlayer.play(context)
 		}
 		// Play the alarm
 		else
 		{
 			// Uri of media that is playing
-			val playingUri = mediaPlayer.playAlarm(alarm)
+			val playingUri = mediaPlayer.playAlarm(context, alarm)
 
 			// Check if the current playing uri does not match the path from the alarm
 			if ((playingUri == null)

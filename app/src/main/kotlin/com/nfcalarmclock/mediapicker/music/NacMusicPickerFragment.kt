@@ -166,7 +166,7 @@ abstract class NacMusicPickerFragment<T: NacAlarm>
 			// File was deselected. Stop any media that is already playing
 			else
 			{
-				mediaPlayer?.exoPlayer?.stop()
+				mediaPlayer.exoPlayer.stop()
 			}
 		}
 

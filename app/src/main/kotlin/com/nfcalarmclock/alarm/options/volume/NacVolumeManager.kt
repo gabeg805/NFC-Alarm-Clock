@@ -1,9 +1,15 @@
 package com.nfcalarmclock.alarm.options.volume
 
 import android.content.Context
+import android.media.AudioManager
 import android.os.Handler
 import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.media.NacAudioAttributes
+import com.nfcalarmclock.system.media.getSafeStreamVolume
+import com.nfcalarmclock.system.media.saveCurrentVolume
+import com.nfcalarmclock.system.media.setStreamVolume
+import com.nfcalarmclock.system.media.toStreamVolume
 
 /**
  * Manage volume based on alarm settings.
@@ -26,6 +32,16 @@ class NacVolumeManager(
 	{
 		fun onVolumeKeyPress(alarm: NacAlarm)
 	}
+
+	/**
+	 * Audio manager.
+	 */
+	private val audioManager: AudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+
+	/**
+	 * Shared preferences.
+	 */
+	private val sharedPreferences: NacSharedPreferences = NacSharedPreferences(context)
 
 	/**
 	 * Gradually increase the volume.
@@ -76,12 +92,10 @@ class NacVolumeManager(
 	 */
 	fun cleanup()
 	{
-		// Check if the the current volume was saved and if so, then it should
-		// be reverted
+		// Current volume was saved because media/TTS was used, so revert the volume back
 		if (alarm.shouldUseTts || alarm.mediaPath.isNotEmpty())
 		{
-			// Revert the volume
-			audioAttributes.revertVolume()
+			audioManager.setStreamVolume(audioAttributes.stream, sharedPreferences.previousVolume)
 		}
 
 		// Cleanup the gradually increasing volume handler
@@ -100,7 +114,7 @@ class NacVolumeManager(
 	private fun graduallyIncreaseVolume()
 	{
 		// Get the alarm volume
-		val alarmVolume = audioAttributes.alarmToStreamVolume()
+		val alarmVolume = alarm.toStreamVolume(audioManager, audioAttributes.stream)
 
 		// Get the current volume
 		val currentVolume = if (alarm.shouldRestrictVolume)
@@ -111,7 +125,7 @@ class NacVolumeManager(
 		else
 		{
 			// Device volume
-			audioAttributes.streamVolume
+			audioManager.getSafeStreamVolume(audioAttributes.stream)
 		}
 
 		// Volume has not reached the alarm level yet
@@ -122,7 +136,7 @@ class NacVolumeManager(
 
 			initialVolume = newVolume
 			volumeToRestrictChangeTo = newVolume
-			audioAttributes.streamVolume = newVolume
+			audioManager.setStreamVolume(audioAttributes.stream, newVolume)
 		}
 
 		// Wait for a period of time before increasing the volume again.
@@ -138,14 +152,17 @@ class NacVolumeManager(
 	 */
 	private fun restrictVolume()
 	{
+		// Get the stream volume
+		val streamVolume = audioManager.getSafeStreamVolume(audioAttributes.stream)
+
 		// Check if the volume is below the restrict volume.
 		// If the volume will be gradually increasing, check that the process
 		// has already started
-		if ((audioAttributes.streamVolume < volumeToRestrictChangeTo)
+		if ((streamVolume < volumeToRestrictChangeTo)
 			&& (!alarm.shouldGraduallyIncreaseVolume || hasGraduallyIncreaseVolumeStarted))
 		{
 			// Change the volume
-			audioAttributes.streamVolume = volumeToRestrictChangeTo
+			audioManager.setStreamVolume(audioAttributes.stream, volumeToRestrictChangeTo)
 
 			// Call the volume key press listener
 			onVolumeKeyPressListener?.onVolumeKeyPress(alarm)
@@ -166,12 +183,13 @@ class NacVolumeManager(
 		if (alarm.shouldUseTts || alarm.mediaPath.isNotEmpty())
 		{
 			// Save the current volume level so it can be reverted later
-			audioAttributes.saveCurrentVolume()
+			audioManager.saveCurrentVolume(sharedPreferences, audioAttributes.stream)
 
 			// Set the volume to the alarm volume and save the volume level so
 			// that it can be correctly reverted back once the wakeup process
 			// is complete
-			audioAttributes.setStreamVolume()
+			val alarmVolumeIndex = alarm.toStreamVolume(audioManager, audioAttributes.stream)
+			audioManager.setStreamVolume(audioAttributes.stream, alarmVolumeIndex)
 
 			// Check if should gradually increase the volume
 			if (alarm.shouldGraduallyIncreaseVolume)
@@ -187,7 +205,7 @@ class NacVolumeManager(
 		}
 
 		// Set the initial volume
-		initialVolume = audioAttributes.streamVolume
+		initialVolume = audioManager.getSafeStreamVolume(audioAttributes.stream)
 
 		// Watch for volume key press
 		if (alarm.shouldVolumeDismiss || alarm.shouldVolumeSnooze)
@@ -203,7 +221,7 @@ class NacVolumeManager(
 	{
 		// Set the volume to 0 to start with
 		volumeToRestrictChangeTo = 0
-		audioAttributes.streamVolume = 0
+		audioManager.setStreamVolume(audioAttributes.stream, 0)
 
 		// Run handler at a cadence in order to gradually increase the volume
 		graduallyIncreaseVolumeHandler.postDelayed({
@@ -224,7 +242,7 @@ class NacVolumeManager(
 	private fun setupRestrictVolume()
 	{
 		// Set the volume to restrict to, if any changes occur
-		volumeToRestrictChangeTo = audioAttributes.streamVolume
+		volumeToRestrictChangeTo = audioManager.getSafeStreamVolume(audioAttributes.stream)
 
 		// Run handler at a cadence in order to restrict the volume. Volume
 		// change events cannot be caught, so need to run this every X
@@ -241,7 +259,7 @@ class NacVolumeManager(
 		volumeKeyPressHandler.postDelayed({
 
 			// Get the current volume
-			val currentVolume = audioAttributes.streamVolume
+			val currentVolume = audioManager.getSafeStreamVolume(audioAttributes.stream)
 
 			// Volume was changed
 			if (initialVolume != currentVolume)
