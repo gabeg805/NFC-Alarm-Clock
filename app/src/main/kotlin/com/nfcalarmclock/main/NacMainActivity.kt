@@ -9,6 +9,9 @@ import android.content.IntentFilter
 import android.content.ServiceConnection
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.media.AudioDeviceCallback
+import android.media.AudioDeviceInfo
+import android.media.AudioManager
 import android.os.Build
 import android.os.Bundle
 import android.os.DeadObjectException
@@ -599,6 +602,63 @@ class NacMainActivity
 			cleanupExtraMediaFilesInDeviceEncryptedStorage()
 			cleanupEmailZipFiles()
 		}
+
+		// Dummy
+		val audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
+		// Register callback to find any connected bluetooth speakers and play audio through
+		// them as well
+		audioManager.registerAudioDeviceCallback(object: AudioDeviceCallback() {
+
+			override fun onAudioDevicesAdded(devices: Array<out AudioDeviceInfo>)
+			{
+				//super.onAudioDevicesAdded(addedDevices)
+				devices.toList().forEach {
+					println("Device : $it")
+					NacLog.i("Device : $it")
+				}
+
+				//val bluetoothHearingAid = devices.find {
+				//	// TODO: Add this when supporting API 37
+				//	//|| ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.37)
+				//	//	&& (it.type == AudioDeviceInfo.TYPE_BLE_HEARING_AID))
+				//}
+
+				// Attempt to find different types of bluetooth devices
+				val bluetoothA2dp: AudioDeviceInfo? = devices.find { it.type == AudioDeviceInfo.TYPE_BLUETOOTH_A2DP }
+				var bluetoothSpeaker: AudioDeviceInfo? = null
+				var bluetoothHeadset: AudioDeviceInfo? = null
+
+				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
+				{
+					bluetoothSpeaker = devices.find { it.type == AudioDeviceInfo.TYPE_BLE_HEADSET }
+					bluetoothHeadset = devices.find { it.type == AudioDeviceInfo.TYPE_BLE_SPEAKER }
+				}
+
+				// Choose bluetooth device based on priority
+				val bluetoothDevice = bluetoothA2dp ?: bluetoothSpeaker ?: bluetoothHeadset
+
+				// Find the builtin speaker
+				val builtinSpeaker = devices.find { it.type == AudioDeviceInfo.TYPE_BUILTIN_SPEAKER }
+
+				// Start the media player for the phone (always)
+				if (builtinSpeaker != null)
+				{
+					//exoPlayer.setPreferredAudioDevice(builtinSpeaker)
+					//exoPlayer.start()
+				}
+
+				if (bluetoothDevice != null)
+				{
+					//bluetoothPlayer.setPreferredAudioDevice(bluetoothDevice)
+					//bluetoothPlayer.start()
+				}
+
+				// Unregister the callback
+				audioManager.unregisterAudioDeviceCallback(this)
+
+			}
+
+		}, null)
 	}
 
 	/**

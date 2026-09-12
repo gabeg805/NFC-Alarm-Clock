@@ -12,10 +12,12 @@ import com.nfcalarmclock.alarm.options.tts.NacTextToSpeech.OnSpeakingListener
 import com.nfcalarmclock.alarm.options.tts.NacTranslate
 import com.nfcalarmclock.alarm.options.vibrate.NacVibrator
 import com.nfcalarmclock.alarm.options.volume.NacVolumeManager
+import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.getDeviceProtectedStorageContext
 import com.nfcalarmclock.system.media.NacAudioAttributes
 import com.nfcalarmclock.system.media.NacAudioManager
+import com.nfcalarmclock.system.media.getSafeStreamVolume
 import com.nfcalarmclock.system.mediaplayer.NacMediaPlayer
 
 /**
@@ -149,6 +151,8 @@ class NacWakeupProcess(
 				// Abandon audio focus
 				NacAudioManager.abandonFocus(context, audioAttributes)
 
+				NacLog.i("Done speaking current volume=${mediaPlayer?.audioManager?.getSafeStreamVolume(audioAttributes.stream)}")
+
 				// Use handler to start wake up process so that the media
 				// player is accessed on the correct thread
 				continueWakeupHandler.post { startNoTts() }
@@ -159,6 +163,8 @@ class NacWakeupProcess(
 			 */
 			override fun onStartSpeaking()
 			{
+				NacLog.i("Starting speaking current volume=${mediaPlayer?.audioManager?.getSafeStreamVolume(audioAttributes.stream)}")
+
 				// Stop any vibration and flashlight when TTS is playing
 				vibrator?.cleanup()
 				flashlight?.cleanup()
