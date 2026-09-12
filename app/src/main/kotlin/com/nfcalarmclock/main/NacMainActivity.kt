@@ -613,8 +613,8 @@ class NacMainActivity
 			{
 				//super.onAudioDevicesAdded(addedDevices)
 				devices.toList().forEach {
-					println("Device : $it")
-					NacLog.i("Device : $it")
+					println("Device : ${it.type} | ${it.productName} | ${it.address}")
+					NacLog.i("Device : ${it.type} | ${it.productName} | ${it.address}")
 				}
 
 				//val bluetoothHearingAid = devices.find {
@@ -639,6 +639,10 @@ class NacMainActivity
 
 				// Find the builtin speaker
 				val builtinSpeaker = devices.find { it.type == AudioDeviceInfo.TYPE_BUILTIN_SPEAKER }
+				println("Builtin speaker: $builtinSpeaker")
+				println("Bluetooth dev  : $bluetoothDevice")
+				NacLog.i("Builtin speaker: $builtinSpeaker")
+				NacLog.i("Bluetooth dev  : $bluetoothDevice")
 
 				// Start the media player for the phone (always)
 				if (builtinSpeaker != null)
