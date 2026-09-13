@@ -4,10 +4,8 @@ import android.content.Context
 import android.media.AudioManager
 import android.os.Handler
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.media.NacAudioAttributes
 import com.nfcalarmclock.system.media.getSafeStreamVolume
-import com.nfcalarmclock.system.media.saveCurrentVolume
 import com.nfcalarmclock.system.media.setStreamVolume
 import com.nfcalarmclock.system.media.toStreamVolume
 
@@ -37,11 +35,6 @@ class NacVolumeManager(
 	 * Audio manager.
 	 */
 	private val audioManager: AudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-
-	/**
-	 * Shared preferences.
-	 */
-	private val sharedPreferences: NacSharedPreferences = NacSharedPreferences(context)
 
 	/**
 	 * Gradually increase the volume.
@@ -90,12 +83,12 @@ class NacVolumeManager(
 	/**
 	 * Cleanup resources.
 	 */
-	fun cleanup()
+	fun cleanup(onRevertVolume: () -> Unit = {})
 	{
 		// Current volume was saved because media/TTS was used, so revert the volume back
 		if (alarm.shouldUseTts || alarm.mediaPath.isNotEmpty())
 		{
-			audioManager.setStreamVolume(audioAttributes.stream, sharedPreferences.previousVolume)
+			onRevertVolume()
 		}
 
 		// Cleanup the gradually increasing volume handler
@@ -176,14 +169,14 @@ class NacVolumeManager(
 	/**
 	 * Setup the volume manager.
 	 */
-	fun setup(alarm: NacAlarm)
+	fun setup(alarm: NacAlarm, onSaveVolume: () -> Unit = {})
 	{
 		// Using text-to-speech or playing music. The reason being that if these are
 		// not being used, then there is no point in changing the volume
 		if (alarm.shouldUseTts || alarm.mediaPath.isNotEmpty())
 		{
 			// Save the current volume level so it can be reverted later
-			audioManager.saveCurrentVolume(sharedPreferences, audioAttributes.stream)
+			onSaveVolume()
 
 			// Set the volume to the alarm volume and save the volume level so
 			// that it can be correctly reverted back once the wakeup process

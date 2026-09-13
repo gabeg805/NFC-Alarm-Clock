@@ -145,7 +145,7 @@ class NacMediaPlayer(
 	 */
 	fun duck()
 	{
-		NacLog.i("Ducking the media player")
+		NacLog.i("Ducking the media player. streamVolume=${audioManager.getSafeStreamVolume(audioAttributes.stream)} | currentVolume=${sharedPreferences.previousVolume}")
 
 		// Set the was playing flag
 		wasPlaying = exoPlayer.isPlaying
@@ -183,7 +183,7 @@ class NacMediaPlayer(
 	 */
 	fun play(context: Context)
 	{
-		NacLog.i("Playing the media player")
+		NacLog.i("Playing the media player. stream=${audioAttributes.stream} | volume=${audioManager.getSafeStreamVolume(audioAttributes.stream)}")
 
 		// Set the was playing flag
 		// TODO: Can this move after audio focus request?
@@ -399,20 +399,21 @@ class NacMediaPlayer(
 	 *
 	 * @return True if the audio focus request was granted, and False otherwise.
 	 */
-	private fun requestAudioFocus(context: Context, attrs: NacAudioAttributes, shouldDuck: Boolean = true): Boolean
+	private fun requestAudioFocus(context: Context, attrs: NacAudioAttributes): Boolean
 	{
 		// Listener for when audio focus changes
 		val listener = AudioManager.OnAudioFocusChangeListener { focusChange ->
 
-			NacLog.i("Requesting audio focus=$focusChange | wasDucking=${attrs.wasDucking} | prevVolume=${sharedPreferences.previousVolume}")
+			NacLog.i("Requesting audio focus=$focusChange | stream=${attrs.stream} | volume=${audioManager.getSafeStreamVolume(attrs.stream)} | wasDucking=${attrs.wasDucking} | prevVolume=${sharedPreferences.previousVolume} | prevBluetoothVolume=${sharedPreferences.previousBluetoothVolume}")
 
 			// Revert ducking
-			if (shouldDuck && attrs.wasDucking)
+			if (attrs.wasDucking)
 			{
 				// Reset the ducking flag
 				attrs.wasDucking = false
 
 				// Revert the volume back to what it was
+				NacLog.i("Changing stream volume to previous volume!!!!!!!!!! TODO: Delete this when done")
 				audioManager.setStreamVolume(attrs.stream, sharedPreferences.previousVolume)
 			}
 
@@ -452,20 +453,20 @@ class NacMediaPlayer(
 		val request: Boolean = if (shouldGainTransientAudioFocus)
 		{
 			// Gain transient
-			NacLog.i("Requesting audio focus gain transient. usage=${attrs.audioUsage}")
+			NacLog.i("Requesting audio focus gain transient. stream=${attrs.stream} | usage=${attrs.audioUsage} | volume=${audioManager.getSafeStreamVolume(attrs.stream)}")
 			audioManager.requestFocusGainTransient(listener, attrs)
 		}
 		else
 		{
 			// Gain
-			NacLog.i("Requesting audio focus gain. usage=${attrs.audioUsage}")
+			NacLog.i("Requesting audio focus gain. stream=${attrs.stream} | usage=${attrs.audioUsage} | volume=${audioManager.getSafeStreamVolume(attrs.stream)}")
 			audioManager.requestFocusGain(listener, attrs)
 		}
 
 		// Unable to gain audio focus
 		if (!request)
 		{
-			NacLog.e("Unable to request audio focus. usage=${attrs.audioUsage} | shouldGainTransient=$shouldGainTransientAudioFocus")
+			NacLog.e("Unable to request audio focus. stream=${attrs.stream} | usage=${attrs.audioUsage} | volume=${audioManager.getSafeStreamVolume(attrs.stream)} | shouldGainTransient=$shouldGainTransientAudioFocus")
 
 			// Show toast with error message
 			if (shouldShowToasts)

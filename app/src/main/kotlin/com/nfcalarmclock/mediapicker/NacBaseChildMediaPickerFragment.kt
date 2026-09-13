@@ -23,7 +23,6 @@ import com.nfcalarmclock.system.getShuffleMedia
 import com.nfcalarmclock.system.media.NacMedia
 import com.nfcalarmclock.system.media.copyMediaToDeviceEncryptedStorage
 import com.nfcalarmclock.system.media.doesDeviceHaveFreeSpace
-import com.nfcalarmclock.system.media.saveCurrentVolume
 import com.nfcalarmclock.system.mediaplayer.NacMediaPlayer
 import com.nfcalarmclock.view.quickToast
 
@@ -348,9 +347,6 @@ abstract class NacBaseChildMediaPickerFragment<T: NacAlarm>
 
 		// Stop any media that is already playing
 		mediaPlayer.exoPlayer.stop()
-
-		// Save the current volume
-		mediaPlayer.audioManager.saveCurrentVolume(sharedPreferences, mediaPlayer.audioAttributes.stream)
 
 		// Play the media
 		mediaPlayer.playUri(context, uri)

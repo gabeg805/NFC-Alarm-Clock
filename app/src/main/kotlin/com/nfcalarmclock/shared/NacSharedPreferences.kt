@@ -1629,13 +1629,31 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
+	 * The previous system volume being used by bluetooth, before an alarm goes off.
+	 */
+	var previousBluetoothVolume: Int
+		get()
+		{
+			val key = resources.getString(R.string.sys_previous_bluetooth_volume)
+			val defaultValue = -1
+
+			return instance.getInt(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.sys_previous_bluetooth_volume)
+
+			saveInt(key, value)
+		}
+
+	/**
 	 * The previous system volume, before an alarm goes off.
 	 */
 	var previousVolume: Int
 		get()
 		{
 			val key = resources.getString(R.string.sys_previous_volume)
-			val defaultValue = resources.getInteger(R.integer.default_previous_volume)
+			val defaultValue = -1
 
 			return instance.getInt(key, defaultValue)
 		}

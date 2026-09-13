@@ -135,25 +135,11 @@ class NacUpcomingReminderService
 		val stream = audioAttributes.stream
 
 		// Start the wakeup process
-		val textToSpeech = NacTextToSpeech(this, object: NacTextToSpeech.OnSpeakingListener {
-
-			/**
-			 * Called when done speaking.
-			 */
-			override fun onDoneSpeaking()
-			{
+		val textToSpeech = NacTextToSpeech(this,
+			onDoneSpeaking = {
 				// Revert the volume back to what it was
 				audioManager.setStreamVolume(stream, sharedPreferences.previousVolume)
-			}
-
-			/**
-			 * Called when the text-to-speech engine has started.
-			 */
-			override fun onStartSpeaking()
-			{
-			}
-
-		})
+			})
 
 		// Save the current volume level so it can be reverted later
 		audioManager.saveCurrentVolume(sharedPreferences, stream)

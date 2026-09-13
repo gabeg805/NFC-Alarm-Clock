@@ -13,7 +13,6 @@ import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.flashlight.NacFlashlight
 import com.nfcalarmclock.alarm.options.tts.NacTextToSpeech
-import com.nfcalarmclock.alarm.options.tts.NacTextToSpeech.OnSpeakingListener
 import com.nfcalarmclock.alarm.options.tts.NacTranslate
 import com.nfcalarmclock.alarm.options.vibrate.NacVibrator
 import com.nfcalarmclock.alarm.options.volume.NacVolumeManager
@@ -23,6 +22,9 @@ import com.nfcalarmclock.system.getDeviceProtectedStorageContext
 import com.nfcalarmclock.system.media.NacAudioAttributes
 import com.nfcalarmclock.system.media.abandonFocus
 import com.nfcalarmclock.system.media.getSafeStreamVolume
+import com.nfcalarmclock.system.media.saveCurrentBluetoothVolume
+import com.nfcalarmclock.system.media.saveCurrentVolume
+import com.nfcalarmclock.system.media.setStreamVolume
 import com.nfcalarmclock.system.mediaplayer.NacMediaPlayer
 
 /**
@@ -202,28 +204,8 @@ class NacWakeupProcess(
 	 */
 	private val textToSpeech: NacTextToSpeech? = if (alarm.shouldUseTts)
 	{
-		NacTextToSpeech(context, object: OnSpeakingListener {
-
-			/**
-			 * Done speaking.
-			 */
-			override fun onDoneSpeaking()
-			{
-				// Abandon audio focus
-				audioManager.abandonFocus(audioAttributes)
-
-				NacLog.i("Done speaking. currentVolume=${mediaPlayer?.audioManager?.getSafeStreamVolume(audioAttributes.stream)}")
-
-				// Use handler to start wake up process so that the media
-				// player is accessed on the correct thread
-				continueWakeupHandler.post { startNoTts() }
-			}
-
-			/**
-			 * Text-to-speech engine has started.
-			 */
-			override fun onStartSpeaking()
-			{
+		NacTextToSpeech(context,
+			onStartSpeaking = {
 				NacLog.i("Starting speaking. currentVolume=${mediaPlayer?.audioManager?.getSafeStreamVolume(audioAttributes.stream)}")
 
 				// Stop any vibration and flashlight when TTS is playing
@@ -241,9 +223,17 @@ class NacWakeupProcess(
 					}
 
 				}
-			}
+			},
+			onDoneSpeaking = {
+				// Abandon audio focus
+				audioManager.abandonFocus(audioAttributes)
 
-		})
+				NacLog.i("Done speaking. currentVolume=${mediaPlayer?.audioManager?.getSafeStreamVolume(audioAttributes.stream)}")
+
+				// Use handler to start wake up process so that the media
+				// player is accessed on the correct thread
+				continueWakeupHandler.post { startNoTts() }
+			})
 	}
 	else
 	{
@@ -255,28 +245,8 @@ class NacWakeupProcess(
 	 */
 	private val bluetoothTextToSpeech: NacTextToSpeech? = if ((textToSpeech != null) && alarm.shouldPlayAudioThroughSpeakersAndBluetooth)
 	{
-		NacTextToSpeech(context, object: OnSpeakingListener {
-
-			/**
-			 * Done speaking.
-			 */
-			override fun onDoneSpeaking()
-			{
-				// Abandon audio focus
-				audioManager.abandonFocus(bluetoothAudioAttributes!!)
-
-				NacLog.i("Done speaking through bluetooth. currentVolume=${bluetoothMediaPlayer?.audioManager?.getSafeStreamVolume(bluetoothAudioAttributes!!.stream)}")
-
-				// Use handler to start wake up process so that the media
-				// player is accessed on the correct thread
-				continueWakeupHandler.post { startNoTts() }
-			}
-
-			/**
-			 * Text-to-speech engine has started.
-			 */
-			override fun onStartSpeaking()
-			{
+		NacTextToSpeech(context,
+			onStartSpeaking = {
 				NacLog.i("Starting speaking through bluetooth. currentVolume=${bluetoothMediaPlayer?.audioManager?.getSafeStreamVolume(bluetoothAudioAttributes!!.stream)}")
 
 				// Use handler to start wake up process so that the media
@@ -290,9 +260,17 @@ class NacWakeupProcess(
 					}
 
 				}
-			}
+			},
+			onDoneSpeaking = {
+				// Abandon audio focus
+				audioManager.abandonFocus(bluetoothAudioAttributes!!)
 
-		})
+				NacLog.i("Done speaking through bluetooth. currentVolume=${bluetoothMediaPlayer?.audioManager?.getSafeStreamVolume(bluetoothAudioAttributes!!.stream)}")
+
+				// Use handler to start wake up process so that the media
+				// player is accessed on the correct thread
+				continueWakeupHandler.post { startNoTts() }
+			})
 	}
 	else
 	{
@@ -321,6 +299,9 @@ class NacWakeupProcess(
 	 */
 	init
 	{
+		// TODO: SEE WHERE SAVE CURRENT VOLUME IS USED
+		// TODO: SEE HOW TTS CHANGES/SETS VOLUME
+
 		// Audio should be played through speakers and bluetooth
 		if (alarm.shouldPlayAudioThroughSpeakersAndBluetooth)
 		{
@@ -435,8 +416,16 @@ class NacWakeupProcess(
 		mediaWatchdogHandler.removeCallbacksAndMessages(null)
 
 		// Cleanup volume resources
-		volumeManager.cleanup()
-		bluetoothVolumeManager?.cleanup()
+		volumeManager.cleanup(
+			onRevertVolume = {
+				NacLog.i("Reverting normal stream volume. fromVolume=${audioManager.getSafeStreamVolume(audioAttributes.stream)} | toVolume=${sharedPreferences.previousVolume}")
+				audioManager.setStreamVolume(audioAttributes.stream, sharedPreferences.previousVolume)
+			})
+		bluetoothVolumeManager?.cleanup(
+			onRevertVolume = {
+				NacLog.i("Reverting bluetooth stream volume. fromVolume=${audioManager.getSafeStreamVolume(bluetoothAudioAttributes!!.stream)} | toVolume=${sharedPreferences.previousBluetoothVolume}")
+				audioManager.setStreamVolume(bluetoothAudioAttributes!!.stream, sharedPreferences.previousBluetoothVolume)
+			})
 	}
 
 	/**
@@ -539,8 +528,14 @@ class NacWakeupProcess(
 	fun start()
 	{
 		// Setup the volume
-		volumeManager.setup(alarm)
-		bluetoothVolumeManager?.setup(alarm)
+		volumeManager.setup(alarm, onSaveVolume = {
+			NacLog.i("Saving normal stream volume. volume=${audioManager.getSafeStreamVolume(audioAttributes.stream)}")
+			audioManager.saveCurrentVolume(sharedPreferences, audioAttributes.stream)
+		})
+		bluetoothVolumeManager?.setup(alarm, onSaveVolume = {
+			NacLog.i("Saving bluetooth stream volume. volume=${audioManager.getSafeStreamVolume(bluetoothAudioAttributes!!.stream)}")
+			audioManager.saveCurrentBluetoothVolume(sharedPreferences, bluetoothAudioAttributes!!.stream)
+		})
 
 		// Start TTS
 		if (alarm.shouldUseTts)

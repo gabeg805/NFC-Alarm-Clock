@@ -170,13 +170,9 @@ open class NacVolumeOptionsDialog
 				// Empty override functions so that nothing happens when audio
 				// focus is lost. This means that audio should keep playing even if
 				// audio focus is lost
-				override fun onAudioFocusLoss(mediaPlayer: NacMediaPlayer)
-				{
-				}
+				override fun onAudioFocusLoss(mediaPlayer: NacMediaPlayer) {}
 
-				override fun onAudioFocusLossTransient(mediaPlayer: NacMediaPlayer)
-				{
-				}
+				override fun onAudioFocusLossTransient(mediaPlayer: NacMediaPlayer) {}
 			}
 		}
 

@@ -80,63 +80,6 @@ fun AudioManager.getSafeStreamVolume(stream: Int): Int
 }
 
 /**
- * Save the current volume to shared preferences.
- */
-fun AudioManager.saveCurrentVolume(sharedPreferences: NacSharedPreferences, stream: Int)
-{
-	sharedPreferences.previousVolume = this.getSafeStreamVolume(stream)
-}
-
-/**
- * Set the stream volume.
- *
- * @param stream Stream to set the volume for.
- * @param volumeIndex Volume index to set as the volume for the stream.
- */
-fun AudioManager.setStreamVolume(stream: Int, volumeIndex: Int)
-{
-	// Unable to change the volume because the volume is fixed or because the
-	// stream is invalid
-	if (this.isVolumeFixed || (stream == AudioManager.USE_DEFAULT_STREAM_TYPE))
-	{
-		NacLog.w("Cannot set volume=$volumeIndex for stream=$stream. isVolumeFixed=$isVolumeFixed", offsetIndex = 1)
-		return
-	}
-
-	// Set the stream volume
-	try
-	{
-		this.setStreamVolume(stream, volumeIndex, 0)
-	}
-	catch (e: SecurityException)
-	{
-		NacLog.e("Unable to set volume=$volumeIndex for stream=$stream due to security exception", throwable = e, offsetIndex = 1)
-	}
-}
-
-/**
- * Request to gain audio focus.
- */
-fun AudioManager.requestFocusGain(
-	listener: OnAudioFocusChangeListener?,
-	attrs: NacAudioAttributes
-): Boolean
-{
-	return this.requestFocus(listener, attrs, AudioManager.AUDIOFOCUS_GAIN)
-}
-
-/**
- * Request to gain transient audio focus.
- */
-fun AudioManager.requestFocusGainTransient(
-	listener: OnAudioFocusChangeListener?,
-	attrs: NacAudioAttributes
-): Boolean
-{
-	return this.requestFocus(listener, attrs, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT)
-}
-
-/**
  * Request to generally gain audio focus.
  */
 @Suppress("deprecation")
@@ -188,6 +131,71 @@ fun AudioManager.requestFocus(
 
 	// Check the result
 	return result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED
+}
+
+/**
+ * Request to gain audio focus.
+ */
+fun AudioManager.requestFocusGain(
+	listener: OnAudioFocusChangeListener?,
+	attrs: NacAudioAttributes
+): Boolean
+{
+	return this.requestFocus(listener, attrs, AudioManager.AUDIOFOCUS_GAIN)
+}
+
+/**
+ * Request to gain transient audio focus.
+ */
+fun AudioManager.requestFocusGainTransient(
+	listener: OnAudioFocusChangeListener?,
+	attrs: NacAudioAttributes
+): Boolean
+{
+	return this.requestFocus(listener, attrs, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT)
+}
+
+/**
+ * Save the current volume to shared preferences.
+ */
+fun AudioManager.saveCurrentVolume(sharedPreferences: NacSharedPreferences, stream: Int)
+{
+	sharedPreferences.previousVolume = this.getSafeStreamVolume(stream)
+}
+
+/**
+ * Save the current bluetooth volume to shared preferences.
+ */
+fun AudioManager.saveCurrentBluetoothVolume(sharedPreferences: NacSharedPreferences, stream: Int)
+{
+	sharedPreferences.previousBluetoothVolume = this.getSafeStreamVolume(stream)
+}
+
+/**
+ * Set the stream volume.
+ *
+ * @param stream Stream to set the volume for.
+ * @param volumeIndex Volume index to set as the volume for the stream.
+ */
+fun AudioManager.setStreamVolume(stream: Int, volumeIndex: Int)
+{
+	// Unable to change the volume because the volume is fixed or because the
+	// stream is invalid
+	if (this.isVolumeFixed || (stream == AudioManager.USE_DEFAULT_STREAM_TYPE))
+	{
+		NacLog.w("Cannot set volume=$volumeIndex for stream=$stream. isVolumeFixed=$isVolumeFixed", offsetIndex = 1)
+		return
+	}
+
+	// Set the stream volume
+	try
+	{
+		this.setStreamVolume(stream, volumeIndex, 0)
+	}
+	catch (e: SecurityException)
+	{
+		NacLog.e("Unable to set volume=$volumeIndex for stream=$stream due to security exception", throwable = e, offsetIndex = 1)
+	}
 }
 
 /**

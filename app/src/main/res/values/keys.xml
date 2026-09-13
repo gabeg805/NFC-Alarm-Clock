@@ -12,6 +12,7 @@
 	<string name="key_app_should_show_onboarding_screen">app_should_show_onboarding_screen</string>
 	<string name="key_app_should_write_to_log">app_should_write_to_log</string>
 	<string name="sys_previous_volume">sys_previous_volume</string>
+	<string name="sys_previous_bluetooth_volume">sys_previous_bluetooth_volume</string>
 
 	<!-- Next alarm -->
 	<string name="key_app_next_alarm_should_save_app_alarm">key_app_next_alarm_should_save_app_alarm</string>

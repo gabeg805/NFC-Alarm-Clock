@@ -345,39 +345,25 @@ open class NacTextToSpeechDialog
 		val handler = Handler(context.mainLooper)
 
 		// Get the text-to-speech helper
-		ttsHelper = NacTextToSpeech(context, object: NacTextToSpeech.OnSpeakingListener {
+		ttsHelper = NacTextToSpeech(context,
+			onInit = { tts, _ ->
 
-			/**
-			 * Called when speech engine is done speaking.
-			 */
-			override fun onDoneSpeaking()
-			{
+				// Set the init listener on a delay so that the ok/cancel/preview buttons show up
+				// immediately instead of after a noticeable lag
+				handler.postDelayed({
+					setupAllVoices(tts)
+					setupTtsVoiceDropdownItems(default)
+				}, 250)
+
+			},
+			onDoneSpeaking = {
 				lifecycleScope.launch {
 					withContext(Dispatchers.Main)
 					{
 						setPreviewText(true)
 					}
 				}
-			}
-
-			/**
-			 * Called when speech engine has started speaking.
-			 */
-			override fun onStartSpeaking()
-			{
-			}
-
-		})
-
-		// Set the init listener on a delay so that the ok/cancel/preview buttons show up
-		// immediately instead of after a noticeable lag
-		handler.postDelayed({
-			ttsHelper.onInitializedListener = NacTextToSpeech.OnInitializedListener { tts, _ ->
-				setupAllVoices(tts)
-				setupTtsVoiceDropdownItems(default)
-			}
-		}, 250)
-
+			})
 	}
 
 	/**

@@ -14,100 +14,102 @@ import java.util.Locale
 
 /**
  * Text to speech.
+ *
+ * @param context Context.
+ * @param onStartSpeaking Function to call when starting to speak.
+ * @param onDoneSpeaking Function to call when done speaking.
+ * @param onErrorSpeaking Function to call when an error occurred trying to speak.
  */
 class NacTextToSpeech(
-
-	/**
-	 * Context.
-	 */
-	private val context: Context,
-
-	/**
-	 * Listener for when TTS is speaking.
-	 */
-	listener: OnSpeakingListener? = null
-
-	// Interface
-) : TextToSpeech.OnInitListener
+	context: Context,
+	onInit: (TextToSpeech, Int) -> Unit = { _, _ -> },
+	onStartSpeaking: () -> Unit = {},
+	onDoneSpeaking: () -> Unit = {},
+	onErrorSpeaking: () -> Unit = {
+		quickToast(context, R.string.error_message_text_to_speech_audio_focus)
+	}
+)
 {
-
-	/**
-	 * On initialized listener.
-	 */
-	fun interface OnInitializedListener
-	{
-		fun onInitialized(tts: TextToSpeech, status: Int)
-	}
-
-	/**
-	 * On speaking listener.
-	 */
-	interface OnSpeakingListener
-	{
-
-		/**
-		 * Called when speech engine is done speaking.
-		 */
-		fun onDoneSpeaking()
-
-		/**
-		 * Called when speech engine has started speaking.
-		 */
-		fun onStartSpeaking()
-
-	}
 
 	/**
 	 * Utterance listener.
 	 */
-	class NacUtteranceListener
-		: UtteranceProgressListener()
+	class NacUtteranceListener(
+		val onStartSpeaking: () -> Unit = {},
+		val onDoneSpeaking: () -> Unit = {},
+		val onErrorSpeaking: () -> Unit = {}
+	) : UtteranceProgressListener()
 	{
 
 		/**
-		 * On speaking listener.
-		 */
-		var onSpeakingListener: OnSpeakingListener? = null
-
-		/**
-		 * Called when done speaking.
+		 * Done speaking.
 		 */
 		override fun onDone(utteranceId: String)
 		{
-			// Call done speaking listener
-			onSpeakingListener?.onDoneSpeaking()
+			onDoneSpeaking()
 		}
 
 		/**
-		 * Called when starting to speak.
+		 * Starting to speak.
 		 */
 		override fun onStart(utteranceId: String)
 		{
-			// Call the start speaking listener
-			onSpeakingListener?.onStartSpeaking()
+			onStartSpeaking()
 		}
 
 		/**
+		 * Error speaking.
 		 */
 		@Deprecated("Deprecated in Java")
 		override fun onError(utteranceId: String)
 		{
 			NacLog.e("On speaking error. utteranceId=$utteranceId")
+			onErrorSpeaking()
 		}
 
 		/**
+		 * Error speaking.
 		 */
 		override fun onError(utteranceId: String, errorCode: Int)
 		{
 			NacLog.e("On speaking error. utteranceId=$utteranceId | errorCode=$errorCode")
+			onErrorSpeaking()
 		}
 
 	}
 
 	/**
-	 * The speech engine.
+	 * Audio manager.
 	 */
-	val textToSpeech: TextToSpeech = TextToSpeech(context, this)
+	val audioManager: AudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+
+	/**
+	 * The speech engine.
+	 *
+	 * The TextToSpeech.OnInitListener is the lambda.
+	 */
+	val textToSpeech: TextToSpeech = TextToSpeech(context) { status ->
+
+		// Cleanup has been called before init is finished
+		if (isCleanedUp)
+		{
+			return@TextToSpeech
+		}
+
+		// Set the initialization status
+		isInitialized = (status == TextToSpeech.SUCCESS)
+
+		// Initialization was a succes and there is a message in the buffer
+		if (isInitialized && hasBuffer())
+		{
+			// Say what is in the buffer
+			speak(bufferMessage, bufferAudioAttributes!!)
+		}
+
+		// Call the listener
+		onInit(textToSpeech, status)
+
+	}
 
 	/**
 	 * Message to buffer and speak when ready.
@@ -132,32 +134,18 @@ class NacTextToSpeech(
 	/**
 	 * The utterance listener.
 	 */
-	private val utteranceListener: NacUtteranceListener = NacUtteranceListener()
-
-	/**
-	 * On initialized listener.
-	 */
-	var onInitializedListener: OnInitializedListener? = null
-		set(value)
-		{
-			field = value
-
-			// Call the listener if already initialized
-			if (isInitialized)
-			{
-				onInitializedListener?.onInitialized(textToSpeech, TextToSpeech.SUCCESS)
-			}
-		}
+	private val utteranceListener: NacUtteranceListener = NacUtteranceListener(
+		onStartSpeaking = onStartSpeaking,
+		onDoneSpeaking = onDoneSpeaking,
+		onErrorSpeaking = onErrorSpeaking
+	)
 
 	/**
 	 * Constructor.
 	 */
 	init
 	{
-		// Set the speaking listener
-		utteranceListener.onSpeakingListener = listener
-
-		// Setup text to speech
+		// Setup text to speech listener
 		textToSpeech.setOnUtteranceProgressListener(utteranceListener)
 	}
 
@@ -204,35 +192,11 @@ class NacTextToSpeech(
 		{
 			this.isInitialized && textToSpeech.isSpeaking
 		}
-		catch (_: IllegalArgumentException)
+		catch (e: IllegalArgumentException)
 		{
+			NacLog.e("Unable to check whether TTS is speaking", throwable = e)
 			true
 		}
-	}
-
-	/**
-	 * The TextToSpeech engine is done being initialized.
-	 */
-	override fun onInit(status: Int)
-	{
-		// Cleanup has been called before init is finished
-		if (isCleanedUp)
-		{
-			return
-		}
-
-		// Set the initialization status
-		isInitialized = (status == TextToSpeech.SUCCESS)
-
-		// Initialization was a succes and there is a message in the buffer
-		if (isInitialized && hasBuffer())
-		{
-			// Say what is in the buffer
-			speak(bufferMessage, bufferAudioAttributes!!)
-		}
-
-		// Call the listener
-		onInitializedListener?.onInitialized(textToSpeech, status)
 	}
 
 	/**
@@ -249,21 +213,15 @@ class NacTextToSpeech(
 		// TTS object is already initialized
 		if (isInitialized)
 		{
-			// Get the audio manager
-			val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-
 			// Gain transient audio focus
 			if (!audioManager.requestFocusGainTransient(null, attrs))
 			{
-				// Show toast
-				// TODO: Remove context from here
-				quickToast(context, R.string.error_message_text_to_speech_audio_focus)
-
 				// Clear the buffer, just in case
 				clearBuffer()
 
-				// Call listener that speaking is done
-				utteranceListener.onSpeakingListener?.onDoneSpeaking()
+				// Call error and done listeners
+				utteranceListener.onErrorSpeaking()
+				utteranceListener.onDoneSpeaking()
 				return
 			}
 

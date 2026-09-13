@@ -2,7 +2,6 @@
 <resources>
 
 	<integer name="default_rate_my_app_rated">-999</integer>
-	<integer name="default_previous_volume">-1</integer>
 	<integer name="default_days">62</integer>
 	<integer name="default_auto_dismiss_index">7</integer>
 	<integer name="default_max_snooze_index">11</integer>
