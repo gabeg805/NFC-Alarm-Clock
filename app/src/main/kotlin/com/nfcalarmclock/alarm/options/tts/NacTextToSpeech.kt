@@ -1,12 +1,13 @@
 package com.nfcalarmclock.alarm.options.tts
 
 import android.content.Context
+import android.media.AudioManager
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
 import com.nfcalarmclock.R
 import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.system.media.NacAudioAttributes
-import com.nfcalarmclock.system.media.NacAudioManager
+import com.nfcalarmclock.system.media.requestFocusGainTransient
 import com.nfcalarmclock.system.toBundle
 import com.nfcalarmclock.view.quickToast
 import java.util.Locale
@@ -248,10 +249,14 @@ class NacTextToSpeech(
 		// TTS object is already initialized
 		if (isInitialized)
 		{
+			// Get the audio manager
+			val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+
 			// Gain transient audio focus
-			if (!NacAudioManager.requestFocusGainTransient(context, null, attrs))
+			if (!audioManager.requestFocusGainTransient(null, attrs))
 			{
 				// Show toast
+				// TODO: Remove context from here
 				quickToast(context, R.string.error_message_text_to_speech_audio_focus)
 
 				// Clear the buffer, just in case

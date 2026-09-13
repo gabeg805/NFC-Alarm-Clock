@@ -112,6 +112,8 @@ class NacUpcomingReminderService
 					startForeground(notification.id, notification.build())
 				}
 
+				NacLog.i("Showing upcoming reminder notification in service")
+
 				// Start the reminder process
 				startReminderProcess(alarm)
 			}

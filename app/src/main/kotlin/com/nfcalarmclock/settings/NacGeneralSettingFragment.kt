@@ -291,6 +291,7 @@ class NacGeneralSettingFragment
 						// Audio source
 						R.id.nacAudioSourceDialog -> {
 							sharedPreferences!!.audioSource = a.audioSource
+							sharedPreferences!!.shouldPlayAudioThroughSpeakersAndBluetooth = a.shouldPlayAudioThroughSpeakersAndBluetooth
 						}
 
 						// Text-to-speech

@@ -19,16 +19,6 @@ class NacAudioAttributes(
 {
 
 	/**
-	 * Audio usage.
-	 */
-	private var audioUsage = 0
-
-	/**
-	 * Flag indicating if was ducking or not.
-	 */
-	var wasDucking = false
-
-	/**
 	 * Audio attributes.
 	 */
 	val audioAttributes: AudioAttributes
@@ -42,15 +32,19 @@ class NacAudioAttributes(
 	 */
 	val audioAttributesMedia3: androidx.media3.common.AudioAttributes
 		get() = androidx.media3.common.AudioAttributes.Builder()
-					.setContentType(C.AUDIO_CONTENT_TYPE_MUSIC)
-					.setUsage(NacAudioManager.usageToUsageMedia3(audioAttributes.usage))
-					.build()
+			.setContentType(C.AUDIO_CONTENT_TYPE_MUSIC)
+			.setUsage(NacAudioManager.usageToUsageMedia3(audioAttributes.usage))
+			.build()
 
 	/**
-	 * Audio focus request object that is used when initially requesting audio focus.
-	 * This is set by the NacAudioManager.
+	 * Audio usage.
 	 */
-	var audioFocusRequest: AudioFocusRequest? = null
+	var audioUsage = 0
+
+	/**
+	 * Whether audio was ducking or not.
+	 */
+	var wasDucking = false
 
 	/**
 	 * Audio stream.
@@ -67,6 +61,12 @@ class NacAudioAttributes(
 	 * Voice name for text-to-speech.
 	 */
 	var voice: String = ""
+
+	/**
+	 * Audio focus request object that is used when initially requesting audio focus.
+	 * This is set by the NacAudioManager.
+	 */
+	var audioFocusRequest: AudioFocusRequest? = null
 
 	/**
 	 * Constructor.

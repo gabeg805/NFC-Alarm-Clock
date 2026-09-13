@@ -1,11 +1,8 @@
 package com.nfcalarmclock.system.mediaplayer
 
 import android.content.Context
-import android.media.AudioDeviceCallback
-import android.media.AudioDeviceInfo
 import android.media.AudioManager
 import android.net.Uri
-import android.os.Build
 import androidx.core.net.toUri
 import androidx.media3.common.C
 import androidx.media3.common.MediaItem
@@ -19,12 +16,14 @@ import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.isUserUnlocked
 import com.nfcalarmclock.system.media.NacAudioAttributes
-import com.nfcalarmclock.system.media.NacAudioManager
 import com.nfcalarmclock.system.media.NacMedia
+import com.nfcalarmclock.system.media.abandonFocus
 import com.nfcalarmclock.system.media.findFirstValidLocalMedia
 import com.nfcalarmclock.system.media.getSafeStreamVolume
 import com.nfcalarmclock.system.media.isMediaDirectory
 import com.nfcalarmclock.system.media.isMediaValid
+import com.nfcalarmclock.system.media.requestFocusGain
+import com.nfcalarmclock.system.media.requestFocusGainTransient
 import com.nfcalarmclock.system.media.saveCurrentVolume
 import com.nfcalarmclock.system.media.setStreamVolume
 import com.nfcalarmclock.view.quickToast
@@ -35,11 +34,15 @@ import java.io.File
  *
  * @param context Application context.
  * @param listener ExoPlayer listener.
+ * @param audioAttributes Audio attributes.
+ * @param shouldGainTransientAudioFocus Whether to gain transient audio focus when the audio focus request occurs. If not regular audio focus will be gained.
  */
 @UnstableApi
 class NacMediaPlayer(
 	context: Context,
-	listener: Player.Listener? = null
+	listener: Player.Listener? = null,
+	val audioAttributes: NacAudioAttributes = NacAudioAttributes(context),
+	private val shouldGainTransientAudioFocus: Boolean = false
 )
 {
 
@@ -88,7 +91,7 @@ class NacMediaPlayer(
 	}
 
 	/**
-	 * Media player.
+	 * Phone media player.
 	 */
 	val exoPlayer: ExoPlayer = ExoPlayer.Builder(context)
 		.setLooper(context.mainLooper)
@@ -101,20 +104,9 @@ class NacMediaPlayer(
 	val audioManager: AudioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
 
 	/**
-	 * Audio attributes.
-	 */
-	val audioAttributes: NacAudioAttributes = NacAudioAttributes(context)
-
-	/**
 	 * Shared preferences.
 	 */
 	private val sharedPreferences: NacSharedPreferences = NacSharedPreferences(context)
-
-	/**
-	 * Flag indicating whether to gain transient audio focus, when requesting
-	 * audio focus, or to gain regular focus.
-	 */
-	var shouldGainTransientAudioFocus: Boolean = false
 
 	/**
 	 * Check if the player was playing.
@@ -146,65 +138,6 @@ class NacMediaPlayer(
 		{
 			exoPlayer.addListener(listener)
 		}
-
-		// Register callback to find any connected bluetooth speakers and play audio through
-		// them as well
-		audioManager.registerAudioDeviceCallback(object: AudioDeviceCallback() {
-
-			override fun onAudioDevicesAdded(devices: Array<out AudioDeviceInfo>)
-			{
-				//super.onAudioDevicesAdded(addedDevices)
-				//devices.toList().forEach {
-				//	println("Device : $it")
-				//	NacLog.i("Device : $it")
-				//}
-
-				//val bluetoothHearingAid = devices.find {
-				//	// TODO: Add this when supporting API 37
-				//	//|| ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.37)
-				//	//	&& (it.type == AudioDeviceInfo.TYPE_BLE_HEARING_AID))
-				//}
-
-				// Attempt to find different types of bluetooth devices
-				val bluetoothA2dp: AudioDeviceInfo? = devices.find { it.type == AudioDeviceInfo.TYPE_BLUETOOTH_A2DP }
-				var bluetoothSpeaker: AudioDeviceInfo? = null
-				var bluetoothHeadset: AudioDeviceInfo? = null
-
-				if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
-				{
-					bluetoothSpeaker = devices.find { it.type == AudioDeviceInfo.TYPE_BLE_HEADSET }
-					bluetoothHeadset = devices.find { it.type == AudioDeviceInfo.TYPE_BLE_SPEAKER }
-				}
-
-				// Choose bluetooth device based on priority
-				val bluetoothDevice = bluetoothA2dp ?: bluetoothSpeaker ?: bluetoothHeadset
-
-				// Find the builtin speaker
-				val builtinSpeaker = devices.find { it.type == AudioDeviceInfo.TYPE_BUILTIN_SPEAKER }
-				println("Builtin speaker: $builtinSpeaker")
-				println("Bluetooth dev  : $bluetoothDevice")
-				NacLog.i("Builtin speaker: $builtinSpeaker")
-				NacLog.i("Bluetooth dev  : $bluetoothDevice")
-
-				// Start the media player for the phone (always)
-				if (builtinSpeaker != null)
-				{
-					//exoPlayer.setPreferredAudioDevice(builtinSpeaker)
-					//exoPlayer.start()
-				}
-
-				if (bluetoothDevice != null)
-				{
-					//bluetoothPlayer.setPreferredAudioDevice(bluetoothDevice)
-					//bluetoothPlayer.start()
-				}
-
-				// Unregister the callback
-				audioManager.unregisterAudioDeviceCallback(this)
-
-			}
-
-		}, null)
 	}
 
 	/**
@@ -257,7 +190,7 @@ class NacMediaPlayer(
 		wasPlaying = true
 
 		// Unable to gain audio focus
-		if (!requestAudioFocus(context))
+		if (!requestAudioFocus(context, audioAttributes))
 		{
 			return
 		}
@@ -268,7 +201,7 @@ class NacMediaPlayer(
 			exoPlayer.repeatMode = Player.REPEAT_MODE_ALL
 		}
 
-		// Prepare to play the media
+		// Play the media
 		exoPlayer.setAudioAttributes(audioAttributes.audioAttributesMedia3, false)
 		exoPlayer.prepare()
 		exoPlayer.play()
@@ -286,14 +219,12 @@ class NacMediaPlayer(
 	{
 		NacLog.i("Playing alarm with the media player")
 
-		// Set shuffle mode (can be true or false) when playing a media directory
-		if (alarm.mediaType.isMediaDirectory())
-		{
-			exoPlayer.shuffleModeEnabled = alarm.shouldShuffleMedia
-		}
-
-		// Merge alarm with audio attributes
-		audioAttributes.merge(context, alarm)
+		// TODO: Check if this is really necessary since playDirectory() shuffles the media items as well
+		//// Set shuffle mode (can be true or false) when playing a media directory
+		//if (alarm.mediaType.isMediaDirectory())
+		//{
+		//	exoPlayer.shuffleModeEnabled = alarm.shouldShuffleMedia
+		//}
 
 		// Check if file/directory exists
 		var uri: Uri? = alarm.mediaPath.toUri()
@@ -388,7 +319,7 @@ class NacMediaPlayer(
 	 * @param context Context.
 	 * @param  item  A media item.
 	 */
-	private fun playMediaItem(context: Context, item: MediaItem)
+	fun playMediaItem(context: Context, item: MediaItem)
 	{
 		NacLog.i("Playing media item")
 
@@ -449,15 +380,13 @@ class NacMediaPlayer(
 
 	/**
 	 * Release the media player.
-	 *
-	 * @param context Context.
 	 */
-	fun release(context: Context)
+	fun release()
 	{
 		NacLog.i("Releasing the media player")
 
 		// Abandon audio focus
-		NacAudioManager.abandonFocus(context, audioAttributes)
+		audioManager.abandonFocus(audioAttributes)
 
 		// Release the media player resources
 		exoPlayer.release()
@@ -470,21 +399,21 @@ class NacMediaPlayer(
 	 *
 	 * @return True if the audio focus request was granted, and False otherwise.
 	 */
-	private fun requestAudioFocus(context: Context): Boolean
+	private fun requestAudioFocus(context: Context, attrs: NacAudioAttributes, shouldDuck: Boolean = true): Boolean
 	{
 		// Listener for when audio focus changes
 		val listener = AudioManager.OnAudioFocusChangeListener { focusChange ->
 
-			NacLog.i("Requesting audio focus=$focusChange | wasDucking=${audioAttributes.wasDucking} | prevVolume=${sharedPreferences.previousVolume}")
+			NacLog.i("Requesting audio focus=$focusChange | wasDucking=${attrs.wasDucking} | prevVolume=${sharedPreferences.previousVolume}")
 
 			// Revert ducking
-			if (audioAttributes.wasDucking)
+			if (shouldDuck && attrs.wasDucking)
 			{
 				// Reset the ducking flag
-				audioAttributes.wasDucking = false
+				attrs.wasDucking = false
 
 				// Revert the volume back to what it was
-				audioManager.setStreamVolume(audioAttributes.stream, sharedPreferences.previousVolume)
+				audioManager.setStreamVolume(attrs.stream, sharedPreferences.previousVolume)
 			}
 
 			// Check what type of focus change occurred
@@ -523,23 +452,24 @@ class NacMediaPlayer(
 		val request: Boolean = if (shouldGainTransientAudioFocus)
 		{
 			// Gain transient
-			NacLog.i("Requesting audio focus gain transient")
-			NacAudioManager.requestFocusGainTransient(context, listener, audioAttributes)
+			NacLog.i("Requesting audio focus gain transient. usage=${attrs.audioUsage}")
+			audioManager.requestFocusGainTransient(listener, attrs)
 		}
 		else
 		{
 			// Gain
-			NacLog.i("Requesting audio focus gain")
-			NacAudioManager.requestFocusGain(context, listener, audioAttributes)
+			NacLog.i("Requesting audio focus gain. usage=${attrs.audioUsage}")
+			audioManager.requestFocusGain(listener, attrs)
 		}
 
 		// Unable to gain audio focus
 		if (!request)
 		{
+			NacLog.e("Unable to request audio focus. usage=${attrs.audioUsage} | shouldGainTransient=$shouldGainTransientAudioFocus")
+
 			// Show toast with error message
 			if (shouldShowToasts)
 			{
-				NacLog.e("Unable to request audio focus. shouldGainTransient=$shouldGainTransientAudioFocus")
 				quickToast(context, R.string.error_message_play_audio)
 			}
 		}

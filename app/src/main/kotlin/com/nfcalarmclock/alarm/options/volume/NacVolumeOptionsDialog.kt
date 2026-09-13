@@ -82,7 +82,7 @@ open class NacVolumeOptionsDialog
 		volumeManager?.cleanup()
 
 		// Cleanup the media player
-		mediaPlayer?.release(requireContext())
+		mediaPlayer?.release()
 	}
 
 	/**
@@ -161,7 +161,7 @@ open class NacVolumeOptionsDialog
 
 			// Set member variables for preview to work
 			audioAttributes = NacAudioAttributes(context, alarm)
-			mediaPlayer = NacMediaPlayer(deviceContext, null)
+			mediaPlayer = NacMediaPlayer(deviceContext, listener = null, audioAttributes = audioAttributes!!)
 			volumeManager = NacVolumeManager(context, alarm, audioAttributes!!)
 
 			// Setup the media player

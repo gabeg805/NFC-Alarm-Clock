@@ -276,11 +276,8 @@ abstract class NacBaseChildMediaPickerFragment<T: NacAlarm>
 		}
 
 		// Create the lateinit vars
-		mediaPlayer = NacMediaPlayer(context)
+		mediaPlayer = NacMediaPlayer(context, shouldGainTransientAudioFocus = true)
 		sharedPreferences =  NacSharedPreferences(context)
-
-		// Gain transient audio focus
-		mediaPlayer.shouldGainTransientAudioFocus = true
 	}
 
 	/**
@@ -292,7 +289,7 @@ abstract class NacBaseChildMediaPickerFragment<T: NacAlarm>
 		super.onDestroy()
 
 		// Cleanup the media player
-		mediaPlayer.release(requireContext())
+		mediaPlayer.release()
 	}
 
 	/**

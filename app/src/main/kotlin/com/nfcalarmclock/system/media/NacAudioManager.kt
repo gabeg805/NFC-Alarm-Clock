@@ -22,6 +22,24 @@ fun NacAlarm.toStreamVolume(audioManager: AudioManager, stream: Int): Int
 	val maxVolume = audioManager.getSafeMaxStreamVolume(stream)
 	return (maxVolume * this.volume / 100.0f).toInt()
 }
+/**
+ * Abandon audio focus.
+ */
+@Suppress("deprecation")
+fun AudioManager.abandonFocus(attrs: NacAudioAttributes): Int
+{
+	// Need to use the AudioFocusRequest object that was used when requesting audio
+	// focus in order to abandon focus.
+	return if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) && (attrs.audioFocusRequest != null))
+	{
+		this.abandonAudioFocusRequest(attrs.audioFocusRequest!!)
+	}
+	// Simpler way to abandon audio focus in older API
+	else
+	{
+		this.abandonAudioFocus(null)
+	}
+}
 
 /**
  * Get the maximum stream volume.
@@ -97,116 +115,86 @@ fun AudioManager.setStreamVolume(stream: Int, volumeIndex: Int)
 }
 
 /**
+ * Request to gain audio focus.
+ */
+fun AudioManager.requestFocusGain(
+	listener: OnAudioFocusChangeListener?,
+	attrs: NacAudioAttributes
+): Boolean
+{
+	return this.requestFocus(listener, attrs, AudioManager.AUDIOFOCUS_GAIN)
+}
+
+/**
+ * Request to gain transient audio focus.
+ */
+fun AudioManager.requestFocusGainTransient(
+	listener: OnAudioFocusChangeListener?,
+	attrs: NacAudioAttributes
+): Boolean
+{
+	return this.requestFocus(listener, attrs, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT)
+}
+
+/**
+ * Request to generally gain audio focus.
+ */
+@Suppress("deprecation")
+fun AudioManager.requestFocus(
+	listener: OnAudioFocusChangeListener?,
+	attrs: NacAudioAttributes,
+	focusGainType: Int
+): Boolean
+{
+	// Assume a result of FAILED
+	var result: Int
+
+	// Build the audio request
+	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+	{
+		var builder = AudioFocusRequest.Builder(focusGainType)
+			.setAudioAttributes(attrs.audioAttributes)
+
+		// Set the listener only if it is not null
+		if (listener != null)
+		{
+			builder = builder.setOnAudioFocusChangeListener(listener)
+		}
+
+		// Build the audio request and set it in the audio attributes object
+		val request = builder.build()
+		attrs.audioFocusRequest = request
+
+		// Request audio focus and get the result
+		result = this.requestAudioFocus(request)
+	}
+	else
+	{
+		// Get the stream the request is for
+		val stream = if (attrs.stream == AudioManager.USE_DEFAULT_STREAM_TYPE)
+		{
+			// Stream has not been set. Must be set before requesting focus. Use music
+			// stream by default
+			AudioManager.STREAM_MUSIC
+		}
+		else
+		{
+			attrs.stream
+		}
+
+		// Request focus
+		result = this.requestAudioFocus(listener, stream, focusGainType)
+	}
+
+	// Check the result
+	return result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED
+}
+
+/**
  * Audio manager.
  */
 object NacAudioManager
 {
-
-	/**
-	 * Abandon audio focus.
-	 */
-	@Suppress("deprecation")
-	fun abandonFocus(
-		context: Context,
-		attrs: NacAudioAttributes
-	): Int
-	{
-
-		val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-
-		// Need to use the AudioFocusRequest object that was used when requesting audio
-		// focus in order to abandon focus.
-		return if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) && (attrs.audioFocusRequest != null))
-		{
-			audioManager.abandonAudioFocusRequest(attrs.audioFocusRequest!!)
-		}
-		// Simpler way to abandon audio focus in older API
-		else
-		{
-			audioManager.abandonAudioFocus(null)
-		}
-	}
-
-	/**
-	 * Request to generally gain audio focus.
-	 */
-	@Suppress("deprecation")
-	private fun requestFocus(
-		context: Context,
-		listener: OnAudioFocusChangeListener?,
-		attrs: NacAudioAttributes, focusGainType: Int
-	): Boolean
-	{
-		// Get the audio manager object
-		val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-
-		// Assume a result of FAILED
-		var result: Int
-
-        // Build the audio request
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
-		{
-			var builder = AudioFocusRequest.Builder(focusGainType)
-				.setAudioAttributes(attrs.audioAttributes)
-
-			// Set the listener only if it is not null
-			if (listener != null)
-			{
-				builder = builder.setOnAudioFocusChangeListener(listener)
-			}
-
-			// Build the audio request and set it in the audio attributes object
-			val request = builder.build()
-			attrs.audioFocusRequest = request
-
-			// Request audio focus and get the result
-			result = audioManager.requestAudioFocus(request)
-		}
-		else
-		{
-			// Get the stream the request is for
-			val stream = if (attrs.stream == AudioManager.USE_DEFAULT_STREAM_TYPE)
-			{
-				// Stream has not been set. Must be set before requesting focus. Use music
-				// stream by default
-				AudioManager.STREAM_MUSIC
-			}
-			else
-			{
-				attrs.stream
-			}
-
-			// Request focus
-			result = audioManager.requestAudioFocus(listener, stream, focusGainType)
-		}
-
-		// Check the result
-		return result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED
-	}
-
-	/**
-	 * Request to gain audio focus.
-	 */
-	fun requestFocusGain(
-		context: Context,
-		listener: OnAudioFocusChangeListener?,
-		attrs: NacAudioAttributes
-	): Boolean
-	{
-		return requestFocus(context, listener, attrs, AudioManager.AUDIOFOCUS_GAIN)
-	}
-
-	/**
-	 * Request to gain transient audio focus.
-	 */
-	fun requestFocusGainTransient(
-		context: Context,
-		listener: OnAudioFocusChangeListener?,
-		attrs: NacAudioAttributes
-	): Boolean
-	{
-		return requestFocus(context, listener, attrs, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT)
-	}
 
 	/**
 	 * Convert a source to a usage.

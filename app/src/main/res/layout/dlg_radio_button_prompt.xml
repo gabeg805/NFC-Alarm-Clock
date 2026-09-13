@@ -11,7 +11,6 @@
 		android:id="@+id/prompt_title"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="@string/action_alarm_option_audio_source"
 		/>
 
 	<!-- Description -->
@@ -20,7 +19,6 @@
 		android:id="@+id/prompt_description"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="@string/description_audio_sources_alarm"
 		/>
 
 	<!-- Radio group -->
@@ -29,7 +27,8 @@
 		android:id="@+id/prompt_radio_group"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:layout_marginVertical="@dimen/tiny"
-		tools:ignore="RtlSymmetry" />
+		android:layout_marginBottom="@dimen/small"
+		tools:ignore="RtlSymmetry"
+		/>
 
 </com.nfcalarmclock.view.alarmoptionlayout.NacAlarmOptionLayout>

@@ -84,6 +84,7 @@
 	<string name="key_default_alarm_volume_gradually_increase_volume_wait_time">pref_gradually_increase_volume_wait_time</string>
 	<string name="key_default_alarm_volume_should_restrict_volume">pref_should_restrict_volume</string>
 	<string name="key_default_alarm_audio_source">pref_audio_source</string>
+	<string name="key_default_alarm_should_play_audio_through_speakers_and_bluetooth">pref_should_play_audio_through_speakers_and_bluetooth</string>
 	<string name="key_default_alarm_name">pref_name</string>
 	<string name="key_default_alarm_tts_should_say_current_time">pref_should_say_current_time</string>
 	<string name="key_default_alarm_tts_should_say_alarm_name">pref_should_say_alarm_name</string>
