@@ -205,6 +205,21 @@ object NacAudioManager
 {
 
 	/**
+	 * Get the media3 content type from a normal AudioAttributes content type.
+	 *
+	 * @return The media3 content type from a normal AudioAttributes content type.
+	 */
+	fun contentTypeToContentTypeMedia3(contentType: Int): Int
+	{
+		return when (contentType)
+		{
+			AudioAttributes.CONTENT_TYPE_MUSIC        -> C.AUDIO_CONTENT_TYPE_MUSIC
+			AudioAttributes.CONTENT_TYPE_SONIFICATION -> C.AUDIO_CONTENT_TYPE_SONIFICATION
+			else                                      -> C.AUDIO_CONTENT_TYPE_UNKNOWN
+		}
+	}
+
+	/**
 	 * Convert a source to a usage.
 	 */
 	fun sourceToUsage(context: Context, source: String?): Int
@@ -218,7 +233,6 @@ object NacAudioManager
 		// Get all the audio sources
 		val audioSources = context.resources.getStringArray(R.array.audio_sources)
 
-		// Alarm
 		return when(source)
 		{
 			audioSources[0] -> AudioAttributes.USAGE_ALARM
@@ -226,7 +240,7 @@ object NacAudioManager
 			audioSources[2] -> AudioAttributes.USAGE_MEDIA
 			audioSources[3] -> AudioAttributes.USAGE_NOTIFICATION
 			audioSources[4] -> AudioAttributes.USAGE_NOTIFICATION_RINGTONE
-			else            -> AudioAttributes.USAGE_MEDIA
+			else            -> AudioAttributes.USAGE_ALARM
 		}
 	}
 
@@ -237,7 +251,6 @@ object NacAudioManager
 	 */
 	fun usageToStream(usage: Int): Int
 	{
-		// Alarm
 		return when (usage)
 		{
 			AudioAttributes.USAGE_ALARM                 -> AudioManager.STREAM_ALARM
@@ -256,7 +269,6 @@ object NacAudioManager
 	 */
 	fun usageToUsageMedia3(usage: Int): Int
 	{
-		// Alarm
 		return when (usage)
 		{
 			AudioAttributes.USAGE_ALARM                 -> C.USAGE_ALARM

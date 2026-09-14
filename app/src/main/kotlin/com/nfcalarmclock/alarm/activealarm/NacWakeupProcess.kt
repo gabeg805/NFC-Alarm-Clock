@@ -60,7 +60,7 @@ class NacWakeupProcess(
 	 */
 	private var bluetoothAudioAttributes: NacAudioAttributes? = if (alarm.shouldPlayAudioThroughSpeakersAndBluetooth)
 	{
-		NacAudioAttributes(context, alarm)
+		NacAudioAttributes(context, alarm, contentType = AudioAttributes.CONTENT_TYPE_MUSIC)
 	}
 	else
 	{
@@ -155,6 +155,7 @@ class NacWakeupProcess(
 			},
 			audioAttributes = audioAttributes)
 			.apply {
+				// TODO: Can this listener just be null?
 				onAudioFocusChangeListener = object : NacMediaPlayer.OnAudioFocusChangeListener {
 
 					// Empty override functions so that nothing happens when audio
@@ -183,6 +184,7 @@ class NacWakeupProcess(
 		// Create the media player
 		NacMediaPlayer(deviceContext, listener = null, audioAttributes = bluetoothAudioAttributes!!)
 			.apply {
+				// TODO: Can this listener just be null?
 				onAudioFocusChangeListener = object : NacMediaPlayer.OnAudioFocusChangeListener {
 
 					// Empty override functions so that nothing happens when audio
@@ -299,15 +301,11 @@ class NacWakeupProcess(
 	 */
 	init
 	{
-		// TODO: SEE WHERE SAVE CURRENT VOLUME IS USED
-		// TODO: SEE HOW TTS CHANGES/SETS VOLUME
-
 		// Audio should be played through speakers and bluetooth
 		if (alarm.shouldPlayAudioThroughSpeakersAndBluetooth)
 		{
 			// Set the correct audio usages. Phone should always be ALARM and bluetooth should
 			// either be the original audio source the user selected or MEDIA
-			// TODO: ContentType SONIFICATION for USAGE_ALARM
 			if (audioAttributes.audioUsage == AudioAttributes.USAGE_ALARM)
 			{
 				bluetoothAudioAttributes!!.audioUsage = AudioAttributes.USAGE_MEDIA

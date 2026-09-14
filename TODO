@@ -2,6 +2,9 @@
 TODO
 ----
 
+Playing media item twice at 19:36:01
+Does OnAudioFocusChangeListener function content actually get called? It looks like no
+
 * Make new alarm screen snooze positioning better
 
 * Add blackout times for repeat frequency

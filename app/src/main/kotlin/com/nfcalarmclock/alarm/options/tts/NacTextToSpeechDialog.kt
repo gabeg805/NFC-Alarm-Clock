@@ -16,6 +16,7 @@ import com.google.android.material.textfield.TextInputLayout
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.NacGenericAlarmOptionsDialog
+import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.system.media.NacAudioAttributes
 import com.nfcalarmclock.view.calcAlpha
 import com.nfcalarmclock.view.setTextFromIndex
@@ -290,10 +291,13 @@ open class NacTextToSpeechDialog
 		val locale = Locale.getDefault()
 
 		// Filter out voices that do not match the current locale
+		println("Text to speech object: $tts")
+		NacLog.i("Text to speech object: $tts")
 		allVoices = tts.voices
 			.filter { it.locale == locale }
-			.partition { it == ttsHelper.textToSpeech.defaultVoice }
+			.partition { it == tts.defaultVoice }
 			.let { it.first + it.second }
+		//.partition { it == ttsHelper.textToSpeech.defaultVoice }
 	}
 
 	/**

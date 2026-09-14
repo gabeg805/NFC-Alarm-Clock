@@ -3,18 +3,19 @@ package com.nfcalarmclock.system.media
 import android.content.Context
 import android.media.AudioAttributes
 import android.media.AudioFocusRequest
-import androidx.media3.common.C
 import com.nfcalarmclock.alarm.db.NacAlarm
 
 /**
  * Audio attributes.
  *
  * @param context Context.
- * @param source Audio source.
+ * @param alarm Alarm.
+ * @param contentType Content type to use for audio attributes.
  */
 class NacAudioAttributes(
 	context: Context,
-	source: String = ""
+	alarm: NacAlarm? = null,
+	private val contentType: Int = AudioAttributes.CONTENT_TYPE_SONIFICATION
 )
 {
 
@@ -23,7 +24,7 @@ class NacAudioAttributes(
 	 */
 	val audioAttributes: AudioAttributes
 		get() = AudioAttributes.Builder()
-			.setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+			.setContentType(contentType)
 			.setUsage(audioUsage)
 			.build()
 
@@ -32,14 +33,14 @@ class NacAudioAttributes(
 	 */
 	val audioAttributesMedia3: androidx.media3.common.AudioAttributes
 		get() = androidx.media3.common.AudioAttributes.Builder()
-			.setContentType(C.AUDIO_CONTENT_TYPE_MUSIC)
+			.setContentType(NacAudioManager.contentTypeToContentTypeMedia3(audioAttributes.contentType))
 			.setUsage(NacAudioManager.usageToUsageMedia3(audioAttributes.usage))
 			.build()
 
 	/**
 	 * Audio usage.
 	 */
-	var audioUsage = 0
+	var audioUsage = AudioAttributes.USAGE_UNKNOWN
 
 	/**
 	 * Whether audio was ducking or not.
@@ -71,41 +72,22 @@ class NacAudioAttributes(
 	/**
 	 * Constructor.
 	 */
-	constructor(context: Context, alarm: NacAlarm) : this(context, "")
-	{
-		merge(context, alarm)
-	}
-
-	/**
-	 * Constructor.
-	 */
 	init
 	{
-		// Set usage from audio source
-		setUsageFromSource(context, source)
-	}
+		// Set alarm based attributes
+		if (alarm != null)
+		{
+			// Set audio usage
+			audioUsage = NacAudioManager.sourceToUsage(context, alarm.audioSource)
 
-	/**
-	 * Merge the current audio attributes with that of the alarm.
-	 */
-	fun merge(context: Context, alarm: NacAlarm): NacAudioAttributes
-	{
-		// Set audio usage from audio source
-		setUsageFromSource(context, alarm.audioSource)
+			// Set the text-to-speech rate and voice
+			speechRate = alarm.ttsSpeechRate
+			voice = alarm.ttsVoice
+		}
 
-		// Set the text-to-speech rate and voice
-		speechRate = alarm.ttsSpeechRate
-		voice = alarm.ttsVoice
-
-		return this
-	}
-
-		/**
-	 * Set the audio usage from the source name.
-	 */
-	private fun setUsageFromSource(context: Context, source: String)
-	{
-		audioUsage = NacAudioManager.sourceToUsage(context, source)
+		//// Set usage from audio source
+		//setUsageFromSource(context, source)
+		//    audioUsage = NacAudioManager.sourceToUsage(context, source)
 	}
 
 }

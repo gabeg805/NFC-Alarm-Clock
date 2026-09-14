@@ -165,6 +165,7 @@ open class NacVolumeOptionsDialog
 			volumeManager = NacVolumeManager(context, alarm, audioAttributes!!)
 
 			// Setup the media player
+			// TODO: Can this listener just be null?
 			mediaPlayer!!.onAudioFocusChangeListener = object : NacMediaPlayer.OnAudioFocusChangeListener
 			{
 				// Empty override functions so that nothing happens when audio
