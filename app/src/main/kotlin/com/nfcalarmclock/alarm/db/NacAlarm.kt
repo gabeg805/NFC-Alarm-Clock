@@ -360,6 +360,9 @@ open class NacAlarm()
 
 	/**
 	 * Frequency at which to play text-to-speech. [Units: min]
+	 *
+	 * 0  = Speak 1 time
+	 * 1+ = Speak every X min
 	 */
 	@ColumnInfo(name = "tts_frequency", defaultValue = "0")
 	var ttsFrequency: Int = 0

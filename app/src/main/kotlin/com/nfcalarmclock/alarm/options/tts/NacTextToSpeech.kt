@@ -1,6 +1,7 @@
 package com.nfcalarmclock.alarm.options.tts
 
 import android.content.Context
+import android.media.AudioAttributes
 import android.media.AudioManager
 import android.speech.tts.TextToSpeech
 import android.speech.tts.UtteranceProgressListener
@@ -27,7 +28,8 @@ class NacTextToSpeech(
 	onDoneSpeaking: () -> Unit = {},
 	onErrorSpeaking: () -> Unit = {
 		quickToast(context, R.string.error_message_text_to_speech_audio_focus)
-	}
+	},
+	private val utteranceId: String = UTTERANCE_ID
 )
 {
 
@@ -242,12 +244,16 @@ class NacTextToSpeech(
 					?.let { textToSpeech.voice = it }
 			}
 
-			// Speak the message
+			// Create TTS audio attributes and bundle any TTS params
+			val audioAttributes = AudioAttributes.Builder()
+				.setContentType(AudioAttributes.CONTENT_TYPE_SPEECH)
+				.setUsage(attrs.audioUsage)
+				.build()
 			val bundle = attrs.toBundle()
 
-			textToSpeech.setAudioAttributes(attrs.audioAttributes)
-			textToSpeech.speak(message, TextToSpeech.QUEUE_FLUSH, bundle,
-				UTTERANCE_ID)
+			// Speak the message
+			textToSpeech.setAudioAttributes(audioAttributes)
+			textToSpeech.speak(message, TextToSpeech.QUEUE_FLUSH, bundle, utteranceId)
 
 			// Clear the buffer
 			clearBuffer()

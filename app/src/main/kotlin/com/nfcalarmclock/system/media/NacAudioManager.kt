@@ -92,24 +92,27 @@ fun AudioManager.requestFocus(
 	// Assume a result of FAILED
 	var result: Int
 
-	// Build the audio request
+	// Use an AudioFocusRequest object to request focus
 	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
 	{
-		var builder = AudioFocusRequest.Builder(focusGainType)
-			.setAudioAttributes(attrs.audioAttributes)
-
-		// Set the listener only if it is not null
-		if (listener != null)
+		// Build the audio request
+		if (attrs.audioFocusRequest == null)
 		{
-			builder = builder.setOnAudioFocusChangeListener(listener)
+			var builder = AudioFocusRequest.Builder(focusGainType)
+				.setAudioAttributes(attrs.audioAttributes)
+
+			// Set the listener only if it is not null
+			if (listener != null)
+			{
+				builder = builder.setOnAudioFocusChangeListener(listener)
+			}
+
+			// Build the audio request and set it in the audio attributes object
+			attrs.audioFocusRequest = builder.build()
 		}
 
-		// Build the audio request and set it in the audio attributes object
-		val request = builder.build()
-		attrs.audioFocusRequest = request
-
 		// Request audio focus and get the result
-		result = this.requestAudioFocus(request)
+		result = this.requestAudioFocus(attrs.audioFocusRequest!!)
 	}
 	else
 	{

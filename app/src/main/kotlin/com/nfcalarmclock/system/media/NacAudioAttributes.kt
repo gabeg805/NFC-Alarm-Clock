@@ -13,9 +13,9 @@ import com.nfcalarmclock.alarm.db.NacAlarm
  * @param contentType Content type to use for audio attributes.
  */
 class NacAudioAttributes(
-	context: Context,
+	context: Context? = null,
 	alarm: NacAlarm? = null,
-	private val contentType: Int = AudioAttributes.CONTENT_TYPE_SONIFICATION
+	var contentType: Int = AudioAttributes.CONTENT_TYPE_SONIFICATION,
 )
 {
 
@@ -43,9 +43,10 @@ class NacAudioAttributes(
 	var audioUsage = AudioAttributes.USAGE_UNKNOWN
 
 	/**
-	 * Whether audio was ducking or not.
+	 * Audio focus request object that is used when requesting audio focus. If null, it will be
+	 * set by NacAudioManager.requestFocus().
 	 */
-	var wasDucking = false
+	var audioFocusRequest: AudioFocusRequest? = null
 
 	/**
 	 * Audio stream.
@@ -64,10 +65,9 @@ class NacAudioAttributes(
 	var voice: String = ""
 
 	/**
-	 * Audio focus request object that is used when initially requesting audio focus.
-	 * This is set by the NacAudioManager.
+	 * Whether audio was ducking or not.
 	 */
-	var audioFocusRequest: AudioFocusRequest? = null
+	var wasDucking = false
 
 	/**
 	 * Constructor.
@@ -75,7 +75,7 @@ class NacAudioAttributes(
 	init
 	{
 		// Set alarm based attributes
-		if (alarm != null)
+		if ((context != null) && (alarm != null))
 		{
 			// Set audio usage
 			audioUsage = NacAudioManager.sourceToUsage(context, alarm.audioSource)
@@ -84,10 +84,24 @@ class NacAudioAttributes(
 			speechRate = alarm.ttsSpeechRate
 			voice = alarm.ttsVoice
 		}
+	}
 
-		//// Set usage from audio source
-		//setUsageFromSource(context, source)
-		//    audioUsage = NacAudioManager.sourceToUsage(context, source)
+	/**
+	 * Copy the NacAudioAttributes object to a new object.
+	 */
+	fun copy(): NacAudioAttributes
+	{
+		// Create a new object
+		val attrs = NacAudioAttributes()
+
+		// Copy all the attributes
+		attrs.audioUsage = audioUsage
+		attrs.contentType = contentType
+		attrs.speechRate = speechRate
+		attrs.voice = voice
+		attrs.audioFocusRequest = null
+
+		return attrs
 	}
 
 }

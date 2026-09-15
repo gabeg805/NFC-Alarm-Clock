@@ -9,6 +9,7 @@ import android.os.Handler
 import android.os.Looper
 import androidx.appcompat.app.AppCompatActivity
 import com.nfcalarmclock.R
+import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.view.toast
 
 /**
@@ -179,9 +180,10 @@ class NacFlashlight(private val context: Context)
 	 */
 	fun blink(onTime: String, offTime: String)
 	{
-		// Ensure that the on/off durations cannot be empty
-		val onTime = onTime.ifEmpty { "1.0" }
-		val offTime = offTime.ifEmpty { "1.0" }
+		// Ensure that the on/off durations cannot be empty and if a locale uses a comma instead
+		// of dot for floats, then this will fix that as well
+		val onTime = onTime.ifEmpty { "1.0" }.replace(',', '.')
+		val offTime = offTime.ifEmpty { "1.0" }.replace(',', '.')
 
 		// Setup the handlers
 		val mainLooper = Looper.getMainLooper()
@@ -190,8 +192,26 @@ class NacFlashlight(private val context: Context)
 
 		// Set the durations and convert the passed in values from sec (as a String)
 		// to millisecond as a Long
-		onDuration = (onTime.toFloat() * 1000).toLong()
-		offDuration = (offTime.toFloat() * 1000).toLong()
+		try
+		{
+			onDuration = (onTime.toFloat() * 1000).toLong()
+		}
+		catch (e: NumberFormatException)
+		{
+			NacLog.e("Unable to convert onTime='$onTime' to float. Using default duration of 1000 ms", throwable = e)
+			onDuration = 1000
+		}
+
+		try
+		{
+
+			offDuration = (offTime.toFloat() * 1000).toLong()
+		}
+		catch (e: NumberFormatException)
+		{
+			NacLog.e("Unable to convert offTime='$offTime' to float. Using default duration of 1000 ms", throwable = e)
+			offDuration = 1000
+		}
 
 		// Turn on the flashlight
 		turnOn()

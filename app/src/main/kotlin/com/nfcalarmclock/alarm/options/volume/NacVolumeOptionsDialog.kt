@@ -103,6 +103,18 @@ open class NacVolumeOptionsDialog
 	}
 
 	/**
+	 * View is destroyed.
+	 */
+	override fun onDestroyView()
+	{
+		// Super
+		super.onDestroyView()
+
+		// Cleanup resources
+		cleanup()
+	}
+
+	/**
 	 * Ok button is clicked.
 	 */
 	override fun onOkClicked(alarm: NacAlarm)
@@ -163,18 +175,6 @@ open class NacVolumeOptionsDialog
 			audioAttributes = NacAudioAttributes(context, alarm)
 			mediaPlayer = NacMediaPlayer(deviceContext, listener = null, audioAttributes = audioAttributes!!)
 			volumeManager = NacVolumeManager(context, alarm, audioAttributes!!)
-
-			// Setup the media player
-			// TODO: Can this listener just be null?
-			mediaPlayer!!.onAudioFocusChangeListener = object : NacMediaPlayer.OnAudioFocusChangeListener
-			{
-				// Empty override functions so that nothing happens when audio
-				// focus is lost. This means that audio should keep playing even if
-				// audio focus is lost
-				override fun onAudioFocusLoss(mediaPlayer: NacMediaPlayer) {}
-
-				override fun onAudioFocusLossTransient(mediaPlayer: NacMediaPlayer) {}
-			}
 		}
 
 		// Set the default selected values

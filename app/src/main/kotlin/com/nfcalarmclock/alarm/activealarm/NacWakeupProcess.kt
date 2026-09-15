@@ -4,6 +4,7 @@ import android.content.Context
 import android.media.AudioAttributes
 import android.media.AudioDeviceCallback
 import android.media.AudioDeviceInfo
+import android.media.AudioFocusRequest
 import android.media.AudioManager
 import android.os.Build
 import android.os.Handler
@@ -56,6 +57,11 @@ class NacWakeupProcess(
 	private var audioAttributes: NacAudioAttributes = NacAudioAttributes(context, alarm)
 
 	/**
+	 * Audio attributes for text-to-speech.
+	 */
+	private var audioAttributesTts: NacAudioAttributes
+
+	/**
 	 * Bluetooth audio attributes.
 	 */
 	private var bluetoothAudioAttributes: NacAudioAttributes? = if (alarm.shouldPlayAudioThroughSpeakersAndBluetooth)
@@ -66,6 +72,11 @@ class NacWakeupProcess(
 	{
 		null
 	}
+
+	/**
+	 * Bluetooth audio attributes for text-to-speech.
+	 */
+	private var bluetoothAudioAttributesTts: NacAudioAttributes?
 
 	/**
 	 * Say the current time at user specified intervals.
@@ -99,7 +110,14 @@ class NacWakeupProcess(
 	/**
 	 * Vibrate the device.
 	 */
-	private val vibrator: NacVibrator? = if (shouldVibrate) NacVibrator(context) else null
+	private val vibrator: NacVibrator? = if (shouldVibrate)
+	{
+		NacVibrator(context)
+	}
+	else
+	{
+		null
+	}
 
 	/**
 	 * Flashlight.
@@ -118,12 +136,8 @@ class NacWakeupProcess(
 	 */
 	private val mediaPlayer: NacMediaPlayer? = if (alarm.mediaPath.isNotEmpty())
 	{
-		// Get device protected storage context
-		// TODO: Why does device protected storage context matter?
-		val deviceContext = getDeviceProtectedStorageContext(context)
-
-		// Create the media player
-		NacMediaPlayer(deviceContext,
+		NacMediaPlayer(
+			getDeviceProtectedStorageContext(context),
 			listener = object : Player.Listener
 			{
 
@@ -143,29 +157,11 @@ class NacWakeupProcess(
 
 					NacLog.i("Media player item transition. mediaPath=$mediaPath")
 
-					if ((mediaItem != null) && (bluetoothMediaPlayer != null))
-					{
-						NacLog.i("Playing same media item on bluetooth device")
-						bluetoothMediaPlayer.playMediaItem(context, mediaItem)
-					}
-
 					// Save the path of the current media item
 					sharedPreferences.currentPlayingAlarmMedia = mediaPath
 				}
 			},
 			audioAttributes = audioAttributes)
-			.apply {
-				// TODO: Can this listener just be null?
-				onAudioFocusChangeListener = object : NacMediaPlayer.OnAudioFocusChangeListener {
-
-					// Empty override functions so that nothing happens when audio
-					// focus is lost. This means that audio should keep playing even if
-					// audio focus is lost
-					override fun onAudioFocusLoss(mediaPlayer: NacMediaPlayer) {}
-					override fun onAudioFocusLossTransient(mediaPlayer: NacMediaPlayer) {}
-
-				}
-			}
 	}
 	else
 	{
@@ -177,24 +173,10 @@ class NacWakeupProcess(
 	 */
 	private val bluetoothMediaPlayer: NacMediaPlayer? = if ((mediaPlayer != null) && alarm.shouldPlayAudioThroughSpeakersAndBluetooth)
 	{
-		// Get device protected storage context
-		// TODO: Why does device protected storage context matter?
-		val deviceContext = getDeviceProtectedStorageContext(context)
-
-		// Create the media player
-		NacMediaPlayer(deviceContext, listener = null, audioAttributes = bluetoothAudioAttributes!!)
-			.apply {
-				// TODO: Can this listener just be null?
-				onAudioFocusChangeListener = object : NacMediaPlayer.OnAudioFocusChangeListener {
-
-					// Empty override functions so that nothing happens when audio
-					// focus is lost. This means that audio should keep playing even if
-					// audio focus is lost
-					override fun onAudioFocusLoss(mediaPlayer: NacMediaPlayer) {}
-					override fun onAudioFocusLossTransient(mediaPlayer: NacMediaPlayer) {}
-
-				}
-			}
+		NacMediaPlayer(
+			getDeviceProtectedStorageContext(context),
+			listener = null,
+			audioAttributes = bluetoothAudioAttributes!!)
 	}
 	else
 	{
@@ -208,33 +190,25 @@ class NacWakeupProcess(
 	{
 		NacTextToSpeech(context,
 			onStartSpeaking = {
-				NacLog.i("Starting speaking. currentVolume=${mediaPlayer?.audioManager?.getSafeStreamVolume(audioAttributes.stream)}")
-
-				// Stop any vibration and flashlight when TTS is playing
-				vibrator?.cleanup()
-				flashlight?.cleanup()
-
-				// Use handler to start wake up process so that the media
-				// player is accessed on the correct thread
-				continueWakeupHandler.post {
-
-					// Media player was playing music. Pause it until done speaking
-					if (mediaPlayer?.wasPlaying == true)
-					{
-						mediaPlayer.pause()
-					}
-
-				}
+				NacLog.i("Starting to speak")
 			},
 			onDoneSpeaking = {
+				NacLog.i("Done speaking")
+
 				// Abandon audio focus
-				audioManager.abandonFocus(audioAttributes)
+				audioManager.abandonFocus(audioAttributesTts)
 
-				NacLog.i("Done speaking. currentVolume=${mediaPlayer?.audioManager?.getSafeStreamVolume(audioAttributes.stream)}")
+				// Bluetooth TTS is speaking. Stop TTS engine and abandon audio focus
+				if (bluetoothTextToSpeech?.isSpeaking() == true)
+				{
+					NacLog.i("Stopping bluetooth text to speech so that both media players can start at same time")
+					bluetoothTextToSpeech.textToSpeech.stop()
+					audioManager.abandonFocus(bluetoothAudioAttributesTts!!)
+				}
 
-				// Use handler to start wake up process so that the media
-				// player is accessed on the correct thread
-				continueWakeupHandler.post { startNoTts() }
+				// Use handler to start wake up process so that the media player is accessed on
+				// the correct thread. Have a delay so that there is no OS level volume ducking
+				continueWakeupHandler.postDelayed({ startNoTts() }, 500)
 			})
 	}
 	else
@@ -249,30 +223,15 @@ class NacWakeupProcess(
 	{
 		NacTextToSpeech(context,
 			onStartSpeaking = {
-				NacLog.i("Starting speaking through bluetooth. currentVolume=${bluetoothMediaPlayer?.audioManager?.getSafeStreamVolume(bluetoothAudioAttributes!!.stream)}")
-
-				// Use handler to start wake up process so that the media
-				// player is accessed on the correct thread
-				continueWakeupHandler.post {
-
-					// Media player was playing music. Pause it until done speaking
-					if (bluetoothMediaPlayer?.wasPlaying == true)
-					{
-						bluetoothMediaPlayer.pause()
-					}
-
-				}
+				NacLog.i("Starting to speak through bluetooth")
 			},
 			onDoneSpeaking = {
+				NacLog.i("Done speaking through bluetooth")
+
 				// Abandon audio focus
-				audioManager.abandonFocus(bluetoothAudioAttributes!!)
-
-				NacLog.i("Done speaking through bluetooth. currentVolume=${bluetoothMediaPlayer?.audioManager?.getSafeStreamVolume(bluetoothAudioAttributes!!.stream)}")
-
-				// Use handler to start wake up process so that the media
-				// player is accessed on the correct thread
-				continueWakeupHandler.post { startNoTts() }
-			})
+				audioManager.abandonFocus(bluetoothAudioAttributesTts!!)
+			},
+			utteranceId = NacTextToSpeech.UTTERANCE_ID+"Bluetooth")
 	}
 	else
 	{
@@ -322,6 +281,86 @@ class NacWakeupProcess(
 			// Find the builtin speaker and bluetooth device
 			findPreferredAudioDevices()
 		}
+
+		// Create the TTS audio attributes
+		audioAttributesTts = audioAttributes.copy()
+			.apply { contentType = AudioAttributes.CONTENT_TYPE_SPEECH }
+		bluetoothAudioAttributesTts = bluetoothAudioAttributes?.copy()
+			?.apply { contentType = AudioAttributes.CONTENT_TYPE_SPEECH }
+
+		// Create the audio focus requests
+		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+		{
+			// Media player audio focus requests
+			if (mediaPlayer != null)
+			{
+				audioAttributes.audioFocusRequest = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
+					.setAudioAttributes(audioAttributes.audioAttributes)
+					.setWillPauseWhenDucked(true)
+					.setOnAudioFocusChangeListener(mediaPlayer.onAudioFocusRequestChangeListener)
+					.build()
+				bluetoothAudioAttributes?.audioFocusRequest = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN)
+					.setAudioAttributes(audioAttributes.audioAttributes)
+					.setWillPauseWhenDucked(true)
+					.setOnAudioFocusChangeListener(bluetoothMediaPlayer!!.onAudioFocusRequestChangeListener)
+					.build()
+			}
+
+			// TTS audio focus requests
+			if (textToSpeech != null)
+			{
+				audioAttributesTts.audioFocusRequest = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT)
+					.setAudioAttributes(audioAttributesTts.audioAttributes)
+					.setOnAudioFocusChangeListener { focusChange -> NacLog.i("FOCUS CHANGE : $focusChange") }
+					.build()
+				bluetoothAudioAttributesTts?.audioFocusRequest = AudioFocusRequest.Builder(AudioManager.AUDIOFOCUS_GAIN_TRANSIENT)
+					.setAudioAttributes(bluetoothAudioAttributesTts!!.audioAttributes)
+					.setOnAudioFocusChangeListener { focusChange -> NacLog.i("FOCUS CHANGE BLUE : $focusChange") }
+					.build()
+			}
+		}
+
+	}
+
+	/**
+	 * Cleanup various alarm objects.
+	 */
+	fun cleanup()
+	{
+		NacLog.i("Cleaning up wakeup process")
+
+		// Cleanup vibrate
+		vibrator?.cleanup()
+
+		// Cleanup the flashlight
+		flashlight?.cleanup()
+
+		// Cleanup the media player
+		mediaPlayer?.release()
+		bluetoothMediaPlayer?.release()
+
+		// Cleanup the text-to-speech engine
+		textToSpeech?.cleanup()
+		bluetoothTextToSpeech?.cleanup()
+		speakHandler.removeCallbacksAndMessages(null)
+
+		// Cleanup the continue wakeup handler
+		continueWakeupHandler.removeCallbacksAndMessages(null)
+
+		// Cleanup the media watchdog handler
+		mediaWatchdogHandler.removeCallbacksAndMessages(null)
+
+		// Cleanup volume resources
+		volumeManager.cleanup(
+			onRevertVolume = {
+				NacLog.i("Reverting normal stream volume. fromVolume=${audioManager.getSafeStreamVolume(audioAttributes.stream)} | toVolume=${sharedPreferences.previousVolume}")
+				audioManager.setStreamVolume(audioAttributes.stream, sharedPreferences.previousVolume)
+			})
+		bluetoothVolumeManager?.cleanup(
+			onRevertVolume = {
+				NacLog.i("Reverting bluetooth stream volume. fromVolume=${audioManager.getSafeStreamVolume(bluetoothAudioAttributes!!.stream)} | toVolume=${sharedPreferences.previousBluetoothVolume}")
+				audioManager.setStreamVolume(bluetoothAudioAttributes!!.stream, sharedPreferences.previousBluetoothVolume)
+			})
 	}
 
 	/**
@@ -388,45 +427,6 @@ class NacWakeupProcess(
 	}
 
 	/**
-	 * Cleanup various alarm objects.
-	 */
-	fun cleanup()
-	{
-		// Cleanup vibrate
-		vibrator?.cleanup()
-
-		// Cleanup the flashlight
-		flashlight?.cleanup()
-
-		// Cleanup the media player
-		mediaPlayer?.release()
-		bluetoothMediaPlayer?.release()
-
-		// Cleanup the text-to-speech engine
-		textToSpeech?.cleanup()
-		bluetoothTextToSpeech?.cleanup()
-		speakHandler.removeCallbacksAndMessages(null)
-
-		// Cleanup the continue wakeup handler
-		continueWakeupHandler.removeCallbacksAndMessages(null)
-
-		// Cleanup the media watchdog handler
-		mediaWatchdogHandler.removeCallbacksAndMessages(null)
-
-		// Cleanup volume resources
-		volumeManager.cleanup(
-			onRevertVolume = {
-				NacLog.i("Reverting normal stream volume. fromVolume=${audioManager.getSafeStreamVolume(audioAttributes.stream)} | toVolume=${sharedPreferences.previousVolume}")
-				audioManager.setStreamVolume(audioAttributes.stream, sharedPreferences.previousVolume)
-			})
-		bluetoothVolumeManager?.cleanup(
-			onRevertVolume = {
-				NacLog.i("Reverting bluetooth stream volume. fromVolume=${audioManager.getSafeStreamVolume(bluetoothAudioAttributes!!.stream)} | toVolume=${sharedPreferences.previousBluetoothVolume}")
-				audioManager.setStreamVolume(bluetoothAudioAttributes!!.stream, sharedPreferences.previousBluetoothVolume)
-			})
-	}
-
-	/**
 	 * Play music.
 	 */
 	private fun playMusic()
@@ -440,22 +440,25 @@ class NacWakeupProcess(
 		// Media player was playing music, so continue playing what was playing before
 		if (mediaPlayer.wasPlaying)
 		{
-			NacLog.i("Was playing so playing both media player and bluetooth player. bluetoothPlayer=${bluetoothMediaPlayer != null}")
+			NacLog.i("Media player(s) are paused. Playing both media player and bluetooth player. bluetoothPlayer=${bluetoothMediaPlayer != null}")
+			//mediaPlayer.exoPlayer.volume = 1f
+			//bluetoothMediaPlayer?.exoPlayer?.volume = 1f
 			mediaPlayer.play(context)
 			bluetoothMediaPlayer?.play(context)
 		}
 		// Play the alarm
 		else
 		{
-			// Uri of media that is playing
-			val playingUri = mediaPlayer.playAlarm(context, alarm)
-			//bluetoothMediaPlayer?.playAlarm(context, alarm)
+			NacLog.i("Starting to play alarm media")
 
-			// Check if the current playing uri does not match the path from the alarm
-			if ((playingUri == null)
-				|| ((playingUri.toString() != alarm.mediaPath) && (playingUri.toString() != alarm.localMediaPath)))
+			// Media item(s) to play
+			val mediaItems = mediaPlayer.playAlarm(context, alarm)
+			bluetoothMediaPlayer?.playMediaItems(context, mediaItems)
+
+			// Selected media for alarm is not available
+			if (mediaItems.isEmpty())
 			{
-				// Selected media for alarm is not available
+				NacLog.i("Media items list is empty. Selected media for alarm not available")
 				sharedPreferences.isSelectedMediaForAlarmNotAvailable = true
 			}
 		}
@@ -475,8 +478,7 @@ class NacWakeupProcess(
 		// Start the watchdog
 		mediaWatchdogHandler.postDelayed({
 
-			// Media is not playing and TTS is not speaking, which means media should be
-			// playing
+			// Media is not playing and TTS is not speaking, which means media should be playing
 			if (((mediaPlayer != null) && !mediaPlayer.exoPlayer.isPlaying)
 				&& ((textToSpeech == null) || !textToSpeech.isSpeaking()))
 			{
@@ -506,17 +508,44 @@ class NacWakeupProcess(
 			return
 		}
 
+		NacLog.i("Speaking with TTS")
+
 		// Speak via TTS
 		val phrase = NacTranslate.getTtsPhrase(context, alarm.shouldSayCurrentTime, alarm.shouldSayName, alarm.name)
 
-		textToSpeech.speak(phrase, audioAttributes)
-		bluetoothTextToSpeech?.speak(phrase, bluetoothAudioAttributes!!)
+		textToSpeech.speak(phrase, audioAttributesTts)
+		bluetoothTextToSpeech?.speak(phrase, bluetoothAudioAttributesTts!!)
 
 		// Check if text to speech should be run at a certain frequency
 		if (alarm.ttsFrequency != 0)
 		{
 			// Wait for some period of time before speaking through TTS again
-			speakHandler.postDelayed({ speak() }, alarm.ttsFrequency*60L*1000L)
+			speakHandler.postDelayed({
+
+				// Stop any vibration and flashlight when TTS is playing
+				vibrator?.cleanup()
+				flashlight?.cleanup()
+
+				// Pause phone media player until done speaking
+				if (mediaPlayer?.wasPlaying == true)
+				{
+					NacLog.i("Pausing and abandoning media player focus")
+					mediaPlayer.pause()
+					audioManager.abandonFocus(audioAttributes)
+				}
+
+				// Pause bluetooth media player until done speaking
+				if (bluetoothMediaPlayer?.wasPlaying == true)
+				{
+					NacLog.i("Pausing and abandoning bluetooth media player focus")
+					bluetoothMediaPlayer.pause()
+					audioManager.abandonFocus(bluetoothAudioAttributes!!)
+				}
+
+				// Speak TTS
+				speak()
+
+			}, alarm.ttsFrequency*60L*1000L)
 		}
 	}
 
