@@ -104,9 +104,9 @@ class NacMediaPlayer(
 	private val sharedPreferences: NacSharedPreferences = NacSharedPreferences(context)
 
 	/**
-	 * Check if the player was playing.
+	 * Whether the player is paused or not.
 	 */
-	var wasPlaying: Boolean = false
+	var isPaused: Boolean = false
 		private set
 
 	/**
@@ -172,28 +172,6 @@ class NacMediaPlayer(
 		}
 	}
 
-	///**
-	// * Duck the media player.
-	// */
-	//fun duck()
-	//{
-	//	NacLog.i("Ducking the media player. streamVolume=${audioManager.getSafeStreamVolume(audioAttributes.stream)} | currentVolume=${sharedPreferences.previousVolume}")
-
-	//	// Set the was playing flag
-	//	wasPlaying = exoPlayer.isPlaying
-
-	//	// Get stream and current volume
-	//	val stream = audioAttributes.stream
-	//	val currentVolume = audioManager.getSafeStreamVolume(stream)
-
-	//	// Save current volume
-	//	audioManager.saveCurrentVolume(sharedPreferences, stream)
-
-	//	// Duck the volume
-	//	audioManager.setStreamVolume(stream, currentVolume/2)
-	//	audioAttributes.wasDucking = true
-	//}
-
 	/**
 	 * Build media items to play.
 	 */
@@ -258,8 +236,8 @@ class NacMediaPlayer(
 	{
 		NacLog.i("Pausing media player")
 
-		// Set the was playing flag
-		wasPlaying = exoPlayer.isPlaying
+		// Set the flag
+		isPaused = true
 
 		// Pause the media player
 		exoPlayer.pause()
@@ -298,8 +276,8 @@ class NacMediaPlayer(
 			return
 		}
 
-		// Set the was playing flag
-		wasPlaying = true
+		// Set the flag
+		isPaused = false
 
 		// Play the media
 		exoPlayer.play()
@@ -484,8 +462,8 @@ class NacMediaPlayer(
 	{
 		NacLog.i("Stopping media player")
 
-		// Set the was playing flag
-		wasPlaying = false
+		// Set the flag
+		isPaused = false
 
 		// Stop the media player
 		exoPlayer.stop()

@@ -204,11 +204,14 @@ open class NacVolumeOptionsDialog
 				return@setupSecondaryButton
 			}
 
+			// Get the playing flag
+			val isPlaying = mediaPlayer!!.exoPlayer.isPlaying
+
 			// Set the button text
-			setPreviewText(mediaPlayer!!.wasPlaying)
+			setPreviewText(isPlaying)
 
 			// Stop preview
-			if (mediaPlayer!!.wasPlaying)
+			if (isPlaying)
 			{
 				volumeManager!!.cleanup()
 				mediaPlayer!!.stop()
