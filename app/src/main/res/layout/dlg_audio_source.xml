@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.nfcalarmclock.view.alarmoptionlayout.NacAlarmOptionLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:layout_width="match_parent"
+	android:layout_height="wrap_content">
+
+	<!-- Title -->
+	<TextView
+		style="@style/Widget.AlarmOptionDialog.Title"
+		android:id="@+id/prompt_title"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		/>
+
+	<!-- Description -->
+	<TextView
+		style="@style/Widget.AlarmOptionDialog.DescriptionBeforeCheckBox"
+		android:id="@+id/prompt_description"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		/>
+
+	<!-- Radio group -->
+	<RadioGroup
+		style="@style/My.RadioGroup"
+		android:id="@+id/prompt_radio_group"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginBottom="@dimen/small"
+		tools:ignore="RtlSymmetry"
+		/>
+
+	<!-- Separator -->
+	<Space style="@style/Widget.AlarmOptionDialog.Separator" />
+
+	<!-- Speakers and bluetooth title, description, and switch -->
+	<RelativeLayout
+		android:id="@+id/speakers_and_bluetooth_container"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content">
+
+		<!-- Title -->
+		<TextView
+			style="@style/Widget.AlarmOptionDialog.Title"
+			android:id="@+id/speakers_and_bluetooth_title"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_toStartOf="@id/speakers_and_bluetooth_switch"
+			android:text="Audio through speakers and bluetooth"
+			/>
+
+		<!-- Description -->
+		<TextView
+			style="@style/Widget.AlarmOptionDialog.Description"
+			android:id="@+id/speakers_and_bluetooth_description"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_below="@id/speakers_and_bluetooth_title"
+			android:layout_toStartOf="@id/speakers_and_bluetooth_switch"
+			android:text="Play audio through the builtin speakers and a connected bluetooth device, simultaneously."
+			/>
+
+		<!-- Switch -->
+		<androidx.appcompat.widget.SwitchCompat
+			android:id="@+id/speakers_and_bluetooth_switch"
+			android:layout_width="@dimen/touch"
+			android:layout_height="@dimen/touch"
+			android:layout_alignParentEnd="true"
+			android:layout_centerVertical="true"
+			android:clickable="false"
+			/>
+	</RelativeLayout>
+
+</com.nfcalarmclock.view.alarmoptionlayout.NacAlarmOptionLayout>

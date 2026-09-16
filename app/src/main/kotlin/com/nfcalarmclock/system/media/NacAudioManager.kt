@@ -8,56 +8,95 @@ import android.media.AudioManager.OnAudioFocusChangeListener
 import android.os.Build
 import androidx.media3.common.C
 import com.nfcalarmclock.R
+import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.log.NacLog
+import com.nfcalarmclock.shared.NacSharedPreferences
 
 /**
- * Audio manager.
+ * Convert an alarm volume to a stream volume.
+ *
+ * Note a stream volume is an index.
  */
-object NacAudioManager
+fun NacAlarm.toStreamVolume(audioManager: AudioManager, stream: Int): Int
 {
-
-	/**
-	 * Abandon audio focus.
-	 */
-	@Suppress("deprecation")
-	fun abandonFocus(
-		context: Context,
-		attrs: NacAudioAttributes
-	): Int
+	val maxVolume = audioManager.getSafeMaxStreamVolume(stream)
+	return (maxVolume * this.volume / 100.0f).toInt()
+}
+/**
+ * Abandon audio focus.
+ */
+@Suppress("deprecation")
+fun AudioManager.abandonFocus(attrs: NacAudioAttributes): Int
+{
+	// Need to use the AudioFocusRequest object that was used when requesting audio
+	// focus in order to abandon focus.
+	return if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) && (attrs.audioFocusRequest != null))
 	{
-
-		val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
-
-		// Need to use the AudioFocusRequest object that was used when requesting audio
-		// focus in order to abandon focus.
-		return if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) && (attrs.audioFocusRequest != null))
-		{
-			audioManager.abandonAudioFocusRequest(attrs.audioFocusRequest!!)
-		}
-		// Simpler way to abandon audio focus in older API
-		else
-		{
-			audioManager.abandonAudioFocus(null)
-		}
+		this.abandonAudioFocusRequest(attrs.audioFocusRequest!!)
 	}
-
-	/**
-	 * Request to generally gain audio focus.
-	 */
-	@Suppress("deprecation")
-	private fun requestFocus(
-		context: Context,
-		listener: OnAudioFocusChangeListener?,
-		attrs: NacAudioAttributes, focusGainType: Int
-	): Boolean
+	// Simpler way to abandon audio focus in older API
+	else
 	{
-		// Get the audio manager object
-		val audioManager = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+		this.abandonAudioFocus(null)
+	}
+}
 
-		// Assume a result of FAILED
-		var result: Int
+/**
+ * Get the maximum stream volume.
+ *
+ * @param stream A stream. Cannot be AudioManager.USE_DEFAULT_STREAM_TYPE.
+ *
+ * @return The maximum stream volume.
+ */
+fun AudioManager.getSafeMaxStreamVolume(stream: Int): Int
+{
+	return if (stream != AudioManager.USE_DEFAULT_STREAM_TYPE)
+	{
+		this.getStreamMaxVolume(stream)
+	}
+	else
+	{
+		0
+	}
+}
 
-        // Build the audio request
-		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+/**
+ * Get the stream volume.
+ *
+ * @param stream A stream. Cannot be AudioManager.USE_DEFAULT_STREAM_TYPE.
+ *
+ * @return The stream volume.
+ */
+fun AudioManager.getSafeStreamVolume(stream: Int): Int
+{
+	return if (stream != AudioManager.USE_DEFAULT_STREAM_TYPE)
+	{
+		this.getStreamVolume(stream)
+	}
+	else
+	{
+		0
+	}
+}
+
+/**
+ * Request to generally gain audio focus.
+ */
+@Suppress("deprecation")
+fun AudioManager.requestFocus(
+	listener: OnAudioFocusChangeListener?,
+	attrs: NacAudioAttributes,
+	focusGainType: Int
+): Boolean
+{
+	// Assume a result of FAILED
+	var result: Int
+
+	// Use an AudioFocusRequest object to request focus
+	if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+	{
+		// Build the audio request
+		if (attrs.audioFocusRequest == null)
 		{
 			var builder = AudioFocusRequest.Builder(focusGainType)
 				.setAudioAttributes(attrs.audioAttributes)
@@ -69,56 +108,118 @@ object NacAudioManager
 			}
 
 			// Build the audio request and set it in the audio attributes object
-			val request = builder.build()
-			attrs.audioFocusRequest = request
+			attrs.audioFocusRequest = builder.build()
+		}
 
-			// Request audio focus and get the result
-			result = audioManager.requestAudioFocus(request)
+		// Request audio focus and get the result
+		result = this.requestAudioFocus(attrs.audioFocusRequest!!)
+	}
+	else
+	{
+		// Get the stream the request is for
+		val stream = if (attrs.stream == AudioManager.USE_DEFAULT_STREAM_TYPE)
+		{
+			// Stream has not been set. Must be set before requesting focus. Use music
+			// stream by default
+			AudioManager.STREAM_MUSIC
 		}
 		else
 		{
-			// Get the stream the request is for
-			val stream = if (attrs.stream == AudioManager.USE_DEFAULT_STREAM_TYPE)
-			{
-				// Stream has not been set. Must be set before requesting focus. Use music
-				// stream by default
-				AudioManager.STREAM_MUSIC
-			}
-			else
-			{
-				attrs.stream
-			}
-
-			// Request focus
-			result = audioManager.requestAudioFocus(listener, stream, focusGainType)
+			attrs.stream
 		}
 
-		// Check the result
-		return result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED
+		// Request focus
+		result = this.requestAudioFocus(listener, stream, focusGainType)
 	}
 
-	/**
-	 * Request to gain audio focus.
-	 */
-	fun requestFocusGain(
-		context: Context,
-		listener: OnAudioFocusChangeListener?,
-		attrs: NacAudioAttributes
-	): Boolean
+	// Check the result
+	return result == AudioManager.AUDIOFOCUS_REQUEST_GRANTED
+}
+
+/**
+ * Request to gain audio focus.
+ */
+fun AudioManager.requestFocusGain(
+	listener: OnAudioFocusChangeListener?,
+	attrs: NacAudioAttributes
+): Boolean
+{
+	return this.requestFocus(listener, attrs, AudioManager.AUDIOFOCUS_GAIN)
+}
+
+/**
+ * Request to gain transient audio focus.
+ */
+fun AudioManager.requestFocusGainTransient(
+	listener: OnAudioFocusChangeListener?,
+	attrs: NacAudioAttributes
+): Boolean
+{
+	return this.requestFocus(listener, attrs, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT)
+}
+
+/**
+ * Save the current volume to shared preferences.
+ */
+fun AudioManager.saveCurrentVolume(sharedPreferences: NacSharedPreferences, stream: Int)
+{
+	sharedPreferences.previousVolume = this.getSafeStreamVolume(stream)
+}
+
+/**
+ * Save the current bluetooth volume to shared preferences.
+ */
+fun AudioManager.saveCurrentBluetoothVolume(sharedPreferences: NacSharedPreferences, stream: Int)
+{
+	sharedPreferences.previousBluetoothVolume = this.getSafeStreamVolume(stream)
+}
+
+/**
+ * Set the stream volume.
+ *
+ * @param stream Stream to set the volume for.
+ * @param volumeIndex Volume index to set as the volume for the stream.
+ */
+fun AudioManager.setStreamVolume(stream: Int, volumeIndex: Int)
+{
+	// Unable to change the volume because the volume is fixed or because the
+	// stream is invalid
+	if (this.isVolumeFixed || (stream == AudioManager.USE_DEFAULT_STREAM_TYPE))
 	{
-		return requestFocus(context, listener, attrs, AudioManager.AUDIOFOCUS_GAIN)
+		NacLog.w("Cannot set volume=$volumeIndex for stream=$stream. isVolumeFixed=$isVolumeFixed", offsetIndex = 1)
+		return
 	}
 
-	/**
-	 * Request to gain transient audio focus.
-	 */
-	fun requestFocusGainTransient(
-		context: Context,
-		listener: OnAudioFocusChangeListener?,
-		attrs: NacAudioAttributes
-	): Boolean
+	// Set the stream volume
+	try
 	{
-		return requestFocus(context, listener, attrs, AudioManager.AUDIOFOCUS_GAIN_TRANSIENT)
+		this.setStreamVolume(stream, volumeIndex, 0)
+	}
+	catch (e: SecurityException)
+	{
+		NacLog.e("Unable to set volume=$volumeIndex for stream=$stream due to security exception", throwable = e, offsetIndex = 1)
+	}
+}
+
+/**
+ * Audio manager.
+ */
+object NacAudioManager
+{
+
+	/**
+	 * Get the media3 content type from a normal AudioAttributes content type.
+	 *
+	 * @return The media3 content type from a normal AudioAttributes content type.
+	 */
+	fun contentTypeToContentTypeMedia3(contentType: Int): Int
+	{
+		return when (contentType)
+		{
+			AudioAttributes.CONTENT_TYPE_MUSIC        -> C.AUDIO_CONTENT_TYPE_MUSIC
+			AudioAttributes.CONTENT_TYPE_SONIFICATION -> C.AUDIO_CONTENT_TYPE_SONIFICATION
+			else                                      -> C.AUDIO_CONTENT_TYPE_UNKNOWN
+		}
 	}
 
 	/**
@@ -135,7 +236,6 @@ object NacAudioManager
 		// Get all the audio sources
 		val audioSources = context.resources.getStringArray(R.array.audio_sources)
 
-		// Alarm
 		return when(source)
 		{
 			audioSources[0] -> AudioAttributes.USAGE_ALARM
@@ -143,7 +243,7 @@ object NacAudioManager
 			audioSources[2] -> AudioAttributes.USAGE_MEDIA
 			audioSources[3] -> AudioAttributes.USAGE_NOTIFICATION
 			audioSources[4] -> AudioAttributes.USAGE_NOTIFICATION_RINGTONE
-			else            -> AudioAttributes.USAGE_MEDIA
+			else            -> AudioAttributes.USAGE_ALARM
 		}
 	}
 
@@ -154,7 +254,6 @@ object NacAudioManager
 	 */
 	fun usageToStream(usage: Int): Int
 	{
-		// Alarm
 		return when (usage)
 		{
 			AudioAttributes.USAGE_ALARM                 -> AudioManager.STREAM_ALARM
@@ -173,7 +272,6 @@ object NacAudioManager
 	 */
 	fun usageToUsageMedia3(usage: Int): Int
 	{
-		// Alarm
 		return when (usage)
 		{
 			AudioAttributes.USAGE_ALARM                 -> C.USAGE_ALARM

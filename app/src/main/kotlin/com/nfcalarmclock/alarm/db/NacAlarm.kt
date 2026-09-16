@@ -335,6 +335,12 @@ open class NacAlarm()
 	var audioSource: String = ""
 
 	/**
+	 * Whether audio should be played through speakers and bluetooth or not.
+	 */
+	@ColumnInfo(name = "should_play_audio_through_speakers_and_bluetooth", defaultValue = "0")
+	var shouldPlayAudioThroughSpeakersAndBluetooth: Boolean = false
+
+	/**
 	 * Name of the alarm.
 	 */
 	@ColumnInfo(name = "name", defaultValue = "")
@@ -354,6 +360,9 @@ open class NacAlarm()
 
 	/**
 	 * Frequency at which to play text-to-speech. [Units: min]
+	 *
+	 * 0  = Speak 1 time
+	 * 1+ = Speak every X min
 	 */
 	@ColumnInfo(name = "tts_frequency", defaultValue = "0")
 	var ttsFrequency: Int = 0
@@ -614,6 +623,7 @@ open class NacAlarm()
 		graduallyIncreaseVolumeWaitTime = input.readInt()
 		shouldRestrictVolume = input.readInt() != 0
 		audioSource = input.readString() ?: ""
+		shouldPlayAudioThroughSpeakersAndBluetooth = input.readInt() != 0
 
 		// Name
 		name = input.readString() ?: ""
@@ -1055,6 +1065,7 @@ open class NacAlarm()
 		alarm.graduallyIncreaseVolumeWaitTime = graduallyIncreaseVolumeWaitTime
 		alarm.shouldRestrictVolume = shouldRestrictVolume
 		alarm.audioSource = audioSource
+		alarm.shouldPlayAudioThroughSpeakersAndBluetooth = shouldPlayAudioThroughSpeakersAndBluetooth
 
 		// Name
 		alarm.name = name
@@ -1248,6 +1259,7 @@ open class NacAlarm()
 			&& (shouldRecursivelyPlayMedia == alarm.shouldRecursivelyPlayMedia)
 			&& (volume == alarm.volume)
 			&& (audioSource == alarm.audioSource)
+			&& (shouldPlayAudioThroughSpeakersAndBluetooth == alarm.shouldPlayAudioThroughSpeakersAndBluetooth)
 			&& (name == alarm.name)
 			&& (shouldSayCurrentTime == alarm.shouldSayCurrentTime)
 			&& (shouldSayName == alarm.shouldSayName)
@@ -1383,6 +1395,7 @@ open class NacAlarm()
 			+ mediaTitle.hashCode()
 			+ localMediaPath.hashCode()
 			+ audioSource.hashCode()
+			+ shouldPlayAudioThroughSpeakersAndBluetooth.hashCode()
 			+ name.hashCode()
 			+ ttsVoice.hashCode()
 			+ canSnooze.hashCode()
@@ -1439,6 +1452,7 @@ open class NacAlarm()
 		println("Recusively Play       : $shouldRecursivelyPlayMedia")
 		println("Volume                : $volume")
 		println("Audio Source          : $audioSource")
+		println("ShouldPlayAudioS+B    : $shouldPlayAudioThroughSpeakersAndBluetooth")
 		println("Name                  : $name")
 		println("Tts say time          : $shouldSayCurrentTime")
 		println("Tts say name          : $shouldSayName")
@@ -1830,6 +1844,7 @@ open class NacAlarm()
 		output.writeInt(graduallyIncreaseVolumeWaitTime)
 		output.writeInt(if (shouldRestrictVolume) 1 else 0)
 		output.writeString(audioSource)
+		output.writeInt(if (shouldPlayAudioThroughSpeakersAndBluetooth) 1 else 0)
 
 		// Name
 		output.writeString(name)
@@ -1961,6 +1976,7 @@ open class NacAlarm()
 			alarm.graduallyIncreaseVolumeWaitTime = shared.graduallyIncreaseVolumeWaitTime
 			alarm.shouldRestrictVolume = shared.shouldRestrictVolume
 			alarm.audioSource = shared.audioSource
+			alarm.shouldPlayAudioThroughSpeakersAndBluetooth = shared.shouldPlayAudioThroughSpeakersAndBluetooth
 
 			// Name
 			alarm.name = shared.name

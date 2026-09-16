@@ -2,6 +2,7 @@ package com.nfcalarmclock.alarm.options.upcomingreminder
 
 import android.content.Context
 import android.content.Intent
+import android.media.AudioManager
 import android.os.IBinder
 import androidx.annotation.OptIn
 import androidx.media3.common.util.UnstableApi
@@ -9,11 +10,15 @@ import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.tts.NacTextToSpeech
 import com.nfcalarmclock.alarm.options.tts.NacTranslate
 import com.nfcalarmclock.log.NacLog
+import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.NacCalendar
 import com.nfcalarmclock.system.NacLifecycleService
 import com.nfcalarmclock.system.addAlarm
 import com.nfcalarmclock.system.getAlarm
 import com.nfcalarmclock.system.media.NacAudioAttributes
+import com.nfcalarmclock.system.media.saveCurrentVolume
+import com.nfcalarmclock.system.media.setStreamVolume
+import com.nfcalarmclock.system.media.toStreamVolume
 import com.nfcalarmclock.system.scheduler.NacScheduler
 import java.util.Calendar
 
@@ -107,6 +112,8 @@ class NacUpcomingReminderService
 					startForeground(notification.id, notification.build())
 				}
 
+				NacLog.i("Showing upcoming reminder notification in service")
+
 				// Start the reminder process
 				startReminderProcess(alarm)
 			}
@@ -121,37 +128,27 @@ class NacUpcomingReminderService
 	 */
 	private fun setupTextToSpeech(alarm: NacAlarm, nextAlarmCal: Calendar)
 	{
-		// Audio attributes
+		// Audio manager and attributes
+		val audioManager = getSystemService(AUDIO_SERVICE) as AudioManager
 		val audioAttributes = NacAudioAttributes(this, alarm)
+		val sharedPreferences = NacSharedPreferences(this)
+		val stream = audioAttributes.stream
 
 		// Start the wakeup process
-		val textToSpeech = NacTextToSpeech(this, object: NacTextToSpeech.OnSpeakingListener {
-
-			/**
-			 * Called when done speaking.
-			 */
-			override fun onDoneSpeaking()
-			{
-				// Revert the volume
-				audioAttributes.revertVolume()
-			}
-
-			/**
-			 * Called when the text-to-speech engine has started.
-			 */
-			override fun onStartSpeaking()
-			{
-			}
-
-		})
+		val textToSpeech = NacTextToSpeech(this,
+			onDoneSpeaking = {
+				// Revert the volume back to what it was
+				audioManager.setStreamVolume(stream, sharedPreferences.previousVolume)
+			})
 
 		// Save the current volume level so it can be reverted later
-		audioAttributes.saveCurrentVolume()
+		audioManager.saveCurrentVolume(sharedPreferences, stream)
 
 		// Set the volume to the alarm volume and save the volume level so
 		// that it can be correctly reverted back once the wakeup process
 		// is complete
-		audioAttributes.setStreamVolume()
+		val alarmVolumeIndex = alarm.toStreamVolume(audioManager, stream)
+		audioManager.setStreamVolume(stream, alarmVolumeIndex)
 
 		// Get the phrase that should be said for the reminder
 		val timeUntilNextAlarm = getMinutesUntilNextAlarm(nextAlarmCal)

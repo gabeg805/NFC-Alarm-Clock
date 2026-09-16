@@ -62,6 +62,8 @@ class NacDismissEarlyService
 				showForegroundNotification {
 					startForeground(notification.id, notification.build())
 				}
+
+				NacLog.i("Showing dismiss early notification in service")
 			}
 
 		}

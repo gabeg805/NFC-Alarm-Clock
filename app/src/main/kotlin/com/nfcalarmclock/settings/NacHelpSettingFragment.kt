@@ -111,11 +111,24 @@ class NacHelpSettingFragment
 			// Get the context
 			val context = requireContext()
 
-			// Re-initialize the logger
-			NacLog.i("Debug mode changed to: ${sharedPreferences!!.shouldWriteToLog}")
+			// Close the logger
 			NacLog.close()
-			NacLog.init(context, sharedPreferences!!)
-			NacLog.i("Re-initializing log in app v${BuildConfig.VERSION_NAME} (Android API ${Build.VERSION.SDK_INT})")
+
+			// Re-initialize the logger
+			if (sharedPreferences!!.shouldWriteToLog)
+			{
+				//NacLog.i("Debug mode changed to: ${sharedPreferences!!.shouldWriteToLog}")
+				NacLog.init(context, sharedPreferences!!)
+				NacLog.i("Re-initializing log in app v${BuildConfig.VERSION_NAME} (Android API ${Build.VERSION.SDK_INT})")
+			}
+			// Delete all logs
+			else
+			{
+				NacLog.getDirectory(context)
+					.listFiles()?.forEach {
+						it.delete()
+					}
+			}
 
 		}
 	}

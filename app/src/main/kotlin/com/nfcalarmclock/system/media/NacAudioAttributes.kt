@@ -3,49 +3,28 @@ package com.nfcalarmclock.system.media
 import android.content.Context
 import android.media.AudioAttributes
 import android.media.AudioFocusRequest
-import android.media.AudioManager
-import androidx.media3.common.C
 import com.nfcalarmclock.alarm.db.NacAlarm
-import com.nfcalarmclock.shared.NacSharedPreferences
 
 /**
  * Audio attributes.
  *
  * @param context Context.
- * @param source Audio source.
+ * @param alarm Alarm.
+ * @param contentType Content type to use for audio attributes.
  */
 class NacAudioAttributes(
-	private val context: Context,
-	source: String = ""
+	context: Context? = null,
+	alarm: NacAlarm? = null,
+	var contentType: Int = AudioAttributes.CONTENT_TYPE_SONIFICATION,
 )
 {
-
-	/**
-	 * Shared preferences.
-	 */
-	private val sharedPreferences: NacSharedPreferences = NacSharedPreferences(context)
-
-	/**
-	 * Audio usage.
-	 */
-	private var audioUsage = 0
-
-	/**
-	 * Volume level.
-	 */
-	private var volumeLevel = 0
-
-	/**
-	 * Flag indicating if was ducking or not.
-	 */
-	private var wasDucking = false
 
 	/**
 	 * Audio attributes.
 	 */
 	val audioAttributes: AudioAttributes
 		get() = AudioAttributes.Builder()
-			.setContentType(AudioAttributes.CONTENT_TYPE_MUSIC)
+			.setContentType(contentType)
 			.setUsage(audioUsage)
 			.build()
 
@@ -54,19 +33,18 @@ class NacAudioAttributes(
 	 */
 	val audioAttributesMedia3: androidx.media3.common.AudioAttributes
 		get() = androidx.media3.common.AudioAttributes.Builder()
-					.setContentType(C.AUDIO_CONTENT_TYPE_MUSIC)
-					.setUsage(NacAudioManager.usageToUsageMedia3(audioAttributes.usage))
-					.build()
+			.setContentType(NacAudioManager.contentTypeToContentTypeMedia3(audioAttributes.contentType))
+			.setUsage(NacAudioManager.usageToUsageMedia3(audioAttributes.usage))
+			.build()
 
 	/**
-	 * Audio manager.
+	 * Audio usage.
 	 */
-	private val audioManager: AudioManager
-		get() = context.getSystemService(Context.AUDIO_SERVICE) as AudioManager
+	var audioUsage = AudioAttributes.USAGE_UNKNOWN
 
 	/**
-	 * Audio focus request object that is used when initially requesting audio focus.
-	 * This is set by the NacAudioManager.
+	 * Audio focus request object that is used when requesting audio focus. If null, it will be
+	 * set by NacAudioManager.requestFocus().
 	 */
 	var audioFocusRequest: AudioFocusRequest? = null
 
@@ -75,50 +53,6 @@ class NacAudioAttributes(
 	 */
 	val stream: Int
 		get() = NacAudioManager.usageToStream(audioUsage)
-
-	/**
-	 * Volume of the stream.
-	 */
-	var streamVolume: Int
-		get() = if (stream != AudioManager.USE_DEFAULT_STREAM_TYPE)
-		{
-			audioManager.getStreamVolume(stream)
-		}
-		else
-		{
-			0
-		}
-		set(volume)
-		{
-			// Unable to change the volume because the volume is fixed or because the
-			// stream is invalid
-			if (audioManager.isVolumeFixed || stream == AudioManager.USE_DEFAULT_STREAM_TYPE)
-			{
-				return
-			}
-
-			// Set the stream volume
-			try
-			{
-				audioManager.setStreamVolume(stream, volume, 0)
-			}
-			catch (_: SecurityException)
-			{
-			}
-		}
-
-	/**
-	 * Maximum stream volume.
-	 */
-	private val streamMaxVolume: Int
-		get() = if (stream != AudioManager.USE_DEFAULT_STREAM_TYPE)
-		{
-			audioManager.getStreamMaxVolume(stream)
-		}
-		else
-		{
-			0
-		}
 
 	/**
 	 * Speech rate for text-to-speech.
@@ -131,112 +65,43 @@ class NacAudioAttributes(
 	var voice: String = ""
 
 	/**
-	 * Constructor.
+	 * Whether audio was ducking or not.
 	 */
-	constructor(context: Context, alarm: NacAlarm) : this(context, "")
-	{
-		merge(alarm)
-	}
+	var wasDucking = false
 
 	/**
 	 * Constructor.
 	 */
 	init
 	{
-		// Set usage from audio source
-		setUsageFromSource(source)
-	}
-
-	/**
-	 * Convert the alarm volume to a stream volume.
-	 */
-	fun alarmToStreamVolume(): Int
-	{
-		return (streamMaxVolume * volumeLevel / 100.0f).toInt()
-	}
-
-	/**
-	 * Duck the volume.
-	 */
-	fun duckVolume()
-	{
-		// Set the ducking flag
-		wasDucking = true
-
-		// Save the current volume
-		saveCurrentVolume()
-
-		// Set the volume to half its current value
-		streamVolume /= 2
-	}
-
-	/**
-	 * Merge the current audio attributes with that of the alarm.
-	 */
-	fun merge(alarm: NacAlarm): NacAudioAttributes
-	{
-		// Set audio usage from audio source
-		setUsageFromSource(alarm.audioSource)
-
-		// Set the volume level
-		volumeLevel = alarm.volume
-
-		// Set the text-to-speech rate and voice
-		speechRate = alarm.ttsSpeechRate
-		voice = alarm.ttsVoice
-
-		return this
-	}
-
-	/**
-	 * Revert the effects of ducking.
-	 */
-	fun revertDucking()
-	{
-		// Was not ducking, so do nothing
-		if (!wasDucking)
+		// Set alarm based attributes
+		if ((context != null) && (alarm != null))
 		{
-			return
+			// Set audio usage
+			audioUsage = NacAudioManager.sourceToUsage(context, alarm.audioSource)
+
+			// Set the text-to-speech rate and voice
+			speechRate = alarm.ttsSpeechRate
+			voice = alarm.ttsVoice
 		}
-
-		// Reset the ducking flag
-		wasDucking = false
-
-		// Revert the volume back to what it was
-		revertVolume()
 	}
 
 	/**
-	 * Revert the volume level to what it previously was.
+	 * Copy the NacAudioAttributes object to a new object.
 	 */
-	fun revertVolume()
+	fun copy(): NacAudioAttributes
 	{
-		streamVolume = sharedPreferences.previousVolume
-	}
+		// Create a new object
+		val attrs = NacAudioAttributes()
 
-	/**
-	 * Save the current volume.
-	 */
-	fun saveCurrentVolume()
-	{
-		sharedPreferences.previousVolume = streamVolume
-	}
+		// Copy all the attributes
+		attrs.audioUsage = audioUsage
+		attrs.contentType = contentType
+		attrs.speechRate = speechRate
+		attrs.voice = voice
+		attrs.audioFocusRequest = null
 
-		/**
-	 * Set the audio usage from the source name.
-	 */
-	private fun setUsageFromSource(source: String)
-	{
-		audioUsage = NacAudioManager.sourceToUsage(context, source)
-	}
-
-	/**
-	 * Set the stream volume.
-	 */
-	fun setStreamVolume()
-	{
-		// Set the stream volume
-		streamVolume = alarmToStreamVolume()
+		return attrs
 	}
 
 }

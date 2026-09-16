@@ -232,6 +232,7 @@ fun NacAudioAttributes.toBundle(): Bundle
 
 	// Put the audio attributes in a bundle
 	bundle.putInt(TextToSpeech.Engine.KEY_PARAM_STREAM, this.stream)
+	bundle.putFloat(TextToSpeech.Engine.KEY_PARAM_VOLUME, 1f)
 
 	return bundle
 }

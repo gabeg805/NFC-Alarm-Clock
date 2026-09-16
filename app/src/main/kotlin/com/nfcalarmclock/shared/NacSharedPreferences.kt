@@ -142,9 +142,9 @@ class NacSharedPreferences(context: Context)
 		{
 			val key = resources.getString(R.string.key_default_alarm_audio_source)
 			val audioSources = resources.getStringArray(R.array.audio_sources)
-			val defaultValue = audioSources[2]
+			val defaultValue = audioSources[0]
 
-			return instance.getString(key, defaultValue) ?: ""
+			return instance.getString(key, defaultValue) ?: defaultValue
 		}
 		set(value)
 		{
@@ -161,9 +161,9 @@ class NacSharedPreferences(context: Context)
 		{
 			val key = resources.getString(R.string.key_default_timer_audio_source)
 			val audioSources = resources.getStringArray(R.array.audio_sources)
-			val defaultValue = audioSources[2]
+			val defaultValue = audioSources[0]
 
-			return instance.getString(key, defaultValue) ?: ""
+			return instance.getString(key, defaultValue) ?: defaultValue
 		}
 		set(value)
 		{
@@ -1629,13 +1629,31 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
+	 * The previous system volume being used by bluetooth, before an alarm goes off.
+	 */
+	var previousBluetoothVolume: Int
+		get()
+		{
+			val key = resources.getString(R.string.sys_previous_bluetooth_volume)
+			val defaultValue = -1
+
+			return instance.getInt(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.sys_previous_bluetooth_volume)
+
+			saveInt(key, value)
+		}
+
+	/**
 	 * The previous system volume, before an alarm goes off.
 	 */
 	var previousVolume: Int
 		get()
 		{
 			val key = resources.getString(R.string.sys_previous_volume)
-			val defaultValue = resources.getInteger(R.integer.default_previous_volume)
+			val defaultValue = -1
 
 			return instance.getInt(key, defaultValue)
 		}
@@ -1915,6 +1933,24 @@ class NacSharedPreferences(context: Context)
 		set(value)
 		{
 			val key = resources.getString(R.string.key_default_timer_volume_should_gradually_increase_volume)
+
+			saveBoolean(key, value)
+		}
+
+	/**
+	 * Whether audio should be played through speakers and bluetooth or not.
+	 */
+	var shouldPlayAudioThroughSpeakersAndBluetooth: Boolean
+		get()
+		{
+			val key = resources.getString(R.string.key_default_alarm_should_play_audio_through_speakers_and_bluetooth)
+			val defaultValue = false
+
+			return instance.getBoolean(key, defaultValue)
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_alarm_should_play_audio_through_speakers_and_bluetooth)
 
 			saveBoolean(key, value)
 		}

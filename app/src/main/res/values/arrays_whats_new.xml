@@ -5,6 +5,9 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.2</item>
+		<item>Added option to play audio through &lt;b>speakers&lt;/b> and &lt;b>bluetooth&lt;/b> simultaneously.</item>
+		<item>Fixed &lt;b>flashlight&lt;/b> blink issue where on/off durations were not being converted properly due to locale.</item>
 		<item>12.7.1</item>
 		<item>Fixed &lt;b>flashlight&lt;/b> blink issue where on/off durations were empty.</item>
 		<item>Fixed visual artifact being shown in &lt;b>Android 15&lt;/b>.</item>

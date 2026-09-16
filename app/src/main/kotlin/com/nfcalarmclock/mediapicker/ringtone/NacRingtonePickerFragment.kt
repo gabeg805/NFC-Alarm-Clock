@@ -12,7 +12,6 @@ import androidx.media3.common.util.UnstableApi
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.mediapicker.NacBaseChildMediaPickerFragment
-import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.system.getDeviceProtectedStorageContext
 import com.nfcalarmclock.system.media.NacMedia
 import com.nfcalarmclock.system.media.buildLocalMediaPath
@@ -143,7 +142,6 @@ abstract class NacRingtonePickerFragment<T: NacAlarm>
 		// Get all the ringtones
 		val context = requireContext()
 		val ringtones = NacMedia.getRingtones(context)
-		val shared = NacSharedPreferences(context)
 
 		// Iterate over each ringtone
 		for ((title, path) in ringtones)
@@ -158,7 +156,7 @@ abstract class NacRingtonePickerFragment<T: NacAlarm>
 			val button = createRadioButton(title, path)
 
 			// Setup the radio button color
-			button.setupThemeColor(shared)
+			button.setupThemeColor(sharedPreferences)
 
 			// Check if the paths match
 			if (path == mediaPath)

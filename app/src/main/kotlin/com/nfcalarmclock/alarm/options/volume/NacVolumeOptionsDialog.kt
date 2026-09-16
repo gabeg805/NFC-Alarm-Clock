@@ -103,6 +103,18 @@ open class NacVolumeOptionsDialog
 	}
 
 	/**
+	 * View is destroyed.
+	 */
+	override fun onDestroyView()
+	{
+		// Super
+		super.onDestroyView()
+
+		// Cleanup resources
+		cleanup()
+	}
+
+	/**
 	 * Ok button is clicked.
 	 */
 	override fun onOkClicked(alarm: NacAlarm)
@@ -161,23 +173,8 @@ open class NacVolumeOptionsDialog
 
 			// Set member variables for preview to work
 			audioAttributes = NacAudioAttributes(context, alarm)
-			mediaPlayer = NacMediaPlayer(deviceContext, null)
+			mediaPlayer = NacMediaPlayer(deviceContext, listener = null, audioAttributes = audioAttributes!!)
 			volumeManager = NacVolumeManager(context, alarm, audioAttributes!!)
-
-			// Setup the media player
-			mediaPlayer!!.onAudioFocusChangeListener = object : NacMediaPlayer.OnAudioFocusChangeListener
-			{
-				// Empty override functions so that nothing happens when audio
-				// focus is lost. This means that audio should keep playing even if
-				// audio focus is lost
-				override fun onAudioFocusLoss(mediaPlayer: NacMediaPlayer)
-				{
-				}
-
-				override fun onAudioFocusLossTransient(mediaPlayer: NacMediaPlayer)
-				{
-				}
-			}
 		}
 
 		// Set the default selected values
@@ -207,11 +204,14 @@ open class NacVolumeOptionsDialog
 				return@setupSecondaryButton
 			}
 
+			// Get the playing flag
+			val isPlaying = mediaPlayer!!.exoPlayer.isPlaying
+
 			// Set the button text
-			setPreviewText(mediaPlayer!!.wasPlaying)
+			setPreviewText(isPlaying)
 
 			// Stop preview
-			if (mediaPlayer!!.wasPlaying)
+			if (isPlaying)
 			{
 				volumeManager!!.cleanup()
 				mediaPlayer!!.stop()
@@ -219,12 +219,16 @@ open class NacVolumeOptionsDialog
 			// Start preview
 			else
 			{
-				// Update the alarm for volume manager
-				updateAlarm(alarm)
+				// Create a temporary alarm an update it with the selected options so that it
+				// can be previewed properly
+				val tmpAlarm = alarm.copy()
+				updateAlarm(tmpAlarm)
 
-				// Setup the volume and media player
-				volumeManager!!.setup(alarm)
-				mediaPlayer!!.playAlarm(alarm)
+				// Setup volume and media player
+				val context = requireContext()
+
+				volumeManager!!.setup(tmpAlarm)
+				mediaPlayer!!.playAlarm(context, tmpAlarm)
 			}
 
 		})
