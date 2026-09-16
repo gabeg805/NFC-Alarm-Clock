@@ -339,12 +339,12 @@ class NacWakeupProcess(
 		// Cleanup volume resources
 		volumeManager.cleanup(
 			onRevertVolume = {
-				NacLog.i("Reverting normal stream volume. fromVolume=${audioManager.getSafeStreamVolume(audioAttributes.stream)} | toVolume=${sharedPreferences.previousVolume}")
+				NacLog.i("Reverting normal stream volume. fromVolume=${audioManager.getSafeStreamVolume(audioAttributes.stream)} | toVolume=${sharedPreferences.previousVolume}", offsetIndex = 1)
 				audioManager.setStreamVolume(audioAttributes.stream, sharedPreferences.previousVolume)
 			})
 		bluetoothVolumeManager?.cleanup(
 			onRevertVolume = {
-				NacLog.i("Reverting bluetooth stream volume. fromVolume=${audioManager.getSafeStreamVolume(bluetoothAudioAttributes!!.stream)} | toVolume=${sharedPreferences.previousBluetoothVolume}")
+				NacLog.i("Reverting bluetooth stream volume. fromVolume=${audioManager.getSafeStreamVolume(bluetoothAudioAttributes!!.stream)} | toVolume=${sharedPreferences.previousBluetoothVolume}", offsetIndex = 1)
 				audioManager.setStreamVolume(bluetoothAudioAttributes!!.stream, sharedPreferences.previousBluetoothVolume)
 			})
 	}
@@ -407,6 +407,8 @@ class NacWakeupProcess(
 				// No bluetooth device found. Null all bluetooth objects so they cannot be used
 				else
 				{
+					NacLog.i("No bluetooth device found")
+
 					bluetoothMediaPlayer = null
 					bluetoothAudioAttributes = null
 					bluetoothVolumeManager = null
@@ -556,11 +558,11 @@ class NacWakeupProcess(
 	{
 		// Setup the volume
 		volumeManager.setup(alarm, onSaveVolume = {
-			NacLog.i("Saving normal stream volume. volume=${audioManager.getSafeStreamVolume(audioAttributes.stream)}")
+			NacLog.i("Saving normal stream volume. volume=${audioManager.getSafeStreamVolume(audioAttributes.stream)}", offsetIndex = 1)
 			audioManager.saveCurrentVolume(sharedPreferences, audioAttributes.stream)
 		})
 		bluetoothVolumeManager?.setup(alarm, onSaveVolume = {
-			NacLog.i("Saving bluetooth stream volume. volume=${audioManager.getSafeStreamVolume(bluetoothAudioAttributes!!.stream)}")
+			NacLog.i("Saving bluetooth stream volume. volume=${audioManager.getSafeStreamVolume(bluetoothAudioAttributes!!.stream)}", offsetIndex = 1)
 			audioManager.saveCurrentBluetoothVolume(sharedPreferences, bluetoothAudioAttributes!!.stream)
 		})
 

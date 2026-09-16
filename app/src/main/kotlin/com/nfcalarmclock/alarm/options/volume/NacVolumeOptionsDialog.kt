@@ -219,14 +219,16 @@ open class NacVolumeOptionsDialog
 			// Start preview
 			else
 			{
-				// Update the alarm for volume manager
-				updateAlarm(alarm)
+				// Create a temporary alarm an update it with the selected options so that it
+				// can be previewed properly
+				val tmpAlarm = alarm.copy()
+				updateAlarm(tmpAlarm)
 
 				// Setup volume and media player
 				val context = requireContext()
 
-				volumeManager!!.setup(alarm)
-				mediaPlayer!!.playAlarm(context, alarm)
+				volumeManager!!.setup(tmpAlarm)
+				mediaPlayer!!.playAlarm(context, tmpAlarm)
 			}
 
 		})
