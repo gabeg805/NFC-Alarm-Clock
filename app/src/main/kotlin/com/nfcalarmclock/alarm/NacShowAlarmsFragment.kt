@@ -981,6 +981,7 @@ class NacShowAlarmsFragment
 						// the alarm will run
 						if (navController.currentDestination?.id == R.id.nacRepeatOptionsDialog)
 						{
+							// TODO: Investigate this
 							updateAllAlarmReferences(card, alarm)
 						}
 						// Update only the alarm
@@ -1533,7 +1534,7 @@ class NacShowAlarmsFragment
 			alarm,
 			onDateClearedListener = {
 
-				NacLog.i("Date cleared")
+				NacLog.i("Date cleared", offsetIndex = 1)
 
 				// Clear the date
 				alarm.date = ""
@@ -1558,7 +1559,7 @@ class NacShowAlarmsFragment
 				alarm.hour = hour
 				alarm.minute = min
 
-				NacLog.i("Date and time selected: Date=${alarm.date} | Time=${hour.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')}")
+				NacLog.i("Date and time selected: Date=${alarm.date} | Time=${hour.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')}", offsetIndex = 1)
 
 				// Enable the alarm and clear the skip next alarm flag
 				alarm.isEnabled = true
@@ -1571,7 +1572,6 @@ class NacShowAlarmsFragment
 				alarm.setDays(0)
 				alarm.repeatFrequencyDaysToRunBeforeStarting = NacCalendar.Day.NONE
 
-
 				// Update all alarm references
 				// Refresh the schedule date and time views
 				updateAllAlarmReferences(card, alarm)
@@ -1581,7 +1581,7 @@ class NacShowAlarmsFragment
 			},
 			onTimeSelectedListener = { _, hour, min ->
 
-				NacLog.i("Time selected=${hour.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')}")
+				NacLog.i("Time selected=${hour.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')}", offsetIndex = 1)
 
 				// Set the time
 				alarm.hour = hour

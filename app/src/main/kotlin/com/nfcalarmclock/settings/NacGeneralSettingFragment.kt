@@ -247,6 +247,8 @@ class NacGeneralSettingFragment
 							sharedPreferences!!.repeatFrequency = a.repeatFrequency
 							sharedPreferences!!.repeatFrequencyUnits = a.repeatFrequencyUnits
 							sharedPreferences!!.repeatFrequencyDaysToRunBeforeStarting = a.repeatFrequencyDaysToRunBeforeStarting.daysToValue()
+							sharedPreferences!!.repeatFrequencyExcludeStartDateTime = a.excludeStartDateTime
+							sharedPreferences!!.repeatFrequencyExcludeEndDateTime = a.excludeEndDateTime
 
 							// Weekly frequency unit
 							if (a.repeatFrequencyUnits == 4)
