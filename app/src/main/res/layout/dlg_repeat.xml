@@ -1,199 +1,200 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.nfcalarmclock.view.alarmoptionlayout.NacAlarmOptionLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<com.nfcalarmclock.view.alarmoptionlayout.NacAlarmOptionLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
 	xmlns:tools="http://schemas.android.com/tools"
 	android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto">
+	android:layout_height="match_parent">
 
-    <!-- Repeat frequency title -->
-    <TextView
-        style="@style/Widget.AlarmOptionDialog.Title"
-        android:id="@+id/repeat_freq_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/title_repeat_frequency"
-        />
+	<!-- Repeat frequency title -->
+	<TextView
+		style="@style/Widget.AlarmOptionDialog.Title"
+		android:id="@+id/repeat_freq_title"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/title_repeat_frequency"
+		/>
 
-    <!-- Repeat frequency description-->
-    <TextView
-        style="@style/Widget.AlarmOptionDialog.Description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/description_repeat_frequency"
-        />
+	<!-- Repeat frequency description-->
+	<TextView
+		style="@style/Widget.AlarmOptionDialog.Description"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/description_repeat_frequency"
+		/>
 
-    <!-- Repeat frequency value and units -->
-    <LinearLayout
-        style="@style/Widget.AlarmOptionDialog.Row"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:baselineAligned="false"
-        android:gravity="center_horizontal"
-        android:orientation="horizontal"
-        android:weightSum="2">
+	<!-- Repeat frequency value and units -->
+	<LinearLayout
+		style="@style/Widget.AlarmOptionDialog.Row"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:baselineAligned="false"
+		android:gravity="center_horizontal"
+		android:orientation="horizontal"
+		android:weightSum="2">
 
-        <!-- Value -->
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.AlarmOptionDialog.Dropdown"
-            android:id="@+id/repeat_freq_value_input_layout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
+		<!-- Value -->
+		<com.google.android.material.textfield.TextInputLayout
+			style="@style/Widget.AlarmOptionDialog.Dropdown"
+			android:id="@+id/repeat_freq_value_input_layout"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1">
 
-            <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                android:id="@+id/repeat_freq_value_dropdown_menu"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="none"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
+			<com.google.android.material.textfield.MaterialAutoCompleteTextView
+				android:id="@+id/repeat_freq_value_dropdown_menu"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:inputType="none"
+				/>
+		</com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Units -->
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.AlarmOptionDialog.Dropdown"
-            android:id="@+id/repeat_freq_units_input_layout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1">
+		<!-- Units -->
+		<com.google.android.material.textfield.TextInputLayout
+			style="@style/Widget.AlarmOptionDialog.Dropdown"
+			android:id="@+id/repeat_freq_units_input_layout"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_weight="1">
 
-            <com.google.android.material.textfield.MaterialAutoCompleteTextView
-                android:id="@+id/repeat_freq_units_dropdown_menu"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:inputType="none"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
-    </LinearLayout>
+			<com.google.android.material.textfield.MaterialAutoCompleteTextView
+				android:id="@+id/repeat_freq_units_dropdown_menu"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:inputType="none"
+				/>
+		</com.google.android.material.textfield.TextInputLayout>
+	</LinearLayout>
 
-    <!-- Separator -->
-    <Space style="@style/Widget.AlarmOptionDialog.Separator" />
+	<!-- Separator -->
+	<Space style="@style/Widget.AlarmOptionDialog.Separator" />
 
-    <!-- Exclude range title -->
-    <TextView
-        style="@style/Widget.AlarmOptionDialog.Title"
-        android:id="@+id/repeat_freq_exclude_range_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/title_exclude_date_time_range"
-        />
+	<!-- Exclude range title -->
+	<TextView
+		style="@style/Widget.AlarmOptionDialog.Title"
+		android:id="@+id/repeat_freq_exclude_range_title"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/title_exclude_date_time_range"
+		/>
 
-    <!-- Exclude range description-->
-    <TextView
-        style="@style/Widget.AlarmOptionDialog.Description"
-        android:id="@+id/repeat_freq_exclude_range_description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/description_exclude_date_time_range"
-        />
+	<!-- Exclude range description-->
+	<TextView
+		style="@style/Widget.AlarmOptionDialog.Description"
+		android:id="@+id/repeat_freq_exclude_range_description"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/description_exclude_date_time_range"
+		/>
 
-    <!-- Exclude start/end range -->
-    <LinearLayout
-        style="@style/Widget.AlarmOptionDialog.Row"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+	<!-- Exclude start/end range -->
+	<LinearLayout
+		style="@style/Widget.AlarmOptionDialog.Row"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:orientation="vertical">
 
-        <!-- Start -->
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.AlarmOptionDialog.EditText"
-            android:id="@+id/repeat_freq_exclude_start_range_input_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginBottom="@dimen/tiny"
-            android:layout_marginStart="@dimen/normal"
-            android:layout_marginEnd="@dimen/normal"
-            android:hint="@string/label_start"
-            app:startIconDrawable="@drawable/calendar_clock_20">
+		<!-- Start -->
+		<com.google.android.material.textfield.TextInputLayout
+			style="@style/Widget.AlarmOptionDialog.EditText"
+			android:id="@+id/repeat_freq_exclude_start_range_input_layout"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_vertical"
+			android:layout_marginBottom="@dimen/tiny"
+			android:layout_marginStart="@dimen/normal"
+			android:layout_marginEnd="@dimen/normal"
+			android:hint="@string/label_start"
+			app:startIconDrawable="@drawable/calendar_clock_20">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/repeat_freq_exclude_start_range_edit_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:longClickable="false"
-                android:inputType="none"
+			<com.google.android.material.textfield.TextInputEditText
+				android:id="@+id/repeat_freq_exclude_start_range_edit_text"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:clickable="true"
+				android:focusable="false"
+				android:focusableInTouchMode="false"
+				android:longClickable="false"
+				android:inputType="none"
 				tools:ignore="KeyboardInaccessibleWidget"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
+				/>
+		</com.google.android.material.textfield.TextInputLayout>
 
-        <!-- End -->
-        <com.google.android.material.textfield.TextInputLayout
-            style="@style/Widget.AlarmOptionDialog.EditText"
-            android:id="@+id/repeat_freq_exclude_end_range_input_layout"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
-            android:layout_marginStart="@dimen/normal"
-            android:layout_marginEnd="@dimen/normal"
-            android:hint="@string/label_end"
-            app:startIconDrawable="@drawable/calendar_clock_20">
+		<!-- End -->
+		<com.google.android.material.textfield.TextInputLayout
+			style="@style/Widget.AlarmOptionDialog.EditText"
+			android:id="@+id/repeat_freq_exclude_end_range_input_layout"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_gravity="center_vertical"
+			android:layout_marginStart="@dimen/normal"
+			android:layout_marginEnd="@dimen/normal"
+			android:hint="@string/label_end"
+			app:startIconDrawable="@drawable/calendar_clock_20">
 
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/repeat_freq_exclude_end_range_edit_text"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="true"
-                android:focusable="false"
-                android:focusableInTouchMode="false"
-                android:longClickable="false"
-                android:inputType="none"
+			<com.google.android.material.textfield.TextInputEditText
+				android:id="@+id/repeat_freq_exclude_end_range_edit_text"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:clickable="true"
+				android:focusable="false"
+				android:focusableInTouchMode="false"
+				android:longClickable="false"
+				android:inputType="none"
 				tools:ignore="KeyboardInaccessibleWidget"
-                />
-        </com.google.android.material.textfield.TextInputLayout>
+				/>
+		</com.google.android.material.textfield.TextInputLayout>
 
-        <!-- Note alarm is within exclude range -->
-        <TextView
-            style="@style/Widget.TextView.Caption"
-            android:id="@+id/repeat_freq_exclude_note"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/small"
-            android:layout_marginStart="@dimen/normal"
-            android:layout_marginEnd="@dimen/normal"
-            android:textColor="@color/yellow"
-            android:text="@string/message_current_alarm_within_exclude_range"
-            android:visibility="gone"
-            />
-    </LinearLayout>
+		<!-- Note alarm is within exclude range -->
+		<TextView
+			style="@style/Widget.TextView.Caption"
+			android:id="@+id/repeat_freq_exclude_note"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:layout_marginTop="@dimen/small"
+			android:layout_marginStart="@dimen/normal"
+			android:layout_marginEnd="@dimen/normal"
+			android:textColor="@color/yellow"
+			android:text="@string/message_current_alarm_within_exclude_range"
+			android:visibility="gone"
+			/>
+	</LinearLayout>
 
-    <!-- Separator -->
-    <Space style="@style/Widget.AlarmOptionDialog.Separator" />
+	<!-- Separator -->
+	<Space style="@style/Widget.AlarmOptionDialog.Separator" />
 
-    <!-- Days to run before starting the frequency title -->
-    <TextView
-        style="@style/Widget.AlarmOptionDialog.Title"
-        android:id="@+id/repeat_freq_days_to_run_title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/title_repeat_frequency_days_to_run_before_starting"
-        />
+	<!-- Days to run before starting the frequency title -->
+	<TextView
+		style="@style/Widget.AlarmOptionDialog.Title"
+		android:id="@+id/repeat_freq_days_to_run_title"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/title_repeat_frequency_days_to_run_before_starting"
+		/>
 
-    <!-- Days to run before starting the frequency description-->
-    <TextView
-        style="@style/Widget.AlarmOptionDialog.Description"
-        android:id="@+id/repeat_freq_days_to_run_description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/description_repeat_frequency_days_to_run_before_starting"
-        />
+	<!-- Days to run before starting the frequency description-->
+	<TextView
+		style="@style/Widget.AlarmOptionDialog.Description"
+		android:id="@+id/repeat_freq_days_to_run_description"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="@string/description_repeat_frequency_days_to_run_before_starting"
+		/>
 
-    <!-- Days -->
-    <LinearLayout
-        android:id="@+id/repeat_freq_days_to_run"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/touch"
-        android:layout_marginStart="@dimen/small"
-        android:layout_marginEnd="@dimen/small"
-        android:gravity="center"
-        android:orientation="horizontal">
+	<!-- Days -->
+	<LinearLayout
+		android:id="@+id/repeat_freq_days_to_run"
+		android:layout_width="match_parent"
+		android:layout_height="@dimen/touch"
+		android:layout_marginStart="@dimen/small"
+		android:layout_marginEnd="@dimen/small"
+		android:gravity="center"
+		android:orientation="horizontal">
 
-        <include layout="@layout/nac_day_of_week" />
-    </LinearLayout>
+		<include layout="@layout/nac_day_of_week" />
+	</LinearLayout>
 
-    <!-- Separator -->
-    <Space style="@style/Widget.AlarmOptionDialog.Separator" />
+	<!-- Separator -->
+	<Space style="@style/Widget.AlarmOptionDialog.Separator" />
 
 </com.nfcalarmclock.view.alarmoptionlayout.NacAlarmOptionLayout>
