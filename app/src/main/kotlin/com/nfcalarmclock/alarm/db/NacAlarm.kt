@@ -23,7 +23,7 @@ import com.nfcalarmclock.system.daysToValue
 import com.nfcalarmclock.system.removeToday
 import com.nfcalarmclock.system.toDay
 import com.nfcalarmclock.system.toDays
-import com.nfcalarmclock.system.toFormatString
+import com.nfcalarmclock.system.toFullTime
 import com.nfcalarmclock.view.quickToast
 import dagger.Module
 import dagger.Provides
@@ -573,7 +573,7 @@ open class NacAlarm()
 	 * is set and repeat flag is enabled, so the time range should be respected.
 	 */
 	val shouldCheckExcludeTimeRange: Boolean
-		get() = shouldRepeat && excludeStartDateTime.isNotEmpty() && excludeEndDateTime.isNotEmpty()
+		get() = isEnabled && shouldRepeat && excludeStartDateTime.isNotEmpty() && excludeEndDateTime.isNotEmpty()
 
 	/**
 	 * Check if should use TTS or not.
@@ -838,7 +838,7 @@ open class NacAlarm()
 			NacCalendar.getNextAlarmDay(this)!!
 		}
 
-		NacLog.i("nextCal=${nextCal.toFormatString("EEE MMM dd HH:mm:ss z yyyy")} | daysToRunBefore=$repeatFrequencyDaysToRunBeforeStarting | days=$days")
+		NacLog.i("nextCal=${nextCal.toFullTime()} | daysToRunBefore=$repeatFrequencyDaysToRunBeforeStarting | days=$days")
 
 		// Ensure that the days to run before starting does not have any extra
 		// days selected. These would be days that do not match the alarm days.
@@ -889,11 +889,11 @@ open class NacAlarm()
 
 		// Create a calendar from the alarm
 		val alarmCal = NacCalendar.alarmToCalendar(this)
-		NacLog.i("addRepeatFrequency initial cal=${alarmCal.toFormatString("EEE MMM dd HH:mm:ss z yyyy")}")
+		NacLog.i("addRepeatFrequency initial cal=${alarmCal.toFullTime()}")
 
 		// Add the repeat frequency to the calendar
 		alarmCal.addRepeatFrequency(this)
-		NacLog.i("addRepeatFrequency after add cal=${alarmCal.toFormatString("EEE MMM dd HH:mm:ss z yyyy")}")
+		NacLog.i("addRepeatFrequency after add cal=${alarmCal.toFullTime()}")
 
 		// Check repeat frequency units
 		when (repeatFrequencyUnits)

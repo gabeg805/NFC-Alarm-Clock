@@ -377,10 +377,11 @@ class NacDateAndTimePickerDialog
 	{
 		// Get whether the time is 24 hour format or not
 		val is24HourFormat = DateFormat.is24HourFormat(context)
+		val now = Calendar.getInstance()
 
 		// Set the time attributes
-		timePicker.hour = alarm.hour
-		timePicker.minute = alarm.minute
+		timePicker.hour = if (alarm.hour >= 0) alarm.hour else now[Calendar.HOUR_OF_DAY]
+		timePicker.minute = if (alarm.minute >= 0) alarm.minute else now[Calendar.MINUTE]
 		timePicker.setIs24HourView(is24HourFormat)
 	}
 

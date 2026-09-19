@@ -2,7 +2,7 @@ package com.nfcalarmclock.alarm.options.repeat
 
 import android.content.res.ColorStateList
 import android.text.SpannableStringBuilder
-import android.text.format.DateFormat
+import android.view.View
 import android.widget.AdapterView
 import android.widget.TextView
 import com.google.android.material.textfield.MaterialAutoCompleteTextView
@@ -15,17 +15,19 @@ import com.nfcalarmclock.alarm.options.dateandtime.NacDateAndTimePickerDialog
 import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.system.NacCalendar
 import com.nfcalarmclock.system.NacCalendar.Day
+import com.nfcalarmclock.system.excludeDateTimesToCalendars
 import com.nfcalarmclock.system.toBestDateTimeString
+import com.nfcalarmclock.system.toFullTime
 import com.nfcalarmclock.view.calcAlpha
 import com.nfcalarmclock.view.dayofweek.NacDayOfWeek
 import com.nfcalarmclock.view.dayofweek.NacDayOfWeek.OnWeekChangedListener
 import com.nfcalarmclock.view.performHapticFeedback
+import com.nfcalarmclock.view.quickToast
 import com.nfcalarmclock.view.setTextFromIndex
 import com.nfcalarmclock.view.setupInputLayoutColor
 import com.nfcalarmclock.view.setupRippleColor
 import java.util.Calendar
 import java.util.EnumSet
-import java.util.Locale
 
 /**
  * Repeat options.
@@ -60,12 +62,25 @@ class NacRepeatOptionsDialog
 	private lateinit var excludeEndEditText: TextInputEditText
 
 	/**
-	 * Exclude start range alarm.
+	 * Exclude note if current alarm is in exclude range.
+	 */
+	private lateinit var excludeNoteTextView: TextView
+
+	/**
+	 * Exclude note alarm. This is the same as the input alarm, but without any exclude datetime
+	 * attributes set.
+	 */
+	private lateinit var excludeNoteAlarm: NacAlarm
+
+	/**
+	 * Exclude start range alarm. This is the same as the input alarm, but the hour, minute, and
+	 * date represent the exclude date and time, as a means to show a correct date/time dialog.
 	 */
 	private lateinit var excludeStartAlarm: NacAlarm
 
 	/**
-	 * Exclude end range alarm.
+	 * Exclude end range alarm. This is the same as the input alarm, but the hour, minute, and
+	 * date represent the exclude date and time, as a means to show a correct date/time dialog.
 	 */
 	private lateinit var excludeEndAlarm: NacAlarm
 
@@ -104,30 +119,24 @@ class NacRepeatOptionsDialog
 	 *
 	 * The output of this should be used in a TextInputEditText.
 	 */
-	private fun buildBestDateTime(dateTime: String): CharSequence
+	private fun buildDateTimeFromAlarm(alarm: NacAlarm): String
 	{
-		// Nothing to convert
-		if (dateTime.isEmpty())
+		// Initialize the date/time with the date
+		var dateTime = alarm.date
+
+		// Set the time
+		if (alarm.hour >= 0)
 		{
-			return ""
+			// Add space if date is present
+			if (dateTime.isNotEmpty())
+			{
+				dateTime += " "
+			}
+
+			dateTime += "${alarm.hour}:${alarm.minute}"
 		}
 
-		// Convert the datetime string to a Calendar
-		val cal = NacCalendar.dateTimeToCalendar(dateTime)
-
-		// Convert the Calendar to the best human readable datetime string
-		val locale = Locale.getDefault()
-		val skeletonFormat = if (dateTime.contains(' '))
-		{
-			"MMM d, h:mm a"
-		}
-		else
-		{
-			"h:mm a"
-		}
-		val betterFormat = DateFormat.getBestDateTimePattern(locale, skeletonFormat)
-
-		return DateFormat.format(betterFormat, cal)
+		return dateTime
 	}
 
 	/**
@@ -187,11 +196,54 @@ class NacRepeatOptionsDialog
 	 */
 	override fun onOkClicked(alarm: NacAlarm)
 	{
+		// Get the exclude start and end text
+		val context = requireContext()
+		val excludeStartText = excludeStartEditText.text.toString()
+		val excludeEndText = excludeEndEditText.text.toString()
+
+		// Error: Exclude start datetime is missing
+		if (excludeStartText.isEmpty() && excludeEndText.isNotEmpty())
+		{
+			quickToast(context, R.string.error_message_exclude_start_datetime_missing)
+			throw IllegalStateException()
+		}
+		// Error: Exclude end datetime is missing
+		else if (excludeStartText.isNotEmpty() && excludeEndText.isEmpty())
+		{
+			quickToast(context, R.string.error_message_exclude_end_datetime_missing)
+			throw IllegalStateException()
+		}
+
+		// Build the start and end datetimes and calendar
+		excludeStartAlarm.excludeStartDateTime = buildDateTimeFromAlarm(excludeStartAlarm)
+		excludeStartAlarm.excludeEndDateTime = buildDateTimeFromAlarm(excludeEndAlarm)
+		excludeEndAlarm.excludeStartDateTime = excludeStartAlarm.excludeStartDateTime
+		excludeEndAlarm.excludeEndDateTime = excludeStartAlarm.excludeEndDateTime
+		// TODO: Test this, there was some jank where at 11:40pm, startCal=11:45pm and endCal=12:45am, but the calendar date was for today, instead of tomorrow. Need to fix this globally
+
+		// Error: Start and end times are not in order
+		if (excludeStartAlarm.excludeStartDateTime.contains(' ') && excludeStartAlarm.excludeEndDateTime.contains(' '))
+		{
+			val (startCal, endCal) = excludeStartAlarm.excludeDateTimesToCalendars()
+			NacLog.i("Checking that start calendar occurs before end calendar. startCal=${startCal?.toFullTime()} | endCal=${endCal?.toFullTime()}")
+
+			if ((startCal != null) && (endCal != null) && (startCal >= endCal))
+			{
+				quickToast(context, R.string.error_message_exclude_start_end_calendar_not_in_order)
+				throw IllegalStateException()
+			}
+		}
+
+		NacLog.i("Saving start datetime=${excludeStartAlarm.excludeStartDateTime}")
+		NacLog.i("Saving   end datetime=${excludeStartAlarm.excludeEndDateTime}")
+
 		// Update the alarm
 		alarm.shouldRepeat = true
 		alarm.shouldSkipNextAlarm = false
 		alarm.repeatFrequency = selectedRepeatFrequencyValue
 		alarm.repeatFrequencyUnits = selectedRepeatFrequencyUnits
+		alarm.excludeStartDateTime = excludeStartAlarm.excludeStartDateTime
+		alarm.excludeEndDateTime = excludeStartAlarm.excludeEndDateTime
 		alarm.repeatFrequencyDaysToRunBeforeStarting = selectedDaysToRunBeforeFrequency
 
 		// Weekly frequency unit
@@ -221,41 +273,6 @@ class NacRepeatOptionsDialog
 			alarm.repeatFrequencyDaysToRunBeforeStarting = Day.NONE
 			alarm.setDays(0)
 		}
-
-		// Initialize the start and end date/time with the dates
-		var startDateTime = excludeStartAlarm.date
-		var endDateTime = excludeEndAlarm.date
-
-		// Set the start time
-		if (excludeStartAlarm.hour >= 0)
-		{
-			// Add space if date is present
-			if (startDateTime.isNotEmpty())
-			{
-				startDateTime += " "
-			}
-
-			startDateTime += "${excludeStartAlarm.hour}:${excludeStartAlarm.minute}"
-		}
-
-		// Set the end time
-		if (excludeEndAlarm.hour >= 0)
-		{
-			// Add space if date is present
-			if (endDateTime.isNotEmpty())
-			{
-				endDateTime += " "
-			}
-
-			endDateTime += "${excludeEndAlarm.hour}:${excludeEndAlarm.minute}"
-		}
-
-		NacLog.i("Saving start datetime=$startDateTime")
-		NacLog.i("Saving   end datetime=$endDateTime")
-
-		// Save the start and end date/times
-		alarm.excludeStartDateTime = startDateTime
-		alarm.excludeEndDateTime = endDateTime
 	}
 
 	/**
@@ -358,47 +375,61 @@ class NacRepeatOptionsDialog
 	 */
 	private fun setupExcludeAlarms(alarm: NacAlarm)
 	{
+		NacLog.i("Original start datetime=${alarm.excludeStartDateTime}")
+		NacLog.i("Original end datetime=${alarm.excludeEndDateTime}")
+
 		// Set the exclude start and end alarms. They are copies so the original does not get modified
+		excludeNoteAlarm = alarm.copy()
+			.apply {
+				excludeStartDateTime = ""
+				excludeEndDateTime = ""
+			}
 		excludeStartAlarm = alarm.copy()
 		excludeEndAlarm = alarm.copy()
 
-		// Convert the datetime string to a Calendar
-		val startCal = NacCalendar.dateTimeToCalendar(excludeStartAlarm.excludeStartDateTime)
-		val endCal = NacCalendar.dateTimeToCalendar(excludeEndAlarm.excludeEndDateTime)
+		// Convert the datetime strings to Calendars
+		val (startCal, endCal) = alarm.excludeDateTimesToCalendars()
 
-		// Set the start hour, minute, and date
-		if (startCal != null)
+		// Unable to convert the datetimes to calendars. Invalidate the hour and minute
+		if ((startCal == null) || (endCal == null))
 		{
-			NacLog.i("Original start datetime=${excludeStartAlarm.excludeStartDateTime}")
-
+			excludeStartAlarm.date = ""
+			excludeStartAlarm.hour = -1
+			excludeStartAlarm.minute = -1
+			excludeEndAlarm.date = ""
+			excludeEndAlarm.hour = -1
+			excludeEndAlarm.minute = -1
+		}
+		// Set the hour, minute and date
+		else
+		{
+			excludeStartAlarm.date = ""
 			excludeStartAlarm.hour = startCal[Calendar.HOUR_OF_DAY]
 			excludeStartAlarm.minute = startCal[Calendar.MINUTE]
-			NacLog.i("Hour   : ${excludeStartAlarm.hour}")
-			NacLog.i("Minute : ${excludeStartAlarm.minute}")
+			excludeEndAlarm.date = ""
+			excludeEndAlarm.hour = endCal[Calendar.HOUR_OF_DAY]
+			excludeEndAlarm.minute = endCal[Calendar.MINUTE]
 
+			// Start date
 			if (excludeStartAlarm.excludeStartDateTime.contains(' '))
 			{
 				excludeStartAlarm.date = excludeStartAlarm.excludeStartDateTime.split(' ')[0]
-				NacLog.i("Date : ${excludeStartAlarm.date}")
+				NacLog.i("Start date : ${excludeStartAlarm.date}")
 			}
-		}
 
-		// Set the end hour, minute, and date
-		if (endCal != null)
-		{
-			NacLog.i("Original end datetime=${excludeEndAlarm.excludeEndDateTime}")
-
-			excludeEndAlarm.hour = endCal[Calendar.HOUR_OF_DAY]
-			excludeEndAlarm.minute = endCal[Calendar.MINUTE]
-			NacLog.i("Hour   : ${excludeEndAlarm.hour}")
-			NacLog.i("Minute : ${excludeEndAlarm.minute}")
-
+			// End date
 			if (excludeEndAlarm.excludeEndDateTime.contains(' '))
 			{
 				excludeEndAlarm.date = excludeEndAlarm.excludeEndDateTime.split(' ')[0]
-				NacLog.i("Date : ${excludeEndAlarm.date}")
+				NacLog.i("End date : ${excludeEndAlarm.date}")
 			}
 		}
+
+		NacLog.i("Start hour   : ${excludeStartAlarm.hour}")
+		NacLog.i("Start minute : ${excludeStartAlarm.minute}")
+		NacLog.i("End hour   : ${excludeEndAlarm.hour}")
+		NacLog.i("End minute : ${excludeEndAlarm.minute}")
+
 	}
 
 	/**
@@ -411,6 +442,7 @@ class NacRepeatOptionsDialog
 		val excludeEndInputLayout: TextInputLayout = dialog!!.findViewById(R.id.repeat_freq_exclude_end_range_input_layout)
 		excludeStartEditText = dialog!!.findViewById(R.id.repeat_freq_exclude_start_range_edit_text)
 		excludeEndEditText = dialog!!.findViewById(R.id.repeat_freq_exclude_end_range_edit_text)
+		excludeNoteTextView = dialog!!.findViewById(R.id.repeat_freq_exclude_note)
 
 		// Setup the color
 		val themeColor = ColorStateList.valueOf(sharedPreferences.themeColor)
@@ -418,18 +450,23 @@ class NacRepeatOptionsDialog
 		excludeEndInputLayout.setStartIconTintList(themeColor)
 
 		// Setup the initial text
-		val startTime = buildBestDateTime(excludeStartAlarm.excludeStartDateTime)
-		val endTime = buildBestDateTime(excludeEndAlarm.excludeEndDateTime)
-		excludeStartEditText.text = SpannableStringBuilder(startTime)
-		excludeEndEditText.text = SpannableStringBuilder(endTime)
+		updateExcludeStartAndEndEditTexts()
+		updateExcludeNoteVisibility()
 
 		// Show the time dialog on click
 		excludeStartEditText.setOnClickListener {
-			showTimeDialog(excludeStartEditText, excludeStartAlarm)
+			// TODO: Warning message can be one of: current alarm is in exclude range
+			showTimeDialog(
+				excludeStartAlarm,
+				dateTitle = R.string.title_select_start_date,
+				timeTitle = R.string.title_select_start_time)
 		}
 
 		excludeEndEditText.setOnClickListener {
-			showTimeDialog(excludeEndEditText, excludeEndAlarm)
+			showTimeDialog(
+				excludeEndAlarm,
+				dateTitle = R.string.title_select_end_date,
+				timeTitle = R.string.title_select_end_time)
 		}
 	}
 
@@ -520,33 +557,27 @@ class NacRepeatOptionsDialog
 	/**
 	 * Show the time picker dialog.
 	 */
-	private fun showTimeDialog(editText: TextInputEditText, alarm: NacAlarm)
+	private fun showTimeDialog(alarm: NacAlarm, dateTitle: Int, timeTitle: Int)
 	{
 		// Show the dialog
 		NacDateAndTimePickerDialog.create(
 			alarm,
-			onShowDateTitleListener = {
-				it.text = "Select start date"
-			},
-			onShowTimeTitleListener = {
-				it.text = "Select start time"
-			},
+			onShowDateTitleListener = { it.setText(dateTitle) },
+			onShowTimeTitleListener = { it.setText(timeTitle) },
 			onDateClearedListener = {
-
 				NacLog.i("Repeat options date cleared. Only using the time", offsetIndex = 1)
 
 				// Clear date
 				alarm.date = ""
 
-				// Only use the time
-				val bestDateTime = alarm.toBestDateTimeString()
-				editText.text = SpannableStringBuilder(bestDateTime)
+				// Update the edit texts
+				updateExcludeStartAndEndEditTexts()
+				updateExcludeNoteVisibility()
 
-				NacLog.i("Display text=${editText.text}")
-
+				NacLog.i("startEditText=${excludeStartEditText.text}")
+				NacLog.i("  endEditText=${excludeEndEditText.text}")
 			},
 			onTimeClearedListener = {
-
 				NacLog.i("Repeat options time cleared. Clearing everything", offsetIndex = 1)
 
 				// Clear everything
@@ -554,9 +585,12 @@ class NacRepeatOptionsDialog
 				alarm.hour = -1
 				alarm.minute = -1
 
-				// Only use the time
-				editText.text = SpannableStringBuilder("")
+				// Update the edit texts
+				updateExcludeStartAndEndEditTexts()
+				updateExcludeNoteVisibility()
 
+				NacLog.i("startEditText=${excludeStartEditText.text}")
+				NacLog.i("  endEditText=${excludeEndEditText.text}")
 			},
 			onDateAndTimeSelectedListener = { _, _, year, month, day, hour, min ->
 
@@ -567,33 +601,140 @@ class NacRepeatOptionsDialog
 
 				NacLog.i("Repeat options date and time selected: Date=${alarm.date} | Time=${hour.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')}", offsetIndex = 1)
 
-				// Format and use the date and time
-				val bestDateTime = alarm.toBestDateTimeString()
-				editText.text = SpannableStringBuilder(bestDateTime)
+				// Update the edit texts
+				updateExcludeStartAndEndEditTexts()
+				updateExcludeNoteVisibility()
 
-				NacLog.i("Display text=${editText.text}")
-
+				NacLog.i("startEditText=${excludeStartEditText.text}")
+				NacLog.i("  endEditText=${excludeEndEditText.text}")
 			},
 			onTimeSelectedListener = { _, hour, min ->
-
 				NacLog.i("Repeat options time selected=${hour.toString().padStart(2, '0')}:${min.toString().padStart(2, '0')}", offsetIndex = 1)
 
 				// Set the time
 				alarm.hour = hour
 				alarm.minute = min
 
-				// Format and use the date and/or time
-				val bestDateTime = alarm.toBestDateTimeString()
-				editText.text = SpannableStringBuilder(bestDateTime)
+				// Update the edit texts
+				updateExcludeStartAndEndEditTexts()
+				updateExcludeNoteVisibility()
 
-				NacLog.i("Display text=${editText.text}")
-
+				NacLog.i("startEditText=${excludeStartEditText.text}")
+				NacLog.i("  endEditText=${excludeEndEditText.text}")
 			})
 			.apply {
 				shouldShowTitle = true
 				shouldAlwaysShowClearButton = true
 			}
 			.show(childFragmentManager, NacDateAndTimePickerDialog.TAG)
+	}
+
+	/**
+	 * Update the exclude start and end TextInputEditTexts.
+	 */
+	private fun updateExcludeStartAndEndEditTexts()
+	{
+		// Whether exclude alarms have a start/end
+		val hasStart = (excludeStartAlarm.hour >= 0)
+		val hasEnd = (excludeEndAlarm.hour >= 0)
+
+		// Start/end times
+		var startTime = if (hasStart) excludeStartAlarm.toBestDateTimeString() else ""
+		var endTime = if (hasEnd) excludeEndAlarm.toBestDateTimeString() else ""
+
+		// Start/end calendars
+		val startCal = if (hasStart) NacCalendar.alarmToCalendar(excludeStartAlarm) else null
+		val endCal = if (hasEnd) NacCalendar.alarmToCalendar(excludeEndAlarm) else null
+		val now = Calendar.getInstance()
+
+		// Helper descriptor strings
+		val everyday = getString(R.string.dow_everyday)
+		val today = getString(R.string.dow_today)
+		val tomorrow = getString(R.string.dow_tomorrow)
+
+		//// Everyday
+		//if (hasStart && excludeStartAlarm.date.isEmpty())
+		//{
+		//	println("EVERYDAY START")
+		//	startTime = "$everyday $startTime"
+		//}
+
+		//if (hasEnd && excludeEndAlarm.date.isEmpty())
+		//{
+		//	println("EVERYDAY END")
+		//	endTime = "$everyday $endTime"
+		//}
+
+		// Everyday
+		if (excludeStartAlarm.date.isEmpty() && excludeEndAlarm.date.isEmpty())
+		{
+			println("EVERYDAY. hasStart=$hasStart | hasEnd=$hasEnd")
+			if (hasStart)
+			{
+				startTime = "$everyday $startTime"
+			}
+
+			if (hasEnd)
+			{
+				endTime = "$everyday $endTime"
+			}
+		}
+		// Today start time
+		else if (hasStart && excludeStartAlarm.date.isEmpty() && excludeEndAlarm.date.isNotEmpty())
+		{
+			println("TODAY START. after=${startCal!!.after(now)}")
+			startTime = "$today $startTime"
+		}
+		// Today end time
+		else if (hasEnd && excludeStartAlarm.date.isNotEmpty() && excludeEndAlarm.date.isEmpty())
+		{
+			println("TODAY END. after=${endCal!!.after(now)}")
+			endTime = "${if (endCal.after(now)) today else tomorrow} $endTime"
+		}
+
+		println("Final start : '$startTime'")
+		println("Final end   : '$endTime'")
+
+		excludeStartEditText.text = SpannableStringBuilder(startTime)
+		excludeEndEditText.text = SpannableStringBuilder(endTime)
+	}
+
+	/**
+	 * Update the visibility of the exclude note, in the event that the exclude range includes
+	 * the current alarm.
+	 */
+	private fun updateExcludeNoteVisibility()
+	{
+		// No need to show the note when one or both of the exclude ranges is not set
+		if (!excludeNoteAlarm.isEnabled
+			|| excludeStartEditText.text.toString().isEmpty()
+			|| excludeEndEditText.text.toString().isEmpty())
+		{
+			excludeNoteTextView.visibility = View.GONE
+			return
+		}
+
+		// Get the next time the alarm will run
+		val c = NacCalendar.getNextAlarmDay(excludeNoteAlarm)!!
+
+		// Get the exclude range calendars
+		val tmpAlarm = excludeStartAlarm.copy()
+			.apply {
+				excludeStartDateTime = buildDateTimeFromAlarm(excludeStartAlarm)
+				excludeEndDateTime = buildDateTimeFromAlarm(excludeEndAlarm)
+			}
+		val (startCal, endCal) = tmpAlarm.excludeDateTimesToCalendars()
+
+		// Alarm is within exclude range. Show the note
+		excludeNoteTextView.visibility = if ((c >= startCal!!) && (c < endCal!!))
+		{
+			View.VISIBLE
+		}
+		// Do not show the note
+		else
+		{
+			View.GONE
+		}
 	}
 
 }

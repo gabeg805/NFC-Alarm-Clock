@@ -53,40 +53,40 @@ class NacAirplaneModeBroadcastReceiver
 
 		NacLog.i("Airplane mode broadcast received. ${if (state) "Disabling" else "Enabling"} all alarms")
 
-		// Disable each alarm that is not active
-		alarmRepository.getAllAlarms().forEach { a ->
+		//// Disable each alarm that is not active
+		//alarmRepository.getAllAlarms().forEach { a ->
 
-			// Skip active alarms
-			if (a.isActive)
-			{
-				return@forEach
-			}
+		//	// Skip active alarms
+		//	if (a.isActive)
+		//	{
+		//		return@forEach
+		//	}
 
-			// Disable/enable the alarm based on opposite of airplane mode state
-			a.isEnabled = !state
+		//	// Disable/enable the alarm based on opposite of airplane mode state
+		//	a.isEnabled = !state
 
-			// Update the alarm in the database and scheduler
-			alarmRepository.update(a)
-			NacScheduler.update(context, a)
+		//	// Update the alarm in the database and scheduler
+		//	alarmRepository.update(a)
+		//	NacScheduler.update(context, a)
 
-		}
+		//}
 
-		// Show toast based on the airplane mode state
-		withContext(Dispatchers.Main)
-		{
-			// Choose the correct message based on the airplane mode state
-			val message = if (state)
-			{
-				R.string.description_toggle_alarms_with_airplane_mode_on
-			}
-			else
-			{
-				R.string.description_toggle_alarms_with_airplane_mode_off
-			}
+		//// Show toast based on the airplane mode state
+		//withContext(Dispatchers.Main)
+		//{
+		//	// Choose the correct message based on the airplane mode state
+		//	val message = if (state)
+		//	{
+		//		R.string.description_toggle_alarms_with_airplane_mode_on
+		//	}
+		//	else
+		//	{
+		//		R.string.description_toggle_alarms_with_airplane_mode_off
+		//	}
 
-			// Show toast
-			toast(context, message)
-		}
+		//	// Show toast
+		//	toast(context, message)
+		//}
 
 	}
 

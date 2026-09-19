@@ -132,10 +132,13 @@
 	<string name="label_missed_statistic_header">Time Missed,Name,Alarm Time</string>
 	<string name="label_snoozed_statistic_header">Time Snoozed,Name,Alarm Time,Snooze Duration (seconds)</string>
 	<string name="label_clock_widget">Clock</string>
+	<string name="label_start">Start</string>
+	<string name="label_end">End</string>
 
 	<!-- Messages -->
 	<string name="message_permission_ignore_battery_optimization_request">Allow permission to avoid alarm not running if the app has not been used for a while.&lt;br/>&lt;br/>&lt;b>Note:&lt;/b>  This depends on what device you have and &lt;b>may not actually be needed&lt;/b>.</string>
 	<string name="message_permission_post_notifications_request">Allow permission for alarms to run when the app is not in focus.&lt;br/>&lt;br/>&lt;b>Note:&lt;/b>  This is a side effect of the security policies introduced in &lt;b>Android 13&lt;/b>, which are for the benefit of users, but can restrict apps in instances like this.</string>
+	<string name="message_permission_post_notifications_warning">Please enable the notification permission. Alarms may not work without it.</string>
 	<string name="message_permission_schedule_exact_alarm_request">Allow permission to have alarms run precisely when scheduled.</string>
 	<string name="message_permission_system_alert_window_request">Allow permission to display app over other apps?&lt;br/>&lt;br/>This will ensure that the alarm screen is shown, which is a requirement for audio to play, if the app is in the background.&lt;br/>&lt;br/>&lt;b>Note:&lt;/b>  This only affects Android 15.</string>
 	<string name="message_playlist">Do you want to play all the music in this folder?</string>
@@ -181,6 +184,7 @@
 	<string name="message_statistics_email_subject">NFC Alarm Clock Statistics</string>
 	<string name="message_skip_general_alarm">Alarm will be skipped.</string>
 	<string name="message_skip_named_alarm">&lt;b&gt;%1$s&lt;/b&gt; will be skipped.</string>
+	<string name="message_skip_airplane_mode_alarm">Skipping alarm due to airplane mode</string>
 	<string name="message_disabled_general_alarm">Alarm is disabled.</string>
 	<string name="message_disabled_named_alarm">&lt;b&gt;%1$s&lt;/b&gt; is disabled.</string>
 	<string name="message_will_run_on_general_alarm" tools:ignore="StringFormatCount">Will run on %2$s.</string>
@@ -200,6 +204,7 @@
 	<string name="message_text_to_speech_network_required">Network connection may be required for voice to work</string>
 	<string name="message_volume_dismiss_priority">Volume dismiss will have priority</string>
 	<string name="message_volume_snooze_ignored">Volume snooze will be ignored</string>
+	<string name="message_current_alarm_within_exclude_range">Note: Current alarm is within the exclude range.</string>
 
 	<!-- Error messages -->
 	<string name="error_message_active_delete">Unable to delete an active alarm</string>
@@ -240,6 +245,9 @@
 	<string name="error_message_camera_max_in_use">Max cameras in use</string>
 	<string name="error_message_unable_to_launch_media_picker">Unable to launch system audio picker</string>
 	<string name="error_message_unable_to_preview_volume_options">Unable to preview when no media has been set</string>
+	<string name="error_message_exclude_start_datetime_missing">Missing exclude start date/time</string>
+	<string name="error_message_exclude_end_datetime_missing">Missing exclude end date/time</string>
+	<string name="error_message_exclude_start_end_calendar_not_in_order">Start date/time must be before end date/time</string>
 
 	<!-- Titles -->
 	<string name="title_timer_main">NFC Timer</string>
@@ -276,6 +284,10 @@
 	<string name="title_current_alarms">Current</string>
 	<string name="title_set_date">Set date</string>
 	<string name="title_set_time">Set time</string>
+	<string name="title_select_start_date">Select start date</string>
+	<string name="title_select_start_time">Select start time</string>
+	<string name="title_select_end_date">Select end date</string>
+	<string name="title_select_end_time">Select end time</string>
 	<string name="title_whats_new">What\'s New</string>
 	<string name="title_permission_disable_battery_optimization">Disable battery optimization</string>
 	<string name="title_permission_storage">Storage</string>
@@ -290,6 +302,7 @@
 	<string name="title_request_permission_schedule_exact_alarm">Enable schedule exact alarms</string>
 	<string name="title_reset_statistics">Reset statistics…</string>
 	<string name="title_repeat_frequency">Repeat frequency</string>
+	<string name="title_exclude_date_time_range">Exclude date/time range</string>
 	<string name="title_repeat_frequency_days_to_run_before_starting">Days to run before starting frequency</string>
 	<string name="title_vibrate_vibration_duration">Vibration duration</string>
 	<string name="title_vibrate_custom_pattern">Custom pattern</string>
@@ -393,7 +406,8 @@
 	<string name="description_start_timer_on_multiple_nfc_tag_scan">When the app is running and one of the selected NFC tags are scanned (not in this screen), it will automatically start this timer.</string>
 	<string name="description_add_or_replace_nfc_tag">Should the NFC tag be added to the list of NFC tags that can dismiss this alarm, or should it replace any NFC tags that are being used by this alarm?</string>
 	<string name="description_save_nfc_tag">You can reuse this NFC tag, without having to scan it again, by giving it a name.</string>
-	<string name="description_repeat_frequency">Repeat the alarm at a given frequency (every X amount of time).  Note: Selecting hours or days will clear all of the alarm\'s days.</string>
+	<string name="description_repeat_frequency">Repeat the alarm at a given frequency (every X amount of time).  Note: Selecting minutes, hours, or days will clear all of the alarm\'s days.</string>
+	<string name="description_exclude_date_time_range">Alarms will not run during this range of dates/time.</string>
 	<string name="description_repeat_frequency_days_to_run_before_starting">Which of the alarm\'s currently selected days should be run this week before starting the frequency.</string>
 	<string name="description_vibrate_vibration_duration">How long to vibrate for, and how long to wait in between vibrations.</string>
 	<string name="description_vibrate_custom_pattern">Repeat the vibration duration a set number of times, and then wait for a duration.</string>

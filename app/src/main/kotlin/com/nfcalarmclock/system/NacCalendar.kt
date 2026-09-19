@@ -211,20 +211,29 @@ fun Calendar.addRepeatFrequency(alarm: NacAlarm)
  */
 fun Calendar.adjustOutOfExcludeTimeRange(
 	alarm: NacAlarm,
-	startCal: Calendar = dateTimeToCalendar(alarm.excludeStartDateTime)!!,
-	endCal: Calendar = dateTimeToCalendar(alarm.excludeEndDateTime)!!
+	startCal: Calendar? = null,
+	endCal: Calendar? = null,
 ): Boolean
 {
-	println("Start alarm=${alarm.excludeStartDateTime}")
-	println("End   alarm=${alarm.excludeEndDateTime}")
-	println("Start cal=${startCal.toFormatString("EEE MMM dd HH:mm:ss z yyyy")}")
-	println("End   cal=${endCal.toFormatString("EEE MMM dd HH:mm:ss z yyyy")}")
+	// Default to converting the alarm exclude datetimes to Calendars
+	val (startCal, endCal) = if ((startCal == null) || (endCal == null))
+	{
+		alarm.excludeDateTimesToCalendars()
+	}
+	// Use the provided start/end calendars
+	else
+	{
+		Pair(startCal, endCal)
+	}
+
+	println("startAlarm=${alarm.excludeStartDateTime} | endAlarm=${alarm.excludeEndDateTime}")
+	println("startCal=${startCal!!.toFullTime()} | endCal=${endCal!!.toFullTime()}")
 
 	// Log when a calendar is within the exclude range
 	if ((this >= startCal) && (this < endCal))
 	{
-		NacLog.w("Calendar is within exclude range. cal=${this.toFormatString("EEE MMM dd HH:mm:ss z yyyy")}", offsetIndex = 1)
-		println("Calendar is within exclude range. cal=${this.toFormatString("EEE MMM dd HH:mm:ss z yyyy")}")
+		NacLog.w("Calendar is within exclude range. cal=${this.toFullTime()}", offsetIndex = 1)
+		println("Calendar is within exclude range. cal=${this.toFullTime()}")
 	}
 
 	// Adjust all calendars so that if they are within the exclude time range, add the
@@ -239,8 +248,8 @@ fun Calendar.adjustOutOfExcludeTimeRange(
 	// Log when a calendar is within the exclude range
 	if (i > 0)
 	{
-		NacLog.w("Adjusted calendar $i times. newCal=${this.toFormatString("EEE MMM dd HH:mm:ss z yyyy")}", offsetIndex = 1)
-		println("Adjusted calendar $i times. newCal=${this.toFormatString("EEE MMM dd HH:mm:ss z yyyy")}")
+		NacLog.w("Adjusted calendar $i times. newCal=${this.toFullTime()}", offsetIndex = 1)
+		println("Adjusted calendar $i times. newCal=${this.toFullTime()}")
 	}
 
 	return (i > 0)
@@ -268,6 +277,44 @@ fun Calendar.toFormatString(format: String): String
 
 	// Format the calendar time
 	return formatter.format(this.time)
+}
+
+/**
+ * Convert a Calendar to a full time string.
+ *
+ * Note: Mainly used for debugging and printing.
+ */
+fun Calendar.toFullTime(): String
+{
+	return this.toFormatString("EEE MMM dd HH:mm:ss z yyyy")
+}
+
+/**
+ * Convert the exclude datetime strings to Calendars.
+ *
+ * @return A pair of Calendars representing the datetime strings, or null if one or both of the
+ *     datetimes could not be converted to a Calendar.
+ */
+fun NacAlarm.excludeDateTimesToCalendars(): Pair<Calendar?, Calendar?>
+{
+	// Convert to calendars
+	val startCal = dateTimeToCalendar(this.excludeStartDateTime)
+	val endCal = dateTimeToCalendar(this.excludeEndDateTime)
+
+	// Unable to convert calendars
+	if ((startCal == null) || (endCal == null))
+	{
+		return Pair(null, null)
+	}
+
+	// End is before start. Most likely because the end datetime is just the time, no date, so
+	// the Calendar that is used is just the one for today
+	if (endCal < startCal)
+	{
+		endCal.add(Calendar.DAY_OF_MONTH, 1)
+	}
+
+	return Pair(startCal, endCal)
 }
 
 /**
@@ -680,20 +727,20 @@ object NacCalendar
 			calendars.add(c)
 		}
 
-		// TODO: Think about repeat flag and adding repeat freq units. Can you be in here without repeat flag enabled?
-		// TODO: Verify this works. Do I need to check if repeat flag is enabled?
 		// Exclude time range is set and repeat flag is enabled so the time range should be
 		// respected
 		if (alarm.shouldCheckExcludeTimeRange)
 		{
 			// Get the start/end datetimes
-			val excludeStartCal = dateTimeToCalendar(alarm.excludeStartDateTime)!!
-			val excludeEndCal = dateTimeToCalendar(alarm.excludeEndDateTime)!!
+			val (excludeStartCal, excludeEndCal) = alarm.excludeDateTimesToCalendars()
 
 			// Adjust all calendars so that if they are within the exclude time range, add the
 			// repeat frequency until they are outside the range
 			calendars.forEach { c ->
-				c.adjustOutOfExcludeTimeRange(alarm, startCal = excludeStartCal, endCal = excludeEndCal)
+				c.adjustOutOfExcludeTimeRange(
+					alarm,
+					startCal = excludeStartCal!!,
+					endCal = excludeEndCal!!)
 			}
 		}
 
@@ -727,9 +774,8 @@ object NacCalendar
 	 * Convert a datetime string to a Calendar.
 	 *
 	 * The string is expected to be in the format of one of the following, or an empty string:
-	 *
-	 * YYYY-M-D H:m
-	 * H:M
+	 *     YYYY-M-D H:m
+	 *     H:M
 	 */
 	fun dateTimeToCalendar(dateTime: String): Calendar?
 	{
@@ -738,9 +784,6 @@ object NacCalendar
 		{
 			return null
 		}
-
-		// TODO: Error checking when selecting a date/time and it is in the exclude raneg
-		// TODO: Error checking in repeat dialog
 
 		// Get the locale
 		val locale = Locale.getDefault()
@@ -1420,7 +1463,8 @@ object NacCalendar
 		fun getWillRun(
 			context: Context,
 			alarm: NacAlarm,
-			nextAlarmFormat: Int
+			nextAlarmFormat: Int,
+			inputCalendar: Calendar? = null
 		): String
 		{
 			// Get the alarm name
@@ -1443,7 +1487,7 @@ object NacCalendar
 			else
 			{
 				// Get the next alarm day
-				val calendar = getNextAlarmDay(alarm)
+				val calendar = inputCalendar ?: getNextAlarmDay(alarm)
 
 				// No alarm scheduled, possibly because the next alarm is skipped
 				if (calendar == null)

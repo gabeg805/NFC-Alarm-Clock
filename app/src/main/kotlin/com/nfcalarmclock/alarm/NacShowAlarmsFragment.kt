@@ -73,8 +73,10 @@ import com.nfcalarmclock.shared.NacSharedPreferences
 import com.nfcalarmclock.statistics.NacAlarmStatisticViewModel
 import com.nfcalarmclock.system.NacBundle.BUNDLE_INTENT_ACTION
 import com.nfcalarmclock.system.NacCalendar
+import com.nfcalarmclock.system.NacCalendar.getNextAlarmDay
 import com.nfcalarmclock.system.createTimeTickReceiver
 import com.nfcalarmclock.system.getAlarm
+import com.nfcalarmclock.system.permission.postnotifications.NacPostNotificationsPermission
 import com.nfcalarmclock.system.registerMyReceiver
 import com.nfcalarmclock.system.scheduler.NacScheduler
 import com.nfcalarmclock.system.toBundle
@@ -618,6 +620,25 @@ class NacShowAlarmsFragment
 	}
 
 	/**
+	 * Refresh alarm cards that are showing the extra view when they should/shouldn't.
+	 */
+	private fun refreshAlarmCardsShowingExtraView()
+	{
+		// Look for any alarm cards that need to be refreshed
+		for (i in 0 until alarmCardAdapter.itemCount)
+		{
+			// Get the alarm card
+			val card = getAlarmCardAt(i)
+
+			// Alarm card needs to be refreshed
+			if ((card != null) && card.shouldRefreshExtraView())
+			{
+				alarmCardAdapter.notifyItemChanged(i)
+			}
+		}
+	}
+
+	/**
 	 * Refresh alarms that will alarm soon.
 	 */
 	private fun refreshAlarmsThatWillAlarmSoon()
@@ -981,7 +1002,6 @@ class NacShowAlarmsFragment
 						// the alarm will run
 						if (navController.currentDestination?.id == R.id.nacRepeatOptionsDialog)
 						{
-							// TODO: Investigate this
 							updateAllAlarmReferences(card, alarm)
 						}
 						// Update only the alarm
@@ -1193,8 +1213,7 @@ class NacShowAlarmsFragment
 				setupStatistics(alarms)
 			}
 
-			// Save the next alarm in the app, as opposed to using any alarm set on the
-			// device
+			// Save the next alarm in the app, as opposed to using any alarm set on the device
 			if (sharedPreferences.appShouldSaveNextAlarm)
 			{
 				// Get the previous timezone ID and alarm time
@@ -1263,6 +1282,9 @@ class NacShowAlarmsFragment
 				// last time
 				val nextAlarm = NacCalendar.getNextAlarm(alarms)
 				setNextAlarmMessage(nextAlarm)
+
+				// Refresh alarm cards
+				refreshAlarmCardsShowingExtraView()
 
 			}
 
@@ -1433,17 +1455,62 @@ class NacShowAlarmsFragment
 	/**
 	 * Show a snackbar for an alarm.
 	 */
-	private fun showAlarmSnackbar(alarm: NacAlarm? = null, nextAlarm: NacNextAlarm? = null)
+	private fun showAlarmSnackbar(
+		alarm: NacAlarm? = null,
+		nextAlarm: NacNextAlarm? = null,
+		showPermissionWarning: Boolean = false
+	)
 	{
 		// Get the context
 		val context = requireContext()
 
-		// Get the message and action text
-		val action = getString(R.string.action_alarm_dismiss)
-		val message = if (alarm != null)
+		// Get the action
+		val action = if (showPermissionWarning)
 		{
-			// When the given alarm will run
-			NacCalendar.Message.getWillRun(context, alarm, sharedPreferences.nextAlarmFormat)
+			getString(R.string.word_allow)
+		}
+		else
+		{
+			getString(R.string.action_alarm_dismiss)
+		}
+
+		// Get the message
+		val message = if (showPermissionWarning)
+		{
+			// Notification warning
+			getString(R.string.message_permission_post_notifications_warning)
+		}
+		else if (alarm != null)
+		{
+			// Get the next alarm day as a calendar
+			val nextCal = if (alarm.isEnabled)
+			{
+				getNextAlarmDay(alarm)
+			}
+			else
+			{
+				null
+			}
+
+			// Determine whether the next calendar resides within the exclude time range
+			var note = ""
+
+			// TODO: Work on this to make it look better
+			if (alarm.shouldCheckExcludeTimeRange)
+			{
+				val excludeStartCal = NacCalendar.dateTimeToCalendar(alarm.excludeStartDateTime)!!
+				val excludeEndCal = NacCalendar.dateTimeToCalendar(alarm.excludeEndDateTime)!!
+
+				if ((nextCal != null) && (nextCal >= excludeStartCal) && (nextCal < excludeEndCal))
+				{
+					// Use theme for color?
+					NacLog.i("Showing note in snackbar about alarm within exclude time range")
+					note = "\n<b><font color='red'>Note: Alarm is set within excluded time range.</font></b>"
+				}
+			}
+
+			// When the given alarm will run + a note
+			NacCalendar.Message.getWillRun(context, alarm, sharedPreferences.nextAlarmFormat, inputCalendar = nextCal) + note
 		}
 		else
 		{
@@ -1452,10 +1519,28 @@ class NacShowAlarmsFragment
 			NacCalendar.Message.getNext(context, next?.calendar, sharedPreferences.nextAlarmFormat)
 		}
 
+		// On click listener
+		val onClickListener = if (showPermissionWarning)
+		{
+			// Request permission
+			View.OnClickListener {
+				NacLog.i("Requesting notification permission from snackbar. activity=$activity")
+				if (activity != null)
+				{
+					NacPostNotificationsPermission.requestPermission(activity, 0)
+				}
+			}
+		}
+		else
+		{
+			// Do nothing
+			null
+		}
+
 		// Show the snackbar
 		currentSnackbar = showSnackbar(
 			currentSnackbar, bottomNavigation, floatingActionButton,
-			message, action, sharedPreferences.themeColor)
+			message, action, sharedPreferences.themeColor, onClickListener = onClickListener)
 	}
 
 	/**
@@ -1484,7 +1569,7 @@ class NacShowAlarmsFragment
 	/**
 	 * Show a snackbar for the next alarm that will run.
 	 */
-	private fun showNextAlarm(card: NacAlarmCardHolder, alarm: NacAlarm)
+	private fun showNextAlarm(card: NacAlarmCardHolder, alarm: NacAlarm, showPermissionWarning: Boolean = false)
 	{
 		// Set the next alarm message and get the next alarm
 		val nextAlarm = setNextAlarmMessage()
@@ -1493,13 +1578,13 @@ class NacShowAlarmsFragment
 		if (alarm.isEnabled)
 		{
 			// Show a snackbar for the next time this alarm will run
-			showAlarmSnackbar(alarm)
+			showAlarmSnackbar(alarm, showPermissionWarning = showPermissionWarning)
 		}
 		// Alarm is disabled. Find the next alarm and use it
 		else
 		{
 			// Show a snackbar for the next alarm
-			showAlarmSnackbar(nextAlarm = nextAlarm)
+			showAlarmSnackbar(nextAlarm = nextAlarm, showPermissionWarning = showPermissionWarning)
 		}
 
 		// Highlight the alarm card if it is collapsed
@@ -1628,7 +1713,7 @@ class NacShowAlarmsFragment
 		NacUpcomingReminderService.stopService(context, alarm)
 
 		// Show next alarm, update the alarm, and refresh widgets
-		showNextAlarm(card, alarm)
+		showNextAlarm(card, alarm, showPermissionWarning = !NacPostNotificationsPermission.hasPermission(context))
 		updateAlarm(alarm)
 		refreshAllWidgets(context)
 	}
