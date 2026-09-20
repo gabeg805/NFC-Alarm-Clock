@@ -1505,7 +1505,7 @@ class NacShowAlarmsFragment
 				{
 					// Use theme for color?
 					NacLog.i("Showing note in snackbar about alarm within exclude time range")
-					note = "\n<b><font color='red'>Note: Alarm is set within excluded time range.</font></b>"
+					note = "\n<b><font color='yellow'>Note: Alarm is set within excluded time range.</font></b>"
 				}
 			}
 

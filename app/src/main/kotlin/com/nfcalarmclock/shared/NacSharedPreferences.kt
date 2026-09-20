@@ -1905,14 +1905,14 @@ class NacSharedPreferences(context: Context)
 	var shouldToggleAlarmsWithAirplaneMode: Boolean
 		get()
 		{
-			val key = resources.getString(R.string.key_misc_should_toggle_alarms_with_airplane_mode)
+			val key = resources.getString(R.string.key_misc_should_airplane_mode_skip_alarms)
 			val defaultValue = resources.getBoolean(R.bool.default_misc_should_toggle_alarms_with_airplane_mode)
 
 			return instance.getBoolean(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.key_misc_should_toggle_alarms_with_airplane_mode)
+			val key = resources.getString(R.string.key_misc_should_airplane_mode_skip_alarms)
 
 			saveBoolean(key, value)
 		}

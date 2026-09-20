@@ -358,7 +358,7 @@
 	<string name="title_start_week_on">Start week on&#8230;</string>
 	<string name="title_expand_new_alarm">Expand new alarms</string>
 	<string name="title_next_alarm_format">Next alarm format&#8230;</string>
-	<string name="title_toggle_alarms_with_airplane_mode">Toggle alarms with airplane mode</string>
+	<string name="title_toggle_alarms_with_airplane_mode">Airplane mode skips alarms</string>
 	<string name="title_permissions">Permissions</string>
 	<string name="title_no_permissions_needed">No permissions needed!</string>
 	<string name="title_help_debug_mode">Debug mode</string>
@@ -459,8 +459,8 @@
 	<string name="description_alarm_screen_show_music_info_false">Do not show music or ringtone information.</string>
 	<string name="description_alarm_screen_battery_saver_true">Save battery by keeping the screen off when an alarm is active. The screen will need to be turned on manually.</string>
 	<string name="description_alarm_screen_battery_saver_false">Screen will turn on automatically when an alarm is active.</string>
-	<string name="description_toggle_alarms_with_airplane_mode_true">Turning airplane mode on will disable all alarms, and turning airplane mode off will enable all alarms.  Note: The app must be in focus for this to work.</string>
-	<string name="description_toggle_alarms_with_airplane_mode_false">Alarms will be unaffected when airplane mode is turned on or off.</string>
+	<string name="description_toggle_alarms_with_airplane_mode_true">Any alarm will be skipped if airplane mode is enabled when it goes off.</string>
+	<string name="description_toggle_alarms_with_airplane_mode_false">Alarms will run normally.</string>
 	<string name="description_color_theme">The theme color.</string>
 	<string name="description_color_name">e.g. Work</string>
 	<string name="description_color_days">e.g. Mon &#8231; Tue &#8231; Wed &#8231; Thu &#8231; Fri</string>

@@ -345,7 +345,6 @@
 	<string name="title_start_week_on">সপ্তাহ শুরু করুন&#8230;</string>
 	<string name="title_expand_new_alarm">নতুন অ্যালার্ম প্রসারিত করুন</string>
 	<string name="title_next_alarm_format">পরবর্তী অ্যালার্ম বিন্যাস&#8230;</string>
-	<string name="title_toggle_alarms_with_airplane_mode">এয়ারপ্লেন মোড দিয়ে অ্যালার্ম টগল করুন</string>
 	<string name="title_permissions">অনুমতি</string>
 	<string name="title_no_permissions_needed">কোন অনুমতির প্রয়োজন নেই!</string>
 	<string name="title_help_debug_mode">ডিবাগ মোড</string>
@@ -393,7 +392,6 @@
 	<string name="description_start_timer_on_multiple_nfc_tag_scan">যখন অ্যাপটি চলমান থাকে এবং নির্বাচিত NFC ট্যাগগুলির মধ্যে একটি স্ক্যান করা হয় (এই স্ক্রিনে নয়), তখন এটি স্বয়ংক্রিয়ভাবে এই টাইমারটি শুরু করবে।</string>
 	<string name="description_add_or_replace_nfc_tag">এই অ্যালার্মটি বাতিল করতে পারে এমন NFC ট্যাগের তালিকায় কি NFC ট্যাগ যোগ করা উচিত, নাকি এই অ্যালার্ম দ্বারা ব্যবহৃত কোনও NFC ট্যাগ প্রতিস্থাপন করা উচিত?</string>
 	<string name="description_save_nfc_tag">আপনি এই এনএফসি ট্যাগটিকে আবার স্ক্যান না করেই একটি নাম দিয়ে পুনরায় ব্যবহার করতে পারেন৷</string>
-	<string name="description_repeat_frequency">নির্দিষ্ট ফ্রিকোয়েন্সিতে (প্রতি X বার) অ্যালার্মটি পুনরাবৃত্তি করুন। দ্রষ্টব্য: ঘন্টা বা দিন নির্বাচন করলে অ্যালার্মের সমস্ত দিন মুছে যাবে।</string>
 	<string name="description_repeat_frequency_days_to_run_before_starting">ফ্রিকোয়েন্সি শুরু করার আগে এই সপ্তাহে অ্যালার্মের বর্তমানে নির্বাচিত কোন দিনগুলি চালানো উচিত।</string>
 	<string name="description_vibrate_vibration_duration">কতক্ষণ কম্পন করতে হবে এবং কম্পনের মধ্যে কতক্ষণ অপেক্ষা করতে হবে।</string>
 	<string name="description_vibrate_custom_pattern">কম্পনের সময়কাল নির্দিষ্ট সংখ্যক বার পুনরাবৃত্তি করুন, এবং তারপর একটি সময়কালের জন্য অপেক্ষা করুন।</string>
@@ -445,8 +443,6 @@
 	<string name="description_alarm_screen_show_music_info_false">সঙ্গীত বা রিংটোন তথ্য প্রদর্শন করবেন না.</string>
 	<string name="description_alarm_screen_battery_saver_true">অ্যালার্ম সক্রিয় থাকলে স্ক্রিন বন্ধ রেখে ব্যাটারি বাঁচান। স্ক্রিনটি ম্যানুয়ালি চালু করতে হবে।</string>
 	<string name="description_alarm_screen_battery_saver_false">একটি অ্যালার্ম সক্রিয় হলে স্ক্রীন স্বয়ংক্রিয়ভাবে চালু হবে।</string>
-	<string name="description_toggle_alarms_with_airplane_mode_true">এয়ারপ্লেন মোড চালু করলে সমস্ত অ্যালার্ম বন্ধ হয়ে যাবে এবং এয়ারপ্লেন মোড বন্ধ করলে সমস্ত অ্যালার্ম চালু হয়ে যাবে। দ্রষ্টব্য: এই কাজটি করার জন্য অ্যাপটিকে অবশ্যই ফোকাসে থাকতে হবে।</string>
-	<string name="description_toggle_alarms_with_airplane_mode_false">এয়ারপ্লেন মোড চালু বা বন্ধ করা হলেও অ্যালার্মের উপর কোনো প্রভাব পড়বে না।</string>
 	<string name="description_color_theme">থিমের রঙ।</string>
 	<string name="description_color_name">যেমন কাজ</string>
 	<string name="description_color_days">যেমন সোম &#8231; মঙ্গলবার &#8231; বুধ &#8231; বৃহস্পতিবার &#8231; শুক্র</string>
