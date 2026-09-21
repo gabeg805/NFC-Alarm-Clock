@@ -72,7 +72,9 @@ class NacAppearanceSettingFragment
 		setupDependentNewAlarmScreenPreferences(newScreenPref.isChecked)
 
 		// Set the listener for when the new screen preference is changed
-		newScreenPref.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, status ->
+		newScreenPref.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { key, status ->
+
+			NacLog.i("New alarm screen preference changed. key=$key | status=$status")
 
 			// Set the usability of the dependent preferences
 			setupDependentNewAlarmScreenPreferences(status as Boolean)

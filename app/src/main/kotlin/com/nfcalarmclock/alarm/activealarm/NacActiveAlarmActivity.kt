@@ -514,8 +514,8 @@ class NacActiveAlarmActivity
 	}
 
 	/**
-	 * Called when the window focus has changed. This is the best indicator of
-	 * whether the activity is visible to the user, or not.
+	 * Window focus has changed. This is the best indicator of whether the activity is visible
+	 * to the user, or not.
 	 */
 	override fun onWindowFocusChanged(hasFocus: Boolean)
 	{
@@ -524,15 +524,14 @@ class NacActiveAlarmActivity
 
 		NacLog.i("Window focus changed in active alarm activity")
 
-		// Check if the window focus has changed
+		// Start the layout handler
 		if (hasFocus)
 		{
-			// Start the layout handler
 			layoutHandler.start(this)
 		}
+		// Stop the layout handler
 		else
 		{
-			// Stop the layout handler
 			layoutHandler.stop(this)
 		}
 	}

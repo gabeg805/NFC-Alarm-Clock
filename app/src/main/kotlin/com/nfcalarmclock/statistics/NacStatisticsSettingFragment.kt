@@ -54,6 +54,8 @@ class NacStatisticsSettingFragment
 	 */
 	private fun cleanupCsvFiles(allFiles: List<String>)
 	{
+		NacLog.i("Cleaning up any remaining CSV files")
+
 		// Get the directory where files are created
 		val directory = requireContext().filesDir
 
@@ -130,6 +132,8 @@ class NacStatisticsSettingFragment
 	{
 		// Super
 		super.onViewCreated(root, savedInstanceState)
+
+		NacLog.i("Showing statistics settings")
 
 		// Setup all the statistics
 		lifecycleScope.launch {
@@ -269,6 +273,8 @@ class NacStatisticsSettingFragment
 
 		// Set the listener
 		emailButton.setOnClickListener {
+
+			NacLog.i("Email button clicked")
 
 			lifecycleScope.launch {
 
@@ -476,6 +482,8 @@ class NacStatisticsSettingFragment
 	 */
 	private fun zipFiles(timestamp: String, allFiles: List<String>): String
 	{
+		NacLog.i("Zipping statistics files")
+
 		// Get the directory for app specific files
 		val directory = requireContext().filesDir
 

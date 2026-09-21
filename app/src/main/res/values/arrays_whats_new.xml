@@ -10,6 +10,7 @@
 		<item>Added option to &lt;b>exclude date/time range&lt;/b>. Can be found in Settings > Repeat, for an alarm and is used if, for instance, an alarm is going off every couple hours, but you do not want to manually disable/enable it when you go to sleep.</item>
 		<item>Changed &lt;b>airplane mode&lt;/b> option so that it skips alarms if it is enabled, instead of disabling/enabling all alarms when airplane mode is toggled.</item>
 		<item>Fixed &lt;b>flashlight&lt;/b> blink issue where on/off durations were not being converted properly. If unable to convert a duration, it will default to 1 sec.</item>
+		<item>Fixed &lt;b>easy snooze&lt;/b> issue where touching the screen would not snooze.</item>
 		<item>12.7.1</item>
 		<item>Fixed &lt;b>flashlight&lt;/b> blink issue where on/off durations were empty.</item>
 		<item>Fixed visual artifact being shown in &lt;b>Android 15&lt;/b>.</item>

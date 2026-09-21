@@ -28,6 +28,7 @@ import java.util.Calendar
 import java.util.EnumSet
 import java.util.Locale
 import java.util.TimeZone
+import kotlin.Boolean
 
 /**
  * Convert a set of days to a value.
@@ -206,6 +207,7 @@ fun Calendar.addRepeatFrequency(alarm: NacAlarm)
  * @param alarm Alarm.
  * @param startCal Calendar for the start of the exclude time range.
  * @param endCal Calendar for the end of the exclude time range.
+ * @param shouldLog Whether to log or not.
  *
  * @return Whether an adjustment was made or not.
  */
@@ -213,6 +215,7 @@ fun Calendar.adjustOutOfExcludeTimeRange(
 	alarm: NacAlarm,
 	startCal: Calendar? = null,
 	endCal: Calendar? = null,
+	shouldLog: Boolean = false,
 ): Boolean
 {
 	// Default to converting the alarm exclude datetimes to Calendars
@@ -226,29 +229,25 @@ fun Calendar.adjustOutOfExcludeTimeRange(
 		Pair(startCal, endCal)
 	}
 
-	println("startCal=${startCal!!.toFullTime()} | endCal=${endCal!!.toFullTime()} | startAlarm=${alarm.excludeStartDateTime} | endAlarm=${alarm.excludeEndDateTime}")
-
 	// Log when a calendar is within the exclude range
-	if ((this >= startCal) && (this < endCal))
+	if ((this >= startCal!!) && (this < endCal!!) && shouldLog)
 	{
-		NacLog.w("Calendar is within exclude range. cal=${this.toFullTime()}", offsetIndex = 1)
-		println("Calendar is within exclude range. cal=${this.toFullTime()}")
+		NacLog.w("Calendar is within exclude range. initCal=${this.toFullTime()} | startCal=${startCal.toFullTime()} | endCal=${endCal.toFullTime()}", offsetIndex = 1)
 	}
 
 	// Adjust all calendars so that if they are within the exclude time range, add the
 	// repeat frequency until they are outside the range
 	var i = 0
-	while ((this >= startCal) && (this < endCal))
+	while ((this >= startCal) && (this < endCal!!))
 	{
 		i += 1
 		this.addRepeatFrequency(alarm)
 	}
 
 	// Log when a calendar is within the exclude range
-	if (i > 0)
+	if ((i > 0) && shouldLog)
 	{
 		NacLog.w("Adjusted calendar $i times. newCal=${this.toFullTime()}", offsetIndex = 1)
-		println("Adjusted calendar $i times. newCal=${this.toFullTime()}")
 	}
 
 	return (i > 0)
@@ -662,7 +661,7 @@ object NacCalendar
 			}
 			catch (e: IndexOutOfBoundsException)
 			{
-				NacLog.e("Error from trying parse date!", throwable = e)
+				NacLog.e("Error from trying parse date. date=${alarm.date}", throwable = e)
 			}
 		}
 
@@ -673,10 +672,15 @@ object NacCalendar
 	 * Convert all the days an alarm is scheduled to go off, to Calendars.
 	 *
 	 * @param alarm The alarm.
+	 * @param shouldLog Whether to log or not.
 	 *
 	 * @return A list of Calendars.
 	 */
-	private fun alarmToCalendars(alarm: NacAlarm): List<Calendar>
+	private fun alarmToCalendars(
+		alarm: NacAlarm,
+		shouldAdjust: Boolean = true,
+		shouldLog: Boolean = false,
+	): List<Calendar>
 	{
 		val calendars: MutableList<Calendar> = ArrayList()
 
@@ -728,7 +732,7 @@ object NacCalendar
 
 		// Exclude time range is set and repeat flag is enabled so the time range should be
 		// respected
-		if (alarm.shouldCheckExcludeTimeRange)
+		if (alarm.shouldCheckExcludeTimeRange && shouldAdjust)
 		{
 			// Get the start/end datetimes
 			val (excludeStartCal, excludeEndCal) = alarm.excludeDateTimesToCalendars()
@@ -739,7 +743,8 @@ object NacCalendar
 				c.adjustOutOfExcludeTimeRange(
 					alarm,
 					startCal = excludeStartCal!!,
-					endCal = excludeEndCal!!)
+					endCal = excludeEndCal!!,
+					shouldLog = shouldLog)
 			}
 		}
 
@@ -1070,13 +1075,20 @@ object NacCalendar
 	 *
 	 * @param alarm The alarm who's days to check.
 	 * @param ignoreSkip Whether the "shouldSkipNextAlarm" flag should be ignored or not.
+	 * @param shouldAdjust Whether to adjust a Calendar if it is within the exclude range.
+	 * @param shouldLog Whether to log or not.
 	 *
 	 * @return The Calendar day on which the given alarm will run next.
 	 */
-	fun getNextAlarmDay(alarm: NacAlarm, ignoreSkip: Boolean = false): Calendar?
+	fun getNextAlarmDay(
+		alarm: NacAlarm,
+		ignoreSkip: Boolean = false,
+		shouldAdjust: Boolean = true,
+		shouldLog: Boolean = false,
+	): Calendar?
 	{
 		// Convert the alarm to a list of calendar instances
-		val calendars = alarmToCalendars(alarm)
+		val calendars = alarmToCalendars(alarm, shouldAdjust = shouldAdjust, shouldLog = shouldLog)
 
 		// Get the calendar day that is the soonest
 		val nextDay = getNextDay(calendars)!!

@@ -47,6 +47,7 @@
 	<string name="word_back">Atrás</string>
 	<string name="word_next">Próximo</string>
 	<string name="word_finish">Finalizar</string>
+	<string name="word_once">Una vez</string>
 	<string name="letter_h">h</string>
 	<string name="letter_m">metro</string>
 	<string name="letter_s">s</string>
@@ -640,6 +641,7 @@
 
 	<plurals name="import_cleared_media_due_to_not_found">
 		<item quantity="one">Se borraron los medios en %1$d alarma/temporizador debido a que no se encontraron medios.</item>
+		<item quantity="many">Se borraron los medios en %1$d alarmas/temporizadores debido a que no se encontraron medios.</item>
 		<item quantity="other">Se borraron los medios en %1$d alarmas/temporizadores debido a que no se encontraron medios.</item>
 	</plurals>
 
@@ -650,5 +652,17 @@
 	</plurals>
 
 	<string name="tts_say_time">La hora es %1$s:%2$s %3$s.</string>
+
+	<plurals name="upcoming_reminder_how_early">
+		<item quantity="one">%d minuto</item>
+		<item quantity="many">%d minutos</item>
+		<item quantity="other">%d minutos</item>
+	</plurals>
+
+	<plurals name="upcoming_reminder_how_frequent">
+		<item quantity="one">Cada %d minuto</item>
+		<item quantity="many">Cada %d minutos</item>
+		<item quantity="other">Cada %d minutos</item>
+	</plurals>
 
 </resources>

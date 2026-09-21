@@ -215,35 +215,60 @@ class NacRepeatOptionsDialog
 		}
 
 		// Build the start and end datetimes and calendar
-		excludeStartAlarm.excludeStartDateTime = buildDateTimeFromAlarm(excludeStartAlarm)
-		excludeStartAlarm.excludeEndDateTime = buildDateTimeFromAlarm(excludeEndAlarm)
-		excludeEndAlarm.excludeStartDateTime = excludeStartAlarm.excludeStartDateTime
-		excludeEndAlarm.excludeEndDateTime = excludeStartAlarm.excludeEndDateTime
-		// TODO: Test this, there was some jank where at 11:40pm, startCal=11:45pm and endCal=12:45am, but the calendar date was for today, instead of tomorrow. Need to fix this globally
+		var startDateTime = buildDateTimeFromAlarm(excludeStartAlarm)
+		var endDateTime = buildDateTimeFromAlarm(excludeEndAlarm)
+		val startHasDate = startDateTime.contains(' ')
+		val endHasDate = endDateTime.contains(' ')
+		val (startCal, endCal) = excludeStartAlarm.copy()
+			.apply {
+				excludeStartDateTime = startDateTime
+				excludeEndDateTime = endDateTime
+			}
+			.excludeDateTimesToCalendars()
 
-		// Error: Start and end times are not in order
-		if (excludeStartAlarm.excludeStartDateTime.contains(' ') && excludeStartAlarm.excludeEndDateTime.contains(' '))
+		// Start and end both have dates
+		if (startHasDate && endHasDate)
 		{
-			val (startCal, endCal) = excludeStartAlarm.excludeDateTimesToCalendars()
 			NacLog.i("Checking that start calendar occurs before end calendar. startCal=${startCal?.toFullTime()} | endCal=${endCal?.toFullTime()}")
 
+			// Error: Start and end times are not in order
 			if ((startCal != null) && (endCal != null) && (startCal >= endCal))
 			{
 				quickToast(context, R.string.error_message_exclude_start_end_calendar_not_in_order)
 				throw IllegalStateException()
 			}
 		}
+		// Start has date but end is a time. Convert end to date
+		else if (startHasDate)
+		{
+			NacLog.i("Found start date but no end date")
 
-		NacLog.i("Saving start datetime=${excludeStartAlarm.excludeStartDateTime}")
-		NacLog.i("Saving   end datetime=${excludeStartAlarm.excludeEndDateTime}")
+			val year = endCal!![Calendar.YEAR]
+			val month = endCal[Calendar.MONTH]
+			val day = endCal[Calendar.DAY_OF_MONTH]
+			endDateTime = "$year-${month+1}-$day $endDateTime"
+		}
+		// End has date but start is a time. Convert start to date
+		else if (endHasDate)
+		{
+			NacLog.i("Found end date but no start date")
+
+			val year = startCal!![Calendar.YEAR]
+			val month = startCal[Calendar.MONTH]
+			val day = startCal[Calendar.DAY_OF_MONTH]
+			startDateTime = "$year-${month+1}-$day $startDateTime"
+		}
+
+		NacLog.i("Saving start datetime=$startDateTime")
+		NacLog.i("Saving   end datetime=$endDateTime")
 
 		// Update the alarm
 		alarm.shouldRepeat = true
 		alarm.shouldSkipNextAlarm = false
 		alarm.repeatFrequency = selectedRepeatFrequencyValue
 		alarm.repeatFrequencyUnits = selectedRepeatFrequencyUnits
-		alarm.excludeStartDateTime = excludeStartAlarm.excludeStartDateTime
-		alarm.excludeEndDateTime = excludeStartAlarm.excludeEndDateTime
+		alarm.excludeStartDateTime = startDateTime
+		alarm.excludeEndDateTime = endDateTime
 		alarm.repeatFrequencyDaysToRunBeforeStarting = selectedDaysToRunBeforeFrequency
 
 		// Weekly frequency unit

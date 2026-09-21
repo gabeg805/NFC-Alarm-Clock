@@ -18,6 +18,7 @@ import android.widget.LinearLayout
 import android.widget.RelativeLayout
 import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.net.toUri
@@ -68,6 +69,11 @@ class NacSwipeLayoutHandler(
 	 * Animator for the guide on how the user should swipe.
 	 */
 	private val swipeAnimation: NacSwipeAnimationHandler = NacSwipeAnimationHandler(activity)
+
+	/**
+	 * Parent view for entire alarm activity.
+	 */
+	private val parent: ConstraintLayout = activity.findViewById(R.id.act_alarm)
 
 	/**
 	 * Alarm name.
@@ -550,6 +556,7 @@ class NacSwipeLayoutHandler(
 		setupStartEndAlarmActionX()
 		setupAlarmName()
 		setupCurrentDateAndTime(context)
+		setupEasySnoozeClickListeners()
 		setupNumberOfSnoozesLeft(context)
 		setupDismissButton()
 		setupSnoozeButton()
@@ -742,6 +749,23 @@ class NacSwipeLayoutHandler(
 			dismissIcon.imageTintList =
 				ColorStateList.valueOf(calcContrastColor(sharedPreferences.themeColor))
 			dismissTextView.setTextColor(calcContrastColor(sharedPreferences.themeColor))
+		}
+	}
+
+	/**
+	 * Setup easy snooze click listeners.
+	 */
+	private fun setupEasySnoozeClickListeners()
+	{
+		// Easy snooze not enabled
+		if (alarm?.shouldEasySnooze != true)
+		{
+			return
+		}
+
+		// Parent click listener
+		parent.setOnClickListener {
+			onAlarmActionListener.onSnooze(alarm)
 		}
 	}
 

@@ -36,7 +36,7 @@ object NacScheduler
 		}
 
 		// Get the calendar for the next alarm
-		val nextAlarmCal = NacCalendar.getNextAlarmDay(alarm, ignoreSkip = true)!!
+		val nextAlarmCal = NacCalendar.getNextAlarmDay(alarm, ignoreSkip = true, shouldLog = true)!!
 		//NacLog.i("NacScheduler : Next alarm : ${nextAlarmCal.toFullTime()}")
 
 		// Add the alarm

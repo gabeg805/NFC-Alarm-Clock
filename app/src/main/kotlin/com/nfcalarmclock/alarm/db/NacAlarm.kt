@@ -510,6 +510,9 @@ open class NacAlarm()
 
 	/**
 	 * Frequency at which to show the reminder. [Units: min]
+	 *
+	 * 0  = Once
+	 * 1+ = Every X minutes
 	 */
 	@ColumnInfo(name = "reminder_frequency", defaultValue = "0")
 	var reminderFrequency: Int = 0

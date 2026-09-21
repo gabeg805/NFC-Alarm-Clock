@@ -47,6 +47,7 @@
 	<string name="word_back">Back</string>
 	<string name="word_next">Next</string>
 	<string name="word_finish">Finish</string>
+	<string name="word_once">Once</string>
 	<string name="letter_h">h</string>
 	<string name="letter_m">m</string>
 	<string name="letter_s">s</string>
@@ -646,5 +647,15 @@
 	</plurals>
 
 	<string name="tts_say_time">The time is %1$s:%2$s %3$s.</string>
+
+	<plurals name="upcoming_reminder_how_early">
+		<item quantity="one">%d minute</item>
+		<item quantity="other">%d minutes</item>
+	</plurals>
+
+	<plurals name="upcoming_reminder_how_frequent">
+		<item quantity="one">Every %d minute</item>
+		<item quantity="other">Every %d minutes</item>
+	</plurals>
 
 </resources>

@@ -13,6 +13,7 @@ import com.nfcalarmclock.alarm.NacAlarmViewModel
 import com.nfcalarmclock.alarm.options.nfc.NacDeleteNfcTagDialog
 import com.nfcalarmclock.nfc.NacNfcTagViewModel
 import com.nfcalarmclock.alarm.options.nfc.NacRenameNfcTagDialog
+import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.nfc.db.NacNfcTag
 import com.nfcalarmclock.nfc.removeNfcTag
 import com.nfcalarmclock.shared.NacSharedPreferences
@@ -62,6 +63,8 @@ class NacNfcTagSettingFragment
 		// Super
 		super.onViewCreated(root, savedInstanceState)
 
+		NacLog.i("Showing manage NFC tag settings")
+
 		// Context
 		val context = requireContext()
 		val sharedPreferences = NacSharedPreferences(context)
@@ -94,6 +97,8 @@ class NacNfcTagSettingFragment
 
 				// Set the listener for renaming an NFC tag
 				deleteNfcTagDialog.onDeleteNfcTagListener = NacDeleteNfcTagDialog.OnDeleteNfcTagListener {
+
+					NacLog.i("Deleting NFC tag and removing it from all alarms and timers")
 
 					// Delete the NFC tag from the database. The observe() on the
 					// LiveData will take care of updating the adapter
@@ -152,6 +157,8 @@ class NacNfcTagSettingFragment
 
 				// Set the listener for renaming an NFC tag
 				renameNfcTagDialog.onRenameNfcTagListener = NacRenameNfcTagDialog.OnRenameNfcTagListener { name ->
+
+					NacLog.i("Renaming NFC tag")
 
 					// Set the name of the NFC tag
 					nfcTag.name = name

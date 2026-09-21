@@ -172,8 +172,17 @@ class NacUpcomingReminderDialog
 		// Setup the input layout
 		howEarlyInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
 
+		// Build the items for the dropdown menu
+		val allItems: MutableList<String> = mutableListOf()
+
+		repeat(32) { i ->
+			val time = NacAlarm.calcUpcomingReminderTimeToShow(i)
+			allItems.add(resources.getQuantityString(R.plurals.upcoming_reminder_how_early, time, time))
+		}
+
 		// Set the default selected items in the text views
 		val index = NacAlarm.calcUpcomingReminderTimeToShowIndex(default)
+		autoCompleteTextView.setSimpleItems(allItems.toTypedArray())
 		autoCompleteTextView.setTextFromIndex(index)
 
 		// Set the textview listeners
@@ -196,7 +205,16 @@ class NacUpcomingReminderDialog
 		// Setup the input layout
 		howFrequentInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
 
+		// Build the items for the dropdown menu
+		val once = resources.getString(R.string.word_once)
+		val allItems: MutableList<String> = mutableListOf(once)
+
+		repeat(30) { i ->
+			allItems.add(resources.getQuantityString(R.plurals.upcoming_reminder_how_frequent, i+1, i+1))
+		}
+
 		// Set the default selected items in the text views
+		autoCompleteTextView.setSimpleItems(allItems.toTypedArray())
 		autoCompleteTextView.setTextFromIndex(default)
 
 		// Set the textview listeners

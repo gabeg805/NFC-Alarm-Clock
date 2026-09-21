@@ -1495,17 +1495,17 @@ class NacShowAlarmsFragment
 			// Determine whether the next calendar resides within the exclude time range
 			var note = ""
 
-			// TODO: Work on this to make it look better
-			if (alarm.shouldCheckExcludeTimeRange)
+			// TODO: Work on this to make it look better. How to convey that the alarm date/time was not automatically changed, so visually it is within the excluded time range, but the alarm was set correctly?
+			if (alarm.shouldCheckExcludeTimeRange && (nextCal != null))
 			{
+				val nextCalNoAdjust = getNextAlarmDay(alarm, shouldAdjust = false)
 				val excludeStartCal = NacCalendar.dateTimeToCalendar(alarm.excludeStartDateTime)!!
 				val excludeEndCal = NacCalendar.dateTimeToCalendar(alarm.excludeEndDateTime)!!
 
-				if ((nextCal != null) && (nextCal >= excludeStartCal) && (nextCal < excludeEndCal))
+				if ((nextCalNoAdjust != null) && (nextCalNoAdjust >= excludeStartCal) && (nextCalNoAdjust < excludeEndCal))
 				{
-					// Use theme for color?
 					NacLog.i("Showing note in snackbar about alarm within exclude time range")
-					note = "\n<b><font color='yellow'>Note: Alarm is set within excluded time range.</font></b>"
+					note = "<font color='yellow'> Note: Alarm is within excluded time range.</font>"
 				}
 			}
 

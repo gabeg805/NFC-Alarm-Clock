@@ -193,6 +193,8 @@ class NacMainSettingFragment
 
 		// Set whether to show the managee NFC tags preference
 		preference?.isVisible = sharedPreferences?.shouldShowManageNfcTagsPreference == true
+
+		NacLog.i("Determining whether to show manage NFC tags preference. visible=${preference?.isVisible}")
 	}
 
 	/**
@@ -200,10 +202,9 @@ class NacMainSettingFragment
 	 */
 	private fun setupSupportIcon()
 	{
-		// Check if the user has not shown their support
+		// Do nothing. The user has not shown their support
 		if (!sharedPreferences!!.wasAppSupported)
 		{
-			// Do nothing
 			return
 		}
 
