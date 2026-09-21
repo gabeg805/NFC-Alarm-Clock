@@ -88,7 +88,6 @@ import com.nfcalarmclock.widget.refreshAllWidgets
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
 import java.util.Calendar
-import java.util.Locale
 
 /**
  * Show all alarms.
@@ -539,9 +538,6 @@ class NacShowAlarmsFragment
 	{
 		// Setup
 		super.onViewCreated(view, savedInstanceState)
-
-		val locale = Locale.getDefault()
-		println("Show alarms : $locale")
 
 		// Set member variables
 		val context = requireContext()
