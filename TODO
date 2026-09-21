@@ -2,13 +2,6 @@
 TODO
 ----
 
-Playing media item twice at 19:36:01
-Does OnAudioFocusChangeListener function content actually get called? It looks like no
-
-* Make new alarm screen snooze positioning better
-
-* Add blackout times for repeat frequency
-
 * Think of a better way to handle the was NFC just scanned preference logic.
 
 * Update website with f-droid and izzy
@@ -24,9 +17,6 @@ Does OnAudioFocusChangeListener function content actually get called? It looks l
 ------
 Issues
 ------
-
-* When using TTS, volume seems to get louder when coming back to music, and
-  then goes down a bit. Is that intentional? Scope revertVolume() as well.
 
 * Alarm time in activity was not updating until turned on screen. May not be an
   important bug.

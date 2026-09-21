@@ -226,8 +226,7 @@ fun Calendar.adjustOutOfExcludeTimeRange(
 		Pair(startCal, endCal)
 	}
 
-	println("startAlarm=${alarm.excludeStartDateTime} | endAlarm=${alarm.excludeEndDateTime}")
-	println("startCal=${startCal!!.toFullTime()} | endCal=${endCal!!.toFullTime()}")
+	println("startCal=${startCal!!.toFullTime()} | endCal=${endCal!!.toFullTime()} | startAlarm=${alarm.excludeStartDateTime} | endAlarm=${alarm.excludeEndDateTime}")
 
 	// Log when a calendar is within the exclude range
 	if ((this >= startCal) && (this < endCal))

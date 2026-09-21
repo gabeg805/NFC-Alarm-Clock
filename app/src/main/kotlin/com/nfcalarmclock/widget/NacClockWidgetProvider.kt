@@ -604,7 +604,7 @@ internal class NacClockWidgetDataHelper(
 		{
 			val locale = Locale.getDefault()
 			val now = Calendar.getInstance()
-			val skeletonFormat = "E, MMM d"
+			val skeletonFormat = "E MMM d"
 			val betterFormat = DateFormat.getBestDateTimePattern(locale, skeletonFormat)
 
 			return DateFormat.format(betterFormat, now).toString()

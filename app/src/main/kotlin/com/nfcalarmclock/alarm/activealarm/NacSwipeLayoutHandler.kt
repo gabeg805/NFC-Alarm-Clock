@@ -11,6 +11,7 @@ import android.text.format.DateFormat
 import android.view.MotionEvent
 import android.view.VelocityTracker
 import android.view.View
+import android.view.ViewGroup
 import android.view.ViewPropertyAnimator
 import android.widget.ImageView
 import android.widget.LinearLayout
@@ -20,10 +21,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.net.toUri
+import androidx.core.view.doOnLayout
 import androidx.dynamicanimation.animation.DynamicAnimation
 import androidx.dynamicanimation.animation.FlingAnimation
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
+import com.nfcalarmclock.log.NacLog
 import com.nfcalarmclock.nfc.NacNfc
 import com.nfcalarmclock.system.NacCalendar
 import com.nfcalarmclock.system.createTimeTickReceiver
@@ -260,8 +263,7 @@ class NacSwipeLayoutHandler(
 				}
 
 				// Get the inactive view
-				val inactiveView = getInactiveView(view, snoozeButton,
-					dismissButton)
+				val inactiveView = getInactiveView(view, snoozeButton, dismissButton)
 
 				// Show the inactive view (either the snooze or dismiss button)
 				swipeAnimation.showInactiveView(inactiveView,
@@ -466,19 +468,11 @@ class NacSwipeLayoutHandler(
 		// moved and using the other view
 		return when (activeView.id)
 		{
-			// Snooze button is active
-			snoozeButton.id ->
-			{
-				// Dismiss button is inactive
-				dismissButton
-			}
+			// Snooze button is active, so dismiss button is INactive
+			snoozeButton.id -> dismissButton
 
-			// Dismiss button is active
-			dismissButton.id ->
-			{
-				// Snooze button is inactive
-				snoozeButton
-			}
+			// Dismiss button is active, so snooze button is INactive
+			dismissButton.id -> snoozeButton
 
 			// Return the active view because unable to determine which view is
 			// inactive. This should never happen
@@ -553,25 +547,21 @@ class NacSwipeLayoutHandler(
 	override fun setup(context: Context)
 	{
 		// Setup the views based on user preference
+		setupStartEndAlarmActionX()
 		setupAlarmName()
 		setupCurrentDateAndTime(context)
 		setupNumberOfSnoozesLeft(context)
+		setupDismissButton()
+		setupSnoozeButton()
 		setupMusicInformation(context)
 		musicContainer.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
 
-		// Check if the dismiss button should be visible or not
+		// Show the scan NFC view when using NFC and enable layout transitions alongside
+		// animateLayoutChanges=true
 		if (shouldUseNfc)
 		{
-			// Show the scan NFC view
 			scanNfcView.visibility = View.VISIBLE
-
-			// Enable layout transitions alongside animateLayoutChanges=true
 			scanNfcView.layoutTransition.enableTransitionType(LayoutTransition.CHANGING)
-
-			// Set to INVISIBLE so that the end X position can still be
-			// determined, and then it will be set to GONE later
-			dismissButton.visibility = View.INVISIBLE
-			dismissAttentionView.visibility = View.INVISIBLE
 		}
 	}
 
@@ -731,18 +721,10 @@ class NacSwipeLayoutHandler(
 	 */
 	private fun setupDismissButton()
 	{
-		// Check if the X position has already been set
-		if (endAlarmActionX >= 0)
-		{
-			return
-		}
-
-		// Determine the right bound of where the snooze/dismiss button can go
-		endAlarmActionX = dismissButton.x
-
-		// Check if the dismiss button should be visible or not
+		// Dismiss button should NOT be visible
 		if (shouldUseNfc)
 		{
+			NacLog.i("Hiding the dismiss button")
 			dismissButton.visibility = View.GONE
 			dismissAttentionView.visibility = View.GONE
 			return
@@ -918,32 +900,63 @@ class NacSwipeLayoutHandler(
 	 */
 	private fun setupSnoozeButton()
 	{
-		// Check if the X position has already been set
-		if (startAlarmActionX >= 0)
+		// Ensure the slider is laid out so that its width can be used, if need be
+		sliderPath.doOnLayout {
+
+			// Using NFC so snooze button should be in the center
+			// The dismiss button will NOT be shown
+			if (shouldUseNfc)
+			{
+				// Determine the center X position where the snooze button will go when the
+				// button goes to its neutral position
+				centerAlarmActionX = ((it.width - snoozeButton.layoutParams.width) / 2).toFloat()
+
+				NacLog.i("Setting snooze button in the center. x=$centerAlarmActionX")
+
+				// Set the snooze button in the center by default via relative layout rules
+				sliderPath.post {
+					val layoutParams = snoozeButton.layoutParams as RelativeLayout.LayoutParams
+
+					layoutParams.removeRule(RelativeLayout.ALIGN_PARENT_START)
+					layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL)
+
+					snoozeButton.layoutParams = layoutParams
+				}
+			}
+
+			// Setup the snooze button
+			setupAlarmActionButton(snoozeButton, origX = centerAlarmActionX)
+
+		}
+	}
+
+	/**
+	 * Setup the start and end X positions for the alarm action buttons.
+	 */
+	private fun setupStartEndAlarmActionX()
+	{
+		// X position has already been set
+		if ((startAlarmActionX >= 0) && (endAlarmActionX >= 0))
 		{
 			return
 		}
 
-		// Determine the left bound of where the snooze/dismiss button can go
-		startAlarmActionX = snoozeButton.x
+		// Determine X positions
+		sliderPath.doOnLayout {
 
-		// Check if the snooze button should be in the center or not
-		if (shouldUseNfc)
-		{
-			// Determine the center X position where the snooze button will go
-			centerAlarmActionX = ((sliderPath.width - snoozeButton.width) / 2).toFloat()
+			// Margin shifts start/end positions
+			val layoutParams = snoozeButton.layoutParams as ViewGroup.MarginLayoutParams
+			val margin = layoutParams.marginStart
+			val buttonWidth = layoutParams.width
 
-			// Set the snooze button in the center
-			val layoutParams = snoozeButton.layoutParams as RelativeLayout.LayoutParams
+			// Set the positions
+			startAlarmActionX = margin.toFloat()
+			endAlarmActionX = (it.width - buttonWidth - margin).toFloat()
 
-			layoutParams.removeRule(RelativeLayout.ALIGN_PARENT_START)
-			layoutParams.addRule(RelativeLayout.CENTER_HORIZONTAL)
+			NacLog.i("Calculated start and end X positions. start=$startAlarmActionX | end=$endAlarmActionX | width=${it.width} | margin=$margin | buttonWidth=$buttonWidth")
 
-			snoozeButton.layoutParams = layoutParams
 		}
 
-		// Setup the snooze button
-		setupAlarmActionButton(snoozeButton, origX=centerAlarmActionX)
 	}
 
 	/**
@@ -1023,10 +1036,6 @@ class NacSwipeLayoutHandler(
 	{
 		// Reset the stopped flag
 		wasStopped = false
-
-		// Setup the snooze and dismiss buttons
-		setupSnoozeButton()
-		setupDismissButton()
 
 		// Show the attention views and start their animations
 		swipeAnimation.showAttentionViews(snoozeAttentionView, dismissAttentionView)
