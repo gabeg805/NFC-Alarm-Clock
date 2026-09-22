@@ -173,16 +173,19 @@ class NacUpcomingReminderDialog
 		howEarlyInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
 
 		// Build the items for the dropdown menu
-		val allItems: MutableList<String> = mutableListOf()
+		// X minutes, ...
+		val allItems: Array<String> = mutableListOf<String>()
+			.apply {
+				repeat(32) { i ->
+					val time = NacAlarm.calcUpcomingReminderTimeToShow(i)
+					add(resources.getQuantityString(R.plurals.unit_minute, time, time))
+				}
+			}.toTypedArray()
 
-		repeat(32) { i ->
-			val time = NacAlarm.calcUpcomingReminderTimeToShow(i)
-			allItems.add(resources.getQuantityString(R.plurals.upcoming_reminder_how_early, time, time))
-		}
 
-		// Set the default selected items in the text views
+		// Set the default selected items in the text view
 		val index = NacAlarm.calcUpcomingReminderTimeToShowIndex(default)
-		autoCompleteTextView.setSimpleItems(allItems.toTypedArray())
+		autoCompleteTextView.setSimpleItems(allItems)
 		autoCompleteTextView.setTextFromIndex(index)
 
 		// Set the textview listeners
@@ -206,15 +209,18 @@ class NacUpcomingReminderDialog
 		howFrequentInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
 
 		// Build the items for the dropdown menu
+		// Once, Every X minutes, ...
 		val once = resources.getString(R.string.word_once)
-		val allItems: MutableList<String> = mutableListOf(once)
+		val allItems: Array<String> = mutableListOf<String>()
+			.apply {
+				add(once)
+				repeat(30) { i ->
+					add(resources.getQuantityString(R.plurals.repeat_minutely, i+1, i+1))
+				}
+			}.toTypedArray()
 
-		repeat(30) { i ->
-			allItems.add(resources.getQuantityString(R.plurals.upcoming_reminder_how_frequent, i+1, i+1))
-		}
-
-		// Set the default selected items in the text views
-		autoCompleteTextView.setSimpleItems(allItems.toTypedArray())
+		// Set the default selected items in the text view
+		autoCompleteTextView.setSimpleItems(allItems)
 		autoCompleteTextView.setTextFromIndex(default)
 
 		// Set the textview listeners

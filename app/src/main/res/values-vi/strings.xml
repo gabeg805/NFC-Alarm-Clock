@@ -48,6 +48,7 @@
 	<string name="word_next">Kế tiếp</string>
 	<string name="word_finish">Hoàn thành</string>
 	<string name="word_once">Một lần</string>
+	<string name="word_unlimited">Vô hạn</string>
 	<string name="letter_h">giờ</string>
 	<string name="letter_m">tôi</string>
 	<string name="letter_s">S</string>
@@ -613,12 +614,6 @@
 
 	<string name="tts_say_time">Thời gian là %1$s:%2$s %3$s.</string>
 
-	<plurals name="upcoming_reminder_how_early">
-		<item quantity="other">%d phút</item>
-	</plurals>
-
-	<plurals name="upcoming_reminder_how_frequent">
-		<item quantity="other">Mỗi %d phút</item>
-	</plurals>
+	<string name="float_duration_seconds">{count, plural, one{{count} giây} other{{count} giây}}</string>
 
 </resources>

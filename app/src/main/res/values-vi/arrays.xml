@@ -40,69 +40,19 @@
 		<item>Thứ hai</item>
 	</string-array>
 
-	<!-- General list of seconds -->
-	<string-array name="general_seconds_summaries">
-		<item>0 giây</item>
-		<item>1 giây</item>
-		<item>2 giây</item>
-		<item>3 giây</item>
-		<item>4 giây</item>
-		<item>5 giây</item>
-		<item>6 giây</item>
-		<item>7 giây</item>
-		<item>8 giây</item>
-		<item>9 giây</item>
-		<item>10 giây</item>
-		<item>11 giây</item>
-		<item>12 giây</item>
-		<item>13 giây</item>
-		<item>14 giây</item>
-		<item>15 giây</item>
-		<item>16 giây</item>
-		<item>17 giây</item>
-		<item>18 giây</item>
-		<item>19 giây</item>
-		<item>20 giây</item>
-		<item>21 giây</item>
-		<item>22 giây</item>
-		<item>23 giây</item>
-		<item>24 giây</item>
-		<item>25 giây</item>
-		<item>26 giây</item>
-		<item>27 giây</item>
-		<item>28 giây</item>
-		<item>29 giây</item>
-		<item>30 giây</item>
-		<item>31 giây</item>
-		<item>32 giây</item>
-		<item>33 giây</item>
-		<item>34 giây</item>
-		<item>35 giây</item>
-		<item>36 giây</item>
-		<item>37 giây</item>
-		<item>38 giây</item>
-		<item>39 giây</item>
-		<item>40 giây</item>
-		<item>41 giây</item>
-		<item>42 giây</item>
-		<item>43 giây</item>
-		<item>44 giây</item>
-		<item>45 giây</item>
-		<item>46 giây</item>
-		<item>47 giây</item>
-		<item>48 giây</item>
-		<item>49 giây</item>
-		<item>50 giây</item>
-		<item>51 giây</item>
-		<item>52 giây</item>
-		<item>53 giây</item>
-		<item>54 giây</item>
-		<item>55 giây</item>
-		<item>56 giây</item>
-		<item>57 giây</item>
-		<item>58 giây</item>
-		<item>59 giây</item>
-		<item>60 giây</item>
+	<!-- Audio sources -->
+	<string-array name="audio_sources">
+		<item>Báo thức</item>
+		<item>Gọi</item>
+		<item>Phương tiện truyền thông</item>
+		<item>Thông báo</item>
+		<item>Nhạc chuông</item>
+	</string-array>
+
+	<!-- NFC tag dismiss orders -->
+	<string-array name="nfc_tag_dismiss_orders">
+		<item>Ngẫu nhiên</item>
+		<item>Tuần tự</item>
 	</string-array>
 
 </resources>

@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <com.nfcalarmclock.view.alarmoptionlayout.NacAlarmOptionLayout
 	xmlns:android="http://schemas.android.com/apk/res/android"
-	xmlns:app="http://schemas.android.com/apk/res-auto"
 	android:layout_width="match_parent"
 	android:layout_height="wrap_content">
 
@@ -66,7 +65,6 @@
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:inputType="none"
-				app:simpleItems="@array/auto_dismiss_minute_summaries"
 				/>
 		</com.google.android.material.textfield.TextInputLayout>
 
@@ -83,7 +81,6 @@
 				android:layout_width="match_parent"
 				android:layout_height="wrap_content"
 				android:inputType="none"
-				app:simpleItems="@array/general_seconds_summaries"
 				/>
 		</com.google.android.material.textfield.TextInputLayout>
 	</LinearLayout>
@@ -142,7 +139,6 @@
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
 			android:inputType="none"
-			app:simpleItems="@array/dismiss_early_times"
 			/>
 	</com.google.android.material.textfield.TextInputLayout>
 

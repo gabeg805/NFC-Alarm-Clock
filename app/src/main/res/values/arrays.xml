@@ -40,69 +40,19 @@
 		<item>Monday</item>
 	</string-array>
 
-	<!-- General list of seconds -->
-	<string-array name="general_seconds_summaries">
-		<item>0 seconds</item>
-		<item>1 second</item>
-		<item>2 seconds</item>
-		<item>3 seconds</item>
-		<item>4 seconds</item>
-		<item>5 seconds</item>
-		<item>6 seconds</item>
-		<item>7 seconds</item>
-		<item>8 seconds</item>
-		<item>9 seconds</item>
-		<item>10 seconds</item>
-		<item>11 seconds</item>
-		<item>12 seconds</item>
-		<item>13 seconds</item>
-		<item>14 seconds</item>
-		<item>15 seconds</item>
-		<item>16 seconds</item>
-		<item>17 seconds</item>
-		<item>18 seconds</item>
-		<item>19 seconds</item>
-		<item>20 seconds</item>
-		<item>21 seconds</item>
-		<item>22 seconds</item>
-		<item>23 seconds</item>
-		<item>24 seconds</item>
-		<item>25 seconds</item>
-		<item>26 seconds</item>
-		<item>27 seconds</item>
-		<item>28 seconds</item>
-		<item>29 seconds</item>
-		<item>30 seconds</item>
-		<item>31 seconds</item>
-		<item>32 seconds</item>
-		<item>33 seconds</item>
-		<item>34 seconds</item>
-		<item>35 seconds</item>
-		<item>36 seconds</item>
-		<item>37 seconds</item>
-		<item>38 seconds</item>
-		<item>39 seconds</item>
-		<item>40 seconds</item>
-		<item>41 seconds</item>
-		<item>42 seconds</item>
-		<item>43 seconds</item>
-		<item>44 seconds</item>
-		<item>45 seconds</item>
-		<item>46 seconds</item>
-		<item>47 seconds</item>
-		<item>48 seconds</item>
-		<item>49 seconds</item>
-		<item>50 seconds</item>
-		<item>51 seconds</item>
-		<item>52 seconds</item>
-		<item>53 seconds</item>
-		<item>54 seconds</item>
-		<item>55 seconds</item>
-		<item>56 seconds</item>
-		<item>57 seconds</item>
-		<item>58 seconds</item>
-		<item>59 seconds</item>
-		<item>60 seconds</item>
+	<!-- Audio sources -->
+	<string-array name="audio_sources">
+		<item>Alarm</item>
+		<item>Call</item>
+		<item>Media</item>
+		<item>Notification</item>
+		<item>Ringtone</item>
+	</string-array>
+
+	<!-- NFC tag dismiss orders -->
+	<string-array name="nfc_tag_dismiss_orders">
+		<item>Random</item>
+		<item>Sequential</item>
 	</string-array>
 
 </resources>

@@ -48,6 +48,7 @@
 	<string name="word_next">Próximo</string>
 	<string name="word_finish">Terminar</string>
 	<string name="word_once">Uma vez</string>
+	<string name="word_unlimited">Ilimitado</string>
 	<string name="letter_h">h</string>
 	<string name="letter_m">m</string>
 	<string name="letter_s">s</string>
@@ -546,13 +547,13 @@
 	</plurals>
 
 	<plurals name="repeat_minutely">
-		<item quantity="one">A cada %d minutos</item>
+		<item quantity="one">A cada %d minuto</item>
 		<item quantity="many">A cada %d minutos</item>
 		<item quantity="other">A cada %d minutos</item>
 	</plurals>
 
 	<plurals name="repeat_hourly">
-		<item quantity="one">A cada %d horas</item>
+		<item quantity="one">A cada %d hora</item>
 		<item quantity="many">A cada %d horas</item>
 		<item quantity="other">A cada %d horas</item>
 	</plurals>
@@ -655,16 +656,6 @@
 
 	<string name="tts_say_time">O tempo é %1$s:%2$s %3$s.</string>
 
-	<plurals name="upcoming_reminder_how_early">
-		<item quantity="one">%d minuto</item>
-		<item quantity="many">%d minutos</item>
-		<item quantity="other">%d minutos</item>
-	</plurals>
-
-	<plurals name="upcoming_reminder_how_frequent">
-		<item quantity="one">A cada %d minuto</item>
-		<item quantity="many">A cada %d minutos</item>
-		<item quantity="other">A cada %d minutos</item>
-	</plurals>
+	<string name="float_duration_seconds">{count, plural, one{{count} segundo} other{{count} segundos}}</string>
 
 </resources>

@@ -15,6 +15,8 @@ import com.google.android.material.textfield.TextInputLayout
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.NacGenericAlarmOptionsDialog
+import com.nfcalarmclock.log.NacLog
+import com.nfcalarmclock.system.getLocalizedFloatPlural
 import com.nfcalarmclock.view.calcAlpha
 import com.nfcalarmclock.view.setTextFromIndex
 import com.nfcalarmclock.view.setupInputLayoutColor
@@ -121,12 +123,12 @@ open class NacFlashlightOptionsDialog
 		flashlight = NacFlashlight(requireContext())
 
 		// Set the default selected values
-		selectedBlinkOnDuration = if (alarm.flashlightOnDuration.isEmpty() || (alarm.flashlightOnDuration == "0")) "1.0" else alarm.flashlightOnDuration
-		selectedBlinkOffDuration = if (alarm.flashlightOffDuration.isEmpty() || (alarm.flashlightOffDuration == "0")) "1.0" else alarm.flashlightOffDuration
+		selectedBlinkOnDuration = if (alarm.flashlightOnDuration.isEmpty() || (alarm.flashlightOnDuration == "0")) "1" else alarm.flashlightOnDuration
+		selectedBlinkOffDuration = if (alarm.flashlightOffDuration.isEmpty() || (alarm.flashlightOffDuration == "0")) "1" else alarm.flashlightOffDuration
 
 		// Setup the views
 		setupBrightnessLevel(alarm.flashlightStrengthLevel)
-		setupBlinkFlashlight(alarm.shouldBlinkFlashlight, alarm.flashlightOnDuration, alarm.flashlightOffDuration)
+		setupBlinkFlashlight(alarm.shouldBlinkFlashlight, selectedBlinkOnDuration, selectedBlinkOffDuration)
 		setBlinkFlashlightUsability()
 	}
 
@@ -152,11 +154,25 @@ open class NacFlashlightOptionsDialog
 		onDurationInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
 		offDurationInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
 
+		// Build the items for the dropdown menu. 0.5 to 10 seconds
+		val context = requireContext()
+		val allItems: Array<String> = mutableListOf<String>()
+			.apply {
+				repeat(20) { i ->
+					val f = 0.5f * (i+1)
+					add(context.getLocalizedFloatPlural(R.string.float_duration_seconds, f))
+				}
+			}.toTypedArray()
+
 		// Set the default selected items in the text views
 		val onIndex = NacAlarm.calcFlashlightOnOffDurationIndex(defaultOn)
 		val offIndex = NacAlarm.calcFlashlightOnOffDurationIndex(defaultOff)
+		onDurationAutoCompleteTextView.setSimpleItems(allItems)
+		offDurationAutoCompleteTextView.setSimpleItems(allItems)
 		onDurationAutoCompleteTextView.setTextFromIndex(onIndex)
 		offDurationAutoCompleteTextView.setTextFromIndex(offIndex)
+
+		NacLog.i("Setting up blink values. on=$defaultOn | off=$defaultOff | onIndex=$onIndex | offIndex=$offIndex")
 
 		// Set the listener
 		relativeLayout.setOnClickListener {

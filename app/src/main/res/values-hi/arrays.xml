@@ -40,69 +40,19 @@
 		<item>सोमवार</item>
 	</string-array>
 
-	<!-- General list of seconds -->
-	<string-array name="general_seconds_summaries">
-		<item>0 सेकंड</item>
-		<item>1 सेकंड</item>
-		<item>2 सेकंड</item>
-		<item>3 सेकंड</item>
-		<item>4 सेकंड</item>
-		<item>5 सेकंड</item>
-		<item>6 सेकंड</item>
-		<item>7 सेकंड</item>
-		<item>8 सेकंड</item>
-		<item>9 सेकंड</item>
-		<item>10 सेकंड</item>
-		<item>11 सेकंड</item>
-		<item>12 सेकंड</item>
-		<item>13 सेकंड</item>
-		<item>14 सेकंड</item>
-		<item>15 सेकंड</item>
-		<item>16 सेकंड</item>
-		<item>17 सेकंड</item>
-		<item>18 सेकंड</item>
-		<item>19 सेकंड</item>
-		<item>20 सेकंड</item>
-		<item>21 सेकंड</item>
-		<item>22 सेकंड</item>
-		<item>23 सेकंड</item>
-		<item>24 सेकंड</item>
-		<item>25 सेकंड</item>
-		<item>26 सेकंड</item>
-		<item>27 सेकंड</item>
-		<item>28 सेकंड</item>
-		<item>29 सेकंड</item>
-		<item>30 सेकंड</item>
-		<item>31 सेकंड</item>
-		<item>32 सेकंड</item>
-		<item>33 सेकंड</item>
-		<item>34 सेकंड</item>
-		<item>35 सेकंड</item>
-		<item>36 सेकंड</item>
-		<item>37 सेकंड</item>
-		<item>38 सेकंड</item>
-		<item>39 सेकंड</item>
-		<item>40 सेकंड</item>
-		<item>41 सेकंड</item>
-		<item>42 सेकंड</item>
-		<item>43 सेकंड</item>
-		<item>44 सेकंड</item>
-		<item>45 सेकंड</item>
-		<item>46 सेकंड</item>
-		<item>47 सेकंड</item>
-		<item>48 सेकंड</item>
-		<item>49 सेकंड</item>
-		<item>50 सेकंड</item>
-		<item>51 सेकंड</item>
-		<item>52 सेकंड</item>
-		<item>53 सेकंड</item>
-		<item>54 सेकंड</item>
-		<item>55 सेकंड</item>
-		<item>56 सेकंड</item>
-		<item>57 सेकंड</item>
-		<item>58 सेकंड</item>
-		<item>59 सेकंड</item>
-		<item>60 सेकंड</item>
+	<!-- Audio sources -->
+	<string-array name="audio_sources">
+		<item>खतरे की घंटी</item>
+		<item>पुकारना</item>
+		<item>मिडिया</item>
+		<item>अधिसूचना</item>
+		<item>रिंगटोन</item>
+	</string-array>
+
+	<!-- NFC tag dismiss orders -->
+	<string-array name="nfc_tag_dismiss_orders">
+		<item>यादृच्छिक</item>
+		<item>क्रमबद्ध</item>
 	</string-array>
 
 </resources>

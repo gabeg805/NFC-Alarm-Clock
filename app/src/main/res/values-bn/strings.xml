@@ -48,6 +48,7 @@
 	<string name="word_next">পরবর্তী</string>
 	<string name="word_finish">শেষ</string>
 	<string name="word_once">একবার</string>
+	<string name="word_unlimited">আনলিমিটেড</string>
 	<string name="letter_h">জ</string>
 	<string name="letter_m">মি</string>
 	<string name="letter_s">গুলি</string>
@@ -630,14 +631,6 @@
 
 	<string name="tts_say_time">সময় হল %1$s:%2$s %3$s।</string>
 
-	<plurals name="upcoming_reminder_how_early">
-		<item quantity="one">%d মিনিট</item>
-		<item quantity="other">%d মিনিট</item>
-	</plurals>
-
-	<plurals name="upcoming_reminder_how_frequent">
-		<item quantity="one">প্রতি %d মিনিটে</item>
-		<item quantity="other">প্রতি %d মিনিটে</item>
-	</plurals>
+	<string name="float_duration_seconds">{count, plural, one{{count} দ্বিতীয} other{{count} সেকেন্ড}}</string>
 
 </resources>

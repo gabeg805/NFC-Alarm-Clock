@@ -40,69 +40,19 @@
 		<item>lendi</item>
 	</string-array>
 
-	<!-- General list of seconds -->
-	<string-array name="general_seconds_summaries">
-		<item>0 segonn</item>
-		<item>1 segonn</item>
-		<item>2 segonn</item>
-		<item>3 segonn</item>
-		<item>4 segonn</item>
-		<item>5 segonn</item>
-		<item>6 segonn</item>
-		<item>7 segonn</item>
-		<item>8 segonn</item>
-		<item>9 segonn</item>
-		<item>10 segonn</item>
-		<item>11 segonn</item>
-		<item>12 segonn</item>
-		<item>13 segonn</item>
-		<item>14 segonn</item>
-		<item>15 segonn</item>
-		<item>16 segonn</item>
-		<item>17 segonn</item>
-		<item>18 segonn</item>
-		<item>19 segonn</item>
-		<item>20 segonn</item>
-		<item>21 segonn</item>
-		<item>22 segonn</item>
-		<item>23 segonn</item>
-		<item>24 segonn</item>
-		<item>25 segonn</item>
-		<item>26 segonn</item>
-		<item>27 segonn</item>
-		<item>28 segonn</item>
-		<item>29 segonn</item>
-		<item>30 segonn</item>
-		<item>31 segonn</item>
-		<item>32 segonn</item>
-		<item>33 segonn</item>
-		<item>34 segonn</item>
-		<item>35 segonn</item>
-		<item>36 segonn</item>
-		<item>37 segonn</item>
-		<item>38 segonn</item>
-		<item>39 segonn</item>
-		<item>40 segonn</item>
-		<item>41 segonn</item>
-		<item>42 segonn</item>
-		<item>43 segonn</item>
-		<item>44 segonn</item>
-		<item>45 segonn</item>
-		<item>46 segonn</item>
-		<item>47 segonn</item>
-		<item>48 segonn</item>
-		<item>49 segonn</item>
-		<item>50 segonn</item>
-		<item>51 segonn</item>
-		<item>52 segonn</item>
-		<item>53 segonn</item>
-		<item>54 segonn</item>
-		<item>55 segonn</item>
-		<item>56 segonn</item>
-		<item>57 segonn</item>
-		<item>58 segonn</item>
-		<item>59 segonn</item>
-		<item>60 segonn</item>
+	<!-- Audio sources -->
+	<string-array name="audio_sources">
+		<item>Alam</item>
+		<item>Rele</item>
+		<item>Medya</item>
+		<item>Notifikasyon</item>
+		<item>Sonnerie</item>
+	</string-array>
+
+	<!-- NFC tag dismiss orders -->
+	<string-array name="nfc_tag_dismiss_orders">
+		<item>O aza</item>
+		<item>Sekansyèl</item>
 	</string-array>
 
 </resources>

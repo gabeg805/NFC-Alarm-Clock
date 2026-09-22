@@ -48,6 +48,7 @@
 	<string name="word_next">Apre</string>
 	<string name="word_finish">Fini</string>
 	<string name="word_once">Yon fwa</string>
+	<string name="word_unlimited">San limit</string>
 	<string name="letter_h">è</string>
 	<string name="letter_m">m</string>
 	<string name="letter_s">s</string>
@@ -634,14 +635,6 @@
 
 	<string name="tts_say_time">Lè a se %1$s:%2$s %3$s.</string>
 
-	<plurals name="upcoming_reminder_how_early">
-		<item quantity="one">%d minit</item>
-		<item quantity="other">%d minit</item>
-	</plurals>
-
-	<plurals name="upcoming_reminder_how_frequent">
-		<item quantity="one">Chak %d minit</item>
-		<item quantity="other">Chak %d minit</item>
-	</plurals>
+	<string name="float_duration_seconds">{count, plural, one{{count} segonn} other{{count} segonn}}</string>
 
 </resources>

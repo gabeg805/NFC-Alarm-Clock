@@ -48,6 +48,7 @@
 	<string name="word_next">Nächste</string>
 	<string name="word_finish">Beenden</string>
 	<string name="word_once">Einmal</string>
+	<string name="word_unlimited">Unbegrenzt</string>
 	<string name="letter_h">H</string>
 	<string name="letter_m">M</string>
 	<string name="letter_s">S</string>
@@ -543,7 +544,7 @@
 	</plurals>
 
 	<plurals name="repeat_minutely">
-		<item quantity="one">Alle %d Minuten</item>
+		<item quantity="one">Alle %d Minute</item>
 		<item quantity="other">Alle %d Minuten</item>
 	</plurals>
 
@@ -634,14 +635,6 @@
 
 	<string name="tts_say_time">Es ist %1$s:%2$s %3$s.</string>
 
-	<plurals name="upcoming_reminder_how_early">
-		<item quantity="one">%d Minute</item>
-		<item quantity="other">%d Minuten</item>
-	</plurals>
-
-	<plurals name="upcoming_reminder_how_frequent">
-		<item quantity="one">Alle %d Minute</item>
-		<item quantity="other">Alle %d Minuten</item>
-	</plurals>
+	<string name="float_duration_seconds">{count, plural, one{{count} Sekunde} other{{count} Sekunden}}</string>
 
 </resources>

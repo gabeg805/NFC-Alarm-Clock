@@ -48,6 +48,7 @@
 	<string name="word_next">Próximo</string>
 	<string name="word_finish">Finalizar</string>
 	<string name="word_once">Una vez</string>
+	<string name="word_unlimited">Ilimitado</string>
 	<string name="letter_h">h</string>
 	<string name="letter_m">metro</string>
 	<string name="letter_s">s</string>
@@ -544,31 +545,31 @@
 	</plurals>
 
 	<plurals name="repeat_minutely">
-		<item quantity="one">Cada %d minutos</item>
+		<item quantity="one">Cada %d minuto</item>
 		<item quantity="many">Cada %d minutos</item>
 		<item quantity="other">Cada %d minutos</item>
 	</plurals>
 
 	<plurals name="repeat_hourly">
-		<item quantity="one">Cada %d horas</item>
+		<item quantity="one">Cada %d hora</item>
 		<item quantity="many">Cada %d horas</item>
 		<item quantity="other">Cada %d horas</item>
 	</plurals>
 
 	<plurals name="repeat_daily">
-		<item quantity="one">Cada %d días</item>
+		<item quantity="one">Cada %d día</item>
 		<item quantity="many">Cada %d días</item>
 		<item quantity="other">Cada %d días</item>
 	</plurals>
 
 	<plurals name="repeat_weekly">
-		<item quantity="one">Cada %d semanas</item>
+		<item quantity="one">Cada %d semana</item>
 		<item quantity="many">Cada %d semanas</item>
 		<item quantity="other">Cada %d semanas</item>
 	</plurals>
 
 	<plurals name="repeat_monthly">
-		<item quantity="one">Cada %d meses</item>
+		<item quantity="one">Cada %d mes</item>
 		<item quantity="many">Cada %d meses</item>
 		<item quantity="other">Cada %d meses</item>
 	</plurals>
@@ -653,16 +654,6 @@
 
 	<string name="tts_say_time">La hora es %1$s:%2$s %3$s.</string>
 
-	<plurals name="upcoming_reminder_how_early">
-		<item quantity="one">%d minuto</item>
-		<item quantity="many">%d minutos</item>
-		<item quantity="other">%d minutos</item>
-	</plurals>
-
-	<plurals name="upcoming_reminder_how_frequent">
-		<item quantity="one">Cada %d minuto</item>
-		<item quantity="many">Cada %d minutos</item>
-		<item quantity="other">Cada %d minutos</item>
-	</plurals>
+	<string name="float_duration_seconds">{count, plural, one{{count} segundo} other{{count} segundos}}</string>
 
 </resources>

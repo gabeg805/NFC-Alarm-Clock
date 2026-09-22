@@ -48,6 +48,7 @@
 	<string name="word_next">अगला</string>
 	<string name="word_finish">खत्म करना</string>
 	<string name="word_once">एक बार</string>
+	<string name="word_unlimited">असीमित</string>
 	<string name="letter_h">एच</string>
 	<string name="letter_m">एम</string>
 	<string name="letter_s">एस</string>
@@ -633,14 +634,6 @@
 
 	<string name="tts_say_time">समय %1$s:%2$s %3$s है.</string>
 
-	<plurals name="upcoming_reminder_how_early">
-		<item quantity="one">%d मिनट</item>
-		<item quantity="other">%d मिनट</item>
-	</plurals>
-
-	<plurals name="upcoming_reminder_how_frequent">
-		<item quantity="one">हर %d मिनट</item>
-		<item quantity="other">हर %d मिनट</item>
-	</plurals>
+	<string name="float_duration_seconds">{count, plural, one{{count} दूसर} other{{count} सेकंड}}</string>
 
 </resources>

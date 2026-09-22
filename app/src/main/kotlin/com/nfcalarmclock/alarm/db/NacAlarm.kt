@@ -2242,29 +2242,41 @@ open class NacAlarm()
 		 */
 		fun calcFlashlightOnOffDurationIndex(duration: String): Int
 		{
-			return when (duration)
+			// Convert to float
+			val float = try
 			{
-				"0.5"  -> 0
-				"1.0"  -> 1
-				"1.5"  -> 2
-				"2.0"  -> 3
-				"2.5"  -> 4
-				"3.0"  -> 5
-				"3.5"  -> 6
-				"4.0"  -> 7
-				"4.5"  -> 8
-				"5.0"  -> 9
-				"5.5"  -> 10
-				"6.0"  -> 11
-				"6.5"  -> 12
-				"7.0"  -> 13
-				"7.5"  -> 14
-				"8.0"  -> 15
-				"8.5"  -> 16
-				"9.0"  -> 17
-				"9.5"  -> 18
-				"10.0" -> 19
-				else   -> 1
+				duration.ifEmpty { "1" }.replace(',', '.').toFloat()
+			}
+			catch (e: NumberFormatException)
+			{
+				NacLog.w("Failed converting duration when calculating the flashlight on/off duration index. duration=$duration", throwable = e, offsetIndex = 1)
+				1f
+			}
+
+			// Find matching index
+			return when (float)
+			{
+				0.5f  -> 0
+				1.0f  -> 1
+				1.5f  -> 2
+				2.0f  -> 3
+				2.5f  -> 4
+				3.0f  -> 5
+				3.5f  -> 6
+				4.0f  -> 7
+				4.5f  -> 8
+				5.0f  -> 9
+				5.5f  -> 10
+				6.0f  -> 11
+				6.5f  -> 12
+				7.0f  -> 13
+				7.5f  -> 14
+				8.0f  -> 15
+				8.5f  -> 16
+				9.0f  -> 17
+				9.5f  -> 18
+				10.0f -> 19
+				else  -> 1
 			}
 		}
 

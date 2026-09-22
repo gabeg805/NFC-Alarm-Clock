@@ -381,8 +381,22 @@ open class NacTextToSpeechDialog
 		ttsFreqDescription = dialog!!.findViewById(R.id.tts_frequency_description)
 		ttsFreqInputLayout = dialog!!.findViewById(R.id.tts_frequency_input_layout)
 
-		// Setup the views
+		// Setup the input layout
 		ttsFreqInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
+
+		// Build the items for the dropdown menu
+		// Once, Every X minutes, ...
+		val once = resources.getString(R.string.word_once)
+		val allItems: Array<String> = mutableListOf<String>()
+			.apply {
+				add(once)
+				repeat(30) { i ->
+					add(resources.getQuantityString(R.plurals.repeat_minutely, i+1, i+1))
+				}
+			}.toTypedArray()
+
+		// Set the default selected items in the text view
+		autoCompleteTextView.setSimpleItems(allItems)
 		autoCompleteTextView.setTextFromIndex(default)
 
 		// Set the textview listeners

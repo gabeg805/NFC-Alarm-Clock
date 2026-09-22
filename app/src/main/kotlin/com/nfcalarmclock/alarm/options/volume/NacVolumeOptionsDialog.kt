@@ -245,19 +245,23 @@ open class NacVolumeOptionsDialog
 		graduallyIncreaseVolumeSwitch = dialog!!.findViewById(R.id.gradually_increase_volume_switch)
 		graduallyIncreaseVolumeInputLayout = dialog!!.findViewById(R.id.gradually_increase_volume_input_layout)
 
-		// Get the list of seconds, starting at the first index until the end
-		// This will omit 0 seconds
-		val seconds = resources.getStringArray(R.array.general_seconds_summaries).drop(1).toTypedArray()
-
-		// Get the index of the default selected item in the textview
-		val index = NacAlarm.calcGraduallyIncreaseVolumeIndex(defaultTime)
+		// Get the list of seconds. 1-60 seconds
+		val seconds: Array<String> = mutableListOf<String>()
+			.apply {
+				repeat(60) { i ->
+					add(resources.getQuantityString(R.plurals.unit_second, i+1, i+1))
+				}
+			}.toTypedArray()
 
 		// Setup the checkbox
 		graduallyIncreaseVolumeSwitch.isChecked = defaultState
 		graduallyIncreaseVolumeSwitch.setupSwitchColor(sharedPreferences)
 
-		// Setup the input layout and textview
+		// Setup the input layout
 		graduallyIncreaseVolumeInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
+
+		// Setup the textview
+		val index = NacAlarm.calcGraduallyIncreaseVolumeIndex(defaultTime)
 		autoCompleteTextView.setSimpleItems(seconds)
 		autoCompleteTextView.setTextFromIndex(index)
 

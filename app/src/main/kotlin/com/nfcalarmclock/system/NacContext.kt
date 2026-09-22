@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.IntentFilter
 import android.content.ServiceConnection
 import android.content.pm.PackageManager
+import android.icu.text.MessageFormat
 import android.net.Uri
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
@@ -18,6 +19,7 @@ import kotlinx.coroutines.DelicateCoroutinesApi
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import java.io.File
+import java.util.Locale
 import kotlin.coroutines.CoroutineContext
 import kotlin.coroutines.EmptyCoroutineContext
 
@@ -166,6 +168,24 @@ fun Context.bindToService(cls: Class<*>, serviceConnection: ServiceConnection)
 	val intent = Intent(this, cls)
 
 	this.bindService(intent, serviceConnection, 0)
+}
+
+/**
+ * Get a float as a pseudo plural.
+ */
+fun Context.getLocalizedFloatPlural(resId: Int, value: Float): String
+{
+	// Get the template string
+	val pattern = this.getString(resId)
+
+	// Create an ICU MessageFormat
+	val locale = Locale.getDefault()
+	val msgFormat = MessageFormat(pattern, locale)
+
+	// Pass the float into a map arguments structure
+	val args = mapOf("count" to value)
+
+	return msgFormat.format(args)
 }
 
 /**
