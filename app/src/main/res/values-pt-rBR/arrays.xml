@@ -1,17 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<!-- Days of week full names -->
-	<string-array name="days_of_week_full">
-		<item>Domingo</item>
-		<item>Segunda-feira</item>
-		<item>Terça-feira</item>
-		<item>Quarta-feira</item>
-		<item>Quinta-feira</item>
-		<item>Sexta-feira</item>
-		<item>Sábado</item>
-	</string-array>
-
 	<!-- Days of week abbreviated -->
 	<string-array name="days_of_week_abbr">
 		<item>dom</item>
@@ -20,7 +9,7 @@
 		<item>qua</item>
 		<item>qui</item>
 		<item>sex</item>
-		<item>sab</item>
+		<item>sáb</item>
 	</string-array>
 
 	<!-- Days of week one letter -->
@@ -32,12 +21,6 @@
 		<item>5</item>
 		<item>6</item>
 		<item>7</item>
-	</string-array>
-
-	<!-- Start week on days -->
-	<string-array name="start_week_on">
-		<item>Domingo</item>
-		<item>Segunda-feira</item>
 	</string-array>
 
 	<!-- Audio sources -->

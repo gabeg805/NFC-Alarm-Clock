@@ -134,10 +134,13 @@
 	<string name="label_missed_statistic_header">Tiempo perdido, Nombre, Hora de alarma</string>
 	<string name="label_snoozed_statistic_header">Tiempo se pospuso,Nombre,Hora de alarma,Duración de dormitar (segundos)</string>
 	<string name="label_clock_widget">Reloj</string>
+	<string name="label_start">Comenzar</string>
+	<string name="label_end">Fin</string>
 
 	<!-- Messages -->
 	<string name="message_permission_ignore_battery_optimization_request">Para evitar que la alarma no se ejecute si la aplicación no se ha utilizado durante un tiempo.&lt;br/>&lt;br/>&lt;b>Nota:&lt;/b> Esto depende del dispositivo que tengas y &lt;b>puede que en realidad no sea necesario&lt;/b>.</string>
 	<string name="message_permission_post_notifications_request">Para permitir que las alarmas se ejecuten cuando la aplicación no está en foco.&lt;br/>&lt;br/>&lt;b>Nota:&lt;/b> Este es un efecto secundario de las políticas de seguridad introducidas en &lt;b>Android 13&lt;/b>, que son para el beneficio de los usuarios, pero pueden restringir las aplicaciones en casos como este.</string>
+	<string name="message_permission_post_notifications_warning">Por favor, active el permiso de notificaciones. Es posible que las alarmas no funcionen sin él.</string>
 	<string name="message_permission_schedule_exact_alarm_request">Para que las alarmas se ejecuten exactamente en el momento programado.</string>
 	<string name="message_permission_system_alert_window_request">¿Permitir que la aplicación se muestre sobre otras aplicaciones?&lt;br/>&lt;br/>Esto garantizará que se muestre la pantalla de alarma, que es un requisito para que se reproduzca el audio, si la aplicación está en segundo plano.&lt;br/>&lt;br/>&lt;b>Nota:&lt;b>  Esto solo afecta a Android 15.</string>
 	<string name="message_playlist">¿Quieres tocar toda la música de esta carpeta?</string>
@@ -183,6 +186,7 @@
 	<string name="message_statistics_email_subject">Estadísticas del Despertador NFC</string>
 	<string name="message_skip_general_alarm">Se omitirá la alarma.</string>
 	<string name="message_skip_named_alarm">Se omitirá &lt;b&gt;%1$s&lt;/b&gt;.</string>
+	<string name="message_skip_airplane_mode_alarm">Se omite la alarma debido al modo avión.</string>
 	<string name="message_disabled_general_alarm">La alarma está desactivada.</string>
 	<string name="message_disabled_named_alarm">&lt;b&gt;%1$s&lt;/b&gt; está deshabilitado.</string>
 	<string name="message_will_run_on_general_alarm" tools:ignore="StringFormatCount">Se activará el %2$s.</string>
@@ -202,6 +206,7 @@
 	<string name="message_text_to_speech_network_required">Es posible que se requiera una conexión de red para que la voz funcione</string>
 	<string name="message_volume_dismiss_priority">El volumen de descarte tendrá prioridad</string>
 	<string name="message_volume_snooze_ignored">Se ignorará la función de posponer volumen.</string>
+	<string name="message_current_alarm_within_exclude_range">Nota: La alarma actual se encuentra dentro del rango excluido.</string>
 
 	<!-- Error messages -->
 	<string name="error_message_active_delete">Incapaz de borrar una alarma activa</string>
@@ -242,6 +247,9 @@
 	<string name="error_message_camera_max_in_use">Máximo de cámaras en uso</string>
 	<string name="error_message_unable_to_launch_media_picker">No se puede iniciar el selector de audio del sistema</string>
 	<string name="error_message_unable_to_preview_volume_options">No se puede previsualizar cuando no se ha configurado ningún medio.</string>
+	<string name="error_message_exclude_start_datetime_missing">Faltan fechas/horas de inicio de exclusión</string>
+	<string name="error_message_exclude_end_datetime_missing">Faltan fechas/horas de finalización de exclusión</string>
+	<string name="error_message_exclude_start_end_calendar_not_in_order">La fecha y hora de inicio deben ser anteriores a la fecha y hora de finalización.</string>
 
 	<!-- Titles -->
 	<string name="title_timer_main">Temporizador NFC</string>
@@ -278,6 +286,10 @@
 	<string name="title_current_alarms">Actual</string>
 	<string name="title_set_date">Fecha fija</string>
 	<string name="title_set_time">Hora establecida</string>
+	<string name="title_select_start_date">Seleccione la fecha de inicio</string>
+	<string name="title_select_start_time">Seleccione la hora de inicio.</string>
+	<string name="title_select_end_date">Seleccione la fecha de finalización</string>
+	<string name="title_select_end_time">Seleccione la hora de finalización.</string>
 	<string name="title_whats_new">Qué hay de Nuevo</string>
 	<string name="title_permission_disable_battery_optimization">Desactivar la optimización de la batería</string>
 	<string name="title_permission_storage">Almacenamiento</string>
@@ -292,6 +304,7 @@
 	<string name="title_request_permission_schedule_exact_alarm">Habilitar alarmas programadas con precisión</string>
 	<string name="title_reset_statistics">reiniciar las estadísticas…</string>
 	<string name="title_repeat_frequency">Frecuencia de repetición</string>
+	<string name="title_exclude_date_time_range">Excluir rango de fecha/hora</string>
 	<string name="title_repeat_frequency_days_to_run_before_starting">Días que deben transcurrir antes de comenzar la frecuencia</string>
 	<string name="title_vibrate_vibration_duration">Duración de la vibración</string>
 	<string name="title_vibrate_custom_pattern">Patrón personalizado</string>
@@ -347,7 +360,7 @@
 	<string name="title_start_week_on">Empieza la semana&#8230;</string>
 	<string name="title_expand_new_alarm">Expandir alarmas nuevas</string>
 	<string name="title_next_alarm_format">Estilo de la proxima alarma&#8230;</string>
-	<string name="title_toggle_alarms_with_airplane_mode">Activar/desactivar las alarmas con el modo avión</string>
+	<string name="title_toggle_alarms_with_airplane_mode">El modo avión omite las alarmas.</string>
 	<string name="title_permissions">Permisos</string>
 	<string name="title_no_permissions_needed">¡No se necesitan permisos!</string>
 	<string name="title_help_debug_mode">Modo de depuración</string>
@@ -395,7 +408,8 @@
 	<string name="description_start_timer_on_multiple_nfc_tag_scan">Cuando la aplicación esté en ejecución y se escanee una de las etiquetas NFC seleccionadas (no en esta pantalla), este temporizador se iniciará automáticamente.</string>
 	<string name="description_add_or_replace_nfc_tag">¿Debería añadirse la etiqueta NFC a la lista de etiquetas NFC que pueden desactivar esta alarma, o debería sustituir a alguna de las etiquetas NFC que esté utilizando esta alarma?</string>
 	<string name="description_save_nfc_tag">Puedes reutilizar esta etiqueta NFC, sin tener que escanearla nuevamente, dándole un nombre.</string>
-	<string name="description_repeat_frequency">Repita la alarma con la frecuencia indicada (cada cierto tiempo). Nota: Seleccionar horas o días borrará todos los días programados para la alarma.</string>
+	<string name="description_repeat_frequency">Repita la alarma con una frecuencia determinada (cada X intervalos de tiempo). Nota: Seleccionar minutos, horas o días borrará todos los días de la alarma.</string>
+	<string name="description_exclude_date_time_range">Las alarmas no se activarán durante este intervalo de fechas/horas.</string>
 	<string name="description_repeat_frequency_days_to_run_before_starting">¿Cuáles de los días actualmente seleccionados para la alarma deberían ejecutarse esta semana antes de iniciar la frecuencia?</string>
 	<string name="description_vibrate_vibration_duration">¿Cuánto tiempo hay que vibrar y cuánto tiempo hay que esperar entre vibraciones?</string>
 	<string name="description_vibrate_custom_pattern">Repita la duración de la vibración una cantidad determinada de veces y luego espere un tiempo.</string>
@@ -409,6 +423,8 @@
 	<string name="description_volume_gradually_increase_volume_timer">Aumenta el volumen del temporizador a una frecuencia establecida.</string>
 	<string name="description_volume_restrict_volume_alarm">El volumen no se puede bajar cuando suena la alarma.</string>
 	<string name="description_volume_restrict_volume_timer">El volumen no se puede disminuir cuando finaliza el temporizador.</string>
+	<string name="description_dismiss_options_auto_dismiss_alarm">Desactivar la alarma automáticamente después de un tiempo determinado.</string>
+	<string name="description_dismiss_options_auto_dismiss_timer">Desactivar el temporizador automáticamente tras un tiempo determinado.</string>
 	<string name="description_dismiss_options_dismiss_early">Desactive la alarma de forma anticipada, antes de que se active.</string>
 	<string name="description_dismiss_options_dismiss_early_notification">Mostrar una notificación cuando la alarma pueda desactivarse antes de tiempo.</string>
 	<string name="description_dismiss_options_delete_after_dismissed_alarm">La alarma se eliminará después de que se desestime.</string>
@@ -447,8 +463,8 @@
 	<string name="description_alarm_screen_battery_saver_false">La pantalla se encenderá automáticamente cuando una alarma esté activa.</string>
 	<string name="description_color_theme">Color del tema.</string>
 	<string name="description_color_name">p.ej. Trabajo</string>
-	<string name="description_toggle_alarms_with_airplane_mode_true">Activar el modo avión desactivará todas las alarmas, y desactivarlo las activará. Nota: La aplicación debe estar en primer plano para que esto funcione.</string>
-	<string name="description_toggle_alarms_with_airplane_mode_false">Las alarmas no se verán afectadas al activar o desactivar el modo avión.</string>
+	<string name="description_toggle_alarms_with_airplane_mode_true">Si el modo avión está activado cuando suena la alarma, esta se omitirá.</string>
+	<string name="description_toggle_alarms_with_airplane_mode_false">Las alarmas funcionarán con normalidad.</string>
 	<string name="description_color_days">p.ej. Lun &#8231; Mar &#8231; Mie &#8231; Jue &#8231; Vie</string>
 	<string name="description_color_time">p.ej. 12:30</string>
 	<string name="description_color_am">Colorida si esta en la hora de alarma AM.</string>
@@ -525,7 +541,7 @@
 	<string name="cd_customize">Personalizar</string>
 	<string name="cd_preference_icon">Icono de preferencia</string>
 
-	<!-- Plurals -->
+	<!-- Plural alarms -->
 	<plurals name="alarm">
 		<item quantity="one">%d alarma</item>
 		<item quantity="many">%d alarmas</item>
@@ -544,6 +560,44 @@
 		<item quantity="other">Alarmas omitidas</item>
 	</plurals>
 
+	<!-- Plural units -->
+	<plurals name="unit_second">
+		<item quantity="one">%d segundo</item>
+		<item quantity="many">%d segundos</item>
+		<item quantity="other">%d segundos</item>
+	</plurals>
+
+	<plurals name="unit_minute">
+		<item quantity="one">%d minuto</item>
+		<item quantity="many">%d minutos</item>
+		<item quantity="other">%d minutos</item>
+	</plurals>
+
+	<plurals name="unit_hour">
+		<item quantity="one">%d hora</item>
+		<item quantity="many">%d horas</item>
+		<item quantity="other">%d horas</item>
+	</plurals>
+
+	<plurals name="unit_day">
+		<item quantity="one">%d día</item>
+		<item quantity="many">%d días</item>
+		<item quantity="other">%d días</item>
+	</plurals>
+
+	<plurals name="unit_week">
+		<item quantity="one">%d semana</item>
+		<item quantity="many">%d semanas</item>
+		<item quantity="other">%d semanas</item>
+	</plurals>
+
+	<plurals name="unit_month">
+		<item quantity="one">%d mes</item>
+		<item quantity="many">%d meses</item>
+		<item quantity="other">%d meses</item>
+	</plurals>
+
+	<!-- Plural repeats -->
 	<plurals name="repeat_minutely">
 		<item quantity="one">Cada %d minuto</item>
 		<item quantity="many">Cada %d minutos</item>
@@ -574,61 +628,8 @@
 		<item quantity="other">Cada %d meses</item>
 	</plurals>
 
-	<plurals name="standalone_unit_minute">
-		<item quantity="one">Minuto</item>
-		<item quantity="many">Minutos</item>
-		<item quantity="other">Minutos</item>
-	</plurals>
-
-	<plurals name="standalone_unit_hour">
-		<item quantity="one">Hora</item>
-		<item quantity="many">Horas</item>
-		<item quantity="other">Horas</item>
-	</plurals>
-
-	<plurals name="standalone_unit_day">
-		<item quantity="one">Día</item>
-		<item quantity="many">Días</item>
-		<item quantity="other">Días</item>
-	</plurals>
-
-	<plurals name="standalone_unit_week">
-		<item quantity="one">Semana</item>
-		<item quantity="many">Semanas</item>
-		<item quantity="other">Semanas</item>
-	</plurals>
-
-	<plurals name="standalone_unit_month">
-		<item quantity="one">Mes</item>
-		<item quantity="many">Meses</item>
-		<item quantity="other">Meses</item>
-	</plurals>
-
-	<plurals name="unit_day">
-		<item quantity="one">%d día</item>
-		<item quantity="many">%d días</item>
-		<item quantity="other">%d días</item>
-	</plurals>
-
-	<plurals name="unit_hour">
-		<item quantity="one">%d hora</item>
-		<item quantity="many">%d horas</item>
-		<item quantity="other">%d horas</item>
-	</plurals>
-
-	<plurals name="unit_minute">
-		<item quantity="one">%d minuto</item>
-		<item quantity="many">%d minutos</item>
-		<item quantity="other">%d minutos</item>
-	</plurals>
-
-	<plurals name="unit_second">
-		<item quantity="one">%d segundo</item>
-		<item quantity="many">%d segundos</item>
-		<item quantity="other">%d segundos</item>
-	</plurals>
-
-	<plurals name="unit_number_of_times">
+	<!-- Plural numbers -->
+	<plurals name="number_of_times">
 		<item quantity="one">%1$d tiempo</item>
 		<item quantity="many">%1$d veces</item>
 		<item quantity="other">%1$d veces</item>
@@ -640,12 +641,7 @@
 		<item quantity="other">(%1$d restantes)</item>
 	</plurals>
 
-	<plurals name="import_cleared_media_due_to_not_found">
-		<item quantity="one">Se borraron los medios en %1$d alarma/temporizador debido a que no se encontraron medios.</item>
-		<item quantity="many">Se borraron los medios en %1$d alarmas/temporizadores debido a que no se encontraron medios.</item>
-		<item quantity="other">Se borraron los medios en %1$d alarmas/temporizadores debido a que no se encontraron medios.</item>
-	</plurals>
-
+	<!-- Plural TTS -->
 	<plurals name="tts_say_reminder">
 		<item quantity="one">Recordatorio. %1$s, sonará en, %2$d, minuto.</item>
 		<item quantity="many">Recordatorio. %1$s, sonará en, %2$d, minutos.</item>
@@ -654,6 +650,13 @@
 
 	<string name="tts_say_time">La hora es %1$s:%2$s %3$s.</string>
 
-	<string name="float_duration_seconds">{count, plural, one{{count} segundo} other{{count} segundos}}</string>
+	<!-- Plural misc -->
+	<plurals name="import_cleared_media_due_to_not_found">
+		<item quantity="one">Se borraron los medios en %1$d alarma/temporizador debido a que no se encontraron medios.</item>
+		<item quantity="many">Se borraron los medios en %1$d alarmas/temporizadores debido a que no se encontraron medios.</item>
+		<item quantity="other">Se borraron los medios en %1$d alarmas/temporizadores debido a que no se encontraron medios.</item>
+	</plurals>
+
+	<string name="float_duration_seconds">{count, plural, one{{count} segundo} many{{count} segundos}} other{{count} segundos}}</string>
 
 </resources>

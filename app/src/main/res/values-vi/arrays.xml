@@ -1,17 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<!-- Days of week full names -->
-	<string-array name="days_of_week_full">
-		<item>Chủ nhật</item>
-		<item>Thứ hai</item>
-		<item>Thứ ba</item>
-		<item>Thứ Tư</item>
-		<item>Thứ năm</item>
-		<item>Thứ sáu</item>
-		<item>Thứ bảy</item>
-	</string-array>
-
 	<!-- Days of week abbreviated -->
 	<string-array name="days_of_week_abbr">
 		<item>CN</item>
@@ -32,12 +21,6 @@
 		<item>5</item>
 		<item>6</item>
 		<item>7</item>
-	</string-array>
-
-	<!-- Start week on days -->
-	<string-array name="start_week_on">
-		<item>Chủ nhật</item>
-		<item>Thứ hai</item>
 	</string-array>
 
 	<!-- Audio sources -->

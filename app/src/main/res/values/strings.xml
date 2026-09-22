@@ -541,7 +541,7 @@
 	<string name="cd_customize">Customize</string>
 	<string name="cd_preference_icon">Preference icon</string>
 
-	<!-- Plurals -->
+	<!-- Plural alarms -->
 	<plurals name="alarm">
 		<item quantity="one">%d alarm</item>
 		<item quantity="other">%d alarms</item>
@@ -557,6 +557,38 @@
 		<item quantity="other">Skipped alarms</item>
 	</plurals>
 
+	<!-- Plural units -->
+	<plurals name="unit_second">
+		<item quantity="one">%d second</item>
+		<item quantity="other">%d seconds</item>
+	</plurals>
+
+	<plurals name="unit_minute">
+		<item quantity="one">%d minute</item>
+		<item quantity="other">%d minutes</item>
+	</plurals>
+
+	<plurals name="unit_hour">
+		<item quantity="one">%d hour</item>
+		<item quantity="other">%d hours</item>
+	</plurals>
+
+	<plurals name="unit_day">
+		<item quantity="one">%d day</item>
+		<item quantity="other">%d days</item>
+	</plurals>
+
+	<plurals name="unit_week">
+		<item quantity="one">%d week</item>
+		<item quantity="other">%d weeks</item>
+	</plurals>
+
+	<plurals name="unit_month">
+		<item quantity="one">%d month</item>
+		<item quantity="other">%d months</item>
+	</plurals>
+
+	<!-- Plural repeats -->
 	<plurals name="repeat_minutely">
 		<item quantity="one">Every %d minute</item>
 		<item quantity="other">Every %d minutes</item>
@@ -582,52 +614,8 @@
 		<item quantity="other">Every %d months</item>
 	</plurals>
 
-	<plurals name="standalone_unit_minute">
-		<item quantity="one">Minute</item>
-		<item quantity="other">Minutes</item>
-	</plurals>
-
-	<plurals name="standalone_unit_hour">
-		<item quantity="one">Hour</item>
-		<item quantity="other">Hours</item>
-	</plurals>
-
-	<plurals name="standalone_unit_day">
-		<item quantity="one">Day</item>
-		<item quantity="other">Days</item>
-	</plurals>
-
-	<plurals name="standalone_unit_week">
-		<item quantity="one">Week</item>
-		<item quantity="other">Weeks</item>
-	</plurals>
-
-	<plurals name="standalone_unit_month">
-		<item quantity="one">Month</item>
-		<item quantity="other">Months</item>
-	</plurals>
-
-	<plurals name="unit_day">
-		<item quantity="one">%d day</item>
-		<item quantity="other">%d days</item>
-	</plurals>
-
-	<plurals name="unit_hour">
-		<item quantity="one">%d hour</item>
-		<item quantity="other">%d hours</item>
-	</plurals>
-
-	<plurals name="unit_minute">
-		<item quantity="one">%d minute</item>
-		<item quantity="other">%d minutes</item>
-	</plurals>
-
-	<plurals name="unit_second">
-		<item quantity="one">%d second</item>
-		<item quantity="other">%d seconds</item>
-	</plurals>
-
-	<plurals name="unit_number_of_times">
+	<!-- Plural numbers -->
+	<plurals name="number_of_times">
 		<item quantity="one">%1$d time</item>
 		<item quantity="other">%1$d times</item>
 	</plurals>
@@ -637,17 +625,19 @@
 		<item quantity="other">(%1$d remaining)</item>
 	</plurals>
 
-	<plurals name="import_cleared_media_due_to_not_found">
-		<item quantity="one">Cleared media in %1$d alarm/timer due to media not found</item>
-		<item quantity="other">Cleared media in %1$d alarms/timers due to media not found</item>
-	</plurals>
-
+	<!-- Plural TTS -->
 	<plurals name="tts_say_reminder">
 		<item quantity="one">Reminder. %1$s, will run in, %2$d, minute.</item>
 		<item quantity="other">Reminder. %1$s, will run in, %2$d, minutes.</item>
 	</plurals>
 
 	<string name="tts_say_time">The time is %1$s:%2$s %3$s.</string>
+
+	<!-- Plural misc -->
+	<plurals name="import_cleared_media_due_to_not_found">
+		<item quantity="one">Cleared media in %1$d alarm/timer due to media not found</item>
+		<item quantity="other">Cleared media in %1$d alarms/timers due to media not found</item>
+	</plurals>
 
 	<string name="float_duration_seconds">{count, plural, one{{count} second} other{{count} seconds}}</string>
 

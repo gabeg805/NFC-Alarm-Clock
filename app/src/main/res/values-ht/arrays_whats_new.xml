@@ -5,6 +5,13 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.2</item>
+		<item>Yo ajoute opsyon pou jwe odyo atravè &lt;b>oratè&lt;/b> ak &lt;b>bluetooth&lt;/b> an menm tan. Ou ka jwenn li nan Anviwònman > Sous odyo, pou yon alam.</item>
+		<item>Yo ajoute yon opsyon pou &lt;b>eskli entèval dat/lè&lt;/b>. Ou ka jwenn li nan Anviwònman > Repetisyon, pou yon alam epi ou itilize li si, pa egzanp, yon alam ap sonnen chak de zèdtan, men ou pa vle dezaktive/aktive li manyèlman lè w pral dòmi.</item>
+		<item>Amelyorasyon nan &lt;b>NFC revoke&lt;/b> kote yo eseye fèmen ekran bloke a pou yo ka eskane NFC. Sa mande pou aparèy la nan yon eta fyab, kidonk li ka pa fyab, men se yon bagay.</item>
+		<item>Chanje opsyon &lt;b>mòd avyon&lt;/b> a pou li pa sonnen alam yo si li aktive, olye pou l dezaktive/aktive tout alam yo lè mòd avyon an aktive.</item>
+		<item>Pwoblèm &lt;b>flach&lt;/b> la te rezoud kote dire limen/etenn lan pa t ap konvèti byen. Si yo pa kapab konvèti yon dire, li pral pran 1 segonn pa defo.</item>
+		<item>Pwoblèm &lt;b>fasil snooze&lt;/b> la rezoud, kote lè w touche ekran an, sa pa t ap fè sonnen an mwens.</item>
 		<item>12.7.1</item>
 		<item>Pwoblèm &lt;b>flach&lt;/b> la te rezoud kote dire limen/etenn yo te vid.</item>
 		<item>Pwoblèm atifak vizyèl ki te parèt nan &lt;b>Android 15&lt;/b> la korije.</item>

@@ -1,17 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<!-- Days of week full names -->
-	<string-array name="days_of_week_full">
-		<item>রবিবার</item>
-		<item>সোমবার</item>
-		<item>মঙ্গলবার</item>
-		<item>বুধবার</item>
-		<item>বৃহস্পতিবার</item>
-		<item>শুক্রবার</item>
-		<item>শনিবার</item>
-	</string-array>
-
 	<!-- Days of week abbreviated -->
 	<string-array name="days_of_week_abbr">
 		<item>রবি</item>
@@ -32,12 +21,6 @@
 		<item>বৃ</item>
 		<item>শু</item>
 		<item>শ</item>
-	</string-array>
-
-	<!-- Start week on days -->
-	<string-array name="start_week_on">
-		<item>রবিবার</item>
-		<item>সোমবার</item>
 	</string-array>
 
 	<!-- Audio sources -->

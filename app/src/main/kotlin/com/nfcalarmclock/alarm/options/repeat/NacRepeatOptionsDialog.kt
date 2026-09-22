@@ -28,6 +28,7 @@ import com.nfcalarmclock.view.setupInputLayoutColor
 import com.nfcalarmclock.view.setupRippleColor
 import java.util.Calendar
 import java.util.EnumSet
+import java.util.Locale
 
 /**
  * Repeat options.
@@ -105,16 +106,6 @@ class NacRepeatOptionsDialog
 	private var selectedDaysToRunBeforeFrequency: EnumSet<Day> = Day.WEEK
 
 	/**
-	 * List of units in singular form.
-	 */
-	private lateinit var singularUnits: Array<String>
-
-	/**
-	 * List of units in plurarl form.
-	 */
-	private lateinit var pluralUnits: Array<String>
-
-	/**
 	 * Build a human readable date/time string using the best format given a locale.
 	 *
 	 * The output of this should be used in a TextInputEditText.
@@ -144,24 +135,25 @@ class NacRepeatOptionsDialog
 	 *
 	 * @return The correct units list based on a given value and units.
 	 */
-	private fun getCorrectUnitsList(value: Int, units: Int): Array<String>
+	private fun getCorrectUnitsList(value: Int): Array<String>
 	{
-		// Determine the resource ID of the given unit
-		val unitsId = when (units)
-		{
-			1 -> R.plurals.standalone_unit_minute
-			2 -> R.plurals.standalone_unit_hour
-			3 -> R.plurals.standalone_unit_day
-			4 -> R.plurals.standalone_unit_week
-			5 -> R.plurals.standalone_unit_month
-			else -> R.plurals.standalone_unit_week
-		}
+		// Get the locale
+		val locale = Locale.getDefault()
 
-		// Get a test unit string based on the ID above the given value
-		val testUnit = requireContext().resources.getQuantityString(unitsId, value)
-
-		// Check which list has the test unit and return that list
-		return if (testUnit in singularUnits) singularUnits else pluralUnits
+		// Build list of all units in the form: %d <unit>
+		// The %d will need to be removed and the first character will have to be capitalized
+		return listOf(
+			resources.getQuantityString(R.plurals.unit_minute, value),
+			resources.getQuantityString(R.plurals.unit_hour,   value),
+			resources.getQuantityString(R.plurals.unit_day,    value),
+			resources.getQuantityString(R.plurals.unit_week,   value),
+			resources.getQuantityString(R.plurals.unit_month,  value),
+		).map {
+			it.replace("%d", "").trim()
+				.replaceFirstChar { firstChar ->
+					firstChar.titlecase(locale)
+				}
+		}.toTypedArray()
 	}
 
 	/**
@@ -327,26 +319,6 @@ class NacRepeatOptionsDialog
 	 */
 	override fun setupAlarmOptions(alarm: NacAlarm)
 	{
-		// Get the context
-		val context = requireContext()
-
-		// Get singular and plural form of the units
-		singularUnits = listOf(
-			context.resources.getQuantityString(R.plurals.standalone_unit_minute, 1),
-			context.resources.getQuantityString(R.plurals.standalone_unit_hour, 1),
-			context.resources.getQuantityString(R.plurals.standalone_unit_day, 1),
-			context.resources.getQuantityString(R.plurals.standalone_unit_week, 1),
-			context.resources.getQuantityString(R.plurals.standalone_unit_month, 1),
-		).toTypedArray()
-
-		pluralUnits = listOf(
-			context.resources.getQuantityString(R.plurals.standalone_unit_minute, 5),
-			context.resources.getQuantityString(R.plurals.standalone_unit_hour, 5),
-			context.resources.getQuantityString(R.plurals.standalone_unit_day, 5),
-			context.resources.getQuantityString(R.plurals.standalone_unit_week, 5),
-			context.resources.getQuantityString(R.plurals.standalone_unit_month, 5),
-		).toTypedArray()
-
 		// Set the default selected values
 		selectedRepeatFrequencyValue = alarm.repeatFrequency
 		selectedRepeatFrequencyUnits = alarm.repeatFrequencyUnits
@@ -512,10 +484,12 @@ class NacRepeatOptionsDialog
 		// Get the indices to use
 		var valueIndex = NacAlarm.calcRepeatFrequencyIndex(defaultValue, defaultUnits)
 		var unitsIndex = NacAlarm.calcRepeatFrequencyUnitsIndex(defaultUnits)
+		println("defaultValue=$defaultValue | defaultUnits=$defaultUnits")
+		println("valueIndex=$valueIndex | unitsIndex=$unitsIndex")
 
 		// Setup the dropdowns
 		var valuesList = getRepeatFrequencyValuesFromUnitsIndex(unitsIndex)
-		var unitsList = getCorrectUnitsList(defaultValue, defaultUnits)
+		var unitsList = getCorrectUnitsList(defaultValue)
 
 		// Setup the input layouts
 		valueInputLayout.setupInputLayoutColor(context, sharedPreferences)
@@ -533,15 +507,14 @@ class NacRepeatOptionsDialog
 			// Set the repeat frequency
 			selectedRepeatFrequencyValue = valuesList[position].toInt()
 
-			// Get the current unit selected, and the corrected units list
-			unitsList = getCorrectUnitsList(selectedRepeatFrequencyValue, selectedRepeatFrequencyUnits)
+			// Get the corrected units list and the current unit selected
+			unitsList = getCorrectUnitsList(selectedRepeatFrequencyValue)
 			val text = unitsAutoCompleteTextView.adapter.getItem(unitsIndex) as String
 
-			// Check if the current unit is in the corrected units list
+			// Selected unit does not match any in the list. Should change the units list because
+			// it has changed from singular to plural or vice versa
 			if (text !in unitsList)
 			{
-				// The unit is not in the list, so the dropdown list being shown needs to
-				// be updated
 				unitsAutoCompleteTextView.setSimpleItems(unitsList)
 				unitsAutoCompleteTextView.setTextFromIndex(unitsIndex)
 			}
@@ -561,12 +534,18 @@ class NacRepeatOptionsDialog
 			valuesList = getRepeatFrequencyValuesFromUnitsIndex(position)
 			valueIndex = valuesList.indexOfFirst{ selectedRepeatFrequencyValue.toString() == it }
 
-			// Check if the value index was not able to be found
+			// Value index was not able to be found. This may only happen when selecting minutes,
+			// as the minimum value is 15
 			if (valueIndex < 0)
 			{
 				// Reset the index to 0 and update the selected repeat frequency value
 				valueIndex = 0
 				selectedRepeatFrequencyValue = valuesList[0].toInt()
+
+				// Update the units list
+				unitsList = getCorrectUnitsList(selectedRepeatFrequencyValue)
+				unitsAutoCompleteTextView.setSimpleItems(unitsList)
+				unitsAutoCompleteTextView.setTextFromIndex(unitsIndex)
 			}
 
 			// Update the repeat frequency values
@@ -677,23 +656,11 @@ class NacRepeatOptionsDialog
 		val today = getString(R.string.dow_today)
 		val tomorrow = getString(R.string.dow_tomorrow)
 
-		//// Everyday
-		//if (hasStart && excludeStartAlarm.date.isEmpty())
-		//{
-		//	println("EVERYDAY START")
-		//	startTime = "$everyday $startTime"
-		//}
-
-		//if (hasEnd && excludeEndAlarm.date.isEmpty())
-		//{
-		//	println("EVERYDAY END")
-		//	endTime = "$everyday $endTime"
-		//}
-
 		// Everyday
 		if (excludeStartAlarm.date.isEmpty() && excludeEndAlarm.date.isEmpty())
 		{
-			println("EVERYDAY. hasStart=$hasStart | hasEnd=$hasEnd")
+			NacLog.i("Both start and end dates are empty. hasStart=$hasStart | hasEnd=$hasEnd")
+
 			if (hasStart)
 			{
 				startTime = "$everyday $startTime"
@@ -707,18 +674,18 @@ class NacRepeatOptionsDialog
 		// Today start time
 		else if (hasStart && excludeStartAlarm.date.isEmpty() && excludeEndAlarm.date.isNotEmpty())
 		{
-			println("TODAY START. after=${startCal!!.after(now)}")
+			NacLog.i("Start date is empty, but end date is not. after=${startCal!!.after(now)}")
 			startTime = "$today $startTime"
 		}
 		// Today end time
 		else if (hasEnd && excludeStartAlarm.date.isNotEmpty() && excludeEndAlarm.date.isEmpty())
 		{
-			println("TODAY END. after=${endCal!!.after(now)}")
+			NacLog.i("End date is empty, but start date is not. after=${endCal!!.after(now)}")
 			endTime = "${if (endCal.after(now)) today else tomorrow} $endTime"
 		}
 
-		println("Final start : '$startTime'")
-		println("Final end   : '$endTime'")
+		NacLog.i("Updating start edit text. text='$startTime'")
+		NacLog.i("Updating end edit text.   text='$endTime'")
 
 		excludeStartEditText.text = SpannableStringBuilder(startTime)
 		excludeEndEditText.text = SpannableStringBuilder(endTime)

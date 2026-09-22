@@ -23,6 +23,7 @@ import com.nfcalarmclock.system.NacCalendar.Day.entries
 import com.nfcalarmclock.system.NacCalendar.alarmToCalendar
 import com.nfcalarmclock.system.NacCalendar.alarmToNextOneTimeCalendar
 import com.nfcalarmclock.system.NacCalendar.dateTimeToCalendar
+import java.text.DateFormatSymbols
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.EnumSet
@@ -941,6 +942,29 @@ object NacCalendar
 
 			return nowCal
 		}
+	}
+
+	/**
+	 * Get a list of full named weekdays.
+	 *
+	 * @return A list of full named weekdays.
+	 */
+	fun getFullWeekdays(): List<String>
+	{
+		// Get the weekdays
+		val locale = Locale.getDefault()
+		val weekdayNames = DateFormatSymbols(locale).weekdays
+
+		// Convert Calendar indices to weekday names
+		return listOf(
+			Calendar.SUNDAY,
+			Calendar.MONDAY,
+			Calendar.TUESDAY,
+			Calendar.WEDNESDAY,
+			Calendar.THURSDAY,
+			Calendar.FRIDAY,
+			Calendar.SATURDAY
+		).map { weekdayNames[it] }
 	}
 
 	/**

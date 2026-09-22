@@ -5,6 +5,13 @@
 	<!-- &lt;/b> -->
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.2</item>
+		<item>Es wurde eine Option hinzugefügt, um Audio gleichzeitig über &lt;b>Lautsprecher&lt;/b> und &lt;b>Bluetooth&lt;/b> wiederzugeben. Diese Option finden Sie unter Einstellungen > Audioquellen für einen Wecker.</item>
+		<item>Es wurde eine Option hinzugefügt, um einen &lt;b>Datums-/Zeitbereich auszuschließen&lt;/b>. Diese Option finden Sie unter Einstellungen > Wiederholen für einen Alarm und ist beispielsweise nützlich, wenn ein Alarm alle paar Stunden ertönt, Sie ihn aber nicht manuell deaktivieren/aktivieren möchten, wenn Sie schlafen gehen.</item>
+		<item>Verbesserte NFC-Sperre: Der Sperrbildschirm wird deaktiviert, um NFC-Scans zu ermöglichen. Dies setzt voraus, dass sich das Gerät in einem vertrauenswürdigen Zustand befindet und ist daher möglicherweise nicht zuverlässig. Immerhin ist es ein Anfang.</item>
+		<item>Die Option &lt;b>Flugmodus&lt;/b> wurde so geändert, dass Alarme übersprungen werden, wenn sie aktiviert ist, anstatt alle Alarme zu deaktivieren/aktivieren, wenn der Flugmodus umgeschaltet wird.</item>
+		<item>Ein Fehler wurde behoben, der dazu führte, dass die Ein- und Ausschaltzeiten der &lt;b>Taschenlampe&lt;/b> nicht korrekt umgerechnet wurden. Falls eine Umrechnung nicht möglich war, wurde standardmäßig eine Sekunde verwendet.</item>
+		<item>Problem behoben, bei dem die &lt;b>Schlummerfunktion&lt;/b> durch Berühren des Bildschirms nicht aktiviert wurde.</item>
 		<item>12.7.1</item>
 		<item>Problem mit dem Blinken der &lt;b>Taschenlampe&lt;/b> behoben, bei dem die Ein-/Ausschaltzeiten leer waren.</item>
 		<item>Behebung eines visuellen Artefakts in &lt;b>Android 15&lt;/b>.</item>

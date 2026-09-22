@@ -1,17 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<!-- Days of week full names -->
-	<string-array name="days_of_week_full">
-		<item>Sunday</item>
-		<item>Monday</item>
-		<item>Tuesday</item>
-		<item>Wednesday</item>
-		<item>Thursday</item>
-		<item>Friday</item>
-		<item>Saturday</item>
-	</string-array>
-
 	<!-- Days of week abbreviated -->
 	<string-array name="days_of_week_abbr">
 		<item>Sun</item>
@@ -32,12 +21,6 @@
 		<item>T</item>
 		<item>F</item>
 		<item>S</item>
-	</string-array>
-
-	<!-- Start week on days -->
-	<string-array name="start_week_on">
-		<item>Sunday</item>
-		<item>Monday</item>
 	</string-array>
 
 	<!-- Audio sources -->

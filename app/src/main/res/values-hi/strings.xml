@@ -134,10 +134,13 @@
 	<string name="label_missed_statistic_header">छूटा हुआ समय, नाम, अलार्म का समय</string>
 	<string name="label_snoozed_statistic_header">स्नूज़ किया गया समय, नाम, अलार्म समय, स्नूज़ अवधि (सेकंड)</string>
 	<string name="label_clock_widget">घड़ी</string>
+	<string name="label_start">शुरू</string>
+	<string name="label_end">अंत</string>
 
 	<!-- Messages -->
 	<string name="message_permission_ignore_battery_optimization_request">यदि ऐप का उपयोग कुछ समय से नहीं किया गया है तो अलार्म न चलने से बचने के लिए।&lt;br/>&lt;br/>&lt;b>नोट:&lt;/b> यह इस बात पर निर्भर करता है कि आपके पास कौन सा डिवाइस है और .&lt;b>वास्तव में इसकी आवश्यकता नहीं भी हो सकती है&lt;/b>।</string>
 	<string name="message_permission_post_notifications_request">जब ऐप फ़ोकस में न हो, तब अलार्म चलाने की अनुमति देना।&lt;br/>&lt;br/>&lt;b>नोट:&lt;/b> यह &lt;b>एंड्रॉइड 13&lt;/b> में शुरू की गई सुरक्षा नीतियों का एक साइड इफ़ेक्ट है, जो उपयोगकर्ताओं के लाभ के लिए हैं, लेकिन इस तरह के उदाहरणों में ऐप्स को प्रतिबंधित कर सकते हैं।</string>
+	<string name="message_permission_post_notifications_warning">कृपया नोटिफिकेशन की अनुमति चालू करें। इसके बिना अलार्म काम नहीं कर सकते हैं।</string>
 	<string name="message_permission_schedule_exact_alarm_request">निर्धारित समय पर अलार्म को ठीक से चलाना।</string>
 	<string name="message_permission_system_alert_window_request">क्या आप अन्य ऐप्स के ऊपर ऐप प्रदर्शित करने की अनुमति देना चाहते हैं?&lt;br/>&lt;br/>यह सुनिश्चित करेगा कि अलार्म स्क्रीन दिखाई दे, जो कि ऑडियो चलाने के लिए आवश्यक है, यदि ऐप पृष्ठभूमि में हो।&lt;br/>&lt;br/>&lt;b>नोट:&lt;/b> यह केवल Android 15 को प्रभावित करता है।</string>
 	<string name="message_playlist">क्या आप इस फ़ोल्डर का सारा संगीत बजाना चाहते हैं?</string>
@@ -183,6 +186,7 @@
 	<string name="message_statistics_email_subject">एनएफसी अलार्म घड़ी सांख्यिकी</string>
 	<string name="message_skip_general_alarm">अलार्म छोड़ दिया जाएगा.</string>
 	<string name="message_skip_named_alarm">&lt;b&gt;%1$s&lt;/b&gt; को छोड़ दिया जाएगा.</string>
+	<string name="message_skip_airplane_mode_alarm">एयरप्लेन मोड के कारण अलार्म नहीं बज रहा है</string>
 	<string name="message_disabled_general_alarm">अलार्म अक्षम है.</string>
 	<string name="message_disabled_named_alarm">&lt;b&gt;%1$s&lt;/b&gt; अक्षम है.</string>
 	<string name="message_will_run_on_general_alarm" tools:ignore="StringFormatCount">%2$s पर चलेगा.</string>
@@ -202,6 +206,7 @@
 	<string name="message_text_to_speech_network_required">आवाज़ के काम करने के लिए नेटवर्क कनेक्शन की आवश्यकता हो सकती है</string>
 	<string name="message_volume_dismiss_priority">वॉल्यूम डिसमिस को प्राथमिकता दी जाएगी</string>
 	<string name="message_volume_snooze_ignored">वॉल्यूम स्नूज़ को अनदेखा कर दिया जाएगा</string>
+	<string name="message_current_alarm_within_exclude_range">नोट: वर्तमान अलार्म एक्सक्लूड रेंज के भीतर है।</string>
 
 	<!-- Error messages -->
 	<string name="error_message_active_delete">सक्रिय अलार्म को हटाने में असमर्थ</string>
@@ -242,6 +247,9 @@
 	<string name="error_message_camera_max_in_use">अधिकतम उपयोग में कैमरे</string>
 	<string name="error_message_unable_to_launch_media_picker">सिस्टम ऑडियो पिकर लॉन्च करने में असमर्थ</string>
 	<string name="error_message_unable_to_preview_volume_options">जब कोई मीडिया सेट नहीं किया गया हो तो पूर्वावलोकन संभव नहीं है</string>
+	<string name="error_message_exclude_start_datetime_missing">बहिष्करण प्रारंभ तिथि/समय गायब है</string>
+	<string name="error_message_exclude_end_datetime_missing">बहिष्करण समाप्ति तिथि/समय गायब है</string>
+	<string name="error_message_exclude_start_end_calendar_not_in_order">प्रारंभ तिथि/समय समाप्ति तिथि/समय से पहले होना चाहिए।</string>
 
 	<!-- Titles -->
 	<string name="title_timer_main">एनएफसी टाइमर</string>
@@ -278,6 +286,10 @@
 	<string name="title_current_alarms">मौजूदा</string>
 	<string name="title_set_date">तिथि निर्धारित करें</string>
 	<string name="title_set_time">निर्धारित समय</string>
+	<string name="title_select_start_date">प्रारंभ तिथि चुनें</string>
+	<string name="title_select_start_time">प्रारंभ समय चुनें</string>
+	<string name="title_select_end_date">समाप्ति तिथि चुनें</string>
+	<string name="title_select_end_time">समाप्ति समय चुनें</string>
 	<string name="title_whats_new">नया क्या है</string>
 	<string name="title_permission_disable_battery_optimization">बैटरी अनुकूलन अक्षम करें</string>
 	<string name="title_permission_storage">भंडारण</string>
@@ -292,6 +304,7 @@
 	<string name="title_request_permission_schedule_exact_alarm">सटीक अलार्म शेड्यूल करना सक्षम करें</string>
 	<string name="title_reset_statistics">सांख्यिकीय को रीसेट करें…</string>
 	<string name="title_repeat_frequency">दोहराव आवृत्ति</string>
+	<string name="title_exclude_date_time_range">दिनांक/समय सीमा को बाहर रखें</string>
 	<string name="title_repeat_frequency_days_to_run_before_starting">आवृत्ति शुरू करने से पहले चलने वाले दिन</string>
 	<string name="title_vibrate_vibration_duration">कंपन अवधि</string>
 	<string name="title_vibrate_custom_pattern">कस्टम पैटर्न</string>
@@ -347,7 +360,7 @@
 	<string name="title_start_week_on">सप्ताह की शुरुआत&#8230;</string>
 	<string name="title_expand_new_alarm">नये अलार्म का विस्तार करें</string>
 	<string name="title_next_alarm_format">अगला अलार्म प्रारूप&#8230;</string>
-	<string name="title_toggle_alarms_with_airplane_mode">एयरप्लेन मोड के साथ अलार्म को चालू/बंद करें</string>
+	<string name="title_toggle_alarms_with_airplane_mode">एयरप्लेन मोड अलार्म को बंद कर देता है</string>
 	<string name="title_permissions">अनुमतियां</string>
 	<string name="title_no_permissions_needed">किसी अनुमति की आवश्यकता नहीं!</string>
 	<string name="title_help_debug_mode">डिबग मोड</string>
@@ -395,7 +408,8 @@
 	<string name="description_start_timer_on_multiple_nfc_tag_scan">जब ऐप चल रहा हो और चयनित NFC टैग में से एक को स्कैन किया जाता है (इस स्क्रीन में नहीं), तो यह स्वचालित रूप से इस टाइमर को शुरू कर देगा।</string>
 	<string name="description_add_or_replace_nfc_tag">क्या एनएफसी टैग को उन एनएफसी टैग की सूची में जोड़ा जाना चाहिए जो इस अलार्म को खारिज कर सकते हैं, या क्या इसे इस अलार्म द्वारा उपयोग किए जा रहे किसी भी एनएफसी टैग को प्रतिस्थापित करना चाहिए?</string>
 	<string name="description_save_nfc_tag">आप इस NFC टैग को नाम देकर, इसे दोबारा स्कैन किए बिना, पुनः उपयोग कर सकते हैं।</string>
-	<string name="description_repeat_frequency">अलार्म को एक निश्चित आवृत्ति पर दोहराएँ (हर X समय पर)। नोट: घंटे या दिन चुनने से अलार्म के सभी दिन साफ़ हो जाएँगे।</string>
+	<string name="description_repeat_frequency">अलार्म को एक निश्चित अंतराल पर (प्रत्येक X समय अंतराल पर) दोहराएँ। ध्यान दें: मिनट, घंटे या दिन चुनने से अलार्म के सभी दिनों का डेटा हट जाएगा।</string>
+	<string name="description_exclude_date_time_range">इस निर्धारित तिथि/समय सीमा के दौरान अलार्म नहीं बजेंगे।</string>
 	<string name="description_repeat_frequency_days_to_run_before_starting">आवृत्ति शुरू करने से पहले इस सप्ताह अलार्म के वर्तमान में चयनित दिनों में से कौन सा दिन चलाया जाना चाहिए।</string>
 	<string name="description_vibrate_vibration_duration">कितनी देर तक कंपन करना है, तथा कंपनों के बीच कितनी देर तक प्रतीक्षा करनी है।</string>
 	<string name="description_vibrate_custom_pattern">कंपन अवधि को एक निश्चित संख्या में बार दोहराएं, और फिर एक निश्चित अवधि तक प्रतीक्षा करें।</string>
@@ -409,8 +423,8 @@
 	<string name="description_volume_gradually_increase_volume_timer">टाइमर की आवाज़ को निर्धारित आवृत्ति पर बढ़ाएँ।</string>
 	<string name="description_volume_restrict_volume_alarm">अलार्म बजने पर आवाज़ कम नहीं की जा सकती।</string>
 	<string name="description_volume_restrict_volume_timer">टाइमर बंद होने के बाद वॉल्यूम कम नहीं किया जा सकता है।</string>
-	<string name="description_dismiss_options_auto_dismiss_alarm">निर्धारित अवधि के बाद अलार्म स्वचालित रूप से बंद हो जाएगा।</string>
-	<string name="description_dismiss_options_auto_dismiss_timer">निर्धारित अवधि के बाद टाइमर को स्वचालित रूप से बंद कर दें।</string>
+	<string name="description_dismiss_options_auto_dismiss_alarm">निर्धारित अवधि के बाद अलार्म अपने आप बंद हो जाएगा।</string>
+	<string name="description_dismiss_options_auto_dismiss_timer">निर्धारित अवधि के बाद टाइमर अपने आप बंद हो जाता है।</string>
 	<string name="description_dismiss_options_dismiss_early">अलार्म को सक्रिय होने से पहले ही बंद कर दें।</string>
 	<string name="description_dismiss_options_dismiss_early_notification">अलार्म को समय से पहले बंद करने के लिए अधिसूचना दिखाएं।</string>
 	<string name="description_dismiss_options_delete_after_dismissed_alarm">अलार्म बंद होने के बाद उसे हटा दिया जाएगा।</string>
@@ -447,8 +461,8 @@
 	<string name="description_alarm_screen_show_music_info_false">संगीत या रिंगटोन की जानकारी न दिखाएं.</string>
 	<string name="description_alarm_screen_battery_saver_true">अलार्म चालू होने पर स्क्रीन को बंद रखकर बैटरी बचाएं। स्क्रीन को मैन्युअल रूप से चालू करना होगा।</string>
 	<string name="description_alarm_screen_battery_saver_false">अलार्म सक्रिय होने पर स्क्रीन स्वचालित रूप से चालू हो जाएगी।</string>
-	<string name="description_toggle_alarms_with_airplane_mode_true">एयरप्लेन मोड चालू करने से सभी अलार्म बंद हो जाएंगे, और एयरप्लेन मोड बंद करने से सभी अलार्म चालू हो जाएंगे। ध्यान दें: इसके लिए ऐप का फोकस में होना आवश्यक है।</string>
-	<string name="description_toggle_alarms_with_airplane_mode_false">एयरप्लेन मोड चालू या बंद होने पर भी अलार्म पर कोई असर नहीं पड़ेगा।</string>
+	<string name="description_toggle_alarms_with_airplane_mode_true">अगर अलार्म बजने के समय एयरप्लेन मोड चालू है, तो कोई भी अलार्म नहीं बजेगा।</string>
+	<string name="description_toggle_alarms_with_airplane_mode_false">अलार्म सामान्य रूप से बजेंगे।</string>
 	<string name="description_color_theme">थीम रंग.</string>
 	<string name="description_color_name">जैसे काम</string>
 	<string name="description_color_days">जैसे सोम &#8231; मंगल &#8231; बुध &#8231; गुरु &#8231; शुक्र</string>
@@ -527,7 +541,7 @@
 	<string name="cd_customize">अनुकूलित करें</string>
 	<string name="cd_preference_icon">वरीयता आइकन</string>
 
-	<!-- Plurals -->
+	<!-- Plural alarms -->
 	<plurals name="alarm">
 		<item quantity="one">%d खतरे की घंटी</item>
 		<item quantity="other">%d एलार्म</item>
@@ -543,6 +557,38 @@
 		<item quantity="other">छोड़े गए अलार्म</item>
 	</plurals>
 
+	<!-- Plural units -->
+	<plurals name="unit_second">
+		<item quantity="one">%d दूसरा</item>
+		<item quantity="other">%d सेकंड</item>
+	</plurals>
+
+	<plurals name="unit_minute">
+		<item quantity="one">%d मिनट</item>
+		<item quantity="other">%d मिनट</item>
+	</plurals>
+
+	<plurals name="unit_hour">
+		<item quantity="one">%d घंटा</item>
+		<item quantity="other">%d घंटे</item>
+	</plurals>
+
+	<plurals name="unit_day">
+		<item quantity="one">%d दिन</item>
+		<item quantity="other">%d दिन</item>
+	</plurals>
+
+	<plurals name="unit_week">
+		<item quantity="one">%d सप्ताह</item>
+		<item quantity="other">%d हफ्तों</item>
+	</plurals>
+
+	<plurals name="unit_month">
+		<item quantity="one">%d महीना</item>
+		<item quantity="other">%d महीने</item>
+	</plurals>
+
+	<!-- Plural repeats -->
 	<plurals name="repeat_minutely">
 		<item quantity="one">हर %d मिनट</item>
 		<item quantity="other">हर %d मिनट</item>
@@ -568,52 +614,8 @@
 		<item quantity="other">हर %d महीने</item>
 	</plurals>
 
-	<plurals name="standalone_unit_minute">
-		<item quantity="one" tools:ignore="ImpliedQuantity">मिनट</item>
-		<item quantity="other">मिनट</item>
-	</plurals>
-
-	<plurals name="standalone_unit_hour">
-		<item quantity="one" tools:ignore="ImpliedQuantity">घंटा</item>
-		<item quantity="other">घंटे</item>
-	</plurals>
-
-	<plurals name="standalone_unit_day">
-		<item quantity="one" tools:ignore="ImpliedQuantity">दिन</item>
-		<item quantity="other">दिन</item>
-	</plurals>
-
-	<plurals name="standalone_unit_week">
-		<item quantity="one" tools:ignore="ImpliedQuantity">सप्ताह</item>
-		<item quantity="other">हफ्तों</item>
-	</plurals>
-
-	<plurals name="standalone_unit_month">
-		<item quantity="one" tools:ignore="ImpliedQuantity">महीना</item>
-		<item quantity="other">महीने</item>
-	</plurals>
-
-	<plurals name="unit_day">
-		<item quantity="one">%d दिन</item>
-		<item quantity="other">%d दिन</item>
-	</plurals>
-
-	<plurals name="unit_hour">
-		<item quantity="one">%d घंटा</item>
-		<item quantity="other">%d घंटे</item>
-	</plurals>
-
-	<plurals name="unit_minute">
-		<item quantity="one">%d मिनट</item>
-		<item quantity="other">%d मिनट</item>
-	</plurals>
-
-	<plurals name="unit_second">
-		<item quantity="one">%d दूसरा</item>
-		<item quantity="other">%d सेकंड</item>
-	</plurals>
-
-	<plurals name="unit_number_of_times">
+	<!-- Plural numbers -->
+	<plurals name="number_of_times">
 		<item quantity="one">%1$d समय</item>
 		<item quantity="other">%1$d बार</item>
 	</plurals>
@@ -622,17 +624,20 @@
 		<item quantity="one">(%1$d शेष)</item>
 		<item quantity="other">(%1$d शेष)</item>
 	</plurals>
-	<plurals name="import_cleared_media_due_to_not_found">
-		<item quantity="one">मीडिया न मिलने के कारण %1$d अलार्म/टाइमर में मीडिया साफ़ कर दिया गया।</item>
-		<item quantity="other">मीडिया न मिलने के कारण %1$d अलार्म/टाइमर में मीडिया साफ़ कर दिया गया।</item>
-	</plurals>
 
+	<!-- Plural TTS -->
 	<plurals name="tts_say_reminder">
 		<item quantity="one">अनुस्मारक. %1$s, %2$d, मिनट में चलेगा.</item>
 		<item quantity="other">अनुस्मारक. %1$s, %2$d, मिनट में चलेगा.</item>
 	</plurals>
 
 	<string name="tts_say_time">समय %1$s:%2$s %3$s है.</string>
+
+	<!-- Plural misc -->
+	<plurals name="import_cleared_media_due_to_not_found">
+		<item quantity="one">मीडिया न मिलने के कारण %1$d अलार्म/टाइमर में मीडिया साफ़ कर दिया गया।</item>
+		<item quantity="other">मीडिया न मिलने के कारण %1$d अलार्म/टाइमर में मीडिया साफ़ कर दिया गया।</item>
+	</plurals>
 
 	<string name="float_duration_seconds">{count, plural, one{{count} दूसर} other{{count} सेकंड}}</string>
 

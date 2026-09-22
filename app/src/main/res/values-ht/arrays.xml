@@ -1,17 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<!-- Days of week full names -->
-	<string-array name="days_of_week_full">
-		<item>dimanch</item>
-		<item>lendi</item>
-		<item>madi</item>
-		<item>mèkredi</item>
-		<item>jedi</item>
-		<item>vandredi</item>
-		<item>samdi</item>
-	</string-array>
-
 	<!-- Days of week abbreviated -->
 	<string-array name="days_of_week_abbr">
 		<item>dim</item>
@@ -32,12 +21,6 @@
 		<item>J</item>
 		<item>V</item>
 		<item>S</item>
-	</string-array>
-
-	<!-- Start week on days -->
-	<string-array name="start_week_on">
-		<item>dimanch</item>
-		<item>lendi</item>
 	</string-array>
 
 	<!-- Audio sources -->

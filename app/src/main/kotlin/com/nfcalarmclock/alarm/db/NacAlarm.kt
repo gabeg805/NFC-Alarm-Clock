@@ -2383,6 +2383,12 @@ open class NacAlarm()
 
 		/**
 		 * Calculate the repeat frequency units from an index.
+		 *
+		 * 1 = Minutes
+		 * 2 = Hours
+		 * 3 = Days
+		 * 4 = Weeks
+		 * 5 = Months
 		 */
 		fun calcRepeatFrequencyUnitsFromIndex(index: Int): Int
 		{
@@ -2400,11 +2406,11 @@ open class NacAlarm()
 		/**
 		 * Calculate the repeat frequency units index.
 		 *
-		 * 1 = Minutes
-		 * 2 = Hours
-		 * 3 = Days
-		 * 4 = Weeks
-		 * 5 = Months
+		 * 0 = Minutes
+		 * 1 = Hours
+		 * 2 = Days
+		 * 3 = Weeks
+		 * 4 = Months
 		 */
 		fun calcRepeatFrequencyUnitsIndex(units: Int): Int
 		{
