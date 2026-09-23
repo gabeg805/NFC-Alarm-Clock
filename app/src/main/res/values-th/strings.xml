@@ -1,0 +1,626 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+	<!-- App -->
+	<string name="app_name">นาฬิกาปลุก NFC</string>
+	<string name="app_developer">เกบ กอนซาเลซ</string>
+
+	<!-- Consolidate -->
+	<string name="version">เวอร์ชั่น</string>
+	<string name="am">AM</string>
+	<string name="pm">PM</string>
+	<string name="none">ไม่มี</string>
+	<string name="show_next_alarm">แสดงนาฬิกาปลุกครั้งถัดไป</string>
+	<string name="background">พื้นหลัง</string>
+	<string name="time_layout">รูปแบบเวลา</string>
+	<string name="date_layout">รูปแบบวันที่</string>
+	<string name="alarm_layout">รูปแบบการแจ้งเตือน</string>
+	<string name="show">แสดง</string>
+	<string name="bold">ตัวหนา</string>
+	<string name="color">สี</string>
+	<string name="text_size">ขนาดตัวอักษร</string>
+	<string name="colon">:</string>
+	<string name="icon">ไอคอน</string>
+	<string name="transparency">ความโปร่งใส</string>
+	<string name="hour">ชั่วโมง</string>
+	<string name="minutes">นาที</string>
+	<string name="am_pm">AM / PM</string>
+
+	<!-- Day names -->
+	<string name="dow_everyday">ทุกวัน</string>
+	<string name="dow_weekdays">วันธรรมดา</string>
+	<string name="dow_weekend">สุดสัปดาห์</string>
+	<string name="dow_today">วันนี้</string>
+	<string name="dow_tomorrow">พรุ่งนี้</string>
+
+	<!-- Words/numbers -->
+	<string name="word_app">แอป</string>
+	<string name="word_version">เวอร์ชั่น</string>
+	<string name="word_of">ของ</string>
+	<string name="word_alarm">เตือน</string>
+	<string name="word_alarms">สัญญาณเตือนภัย</string>
+	<string name="word_timer">ตัวจับเวลา</string>
+	<string name="word_timers">ตัวจับเวลา</string>
+	<string name="word_reminder">การแจ้งเตือน</string>
+	<string name="word_more">มากกว่า</string>
+	<string name="word_allow">อนุญาต</string>
+	<string name="word_back">กลับ</string>
+	<string name="word_next">ต่อไป</string>
+	<string name="word_finish">เสร็จ</string>
+	<string name="word_once">ครั้งหนึ่ง</string>
+	<string name="word_unlimited">ไม่จำกัด</string>
+	<string name="letter_h">ช</string>
+	<string name="letter_m">น</string>
+	<string name="letter_s">ว</string>
+	<string name="number00">00</string>
+	<string name="number0">0</string>
+	<string name="number1">1</string>
+	<string name="number2">2</string>
+	<string name="number3">3</string>
+	<string name="number4">4</string>
+	<string name="number5">5</string>
+	<string name="number6">6</string>
+	<string name="number7">7</string>
+	<string name="number8">8</string>
+	<string name="number9">9</string>
+
+	<!-- Timer add time -->
+	<string name="timer_add_1min">+ 1น</string>
+	<string name="timer_add_30sec">+ 30วิ</string>
+	<string name="timer_add_5sec">+ 5วิ</string>
+
+	<!-- States -->
+	<string name="state_unknown">ไม่ทราบ</string>
+
+	<!-- Actions -->
+	<string name="action_get_started">เริ่มต้นใช้งาน</string>
+	<string name="action_alarm_snooze">งีบหลับ</string>
+	<string name="action_alarm_dismiss">อนุญาตให้ออกไป</string>
+	<string name="action_alarm_dismiss_early">เลิกงานก่อนเวลา</string>
+	<string name="action_alarm_copy">สำเนา</string>
+	<string name="action_alarm_delete">ลบ</string>
+	<string name="action_timer_pause">หยุดชั่วคราว</string>
+	<string name="action_timer_resume">ประวัติย่อ</string>
+	<string name="action_timer_stop">หยุด</string>
+	<string name="action_yes">ใช่</string>
+	<string name="action_no">เลขที่</string>
+	<string name="action_ok">ตกลง</string>
+	<string name="action_cancel">ยกเลิก</string>
+	<string name="action_clear">ชัดเจน</string>
+	<string name="action_clear_reminder">การแจ้งเตือนที่ชัดเจน</string>
+	<string name="action_default">ค่าเริ่มต้น</string>
+	<string name="action_done">เสร็จแล้ว</string>
+	<string name="action_preview">ตัวอย่าง</string>
+	<string name="action_stop_preview">หยุดดูตัวอย่าง</string>
+	<string name="action_show_nfc_tag_id">แสดงแท็ก NFC</string>
+	<string name="action_use_any">ใช้แท็ก NFC ใดก็ได้</string>
+	<string name="action_add">เพิ่ม</string>
+	<string name="action_replace">แทนที่</string>
+	<string name="action_save">บันทึก</string>
+	<string name="action_skip">ข้าม</string>
+	<string name="action_undo">เลิกทำ</string>
+	<string name="action_browse">เรียกดู</string>
+	<string name="action_previous_folder">โฟลเดอร์ก่อนหน้า</string>
+	<string name="action_reset">รีเซ็ต</string>
+	<string name="action_email">อีเมล</string>
+	<string name="action_shuffle_music">สุ่มเพลง</string>
+	<string name="action_recursively_play_media">รวมโฟลเดอร์ย่อยด้วย</string>
+	<string name="action_alarm_option_audio_source">แหล่งที่มาของเสียง</string>
+	<string name="action_alarm_option_flashlight">ไฟฉาย</string>
+	<string name="action_alarm_option_text_to_speech">แปลงข้อความเป็นเสียงพูด</string>
+	<string name="action_alarm_option_volume">ปริมาณ</string>
+	<string name="action_alarm_option_upcoming_reminder">การแจ้งเตือนที่จะมาถึง</string>
+	<string name="action_delete_alarm_after_dismissed">ลบหลังจากถูกไล่ออก</string>
+	<string name="action_skip_next_alarm">ข้ามนาฬิกาปลุกถัดไป</string>
+	<string name="action_unskip_next_alarm">ยกเลิกการข้ามนาฬิกาปลุกครั้งถัดไป</string>
+	<string name="action_export">ส่งออก</string>
+	<string name="action_import">นำเข้า</string>
+	<string name="action_center">ศูนย์</string>
+	<string name="action_left">ซ้าย</string>
+	<string name="action_right">ขวา</string>
+	<string name="action_above_date">วันที่ข้างต้น</string>
+	<string name="action_below_date">วันที่ด้านล่าง</string>
+	<string name="action_same_line_as_date">บรรทัดเดียวกับวันที่</string>
+
+	<!-- Labels -->
+	<string name="label_created_statistic">สร้าง</string>
+	<string name="label_deleted_statistic">ลบแล้ว</string>
+	<string name="label_dismissed_statistic">ไล่ออก</string>
+	<string name="label_missed_statistic">พลาด</string>
+	<string name="label_snoozed_statistic">งีบหลับ</string>
+	<string name="label_created_statistic_header">เวลาที่สร้าง</string>
+	<string name="label_deleted_statistic_header">เวลาที่ลบ, ชื่อ, เวลาปลุก</string>
+	<string name="label_dismissed_statistic_header">เวลาที่เลิกงาน, ชื่อ, เวลาปลุก, ใช้ NFC</string>
+	<string name="label_missed_statistic_header">เวลาที่พลาด, ชื่อ, เวลาปลุก</string>
+	<string name="label_snoozed_statistic_header">เวลาที่เลื่อนปลุก, ชื่อ, เวลาปลุก, ระยะเวลาเลื่อนปลุก (วินาที)</string>
+	<string name="label_clock_widget">นาฬิกา</string>
+	<string name="label_start">เริ่ม</string>
+	<string name="label_end">จบ</string>
+
+	<!-- Messages -->
+	<string name="message_permission_ignore_battery_optimization_request">อนุญาตเพื่อป้องกันไม่ให้ระบบเตือนภัยไม่ทำงานหากไม่ได้ใช้งานแอปเป็นเวลานาน&lt;br/>&lt;br/>&lt;b>หมายเหตุ:&lt;/b> ขึ้นอยู่กับอุปกรณ์ที่คุณใช้ และ &lt;b>อาจไม่จำเป็นต้องใช้จริง ๆ&lt;/b></string>
+	<string name="message_permission_post_notifications_request">อนุญาตให้แอปทำงานเมื่อแอปไม่ได้อยู่ในสถานะโฟกัส&lt;br/>&lt;br/>&lt;b>หมายเหตุ:&lt;/b> นี่เป็นผลข้างเคียงของนโยบายความปลอดภัยที่นำมาใช้ใน &lt;b>Android 13&lt;/b> ซึ่งมีไว้เพื่อประโยชน์ของผู้ใช้ แต่สามารถจำกัดการทำงานของแอปในกรณีเช่นนี้ได้</string>
+	<string name="message_permission_post_notifications_warning">โปรดเปิดใช้งานการอนุญาตการแจ้งเตือน สัญญาณเตือนอาจไม่ทำงานหากไม่ได้เปิดใช้งาน</string>
+	<string name="message_permission_schedule_exact_alarm_request">อนุญาตให้ระบบแจ้งเตือนทำงานตามเวลาที่กำหนดไว้อย่างแม่นยำ</string>
+	<string name="message_permission_system_alert_window_request">อนุญาตให้แอปแสดงทับแอปอื่นหรือไม่&lt;br/>&lt;br/>การทำเช่นนี้จะช่วยให้หน้าจอนาฬิกาปลุกแสดงขึ้น ซึ่งเป็นสิ่งจำเป็นสำหรับการเล่นเสียง หากแอปทำงานอยู่เบื้องหลัง&lt;br/>&lt;br/>หมายเหตุ:&lt;/b> เฉพาะ Android 15 เท่านั้น</string>
+	<string name="message_playlist">คุณต้องการเล่นเพลงทั้งหมดในโฟลเดอร์นี้หรือไม่?</string>
+	<string name="message_nfc_enable_on_device_request">โปรดเปิดใช้งาน NFC บนอุปกรณ์ของคุณ</string>
+	<string name="message_nfc_optional">NFC (อุปกรณ์เสริม)</string>
+	<string name="message_nfc_required_unsaved">ต้องใช้ NFC</string>
+	<string name="message_nfc_required_saved">ต้องใช้ NFC — %1$s</string>
+	<string name="message_nfc_required_use_any">ต้องใช้ NFC (ใช้รุ่นใดก็ได้)</string>
+	<string name="message_nfc_screen_locked">โปรดปลดล็อกอุปกรณ์เพื่อใช้งาน NFC</string>
+	<string name="message_show_nfc_tag_id">รหัสประจำตัว</string>
+	<string name="message_delete_nfc_tag">คุณแน่ใจหรือไม่ว่าต้องการลบแท็ก NFC นี้?</string>
+	<string name="message_rename_nfc_tag">คุณต้องการเปลี่ยนชื่อแท็ก NFC เป็นชื่ออะไร?</string>
+	<string name="message_flashlight_on_duration">บน:</string>
+	<string name="message_flashlight_off_duration">ปิด:</string>
+	<string name="message_no_alarms_scheduled">ไม่มีการตั้งระบบเตือนภัยใดๆ</string>
+	<string name="message_alarm_repeat_disabled">อย่าส่งสัญญาณเตือนซ้ำ</string>
+	<string name="message_alarm_repeat_enabled">สัญญาณเตือนซ้ำ</string>
+	<string name="message_timer_repeat_disabled">อย่าตั้งเวลาซ้ำ</string>
+	<string name="message_timer_repeat_enabled">ตัวจับเวลาแบบทำซ้ำ</string>
+	<string name="message_vibrate_disabled">ปิดการสั่น</string>
+	<string name="message_vibrate_enabled">เปิดใช้งานการสั่น</string>
+	<string name="message_flashlight_disabled">ห้ามใช้ไฟฉาย</string>
+	<string name="message_flashlight_enabled">ใช้ไฟฉาย</string>
+	<string name="message_alarm_copy">คัดลอกสัญญาณเตือน</string>
+	<string name="message_timer_copy">ตัวจับเวลาที่คัดลอกแล้ว</string>
+	<string name="message_alarm_delete">สัญญาณเตือนถูกลบแล้ว</string>
+	<string name="message_timer_delete">ตัวจับเวลาที่ถูกลบ</string>
+	<string name="message_alarm_restore">สัญญาณเตือนที่กู้คืนแล้ว</string>
+	<string name="message_timer_restore">ตัวจับเวลาที่กู้คืนแล้ว</string>
+	<string name="message_alarm_dismiss">ยกเลิกสัญญาณเตือน</string>
+	<string name="message_alarm_snooze">เลื่อนปลุก</string>
+	<string name="message_timer_dismiss">ตัวจับเวลาถูกยกเลิก</string>
+	<string name="message_statistics_started_on">สถิติเริ่มต้นเมื่อ</string>
+	<string name="message_bullet">\u25BA</string>
+	<string name="message_required">ที่จำเป็น</string>
+	<string name="message_optional">ไม่จำเป็น</string>
+	<string name="message_already_have_permission">คุณได้รับอนุญาตแล้ว</string>
+	<string name="message_support_thank_you">ขอบคุณสำหรับการสนับสนุนของคุณ!</string>
+	<string name="message_reset_statistics">คุณแน่ใจหรือไม่ว่าต้องการรีเซ็ตสถิติทั้งหมด?</string>
+	<string name="message_tts_current_time">เวลาปัจจุบัน</string>
+	<string name="message_tts_alarm_name">ชื่อของสัญญาณเตือนภัย</string>
+	<string name="message_tts_timer_name">ชื่อของตัวจับเวลา</string>
+	<string name="message_statistics_email_subject">สถิตินาฬิกาปลุก NFC</string>
+	<string name="message_skip_general_alarm">ระบบจะข้ามการแจ้งเตือน</string>
+	<string name="message_skip_named_alarm">&lt;b>%1$s&lt;/b> จะถูกข้ามไป</string>
+	<string name="message_skip_airplane_mode_alarm">ข้ามการปลุกเนื่องจากอยู่ในโหมดเครื่องบิน</string>
+	<string name="message_disabled_general_alarm">ระบบเตือนภัยถูกปิดใช้งานแล้ว</string>
+	<string name="message_disabled_named_alarm">&lt;b>%1$s&lt;/b> ถูกปิดใช้งาน</string>
+	<string name="message_will_run_on_general_alarm" tools:ignore="StringFormatCount">จะทำงานโดยใช้ %2$s</string>
+	<string name="message_will_run_on_named_alarm">&lt;b>%1$s&lt;/b> จะทำงานบน %2$s</string>
+	<string name="message_will_run_in_general_alarm" tools:ignore="StringFormatCount">จะใช้เวลา 2 วินาที</string>
+	<string name="message_will_run_in_named_alarm">&lt;b>%1$s&lt;/b> จะทำงานในเวลา %2$s</string>
+	<string name="message_next_alarm_on">นาฬิกาปลุกครั้งต่อไปเวลา %1$s</string>
+	<string name="message_next_alarm_in">นาฬิกาปลุกครั้งต่อไปในอีก %1$s</string>
+	<string name="message_export_started">กำลังส่งออก…</string>
+	<string name="message_export_completed">การส่งออกเสร็จสมบูรณ์</string>
+	<string name="message_import_started">กำลังนำเข้า…</string>
+	<string name="message_import_completed">การนำเข้าเสร็จสมบูรณ์</string>
+	<string name="message_selected_alarm_song_not_available">เพลงที่เลือกสำหรับตั้งปลุกไม่พร้อมใช้งาน</string>
+	<string name="message_milliseconds">%1$d มิลลิวินาที</string>
+	<string name="message_text_to_speech_default_voice">เสียงเริ่มต้น</string>
+	<string name="message_text_to_speech_voice">เสียง %1$d</string>
+	<string name="message_text_to_speech_network_required">อาจจำเป็นต้องมีการเชื่อมต่อเครือข่ายเพื่อให้ใช้งานเสียงได้</string>
+	<string name="message_volume_dismiss_priority">การยกเลิกปริมาณงานจะได้รับความสำคัญเป็นอันดับแรก</string>
+	<string name="message_volume_snooze_ignored">การตั้งค่าเลื่อนปลุกเสียงจะไม่มีผล</string>
+	<string name="message_current_alarm_within_exclude_range">หมายเหตุ: สัญญาณเตือนปัจจุบันอยู่ในช่วงที่ยกเว้นไว้</string>
+
+	<!-- Error messages -->
+	<string name="error_message_active_delete">ไม่สามารถลบสัญญาณเตือนที่กำลังทำงานอยู่ได้</string>
+	<string name="error_message_active_modify">ไม่สามารถแก้ไขสัญญาณเตือนที่กำลังทำงานอยู่ได้</string>
+	<string name="error_message_max_alarms">จำนวนสูงสุดของสัญญาณเตือนที่สร้างขึ้น</string>
+	<string name="error_message_max_timers">จำนวนตัวจับเวลาสูงสุดที่สร้างได้</string>
+	<string name="error_message_nfc_mismatch">แท็ก NFC ไม่ตรงกับแท็กที่บันทึกไว้</string>
+	<string name="error_message_nfc_unsupported">อุปกรณ์ของคุณไม่รองรับ NFC</string>
+	<string name="error_message_nfc_name_exists">ชื่อนี้มีคนใช้อยู่แล้ว</string>
+	<string name="error_message_unable_to_parse_nfc_id">ไม่สามารถแยกวิเคราะห์ NFC ID ได้</string>
+	<string name="error_message_nfc_id_exists">รหัส NFC นี้กำลังถูกใช้งานอยู่แล้ว</string>
+	<string name="error_message_unable_to_scan_nfc">ไม่สามารถสแกนแท็ก NFC ได้</string>
+	<string name="error_message_snooze">ไม่สามารถเลื่อนปลุกได้</string>
+	<string name="error_message_snoozed_delete">ไม่สามารถลบนาฬิกาปลุกที่เลื่อนเวลาไปแล้วได้</string>
+	<string name="error_message_snoozed_modify">ไม่สามารถแก้ไขนาฬิกาปลุกที่เลื่อนเวลาไปแล้วได้</string>
+	<string name="error_message_select_color">สีฐานสิบหกไม่ถูกต้อง</string>
+	<string name="error_message_play_audio">ไม่สามารถเล่นเสียงได้</string>
+	<string name="error_message_google_play_billing">เกิดข้อผิดพลาดขณะเชื่อมต่อกับ Google Play Store</string>
+	<string name="error_message_text_to_speech_audio_focus">ไม่สามารถใช้ฟังก์ชันแปลงข้อความเป็นเสียงได้</string>
+	<string name="error_message_enter_timer_duration">ป้อนระยะเวลา</string>
+	<string name="error_message_unable_to_volume_dismiss_nfc_alarm">ไม่สามารถปิดการแจ้งเตือน NFC ด้วยปุ่มปรับระดับเสียงได้</string>
+	<string name="error_message_unable_to_email">ไม่สามารถร่างอีเมลได้</string>
+	<string name="error_message_unable_to_email_statistics">ไม่สามารถส่งอีเมลสถิติได้</string>
+	<string name="error_message_unable_to_shine_flashlight">ไม่สามารถส่องไฟฉายได้ — %1$s</string>
+	<string name="error_message_unable_to_get_flashlight_characteristics">ไม่สามารถรับข้อมูลไฟฉายได้</string>
+	<string name="error_message_unable_to_access_flashlight">ไม่สามารถเข้าถึงไฟฉายได้ — %1$s</string>
+	<string name="error_message_unable_to_turn_off_flashlight">ไม่สามารถปิดไฟฉายได้</string>
+	<string name="error_message_unable_to_turn_on_flashlight">ไม่สามารถเปิดไฟฉายได้</string>
+	<string name="error_message_unable_to_start_foreground_service">ไม่สามารถเริ่มต้นบริการเบื้องหน้าได้ โปรดเปิดใช้งานสิทธิ์</string>
+	<string name="error_message_unable_to_open_import_export_stream">ไม่สามารถเปิดไฟล์ได้</string>
+	<string name="error_message_unable_to_select_file">ไม่สามารถเลือกไฟล์ได้</string>
+	<string name="error_message_unable_to_get_media_information_from_file">ไม่สามารถดึงข้อมูลสื่อจากไฟล์ได้</string>
+	<string name="error_message_not_enough_free_space">พื้นที่ว่างไม่เพียงพอสำหรับการสำรองข้อมูลเพลง</string>
+	<string name="error_message_camera_disabled">กล้องถูกปิดใช้งาน</string>
+	<string name="error_message_camera_disconnected">กล้องถูกตัดการเชื่อมต่อ</string>
+	<string name="error_message_camera_error">ข้อผิดพลาดของกล้อง</string>
+	<string name="error_message_camera_in_use">กล้องกำลังใช้งาน</string>
+	<string name="error_message_camera_max_in_use">จำนวนกล้องที่ใช้งานสูงสุด</string>
+	<string name="error_message_unable_to_launch_media_picker">ไม่สามารถเรียกใช้ตัวเลือกเสียงของระบบได้</string>
+	<string name="error_message_unable_to_preview_volume_options">ไม่สามารถแสดงตัวอย่างได้หากไม่ได้ตั้งค่าสื่อไว้</string>
+	<string name="error_message_exclude_start_datetime_missing">ขาดวันที่/เวลาเริ่มต้นการยกเว้น</string>
+	<string name="error_message_exclude_end_datetime_missing">ขาดวันที่/เวลาสิ้นสุดการยกเว้น</string>
+	<string name="error_message_exclude_start_end_calendar_not_in_order">วัน/เวลาเริ่มต้นต้องอยู่ก่อนวัน/เวลาสิ้นสุด</string>
+
+	<!-- Titles -->
+	<string name="title_timer_main">ตัวจับเวลา NFC</string>
+	<string name="title_timer_add">เพิ่มตัวจับเวลา</string>
+	<string name="title_timer_edit">แก้ไขตัวจับเวลา</string>
+	<string name="title_timer_active">ตัวจับเวลาทำงานอยู่</string>
+	<string name="title_select_media">เลือกสื่อ</string>
+	<string name="title_settings">การตั้งค่า</string>
+	<string name="title_options">ตัวเลือก</string>
+	<string name="title_time">เวลา</string>
+	<string name="title_alarm_activity">ปิดสัญญาณเตือน</string>
+	<string name="title_scan_nfc_tag">สแกนแท็ก NFC</string>
+	<string name="title_select_nfc_tag">เลือกแท็ก NFC</string>
+	<string name="title_nfc_tag_dismiss_order">ยกเลิกคำสั่ง</string>
+	<string name="title_start_timer_on_nfc_tag_scan">เริ่มจับเวลาเมื่อทำการสแกน</string>
+	<string name="title_add_or_replace_nfc_tag">เพิ่มหรือเปลี่ยน…</string>
+	<string name="title_using_nfc_tag">การใช้งานแท็ก NFC:</string>
+	<string name="title_save_nfc_tag">บันทึกแท็ก NFC</string>
+	<string name="title_delete_nfc_tag">ลบแท็ก NFC</string>
+	<string name="title_rename_nfc_tag">เปลี่ยนชื่อแท็ก NFC</string>
+	<string name="title_current_selected">ที่เลือกในปัจจุบัน</string>
+	<string name="title_select_color">เลือกสี</string>
+	<string name="title_select_next_alarm_format">เลือกรูปแบบ</string>
+	<string name="title_folder_selected">คุณเลือกโฟลเดอร์แล้ว</string>
+	<string name="title_active_alarms">สัญญาณเตือนที่ทำงานอยู่</string>
+	<string name="title_active_timers">ตัวจับเวลาที่ใช้งานอยู่</string>
+	<string name="title_upcoming_reminders">การแจ้งเตือนที่กำลังจะมาถึง</string>
+	<string name="title_dismissed_alarms">ยกเลิกสัญญาณเตือนภัย</string>
+	<string name="title_missed_alarm">นาฬิกาปลุกที่พลาดไป</string>
+	<string name="title_missed_alarms">นาฬิกาปลุกที่พลาดไป</string>
+	<string name="title_snoozed_alarms">นาฬิกาปลุกที่เลื่อนออกไป</string>
+	<string name="title_created_alarms">สร้างสัญญาณเตือน</string>
+	<string name="title_deleted_alarms">สัญญาณเตือนที่ถูกลบ</string>
+	<string name="title_current_alarms">ปัจจุบัน</string>
+	<string name="title_set_date">กำหนดวันที่</string>
+	<string name="title_set_time">ตั้งเวลา</string>
+	<string name="title_select_start_date">เลือกวันที่เริ่มต้น</string>
+	<string name="title_select_start_time">เลือกเวลาเริ่มต้น</string>
+	<string name="title_select_end_date">เลือกวันที่สิ้นสุด</string>
+	<string name="title_select_end_time">เลือกเวลาสิ้นสุด</string>
+	<string name="title_whats_new">มีอะไรใหม่บ้าง</string>
+	<string name="title_permission_disable_battery_optimization">ปิดใช้งานการเพิ่มประสิทธิภาพแบตเตอรี่</string>
+	<string name="title_permission_storage">พื้นที่จัดเก็บ</string>
+	<string name="title_permission_foreground_service">บริการเบื้องหน้า</string>
+	<string name="title_permission_full_screen_intent">เต็มหน้าจอ</string>
+	<string name="title_permission_schedule_exact_alarm">ตั้งเวลาปลุกอย่างแม่นยำ</string>
+	<string name="title_permission_set_alarm">ตั้งนาฬิกาปลุก</string>
+	<string name="title_permission_show_notifications">แสดงการแจ้งเตือน</string>
+	<string name="title_permission_system_alert_window">แสดงผลทับแอปพลิเคชันอื่นๆ</string>
+	<string name="title_permission_boot">สตาร์ทอัพ</string>
+	<string name="title_permission_wakelock">เวคล็อก</string>
+	<string name="title_request_permission_schedule_exact_alarm">เปิดใช้งานการตั้งเวลาปลุกที่แม่นยำ</string>
+	<string name="title_reset_statistics">รีเซ็ตสถิติ…</string>
+	<string name="title_repeat_frequency">ความถี่ในการทำซ้ำ</string>
+	<string name="title_exclude_date_time_range">ยกเว้นช่วงวันที่/เวลา</string>
+	<string name="title_repeat_frequency_days_to_run_before_starting">จำนวนวันที่ต้องวิ่งก่อนเริ่มใช้งานความถี่</string>
+	<string name="title_vibrate_vibration_duration">ระยะเวลาการสั่น</string>
+	<string name="title_vibrate_custom_pattern">ลวดลายที่กำหนดเอง</string>
+	<string name="title_vibrate_wait">รอ</string>
+	<string name="title_flashlight_brightness_level">ระดับความสว่าง</string>
+	<string name="title_flashlight_blink_on_off">กระพริบเปิด/ปิด</string>
+	<string name="title_text_to_speech_speak_frequency">ความถี่ในการพูด</string>
+	<string name="title_text_to_speech_speech_rate">อัตราการพูด</string>
+	<string name="title_text_to_speech_voice">เสียง</string>
+	<string name="title_volume_gradually_increase_volume">ค่อยๆ เพิ่มระดับเสียง</string>
+	<string name="title_volume_restrict_volume">จำกัดปริมาณ</string>
+	<string name="title_dismiss_options_auto_dismiss">ปิดอัตโนมัติ</string>
+	<string name="title_dismiss_options_dismiss_early">เลิกงานก่อนเวลา</string>
+	<string name="title_dismiss_options_dismiss_early_notification">ยกเลิกการแจ้งเตือนล่วงหน้า</string>
+	<string name="title_dismiss_options_delete_after_dismissed">ลบหลังจากถูกไล่ออก</string>
+	<string name="title_dismiss_options_volume_dismiss">ยกเลิกเสียง</string>
+	<string name="title_snooze_options_auto_snooze">เลื่อนปลุกอัตโนมัติ</string>
+	<string name="title_snooze_options_max_snooze">แม็กซ์ งีบหลับ</string>
+	<string name="title_snooze_options_snooze_duration">ระยะเวลาการงีบหลับ</string>
+	<string name="title_snooze_options_easy_snooze">งีบหลับง่าย</string>
+	<string name="title_snooze_options_volume_snooze">เลื่อนเสียง</string>
+	<string name="title_upcoming_reminder_show_reminder">แสดงการแจ้งเตือน</string>
+	<string name="title_upcoming_reminder_how_early">เร็วแค่ไหน…</string>
+	<string name="title_upcoming_reminder_how_frequent">ความถี่…</string>
+	<string name="title_setting_general">ทั่วไป</string>
+	<string name="title_setting_appearance">รูปร่าง</string>
+	<string name="title_setting_about">เกี่ยวกับ</string>
+	<string name="title_setting_help">ช่วย</string>
+	<string name="title_setting_statistics">สถิติ</string>
+	<string name="title_setting_manage_nfc_tags">จัดการแท็ก NFC</string>
+	<string name="title_setting_support">สนับสนุนการพัฒนา</string>
+	<string name="title_setting_import_export">นำเข้า | ส่งออก</string>
+	<string name="title_default_alarm">นาฬิกาปลุกเริ่มต้น</string>
+	<string name="title_alarm_name">ชื่อ</string>
+	<string name="title_alarm_days">วัน</string>
+	<string name="title_alarm_schedule_date">กำหนดวัน</string>
+	<string name="title_alarm_repeat">ทำซ้ำ</string>
+	<string name="title_alarm_vibrate">สั่น</string>
+	<string name="title_alarm_nfc">เอ็นซี</string>
+	<string name="title_alarm_screen">หน้าจอแจ้งเตือน</string>
+	<string name="title_colors">สี</string>
+	<string name="title_notifications">การแจ้งเตือน</string>
+	<string name="title_style">สไตล์</string>
+	<string name="title_tweaks">การปรับแต่ง</string>
+	<string name="title_misc">เบ็ดเตล็ด</string>
+	<string name="title_new_screen">หน้าจอใหม่</string>
+	<string name="title_show_alarm_name">แสดงชื่อการแจ้งเตือน</string>
+	<string name="title_show_current_date_and_time">แสดงวันที่และเวลาปัจจุบัน</string>
+	<string name="title_show_music_info">แสดงข้อมูลเพลง</string>
+	<string name="title_battery_saver">ประหยัดแบตเตอรี่</string>
+	<string name="title_theme_color">ธีม</string>
+	<string name="title_day_button_style">ปุ่มประจำวัน</string>
+	<string name="title_start_week_on">เริ่มต้นสัปดาห์ที่…</string>
+	<string name="title_expand_new_alarm">ขยายการแจ้งเตือนใหม่</string>
+	<string name="title_next_alarm_format">รูปแบบการแจ้งเตือนถัดไป</string>
+	<string name="title_toggle_alarms_with_airplane_mode">โหมดเครื่องบินจะข้ามเสียงเตือน</string>
+	<string name="title_permissions">สิทธิ์การเข้าถึง</string>
+	<string name="title_no_permissions_needed">ไม่ต้องขออนุญาตใดๆ ทั้งสิ้น!</string>
+	<string name="title_help_debug_mode">โหมดดีบัก</string>
+	<string name="title_help_share_logs">ส่งบันทึกข้อมูลให้ผู้พัฒนา</string>
+	<string name="title_help_send_email">ส่งอีเมล</string>
+	<string name="title_how_to_use_features">วิธีใช้งานฟีเจอร์บางอย่าง</string>
+	<string name="title_how_to_copy_and_delete">ปัดเพื่อคัดลอกและลบ</string>
+	<string name="title_how_to_get_more_options">กดค้างเพื่อดูตัวเลือกเพิ่มเติม</string>
+	<string name="title_how_to_change_appearance">การตั้งค่า > ลักษณะที่ปรากฏ</string>
+	<string name="title_developer">นักพัฒนา</string>
+	<string name="title_alignment">การจัดแนว</string>
+	<string name="title_position">ตำแหน่ง</string>
+	<string name="title_only_show_app_alarms">แสดงเฉพาะการแจ้งเตือนของแอปเท่านั้น</string>
+
+	<!-- Descriptions -->
+	<string name="description_onboarding_welcome">ยินดีต้อนรับสู่แอปนาฬิกาปลุกที่ปรับแต่งได้มากที่สุดเท่าที่คุณเคยใช้มา</string>
+	<string name="description_onboarding_permissions">แอปนี้ต้องการสิทธิ์บางอย่างเพื่อให้ทำงานได้อย่างถูกต้อง</string>
+	<string name="description_onboarding_permission_post_notifications_request">จำเป็นสำหรับการทำงานของระบบเตือนภัย ช่วยให้แอปเริ่มต้นและทำงานต่อไปได้แม้ว่าจะไม่ได้อยู่ในสถานะโฟกัสก็ตาม</string>
+	<string name="description_onboarding_permission_system_alert_window_request">นี่คือสิทธิ์พิเศษ ใช้เพื่อให้แน่ใจว่าหน้าจอนาฬิกาปลุกแสดงขึ้นและสามารถเล่นเสียงได้ จำเป็นเฉพาะใน Android 15 หรือในกรณีที่มีปัญหาเฉพาะอุปกรณ์ที่ทำให้นาฬิกาปลุกไม่ทำงาน</string>
+	<string name="description_onboarding_how_to_use_features">บางสิ่งอาจซ่อนอยู่หรือทำให้สับสน นี่คือวิธีการจัดการกับสิ่งเหล่านั้น</string>
+	<string name="description_onboarding_how_to_copy_and_delete">ปัดนาฬิกาปลุกหรือตัวจับเวลาไปทางขวาเพื่อคัดลอก และปัดไปทางซ้ายเพื่อลบ</string>
+	<string name="description_onboarding_how_to_get_more_options">กดปุ่มใดก็ได้ในนาฬิกาปลุก/ตัวจับเวลาแบบขยายค้างไว้เพื่อเข้าถึงตัวเลือกเพิ่มเติม คุณยังสามารถลองใช้กับบัตรนาฬิกาปลุกเพื่อดูตัวเลือกต่างๆ เช่น "ข้ามนาฬิกาปลุกครั้งถัดไป" และอื่นๆ ได้อีกด้วย</string>
+	<string name="description_onboarding_how_to_change_appearance">ไปที่ การตั้งค่า > ลักษณะที่ปรากฏ เพื่อค้นหาตัวเลือกการปรับแต่งทั้งหมด และปรับแต่งแอปให้มีลักษณะตามที่คุณต้องการ</string>
+	<string name="description_slide_to_snooze">เลื่อนเพื่อเลื่อนปลุก</string>
+	<string name="description_slide_to_dismiss">เลื่อนเพื่อปิด</string>
+	<string name="description_alarm_activity">สแกนแท็ก NFC เพื่อปิดเสียงเตือน</string>
+	<string name="description_no_notification">อย่าแสดงการแจ้งเตือน</string>
+	<string name="description_upcoming_reminder">แจ้งเตือนสำหรับนาฬิกาปลุกที่จะเริ่มทำงานในเร็วๆ นี้</string>
+	<string name="description_active_alarm">สัญญาณเตือนภัยที่กำลังทำงานอยู่</string>
+	<string name="description_active_timer">ตัวจับเวลาที่กำลังทำงานอยู่</string>
+	<string name="description_missed_alarm">สัญญาณเตือนที่ถูกปิดโดยอัตโนมัติ</string>
+	<string name="description_skipped_alarm">นาฬิกาปลุกที่ถูกข้ามไป</string>
+	<string name="description_color">สีเลขฐานสิบหก</string>
+	<string name="description_day_button_style_filled">ปุ่มที่กรอกข้อมูลแล้ว</string>
+	<string name="description_day_button_style_outlined">ปุ่มที่มีเส้นขอบ</string>
+	<string name="description_should_show_card_button_labels_true">ปุ่มต่างๆ จะแสดงป้ายกำกับที่อยู่ด้านล่าง</string>
+	<string name="description_should_show_card_button_labels_false">ปุ่มต่างๆ จะแสดงเฉพาะไอคอนเท่านั้น</string>
+	<string name="description_media">เพลงหรือเสียงเรียกเข้า</string>
+	<string name="description_scan_nfc_tag_alarm">เมื่อสัญญาณเตือนดังขึ้น จะต้องสแกนแท็ก NFC เพื่อปิดสัญญาณเตือนนั้น</string>
+	<string name="description_scan_nfc_tag_timer">เมื่อตัวจับเวลาหมดเวลา จะต้องสแกนแท็ก NFC เพื่อปิดตัวจับเวลา</string>
+	<string name="description_select_nfc_tag_alarm">เลือกแท็ก NFC ที่จำเป็นสำหรับการปิดสัญญาณเตือนนี้เมื่อดังขึ้น หากเลือกมากกว่าหนึ่งแท็ก ก็สามารถใช้แท็กเหล่านั้นเพื่อปิดสัญญาณเตือนได้เช่นกัน</string>
+	<string name="description_select_nfc_tag_timer">เลือกแท็ก NFC ที่จำเป็นสำหรับการปิดตัวจับเวลาเมื่อหมดเวลา หากเลือกมากกว่าหนึ่งแท็ก ก็สามารถใช้แท็กเหล่านั้นในการปิดตัวจับเวลาได้เช่นกัน</string>
+	<string name="description_nfc_tag_dismiss_order">ลำดับที่ควรลบแท็ก NFC ด้านบน การเปิดใช้งานตัวเลือกนี้หมายความว่าแท็ก NFC ที่เลือกทั้งหมดจะต้องถูกสแกนก่อนจึงจะสามารถลบได้</string>
+	<string name="description_start_timer_on_single_nfc_tag_scan">เมื่อแอปทำงานอยู่และมีการสแกนแท็ก NFC (ไม่ใช่ในหน้าจอนี้) ตัวจับเวลาจะเริ่มทำงานโดยอัตโนมัติ</string>
+	<string name="description_start_timer_on_multiple_nfc_tag_scan">เมื่อแอปทำงานอยู่และมีการสแกนแท็ก NFC ที่เลือกไว้ (ไม่ใช่ในหน้าจอนี้) ตัวจับเวลาจะเริ่มทำงานโดยอัตโนมัติ</string>
+	<string name="description_add_or_replace_nfc_tag">ควรเพิ่มแท็ก NFC ลงในรายการแท็ก NFC ที่สามารถใช้ปิดสัญญาณเตือนนี้ได้หรือไม่ หรือควรใช้แท็ก NFC นี้แทนที่แท็ก NFC อื่นๆ ที่สัญญาณเตือนนี้ใช้งานอยู่?</string>
+	<string name="description_save_nfc_tag">คุณสามารถนำแท็ก NFC นี้กลับมาใช้ใหม่ได้โดยไม่ต้องสแกนอีกครั้ง เพียงแค่ตั้งชื่อให้กับแท็ก</string>
+	<string name="description_repeat_frequency">ตั้งค่าให้นาฬิกาปลุกดังซ้ำตามความถี่ที่กำหนด (ทุกๆ ระยะเวลา X) หมายเหตุ: การเลือกนาที ชั่วโมง หรือวัน จะเป็นการล้างค่าการตั้งค่านาฬิกาปลุกทั้งหมด</string>
+	<string name="description_exclude_date_time_range">นาฬิกาปลุกจะไม่ดังในช่วงวัน/เวลาดังกล่าว</string>
+	<string name="description_repeat_frequency_days_to_run_before_starting">ควรตั้งค่าการแจ้งเตือนให้ทำงานในวันใดของสัปดาห์นี้ก่อนที่จะเริ่มตั้งค่าความถี่</string>
+	<string name="description_vibrate_vibration_duration">ควรสั่นนานแค่ไหน และควรเว้นระยะเวลานานเท่าใดระหว่างการสั่นแต่ละครั้ง</string>
+	<string name="description_vibrate_custom_pattern">ทำซ้ำการสั่นตามจำนวนครั้งที่กำหนด แล้วรอเป็นระยะเวลาหนึ่ง</string>
+	<string name="description_flashlight_brightness_level">ระดับความสว่างของไฟฉาย</string>
+	<string name="description_flashlight_blink_on_off">เปิดและปิดไฟฉายตามระยะเวลาที่กำหนด</string>
+	<string name="description_text_to_speech_what_to_say_alarm">ควรพูดอะไรผ่านระบบแปลงข้อความเป็นเสียงเมื่อสัญญาณเตือนดังขึ้น</string>
+	<string name="description_text_to_speech_what_to_say_timer">ควรพูดอะไรผ่านระบบแปลงข้อความเป็นเสียงเมื่อตัวจับเวลาทำงานอยู่</string>
+	<string name="description_text_to_speech_speak_frequency">ควรพูดประโยคที่เลือกไว้ข้างต้นบ่อยแค่ไหน</string>
+	<string name="description_text_to_speech_speech_rate">ระบบแปลงข้อความเป็นเสียงควรพูดเร็วแค่ไหน</string>
+	<string name="description_volume_gradually_increase_volume_alarm">เพิ่มระดับเสียงของสัญญาณเตือนตามความถี่ที่ตั้งไว้</string>
+	<string name="description_volume_gradually_increase_volume_timer">เพิ่มระดับเสียงของตัวจับเวลาตามความถี่ที่ตั้งไว้</string>
+	<string name="description_volume_restrict_volume_alarm">ไม่สามารถลดระดับเสียงได้เมื่อสัญญาณเตือนดังขึ้น</string>
+	<string name="description_volume_restrict_volume_timer">ไม่สามารถลดระดับเสียงได้เมื่อตัวจับเวลาหมดเวลาลง</string>
+	<string name="description_dismiss_options_auto_dismiss_alarm">ปิดสัญญาณเตือนโดยอัตโนมัติหลังจากผ่านไประยะเวลาที่กำหนด</string>
+	<string name="description_dismiss_options_auto_dismiss_timer">ตั้งค่าให้ตัวจับเวลาหยุดทำงานโดยอัตโนมัติหลังจากผ่านไประยะเวลาที่กำหนด</string>
+	<string name="description_dismiss_options_dismiss_early">ปิดสัญญาณเตือนแต่เนิ่นๆ ก่อนที่มันจะดังขึ้น</string>
+	<string name="description_dismiss_options_dismiss_early_notification">แสดงการแจ้งเตือนเมื่อสามารถปิดเสียงเตือนได้ก่อนเวลา</string>
+	<string name="description_dismiss_options_delete_after_dismissed_alarm">การแจ้งเตือนจะถูกลบหลังจากปิดการแจ้งเตือนแล้ว</string>
+	<string name="description_dismiss_options_delete_after_dismissed_timer">ตัวจับเวลาจะถูกลบหลังจากปิดหน้าต่างแล้ว</string>
+	<string name="description_dismiss_options_volume_dismiss_alarm">ปิดเสียงเตือนโดยกดปุ่มเพิ่มหรือลดระดับเสียง</string>
+	<string name="description_dismiss_options_volume_dismiss_timer">ปิดตัวจับเวลาโดยกดปุ่มเพิ่มหรือลดระดับเสียง</string>
+	<string name="description_snooze_options_auto_snooze">ตั้งค่าให้เลื่อนปลุกอัตโนมัติหลังจากเวลาที่กำหนด</string>
+	<string name="description_snooze_options_max_snooze">จำนวนครั้งสูงสุดที่สามารถเลื่อนการปลุกได้</string>
+	<string name="description_snooze_options_snooze_duration">ระยะเวลาที่สามารถเลื่อนนาฬิกาปลุกได้</string>
+	<string name="description_snooze_options_easy_snooze">เลื่อนการปลุกโดยแตะที่ใดก็ได้บนหน้าจอนาฬิกาปลุก</string>
+	<string name="description_snooze_options_volume_snooze">เลื่อนปลุกโดยกดปุ่มเพิ่มหรือลดระดับเสียง</string>
+	<string name="description_upcoming_reminder_show_reminder">แสดงการแจ้งเตือนก่อนที่นาฬิกาปลุกจะดังขึ้น</string>
+	<string name="description_upcoming_reminder_how_early">ควรแสดงการแจ้งเตือนล่วงหน้านานแค่ไหน?</string>
+	<string name="description_upcoming_reminder_how_frequent">ควรแสดงการแจ้งเตือนบ่อยแค่ไหน?</string>
+	<string name="description_upcoming_reminder_text_to_speech">เมื่อมีการแจ้งเตือนปรากฏขึ้น ให้ใช้ฟังก์ชันแปลงข้อความเป็นเสียงของนาฬิกาปลุก</string>
+	<string name="example_name">งาน</string>
+	<string name="description_setting_general">การตั้งค่าสัญญาณเตือนทั่วไป</string>
+	<string name="description_setting_appearance">ปรับแต่งรูปลักษณ์ของแอป</string>
+	<string name="description_setting_about">ข้อมูลเกี่ยวกับแอป</string>
+	<string name="description_setting_help">หากมีปัญหาหรือข้อเสนอแนะใดๆ โปรดแจ้งให้ทราบได้เลยครับ</string>
+	<string name="description_setting_statistics">ดูว่าคุณกดปุ่มเลื่อนปลุกนานแค่ไหน และอื่นๆ อีกมากมาย</string>
+	<string name="description_setting_manage_nfc_tags">ลบหรือเปลี่ยนชื่อแท็ก NFC ที่บันทึกไว้</string>
+	<string name="description_setting_support">การสนับสนุนจะเป็นที่น่ายินดีอย่างยิ่ง แต่ไม่ต้องกดดันนะครับ! แอปนี้จะให้บริการฟรีตลอดไป</string>
+	<string name="description_setting_import_export">นำเข้าหรือส่งออกข้อมูลที่คุณบันทึกไว้ทั้งหมด</string>
+	<string name="description_toggle_alarms_with_airplane_mode_on">ปิดสัญญาณเตือนทั้งหมดเนื่องจากการเปลี่ยนโหมดเครื่องบิน</string>
+	<string name="description_toggle_alarms_with_airplane_mode_off">เปิดใช้งานสัญญาณเตือนทั้งหมดเนื่องจากการเปลี่ยนโหมดเครื่องบิน</string>
+	<string name="description_use_new_screen_true">ใช้หน้าจอนาฬิกาปลุกแบบใหม่ ที่คุณสามารถปัดนิ้วเพื่อเลื่อนเวลาปลุกหรือปิดนาฬิกาปลุกได้</string>
+	<string name="description_use_new_screen_false">อย่าใช้หน้าจอตั้งปลุกแบบใหม่ ให้ใช้หน้าจอเดิมที่มีปุ่มกดง่ายๆ สำหรับเลื่อนปลุกหรือปิดการปลุกแทน</string>
+	<string name="description_alarm_screen_show_alarm_name_true">แสดงชื่อสัญญาณเตือนในหน้าจอสัญญาณเตือน</string>
+	<string name="description_alarm_screen_show_alarm_name_false">อย่าแสดงชื่อสัญญาณเตือน</string>
+	<string name="description_alarm_screen_show_current_date_and_time_true">แสดงวันที่และเวลาปัจจุบันในหน้าจอตั้งปลุก</string>
+	<string name="description_alarm_screen_show_current_date_and_time_false">ไม่ต้องแสดงวันที่และเวลาปัจจุบัน</string>
+	<string name="description_alarm_screen_show_music_info_true">แสดงข้อมูลเกี่ยวกับเพลงหรือเสียงเรียกเข้าที่กำลังเล่นอยู่ในหน้าจอนาฬิกาปลุก</string>
+	<string name="description_alarm_screen_show_music_info_false">อย่าแสดงข้อมูลเพลงหรือเสียงเรียกเข้า</string>
+	<string name="description_alarm_screen_battery_saver_true">ประหยัดแบตเตอรี่โดยการปิดหน้าจอเมื่อตั้งนาฬิกาปลุกไว้ คุณจะต้องเปิดหน้าจอด้วยตนเอง</string>
+	<string name="description_alarm_screen_battery_saver_false">หน้าจอจะเปิดโดยอัตโนมัติเมื่อมีการแจ้งเตือน</string>
+	<string name="description_toggle_alarms_with_airplane_mode_true">หากเปิดโหมดเครื่องบินไว้ในขณะที่นาฬิกาปลุกดังขึ้น ระบบจะข้ามการแจ้งเตือนใดๆ ไป</string>
+	<string name="description_toggle_alarms_with_airplane_mode_false">ระบบเตือนภัยจะทำงานตามปกติ</string>
+	<string name="description_color_theme">สีหลักของธีม</string>
+	<string name="description_color_name">เช่น งาน</string>
+	<string name="description_color_days">เช่น จันทร์ &#8231; อ &#8231; พุ &#8231; พฤ &#8231; ศ</string>
+	<string name="description_color_time">เช่น 12:30 น.</string>
+	<string name="description_color_am">จะแสดงสีหาก AM อยู่ในช่วงเวลาปลุก</string>
+	<string name="description_color_pm">จะแสดงสีหาก PM อยู่ในช่วงเวลาปลุก</string>
+	<string name="description_color_delete_alarm_after_dismissed">ไอคอนนี้ใช้เพื่อแสดงว่าการแจ้งเตือนจะถูกลบหลังจากปิดการแจ้งเตือนแล้ว</string>
+	<string name="description_color_skip_next_alarm">ไอคอนนี้ใช้เพื่อระบุว่าการตั้งปลุกครั้งต่อไปจะถูกข้ามไป</string>
+	<string name="description_missed_alarm_true">แสดงการแจ้งเตือนสำหรับนาฬิกาปลุกที่พลาดไป</string>
+	<string name="description_show_hide_vibrate_button_true">แสดงปุ่มสั่นเมื่อขยายการตั้งค่าการแจ้งเตือน</string>
+	<string name="description_show_hide_vibrate_button_false">ซ่อนปุ่มสั่นเมื่อขยายการตั้งค่าการแจ้งเตือน</string>
+	<string name="description_show_hide_nfc_button_true">แสดงปุ่ม NFC เมื่อขยายการตั้งค่าการแจ้งเตือน</string>
+	<string name="description_show_hide_nfc_button_false">ซ่อนปุ่ม NFC เมื่อขยายการตั้งค่าการแจ้งเตือน</string>
+	<string name="description_show_hide_flashlight_button_true">แสดงปุ่มไฟฉายเมื่อขยายการแจ้งเตือน</string>
+	<string name="description_show_hide_flashlight_button_false">ซ่อนปุ่มไฟฉายเมื่อขยายการตั้งค่าการแจ้งเตือน</string>
+	<string name="description_expand_new_alarm_true">สัญญาณเตือนที่คัดลอกหรือสร้างขึ้นโดยใช้ปุ่ม &#8220;+&#8221; จะถูกขยายออก</string>
+	<string name="description_expand_new_alarm_false">สัญญาณเตือนภัยไม่ได้ถูกขยายเพิ่มเติม</string>
+	<string name="description_start_week_on">สัปดาห์ที่แสดงในตารางนาฬิกาปลุกแบบขยายจะเริ่มต้นในวันนี้</string>
+	<string name="description_next_alarm_format">รูปแบบที่ใช้ในการแสดงเวลาที่นาฬิกาปลุกจะดังครั้งต่อไป</string>
+	<string name="description_next_alarm_format_time_in">นาฬิกาปลุกครั้งต่อไปในอีก 7 ชั่วโมง 30 นาที</string>
+	<string name="description_next_alarm_format_time_on">ตั้งปลุกครั้งต่อไปวันจันทร์ เวลา 7:00 น.</string>
+	<string name="description_permission_disable_battery_optimization">แอปจะไม่เข้าสู่โหมดพักการทำงาน ทำให้สามารถตั้งนาฬิกาปลุกได้ตามปกติ</string>
+	<string name="description_permission_nfc">ตรวจจับแท็ก NFC เพื่อปิดการแจ้งเตือน</string>
+	<string name="description_permission_storage">อ่านโน้ตเพลงที่จัดเก็บไว้ในอุปกรณ์ของคุณ</string>
+	<string name="description_permission_vibrate">ตั้งค่าอุปกรณ์ให้สั่นเมื่อมีการเปิดใช้งานสัญญาณเตือน</string>
+	<string name="description_permission_foreground_service">เรียกใช้บริการที่ทำงานอยู่เบื้องหน้าเพื่อเล่นเสียง สั่นอุปกรณ์ของคุณ ฯลฯ เมื่อมีการแจ้งเตือน</string>
+	<string name="description_permission_full_screen_intent">เมื่อมีการแจ้งเตือน ให้ใช้โหมดเต็มหน้าจอ</string>
+	<string name="description_permission_schedule_alarm">ตั้งเวลาปลุกให้แม่นยำ</string>
+	<string name="description_permission_set_alarm">ตั้งนาฬิกาปลุกจากแหล่งภายนอก เช่น Google Assistant</string>
+	<string name="description_permission_post_notifications">แสดงการแจ้งเตือนเมื่อมีการเปิดใช้งานนาฬิกาปลุก เพื่อป้องกันไม่ให้แอปเข้าสู่โหมดพักการทำงานและปิดนาฬิกาปลุกโดยอัตโนมัติ</string>
+	<string name="description_permission_system_alert_window">ตรวจสอบให้แน่ใจว่าหน้าจอการตั้งค่าการแจ้งเตือนแสดงขึ้น ซึ่งเป็นข้อกำหนดสำหรับการเล่นเสียง หากแอปอยู่ในโหมดพื้นหลังและไม่ได้ใช้งานมาระยะหนึ่งแล้ว ปัญหานี้อาจเกิดขึ้นเฉพาะกับ Android 15 เท่านั้น</string>
+	<string name="description_permission_boot">กู้คืนการแจ้งเตือนเมื่ออุปกรณ์ของคุณเปิดอยู่ ระบบ Android จะลบการแจ้งเตือนเมื่ออุปกรณ์ของคุณปิดอยู่</string>
+	<string name="description_permission_wakelock">ป้องกันไม่ให้อุปกรณ์ของคุณเข้าสู่โหมดพักเครื่อง เพื่อให้เสียงเตือนที่เปิดใช้งานยังคงดังต่อไป</string>
+	<string name="message_debug_mode_on">บันทึกข้อมูลลงในไฟล์บันทึกเพื่อช่วยในการแก้ไขปัญหา อาจส่งผลกระทบต่อประสิทธิภาพการทำงานเล็กน้อย</string>
+	<string name="message_debug_mode_off">อย่าบันทึกข้อมูลลงในไฟล์บันทึก นี่คือโหมดปกติ</string>
+	<string name="message_share_logs_with_developer">กรุณาส่งไฟล์บันทึกข้อมูล (log) มาให้ทางอีเมล เพื่อให้เราสามารถตรวจสอบสาเหตุของปัญหาได้</string>
+	<string name="message_send_email">หากมีปัญหา คำถาม หรือข้อเสนอแนะใด ๆ โปรดส่งอีเมลมาได้เลย</string>
+	<string name="description_audio_sources_alarm">ช่องสัญญาณเสียงที่จะใช้เล่นเสียงปลุก</string>
+	<string name="description_audio_sources_timer">ช่องสัญญาณเสียงที่จะใช้เล่นตัวจับเวลา</string>
+	<string name="description_widget_alarm_example">สัญญาณเตือนภัยที่แสดงในตัวอย่างเป็นเพียงตัวอย่างเท่านั้น</string>
+	<string name="description_text_to_speech_voice">เสียงที่จะใช้สำหรับการแปลงข้อความเป็นเสียงพูด</string>
+	<string name="description_only_show_app_alarms">เฉพาะการแจ้งเตือนจากแอปนี้เท่านั้นที่จะแสดงในวิดเจ็ต</string>
+	<string name="description_show_any_alarms">การแจ้งเตือนที่สร้างไว้ในแอปใด ๆ จะแสดงในวิดเจ็ต</string>
+
+	<!-- Content descriptions -->
+	<string name="cd_alarm_list">รายการสัญญาณเตือนจะแสดงอยู่ที่นี่</string>
+	<string name="cd_timer_list">รายชื่อตัวจับเวลาจะแสดงอยู่ที่นี่</string>
+	<string name="cd_nfc_tag_list">รายชื่อแท็ก NFC จะแสดงอยู่ที่นี่</string>
+	<string name="cd_fab_add_alarm">เพิ่มนาฬิกาปลุกใหม่</string>
+	<string name="cd_fab_launch_system_file_browser">เปิดโปรแกรมจัดการไฟล์ของระบบ</string>
+	<string name="cd_expand_alarm">ขยายสัญญาณเตือนภัย</string>
+	<string name="cd_volume_icon">ปรับระดับเสียงของนาฬิกาปลุก</string>
+	<string name="cd_volume_slider">เลื่อนเพื่อเปลี่ยนระดับเสียงของนาฬิกาปลุก</string>
+	<string name="cd_alarm_options">เปลี่ยนตัวเลือกเฉพาะสำหรับการแจ้งเตือน</string>
+	<string name="cd_color_example">ตัวอย่างสีปัจจุบัน</string>
+	<string name="cd_file_entry">ประเภทของรายการที่แสดง เช่น ไฟล์หรือโฟลเดอร์</string>
+	<string name="cd_color_selector">เลือกสีสำหรับตัวเลือกสี</string>
+	<string name="cd_shader_selector">เลือกเฉดสีจากตัวเลือกสี</string>
+	<string name="cd_request_permission_ignore_battery_optimization">ขอปิดใช้งานการเพิ่มประสิทธิภาพแบตเตอรี่</string>
+	<string name="cd_request_permission_post_notifications">ขออนุญาตโพสต์การแจ้งเตือน</string>
+	<string name="cd_request_permission_schedule_exact_alarm">ขอให้ตั้งค่าการแจ้งเตือนอย่างแม่นยำ</string>
+	<string name="cd_request_permission_system_alert_window">ขออนุญาตแสดงแอปนี้ทับแอปอื่นๆ</string>
+	<string name="cd_whats_new">รายการสิ่งที่เพิ่มเข้ามาใหม่ในแอปเวอร์ชันนี้</string>
+	<string name="cd_scan_nfc">สแกนแท็ก NFC</string>
+	<string name="cd_alarm_slider_arrow">ทิศทางการปัดนิ้วของคุณ</string>
+	<string name="cd_dismiss_alarm">ปิดสัญญาณเตือน</string>
+	<string name="cd_snooze_alarm">เลื่อนนาฬิกาปลุก</string>
+	<string name="cd_current_alarm_media_playing">สื่อเตือนภัยที่กำลังเล่นอยู่ขณะนี้</string>
+	<string name="cd_skip_next_alarm">ข้ามการตั้งปลุกครั้งถัดไป</string>
+	<string name="cd_delete_alarm_after_dismissed">ลบการแจ้งเตือนหลังจากปิดการแจ้งเตือนแล้ว</string>
+	<string name="cd_clock_widget_alarm_icon">สัญญาณเตือนถัดไป</string>
+	<string name="cd_permission_check_mark">เครื่องหมายถูกแสดงว่าได้รับอนุญาตแล้ว</string>
+	<string name="cd_request_permission_icon">ไอคอนขออนุญาต</string>
+	<string name="cd_swipe">ปัด</string>
+	<string name="cd_long_press">กดค้าง</string>
+	<string name="cd_customize">ปรับแต่ง</string>
+	<string name="cd_preference_icon">ไอคอนการตั้งค่า</string>
+
+	<!-- Plural alarms -->
+	<plurals name="alarm">
+		<item quantity="other">สัญญาณเตือน %d</item>
+	</plurals>
+
+	<plurals name="missed_alarm">
+		<item quantity="other">%d สัญญาณเตือนที่พลาดไป</item>
+	</plurals>
+
+	<plurals name="skipped_alarm">
+		<item quantity="other">ข้ามการตั้งปลุก</item>
+	</plurals>
+
+	<!-- Plural units -->
+	<plurals name="unit_second">
+		<item quantity="other">%d วินาที</item>
+	</plurals>
+
+	<plurals name="unit_minute">
+		<item quantity="other">%d นาที</item>
+	</plurals>
+
+	<plurals name="unit_hour">
+		<item quantity="other">%d ชั่วโมง</item>
+	</plurals>
+
+	<plurals name="unit_day">
+		<item quantity="other">%d วัน</item>
+	</plurals>
+
+	<plurals name="unit_week">
+		<item quantity="other">สัปดาห์ที่ %d</item>
+	</plurals>
+
+	<plurals name="unit_month">
+		<item quantity="other">%d เดือน</item>
+	</plurals>
+
+	<!-- Plural repeats -->
+	<plurals name="repeat_minutely">
+		<item quantity="other">ทุกๆ %d นาที</item>
+	</plurals>
+
+	<plurals name="repeat_hourly">
+		<item quantity="other">ทุกๆ %d ชั่วโมง</item>
+	</plurals>
+
+	<plurals name="repeat_daily">
+		<item quantity="other">ทุกๆ %d วัน</item>
+	</plurals>
+
+	<plurals name="repeat_weekly">
+		<item quantity="other">ทุกๆ %d สัปดาห์</item>
+	</plurals>
+
+	<plurals name="repeat_monthly">
+		<item quantity="other">ทุกๆ %d เดือน</item>
+	</plurals>
+
+	<!-- Plural numbers -->
+	<plurals name="number_of_times">
+		<item quantity="other">%1$d ครั้ง</item>
+	</plurals>
+
+	<plurals name="number_of_snoozes_left">
+		<item quantity="other">(เหลือ %1$d ของวันที่)</item>
+	</plurals>
+
+	<!-- Plural TTS -->
+	<plurals name="tts_say_reminder">
+		<item quantity="other">แจ้งเตือน. %1$s จะเริ่มทำงานในอีก %2$d นาที</item>
+	</plurals>
+
+	<string name="tts_say_time">เวลาคือ %1$s:%2$s %3$s.</string>
+
+	<!-- Plural misc -->
+	<plurals name="import_cleared_media_due_to_not_found">
+		<item quantity="other">ล้างสื่อใน %1$d alarms/timers เนื่องจากไม่พบสื่อ</item>
+	</plurals>
+
+	<string name="float_duration_seconds">{count, plural, one{{count} วินาที} other{{count} วินาที}}</string>
+
+</resources>

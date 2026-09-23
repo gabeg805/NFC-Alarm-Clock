@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<!-- Days of week abbreviated -->
+	<string-array name="days_of_week_abbr">
+		<item>日</item>
+		<item>月</item>
+		<item>火</item>
+		<item>水</item>
+		<item>木</item>
+		<item>金</item>
+		<item>土</item>
+	</string-array>
+
+	<!-- Days of week one letter -->
+	<string-array name="days_of_week_one_letter">
+		<item>日</item>
+		<item>月</item>
+		<item>火</item>
+		<item>水</item>
+		<item>木</item>
+		<item>金</item>
+		<item>土</item>
+	</string-array>
+
+	<!-- Audio sources -->
+	<string-array name="audio_sources">
+		<item>アラーム</item>
+		<item>電話</item>
+		<item>メディア</item>
+		<item>通知</item>
+		<item>着信音</item>
+	</string-array>
+
+	<!-- NFC tag dismiss orders -->
+	<string-array name="nfc_tag_dismiss_orders">
+		<item>ランダム</item>
+		<item>一連</item>
+	</string-array>
+
+</resources>

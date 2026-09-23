@@ -1,0 +1,626 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+	<!-- App -->
+	<string name="app_name">NFC対応目覚まし時計</string>
+	<string name="app_developer">ゲイブ・ゴンザレス</string>
+
+	<!-- Consolidate -->
+	<string name="version">バージョン</string>
+	<string name="am">午前</string>
+	<string name="pm">午後</string>
+	<string name="none">なし</string>
+	<string name="show_next_alarm">次のアラームを表示</string>
+	<string name="background">背景</string>
+	<string name="time_layout">時間構成</string>
+	<string name="date_layout">日付レイアウト</string>
+	<string name="alarm_layout">アラームレイアウト</string>
+	<string name="show">見せる</string>
+	<string name="bold">大胆な</string>
+	<string name="color">色</string>
+	<string name="text_size">テキストサイズ</string>
+	<string name="colon">:</string>
+	<string name="icon">アイコン</string>
+	<string name="transparency">透明性</string>
+	<string name="hour">時間</string>
+	<string name="minutes">分</string>
+	<string name="am_pm">午前/午後</string>
+
+	<!-- Day names -->
+	<string name="dow_everyday">日常</string>
+	<string name="dow_weekdays">平日</string>
+	<string name="dow_weekend">週末</string>
+	<string name="dow_today">今日</string>
+	<string name="dow_tomorrow">明日</string>
+
+	<!-- Words/numbers -->
+	<string name="word_app">アプリ</string>
+	<string name="word_version">バージョン</string>
+	<string name="word_of">の</string>
+	<string name="word_alarm">アラーム</string>
+	<string name="word_alarms">アラーム</string>
+	<string name="word_timer">タイマー</string>
+	<string name="word_timers">タイマー</string>
+	<string name="word_reminder">リマインダー</string>
+	<string name="word_more">もっと</string>
+	<string name="word_allow">許可する</string>
+	<string name="word_back">戻る</string>
+	<string name="word_next">次</string>
+	<string name="word_finish">仕上げる</string>
+	<string name="word_once">一度</string>
+	<string name="word_unlimited">無制限</string>
+	<string name="letter_h">時</string>
+	<string name="letter_m">分</string>
+	<string name="letter_s">秒</string>
+	<string name="number00">00</string>
+	<string name="number0">0</string>
+	<string name="number1">1</string>
+	<string name="number2">2</string>
+	<string name="number3">3</string>
+	<string name="number4">4</string>
+	<string name="number5">5</string>
+	<string name="number6">6</string>
+	<string name="number7">7</string>
+	<string name="number8">8</string>
+	<string name="number9">9</string>
+
+	<!-- Timer add time -->
+	<string name="timer_add_1min">+ 1分</string>
+	<string name="timer_add_30sec">+ 30秒</string>
+	<string name="timer_add_5sec">+ 5秒</string>
+
+	<!-- States -->
+	<string name="state_unknown">未知</string>
+
+	<!-- Actions -->
+	<string name="action_get_started">さあ始めましょう</string>
+	<string name="action_alarm_snooze">スヌーズ</string>
+	<string name="action_alarm_dismiss">却下する</string>
+	<string name="action_alarm_dismiss_early">早めに解雇する</string>
+	<string name="action_alarm_copy">コピー</string>
+	<string name="action_alarm_delete">消去</string>
+	<string name="action_timer_pause">一時停止</string>
+	<string name="action_timer_resume">再開する</string>
+	<string name="action_timer_stop">停止</string>
+	<string name="action_yes">はい</string>
+	<string name="action_no">いいえ</string>
+	<string name="action_ok">OK</string>
+	<string name="action_cancel">キャンセル</string>
+	<string name="action_clear">クリア</string>
+	<string name="action_clear_reminder">明確な注意喚起</string>
+	<string name="action_default">デフォルト</string>
+	<string name="action_done">終わり</string>
+	<string name="action_preview">プレビュー</string>
+	<string name="action_stop_preview">プレビューを停止</string>
+	<string name="action_show_nfc_tag_id">NFCタグを表示する</string>
+	<string name="action_use_any">どのNFCタグでも使用できます</string>
+	<string name="action_add">追加</string>
+	<string name="action_replace">交換する</string>
+	<string name="action_save">保存</string>
+	<string name="action_skip">スキップ</string>
+	<string name="action_undo">元に戻す</string>
+	<string name="action_browse">ブラウズ</string>
+	<string name="action_previous_folder">前のフォルダ</string>
+	<string name="action_reset">リセット</string>
+	<string name="action_email">メール</string>
+	<string name="action_shuffle_music">シャッフル音楽</string>
+	<string name="action_recursively_play_media">サブフォルダーを含める</string>
+	<string name="action_alarm_option_audio_source">音声ソース</string>
+	<string name="action_alarm_option_flashlight">懐中電灯</string>
+	<string name="action_alarm_option_text_to_speech">テキスト読み上げ</string>
+	<string name="action_alarm_option_volume">音量</string>
+	<string name="action_alarm_option_upcoming_reminder">今後のリマインダー</string>
+	<string name="action_delete_alarm_after_dismissed">解雇後に削除</string>
+	<string name="action_skip_next_alarm">次のアラームをスキップする</string>
+	<string name="action_unskip_next_alarm">次のアラームのスキップを解除する</string>
+	<string name="action_export">輸出</string>
+	<string name="action_import">輸入</string>
+	<string name="action_center">中心</string>
+	<string name="action_left">左</string>
+	<string name="action_right">右</string>
+	<string name="action_above_date">上記の日付</string>
+	<string name="action_below_date">下記の日付</string>
+	<string name="action_same_line_as_date">日付と同じ行</string>
+
+	<!-- Labels -->
+	<string name="label_created_statistic">作成済み</string>
+	<string name="label_deleted_statistic">削除済み</string>
+	<string name="label_dismissed_statistic">解雇された</string>
+	<string name="label_missed_statistic">見逃した</string>
+	<string name="label_snoozed_statistic">うたた寝をした</string>
+	<string name="label_created_statistic_header">作成時間</string>
+	<string name="label_deleted_statistic_header">削除時刻、名前、アラーム時刻</string>
+	<string name="label_dismissed_statistic_header">解除時刻、名前、アラーム時刻、NFC使用</string>
+	<string name="label_missed_statistic_header">欠席時間、名前、アラーム時刻</string>
+	<string name="label_snoozed_statistic_header">スヌーズ時間、名前、アラーム時刻、スヌーズ時間（秒）</string>
+	<string name="label_clock_widget">クロック</string>
+	<string name="label_start">始める</string>
+	<string name="label_end">終わり</string>
+
+	<!-- Messages -->
+	<string name="message_permission_ignore_battery_optimization_request">アプリがしばらく使用されていない場合にアラームが実行されないように、権限を許可してください。&lt;br/>&lt;br/>&lt;b>注:&lt;/b>これはお使いのデバイスによって異なり、&lt;b>実際には必要ない場合があります&lt;/b>。</string>
+	<string name="message_permission_post_notifications_request">アプリがアクティブでないときにアラームを実行する権限を許可します。&lt;br/>&lt;br/>&lt;b>注:&lt;/b> これは、ユーザーにとって有益なセキュリティ ポリシーが Android 13 で導入されたことによる副作用です。ただし、このような場合にはアプリの動作が制限される可能性があります。</string>
+	<string name="message_permission_post_notifications_warning">通知権限を有効にしてください。有効にしないとアラームが作動しない場合があります。</string>
+	<string name="message_permission_schedule_exact_alarm_request">アラームがスケジュールされた時刻に正確に作動するよう許可する。</string>
+	<string name="message_permission_system_alert_window_request">他のアプリの上にアプリを表示する権限を許可しますか？&lt;br/>&lt;br/>これにより、アプリがバックグラウンドにある場合に、アラーム画面が表示されるようになります。これは、音声を再生するために必要な条件です。&lt;br/>&lt;br/>&lt;b>注:&lt;/b>これはAndroid 15のみに影響します。</string>
+	<string name="message_playlist">このフォルダ内のすべての音楽を再生しますか？</string>
+	<string name="message_nfc_enable_on_device_request">デバイスでNFCを有効にしてください。</string>
+	<string name="message_nfc_optional">NFCはオプションです</string>
+	<string name="message_nfc_required_unsaved">NFCが必要</string>
+	<string name="message_nfc_required_saved">NFCが必要です — %1$s</string>
+	<string name="message_nfc_required_use_any">NFC機能が必要です（どのNFCでも構いません）</string>
+	<string name="message_nfc_screen_locked">NFCを使用するには、デバイスのロックを解除してください。</string>
+	<string name="message_show_nfc_tag_id">ID</string>
+	<string name="message_delete_nfc_tag">このNFCタグを削除してもよろしいですか？</string>
+	<string name="message_rename_nfc_tag">NFCタグの名前を何に変更しますか？</string>
+	<string name="message_flashlight_on_duration">の上：</string>
+	<string name="message_flashlight_off_duration">オフ：</string>
+	<string name="message_no_alarms_scheduled">アラームは設定されていません。</string>
+	<string name="message_alarm_repeat_disabled">アラームを繰り返さない</string>
+	<string name="message_alarm_repeat_enabled">アラームを繰り返す</string>
+	<string name="message_timer_repeat_disabled">タイマーを繰り返さない</string>
+	<string name="message_timer_repeat_enabled">タイマーを繰り返す</string>
+	<string name="message_vibrate_disabled">振動をオフにする</string>
+	<string name="message_vibrate_enabled">振動オン</string>
+	<string name="message_flashlight_disabled">懐中電灯は使用しないでください</string>
+	<string name="message_flashlight_enabled">懐中電灯を使う</string>
+	<string name="message_alarm_copy">アラームをコピーしました</string>
+	<string name="message_timer_copy">タイマーをコピーしました</string>
+	<string name="message_alarm_delete">アラームを削除しました</string>
+	<string name="message_timer_delete">タイマーを削除しました</string>
+	<string name="message_alarm_restore">アラームを復旧しました</string>
+	<string name="message_timer_restore">タイマーを復元しました</string>
+	<string name="message_alarm_dismiss">警報を解除しました</string>
+	<string name="message_alarm_snooze">アラームをスヌーズしました</string>
+	<string name="message_timer_dismiss">タイマーを解除しました</string>
+	<string name="message_statistics_started_on">統計は</string>
+	<string name="message_bullet">\u25BA</string>
+	<string name="message_required">必須</string>
+	<string name="message_optional">オプション</string>
+	<string name="message_already_have_permission">この権限は既に付与されています</string>
+	<string name="message_support_thank_you">ご支援ありがとうございます！</string>
+	<string name="message_reset_statistics">統計情報をすべてリセットしてもよろしいですか？</string>
+	<string name="message_tts_current_time">現在時刻</string>
+	<string name="message_tts_alarm_name">アラーム名</string>
+	<string name="message_tts_timer_name">タイマーの名前</string>
+	<string name="message_statistics_email_subject">NFCアラームクロックの統計情報</string>
+	<string name="message_skip_general_alarm">アラームはスキップされます。</string>
+	<string name="message_skip_named_alarm">&lt;b>%1$s&lt;/b>はスキップされます。</string>
+	<string name="message_skip_airplane_mode_alarm">機内モードのためアラームをスキップします</string>
+	<string name="message_disabled_general_alarm">アラームは無効になっています。</string>
+	<string name="message_disabled_named_alarm">&lt;b&gt;%1$s&lt;/b&gt; は無効になっています。</string>
+	<string name="message_will_run_on_general_alarm" tools:ignore="StringFormatCount">%2$sで動作します。</string>
+	<string name="message_will_run_on_named_alarm">&lt;b>%1$s&lt;/b>は%2$sで実行されます。</string>
+	<string name="message_will_run_in_general_alarm" tools:ignore="StringFormatCount">%2$s秒で実行されます。</string>
+	<string name="message_will_run_in_named_alarm">&lt;b>%1$s&lt;/b>は%2$sで実行されます。</string>
+	<string name="message_next_alarm_on">次のアラームは%1$sです</string>
+	<string name="message_next_alarm_in">次のアラームは%1$s秒後です</string>
+	<string name="message_export_started">輸出中…</string>
+	<string name="message_export_completed">エクスポートが完了しました</string>
+	<string name="message_import_started">インポート中…</string>
+	<string name="message_import_completed">インポートが完了しました</string>
+	<string name="message_selected_alarm_song_not_available">アラームに選択した曲が利用できません</string>
+	<string name="message_milliseconds">%1$d ms</string>
+	<string name="message_text_to_speech_default_voice">デフォルト音声</string>
+	<string name="message_text_to_speech_voice">音声 %1$d</string>
+	<string name="message_text_to_speech_network_required">音声通話にはネットワーク接続が必要な場合があります。</string>
+	<string name="message_volume_dismiss_priority">ボリュームの削除が優先されます</string>
+	<string name="message_volume_snooze_ignored">音量スヌーズ機能は無視されます</string>
+	<string name="message_current_alarm_within_exclude_range">注：現在のアラームは除外範囲内です。</string>
+
+	<!-- Error messages -->
+	<string name="error_message_active_delete">アクティブなアラームを削除できません</string>
+	<string name="error_message_active_modify">アクティブなアラームを変更できません</string>
+	<string name="error_message_max_alarms">作成可能なアラームの最大数</string>
+	<string name="error_message_max_timers">作成可能なタイマーの最大数</string>
+	<string name="error_message_nfc_mismatch">NFCタグが保存されているタグと一致しません。</string>
+	<string name="error_message_nfc_unsupported">お使いのデバイスはNFCに対応していません</string>
+	<string name="error_message_nfc_name_exists">この名前は既に使用されています</string>
+	<string name="error_message_unable_to_parse_nfc_id">NFC IDを解析できません</string>
+	<string name="error_message_nfc_id_exists">このNFC IDは既に使用されています</string>
+	<string name="error_message_unable_to_scan_nfc">NFCタグをスキャンできません</string>
+	<string name="error_message_snooze">アラームをスヌーズできません</string>
+	<string name="error_message_snoozed_delete">スヌーズしたアラームを削除できません</string>
+	<string name="error_message_snoozed_modify">スヌーズしたアラームを変更できません</string>
+	<string name="error_message_select_color">無効な16進数カラー</string>
+	<string name="error_message_play_audio">音声を再生できません</string>
+	<string name="error_message_google_play_billing">Google Playストアへの接続時にエラーが発生しました。</string>
+	<string name="error_message_text_to_speech_audio_focus">テキスト読み上げ機能が使えません</string>
+	<string name="error_message_enter_timer_duration">期間を入力してください</string>
+	<string name="error_message_unable_to_volume_dismiss_nfc_alarm">音量ボタンでNFCアラームを解除できません</string>
+	<string name="error_message_unable_to_email">メールを作成できません</string>
+	<string name="error_message_unable_to_email_statistics">統計情報をメールで送信できません</string>
+	<string name="error_message_unable_to_shine_flashlight">懐中電灯を照らすことができません — %1$s</string>
+	<string name="error_message_unable_to_get_flashlight_characteristics">懐中電灯の情報を取得できません</string>
+	<string name="error_message_unable_to_access_flashlight">懐中電灯にアクセスできません — %1$s</string>
+	<string name="error_message_unable_to_turn_off_flashlight">懐中電灯を消すことができません</string>
+	<string name="error_message_unable_to_turn_on_flashlight">懐中電灯を点灯できません</string>
+	<string name="error_message_unable_to_start_foreground_service">フォアグラウンドサービスを開始できません。権限を有効にしてください。</string>
+	<string name="error_message_unable_to_open_import_export_stream">ファイルを開けません</string>
+	<string name="error_message_unable_to_select_file">ファイルを選択できません</string>
+	<string name="error_message_unable_to_get_media_information_from_file">ファイルからメディア情報を取得できません</string>
+	<string name="error_message_not_enough_free_space">曲のバックアップを作成するのに十分な空き容量がありません</string>
+	<string name="error_message_camera_disabled">カメラが無効になっています</string>
+	<string name="error_message_camera_disconnected">カメラの接続が切断されました</string>
+	<string name="error_message_camera_error">カメラエラー</string>
+	<string name="error_message_camera_in_use">カメラ使用中</string>
+	<string name="error_message_camera_max_in_use">使用中のカメラの最大数</string>
+	<string name="error_message_unable_to_launch_media_picker">システムオーディオピッカーを起動できません</string>
+	<string name="error_message_unable_to_preview_volume_options">メディアが設定されていない場合はプレビューできません</string>
+	<string name="error_message_exclude_start_datetime_missing">除外開始日時が指定されていません</string>
+	<string name="error_message_exclude_end_datetime_missing">除外終了日時が指定されていません</string>
+	<string name="error_message_exclude_start_end_calendar_not_in_order">開始日時が終了日時より前である必要があります</string>
+
+	<!-- Titles -->
+	<string name="title_timer_main">NFCタイマー</string>
+	<string name="title_timer_add">タイマーを追加</string>
+	<string name="title_timer_edit">タイマーを編集</string>
+	<string name="title_timer_active">アクティブタイマー</string>
+	<string name="title_select_media">メディアを選択</string>
+	<string name="title_settings">設定</string>
+	<string name="title_options">オプション</string>
+	<string name="title_time">時間</string>
+	<string name="title_alarm_activity">アラームを解除する</string>
+	<string name="title_scan_nfc_tag">NFCタグをスキャン</string>
+	<string name="title_select_nfc_tag">NFCタグを選択してください</string>
+	<string name="title_nfc_tag_dismiss_order">命令を却下する</string>
+	<string name="title_start_timer_on_nfc_tag_scan">スキャン開始時にタイマーをスタート</string>
+	<string name="title_add_or_replace_nfc_tag">追加または置換…</string>
+	<string name="title_using_nfc_tag">NFCタグを使用する：</string>
+	<string name="title_save_nfc_tag">NFCタグを保存</string>
+	<string name="title_delete_nfc_tag">NFCタグを削除する</string>
+	<string name="title_rename_nfc_tag">NFCタグの名前を変更する</string>
+	<string name="title_current_selected">現在選択されているもの</string>
+	<string name="title_select_color">色を選択してください</string>
+	<string name="title_select_next_alarm_format">フォーマットを選択してください</string>
+	<string name="title_folder_selected">フォルダを選択しました</string>
+	<string name="title_active_alarms">アクティブなアラーム</string>
+	<string name="title_active_timers">アクティブなタイマー</string>
+	<string name="title_upcoming_reminders">今後のリマインダー</string>
+	<string name="title_dismissed_alarms">警報を解除しました</string>
+	<string name="title_missed_alarm">アラームを見逃しました</string>
+	<string name="title_missed_alarms">見逃したアラーム</string>
+	<string name="title_snoozed_alarms">スヌーズしたアラーム</string>
+	<string name="title_created_alarms">アラームを作成しました</string>
+	<string name="title_deleted_alarms">削除されたアラーム</string>
+	<string name="title_current_alarms">現在</string>
+	<string name="title_set_date">日付を設定</string>
+	<string name="title_set_time">設定時間</string>
+	<string name="title_select_start_date">開始日を選択してください</string>
+	<string name="title_select_start_time">開始時間を選択してください</string>
+	<string name="title_select_end_date">終了日を選択してください</string>
+	<string name="title_select_end_time">終了時間を選択してください</string>
+	<string name="title_whats_new">新着情報</string>
+	<string name="title_permission_disable_battery_optimization">バッテリー最適化を無効にする</string>
+	<string name="title_permission_storage">ストレージ</string>
+	<string name="title_permission_foreground_service">フォアグラウンドサービス</string>
+	<string name="title_permission_full_screen_intent">全画面表示</string>
+	<string name="title_permission_schedule_exact_alarm">正確なアラームをスケジュールする</string>
+	<string name="title_permission_set_alarm">アラームを設定する</string>
+	<string name="title_permission_show_notifications">通知を表示する</string>
+	<string name="title_permission_system_alert_window">他のアプリの上に表示する</string>
+	<string name="title_permission_boot">起動する</string>
+	<string name="title_permission_wakelock">ウェイクロック</string>
+	<string name="title_request_permission_schedule_exact_alarm">スケジュールされた正確なアラームを有効にする</string>
+	<string name="title_reset_statistics">統計情報をリセットします…</string>
+	<string name="title_repeat_frequency">繰り返し頻度</string>
+	<string name="title_exclude_date_time_range">日付/時間範囲を除外する</string>
+	<string name="title_repeat_frequency_days_to_run_before_starting">頻度を開始するまでの日数</string>
+	<string name="title_vibrate_vibration_duration">振動時間</string>
+	<string name="title_vibrate_custom_pattern">カスタムパターン</string>
+	<string name="title_vibrate_wait">待って</string>
+	<string name="title_flashlight_brightness_level">明るさレベル</string>
+	<string name="title_flashlight_blink_on_off">点滅オン/オフ</string>
+	<string name="title_text_to_speech_speak_frequency">話す頻度</string>
+	<string name="title_text_to_speech_speech_rate">話す速度</string>
+	<string name="title_text_to_speech_voice">声</string>
+	<string name="title_volume_gradually_increase_volume">徐々に音量を上げていく</string>
+	<string name="title_volume_restrict_volume">音量を制限する</string>
+	<string name="title_dismiss_options_auto_dismiss">自動閉じる</string>
+	<string name="title_dismiss_options_dismiss_early">早めに解雇する</string>
+	<string name="title_dismiss_options_dismiss_early_notification">早期通知を却下する</string>
+	<string name="title_dismiss_options_delete_after_dismissed">解雇後に削除</string>
+	<string name="title_dismiss_options_volume_dismiss">音量を下げる</string>
+	<string name="title_snooze_options_auto_snooze">自動スヌーズ</string>
+	<string name="title_snooze_options_max_snooze">マックスは居眠りをする</string>
+	<string name="title_snooze_options_snooze_duration">スヌーズ時間</string>
+	<string name="title_snooze_options_easy_snooze">簡単に眠れます</string>
+	<string name="title_snooze_options_volume_snooze">音量スヌーズ</string>
+	<string name="title_upcoming_reminder_show_reminder">リマインダーを表示</string>
+	<string name="title_upcoming_reminder_how_early">どれくらい早く…</string>
+	<string name="title_upcoming_reminder_how_frequent">どのくらいの頻度で…</string>
+	<string name="title_setting_general">一般的な</string>
+	<string name="title_setting_appearance">外観</string>
+	<string name="title_setting_about">について</string>
+	<string name="title_setting_help">ヘルプ</string>
+	<string name="title_setting_statistics">統計</string>
+	<string name="title_setting_manage_nfc_tags">NFCタグを管理する</string>
+	<string name="title_setting_support">開発を支援する</string>
+	<string name="title_setting_import_export">インポート＆エクスポート</string>
+	<string name="title_default_alarm">デフォルトのアラーム</string>
+	<string name="title_alarm_name">名前</string>
+	<string name="title_alarm_days">日</string>
+	<string name="title_alarm_schedule_date">スケジュール日</string>
+	<string name="title_alarm_repeat">繰り返す</string>
+	<string name="title_alarm_vibrate">振動する</string>
+	<string name="title_alarm_nfc">NFC</string>
+	<string name="title_alarm_screen">アラーム画面</string>
+	<string name="title_colors">色</string>
+	<string name="title_notifications">通知</string>
+	<string name="title_style">スタイル</string>
+	<string name="title_tweaks">微調整</string>
+	<string name="title_misc">その他</string>
+	<string name="title_new_screen">新しい画面</string>
+	<string name="title_show_alarm_name">アラーム名を表示する</string>
+	<string name="title_show_current_date_and_time">現在の日付と時刻を表示します</string>
+	<string name="title_show_music_info">ショーの音楽情報</string>
+	<string name="title_battery_saver">バッテリーセーバー</string>
+	<string name="title_theme_color">テーマ</string>
+	<string name="title_day_button_style">デイボタン</string>
+	<string name="title_start_week_on">週の始まりは&#8230;</string>
+	<string name="title_expand_new_alarm">新しいアラームを展開する</string>
+	<string name="title_next_alarm_format">次のアラーム形式&#8230;</string>
+	<string name="title_toggle_alarms_with_airplane_mode">機内モードではアラームが鳴らない</string>
+	<string name="title_permissions">権限</string>
+	<string name="title_no_permissions_needed">許可は不要です！</string>
+	<string name="title_help_debug_mode">デバッグモード</string>
+	<string name="title_help_share_logs">開発者とログを共有する</string>
+	<string name="title_help_send_email">メールを送信する</string>
+	<string name="title_how_to_use_features">機能の使い方</string>
+	<string name="title_how_to_copy_and_delete">スワイプしてコピーして削除</string>
+	<string name="title_how_to_get_more_options">その他のオプションを表示するには長押ししてください</string>
+	<string name="title_how_to_change_appearance">設定 > 外観</string>
+	<string name="title_developer">開発者</string>
+	<string name="title_alignment">アライメント</string>
+	<string name="title_position">位置</string>
+	<string name="title_only_show_app_alarms">アプリのアラームのみを表示する</string>
+
+	<!-- Descriptions -->
+	<string name="description_onboarding_welcome">これまでで最もカスタマイズ可能な目覚まし時計アプリへようこそ</string>
+	<string name="description_onboarding_permissions">アプリが正しく動作するためには、いくつかの権限が必要です。</string>
+	<string name="description_onboarding_permission_post_notifications_request">アラームの動作に必要です。アプリが起動し、アクティブでない状態でも動作し続けることを可能にします。</string>
+	<string name="description_onboarding_permission_system_alert_window_request">これは特別な権限です。アラーム画面が表示され、音声が再生されるようにするために使用されます。Android 15以降、またはアラームが作動しないなど端末固有の問題が発生している場合にのみ必要です。</string>
+	<string name="description_onboarding_how_to_use_features">隠されていたり、分かりにくかったりするものもあります。それらの対処法は以下のとおりです。</string>
+	<string name="description_onboarding_how_to_copy_and_delete">アラームやタイマーを右にスワイプするとコピー、左にスワイプすると削除できます。</string>
+	<string name="description_onboarding_how_to_get_more_options">拡張アラーム／タイマーのほぼすべてのボタンを長押しすると、より多くのオプションにアクセスできます。アラームカードで試してみると、「次のアラームをスキップ」などのオプションが表示されます。</string>
+	<string name="description_onboarding_how_to_change_appearance">設定＞外観に移動すると、すべてのカスタマイズオプションが表示され、アプリを思い通りに表示させることができます。</string>
+	<string name="description_slide_to_snooze">スワイプしてスヌーズ</string>
+	<string name="description_slide_to_dismiss">スライドして閉じる</string>
+	<string name="description_alarm_activity">NFCタグをスキャンしてアラームを解除してください。</string>
+	<string name="description_no_notification">通知を表示しない。</string>
+	<string name="description_upcoming_reminder">まもなく作動するアラームに関するリマインダーです。</string>
+	<string name="description_active_alarm">現在作動中のアラーム。</string>
+	<string name="description_active_timer">現在アクティブなタイマー。</string>
+	<string name="description_missed_alarm">自動的に解除されるアラーム。</string>
+	<string name="description_skipped_alarm">スキップされたアラーム。</string>
+	<string name="description_color">16進数カラー</string>
+	<string name="description_day_button_style_filled">塗りつぶされたボタン。</string>
+	<string name="description_day_button_style_outlined">枠線付きのボタン。</string>
+	<string name="description_should_show_card_button_labels_true">ボタンをクリックすると、その下にラベルが表示されます。</string>
+	<string name="description_should_show_card_button_labels_false">ボタンにはアイコンのみが表示されます。</string>
+	<string name="description_media">音楽または着信音</string>
+	<string name="description_scan_nfc_tag_alarm">アラームが鳴った場合、スキャンされたNFCタグを使ってアラームを解除する必要があります。</string>
+	<string name="description_scan_nfc_tag_timer">タイマーが作動した際に解除するには、スキャンされたNFCタグが必要になります。</string>
+	<string name="description_select_nfc_tag_alarm">アラームが鳴った際に解除するために使用するNFCタグを選択してください。複数選択した場合、それらのタグもアラーム解除に使用できます。</string>
+	<string name="description_select_nfc_tag_timer">タイマーが作動した際に解除するために使用するNFCタグを選択してください。複数選択した場合、それらのタグもタイマー解除に使用できます。</string>
+	<string name="description_nfc_tag_dismiss_order">上記のNFCタグを解除する順序を指定します。これを有効にすると、選択したすべてのNFCタグをスキャンしてからでないと解除できなくなります。</string>
+	<string name="description_start_timer_on_single_nfc_tag_scan">アプリが実行中で、NFCタグがスキャンされると（この画面ではスキャンされません）、このタイマーが自動的に開始されます。</string>
+	<string name="description_start_timer_on_multiple_nfc_tag_scan">アプリが実行中で、選択されたNFCタグのいずれかがスキャンされると（この画面には表示されません）、このタイマーが自動的に開始されます。</string>
+	<string name="description_add_or_replace_nfc_tag">このNFCタグを、このアラームを解除できるNFCタグのリストに追加すべきでしょうか、それとも、このアラームで使用されている既存のNFCタグと置き換えるべきでしょうか？</string>
+	<string name="description_save_nfc_tag">このNFCタグに名前を付けることで、再度スキャンすることなく再利用できます。</string>
+	<string name="description_repeat_frequency">指定した間隔（X時間ごと）でアラームを繰り返します。注：分、時間、または日を選択すると、アラームに登録されているすべての日数がリセットされます。</string>
+	<string name="description_exclude_date_time_range">この期間（日時）中はアラームは作動しません。</string>
+	<string name="description_repeat_frequency_days_to_run_before_starting">アラームの頻度を開始する前に、今週はアラームが現在選択されている曜日のうち、どの曜日を実行すべきでしょうか。</string>
+	<string name="description_vibrate_vibration_duration">振動させる時間と、振動の間隔をどれくらい空けるか。</string>
+	<string name="description_vibrate_custom_pattern">振動時間を一定回数繰り返し、その後一定時間待機する。</string>
+	<string name="description_flashlight_brightness_level">懐中電灯の明るさレベル。</string>
+	<string name="description_flashlight_blink_on_off">懐中電灯を一定の間隔で点滅させる。</string>
+	<string name="description_text_to_speech_what_to_say_alarm">アラームが作動しているときに、テキスト読み上げ機能で何と言うべきか。</string>
+	<string name="description_text_to_speech_what_to_say_timer">タイマーが作動しているときに、テキスト読み上げ機能で何を言うべきか。</string>
+	<string name="description_text_to_speech_speak_frequency">上記で選択した項目をどのくらいの頻度で言うべきか。</string>
+	<string name="description_text_to_speech_speech_rate">テキスト読み上げ機能はどのくらいの速さで読み上げるべきか。</string>
+	<string name="description_volume_gradually_increase_volume_alarm">設定した間隔でアラームの音量を上げる。</string>
+	<string name="description_volume_gradually_increase_volume_timer">タイマーの音量を一定の間隔で上げてください。</string>
+	<string name="description_volume_restrict_volume_alarm">アラームが鳴っている間は音量を下げることはできません。</string>
+	<string name="description_volume_restrict_volume_timer">タイマーが鳴ると音量を下げることはできません。</string>
+	<string name="description_dismiss_options_auto_dismiss_alarm">設定した時間が経過したら、アラームを自動的に解除する。</string>
+	<string name="description_dismiss_options_auto_dismiss_timer">設定した時間が経過したら、タイマーを自動的に解除します。</string>
+	<string name="description_dismiss_options_dismiss_early">アラームが作動する前に、早めに解除してください。</string>
+	<string name="description_dismiss_options_dismiss_early_notification">アラームを早期に解除できる場合は、通知を表示します。</string>
+	<string name="description_dismiss_options_delete_after_dismissed_alarm">アラームは解除されると削除されます。</string>
+	<string name="description_dismiss_options_delete_after_dismissed_timer">タイマーは解除されると削除されます。</string>
+	<string name="description_dismiss_options_volume_dismiss_alarm">音量アップまたはダウンボタンを押してアラームを解除してください。</string>
+	<string name="description_dismiss_options_volume_dismiss_timer">音量アップまたはダウンボタンを押してタイマーを解除してください。</string>
+	<string name="description_snooze_options_auto_snooze">設定した時間が経過すると、アラームを自動的にスヌーズします。</string>
+	<string name="description_snooze_options_max_snooze">アラームをスヌーズできる最大回数。</string>
+	<string name="description_snooze_options_snooze_duration">アラームをスヌーズする時間。</string>
+	<string name="description_snooze_options_easy_snooze">アラーム画面のどこかをタップすると、アラームをスヌーズできます。</string>
+	<string name="description_snooze_options_volume_snooze">音量アップまたはダウンボタンを押すと、アラームがスヌーズされます。</string>
+	<string name="description_upcoming_reminder_show_reminder">アラームが鳴る前にリマインダー通知を表示する。</string>
+	<string name="description_upcoming_reminder_how_early">リマインダー通知はどのくらい早く表示すべきでしょうか？</string>
+	<string name="description_upcoming_reminder_how_frequent">リマインダー通知はどのくらいの頻度で表示すべきですか？</string>
+	<string name="description_upcoming_reminder_text_to_speech">通知が表示されたら、アラームのテキスト読み上げ機能を使用してください。</string>
+	<string name="example_name">仕事</string>
+	<string name="description_setting_general">一般的なアラーム設定</string>
+	<string name="description_setting_appearance">アプリの外観をカスタマイズする</string>
+	<string name="description_setting_about">アプリに関する情報</string>
+	<string name="description_setting_help">何か問題やご提案がありましたらお知らせください。</string>
+	<string name="description_setting_statistics">どれくらいスヌーズしたかなどを確認しましょう</string>
+	<string name="description_setting_manage_nfc_tags">保存済みのNFCタグを削除または名前変更する</string>
+	<string name="description_setting_support">ご支援いただければ大変ありがたいですが、無理強いはいたしません！このアプリは今後もずっと無料です。</string>
+	<string name="description_setting_import_export">保存したすべてのデータをインポートまたはエクスポートする</string>
+	<string name="description_toggle_alarms_with_airplane_mode_on">機内モード変更に伴い、すべてのアラームを無効にします。</string>
+	<string name="description_toggle_alarms_with_airplane_mode_off">機内モード変更に伴うすべてのアラームを有効にします。</string>
+	<string name="description_use_new_screen_true">新しいアラーム画面では、スワイプ操作でアラームをスヌーズしたり解除したりできます。</string>
+	<string name="description_use_new_screen_false">新しいアラーム画面は使用しないでください。アラームのスヌーズや解除には、シンプルなボタンを備えた従来の画面を使用してください。</string>
+	<string name="description_alarm_screen_show_alarm_name_true">アラーム画面にアラーム名を表示する。</string>
+	<string name="description_alarm_screen_show_alarm_name_false">アラーム名を表示しないでください。</string>
+	<string name="description_alarm_screen_show_current_date_and_time_true">アラーム画面に現在の日時を表示する。</string>
+	<string name="description_alarm_screen_show_current_date_and_time_false">現在の日時を表示しないでください。</string>
+	<string name="description_alarm_screen_show_music_info_true">アラーム画面に、現在再生中の音楽または着信音に関する情報を表示します。</string>
+	<string name="description_alarm_screen_show_music_info_false">音楽や着信音の情報は表示しないでください。</string>
+	<string name="description_alarm_screen_battery_saver_true">アラーム作動中は画面をオフにしてバッテリーを節約してください。画面は手動でオンにする必要があります。</string>
+	<string name="description_alarm_screen_battery_saver_false">アラームが作動すると、画面が自動的に点灯します。</string>
+	<string name="description_toggle_alarms_with_airplane_mode_true">アラームが鳴った際に機内モードが有効になっている場合、アラームはスキップされます。</string>
+	<string name="description_toggle_alarms_with_airplane_mode_false">アラームは正常に作動します。</string>
+	<string name="description_color_theme">テーマカラー。</string>
+	<string name="description_color_name">例：仕事</string>
+	<string name="description_color_days">例えば月&#8231;火&#8231;水&#8231;木&#8231;金</string>
+	<string name="description_color_time">例：12:30</string>
+	<string name="description_color_am">アラーム時刻にAMが含まれている場合は色付きで表示されます。</string>
+	<string name="description_color_pm">アラーム時刻に午後（PM）が含まれている場合は、色付きで表示されます。</string>
+	<string name="description_color_delete_alarm_after_dismissed">アラームが解除されると削除されることを示すアイコン。</string>
+	<string name="description_color_skip_next_alarm">次回のアラーム実行がスキップされることを示すアイコン。</string>
+	<string name="description_missed_alarm_true">見逃したアラームの通知を表示します。</string>
+	<string name="description_show_hide_vibrate_button_true">アラームを展開する際に、バイブレーションボタンを表示する。</string>
+	<string name="description_show_hide_vibrate_button_false">アラームを展開する際に、バイブレーションボタンを非表示にする。</string>
+	<string name="description_show_hide_nfc_button_true">アラームを展開する際にNFCボタンを表示する。</string>
+	<string name="description_show_hide_nfc_button_false">アラームを展開する際は、NFCボタンを非表示にします。</string>
+	<string name="description_show_hide_flashlight_button_true">アラームを展開する際に、懐中電灯ボタンを表示する。</string>
+	<string name="description_show_hide_flashlight_button_false">アラームを展開する際は、懐中電灯ボタンを非表示にします。</string>
+	<string name="description_expand_new_alarm_true">「+」ボタンでコピーまたは作成されたアラームは展開されます。</string>
+	<string name="description_expand_new_alarm_false">アラームは拡張されません。</string>
+	<string name="description_start_week_on">拡大版アラームカードに表示されている週は、この日から始まります。</string>
+	<string name="description_next_alarm_format">次のアラームが作動する日時を表示する際に使用するフォーマット。</string>
+	<string name="description_next_alarm_format_time_in">次のアラームは7時間30分後です</string>
+	<string name="description_next_alarm_format_time_on">次のアラームは月曜日の午前7時です。</string>
+	<string name="description_permission_disable_battery_optimization">アプリはスリープ状態にならないため、アラームは通常どおり作動します。</string>
+	<string name="description_permission_nfc">NFCタグを検出してアラームを解除します。</string>
+	<string name="description_permission_storage">デバイスに保存されている音楽ファイルを再生します。</string>
+	<string name="description_permission_vibrate">アラームが作動したら、デバイスを振動させて知らせます。</string>
+	<string name="description_permission_foreground_service">アラームが作動した際に、音声再生やデバイスの振動などを行うフォアグラウンドサービスを実行します。</string>
+	<string name="description_permission_full_screen_intent">アラームが作動したときは、全画面表示を使用してください。</string>
+	<string name="description_permission_schedule_alarm">正確なアラームを設定する。</string>
+	<string name="description_permission_set_alarm">Googleアシスタントなどの外部ソースからアラームを設定する。</string>
+	<string name="description_permission_post_notifications">アラームが作動した際に通知を表示することで、デバイスがアプリをスリープ状態にしてアラームを自動的にオフにしてしまうのを防ぎます。</string>
+	<string name="description_permission_system_alert_window">アプリがバックグラウンドで実行されていて、しばらく使用されていない場合、アラーム画面が表示されていることを確認してください。アラーム画面は音声再生の必須条件です。この問題はAndroid 15のみに影響します。</string>
+	<string name="description_permission_boot">デバイスの電源を入れるとアラームが復元されます。Android は、デバイスの電源を切るとアラームを削除します。</string>
+	<string name="description_permission_wakelock">アラームが作動し続けるように、デバイスがスリープ状態にならないようにしてください。</string>
+	<string name="message_debug_mode_on">問題のデバッグのためにログファイルに書き込みます。パフォーマンスに若干影響を与える可能性があります。</string>
+	<string name="message_debug_mode_off">ログファイルへの書き込みは行いません。これが通常モードです。</string>
+	<string name="message_share_logs_with_developer">問題が発生した原因を特定するために、ログファイルをメールで送ってください。</string>
+	<string name="message_send_email">何か問題、質問、提案などがありましたら、お気軽にメールでご連絡ください。</string>
+	<string name="description_audio_sources_alarm">アラームを再生するオーディオチャンネル。</string>
+	<string name="description_audio_sources_timer">タイマーを再生するオーディオチャンネル。</string>
+	<string name="description_widget_alarm_example">プレビューに表示されているアラームはあくまで一例です。</string>
+	<string name="description_text_to_speech_voice">テキスト読み上げに使用する音声。</string>
+	<string name="description_only_show_app_alarms">このウィジェットには、このアプリからのアラームのみが表示されます。</string>
+	<string name="description_show_any_alarms">どのアプリで作成されたアラームでも、ウィジェットに表示されます。</string>
+
+	<!-- Content descriptions -->
+	<string name="cd_alarm_list">アラームの一覧がここに表示されます。</string>
+	<string name="cd_timer_list">タイマーの一覧がここに表示されます。</string>
+	<string name="cd_nfc_tag_list">NFCタグの一覧がここに表示されます。</string>
+	<string name="cd_fab_add_alarm">新しいアラームを追加します。</string>
+	<string name="cd_fab_launch_system_file_browser">システムファイルブラウザを起動します。</string>
+	<string name="cd_expand_alarm">アラームを拡張する。</string>
+	<string name="cd_volume_icon">アラームの音量を変更する。</string>
+	<string name="cd_volume_slider">スライドしてアラームの音量を変更します。</string>
+	<string name="cd_alarm_options">アラーム固有のオプションを変更します。</string>
+	<string name="cd_color_example">現在の色の例。</string>
+	<string name="cd_file_entry">表示されているエントリの種類（ファイルやディレクトリなど）。</string>
+	<string name="cd_color_selector">カラーピッカーで色を選択してください。</string>
+	<string name="cd_shader_selector">カラーピッカーで色を選択してください。</string>
+	<string name="cd_request_permission_ignore_battery_optimization">バッテリー最適化を無効にするようリクエストします。</string>
+	<string name="cd_request_permission_post_notifications">通知を掲載するようリクエストします。</string>
+	<string name="cd_request_permission_schedule_exact_alarm">正確なアラーム時刻を設定するようリクエストします。</string>
+	<string name="cd_request_permission_system_alert_window">他のアプリの上にアプリを表示する許可を要求します。</string>
+	<string name="cd_whats_new">このバージョンのアプリで新しく追加されたアイテムの一覧です。</string>
+	<string name="cd_scan_nfc">NFCタグをスキャンしてください。</string>
+	<string name="cd_alarm_slider_arrow">指をスワイプする方向。</string>
+	<string name="cd_dismiss_alarm">警報を解除してください。</string>
+	<string name="cd_snooze_alarm">アラームをスヌーズする。</string>
+	<string name="cd_current_alarm_media_playing">現在再生中のアラームメディア。</string>
+	<string name="cd_skip_next_alarm">次のアラームをスキップします。</string>
+	<string name="cd_delete_alarm_after_dismissed">アラームを解除したら削除してください。</string>
+	<string name="cd_clock_widget_alarm_icon">次のアラーム</string>
+	<string name="cd_permission_check_mark">許可が与えられたことを示すチェックマーク</string>
+	<string name="cd_request_permission_icon">権限を要求するアイコン</string>
+	<string name="cd_swipe">スワイプ</string>
+	<string name="cd_long_press">長押し</string>
+	<string name="cd_customize">カスタマイズ</string>
+	<string name="cd_preference_icon">設定アイコン</string>
+
+	<!-- Plural alarms -->
+	<plurals name="alarm">
+		<item quantity="other">%d件のアラーム</item>
+	</plurals>
+
+	<plurals name="missed_alarm">
+		<item quantity="other">%d見逃したアラーム</item>
+	</plurals>
+
+	<plurals name="skipped_alarm">
+		<item quantity="other">スキップされたアラーム</item>
+	</plurals>
+
+	<!-- Plural units -->
+	<plurals name="unit_second">
+		<item quantity="other">%d秒</item>
+	</plurals>
+
+	<plurals name="unit_minute">
+		<item quantity="other">%d分</item>
+	</plurals>
+
+	<plurals name="unit_hour">
+		<item quantity="other">%d時間</item>
+	</plurals>
+
+	<plurals name="unit_day">
+		<item quantity="other">%d日</item>
+	</plurals>
+
+	<plurals name="unit_week">
+		<item quantity="other">%d週間</item>
+	</plurals>
+
+	<plurals name="unit_month">
+		<item quantity="other">%dヶ月</item>
+	</plurals>
+
+	<!-- Plural repeats -->
+	<plurals name="repeat_minutely">
+		<item quantity="other">%d分ごと</item>
+	</plurals>
+
+	<plurals name="repeat_hourly">
+		<item quantity="other">%d時間ごと</item>
+	</plurals>
+
+	<plurals name="repeat_daily">
+		<item quantity="other">%d日ごと</item>
+	</plurals>
+
+	<plurals name="repeat_weekly">
+		<item quantity="other">%d週間ごと</item>
+	</plurals>
+
+	<plurals name="repeat_monthly">
+		<item quantity="other">%dヶ月ごと</item>
+	</plurals>
+
+	<!-- Plural numbers -->
+	<plurals name="number_of_times">
+		<item quantity="other">%1$d 回</item>
+	</plurals>
+
+	<plurals name="number_of_snoozes_left">
+		<item quantity="other">（残り%1$d）</item>
+	</plurals>
+
+	<!-- Plural TTS -->
+	<plurals name="tts_say_reminder">
+		<item quantity="other">お知らせ。%1$s は %2$d 分後に終了します。</item>
+	</plurals>
+
+	<string name="tts_say_time">時刻は%1$s秒:%2$s秒 %3$s秒です。</string>
+
+	<!-- Plural misc -->
+	<plurals name="import_cleared_media_due_to_not_found">
+		<item quantity="other">メディアが見つからなかったため、%1$d アラーム/タイマーのメディアをクリアしました。</item>
+	</plurals>
+
+	<string name="float_duration_seconds">{count, plural, one{{count}秒} other{{count}秒}}</string>
+
+</resources>

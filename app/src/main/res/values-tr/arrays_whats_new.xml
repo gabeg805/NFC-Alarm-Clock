@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.2</item>
+		<item>Sesleri aynı anda hoparlörlerden ve Bluetooth üzerinden çalma seçeneği eklendi. Bu özellik Ayarlar > Ses kaynakları bölümünde, alarm için bulunabilir.</item>
+		<item>&lt;b>Tarih/saat aralığını hariç tutma&lt;/b> seçeneği eklendi. Ayarlar > Tekrar bölümünde, bir alarm için bulunur ve örneğin, alarm birkaç saatte bir çalıyorsa ancak uykuya dalmadan önce manuel olarak devre dışı bırakmak/etkinleştirmek istemiyorsanız kullanılır.</item>
+		<item>NFC taraması yapılabilmesi için kilit ekranının kapatılması girişiminde kullanılan NFC kapatma özelliği iyileştirildi. Bu özellik, cihazın güvenilir durumda olmasını gerektirir, bu nedenle her zaman güvenilir olmayabilir, ancak yine de bir çözümdür.</item>
+		<item>Uçak modu seçeneği, etkinleştirildiğinde tüm alarmları devre dışı bırakmak/etkinleştirmek yerine, etkinleştirildiğinde alarmları atlayacak şekilde değiştirildi.</item>
+		<item>&lt;b>El feneri&lt;/b> yanıp sönme sorununu düzelttik; açma/kapama süreleri doğru şekilde dönüştürülemiyordu. Süre dönüştürülemezse, varsayılan olarak 1 saniye kullanılır.</item>
+		<item>Ekrana dokunmanın erteleme işlevini etkinleştirmemesi sorunu düzeltildi.</item>
+		<item>12.7.1</item>
+		<item>&lt;b>El fenerinin&lt;/b> açma/kapama sürelerinin boş olduğu yanıp sönme sorunu düzeltildi.</item>
+		<item>&lt;b>Android 15&lt;/b>\'te görünen görsel hata düzeltildi.</item>
+		<item>&lt;b>Android 13&lt;/b>\'ü etkileyen alarm/zamanlayıcı sorunu düzeltildi.</item>
+		<item>Cihaz kilitliyken widget\'ları yenileme girişiminde yaşanan sorun düzeltildi.</item>
+		<item>Ekran yönü değiştiğinde veya uygulama kapatıldığında &lt;b>zaman&lt;/b> iletişim kutusunun görünmesine ve bunun sonucunda uygulamanın çökmesine neden olan sorun düzeltildi.</item>
+		<item>&lt;b>Hata ayıklama modu&lt;/b> daha bilgilendirici günlükler içerecek şekilde güncellendi.</item>
+		<item>12.7.0</item>
+		<item>Düğmelerin işlevlerini daha belirgin hale getirmek için düğme etiketleri eklendi. Bu, Ayarlar > Görünüm > Stiller bölümünden değiştirilebilir.</item>
+		<item>Uçak modu değiştirildiğinde alarmları açma/kapama seçeneği eklendi.</item>
+		<item>Alarmı ses düğmeleriyle kapatma seçeneği eklendi.</item>
+		<item>Ses seviyesi seçeneklerine &lt;b> önizleme &lt;/b> eklendi.</item>
+		<item>Yeni kullanıcılar için &lt;b>tanıtım ekranı&lt;/b> eklendi.</item>
+		<item>Ayarlar bölümüne &lt;b>Yardım&lt;/b> bölümü eklendi.</item>
+		<item>Uygulama bazında dil desteği eklendi.</item>
+		<item>&lt;b> Android 16&lt;/b> desteği eklenerek güncellendi.</item>
+		<item>Tarihin yerel dile göre biçimlendirilmesi için &lt;b> widget &lt;/b> güncellendi.</item>
+		<item>Birden fazla NFC etiketinin taranması gerektiğinde, NFC ile kapatma mantığı güncellendi. Artık erteleme özelliği ücretsiz ve daha önce taranmış olan NFC etiketlerinin yeniden taranmasına gerek yok.</item>
+		<item>Geliştirilmiş &lt;b>alarm kartı&lt;/b>, kart genişletildiğinde kaydırma hareketiyle kopyalama/silme olanağı sağlar.</item>
+		<item>&lt;b>Tarih ayarlama&lt;/b> özelliği iyileştirildi, böylece tarih ayarlandığında saat de kaydediliyor.</item>
+		<item>Geliştirilmiş &lt;b>kaçırılan alarm&lt;/b> bildirimi, kaçırılan alarmın adını ve saatini gösterecek şekilde ayarlanmıştır.</item>
+		<item>Alarm ekranındaki erteleme ve kapatma düğmelerinin boyutu artırıldı.</item>
+		<item>Bazı telefonlarda görülen titreşim sorunu düzeltildi.</item>
+		<item>&lt;b>Import&lt;/b> ve &lt;b>export&lt;/b> ile ilgili sorun düzeltildi.</item>
+		<item>Alarm ekranının nadir durumlarda alarm kapatıldıktan sonra kapanmaması ve hatalı bir döngüye neden olması sorunu düzeltildi.</item>
+		<item>&lt;b>Erken kapatma&lt;/b> bildirimiyle ilgili küçük bir sorun düzeltildi.</item>
+		<item>12.6.4</item>
+		<item>&lt;b>NFC&lt;/b> kullanarak bir alarmı veya zamanlayıcıyı kapatırken, &lt;b>siparişi kapat&lt;/b> seçeneklerinin de ayarlanmış olması durumunda ortaya çıkan sorun düzeltildi.</item>
+		<item>&lt;b>El feneri yanıp sönmesi&lt;/b> özelliğinin çökmeye neden olması sorunu düzeltildi.</item>
+		<item>Çeşitli zamanlayıcı kullanıcı arayüzü sorunları düzeltildi.</item>
+		<item>Zamanlayıcı eklerken bir kaydet düğmesi eklendi, böylece kaydetmek için zamanlayıcıyı hemen başlatmak zorunda kalmazsınız.</item>
+		<item>Düşük piksel yoğunluğuna sahip cihazlar için alarm ve zamanlayıcı ekranlarının görünümü iyileştirildi.</item>
+		<item>12.6.3</item>
+		<item>NFC seçenekleri iletişim kutusunun görünümü yeniden düzenlenerek tüm seçenekler tek bir ekranda toplandı.</item>
+		<item>NFC ile kapatmaya çalışırken oluşan sorun düzeltildi.</item>
+		<item>NFC düğmesi gizlendiğinde NFC alarm/zamanlayıcı seçeneğinin görünmeye devam etmesi sorunu düzeltildi.</item>
+		<item>Alarm/zamanlayıcı silinirken oluşan zamanlama sorunu düzeltildi.</item>
+		<item>Zamanlayıcıyı başlatırken karşılaşılan nadir bir sorun düzeltildi.</item>
+		<item>Telefon kilitliyken ve NFC kullanılırken zil sesinin çalmaması sorunu düzeltildi.</item>
+		<item>12.6.2</item>
+		<item>Portekizceye çeviriyle ilgili sorun giderildi.</item>
+		<item>&lt;b>El fenerinin&lt;/b> çalışmaması sorunu giderildi.</item>
+		<item>Ayarlar bölümündeki kullanıcı arayüzü hatası düzeltildi.</item>
+		<item>Düşük yoğunluklu cihazlar için &lt;b>aktif alarm&lt;/b> ekranının görünümü iyileştirildi.</item>
+		<item>12.6.1</item>
+		<item>Zamanlayıcıyı düzenlemeyle ilgili sorun düzeltildi.</item>
+		<item>12.6.0</item>
+		<item>Zamanlayıcı eklendi. Ayrıca NFC etiketlerini tarayarak da zamanlayıcıları başlatabilirsiniz.</item>
+		<item>Alarm ayarlarına &lt;b>tekrarla&lt;/b> seçeneği eklendi. Alarmı saat, gün, hafta veya ay bazında tekrarlayabilirsiniz.</item>
+		<item>Alarmın belirli bir tarihte çalışmasını sağlamak için &lt;b>tarih&lt;/b> seçeneği eklendi. Zaman seçimi yapılırken erişilebilir.</item>
+		<item>Erteleme fonksiyonu ve ses düğmeleri eklendi.</item>
+		<item>Birden fazla NFC etiketi seçildiğinde &lt;b>NFC etiketlerini&lt;/b> sırayla kapatma&lt;/b> özelliği eklendi. Etiketler herhangi bir sırayla, rastgele veya ardışık olarak kapatılabilir.</item>
+		<item>&lt;b>Erken bildirimi kapat&lt;/b> seçeneği eklendi. İsteğe bağlı olarak, bir alarmın erken kapatılabileceği durumlarda bildirim gösterilebilir.</item>
+		<item>Tekrar, titreşim, NFC ve el feneri düğmelerine hızlı erişim için &lt;b>uzun basma&lt;/b> özelliği eklendi.</item>
+		<item>Bir klasördeki tüm müziklerin çalınması/karıştırılmasının çalışmaması sorunu düzeltildi.</item>
+		<item>&lt;b>Android 15&lt;/b> desteği eklenerek güncellendi.</item>
+		<item>Android\'in &lt;b>Material 3&lt;/b> temasını destekleyecek şekilde güncellendi.</item>
+	</string-array>
+
+</resources>

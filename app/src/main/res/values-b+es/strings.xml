@@ -465,7 +465,7 @@
 	<string name="description_color_name">p.ej. Trabajo</string>
 	<string name="description_toggle_alarms_with_airplane_mode_true">Si el modo avión está activado cuando suena la alarma, esta se omitirá.</string>
 	<string name="description_toggle_alarms_with_airplane_mode_false">Las alarmas funcionarán con normalidad.</string>
-	<string name="description_color_days">p.ej. Lun &#8231; Mar &#8231; Mie &#8231; Jue &#8231; Vie</string>
+	<string name="description_color_days">p.ej. lun &#8231; mar &#8231; mie &#8231; jue &#8231; vie</string>
 	<string name="description_color_time">p.ej. 12:30</string>
 	<string name="description_color_am">Colorida si esta en la hora de alarma AM.</string>
 	<string name="description_color_pm">Colorida si esta en la hora de alarma PM.</string>
