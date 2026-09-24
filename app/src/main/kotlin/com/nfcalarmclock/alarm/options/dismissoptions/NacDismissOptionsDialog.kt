@@ -260,7 +260,6 @@ open class NacDismissOptionsDialog
 					val time = NacAlarm.calcDismissEarlyTime(i)
 					add(resources.getQuantityString(R.plurals.unit_minute, time, time))
 				}
-				println(this)
 			}.toTypedArray()
 
 		// Setup the dropdown

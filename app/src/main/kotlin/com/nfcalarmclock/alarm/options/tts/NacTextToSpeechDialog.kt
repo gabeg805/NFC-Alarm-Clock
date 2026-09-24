@@ -290,14 +290,13 @@ open class NacTextToSpeechDialog
 		// Get the default locale
 		val locale = Locale.getDefault()
 
-		// Filter out voices that do not match the current locale
-		println("Text to speech object: $tts")
 		NacLog.i("Text to speech object: $tts")
+
+		// Filter out voices that do not match the current locale
 		allVoices = tts.voices
 			.filter { it.locale == locale }
 			.partition { it == tts.defaultVoice }
 			.let { it.first + it.second }
-		//.partition { it == ttsHelper.textToSpeech.defaultVoice }
 	}
 
 	/**

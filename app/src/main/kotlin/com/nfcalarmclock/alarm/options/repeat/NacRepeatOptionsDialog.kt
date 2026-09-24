@@ -484,8 +484,6 @@ class NacRepeatOptionsDialog
 		// Get the indices to use
 		var valueIndex = NacAlarm.calcRepeatFrequencyIndex(defaultValue, defaultUnits)
 		var unitsIndex = NacAlarm.calcRepeatFrequencyUnitsIndex(defaultUnits)
-		println("defaultValue=$defaultValue | defaultUnits=$defaultUnits")
-		println("valueIndex=$valueIndex | unitsIndex=$unitsIndex")
 
 		// Setup the dropdowns
 		var valuesList = getRepeatFrequencyValuesFromUnitsIndex(unitsIndex)
