@@ -1,17 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-	<!-- Days of week full names -->
-	<string-array name="days_of_week_full">
-		<item>Sonntag</item>
-		<item>Montag</item>
-		<item>Dienstag</item>
-		<item>Mittwoch</item>
-		<item>Donnerstag</item>
-		<item>Freitag</item>
-		<item>Samstag</item>
-	</string-array>
-
 	<!-- Days of week abbreviated -->
 	<string-array name="days_of_week_abbr">
 		<item>So</item>
@@ -34,75 +23,19 @@
 		<item>S</item>
 	</string-array>
 
-	<!-- Start week on days -->
-	<string-array name="start_week_on">
-		<item>Sonntag</item>
-		<item>Montag</item>
+	<!-- Audio sources -->
+	<string-array name="audio_sources">
+		<item>Alarm</item>
+		<item>Anruf</item>
+		<item>Medien</item>
+		<item>Benachrichtigung</item>
+		<item>Klingelton</item>
 	</string-array>
 
-	<!-- General list of seconds -->
-	<string-array name="general_seconds_summaries">
-		<item>0 Sekunden</item>
-		<item>1 Sekunde</item>
-		<item>2 Sekunden</item>
-		<item>3 Sekunden</item>
-		<item>4 Sekunden</item>
-		<item>5 Sekunden</item>
-		<item>6 Sekunden</item>
-		<item>7 Sekunden</item>
-		<item>8 Sekunden</item>
-		<item>9 Sekunden</item>
-		<item>10 Sekunden</item>
-		<item>11 Sekunden</item>
-		<item>12 Sekunden</item>
-		<item>13 Sekunden</item>
-		<item>14 Sekunden</item>
-		<item>15 Sekunden</item>
-		<item>16 Sekunden</item>
-		<item>17 Sekunden</item>
-		<item>18 Sekunden</item>
-		<item>19 Sekunden</item>
-		<item>20 Sekunden</item>
-		<item>21 Sekunden</item>
-		<item>22 Sekunden</item>
-		<item>23 Sekunden</item>
-		<item>24 Sekunden</item>
-		<item>25 Sekunden</item>
-		<item>26 Sekunden</item>
-		<item>27 Sekunden</item>
-		<item>28 Sekunden</item>
-		<item>29 Sekunden</item>
-		<item>30 Sekunden</item>
-		<item>31 Sekunden</item>
-		<item>32 Sekunden</item>
-		<item>33 Sekunden</item>
-		<item>34 Sekunden</item>
-		<item>35 Sekunden</item>
-		<item>36 Sekunden</item>
-		<item>37 Sekunden</item>
-		<item>38 Sekunden</item>
-		<item>39 Sekunden</item>
-		<item>40 Sekunden</item>
-		<item>41 Sekunden</item>
-		<item>42 Sekunden</item>
-		<item>43 Sekunden</item>
-		<item>44 Sekunden</item>
-		<item>45 Sekunden</item>
-		<item>46 Sekunden</item>
-		<item>47 Sekunden</item>
-		<item>48 Sekunden</item>
-		<item>49 Sekunden</item>
-		<item>50 Sekunden</item>
-		<item>51 Sekunden</item>
-		<item>52 Sekunden</item>
-		<item>53 Sekunden</item>
-		<item>54 Sekunden</item>
-		<item>55 Sekunden</item>
-		<item>56 Sekunden</item>
-		<item>57 Sekunden</item>
-		<item>58 Sekunden</item>
-		<item>59 Sekunden</item>
-		<item>60 Sekunden</item>
+	<!-- NFC tag dismiss orders -->
+	<string-array name="nfc_tag_dismiss_orders">
+		<item>Zufällig</item>
+		<item>Sequentiell</item>
 	</string-array>
 
 </resources>

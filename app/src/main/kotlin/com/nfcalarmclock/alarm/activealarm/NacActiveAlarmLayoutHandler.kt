@@ -6,23 +6,17 @@ import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.nfc.NacNfc
 import com.nfcalarmclock.shared.NacSharedPreferences
 
+/**
+ * Layout handler for an active alarm.
+ *
+ * @param activity Activity.
+ * @param alarm Alarm.
+ * @param onAlarmActionListener Listener for an alarm action.
+ */
 abstract class NacActiveAlarmLayoutHandler(
-
-	/**
-	 * Activity.
-	 */
 	activity: AppCompatActivity,
-
-	/**
-	 * Alarm.
-	 */
 	val alarm: NacAlarm?,
-
-	/**
-	 * Listener for an alarm action.
-	 */
 	val onAlarmActionListener: OnAlarmActionListener
-
 )
 {
 

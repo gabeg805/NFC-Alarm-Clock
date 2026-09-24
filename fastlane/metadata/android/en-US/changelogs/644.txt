@@ -1,0 +1,7 @@
+Added option to play audio through speakers and bluetooth simultaneously.
+Added option to exclude date/time range.
+Added language support for French, Italian, Japanese, Polish, Thai, and Turkish.
+Improved NFC dismiss where the lock screen is attempted to be dismissed.
+Changed airplane mode option so that it skips alarms if it is enabled.
+Fixed flashlight blink issue where on/off durations were not being converted properly.
+Fixed easy snooze issue where touching the screen would not snooze.

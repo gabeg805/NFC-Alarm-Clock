@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<!-- Days of week abbreviated -->
+	<string-array name="days_of_week_abbr">
+		<item>จ</item>
+		<item>อ</item>
+		<item>พ</item>
+		<item>พฤ</item>
+		<item>ศ</item>
+		<item>ส</item>
+		<item>อา</item>
+	</string-array>
+
+	<!-- Days of week one letter -->
+	<string-array name="days_of_week_one_letter">
+		<item>จ</item>
+		<item>อ</item>
+		<item>พ</item>
+		<item>พฤ</item>
+		<item>ศ</item>
+		<item>ส</item>
+		<item>อ</item>
+	</string-array>
+
+	<!-- Audio sources -->
+	<string-array name="audio_sources">
+		<item>เตือน</item>
+		<item>เรียก</item>
+		<item>สื่อ</item>
+		<item>การแจ้งเตือน</item>
+		<item>ริงโทน</item>
+	</string-array>
+
+	<!-- NFC tag dismiss orders -->
+	<string-array name="nfc_tag_dismiss_orders">
+		<item>สุ่ม</item>
+		<item>ลำดับ</item>
+	</string-array>
+
+</resources>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.2</item>
+		<item>Aggiunta l\'opzione per riprodurre l\'audio tramite &lt;b>altoparlanti&lt;/b> e &lt;b>Bluetooth&lt;/b> contemporaneamente. Si trova in Impostazioni > Sorgenti audio, per una sveglia.</item>
+		<item>Aggiunta l\'opzione per &lt;b>escludere un intervallo di date/ore&lt;/b>. Si trova in Impostazioni > Ripeti, per una sveglia, ed è utile se, ad esempio, una sveglia suona ogni due ore, ma non si desidera disattivarla/attivarla manualmente prima di andare a dormire.</item>
+		<item>Aggiunto il supporto linguistico per &lt;b>francese&lt;/b>, &lt;b>italiano&lt;/b>, &lt;b>giapponese&lt;/b>, &lt;b>polacco&lt;/b>, &lt;b>tailandese&lt;/b> e &lt;b>turco&lt;/b>. Se avete suggerimenti per migliorare una traduzione, inviatemi un\'email tramite Impostazioni > Aiuto.</item>
+		<item>Funzione di chiusura NFC migliorata: si tenta di chiudere la schermata di blocco per consentire la scansione NFC. Questa funzione richiede che il dispositivo si trovi in uno stato attendibile, quindi potrebbe non essere del tutto affidabile, ma è comunque un passo avanti.</item>
+		<item>Modificata l\'opzione &lt;b>modalità aereo&lt;/b> in modo che, se abilitata, ignori gli allarmi, anziché disabilitarli/abilitarli tutti quando si attiva/disattiva la modalità aereo.</item>
+		<item>Risolto il problema di lampeggio della &lt;b>torcia&lt;/b> in cui le durate di accensione/spegnimento non venivano convertite correttamente. Se non è possibile convertire una durata, verrà utilizzata come valore predefinito 1 secondo.</item>
+		<item>Risolto il problema &lt;b>easy snooze&lt;/b> per cui toccando lo schermo non si attivava la funzione snooze.</item>
+		<item>12.7.1</item>
+		<item>Risolto il problema di lampeggio della &lt;b>torcia&lt;/b> in cui le durate di accensione/spegnimento erano vuote.</item>
+		<item>Risolto l\'artefatto visivo che si verificava in &lt;b>Android 15&lt;/b>.</item>
+		<item>Risolto il problema relativo alla sveglia/timer che interessava &lt;b>Android 13&lt;/b>.</item>
+		<item>Risolto il problema relativo al tentativo di aggiornare i widget quando il dispositivo è bloccato.</item>
+		<item>Risolto il problema per cui la finestra di dialogo &lt;b>time&lt;/b> veniva visualizzata dopo un cambio di orientamento dello schermo o la chiusura dell\'app, causando un arresto anomalo.</item>
+		<item>Modalità di debug aggiornata per fornire log più informativi.</item>
+		<item>12.7.0</item>
+		<item>Sono state aggiunte delle etichette ai pulsanti &lt;b> per rendere più evidente la loro funzione. Questa impostazione può essere modificata in &lt;b> Impostazioni > Aspetto > Stili&lt;/b>.</item>
+		<item>Aggiunta l\'opzione per attivare/disattivare gli allarmi quando si cambia la &lt;b>modalità aereo&lt;/b>.</item>
+		<item>Aggiunta l\'opzione per disattivare la sveglia con i pulsanti del volume.</item>
+		<item>Aggiunta l\'anteprima alle opzioni del volume.</item>
+		<item>Aggiunta la schermata di onboarding per i nuovi utenti.</item>
+		<item>Aggiunta la sezione &lt;b>Aiuto&lt;/b> nelle Impostazioni.</item>
+		<item>Aggiunto il supporto linguistico per singola applicazione.</item>
+		<item>Aggiornato per supportare &lt;b>Android 16&lt;/b>.</item>
+		<item>Widget aggiornato &lt;b> in modo che la data segua il formato locale.</item>
+		<item>Logica di "chiusura con NFC" aggiornata quando è necessario scansionare più tag NFC. Ora è possibile posticipare la scansione e i tag NFC già scansionati non necessitano di essere scansionati nuovamente.</item>
+		<item>Scheda di allarme migliorata per consentire lo scorrimento per copiare/eliminare quando la scheda è espansa.</item>
+		<item>Funzione &lt;b>imposta data&lt;/b> migliorata, in modo che anche l\'ora venga salvata quando si imposta la data.</item>
+		<item>Notifica migliorata per le &lt;b>sveglie perse&lt;/b>, che ora mostra il nome e l\'ora della sveglia non ricevuta.</item>
+		<item>Dimensioni aumentate dei pulsanti "posticipa" e "chiudi" nella schermata della sveglia.</item>
+		<item>Risolto il problema relativo alla vibrazione che interessava alcuni telefoni.</item>
+		<item>Risolto il problema con &lt;b> import &lt;/b> e &lt;b> export &lt;/b>.</item>
+		<item>Risolto un problema per cui la schermata di allarme, in rare occasioni, non si chiudeva dopo aver disattivato l\'allarme, causando un ciclo anomalo.</item>
+		<item>Risolto un piccolo problema con la notifica di &lt;b>chiusura anticipata&lt;/b>.</item>
+		<item>12.6.4</item>
+		<item>Risolto un problema che si verificava quando si utilizzava &lt;b>NFC&lt;/b> per disattivare un allarme o un timer, ma erano state impostate anche le opzioni &lt;b>ordine di disattivazione&lt;/b>.</item>
+		<item>Risolto un problema per cui l\'utilizzo di &lt;b>flashlight blink&lt;/b> causava un arresto anomalo.</item>
+		<item>Risolti diversi problemi dell\'interfaccia utente del &lt;b>timer&lt;/b>.</item>
+		<item>È stato aggiunto un pulsante &lt;b>salva&lt;/b> quando si aggiunge un &lt;b>timer&lt;/b>, in modo da non essere costretti ad avviare immediatamente un timer per poterlo salvare.</item>
+		<item>Migliorata la visualizzazione delle schermate di &lt;b>allarme&lt;/b> e &lt;b>timer&lt;/b> su dispositivi a bassa densità di pixel.</item>
+		<item>12.6.3</item>
+		<item>Abbiamo riorganizzato l\'aspetto della finestra di dialogo &lt;b>Opzioni NFC&lt;/b> in modo che sia tutta consolidata in un\'unica schermata.</item>
+		<item>Risolto il problema che si verificava durante il tentativo di &lt;b>chiudere&lt;/b> con &lt;b>NFC&lt;/b>.</item>
+		<item>Risolto il problema per cui, quando si nascondeva il pulsante NFC, l\'opzione di allarme/timer NFC veniva comunque visualizzata.</item>
+		<item>Risolto un problema di temporizzazione durante l\'eliminazione di un &lt;b>allarme&lt;/b>/&lt;b>timer&lt;/b>.</item>
+		<item>Risolto un raro problema all\'avvio del timer.</item>
+		<item>Risolto il problema per cui la &lt;b>suoneria&lt;/b> non veniva riprodotta con il &lt;b>telefono bloccato&lt;/b> e utilizzando la &lt;b>NFC&lt;/b>.</item>
+		<item>12.6.2</item>
+		<item>Risolto il problema di traduzione in &lt;b>portoghese&lt;/b>.</item>
+		<item>Risolto il problema con la torcia che non funzionava.</item>
+		<item>Risolto un errore dell\'interfaccia utente in &lt;b>Impostazioni&lt;/b>.</item>
+		<item>Migliorata la visualizzazione della schermata di allarme attivo sui dispositivi a bassa densità.</item>
+		<item>12.6.1</item>
+		<item>Risolto il problema relativo alla modifica di un &lt;b>timer&lt;/b>.</item>
+		<item>12.6.0</item>
+		<item>Aggiunto il timer. È possibile anche scansionare i tag NFC per avviare i timer.</item>
+		<item>Aggiunta l\'opzione &lt;b>ripeti&lt;/b> nelle impostazioni della sveglia. È possibile ripetere una sveglia per ore, giorni, settimane o mesi.</item>
+		<item>Aggiunta l\'opzione &lt;b>data&lt;/b> per impostare una sveglia in una data specifica. Accessibile durante la selezione dell\'ora.</item>
+		<item>Aggiunto il pulsante &lt;b>snooze&lt;/b> con i pulsanti &lt;b>volume&lt;/b>.</item>
+		<item>Aggiunta la possibilità di chiudere i tag NFC in ordine se sono selezionati più tag NFC. Possono essere chiusi in qualsiasi ordine, casuale o sequenziale.</item>
+		<item>Aggiunta la notifica &lt;b>disattiva anticipatamente&lt;/b>. È possibile visualizzare una notifica quando un allarme può essere disattivato in anticipo.</item>
+		<item>È stata aggiunta la funzione di &lt;b>pressione prolungata&lt;/b> sui pulsanti di ripetizione, vibrazione, NFC e torcia per accedere rapidamente a queste opzioni.</item>
+		<item>Risolto un problema per cui la riproduzione/casuale di tutta la &lt;b>musica&lt;/b> in una &lt;b>cartella&lt;/b> non funzionava.</item>
+		<item>Aggiornato per supportare &lt;b>Android 15&lt;/b>.</item>
+		<item>Aggiornato per supportare il tema &lt;b>Material 3&lt;/b> di Android.</item>
+	</string-array>
+
+</resources>

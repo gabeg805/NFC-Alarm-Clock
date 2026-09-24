@@ -11,53 +11,43 @@ import com.nfcalarmclock.alarm.db.NacAlarm
 
 /**
  * Original layout that the alarm activity had.
+ *
+ * @param activity Activity.
+ * @param alarm Alarm.
+ * @param onAlarmActionListener Listener for an alarm action.
  */
 class NacOriginalLayoutHandler(
-
-	/**
-	 * Activity.
-	 */
 	activity: AppCompatActivity,
-
-	/**
-	 * Alarm.
-	 */
 	alarm: NacAlarm?,
-
-	/**
-	 * Listener for an alarm action.
-	 */
 	onAlarmActionListener: OnAlarmActionListener
-
-	// Constructor
 ) : NacActiveAlarmLayoutHandler(activity, alarm, onAlarmActionListener)
 {
 
 	/**
-	 * Entire alarm activity layout.
+	 * Parent view for entire alarm activity.
 	 */
-	private val layout = activity.findViewById<RelativeLayout>(R.id.act_alarm)
+	private val parent: RelativeLayout = activity.findViewById(R.id.act_alarm)
 
 	/**
 	 * Snooze button.
 	 */
-	private val snoozeButton = activity.findViewById<Button>(R.id.snooze)
+	private val snoozeButton: Button = activity.findViewById(R.id.snooze)
 
 	/**
 	 * Dismiss button.
 	 */
-	private val dismissButton = activity.findViewById<Button>(R.id.dismiss)
+	private val dismissButton: Button = activity.findViewById(R.id.dismiss)
 
 	/**
 	 * The text view to show the instructions of how to interact with the
 	 * alarm.
  	 */
-	private val instructionsTextView = activity.findViewById<TextView>(R.id.instructions)
+	private val instructionsTextView: TextView = activity.findViewById(R.id.instructions)
 
 	/**
 	 * The text view to show the alarm name.
 	 */
-	private val nameTextView = activity.findViewById<TextView>(R.id.music_title)
+	private val nameTextView: TextView = activity.findViewById(R.id.music_title)
 
 	/**
 	 * Run any setup steps.
@@ -74,7 +64,6 @@ class NacOriginalLayoutHandler(
 	private fun setupAlarmButtons()
 	{
 		// NFC should be used
-		//if (NacNfc.exists(activity) && shouldUseNfc)
 		if (shouldUseNfc)
 		{
 			// Do not show the dismiss button
@@ -91,15 +80,13 @@ class NacOriginalLayoutHandler(
 		snoozeButton.setTextColor(sharedPreferences.themeColor)
 		dismissButton.setTextColor(sharedPreferences.themeColor)
 
-		// Setup the layout listener
-		layout.setOnClickListener {
-
-			// Check if easy snooze is allowed
-			if (sharedPreferences.shouldEasySnooze)
-			{
-				onAlarmActionListener.onSnooze(alarm!!)
+		// Setup easy snooze click listeners
+		if (alarm?.shouldEasySnooze == true)
+		{
+			// Parent click listener
+			parent.setOnClickListener {
+				onAlarmActionListener.onSnooze(alarm)
 			}
-
 		}
 
 		// Setup the snooze button listener

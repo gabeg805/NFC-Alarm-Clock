@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<!-- Days of week abbreviated -->
+	<string-array name="days_of_week_abbr">
+		<item>dom</item>
+		<item>lun</item>
+		<item>mar</item>
+		<item>mer</item>
+		<item>gio</item>
+		<item>ven</item>
+		<item>sab</item>
+	</string-array>
+
+	<!-- Days of week one letter -->
+	<string-array name="days_of_week_one_letter">
+		<item>D</item>
+		<item>L</item>
+		<item>M</item>
+		<item>M</item>
+		<item>G</item>
+		<item>V</item>
+		<item>S</item>
+	</string-array>
+
+	<!-- Audio sources -->
+	<string-array name="audio_sources">
+		<item>Allarme</item>
+		<item>Chiamata</item>
+		<item>Media</item>
+		<item>Notifica</item>
+		<item>Suoneria</item>
+	</string-array>
+
+	<!-- NFC tag dismiss orders -->
+	<string-array name="nfc_tag_dismiss_orders">
+		<item>Casuale</item>
+		<item>Sequenziale</item>
+	</string-array>
+
+</resources>

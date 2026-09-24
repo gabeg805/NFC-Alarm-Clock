@@ -143,12 +143,13 @@ class NacSnoozeOptionsDialog
 		autoSnoozeSwitch.isChecked = defaultState
 		autoSnoozeSwitch.setupSwitchColor(sharedPreferences)
 
-		// Setup the minutes and seconds
+		// Setup the minutes and seconds. 0-30 minutes
 		setupMinutesAndSecondsOption(
 			autoSnoozeMinutesInputLayout,
 			autoSnoozeSecondsInputLayout,
 			minutesAutoCompleteTextView,
 			secondsAutoCompleteTextView,
+			numMinutes = 31,
 			startIndices = NacAlarm.calcAutoSnoozeIndex(defaultTime),
 			onTimeChanged = { minIndex, secIndex ->
 
@@ -181,8 +182,20 @@ class NacSnoozeOptionsDialog
 		// Setup the input layouts
 		inputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
 
+		// Build the items for the dropdown menu
+		// None, 1-10, Unlimited
+		val allItems: Array<String> = mutableListOf<String>()
+			.apply {
+				add(resources.getString(R.string.none))
+				repeat(10) { i ->
+					add("${i+1}")
+				}
+				add(resources.getString(R.string.word_unlimited))
+			}.toTypedArray()
+
 		// Set the default selected items in the text views
 		val index = NacAlarm.calcMaxSnoozeIndex(default)
+		autoCompleteTextView.setSimpleItems(allItems)
 		autoCompleteTextView.setTextFromIndex(index)
 
 		// Set the textview listeners
@@ -202,12 +215,13 @@ class NacSnoozeOptionsDialog
 		val secondsInputLayout: TextInputLayout = dialog!!.findViewById(R.id.snooze_duration_seconds_input_layout)
 		val secondsAutoCompleteTextView: MaterialAutoCompleteTextView = dialog!!.findViewById(R.id.snooze_duration_seconds_dropdown_menu)
 
-		// Setup the minutes and seconds
+		// Setup the minutes and seconds. 0-90 minutes
 		setupMinutesAndSecondsOption(
 			minutesInputLayout,
 			secondsInputLayout,
 			minutesAutoCompleteTextView,
 			secondsAutoCompleteTextView,
+			numMinutes = 91,
 			startIndices = NacAlarm.calcSnoozeDurationIndex(default),
 			onTimeChanged = { minIndex, secIndex ->
 

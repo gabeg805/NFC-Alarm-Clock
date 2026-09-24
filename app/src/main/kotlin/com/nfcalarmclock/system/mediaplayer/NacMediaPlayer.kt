@@ -316,6 +316,7 @@ class NacMediaPlayer(
 			NacLog.i("Attempting to find a random song to play in local files directory")
 
 			// Find a random song to play in the local files directory
+			// TODO: Should I use Settings.System.DEFAULT_ALARM_ALERT_URI?
 			val uri = findFirstValidLocalMedia(context, alarm.localMediaPath.toUri())
 
 			// Play the random song

@@ -51,8 +51,7 @@ object NacPostNotificationsPermission
 			return true
 		}
 
-		// Check if the app has permission to read external storage/media audio
-		// (depending on version)
+		// Check if app has permission
 		return (ContextCompat.checkSelfPermission(context, permissionName)
 			== PackageManager.PERMISSION_GRANTED)
 	}

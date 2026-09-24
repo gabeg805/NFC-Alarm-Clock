@@ -1776,6 +1776,40 @@ class NacSharedPreferences(context: Context)
 		}
 
 	/**
+	 * Exclusion start date and/or time. Alarms will be skipped starting on this date/time.
+	 */
+	var repeatFrequencyExcludeStartDateTime: String
+		get()
+		{
+			val key = resources.getString(R.string.key_default_alarm_repeat_frequency_exclude_start_date_time)
+
+			return instance.getString(key, "") ?: ""
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_alarm_repeat_frequency_exclude_start_date_time)
+
+			saveString(key, value)
+		}
+
+	/**
+	 * Exclusion end date and/or time. Alarms will be skipped ending on this date/time.
+	 */
+	var repeatFrequencyExcludeEndDateTime: String
+		get()
+		{
+			val key = resources.getString(R.string.key_default_alarm_repeat_frequency_exclude_end_date_time)
+
+			return instance.getString(key, "") ?: ""
+		}
+		set(value)
+		{
+			val key = resources.getString(R.string.key_default_alarm_repeat_frequency_exclude_end_date_time)
+
+			saveString(key, value)
+		}
+
+	/**
 	 * Units for the frequency at which to repeat the alarm.
 	 */
 	var repeatFrequencyUnits: Int
@@ -1871,14 +1905,14 @@ class NacSharedPreferences(context: Context)
 	var shouldToggleAlarmsWithAirplaneMode: Boolean
 		get()
 		{
-			val key = resources.getString(R.string.key_misc_should_toggle_alarms_with_airplane_mode)
+			val key = resources.getString(R.string.key_misc_should_airplane_mode_skip_alarms)
 			val defaultValue = resources.getBoolean(R.bool.default_misc_should_toggle_alarms_with_airplane_mode)
 
 			return instance.getBoolean(key, defaultValue)
 		}
 		set(value)
 		{
-			val key = resources.getString(R.string.key_misc_should_toggle_alarms_with_airplane_mode)
+			val key = resources.getString(R.string.key_misc_should_airplane_mode_skip_alarms)
 
 			saveBoolean(key, value)
 		}

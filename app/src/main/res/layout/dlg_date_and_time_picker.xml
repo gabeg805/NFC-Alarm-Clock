@@ -6,6 +6,23 @@
     android:layout_height="wrap_content"
     android:background="@color/gray_dark">
 
+    <!-- Title -->
+    <TextView
+        android:id="@+id/date_time_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/normal"
+        android:paddingBottom="@dimen/zero"
+        android:paddingStart="@dimen/normal"
+        android:paddingEnd="@dimen/normal"
+        android:background="@color/gray_dark2"
+        android:textAppearance="@style/TextAppearance.Material3.TitleLarge"
+        android:textStyle="bold"
+        android:visibility="gone"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        />
+
     <!-- Time -->
     <TimePicker
         style="@style/Widget.TimePickerStyle"
@@ -13,7 +30,7 @@
         android:id="@+id/time_picker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/date_time_title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         />
@@ -25,7 +42,7 @@
         android:id="@+id/date_picker"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/date_time_title"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         android:visibility="gone"

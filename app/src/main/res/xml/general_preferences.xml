@@ -20,7 +20,7 @@
 
 		<com.nfcalarmclock.settings.preference.NacSwitchPreference
 			android:title="@string/title_toggle_alarms_with_airplane_mode"
-			android:key="@string/key_misc_should_toggle_alarms_with_airplane_mode"
+			android:key="@string/key_misc_should_airplane_mode_skip_alarms"
 			android:summaryOn="@string/description_toggle_alarms_with_airplane_mode_true"
 			android:summaryOff="@string/description_toggle_alarms_with_airplane_mode_false"
 			android:defaultValue="@bool/default_misc_should_toggle_alarms_with_airplane_mode"

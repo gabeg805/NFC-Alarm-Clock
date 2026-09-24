@@ -52,6 +52,16 @@
 		<item name="android:layout_marginBottom">@dimen/small</item>
 	</style>
 
+	<!-- EditText -->
+	<style name="Widget.AlarmOptionDialog.EditText" parent="Widget.Material3.TextInputLayout.OutlinedBox">
+		<item name="boxCornerRadiusTopStart">10dp</item>
+		<item name="boxCornerRadiusTopEnd">10dp</item>
+		<item name="boxCornerRadiusBottomStart">10dp</item>
+		<item name="boxCornerRadiusBottomEnd">10dp</item>
+		<item name="boxStrokeWidth">@dimen/line</item>
+		<item name="boxBackgroundColor">@color/gray_light</item>
+	</style>
+
 	<!-- Dropdown -->
 	<style name="Widget.AlarmOptionDialog.Dropdown" parent="Widget.Material3.TextInputLayout.OutlinedBox.ExposedDropdownMenu">
 		<item name="boxCornerRadiusTopStart">10dp</item>

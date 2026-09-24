@@ -88,6 +88,8 @@ class NacGeneralSettingFragment
 			?.getLiveData<Bundle>("YOYOYO")
 			?.observe(viewLifecycleOwner) { result ->
 
+				NacLog.i("Saving shared preference media info")
+
 				// Get the preference
 				val context = requireContext()
 				val key = getString(R.string.key_default_alarm_card)
@@ -171,10 +173,14 @@ class NacGeneralSettingFragment
 		// Name
 		pref.onCardNameClickedListener = NacCardPreference.OnCardNameClickedListener { alarm ->
 
+			NacLog.i("Showing shared preference name dialog")
+
 			// Show the name dialog
 			NacNameDialog.create(
 				alarm.name,
 				onNameEnteredListener = {
+
+					NacLog.i("Saving default alarm name")
 
 					// Save the name
 					sharedPreferences!!.name = it
@@ -190,10 +196,14 @@ class NacGeneralSettingFragment
 		// Dismiss options
 		pref.onCardDismissOptionsClickedListener = NacCardPreference.OnCardDismissOptionsClickedListener { alarm ->
 
+			NacLog.i("Showing shared preference dismiss options dialog")
+
 			// Show the dismiss options dialog
 			NacDismissOptionsDialog.create(
 				alarm,
 				onSaveAlarmListener = { a ->
+
+					NacLog.i("Saving default alarm dismiss options")
 
 					// Save the changes
 					sharedPreferences!!.shouldAutoDismiss = a.shouldAutoDismiss
@@ -211,10 +221,14 @@ class NacGeneralSettingFragment
 		// Snooze options
 		pref.onCardSnoozeOptionsClickedListener = NacCardPreference.OnCardSnoozeOptionsClickedListener { alarm ->
 
+			NacLog.i("Showing shared preference snooze options dialog")
+
 			// Show the snooze options dialog
 			NacSnoozeOptionsDialog.create(
 				alarm,
 				onSaveAlarmListener = { a ->
+
+					NacLog.i("Saving default alarm snooze options")
 
 					// Save the changes
 					sharedPreferences!!.shouldAutoSnooze = a.shouldAutoSnooze
@@ -233,6 +247,8 @@ class NacGeneralSettingFragment
 		// Alarm options
 		pref.onCardAlarmOptionsClickedListener = NacCardPreference.OnCardAlarmOptionsClickedListener { alarm ->
 
+			NacLog.i("Showing shared preference alarm options dialog")
+
 			// Show the alarm options dialog
 			NacAlarmOptionsDialog.navigate(navController, alarm)
 				?.observe(this) { a ->
@@ -243,10 +259,13 @@ class NacGeneralSettingFragment
 
 						// Repeat
 						R.id.nacRepeatOptionsDialog -> {
+							NacLog.i("Saving default alarm repeat options")
 							sharedPreferences!!.shouldRepeat = true
 							sharedPreferences!!.repeatFrequency = a.repeatFrequency
 							sharedPreferences!!.repeatFrequencyUnits = a.repeatFrequencyUnits
 							sharedPreferences!!.repeatFrequencyDaysToRunBeforeStarting = a.repeatFrequencyDaysToRunBeforeStarting.daysToValue()
+							sharedPreferences!!.repeatFrequencyExcludeStartDateTime = a.excludeStartDateTime
+							sharedPreferences!!.repeatFrequencyExcludeEndDateTime = a.excludeEndDateTime
 
 							// Weekly frequency unit
 							if (a.repeatFrequencyUnits == 4)
@@ -266,6 +285,7 @@ class NacGeneralSettingFragment
 
 						// Vibrate
 						R.id.nacVibrateOptionsDialog -> {
+							NacLog.i("Saving default alarm vibrate options")
 							sharedPreferences!!.vibrateDuration = a.vibrateDuration
 							sharedPreferences!!.vibrateWaitTime = a.vibrateWaitTime
 							sharedPreferences!!.shouldVibratePattern = a.shouldVibratePattern
@@ -275,6 +295,7 @@ class NacGeneralSettingFragment
 
 						// NFC
 						R.id.nacScanNfcTagDialog -> {
+							NacLog.i("Saving default alarm NFC options")
 							sharedPreferences!!.nfcTagId = a.nfcTagId
 							sharedPreferences!!.shouldUseNfcTagDismissOrder = a.shouldUseNfcTagDismissOrder
 							sharedPreferences!!.nfcTagDismissOrder = a.nfcTagDismissOrder
@@ -282,6 +303,7 @@ class NacGeneralSettingFragment
 
 						// Flashlight
 						R.id.nacFlashlightOptionsDialog -> {
+							NacLog.i("Saving default alarm flashlight options")
 							sharedPreferences!!.flashlightStrengthLevel = a.flashlightStrengthLevel
 							sharedPreferences!!.shouldBlinkFlashlight = a.shouldBlinkFlashlight
 							sharedPreferences!!.flashlightOnDuration = a.flashlightOnDuration
@@ -290,12 +312,14 @@ class NacGeneralSettingFragment
 
 						// Audio source
 						R.id.nacAudioSourceDialog -> {
+							NacLog.i("Saving default alarm audio source options")
 							sharedPreferences!!.audioSource = a.audioSource
 							sharedPreferences!!.shouldPlayAudioThroughSpeakersAndBluetooth = a.shouldPlayAudioThroughSpeakersAndBluetooth
 						}
 
 						// Text-to-speech
 						R.id.nacTextToSpeechDialog -> {
+							NacLog.i("Saving default alarm TTS options")
 							sharedPreferences!!.shouldSayCurrentTime = a.shouldSayCurrentTime
 							sharedPreferences!!.shouldSayAlarmName = a.shouldSayName
 							sharedPreferences!!.ttsFrequency = a.ttsFrequency
@@ -304,6 +328,7 @@ class NacGeneralSettingFragment
 
 						// Upcoming reminder
 						R.id.nacUpcomingReminderDialog -> {
+							NacLog.i("Saving default alarm reminder options")
 							sharedPreferences!!.shouldShowReminder = a.shouldShowReminder
 							sharedPreferences!!.timeToShowReminder = a.timeToShowReminder
 							sharedPreferences!!.reminderFrequency = a.reminderFrequency
@@ -312,6 +337,7 @@ class NacGeneralSettingFragment
 
 						// Volume
 						R.id.nacVolumeOptionsDialog -> {
+							NacLog.i("Saving default alarm volume options")
 							sharedPreferences!!.shouldGraduallyIncreaseVolume = a.shouldGraduallyIncreaseVolume
 							sharedPreferences!!.graduallyIncreaseVolumeWaitTime = a.graduallyIncreaseVolumeWaitTime
 							sharedPreferences!!.shouldRestrictVolume = a.shouldRestrictVolume

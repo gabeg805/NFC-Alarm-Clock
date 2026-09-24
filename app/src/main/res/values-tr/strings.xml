@@ -1,0 +1,644 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+	<!-- App -->
+	<string name="app_name">NFC Alarm Saati</string>
+	<string name="app_developer">Gabe Gonzalez</string>
+
+	<!-- Consolidate -->
+	<string name="version">Sürüm</string>
+	<string name="am">ÖÖ</string>
+	<string name="pm">ÖS</string>
+	<string name="none">Hiçbiri</string>
+	<string name="show_next_alarm">Sonraki alarmı göster</string>
+	<string name="background">Arka plan</string>
+	<string name="time_layout">Zaman düzeni</string>
+	<string name="date_layout">Tarih düzeni</string>
+	<string name="alarm_layout">Alarm düzeni</string>
+	<string name="show">Göstermek</string>
+	<string name="bold">Gözü pek</string>
+	<string name="color">Renk</string>
+	<string name="text_size">Metin boyutu</string>
+	<string name="colon">:</string>
+	<string name="icon">Simge</string>
+	<string name="transparency">Şeffaflık</string>
+	<string name="hour">Saat</string>
+	<string name="minutes">Dakikalar</string>
+	<string name="am_pm">ÖÖ / ÖS</string>
+
+	<!-- Day names -->
+	<string name="dow_everyday">Her gün</string>
+	<string name="dow_weekdays">Hafta içi</string>
+	<string name="dow_weekend">Hafta sonu</string>
+	<string name="dow_today">Bugün</string>
+	<string name="dow_tomorrow">Yarın</string>
+
+	<!-- Words/numbers -->
+	<string name="word_app">Uygulama</string>
+	<string name="word_version">Sürüm</string>
+	<string name="word_of">ile ilgili</string>
+	<string name="word_alarm">Alarm</string>
+	<string name="word_alarms">Alarmlar</string>
+	<string name="word_timer">Zamanlayıcı</string>
+	<string name="word_timers">Zamanlayıcılar</string>
+	<string name="word_reminder">Hatırlatma</string>
+	<string name="word_more">Daha</string>
+	<string name="word_allow">İzin vermek</string>
+	<string name="word_back">Geri</string>
+	<string name="word_next">Sonraki</string>
+	<string name="word_finish">Sona ermek</string>
+	<string name="word_once">Bir kere</string>
+	<string name="word_unlimited">Sınırsız</string>
+	<string name="letter_h">sa</string>
+	<string name="letter_m">dk</string>
+	<string name="letter_s">sn</string>
+	<string name="number00">00</string>
+	<string name="number0">0</string>
+	<string name="number1">1</string>
+	<string name="number2">2</string>
+	<string name="number3">3</string>
+	<string name="number4">4</string>
+	<string name="number5">5</string>
+	<string name="number6">6</string>
+	<string name="number7">7</string>
+	<string name="number8">8</string>
+	<string name="number9">9</string>
+
+	<!-- Timer add time -->
+	<string name="timer_add_1min">+ 1dk</string>
+	<string name="timer_add_30sec">+ 30s</string>
+	<string name="timer_add_5sec">+ 5s</string>
+
+	<!-- States -->
+	<string name="state_unknown">Bilinmiyor</string>
+
+	<!-- Actions -->
+	<string name="action_get_started">Başlayın</string>
+	<string name="action_alarm_snooze">Kestirmek</string>
+	<string name="action_alarm_dismiss">Azletmek</string>
+	<string name="action_alarm_dismiss_early">Erken taburcu et</string>
+	<string name="action_alarm_copy">Kopyala</string>
+	<string name="action_alarm_delete">Silmek</string>
+	<string name="action_timer_pause">Duraklat</string>
+	<string name="action_timer_resume">Sürdürmek</string>
+	<string name="action_timer_stop">Durmak</string>
+	<string name="action_yes">Evet</string>
+	<string name="action_no">Hayir</string>
+	<string name="action_ok">Tamam</string>
+	<string name="action_cancel">İptal etmek</string>
+	<string name="action_clear">Temizlemek</string>
+	<string name="action_clear_reminder">Net hatırlatma</string>
+	<string name="action_default">Varsayılan</string>
+	<string name="action_done">Tamamlamak</string>
+	<string name="action_preview">Önizleme</string>
+	<string name="action_stop_preview">Durdurma Önizlemesi</string>
+	<string name="action_show_nfc_tag_id">NFC etiketini göster</string>
+	<string name="action_use_any">Herhangi bir NFC etiketi kullanın.</string>
+	<string name="action_add">Eklemek</string>
+	<string name="action_replace">Yer değiştirmek</string>
+	<string name="action_save">Kaydetmek</string>
+	<string name="action_skip">Atlamak</string>
+	<string name="action_undo">Geri al</string>
+	<string name="action_browse">Gözat</string>
+	<string name="action_previous_folder">Önceki klasör</string>
+	<string name="action_reset">Sıfırla</string>
+	<string name="action_email">E-posta</string>
+	<string name="action_shuffle_music">Müziği karıştır</string>
+	<string name="action_recursively_play_media">Alt klasörleri dahil et</string>
+	<string name="action_alarm_option_audio_source">Ses kaynağı</string>
+	<string name="action_alarm_option_flashlight">El feneri</string>
+	<string name="action_alarm_option_text_to_speech">Metinden sese dönüştürme</string>
+	<string name="action_alarm_option_volume">Hacim</string>
+	<string name="action_alarm_option_upcoming_reminder">Yaklaşan hatırlatma</string>
+	<string name="action_delete_alarm_after_dismissed">İşten çıkarıldıktan sonra silin</string>
+	<string name="action_skip_next_alarm">Sonraki alarmı atla</string>
+	<string name="action_unskip_next_alarm">Sonraki alarmı atla</string>
+	<string name="action_export">İhracat</string>
+	<string name="action_import">İçe aktarmak</string>
+	<string name="action_center">Merkez</string>
+	<string name="action_left">Sol</string>
+	<string name="action_right">Sağ</string>
+	<string name="action_above_date">Yukarıdaki tarih</string>
+	<string name="action_below_date">Aşağıda tarih</string>
+	<string name="action_same_line_as_date">Tarihle aynı satırda</string>
+
+	<!-- Labels -->
+	<string name="label_created_statistic">oluşturuldu</string>
+	<string name="label_deleted_statistic">silindi</string>
+	<string name="label_dismissed_statistic">görevden alındı</string>
+	<string name="label_missed_statistic">kaçırıldı</string>
+	<string name="label_snoozed_statistic">uyukladı</string>
+	<string name="label_created_statistic_header">Oluşturulan Zaman</string>
+	<string name="label_deleted_statistic_header">Silinme Zamanı, İsim, Alarm Saati</string>
+	<string name="label_dismissed_statistic_header">Çıkış Saati, İsim, Alarm Saati, NFC Kullanımı</string>
+	<string name="label_missed_statistic_header">Kaçırılan Saat, İsim, Alarm Saati</string>
+	<string name="label_snoozed_statistic_header">Erteleme Süresi, İsim, Alarm Saati, Erteleme Süresi (saniye)</string>
+	<string name="label_clock_widget">Saat</string>
+	<string name="label_start">Başlangıç</string>
+	<string name="label_end">Son</string>
+
+	<!-- Messages -->
+	<string name="message_permission_ignore_battery_optimization_request">Uygulama bir süredir kullanılmadığında alarmın çalışmamasını önlemek için izin verin.&lt;br/>&lt;br/>&lt;b>Not:&lt;/b> Bu, sahip olduğunuz cihaza bağlıdır ve aslında gerekli olmayabilir.&lt;/b></string>
+	<string name="message_permission_post_notifications_request">Uygulama odaklanmadığında alarmların çalışmasına izin verin.&lt;br/>&lt;br/>&lt;b>Not:&lt;/b> Bu, kullanıcıların yararına olan ancak bu gibi durumlarda uygulamaları kısıtlayabilen &lt;b>Android 13&lt;/b>\'te tanıtılan güvenlik politikalarının bir yan etkisidir.</string>
+	<string name="message_permission_post_notifications_warning">Lütfen bildirim iznini etkinleştirin. Bildirim izni olmadan alarmlar çalışmayabilir.</string>
+	<string name="message_permission_schedule_exact_alarm_request">Alarmların tam olarak planlanan zamanda çalıştırılması için izin verin.</string>
+	<string name="message_permission_system_alert_window_request">Uygulamanın diğer uygulamaların üzerinde görüntülenmesine izin verilsin mi? Bu, uygulamanın arka planda çalışması durumunda sesin çalınması için gerekli olan alarm ekranının gösterilmesini sağlayacaktır. Not: Bu yalnızca Android 15\'i etkiler.</string>
+	<string name="message_playlist">Bu klasördeki tüm müzikleri çalmak ister misiniz?</string>
+	<string name="message_nfc_enable_on_device_request">Lütfen cihazınızda NFC özelliğini etkinleştirin.</string>
+	<string name="message_nfc_optional">NFC isteğe bağlıdır</string>
+	<string name="message_nfc_required_unsaved">NFC gereklidir</string>
+	<string name="message_nfc_required_saved">NFC gerekli — %1$s</string>
+	<string name="message_nfc_required_use_any">NFC gereklidir (herhangi birini kullanabilirsiniz)</string>
+	<string name="message_nfc_screen_locked">NFC özelliğini kullanmak için lütfen cihazın kilidini açın.</string>
+	<string name="message_show_nfc_tag_id">İD</string>
+	<string name="message_delete_nfc_tag">Bu NFC etiketini silmek istediğinizden emin misiniz?</string>
+	<string name="message_rename_nfc_tag">NFC etiketinin adını ne olarak değiştirmek istersiniz?</string>
+	<string name="message_flashlight_on_duration">Açık:</string>
+	<string name="message_flashlight_off_duration">Kapalı:</string>
+	<string name="message_no_alarms_scheduled">Hiçbir alarm planlanmadı.</string>
+	<string name="message_alarm_repeat_disabled">Alarmı tekrarlamayın.</string>
+	<string name="message_alarm_repeat_enabled">Tekrarlanan alarm</string>
+	<string name="message_timer_repeat_disabled">Zamanlayıcıyı tekrarlamayın.</string>
+	<string name="message_timer_repeat_enabled">Tekrar zamanlayıcısı</string>
+	<string name="message_vibrate_disabled">Titreşimi kapat</string>
+	<string name="message_vibrate_enabled">Açıkken titreştirin</string>
+	<string name="message_flashlight_disabled">El feneri kullanmayın.</string>
+	<string name="message_flashlight_enabled">El feneri kullanın.</string>
+	<string name="message_alarm_copy">Kopyalanan alarm</string>
+	<string name="message_timer_copy">Kopyalanmış zamanlayıcı</string>
+	<string name="message_alarm_delete">Silinen alarm</string>
+	<string name="message_timer_delete">Zamanlayıcı silindi</string>
+	<string name="message_alarm_restore">Alarm geri yüklendi.</string>
+	<string name="message_timer_restore">Zamanlayıcı geri yüklendi</string>
+	<string name="message_alarm_dismiss">Alarm kapatıldı.</string>
+	<string name="message_alarm_snooze">Alarmı erteledim</string>
+	<string name="message_timer_dismiss">Zamanlayıcı kapatıldı</string>
+	<string name="message_statistics_started_on">İstatistikler şu tarihte başladı:</string>
+	<string name="message_bullet">\u25BA</string>
+	<string name="message_required">Gerekli</string>
+	<string name="message_optional">İsteğe bağlı</string>
+	<string name="message_already_have_permission">Bu izne zaten sahipsiniz.</string>
+	<string name="message_support_thank_you">Desteğiniz için teşekkür ederim!</string>
+	<string name="message_reset_statistics">Tüm istatistikleri sıfırlamak istediğinizden emin misiniz?</string>
+	<string name="message_tts_current_time">Şu anki zaman</string>
+	<string name="message_tts_alarm_name">Alarmın adı</string>
+	<string name="message_tts_timer_name">Zamanlayıcının adı</string>
+	<string name="message_statistics_email_subject">NFC Alarm Saati İstatistikleri</string>
+	<string name="message_skip_general_alarm">Alarm atlanacak.</string>
+	<string name="message_skip_named_alarm">&lt;b>%1$s&lt;/b> atlanacaktır.</string>
+	<string name="message_skip_airplane_mode_alarm">Uçak modu nedeniyle alarm atlanıyor.</string>
+	<string name="message_disabled_general_alarm">Alarm devre dışı bırakıldı.</string>
+	<string name="message_disabled_named_alarm">&lt;b>%1$s&lt;/b> devre dışı bırakıldı.</string>
+	<string name="message_will_run_on_general_alarm" tools:ignore="StringFormatCount">%2$s üzerinden çalışacaktır.</string>
+	<string name="message_will_run_on_named_alarm">&lt;b>%1$s&lt;/b>%2$s üzerinde çalışacak.</string>
+	<string name="message_will_run_in_general_alarm" tools:ignore="StringFormatCount">%2$s dakika içinde çalışacak.</string>
+	<string name="message_will_run_in_named_alarm">&lt;b>%1$s&lt;/b> %2$s içinde çalışacak.</string>
+	<string name="message_next_alarm_on">Sonraki alarm %1$s\'de</string>
+	<string name="message_next_alarm_in">Sonraki alarm %1$s saniye sonra</string>
+	<string name="message_export_started">İhracat…</string>
+	<string name="message_export_completed">Dışa aktarma tamamlandı</string>
+	<string name="message_import_started">İthalat…</string>
+	<string name="message_import_completed">İçe aktarma işlemi tamamlandı</string>
+	<string name="message_selected_alarm_song_not_available">Alarm için seçilen şarkı mevcut değil.</string>
+	<string name="message_milliseconds">%1$d ms</string>
+	<string name="message_text_to_speech_default_voice">Varsayılan ses</string>
+	<string name="message_text_to_speech_voice">Ses %1$d</string>
+	<string name="message_text_to_speech_network_required">Sesli iletişimin çalışması için ağ bağlantısı gerekebilir.</string>
+	<string name="message_volume_dismiss_priority">Toplu işlemden çıkarma öncelikli olacaktır.</string>
+	<string name="message_volume_snooze_ignored">Ses seviyesi erteleme özelliği dikkate alınmayacaktır.</string>
+	<string name="message_current_alarm_within_exclude_range">Not: Mevcut alarm, hariç tutma aralığı içindedir.</string>
+
+	<!-- Error messages -->
+	<string name="error_message_active_delete">Aktif bir alarm silinemiyor.</string>
+	<string name="error_message_active_modify">Aktif bir alarmı değiştirmek mümkün değil.</string>
+	<string name="error_message_max_alarms">Oluşturulan maksimum alarm sayısı</string>
+	<string name="error_message_max_timers">Oluşturulan maksimum zamanlayıcı sayısı</string>
+	<string name="error_message_nfc_mismatch">NFC etiketi, kaydedilen etiketle eşleşmiyor.</string>
+	<string name="error_message_nfc_unsupported">Cihazınız NFC\'yi desteklemiyor.</string>
+	<string name="error_message_nfc_name_exists">Bu isim zaten kullanılıyor.</string>
+	<string name="error_message_unable_to_parse_nfc_id">NFC kimliğini çözümleyemedi.</string>
+	<string name="error_message_nfc_id_exists">Bu NFC kimliği zaten kullanılıyor.</string>
+	<string name="error_message_unable_to_scan_nfc">NFC etiketlerini tarayamıyorum.</string>
+	<string name="error_message_snooze">Alarmı erteleyemedim.</string>
+	<string name="error_message_snoozed_delete">Ertelenmiş alarmı silmek mümkün değil.</string>
+	<string name="error_message_snoozed_modify">Ertelenmiş bir alarmı değiştirmek mümkün değil.</string>
+	<string name="error_message_select_color">Geçersiz onaltılık renk kodu</string>
+	<string name="error_message_play_audio">Ses oynatılamıyor.</string>
+	<string name="error_message_google_play_billing">Google Play Store\'a bağlanırken hata oluştu.</string>
+	<string name="error_message_text_to_speech_audio_focus">Metin okuma özelliğini kullanamıyorum.</string>
+	<string name="error_message_enter_timer_duration">Bir süre girin</string>
+	<string name="error_message_unable_to_volume_dismiss_nfc_alarm">Ses düğmesiyle NFC alarmını kapatmak mümkün değil.</string>
+	<string name="error_message_unable_to_email">E-posta taslağı oluşturulamadı.</string>
+	<string name="error_message_unable_to_email_statistics">İstatistikleri e-posta ile gönderemiyorum.</string>
+	<string name="error_message_unable_to_shine_flashlight">El fenerini yakamıyorum — %1$s</string>
+	<string name="error_message_unable_to_get_flashlight_characteristics">El feneri bilgisine erişilemiyor.</string>
+	<string name="error_message_unable_to_access_flashlight">El fenerine erişilemiyor — %1$s</string>
+	<string name="error_message_unable_to_turn_off_flashlight">El fenerini kapatamıyorum.</string>
+	<string name="error_message_unable_to_turn_on_flashlight">El fenerini açamıyorum.</string>
+	<string name="error_message_unable_to_start_foreground_service">Ön plan hizmeti başlatılamadı. Lütfen izinleri etkinleştirin.</string>
+	<string name="error_message_unable_to_open_import_export_stream">Dosya açılamadı.</string>
+	<string name="error_message_unable_to_select_file">Dosya seçilemedi.</string>
+	<string name="error_message_unable_to_get_media_information_from_file">Dosyadan medya bilgisi alınamadı.</string>
+	<string name="error_message_not_enough_free_space">Şarkının yedeğini almak için yeterli boş alan yok.</string>
+	<string name="error_message_camera_disabled">Kamera devre dışı bırakıldı</string>
+	<string name="error_message_camera_disconnected">Kamera bağlantısı kesildi</string>
+	<string name="error_message_camera_error">Kamera hatası</string>
+	<string name="error_message_camera_in_use">Kullanımda olan kamera</string>
+	<string name="error_message_camera_max_in_use">Kullanımdaki maksimum kamera sayısı</string>
+	<string name="error_message_unable_to_launch_media_picker">Sistem ses seçici başlatılamadı.</string>
+	<string name="error_message_unable_to_preview_volume_options">Medya ayarlanmadığında önizleme yapılamıyor.</string>
+	<string name="error_message_exclude_start_datetime_missing">Başlangıç tarihi/saati eksikse hariç tutulacak.</string>
+	<string name="error_message_exclude_end_datetime_missing">Eksik olan hariç tutma bitiş tarihi/saati</string>
+	<string name="error_message_exclude_start_end_calendar_not_in_order">Başlangıç tarihi/saati, bitiş tarihi/saatinden önce olmalıdır.</string>
+
+	<!-- Titles -->
+	<string name="title_timer_main">NFC Zamanlayıcı</string>
+	<string name="title_timer_add">Zamanlayıcı ekle</string>
+	<string name="title_timer_edit">Zamanlayıcıyı düzenle</string>
+	<string name="title_timer_active">Aktif zamanlayıcı</string>
+	<string name="title_select_media">Medya seçin</string>
+	<string name="title_settings">Ayarlar</string>
+	<string name="title_options">Seçenekler</string>
+	<string name="title_time">Zaman</string>
+	<string name="title_alarm_activity">Alarmı Kapat</string>
+	<string name="title_scan_nfc_tag">NFC etiketini tarayın</string>
+	<string name="title_select_nfc_tag">NFC etiketini/etiketlerini seçin</string>
+	<string name="title_nfc_tag_dismiss_order">Reddetme emri</string>
+	<string name="title_start_timer_on_nfc_tag_scan">Tarama işleminde zamanlayıcıyı başlat</string>
+	<string name="title_add_or_replace_nfc_tag">Ekle veya değiştir…</string>
+	<string name="title_using_nfc_tag">NFC etiketi kullanımı:</string>
+	<string name="title_save_nfc_tag">NFC etiketini kaydedin</string>
+	<string name="title_delete_nfc_tag">NFC etiketini silin</string>
+	<string name="title_rename_nfc_tag">NFC etiketini yeniden adlandır</string>
+	<string name="title_current_selected">Şu anda seçili</string>
+	<string name="title_select_color">Bir renk seçin</string>
+	<string name="title_select_next_alarm_format">Bir format seçin</string>
+	<string name="title_folder_selected">Bir klasör seçtiniz.</string>
+	<string name="title_active_alarms">Aktif alarmlar</string>
+	<string name="title_active_timers">Aktif zamanlayıcılar</string>
+	<string name="title_upcoming_reminders">Yaklaşan hatırlatmalar</string>
+	<string name="title_dismissed_alarms">Reddedilen alarmlar</string>
+	<string name="title_missed_alarm">Alarm kaçırıldı.</string>
+	<string name="title_missed_alarms">Kaçırılan alarmlar</string>
+	<string name="title_snoozed_alarms">Ertelenmiş alarmlar</string>
+	<string name="title_created_alarms">Oluşturulan alarmlar</string>
+	<string name="title_deleted_alarms">Silinen alarmlar</string>
+	<string name="title_current_alarms">Akım</string>
+	<string name="title_set_date">Tarih belirleyin</string>
+	<string name="title_set_time">Zamanı ayarlayın</string>
+	<string name="title_select_start_date">Başlangıç tarihini seçin</string>
+	<string name="title_select_start_time">Başlangıç saatini seçin</string>
+	<string name="title_select_end_date">Bitiş tarihini seçin</string>
+	<string name="title_select_end_time">Bitiş zamanını seçin</string>
+	<string name="title_whats_new">Ne var ne yok</string>
+	<string name="title_permission_disable_battery_optimization">Pil optimizasyonunu devre dışı bırak</string>
+	<string name="title_permission_storage">Depolamak</string>
+	<string name="title_permission_foreground_service">Ön plan hizmeti</string>
+	<string name="title_permission_full_screen_intent">Tam ekran</string>
+	<string name="title_permission_schedule_exact_alarm">Kesin alarmları planla</string>
+	<string name="title_permission_set_alarm">Alarmı ayarla</string>
+	<string name="title_permission_show_notifications">Bildirimleri göster</string>
+	<string name="title_permission_system_alert_window">Diğer uygulamaların üzerinde görüntüle</string>
+	<string name="title_permission_boot">Başlatmak</string>
+	<string name="title_permission_wakelock">Wakelock</string>
+	<string name="title_request_permission_schedule_exact_alarm">Zamanlama ile ilgili kesin alarmları etkinleştirin.</string>
+	<string name="title_reset_statistics">İstatistikleri sıfırla…</string>
+	<string name="title_repeat_frequency">Tekrarlama sıklığı</string>
+	<string name="title_exclude_date_time_range">Tarih/saat aralığını hariç tut</string>
+	<string name="title_repeat_frequency_days_to_run_before_starting">Frekans ölçümüne başlamadan önce geçmesi gereken gün sayısı</string>
+	<string name="title_vibrate_vibration_duration">Titreşim süresi</string>
+	<string name="title_vibrate_custom_pattern">Özel desen</string>
+	<string name="title_vibrate_wait">Beklemek</string>
+	<string name="title_flashlight_brightness_level">Parlaklık seviyesi</string>
+	<string name="title_flashlight_blink_on_off">Yanıp sönme açma/kapama</string>
+	<string name="title_text_to_speech_speak_frequency">Konuşma sıklığı</string>
+	<string name="title_text_to_speech_speech_rate">Konuşma hızı</string>
+	<string name="title_text_to_speech_voice">Ses</string>
+	<string name="title_volume_gradually_increase_volume">Hacmi kademeli olarak artırın</string>
+	<string name="title_volume_restrict_volume">Ses seviyesini sınırlayın</string>
+	<string name="title_dismiss_options_auto_dismiss">Otomatik kapatma</string>
+	<string name="title_dismiss_options_dismiss_early">Erken taburcu et</string>
+	<string name="title_dismiss_options_dismiss_early_notification">Erken bildirimi reddet</string>
+	<string name="title_dismiss_options_delete_after_dismissed">İşten çıkarıldıktan sonra silin</string>
+	<string name="title_dismiss_options_volume_dismiss">Ses seviyesini düşür</string>
+	<string name="title_snooze_options_auto_snooze">Otomatik erteleme</string>
+	<string name="title_snooze_options_max_snooze">Max uyukluyor</string>
+	<string name="title_snooze_options_snooze_duration">Erteleme süresi</string>
+	<string name="title_snooze_options_easy_snooze">Kolay uyku</string>
+	<string name="title_snooze_options_volume_snooze">Ses seviyesi erteleme</string>
+	<string name="title_upcoming_reminder_show_reminder">Hatırlatıcıyı göster</string>
+	<string name="title_upcoming_reminder_how_early">Ne kadar erken…</string>
+	<string name="title_upcoming_reminder_how_frequent">Ne sıklıkla…</string>
+	<string name="title_setting_general">Genel</string>
+	<string name="title_setting_appearance">Dış görünüş</string>
+	<string name="title_setting_about">Hakkında</string>
+	<string name="title_setting_help">Yardım</string>
+	<string name="title_setting_statistics">İstatistikler</string>
+	<string name="title_setting_manage_nfc_tags">NFC etiketlerini yönetin</string>
+	<string name="title_setting_support">Gelişimi destekleyin</string>
+	<string name="title_setting_import_export">İçe Aktar | Dışa Aktar</string>
+	<string name="title_default_alarm">Varsayılan alarm</string>
+	<string name="title_alarm_name">İsim</string>
+	<string name="title_alarm_days">Günler</string>
+	<string name="title_alarm_schedule_date">Planlanan tarih</string>
+	<string name="title_alarm_repeat">Tekrarlamak</string>
+	<string name="title_alarm_vibrate">Titreşim</string>
+	<string name="title_alarm_nfc">NFC</string>
+	<string name="title_alarm_screen">Alarm ekranı</string>
+	<string name="title_colors">Renkler</string>
+	<string name="title_notifications">Bildirimler</string>
+	<string name="title_style">Stil</string>
+	<string name="title_tweaks">İnce Ayarlar</string>
+	<string name="title_misc">Çeşitli</string>
+	<string name="title_new_screen">Yeni ekran</string>
+	<string name="title_show_alarm_name">Alarm adını göster</string>
+	<string name="title_show_current_date_and_time">Geçerli tarih ve saati göster</string>
+	<string name="title_show_music_info">Müzik bilgilerini göster</string>
+	<string name="title_battery_saver">Pil tasarrufu</string>
+	<string name="title_theme_color">Tema</string>
+	<string name="title_day_button_style">Gün düğmeleri</string>
+	<string name="title_start_week_on">Haftaya şu şekilde başlayın:</string>
+	<string name="title_expand_new_alarm">Yeni alarmları genişletin</string>
+	<string name="title_next_alarm_format">Sonraki alarm formatı</string>
+	<string name="title_toggle_alarms_with_airplane_mode">Uçak modu alarmları atlar</string>
+	<string name="title_permissions">İzinler</string>
+	<string name="title_no_permissions_needed">İzin gerekmiyor!</string>
+	<string name="title_help_debug_mode">Hata ayıklama modu</string>
+	<string name="title_help_share_logs">Günlük kayıtlarını geliştiriciyle paylaşın.</string>
+	<string name="title_help_send_email">E-posta gönder</string>
+	<string name="title_how_to_use_features">Bazı özelliklerin nasıl kullanılacağı</string>
+	<string name="title_how_to_copy_and_delete">Kopyalamak ve silmek için kaydırın.</string>
+	<string name="title_how_to_get_more_options">Daha fazla seçenek için uzun süre basılı tutun.</string>
+	<string name="title_how_to_change_appearance">Ayarlar > Görünüm</string>
+	<string name="title_developer">Geliştirici</string>
+	<string name="title_alignment">Hizalama</string>
+	<string name="title_position">Konum</string>
+	<string name="title_only_show_app_alarms">Yalnızca uygulama alarmlarını göster</string>
+
+	<!-- Descriptions -->
+	<string name="description_onboarding_welcome">Şimdiye kadar kullandığınız en özelleştirilebilir alarm saati uygulamasına hoş geldiniz.</string>
+	<string name="description_onboarding_permissions">Uygulamanın düzgün çalışması için bazı izinlere ihtiyacı var.</string>
+	<string name="description_onboarding_permission_post_notifications_request">Alarmların çalışması için gereklidir. Uygulamanın odaklanmış durumda olmadığı zamanlarda başlamasına ve çalışmaya devam etmesine olanak tanır.</string>
+	<string name="description_onboarding_permission_system_alert_window_request">Bu özel bir izindir. Alarm ekranının gösterilmesini ve sesin çalınmasını sağlamak için kullanılır. Yalnızca Android 15\'te veya alarmların çalışmadığı cihaza özgü bir sorun varsa gereklidir.</string>
+	<string name="description_onboarding_how_to_use_features">Bazı şeyler gizli veya kafa karıştırıcı olabilir. İşte bunları nasıl yapacağınız.</string>
+	<string name="description_onboarding_how_to_copy_and_delete">Alarmı veya zamanlayıcıyı kopyalamak için sağa, silmek için sola kaydırın.</string>
+	<string name="description_onboarding_how_to_get_more_options">Genişletilmiş bir alarm/zamanlayıcıda neredeyse herhangi bir düğmeye uzun süre basarak daha fazla seçeneğe erişebilirsiniz. Hatta "Sonraki alarmı atla" gibi seçeneklere erişmek için alarm kartında bile deneyebilirsiniz.</string>
+	<string name="description_onboarding_how_to_change_appearance">Ayarlar > Görünüm bölümüne giderek tüm özelleştirme seçeneklerini bulabilir ve uygulamanın istediğiniz gibi görünmesini sağlayabilirsiniz.</string>
+	<string name="description_slide_to_snooze">Erteleme düğmesine kaydırın</string>
+	<string name="description_slide_to_dismiss">Kapatmak için kaydırın</string>
+	<string name="description_alarm_activity">Alarmı kapatmak için NFC etiketini tarayın.</string>
+	<string name="description_no_notification">Bildirimleri gösterme.</string>
+	<string name="description_upcoming_reminder">Yakında aktif hale gelecek olan alarmlar için hatırlatma.</string>
+	<string name="description_active_alarm">Şu anda aktif olan alarmlar.</string>
+	<string name="description_active_timer">Şu anda aktif olan zamanlayıcılar.</string>
+	<string name="description_missed_alarm">Otomatik olarak kapatılan alarmlar.</string>
+	<string name="description_skipped_alarm">Atlanan alarmlar.</string>
+	<string name="description_color">Hex rengi</string>
+	<string name="description_day_button_style_filled">Doldurulmuş düğmeler.</string>
+	<string name="description_day_button_style_outlined">Çerçeveli düğmeler.</string>
+	<string name="description_should_show_card_button_labels_true">Düğmelerin altında etiket görünecektir.</string>
+	<string name="description_should_show_card_button_labels_false">Düğmelerde yalnızca simge görünecektir.</string>
+	<string name="description_media">Müzik veya zil sesi</string>
+	<string name="description_scan_nfc_tag_alarm">Alarm çaldığında, alarmı kapatmak için taranan NFC etiketine ihtiyaç duyulacaktır.</string>
+	<string name="description_scan_nfc_tag_timer">Zamanlayıcı çaldığında devre dışı bırakmak için taranan NFC etiketine ihtiyaç duyulacaktır.</string>
+	<string name="description_select_nfc_tag_alarm">Alarm çaldığında devre dışı bırakmak için gerekli olacak NFC etiketini seçin. Birden fazla etiket seçilirse, bu etiketler de alarmı devre dışı bırakmak için kullanılabilir.</string>
+	<string name="description_select_nfc_tag_timer">Zamanlayıcı çaldığında devre dışı bırakılması için gerekli olacak NFC etiketini seçin. Birden fazla etiket seçilirse, bu etiketler de zamanlayıcıyı devre dışı bırakmak için kullanılabilir.</string>
+	<string name="description_nfc_tag_dismiss_order">Yukarıdaki NFC etiketlerinin hangi sırayla devre dışı bırakılması gerektiği. Bu özelliği etkinleştirmek, devre dışı bırakılabilmeleri için seçilen tüm NFC etiketlerinin taranması gerektiği anlamına gelir.</string>
+	<string name="description_start_timer_on_single_nfc_tag_scan">Uygulama çalışırken ve NFC etiketi tarandığında (bu ekranda değil), bu zamanlayıcı otomatik olarak başlayacaktır.</string>
+	<string name="description_start_timer_on_multiple_nfc_tag_scan">Uygulama çalışırken ve seçilen NFC etiketlerinden biri tarandığında (bu ekranda değil), bu zamanlayıcı otomatik olarak başlayacaktır.</string>
+	<string name="description_add_or_replace_nfc_tag">NFC etiketi, bu alarmı devre dışı bırakabilen NFC etiketleri listesine mi eklenmeli, yoksa bu alarm tarafından kullanılan mevcut NFC etiketlerinin yerine mi geçmeli?</string>
+	<string name="description_save_nfc_tag">Bu NFC etiketini, tekrar taramanıza gerek kalmadan, ona bir isim vererek yeniden kullanabilirsiniz.</string>
+	<string name="description_repeat_frequency">Alarmı belirli bir sıklıkta (her X süre sonra) tekrarlayın. Not: Dakika, saat veya gün seçmek, alarmın tüm günlerini silecektir.</string>
+	<string name="description_exclude_date_time_range">Bu tarih/saat aralığında alarmlar çalışmayacaktır.</string>
+	<string name="description_repeat_frequency_days_to_run_before_starting">Alarmın şu anda seçili olan günlerinden hangisi, frekans ayarlamasına başlamadan önce bu hafta çalıştırılmalıdır?</string>
+	<string name="description_vibrate_vibration_duration">Titreşim süresi ve titreşimler arasındaki bekleme süresi ne kadar olmalı?</string>
+	<string name="description_vibrate_custom_pattern">Titreşim süresini belirli sayıda tekrarlayın ve ardından belirli bir süre bekleyin.</string>
+	<string name="description_flashlight_brightness_level">El fenerinin parlaklık seviyesi.</string>
+	<string name="description_flashlight_blink_on_off">Belirli sürelerle el fenerini açıp kapatın.</string>
+	<string name="description_text_to_speech_what_to_say_alarm">Alarm aktif olduğunda metin okuma özelliğiyle ne söylenmeli?</string>
+	<string name="description_text_to_speech_what_to_say_timer">Zamanlayıcı aktifken metin okuma özelliğiyle ne söylenmeli?</string>
+	<string name="description_text_to_speech_speak_frequency">Yukarıda seçilen maddeleri ne sıklıkla söylemeliyiz?</string>
+	<string name="description_text_to_speech_speech_rate">Metin okuma programının ne kadar hızlı konuşması gerektiği.</string>
+	<string name="description_volume_gradually_increase_volume_alarm">Alarmın ses seviyesini belirli bir sıklıkta artırın.</string>
+	<string name="description_volume_gradually_increase_volume_timer">Zamanlayıcının ses seviyesini belirli bir frekansta artırın.</string>
+	<string name="description_volume_restrict_volume_alarm">Alarm çaldığında ses seviyesi azaltılamaz.</string>
+	<string name="description_volume_restrict_volume_timer">Zamanlayıcı çaldığında ses seviyesi azaltılamaz.</string>
+	<string name="description_dismiss_options_auto_dismiss_alarm">Belirlenen süre sonunda alarmı otomatik olarak kapat.</string>
+	<string name="description_dismiss_options_auto_dismiss_timer">Belirtilen süre sonunda zamanlayıcıyı otomatik olarak kapat.</string>
+	<string name="description_dismiss_options_dismiss_early">Alarm aktif hale gelmeden önce onu devre dışı bırakın.</string>
+	<string name="description_dismiss_options_dismiss_early_notification">Alarmın erken kapatılabildiği durumlarda bildirim göster.</string>
+	<string name="description_dismiss_options_delete_after_dismissed_alarm">Alarm kapatıldıktan sonra silinecektir.</string>
+	<string name="description_dismiss_options_delete_after_dismissed_timer">Zamanlayıcı kapatıldıktan sonra silinecektir.</string>
+	<string name="description_dismiss_options_volume_dismiss_alarm">Ses açma veya kısma düğmesine basarak alarmı kapatın.</string>
+	<string name="description_dismiss_options_volume_dismiss_timer">Ses açma veya kısma düğmesine basarak zamanlayıcıyı kapatın.</string>
+	<string name="description_snooze_options_auto_snooze">Alarmı belirli bir süre sonra otomatik olarak ertele.</string>
+	<string name="description_snooze_options_max_snooze">Alarmın ertelenebileceği maksimum sayı.</string>
+	<string name="description_snooze_options_snooze_duration">Alarmı erteleme süresi.</string>
+	<string name="description_snooze_options_easy_snooze">Alarm ekranında herhangi bir yere dokunarak alarmı erteleyebilirsiniz.</string>
+	<string name="description_snooze_options_volume_snooze">Ses açma veya kısma düğmesine basarak alarmı erteleyin.</string>
+	<string name="description_upcoming_reminder_show_reminder">Alarm çalmadan önce bir hatırlatma bildirimi gösterin.</string>
+	<string name="description_upcoming_reminder_how_early">Hatırlatma bildirimi ne kadar erken gösterilmelidir?</string>
+	<string name="description_upcoming_reminder_how_frequent">Hatırlatma bildirimi ne sıklıkla gösterilmelidir?</string>
+	<string name="description_upcoming_reminder_text_to_speech">Bildirim görüntülendiğinde alarmın metinden sese dönüştürme seçeneklerini kullanın.</string>
+	<string name="example_name">İş</string>
+	<string name="description_setting_general">Genel alarm ayarları</string>
+	<string name="description_setting_appearance">Uygulamanın görünümünü özelleştirin.</string>
+	<string name="description_setting_about">Uygulama hakkında bilgi</string>
+	<string name="description_setting_help">Herhangi bir sorun veya öneriniz varsa lütfen bana bildirin.</string>
+	<string name="description_setting_statistics">Ne kadar süre uyuduğunuzu ve daha fazlasını görün.</string>
+	<string name="description_setting_manage_nfc_tags">Kaydedilmiş NFC etiketlerini silin veya yeniden adlandırın.</string>
+	<string name="description_setting_support">Desteğiniz çok mak appreciated olurdu, ama lütfen acele etmeyin! Bu uygulama her zaman ücretsiz olacak.</string>
+	<string name="description_setting_import_export">Kaydedilmiş tüm verilerinizi içe veya dışa aktarın.</string>
+	<string name="description_toggle_alarms_with_airplane_mode_on">Uçak modu değişikliği nedeniyle tüm alarmlar devre dışı bırakılıyor.</string>
+	<string name="description_toggle_alarms_with_airplane_mode_off">Uçak modu değişikliği nedeniyle tüm alarmlar etkinleştiriliyor.</string>
+	<string name="description_use_new_screen_true">Alarmı ertelemek veya kapatmak için kaydırma hareketi yapabileceğiniz yeni alarm ekranını kullanın.</string>
+	<string name="description_use_new_screen_false">Yeni alarm ekranını kullanmayın. Alarmı ertelemek veya kapatmak için basit düğmelere sahip orijinal ekranı kullanın.</string>
+	<string name="description_alarm_screen_show_alarm_name_true">Alarm ekranında alarm adını göster.</string>
+	<string name="description_alarm_screen_show_alarm_name_false">Alarm adını göstermeyin.</string>
+	<string name="description_alarm_screen_show_current_date_and_time_true">Alarm ekranında geçerli tarih ve saati göster.</string>
+	<string name="description_alarm_screen_show_current_date_and_time_false">Geçerli tarih ve saati göstermeyin.</string>
+	<string name="description_alarm_screen_show_music_info_true">Alarm ekranında şu anda çalmakta olan müzik veya zil sesiyle ilgili bilgileri göster.</string>
+	<string name="description_alarm_screen_show_music_info_false">Müzik veya zil sesi bilgilerini göstermeyin.</string>
+	<string name="description_alarm_screen_battery_saver_true">Alarm aktifken ekranı kapalı tutarak pil ömrünü uzatın. Ekranın manuel olarak açılması gerekecektir.</string>
+	<string name="description_alarm_screen_battery_saver_false">Alarm aktif olduğunda ekran otomatik olarak açılacaktır.</string>
+	<string name="description_toggle_alarms_with_airplane_mode_true">Alarm çaldığında uçak modu etkinse, alarm atlanacaktır.</string>
+	<string name="description_toggle_alarms_with_airplane_mode_false">Alarmlar normal şekilde çalışacaktır.</string>
+	<string name="description_color_theme">Tema rengi.</string>
+	<string name="description_color_name">Örneğin, İş</string>
+	<string name="description_color_days">örneğin Pzt &#8231; Sal &#8231; Çar &#8231; Per &#8231; Cum</string>
+	<string name="description_color_time">Örneğin 12:30</string>
+	<string name="description_color_am">Alarm saati AM ise renkli gösterilir.</string>
+	<string name="description_color_pm">Alarm zamanına PM (öğleden sonra) denk geliyorsa renkli gösterilir.</string>
+	<string name="description_color_delete_alarm_after_dismissed">Alarm kapatıldıktan sonra silineceğini gösteren simge.</string>
+	<string name="description_color_skip_next_alarm">Alarmın bir sonraki çalıştırılmasının atlanacağını gösteren simge.</string>
+	<string name="description_missed_alarm_true">Cevaplanmayan alarmlar için bildirim göster.</string>
+	<string name="description_show_hide_vibrate_button_true">Alarmı genişletirken titreşim düğmesini göster.</string>
+	<string name="description_show_hide_vibrate_button_false">Alarmı genişletirken titreşim düğmesini gizleyin.</string>
+	<string name="description_show_hide_nfc_button_true">Alarmı genişletirken NFC düğmesini gösterin.</string>
+	<string name="description_show_hide_nfc_button_false">Alarmı genişletirken NFC düğmesini gizleyin.</string>
+	<string name="description_show_hide_flashlight_button_true">Alarmı genişletirken el feneri düğmesini gösterin.</string>
+	<string name="description_show_hide_flashlight_button_false">Alarmı genişletirken el feneri düğmesini gizleyin.</string>
+	<string name="description_expand_new_alarm_true">"+" düğmesiyle kopyalanan veya oluşturulan alarmlar genişletilir.</string>
+	<string name="description_expand_new_alarm_false">Alarmlar genişletilmiyor.</string>
+	<string name="description_start_week_on">Genişletilmiş alarm kartında gösterilen hafta bugün başlayacaktır.</string>
+	<string name="description_next_alarm_format">Bir sonraki alarmın ne zaman çalacağını gösterirken kullanılacak format.</string>
+	<string name="description_next_alarm_format_time_in">Bir sonraki alarm 7 saat 30 dakika sonra çalacak.</string>
+	<string name="description_next_alarm_format_time_on">Bir sonraki alarm Pazartesi sabah 7:00\'de çalacak.</string>
+	<string name="description_permission_disable_battery_optimization">Uygulama uyku moduna alınmayacak ve alarmlar normal şekilde etkinleştirilebilecektir.</string>
+	<string name="description_permission_nfc">Alarmı devre dışı bırakmak için NFC etiketlerini algılayın.</string>
+	<string name="description_permission_storage">Cihazınızda kayıtlı müzikleri okuyun.</string>
+	<string name="description_permission_vibrate">Alarm tetiklendiğinde cihazınızı titreştirin.</string>
+	<string name="description_permission_foreground_service">Alarm tetiklendiğinde ses çalacak, cihazınızı titreştirecek vb. işlemler yapacak bir ön plan servisi çalıştırın.</string>
+	<string name="description_permission_full_screen_intent">Alarm aktifleştiğinde tam ekran modunu kullanın.</string>
+	<string name="description_permission_schedule_alarm">Alarm saatlerini tam olarak ayarlayın.</string>
+	<string name="description_permission_set_alarm">Google Asistan gibi harici bir kaynaktan alarm kurun.</string>
+	<string name="description_permission_post_notifications">Alarm etkinleştirildiğinde bir bildirim gösterin; bu, cihazınızın uygulamayı uyku moduna almasını ve alarmı otomatik olarak kapatmasını önleyecektir.</string>
+	<string name="description_permission_system_alert_window">Uygulama arka planda çalışırken ve bir süredir kullanılmamışsa, sesin çalınması için gerekli olan alarm ekranının görüntülendiğinden emin olun. Bu durum yalnızca Android 15\'i etkilemelidir.</string>
+	<string name="description_permission_boot">Cihazınız açıkken alarmları geri yükleyin. Android, cihazınız kapalıyken alarmları siler.</string>
+	<string name="description_permission_wakelock">Cihazınızın uyku moduna geçmesini engelleyin, böylece etkinleştirilmiş bir alarm çalmaya devam edecektir.</string>
+	<string name="message_debug_mode_on">Bir sorunu gidermek için günlük dosyasına yazın. Bu işlem performansı hafifçe etkileyebilir.</string>
+	<string name="message_debug_mode_off">Günlük dosyasına yazmayın. Bu normal moddur.</string>
+	<string name="message_share_logs_with_developer">Sorunun nedenini belirleyebilmek için lütfen kayıt dosyalarını bana e-posta ile gönderin.</string>
+	<string name="message_send_email">Herhangi bir sorun, soru veya öneriniz için bana e-posta göndermekten çekinmeyin.</string>
+	<string name="description_audio_sources_alarm">Alarmın çalınacağı ses kanalı.</string>
+	<string name="description_audio_sources_timer">Zamanlayıcının çalınacağı ses kanalı.</string>
+	<string name="description_widget_alarm_example">Önizlemede gösterilen alarm sadece bir örnektir.</string>
+	<string name="description_text_to_speech_voice">Metinden sese dönüştürme için kullanılacak ses.</string>
+	<string name="description_only_show_app_alarms">Bu widget\'ta yalnızca bu uygulamadan gelen alarmlar gösterilecektir.</string>
+	<string name="description_show_any_alarms">Herhangi bir uygulamada oluşturulan alarmlar widget\'ta gösterilecektir.</string>
+
+	<!-- Content descriptions -->
+	<string name="cd_alarm_list">Alarm listesi burada gösterilecektir.</string>
+	<string name="cd_timer_list">Zamanlayıcıların listesi burada gösterilecektir.</string>
+	<string name="cd_nfc_tag_list">NFC etiketlerinin listesi burada gösterilecektir.</string>
+	<string name="cd_fab_add_alarm">Yeni bir alarm ekle.</string>
+	<string name="cd_fab_launch_system_file_browser">Sistem dosya tarayıcısını başlatın.</string>
+	<string name="cd_expand_alarm">Alarmı genişletin.</string>
+	<string name="cd_volume_icon">Alarmın ses seviyesini değiştirin.</string>
+	<string name="cd_volume_slider">Alarmın ses seviyesini değiştirmek için kaydırın.</string>
+	<string name="cd_alarm_options">Alarma özgü seçenekleri değiştirin.</string>
+	<string name="cd_color_example">Mevcut rengin bir örneği.</string>
+	<string name="cd_file_entry">Görüntülenen girişin türü, örneğin dosya veya dizin.</string>
+	<string name="cd_color_selector">Renk seçici için bir renk seçin.</string>
+	<string name="cd_shader_selector">Renk seçici için bir renk tonu seçin.</string>
+	<string name="cd_request_permission_ignore_battery_optimization">Pil optimizasyonunu devre dışı bırakma isteği.</string>
+	<string name="cd_request_permission_post_notifications">Bildirim gönderme isteği.</string>
+	<string name="cd_request_permission_schedule_exact_alarm">Kesin alarm saatlerini planlama talebi.</string>
+	<string name="cd_request_permission_system_alert_window">Uygulamayı diğer uygulamaların üzerinde görüntülemek için izin isteyin.</string>
+	<string name="cd_whats_new">Uygulamanın bu sürümünde yeni olan öğelerin listesi.</string>
+	<string name="cd_scan_nfc">NFC etiketini tarayın.</string>
+	<string name="cd_alarm_slider_arrow">Parmak hareketinizi yönlendirmek için.</string>
+	<string name="cd_dismiss_alarm">Alarmı kapatın.</string>
+	<string name="cd_snooze_alarm">Alarmı ertele.</string>
+	<string name="cd_current_alarm_media_playing">Şu anda oynatılan alarm medyası.</string>
+	<string name="cd_skip_next_alarm">Sonraki alarmı atla.</string>
+	<string name="cd_delete_alarm_after_dismissed">Alarm kapatıldıktan sonra silin.</string>
+	<string name="cd_clock_widget_alarm_icon">Sonraki alarm</string>
+	<string name="cd_permission_check_mark">İzin verildiğini gösteren onay işareti.</string>
+	<string name="cd_request_permission_icon">İzin isteme simgesi</string>
+	<string name="cd_swipe">Tokatlamak</string>
+	<string name="cd_long_press">Uzun basma</string>
+	<string name="cd_customize">Özelleştirmek</string>
+	<string name="cd_preference_icon">Tercih simgesi</string>
+
+	<!-- Plural alarms -->
+	<plurals name="alarm">
+		<item quantity="one">%d alarm</item>
+		<item quantity="other">%d alarm</item>
+	</plurals>
+
+	<plurals name="missed_alarm">
+		<item quantity="one">%d Alarm kaçırıldı</item>
+		<item quantity="other">%d Kaçırılan alarmlar</item>
+	</plurals>
+
+	<plurals name="skipped_alarm">
+		<item quantity="one">Alarm atlandı</item>
+		<item quantity="other">Alarm atlandı</item>
+	</plurals>
+
+	<!-- Plural units -->
+	<plurals name="unit_second">
+		<item quantity="one">%d saniye</item>
+		<item quantity="other">%d saniye</item>
+	</plurals>
+
+	<plurals name="unit_minute">
+		<item quantity="one">%d dakika</item>
+		<item quantity="other">%d dakika</item>
+	</plurals>
+
+	<plurals name="unit_hour">
+		<item quantity="one">%d saat</item>
+		<item quantity="other">%d saat</item>
+	</plurals>
+
+	<plurals name="unit_day">
+		<item quantity="one">%d gün</item>
+		<item quantity="other">%d gün</item>
+	</plurals>
+
+	<plurals name="unit_week">
+		<item quantity="one">%d hafta</item>
+		<item quantity="other">%d hafta</item>
+	</plurals>
+
+	<plurals name="unit_month">
+		<item quantity="one">%d ay</item>
+		<item quantity="other">%d ay</item>
+	</plurals>
+
+	<!-- Plural repeats -->
+	<plurals name="repeat_minutely">
+		<item quantity="one">Her %d dakikada bir</item>
+		<item quantity="other">Her %d dakikada bir</item>
+	</plurals>
+
+	<plurals name="repeat_hourly">
+		<item quantity="one">Her %d saatte bir</item>
+		<item quantity="other">Her %d saatte bir</item>
+	</plurals>
+
+	<plurals name="repeat_daily">
+		<item quantity="one">Her %d gün</item>
+		<item quantity="other">Her %d günde bir</item>
+	</plurals>
+
+	<plurals name="repeat_weekly">
+		<item quantity="one">Her %d hafta</item>
+		<item quantity="other">Her %d haftada bir</item>
+	</plurals>
+
+	<plurals name="repeat_monthly">
+		<item quantity="one">Her %d ayda</item>
+		<item quantity="other">Her %d ayda bir</item>
+	</plurals>
+
+	<!-- Plural numbers -->
+	<plurals name="number_of_times">
+		<item quantity="one">%1$d zamanı</item>
+		<item quantity="other">%1$d kez</item>
+	</plurals>
+
+	<plurals name="number_of_snoozes_left">
+		<item quantity="one">(%1$d kalan)</item>
+		<item quantity="other">(%1$d kalan)</item>
+	</plurals>
+
+	<!-- Plural TTS -->
+	<plurals name="tts_say_reminder">
+		<item quantity="one">Hatırlatma. %1$s, %2$d dakika içinde çalışacak.</item>
+		<item quantity="other">Hatırlatma. %1$s, %2$d dakika içinde çalışacak.</item>
+	</plurals>
+
+	<string name="tts_say_time">Süre %1$s:%2$s %3$s.</string>
+
+	<!-- Plural misc -->
+	<plurals name="import_cleared_media_due_to_not_found">
+		<item quantity="one">Ortam bulunamadığı için %1$d alarmı/zamanlayıcısında ortam temizlendi.</item>
+		<item quantity="other">Medya bulunamadığı için %1$d alarm/zamanlayıcıda medya temizlendi.</item>
+	</plurals>
+
+	<string name="float_duration_seconds">{count, plural, one{{count} saniye} other{{count} saniye}}</string>
+
+</resources>

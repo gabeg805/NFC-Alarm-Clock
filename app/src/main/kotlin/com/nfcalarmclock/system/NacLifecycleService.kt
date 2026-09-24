@@ -59,6 +59,10 @@ abstract class NacLifecycleService
 			}
 
 			NacLog.e("Unable to start foreground service", throwable = e, offsetIndex = 1)
+
+			// Throw exception to avoid seeing "service did not call startForeground() or
+			// something like that. This way it is clearer what the exception is
+			throw e
 		}
 	}
 

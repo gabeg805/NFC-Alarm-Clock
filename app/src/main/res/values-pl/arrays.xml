@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<!-- Days of week abbreviated -->
+	<string-array name="days_of_week_abbr">
+		<item>nie</item>
+		<item>pon</item>
+		<item>wto</item>
+		<item>śro</item>
+		<item>czw</item>
+		<item>pią</item>
+		<item>sob</item>
+	</string-array>
+
+	<!-- Days of week one letter -->
+	<string-array name="days_of_week_one_letter">
+		<item>N</item>
+		<item>P</item>
+		<item>W</item>
+		<item>Ś</item>
+		<item>C</item>
+		<item>P</item>
+		<item>S</item>
+	</string-array>
+
+	<!-- Audio sources -->
+	<string-array name="audio_sources">
+		<item>Alarm</item>
+		<item>Dzwonić</item>
+		<item>Głoska bezdźwięczna</item>
+		<item>Powiadomienie</item>
+		<item>Dzwonek</item>
+	</string-array>
+
+	<!-- NFC tag dismiss orders -->
+	<string-array name="nfc_tag_dismiss_orders">
+		<item>Losowy</item>
+		<item>Ciągły</item>
+	</string-array>
+
+</resources>

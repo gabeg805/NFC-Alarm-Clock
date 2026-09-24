@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-	<!-- &lt;b> -->
-	<!-- &lt;/b> -->
-
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.2</item>
+		<item>Se agregó la opción de reproducir audio a través de &lt;b>altavoces&lt;/b> y &lt;b>bluetooth&lt;/b> simultáneamente. Se encuentra en Ajustes > Fuentes de audio, para una alarma.</item>
+		<item>Se agregó la opción de &lt;b>excluir rango de fecha/hora&lt;/b>. Se encuentra en Ajustes > Repetir, para una alarma, y se utiliza si, por ejemplo, una alarma suena cada dos horas, pero no desea desactivarla/activarla manualmente cuando se vaya a dormir.</item>
+		<item>Se agregó compatibilidad con los idiomas &lt;b>francés&lt;/b>, &lt;b>italiano&lt;/b>, &lt;b>japonés&lt;/b>, &lt;b>polaco&lt;/b>, &lt;b>tailandés&lt;/b> y &lt;b>turco&lt;/b>. Si tiene alguna sugerencia para mejorar una traducción, envíeme un correo electrónico a través de Configuración > Ayuda.</item>
+		<item>Se ha mejorado la función &lt;b>NFC dispass&lt;/b>, que permite desactivar la pantalla de bloqueo para escanear mediante NFC. Esto requiere que el dispositivo esté en un estado de confianza, por lo que puede que no sea del todo fiable, pero es un avance.</item>
+		<item>Se modificó la opción &lt;b>modo avión&lt;/b> para que omita las alarmas si está activado, en lugar de desactivar/activar todas las alarmas cuando se activa/desactiva el modo avión.</item>
+		<item>Se solucionó el problema de parpadeo de la &lt;b>linterna&lt;/b>, donde la duración de encendido/apagado no se convertía correctamente. Si no se puede convertir una duración, se establecerá por defecto en 1 segundo.</item>
+		<item>Se solucionó el problema de &lt;b>posponer fácilmente&lt;/b> donde tocar la pantalla no posponía la alarma.</item>
 		<item>12.7.1</item>
 		<item>Se solucionó el problema de parpadeo de la &lt;b>linterna&lt;/b>, donde las duraciones de encendido/apagado estaban vacías.</item>
 		<item>Se ha corregido un artefacto visual que se mostraba en &lt;b>Android 15&lt;/b>.</item>
@@ -62,24 +67,6 @@
 		<item>Se solucionó un problema por el cual no funcionaba la reproducción/aleatorio de toda la <b>música</b> en una <b>carpeta</b>.</item>
 		<item>Actualizado para admitir <b>Android 15</b>.</item>
 		<item>Actualizado para admitir el tema <b>Material 3</b> de Android.</item>
-		<item>12.5.4</item>
-		<item>Se solucionó el problema por el cual &lt;b>omitir siguiente alarma&lt;/b> seguía omitiendo la alarma.</item>
-		<item>12.5.3</item>
-		<item>Se solucionó el problema con &lt;b>voz&lt;/b> donde la conversión de texto a voz usaba la voz predeterminada aunque se hubiera seleccionado una voz diferente.</item>
-		<item>Se agregó la opción &lt;b>alineación&lt;/b> al &lt;b>widget&lt;/b> para alinear todo el texto.</item>
-		<item>Se agregó la opción &lt;b>posición&lt;/b> al &lt;b>widget&lt;/b> para posicionar el texto de la alarma.</item>
-		<item>Se agregó la opción &lt;b>mostrar solo alarmas de la aplicación&lt;/b> al &lt;b>widget&lt;/b> que controla si solo se mostrarán las alarmas creadas en esta aplicación o si se mostrarán las alarmas creadas en cualquier aplicación.</item>
-		<item>Se agregó información sobre el &lt;b>número restante de repeticiones de alarma&lt;/b> al deslizar el dedo para posponer una alarma activa.</item>
-		<item>Aspecto actualizado del cuadro de diálogo &lt;b>Novedades&lt;/b>.</item>
-		<item>12.5.2</item>
-		<item>Se agregó la función para &lt;b>seleccionar múltiples etiquetas NFC&lt;/b> que pueden descartar una alarma.</item>
-		<item>Se agregó &lt;b>velocidad de voz&lt;/b> a la opción de texto a voz para cambiar la velocidad a la que hablará.</item>
-		<item>Se solucionó un problema con la &lt;b>linterna&lt;/b> donde, cuando el parpadeo estaba deshabilitado, aún parpadeaba.</item>
-		<item>12.5.0</item>
-		<item>Se actualizó el aspecto de la &lt;b>tarjeta de alarma&lt;/b> para mostrar botones para opciones de descartar, opciones de posponer y opciones de alarma normales.</item>
-		<item>Se agregó la opción &lt;b>patrón de vibración personalizado&lt;/b> para las alarmas.</item>
-		<item>Se agregó la opción &lt;b>ahorro de batería&lt;/b> para mantener la pantalla apagada cuando hay una alarma activa. Se encuentra en Configuración > General.</item>
-		<item>Se agregó la opción &lt;b>voz&lt;/b> a &lt;b>texto a voz&lt;/b> para elegir qué voz usar.</item>
 	</string-array>
 
 </resources>

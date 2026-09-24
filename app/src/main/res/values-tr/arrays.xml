@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+	<!-- Days of week abbreviated -->
+	<string-array name="days_of_week_abbr">
+		<item>Paz</item>
+		<item>Pzt</item>
+		<item>Sal</item>
+		<item>Çar</item>
+		<item>Per</item>
+		<item>Cum</item>
+		<item>Cmt</item>
+	</string-array>
+
+	<!-- Days of week one letter -->
+	<string-array name="days_of_week_one_letter">
+		<item>P</item>
+		<item>P</item>
+		<item>S</item>
+		<item>Ç</item>
+		<item>P</item>
+		<item>C</item>
+		<item>C</item>
+	</string-array>
+
+	<!-- Audio sources -->
+	<string-array name="audio_sources">
+		<item>Alarm</item>
+		<item>Arama</item>
+		<item>Medya</item>
+		<item>Bildiri</item>
+		<item>Zil sesi</item>
+	</string-array>
+
+	<!-- NFC tag dismiss orders -->
+	<string-array name="nfc_tag_dismiss_orders">
+		<item>Rastgele</item>
+		<item>Sıralı</item>
+	</string-array>
+
+</resources>

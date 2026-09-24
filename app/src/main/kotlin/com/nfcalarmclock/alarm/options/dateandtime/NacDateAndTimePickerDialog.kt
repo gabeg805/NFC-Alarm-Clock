@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.DatePicker
+import android.widget.TextView
 import android.widget.TimePicker
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.view.isVisible
@@ -28,11 +29,28 @@ class NacDateAndTimePickerDialog
 {
 
 	/**
+	 * Listener for when the date/time title should be shown.
+	 */
+	interface OnShowTitleListener
+	{
+		fun onShowDateTitle(textView: TextView)
+		fun onShowTimeTitle(textView: TextView)
+	}
+
+	/**
 	 * Listener for when the date is cleared.
 	 */
 	fun interface OnDateClearedListener
 	{
 		fun onDateCleared(datePicker: DatePicker)
+	}
+
+	/**
+	 * Listener for when the time is cleared.
+	 */
+	fun interface OnTimeClearedListener
+	{
+		fun onTimeCleared(timePicker: TimePicker)
 	}
 
 	/**
@@ -67,6 +85,11 @@ class NacDateAndTimePickerDialog
 	private lateinit var sharedPreferences: NacSharedPreferences
 
 	/**
+	 * Date/time title.
+	 */
+	private lateinit var dateTimeTitle: TextView
+
+	/**
 	 * Date picker.
 	 */
 	private lateinit var datePicker: DatePicker
@@ -77,9 +100,19 @@ class NacDateAndTimePickerDialog
 	private lateinit var timePicker: TimePicker
 
 	/**
+	 * Show date/time title listener.
+	 */
+	var onShowTitleListener: OnShowTitleListener? = null
+
+	/**
 	 * Date cleared listener.
 	 */
 	var onDateClearedListener: OnDateClearedListener? = null
+
+	/**
+	 * Time cleared listener.
+	 */
+	var onTimeClearedListener: OnTimeClearedListener? = null
 
 	/**
 	 * Date selected listener.
@@ -92,7 +125,17 @@ class NacDateAndTimePickerDialog
 	var onTimeSelectedListener: OnTimeSelectedListener? = null
 
 	/**
-	 * Called when the view should be created.
+	 * Whether to show the title or not.
+	 */
+	var shouldShowTitle: Boolean = false
+
+	/**
+	 * Whether to always show the clear button or not.
+	 */
+	var shouldAlwaysShowClearButton: Boolean = false
+
+	/**
+	 * View is created.
 	 */
 	override fun onCreateView(
 		inflater: LayoutInflater,
@@ -104,7 +147,7 @@ class NacDateAndTimePickerDialog
 	}
 
 	/**
-	 * Called when the fragment is resumed.
+	 * Fragment is resumed.
 	 */
 	override fun onResume()
 	{
@@ -121,7 +164,7 @@ class NacDateAndTimePickerDialog
 	}
 
 	/**
-	 * Called after the view has been created.
+	 * View has been created.
 	 */
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?)
 	{
@@ -135,6 +178,7 @@ class NacDateAndTimePickerDialog
 		sharedPreferences = NacSharedPreferences(requireContext())
 
 		// Get the views
+		dateTimeTitle = dialog!!.findViewById(R.id.date_time_title)
 		timePicker = dialog!!.findViewById(R.id.time_picker)
 		datePicker = dialog!!.findViewById(R.id.date_picker)
 		val dateButton: MaterialButton = dialog!!.findViewById(R.id.set_date)
@@ -143,12 +187,28 @@ class NacDateAndTimePickerDialog
 		val cancelButton: MaterialButton = dialog!!.findViewById(R.id.cancel_button)
 		val clearButton: MaterialButton = dialog!!.findViewById(R.id.clear_button)
 
-		// Setup the date and time pickers
+		// Setup the views
+		dateTimeTitle.visibility = if (shouldShowTitle) View.VISIBLE else View.GONE
 		setupDatePicker(alarm)
 		setupTimePicker(alarm)
 
+		// Initialize the clear button visibility
+		clearButton.visibility = if (shouldAlwaysShowClearButton) View.VISIBLE else View.GONE
+
+		// Call the listener on initial showing
+		if (dateTimeTitle.isVisible)
+		{
+			onShowTitleListener?.onShowTimeTitle(dateTimeTitle)
+		}
+
 		// Setup the date button
 		dateButton.setOnClickListener {
+
+			// Call the listener
+			if (dateTimeTitle.isVisible)
+			{
+				onShowTitleListener?.onShowDateTitle(dateTimeTitle)
+			}
 
 			// Show the date picker
 			timePicker.visibility = View.GONE
@@ -171,6 +231,12 @@ class NacDateAndTimePickerDialog
 		// Setup the time button
 		timeButton.setOnClickListener {
 
+			// Call the listener
+			if (dateTimeTitle.isVisible)
+			{
+				onShowTitleListener?.onShowTimeTitle(dateTimeTitle)
+			}
+
 			// Show the time picker
 			timePicker.visibility = View.VISIBLE
 			datePicker.visibility = View.GONE
@@ -180,7 +246,7 @@ class NacDateAndTimePickerDialog
 			dateButton.visibility = View.VISIBLE
 
 			// Hide the clear button
-			clearButton.visibility = View.GONE
+			clearButton.visibility = if (shouldAlwaysShowClearButton) View.VISIBLE else View.GONE
 
 			// Constrain the ok button to be beneath the time picker
 			okButton.updateLayoutParams<ConstraintLayout.LayoutParams> {
@@ -234,7 +300,24 @@ class NacDateAndTimePickerDialog
 		clearButton.setOnClickListener {
 
 			// Call the listener
-			onDateClearedListener?.onDateCleared(datePicker)
+			if (shouldAlwaysShowClearButton)
+			{
+				// Date cleared
+				if (datePicker.isVisible)
+				{
+					onDateClearedListener?.onDateCleared(datePicker)
+				}
+				// Time cleared
+				else
+				{
+					onTimeClearedListener?.onTimeCleared(timePicker)
+				}
+			}
+			// Date cleared by default
+			else
+			{
+				onDateClearedListener?.onDateCleared(datePicker)
+			}
 
 			// Dismiss the dialog
 			dismiss()
@@ -294,10 +377,11 @@ class NacDateAndTimePickerDialog
 	{
 		// Get whether the time is 24 hour format or not
 		val is24HourFormat = DateFormat.is24HourFormat(context)
+		val now = Calendar.getInstance()
 
 		// Set the time attributes
-		timePicker.hour = alarm.hour
-		timePicker.minute = alarm.minute
+		timePicker.hour = if (alarm.hour >= 0) alarm.hour else now[Calendar.HOUR_OF_DAY]
+		timePicker.minute = if (alarm.minute >= 0) alarm.minute else now[Calendar.MINUTE]
 		timePicker.setIs24HourView(is24HourFormat)
 	}
 
@@ -314,7 +398,10 @@ class NacDateAndTimePickerDialog
 		 */
 		fun create(
 			alarm: NacAlarm,
-			onDateClearedListener: (DatePicker) -> Unit = { },
+			onShowDateTitleListener: (TextView) -> Unit = {},
+			onShowTimeTitleListener: (TextView) -> Unit = {},
+			onDateClearedListener: (DatePicker) -> Unit = {},
+			onTimeClearedListener: (TimePicker) -> Unit = {},
 			onDateAndTimeSelectedListener: (DatePicker, TimePicker, Int, Int, Int, Int, Int) -> Unit = { _, _, _, _, _, _, _ -> },
 			onTimeSelectedListener: (TimePicker, Int, Int) -> Unit = { _, _, _ -> },
 		): NacDateAndTimePickerDialog
@@ -326,9 +413,27 @@ class NacDateAndTimePickerDialog
 			// Add the alarm to the dialog
 			dialog.arguments = alarm.toBundle()
 
+			// Set the show title listener
+			dialog.onShowTitleListener = object: OnShowTitleListener {
+				override fun onShowDateTitle(textView: TextView)
+				{
+					onShowDateTitleListener(textView)
+				}
+
+				override fun onShowTimeTitle(textView: TextView)
+				{
+					onShowTimeTitleListener(textView)
+				}
+			}
+
 			// Set the date cleared listener
 			dialog.onDateClearedListener = OnDateClearedListener { datePicker ->
 				onDateClearedListener(datePicker)
+			}
+
+			// Set the time cleared listener
+			dialog.onTimeClearedListener = OnTimeClearedListener { timePicker ->
+				onTimeClearedListener(timePicker)
 			}
 
 			// Set the date set listener

@@ -290,14 +290,13 @@ open class NacTextToSpeechDialog
 		// Get the default locale
 		val locale = Locale.getDefault()
 
-		// Filter out voices that do not match the current locale
-		println("Text to speech object: $tts")
 		NacLog.i("Text to speech object: $tts")
+
+		// Filter out voices that do not match the current locale
 		allVoices = tts.voices
 			.filter { it.locale == locale }
 			.partition { it == tts.defaultVoice }
 			.let { it.first + it.second }
-		//.partition { it == ttsHelper.textToSpeech.defaultVoice }
 	}
 
 	/**
@@ -381,8 +380,22 @@ open class NacTextToSpeechDialog
 		ttsFreqDescription = dialog!!.findViewById(R.id.tts_frequency_description)
 		ttsFreqInputLayout = dialog!!.findViewById(R.id.tts_frequency_input_layout)
 
-		// Setup the views
+		// Setup the input layout
 		ttsFreqInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
+
+		// Build the items for the dropdown menu
+		// Once, Every X minutes, ...
+		val once = resources.getString(R.string.word_once)
+		val allItems: Array<String> = mutableListOf<String>()
+			.apply {
+				add(once)
+				repeat(30) { i ->
+					add(resources.getQuantityString(R.plurals.repeat_minutely, i+1, i+1))
+				}
+			}.toTypedArray()
+
+		// Set the default selected items in the text view
+		autoCompleteTextView.setSimpleItems(allItems)
 		autoCompleteTextView.setTextFromIndex(default)
 
 		// Set the textview listeners

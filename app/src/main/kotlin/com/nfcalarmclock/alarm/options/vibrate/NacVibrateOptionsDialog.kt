@@ -88,7 +88,7 @@ open class NacVibrateOptionsDialog
 
 			// Get the label
 			val value = it.toInt()
-			val label = resources.getQuantityString(R.plurals.unit_number_of_times, value, value)
+			val label = resources.getQuantityString(R.plurals.number_of_times, value, value)
 
 			// Set the label
 			textView.text = label
@@ -242,7 +242,7 @@ open class NacVibrateOptionsDialog
 		customPatternSwitch.isChecked = defaultState
 		customPatternRepeatSlider.value = defaultRepeat.toFloat()
 		customPatternWaitSlider.value = defaultWait.toFloat()
-		customPatternRepeatValue.text = resources.getQuantityString(R.plurals.unit_number_of_times, defaultRepeat, defaultRepeat)
+		customPatternRepeatValue.text = resources.getQuantityString(R.plurals.number_of_times, defaultRepeat, defaultRepeat)
 		customPatternWaitValue.text = resources.getString(R.string.message_milliseconds, defaultWait)
 
 		// Setup the views

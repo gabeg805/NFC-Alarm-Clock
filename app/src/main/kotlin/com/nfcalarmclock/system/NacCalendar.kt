@@ -22,11 +22,14 @@ import com.nfcalarmclock.system.NacCalendar.Day.WEDNESDAY
 import com.nfcalarmclock.system.NacCalendar.Day.entries
 import com.nfcalarmclock.system.NacCalendar.alarmToCalendar
 import com.nfcalarmclock.system.NacCalendar.alarmToNextOneTimeCalendar
+import com.nfcalarmclock.system.NacCalendar.dateTimeToCalendar
+import java.text.DateFormatSymbols
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.EnumSet
 import java.util.Locale
 import java.util.TimeZone
+import kotlin.Boolean
 
 /**
  * Convert a set of days to a value.
@@ -65,8 +68,8 @@ fun EnumSet<Day>.removeToday()
 /**
  * Convert a set of days to a comma separate string of days.
  *
- * @param  context  Context.
- * @param  start  The day to start the week on.
+ * @param context Context.
+ * @param start The day to start the week on.
  *
  * @return A string of the days.
  */
@@ -192,6 +195,66 @@ fun Int.toDays(): EnumSet<Day>
 }
 
 /**
+ * Add the alarm's repeat frequency to the Calendar.
+ */
+fun Calendar.addRepeatFrequency(alarm: NacAlarm)
+{
+	this.add(alarm.repeatFrequencyUnits.toCalendarField(), alarm.repeatFrequency)
+}
+
+/**
+ * Adjust a Calendar outside of the exlude time range.
+ *
+ * @param alarm Alarm.
+ * @param startCal Calendar for the start of the exclude time range.
+ * @param endCal Calendar for the end of the exclude time range.
+ * @param shouldLog Whether to log or not.
+ *
+ * @return Whether an adjustment was made or not.
+ */
+fun Calendar.adjustOutOfExcludeTimeRange(
+	alarm: NacAlarm,
+	startCal: Calendar? = null,
+	endCal: Calendar? = null,
+	shouldLog: Boolean = false,
+): Boolean
+{
+	// Default to converting the alarm exclude datetimes to Calendars
+	val (startCal, endCal) = if ((startCal == null) || (endCal == null))
+	{
+		alarm.excludeDateTimesToCalendars()
+	}
+	// Use the provided start/end calendars
+	else
+	{
+		Pair(startCal, endCal)
+	}
+
+	// Log when a calendar is within the exclude range
+	if ((this >= startCal!!) && (this < endCal!!) && shouldLog)
+	{
+		NacLog.w("Calendar is within exclude range. initCal=${this.toFullTime()} | startCal=${startCal.toFullTime()} | endCal=${endCal.toFullTime()}", offsetIndex = 1)
+	}
+
+	// Adjust all calendars so that if they are within the exclude time range, add the
+	// repeat frequency until they are outside the range
+	var i = 0
+	while ((this >= startCal) && (this < endCal!!))
+	{
+		i += 1
+		this.addRepeatFrequency(alarm)
+	}
+
+	// Log when a calendar is within the exclude range
+	if ((i > 0) && shouldLog)
+	{
+		NacLog.w("Adjusted calendar $i times. newCal=${this.toFullTime()}", offsetIndex = 1)
+	}
+
+	return (i > 0)
+}
+
+/**
  * Check if a calendar's time matches the dismiss early time of an alarm.
  *
  * @return True if a calendar's time matches the dismiss early time of an alarm, and
@@ -200,6 +263,84 @@ fun Int.toDays(): EnumSet<Day>
 fun Calendar.equalsDismissEarlyTime(alarm: NacAlarm): Boolean
 {
 	return (alarm.timeOfDismissEarlyAlarm > 0) && (this.timeInMillis == alarm.timeOfDismissEarlyAlarm)
+}
+
+/**
+ * Convert a Calendar to a string in the given format.
+ */
+fun Calendar.toFormatString(format: String): String
+{
+	// Create the date format
+	val locale = Locale.getDefault()
+	val formatter = SimpleDateFormat(format, locale)
+
+	// Format the calendar time
+	return formatter.format(this.time)
+}
+
+/**
+ * Convert a Calendar to a full time string.
+ *
+ * Note: Mainly used for debugging and printing.
+ */
+fun Calendar.toFullTime(): String
+{
+	return this.toFormatString("EEE MMM dd HH:mm:ss z yyyy")
+}
+
+/**
+ * Convert the exclude datetime strings to Calendars.
+ *
+ * @return A pair of Calendars representing the datetime strings, or null if one or both of the
+ *     datetimes could not be converted to a Calendar.
+ */
+fun NacAlarm.excludeDateTimesToCalendars(): Pair<Calendar?, Calendar?>
+{
+	// Convert to calendars
+	val startCal = dateTimeToCalendar(this.excludeStartDateTime)
+	val endCal = dateTimeToCalendar(this.excludeEndDateTime)
+
+	// Unable to convert calendars
+	if ((startCal == null) || (endCal == null))
+	{
+		return Pair(null, null)
+	}
+
+	// End is before start. Most likely because the end datetime is just the time, no date, so
+	// the Calendar that is used is just the one for today
+	if (endCal < startCal)
+	{
+		endCal.add(Calendar.DAY_OF_MONTH, 1)
+	}
+
+	return Pair(startCal, endCal)
+}
+
+/**
+ * Convert the alarm date/time to the best datetime string.
+ *
+ * @return The best datetime string.
+ */
+fun NacAlarm.toBestDateTimeString(format: String = ""): CharSequence
+{
+	// Convert the alarm to a calendar
+	val cal = alarmToCalendar(this)
+
+	// Format and use the date and/or time
+	val locale = Locale.getDefault()
+	val skeletonFormat = format.ifEmpty {
+		if (this.date.isNotEmpty())
+		{
+			"MMM d, h:mm a"
+		}
+		else
+		{
+			"h:mm a"
+		}
+	}
+	val betterFormat = DateFormat.getBestDateTimePattern(locale, skeletonFormat)
+
+	return DateFormat.format(betterFormat, cal)
 }
 
 /**
@@ -219,21 +360,21 @@ fun NacAlarm.toDayString(
 		val cal = alarmToCalendar(this)
 
 		// Convert date to string
-		val date = DateFormat.format("MMM d", cal).toString()
+		val locale = Locale.getDefault()
+		val skeletonFormat = "MMM d"
+		val betterFormat = DateFormat.getBestDateTimePattern(locale, skeletonFormat)
+		val date = DateFormat.format(betterFormat, cal).toString()
 
-		// Alarm will repeat
+		// Alarm will repeat. Combine the date and repeat frequency string
 		if (this.shouldRepeat)
 		{
-			// Get the repeat frequency string
 			val repeatFrequency = this.toRepeatFrequencyString(context)
 
-			// Combine the date and repeat frequency string
 			return "$date \u2027 $repeatFrequency"
 		}
-		// Do not repeat alarm
+		// Will NOT repeat. Simply return the date
 		else
 		{
-			// Simply return the date
 			return date
 		}
 	}
@@ -243,10 +384,9 @@ fun NacAlarm.toDayString(
 		// Today or tomorrow
 		val oneTime = this.toOneTimeString(context)
 
-		// Alarm will not repeat
+		// Will NOT repeat. Only show the one time alarm
 		if (!this.shouldRepeat)
 		{
-			// Only show the one time alarm
 			return oneTime
 		}
 
@@ -262,16 +402,14 @@ fun NacAlarm.toDayString(
 				// Tomorrow string
 				val tomorrow = context.getString(R.string.dow_tomorrow)
 
-				// One time alarm will occur tomorrow
+				// One time alarm will occur tomorrow: Tomorrow * Every X <min/hour>
 				if (oneTime == tomorrow)
 				{
-					// Tomorrow * Every X <min/hour>
 					"$oneTime \u2027 $repeatFrequency"
 				}
-				// Alarm will occur today
+				// Alarm will occur today: Every X <min/hour>
 				else
 				{
-					// Every X <min/hour>
 					repeatFrequency
 				}
 			}
@@ -279,21 +417,19 @@ fun NacAlarm.toDayString(
 			// Days
 			3 ->
 			{
-				// Every day alarm
+				// Every day alarm. Today/tomorrow
 				if (this.repeatFrequency == 1)
 				{
-					// Today/tomorrow
 					oneTime
 				}
-				// Every X days
+				// Every X days. Today/tomorrow * Every X days
 				else
 				{
-					// Today/tomorrow * Every X days
 					"$oneTime \u2027 $repeatFrequency"
 				}
 			}
 
-			// Months. Show: Today/tomorrow * Every X months
+			// Months: Today/tomorrow * Every X months
 			5 -> "$oneTime \u2027 $repeatFrequency"
 
 			// Unknown or weeks, but don't think this is possible? Since
@@ -381,8 +517,8 @@ fun NacAlarm.toOneTimeString(context: Context): String
 fun NacAlarm.toRepeatFrequencyString(context: Context): String
 {
 	// Check the repeat frequency units
-	// Note: The "Every X <unit>" for Minutes, Hours, and Months reflects
-	//       what is in alarmToNextOneTimeCalendar()
+	// Note: The "Every X <unit>" for Minutes, Hours, and Months reflects what is in
+	//       alarmToNextOneTimeCalendar()
 	return when (this.repeatFrequencyUnits)
 	{
 		// Minutes
@@ -449,8 +585,8 @@ object NacCalendar
 	/**
 	 * Convert the alarm on the given day to a Calendar.
 	 *
-	 * @param  alarm  The alarm.
-	 * @param  day  The day to convert.
+	 * @param alarm The alarm.
+	 * @param day The day to convert.
 	 *
 	 * @return A Calendar.
 	 */
@@ -472,7 +608,7 @@ object NacCalendar
 		if ((alarm.repeatFrequencyUnits == 4) && (alarm.repeatFrequency != 1) && !alarm.repeatFrequencyDaysToRunBeforeStarting.contains(day))
 		{
 			// Alarm will occur in X weeks
-			alarmCalendar.add(alarm.repeatFrequencyUnits.toCalendarField(), alarm.repeatFrequency)
+			alarmCalendar.addRepeatFrequency(alarm)
 		}
 		// Day has already past, so add a week to the next time in the future the day
 		// will occur
@@ -518,7 +654,7 @@ object NacCalendar
 			}
 			catch (e: IndexOutOfBoundsException)
 			{
-				NacLog.e("Error from trying parse date!", throwable = e)
+				NacLog.e("Error from trying parse date. date=${alarm.date}", throwable = e)
 			}
 		}
 
@@ -528,11 +664,16 @@ object NacCalendar
 	/**
 	 * Convert all the days an alarm is scheduled to go off, to Calendars.
 	 *
-	 * @param  alarm  The alarm.
+	 * @param alarm The alarm.
+	 * @param shouldLog Whether to log or not.
 	 *
 	 * @return A list of Calendars.
 	 */
-	private fun alarmToCalendars(alarm: NacAlarm): List<Calendar>
+	private fun alarmToCalendars(
+		alarm: NacAlarm,
+		shouldAdjust: Boolean = true,
+		shouldLog: Boolean = false,
+	): List<Calendar>
 	{
 		val calendars: MutableList<Calendar> = ArrayList()
 
@@ -541,11 +682,13 @@ object NacCalendar
 		{
 			val c = alarmToCalendar(alarm)
 
-			// Alarm was dismissed early at the same time matching this calendar
+			// Alarm was dismissed early at the same time matching this calendar. Add the repeat
+			// frequency to this calendar
+			//
+			// Note: Dismiss early time can only be set if repeat is enabled
 			if (c.equalsDismissEarlyTime(alarm))
 			{
-				// Add the repeat frequency to this calendar
-				c.add(alarm.repeatFrequencyUnits.toCalendarField(), alarm.repeatFrequency)
+				c.addRepeatFrequency(alarm)
 			}
 
 			calendars.add(c)
@@ -559,11 +702,13 @@ object NacCalendar
 				// Get calendar and time of calendar
 				val c = alarmDayToCalendar(alarm, d)
 
-				// Alarm was dismissed early at the same time matching this calendar
+				// Alarm was dismissed early at the same time matching this calendar. Add the
+				// repeat frequency to this calendar
+				//
+				// Note: Dismiss early time can only be set if repeat is enabled
 				if (c.equalsDismissEarlyTime(alarm))
 				{
-					// Add the repeat frequency to this calendar
-					c.add(alarm.repeatFrequencyUnits.toCalendarField(), alarm.repeatFrequency)
+					c.addRepeatFrequency(alarm)
 				}
 
 				// Add calendar to list of calendars
@@ -576,6 +721,24 @@ object NacCalendar
 		{
 			val c = alarmToNextOneTimeCalendar(alarm)
 			calendars.add(c)
+		}
+
+		// Exclude time range is set and repeat flag is enabled so the time range should be
+		// respected
+		if (alarm.shouldCheckExcludeTimeRange && shouldAdjust)
+		{
+			// Get the start/end datetimes
+			val (excludeStartCal, excludeEndCal) = alarm.excludeDateTimesToCalendars()
+
+			// Adjust all calendars so that if they are within the exclude time range, add the
+			// repeat frequency until they are outside the range
+			calendars.forEach { c ->
+				c.adjustOutOfExcludeTimeRange(
+					alarm,
+					startCal = excludeStartCal!!,
+					endCal = excludeEndCal!!,
+					shouldLog = shouldLog)
+			}
 		}
 
 		return calendars
@@ -605,17 +768,59 @@ object NacCalendar
 	}
 
 	/**
-	 * Convert the calendar to a string in the given format.
-	 * TODO: Change back to private
+	 * Convert a datetime string to a Calendar.
+	 *
+	 * The string is expected to be in the format of one of the following, or an empty string:
+	 *     YYYY-M-D H:m
+	 *     H:M
 	 */
-	fun calendarToString(calendar: Calendar, format: String?): String
+	fun dateTimeToCalendar(dateTime: String): Calendar?
 	{
-		// Create the date format
-		val locale = Locale.getDefault()
-		val formatter = SimpleDateFormat(format, locale)
+		// Nothing to convert
+		if (dateTime.isEmpty())
+		{
+			return null
+		}
 
-		// Format the calendar time
-		return formatter.format(calendar.time)
+		// Get the locale
+		val locale = Locale.getDefault()
+
+		// Convert the datetime string to a Calendar
+		val formatter = if (dateTime.contains(' '))
+		{
+			"yyyy-M-d H:m"
+		}
+		else
+		{
+			"H:m"
+		}
+		val simpleDateFormat = SimpleDateFormat(formatter, locale)
+		val date = simpleDateFormat.parse(dateTime)!!
+		val now = Calendar.getInstance()
+		val cal = Calendar.getInstance()
+			.apply {
+
+				// Set the formatted date. When the datetime only has the hour and minute, this
+				// may change the year/month/day and might not represent today
+				time = date
+
+				// Setting the date changed the calendar to the past. Fix this so it represents
+				// today
+				if (this < now)
+				{
+					set(Calendar.YEAR, now[Calendar.YEAR])
+					set(Calendar.MONTH, now[Calendar.MONTH])
+					set(Calendar.WEEK_OF_YEAR, now[Calendar.WEEK_OF_YEAR])
+					set(Calendar.DAY_OF_MONTH, now[Calendar.DAY_OF_MONTH])
+				}
+
+				// Clear the second and millisecond just to keep it clean
+				set(Calendar.SECOND, 0)
+				set(Calendar.MILLISECOND, 0)
+
+			}
+
+		return cal
 	}
 
 	/**
@@ -638,9 +843,9 @@ object NacCalendar
 	/**
 	 * Get the time.
 	 *
-	 * @param  context  The application context.
-	 * @param  hour  The hour.
-	 * @param  minute  The minutes.
+	 * @param context The application context.
+	 * @param hour The hour.
+	 * @param minute The minutes.
 	 *
 	 * @return The time.
 	 */
@@ -656,9 +861,9 @@ object NacCalendar
 	/**
 	 * Get the time.
 	 *
-	 * @param  hour    The hour.
-	 * @param  minute  The minutes.
-	 * @param  is24HourFormat  The 24 hour format, to determine how to interpret the hour.
+	 * @param hour The hour.
+	 * @param minute The minutes.
+	 * @param is24HourFormat The 24 hour format, to determine how to interpret the hour.
 	 *
 	 * @return The time.
 	 */
@@ -695,10 +900,9 @@ object NacCalendar
 	 * Get the Calendar day on which the first upcoming reminder for the
 	 * alarm will run.
 	 *
-	 * @param  alarm  The alarm.
+	 * @param alarm The alarm.
 	 *
-	 * @return The Calendar day on which the first upcoming reminder for the
-	 *         alarm will run.
+	 * @return The Calendar day on which the first upcoming reminder for the alarm will run.
 	 */
 	fun getFirstAlarmUpcomingReminder(alarm: NacAlarm, cal: Calendar): Calendar
 	{
@@ -733,7 +937,32 @@ object NacCalendar
 	}
 
 	/**
+	 * Get a list of full named weekdays.
+	 *
+	 * @return A list of full named weekdays.
+	 */
+	fun getFullWeekdays(): List<String>
+	{
+		// Get the weekdays
+		val locale = Locale.getDefault()
+		val weekdayNames = DateFormatSymbols(locale).weekdays
+
+		// Convert Calendar indices to weekday names
+		return listOf(
+			Calendar.SUNDAY,
+			Calendar.MONDAY,
+			Calendar.TUESDAY,
+			Calendar.WEDNESDAY,
+			Calendar.THURSDAY,
+			Calendar.FRIDAY,
+			Calendar.SATURDAY
+		).map { weekdayNames[it] }
+	}
+
+	/**
 	 * The full time string, EEE, HH:MM AM/PM.
+	 *
+	 * TODO: Should I use best format pattern here?
 	 *
 	 * @return The full time string, EEE, HH:MM AM/PM.
 	 */
@@ -759,7 +988,7 @@ object NacCalendar
 		}
 
 		// Convert to a string
-		return calendarToString(calendar, format)
+		return calendar.toFormatString(format)
 	}
 
 	/**
@@ -779,7 +1008,7 @@ object NacCalendar
 	/**
 	 * Get the time meridian.
 	 *
-	 * @param  hour  The hour.
+	 * @param hour The hour.
 	 *
 	 * @return The time meridian.
 	 */
@@ -860,16 +1089,22 @@ object NacCalendar
 	/**
 	 * Get the Calendar day on which the given alarm will run next.
 	 *
-	 * @param  alarm  The alarm who's days to check.
-	 * @param  ignoreSkip  Whether the "shouldSkipNextAlarm" flag should be
-	 *                     ignored or not.
+	 * @param alarm The alarm who's days to check.
+	 * @param ignoreSkip Whether the "shouldSkipNextAlarm" flag should be ignored or not.
+	 * @param shouldAdjust Whether to adjust a Calendar if it is within the exclude range.
+	 * @param shouldLog Whether to log or not.
 	 *
 	 * @return The Calendar day on which the given alarm will run next.
 	 */
-	fun getNextAlarmDay(alarm: NacAlarm, ignoreSkip: Boolean = false): Calendar?
+	fun getNextAlarmDay(
+		alarm: NacAlarm,
+		ignoreSkip: Boolean = false,
+		shouldAdjust: Boolean = true,
+		shouldLog: Boolean = false,
+	): Calendar?
 	{
 		// Convert the alarm to a list of calendar instances
-		val calendars = alarmToCalendars(alarm)
+		val calendars = alarmToCalendars(alarm, shouldAdjust = shouldAdjust, shouldLog = shouldLog)
 
 		// Get the calendar day that is the soonest
 		val nextDay = getNextDay(calendars)!!
@@ -883,7 +1118,7 @@ object NacCalendar
 				NacLog.i("SKIPPIO. Should skip alarm but do not ignore skip and only one calendar in list: ${alarm.repeatFrequency} | ${alarm.repeatFrequencyUnits} | ${alarm.repeatFrequencyDaysToRunBeforeStarting}")
 
 				// Add the repeat frequency to the calendar
-				nextDay.add(alarm.repeatFrequencyUnits.toCalendarField(), alarm.repeatFrequency)
+				nextDay.addRepeatFrequency(alarm)
 				nextDay
 			}
 			else
@@ -912,11 +1147,11 @@ object NacCalendar
 		// Iterate over each calendar instance
 		for (c in calendars)
 		{
-			// Check if either the "next" calendar has not been set yet,
-			// or occurs after the current calendar item.
+			// Check if either the "next" calendar has not been set yet, or occurs after the
+			// current calendar item.
 			//
-			// If "skipDay" is set, it will make sure to ignore that day since,
-			// as the name suggests, it should be skipped
+			// If "skipDay" is set, it will make sure to ignore that day since, as the name
+			// suggests, it should be skipped
 			next = if (((next == null) || next.after(c)) && (c != skipDay))
 			{
 				c
@@ -1255,7 +1490,8 @@ object NacCalendar
 		fun getWillRun(
 			context: Context,
 			alarm: NacAlarm,
-			nextAlarmFormat: Int
+			nextAlarmFormat: Int,
+			inputCalendar: Calendar? = null
 		): String
 		{
 			// Get the alarm name
@@ -1278,7 +1514,7 @@ object NacCalendar
 			else
 			{
 				// Get the next alarm day
-				val calendar = getNextAlarmDay(alarm)
+				val calendar = inputCalendar ?: getNextAlarmDay(alarm)
 
 				// No alarm scheduled, possibly because the next alarm is skipped
 				if (calendar == null)

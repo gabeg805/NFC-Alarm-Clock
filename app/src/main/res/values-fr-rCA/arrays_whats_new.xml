@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.2</item>
+		<item>Ajout d\'une option permettant de diffuser simultanément le son par les &lt;b>haut-parleurs&lt;/b> et le &lt;b>Bluetooth&lt;/b>. Cette option se trouve dans Réglages > Sources audio, pour une alarme.</item>
+		<item>Ajout d\'une option pour &lt;b>exclure une plage de dates/heures&lt;/b>. Elle se trouve dans Réglages > Répétition, pour une alarme, et est utilisée si, par exemple, une alarme sonne toutes les deux heures, mais que vous ne voulez pas la désactiver/réactiver manuellement lorsque vous vous endormez.</item>
+		<item>Ajout de la prise en charge des langues suivantes: &lt;b>français&lt;/b>, &lt;b>italien&lt;/b>, &lt;b>japonais&lt;/b>, &lt;b>polonais&lt;/b>, &lt;b>thaï&lt;/b> et &lt;b>turc&lt;/b>. N\'hésitez pas à m\'envoyer un courriel par Paramètres > Aide si vous avez des suggestions pour améliorer la traduction.</item>
+		<item>Amélioration de la fonction de déverrouillage NFC: l’écran de verrouillage est maintenant déverrouillé pour permettre la lecture NFC. Cette fonction nécessite que l\'appareil soit en mode de confiance et peut donc ne pas être fiable, mais elle constitue un progrès.</item>
+		<item>L\'option &lt;b>mode avion&lt;/b> a été modifiée afin qu\'elle ignore les alarmes si elle est activée, au lieu de désactiver/activer toutes les alarmes lorsque le mode avion est activé.</item>
+		<item>Correction d\'un problème de clignotement de la lampe de poche: la durée d\'allumage/extinction n\'était pas correctement convertie. En cas d\'impossibilité de conversion, la durée sera désormais fixée à 1 seconde.</item>
+		<item>Correction d\'un problème de &lt;b>réglage facile&lt;/b> où le fait de toucher l\'écran ne permettait pas de mettre en veille.</item>
+		<item>12.7.1</item>
+		<item>Correction d\'un problème de clignotement de la &lt;b>lampe de torche&lt;/b> où les durées d\'allumage/d\'extinction étaient vides.</item>
+		<item>Correction d\'un artefact visuel qui apparaissait dans &lt;b>Android 15&lt;/b>.</item>
+		<item>Correction d\'un problème d\'alarme/minuterie affectant &lt;b>Android 13&lt;/b>.</item>
+		<item>Correction d\'un problème de tentative d\'actualisation des &lt;b>widgets&lt;/b> lorsque l\'appareil est verrouillé.</item>
+		<item>Correction d\'un problème d\'affichage de la boîte de dialogue &lt;b>heure&lt;/b> après un changement d\'orientation de l\'écran ou la fermeture de l\'application, entraînant un plantage.</item>
+		<item>Mise à jour du &lt;b>mode débogage&lt;/b> pour obtenir des journaux plus informatifs.</item>
+		<item>12.7.0</item>
+		<item>Ajout d\'étiquettes aux boutons pour une meilleure lisibilité. Vous pouvez les modifier dans Réglages > Apparence > Styles.</item>
+		<item>Ajout d\'une option permettant d\'activer/désactiver les alarmes lorsque le &lt;b> mode avion &lt;/b> est modifié.</item>
+		<item>Ajout d\'une option pour désactiver l\'alarme avec les boutons de volume.</item>
+		<item>Ajout d\'un aperçu aux options de volume.</item>
+		<item>Ajout d\'un écran d\'accueil pour les nouveaux utilisateurs.</item>
+		<item>Ajout d\'une section &lt;b>Aide&lt;/b> dans les Paramètres.</item>
+		<item>Ajout d\'un soutien linguistique par application.</item>
+		<item>Mise à jour pour supporter &lt;b>Android 16&lt;/b>.</item>
+		<item>Mise à jour du widget &lt;b> &lt;/b> pour que la date suive le format des paramètres régionaux.</item>
+		<item>La logique de suppression avec NFC a été mise à jour lorsque plusieurs étiquettes NFC doivent être scannées. Maintenant, la fonction «Mettre en veille» est désactivée et les étiquettes NFC déjà numérisées n\'ont plus besoin d\'être scannées à nouveau.</item>
+		<item>Amélioration de la &lt;b>carte d\'alarme&lt;/b> pour permettre le glissement pour copier/supprimer lorsque la carte est développée.</item>
+		<item>Amélioration de la fonction &lt;b>définir la date&lt;/b> afin que l\'heure soit également enregistrée lors de la définition de la date.</item>
+		<item>Amélioration de la notification d\'alarme manquée afin qu\'elle affiche le nom et l\'heure de l\'alarme manquée.</item>
+		<item>Augmentation de la taille des boutons de répétition et d\'annulation dans l\'écran d\'alarme.</item>
+		<item>Correction d\'un problème de vibration affectant certains téléphones.</item>
+		<item>Problème résolu avec &lt;b>importation&lt;/b> et &lt;b>export&lt;/b>.</item>
+		<item>Correction d\'un problème où l\'écran d\'alarme ne fermait pas, dans de rares cas, après avoir désactivé l\'alarme, ce qui provoquait une boucle buguée.</item>
+		<item>Correction d\'un problème mineur avec la notification de fermeture anticipée.</item>
+		<item>12.6.4</item>
+		<item>Correction d\'un problème lors de l\'utilisation de la fonction &lt;b>NFC&lt;/b> pour désactiver une alarme ou une minuterie, mais les options &lt;b>ordre de désactivation&lt;/b> avaient également été définies.</item>
+		<item>Correction d\'un problème où l\'utilisation de &lt;b>clignotement de lampe torche&lt;/b> causait un plantage.</item>
+		<item>Correction de divers problèmes d\'interface utilisateur du &lt;b>minuteur&lt;/b>.</item>
+		<item>Ajout d\'un &lt;b>bouton enregistrer&lt;/b> lors de l\'ajout d\'un &lt;b>minuteur&lt;/b>, afin que vous ne soyez pas obligé de démarrer un minuteur immédiatement pour pouvoir l\'enregistrer.</item>
+		<item>Amélioration de l\'apparence des écrans d\'alarme et de minuterie pour les appareils à faible densité de pixels.</item>
+		<item>12.6.3</item>
+		<item>J\'ai retravaillé l\'apparence de la boîte de dialogue des &lt;b>options NFC&lt;/b> afin qu\'elle soit regroupée entièrement sur un seul écran.</item>
+		<item>Problème résolu lors de la tentative de &lt;b>fermeture&lt;/b> avec &lt;b>NFC&lt;/b>.</item>
+		<item>Correction d\'un problème : lorsque le &lt;b>bouton NFC&lt;/b> était masqué, l\'option d\'alarme/minuterie NFC restait affichée.</item>
+		<item>Correction d\'un problème de synchronisation lors de la suppression d\'une &lt;b>alarme&lt;/b>/&lt;b>minuterie&lt;/b>.</item>
+		<item>Correction d\'un problème rare lors du démarrage du &lt;b>minuteur&lt;/b>.</item>
+		<item>Correction d\'un problème où la &lt;b>sonnerie&lt;/b> ne fonctionnait pas lorsque le &lt;b>téléphone était verrouillé&lt;/b> et que la connexion &lt;b>NFC&lt;/b> était utilisée.</item>
+		<item>12.6.2</item>
+		<item>Problème de traduction résolu en &lt;b>portugais&lt;/b>.</item>
+		<item>Problème réglé: la lampe de poche ne fonctionnait pas.</item>
+		<item>Correction d\'une erreur d\'interface utilisateur dans les &lt;b>Paramètres&lt;/b>.</item>
+		<item>Amélioration de l\'apparence de l\'écran d\'alarme active pour les appareils à faible densité.</item>
+		<item>12.6.1</item>
+		<item>Correction d\'un problème lié à la modification d\'une &lt;b>minuterie&lt;/b>.</item>
+		<item>12.6.0</item>
+		<item>Ajout d\'une minuterie. Possibilité de numériser les étiquettes NFC pour démarrer des minuteries.</item>
+		<item>Ajout d\'options de &lt;b>répétition&lt;/b> dans les paramètres d\'alarme. Possibilité de répéter une alarme par heures, jours, semaines ou mois.</item>
+		<item>Ajout d\'une option &lt;b>date&lt;/b> pour programmer une alarme à une date précise. Accessible lors de la sélection de l\'heure.</item>
+		<item>Ajout d\'une fonction &lt;b>snooze&lt;/b> avec des boutons de volume.</item>
+		<item>Ajout d\'une fonction &lt;b>rejeter les étiquettes NFC&lt;/b> dans l\'&lt;b>ordre&lt;/b> si plusieurs étiquettes NFC sont sélectionnées. Le rejet peut se faire dans n\'importe quel ordre, de manière aléatoire ou séquentielle.</item>
+		<item>Ajout d\'une notification de désactivation anticipée. Affichez éventuellement une notification lorsqu\'une alarme peut être désactivée prématurément.</item>
+		<item>Ajout d\'un long appui sur les boutons de répétition, de vibration, NFC et de lampe de poche pour accéder rapidement à ces options.</item>
+		<item>Correction d\'un problème où la lecture/lecture aléatoire de toute la &lt;b>musique&lt;/b> d\'un &lt;b>dossier&lt;/b> ne fonctionnait pas.</item>
+		<item>Mise à jour pour supporter &lt;b>Android 15&lt;/b>.</item>
+		<item>Mise à jour pour prendre en charge le thème &lt;b>Material 3&lt;/b> d\'Android.</item>
+	</string-array>
+
+</resources>

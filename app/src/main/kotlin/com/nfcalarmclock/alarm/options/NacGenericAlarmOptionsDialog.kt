@@ -206,12 +206,26 @@ abstract class NacGenericAlarmOptionsDialog
 		secondsInputLayout: TextInputLayout,
 		minutesAutoCompleteTextView: MaterialAutoCompleteTextView,
 		secondsAutoCompleteTextView: MaterialAutoCompleteTextView,
+		numMinutes: Int,
 		startIndices: Pair<Int, Int>,
 		onTimeChanged: (minIndex: Int, secIndex: Int) -> Unit
 	)
 	{
-		// Get the list of seconds, without 60 seconds. Only need 0 to 59 seconds
-		val seconds = resources.getStringArray(R.array.general_seconds_summaries).dropLast(1).toTypedArray()
+		// Get the list of seconds. 0 to 59 seconds
+		val seconds: Array<String> = mutableListOf<String>()
+			.apply {
+				repeat(60) { i ->
+					add(resources.getQuantityString(R.plurals.unit_second, i, i))
+				}
+			}.toTypedArray()
+
+		// Get the list of minutes. Minutes is determined by parameter
+		val minutes: Array<String> = mutableListOf<String>()
+			.apply {
+				repeat(numMinutes) { i ->
+					add(resources.getQuantityString(R.plurals.unit_minute, i, i))
+				}
+			}.toTypedArray()
 
 		// Get the index of the default selected items in the textviews
 		var (minutesIndex, secondsIndex) = startIndices
@@ -219,9 +233,12 @@ abstract class NacGenericAlarmOptionsDialog
 		// Setup the input layout
 		minutesInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
 		secondsInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
+
+		// Setup the textviews
+		minutesAutoCompleteTextView.setSimpleItems(minutes)
+		secondsAutoCompleteTextView.setSimpleItems(seconds)
 		minutesAutoCompleteTextView.setTextFromIndex(minutesIndex)
 		secondsAutoCompleteTextView.setTextFromIndex(secondsIndex)
-		secondsAutoCompleteTextView.setSimpleItems(seconds)
 
 		// Set the minutes input layout end icon click listener
 		minutesInputLayout.setEndIconOnClickListener {

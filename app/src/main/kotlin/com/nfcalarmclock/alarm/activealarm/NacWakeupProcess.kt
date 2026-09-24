@@ -263,7 +263,7 @@ class NacWakeupProcess(
 	init
 	{
 		// Audio should be played through speakers and bluetooth
-		if (alarm.shouldPlayAudioThroughSpeakersAndBluetooth)
+		if (alarm.shouldPlayAudioThroughSpeakersAndBluetooth && (mediaPlayer != null))
 		{
 			NacLog.i("Normal audio attr usage    : ${audioAttributes.audioUsage}")
 			NacLog.i("Bluetooth audio attr usage : ${bluetoothAudioAttributes?.audioUsage}")
@@ -395,14 +395,14 @@ class NacWakeupProcess(
 				if (builtinSpeakerDevice != null)
 				{
 					NacLog.i("Setting builtin speaker preferred device. name=${builtinSpeakerDevice.productName} | type=${builtinSpeakerDevice.type}")
-					mediaPlayer!!.exoPlayer.setPreferredAudioDevice(builtinSpeakerDevice)
+					mediaPlayer?.exoPlayer?.setPreferredAudioDevice(builtinSpeakerDevice)
 				}
 
 				// Bluetooth device for the bluetooth media player
 				if (bluetoothDevice != null)
 				{
 					NacLog.i("Setting bluetooth preferred device. name=${bluetoothDevice.productName} | type=${bluetoothDevice.type}")
-					bluetoothMediaPlayer!!.exoPlayer.setPreferredAudioDevice(bluetoothDevice)
+					bluetoothMediaPlayer?.exoPlayer?.setPreferredAudioDevice(bluetoothDevice)
 				}
 				// No bluetooth device found. Null all bluetooth objects so they cannot be used
 				else

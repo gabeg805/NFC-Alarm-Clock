@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
 
-	<!-- &lt;b> -->
-	<!-- &lt;/b> -->
-
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.2</item>
+		<item>Đã thêm tùy chọn phát âm thanh đồng thời qua &lt;b>loa&lt;/b> và &lt;b>Bluetooth&lt;/b>. Có thể tìm thấy trong Cài đặt > Nguồn âm thanh, dành cho báo thức.</item>
+		<item>Đã thêm tùy chọn &lt;b>loại trừ khoảng thời gian/ngày tháng&lt;/b>. Có thể tìm thấy trong Cài đặt > Lặp lại, đối với báo thức và được sử dụng nếu, ví dụ, báo thức reo mỗi vài giờ, nhưng bạn không muốn tự tắt/bật nó khi đi ngủ.</item>
+		<item>Đã thêm hỗ trợ ngôn ngữ cho các ngôn ngữ &lt;b>Pháp&lt;/b>, &lt;b>Ý&lt;/b>, &lt;b>Nhật Bản&lt;/b>, &lt;b>Ba Lan&lt;/b>, &lt;b>Thái Lan&lt;/b> và &lt;b>Thổ Nhĩ Kỳ&lt;/b>. Vui lòng gửi email cho tôi qua mục Cài đặt > Trợ giúp nếu bạn có bất kỳ đề xuất nào để cải thiện bản dịch.</item>
+		<item>Cải thiện chức năng &lt;b>tắt NFC&lt;/b>, trong đó màn hình khóa được cố gắng tắt để có thể quét NFC. Điều này yêu cầu thiết bị phải ở trạng thái đáng tin cậy, vì vậy có thể không hoàn toàn đáng tin cậy, nhưng dù sao cũng là một bước tiến.</item>
+		<item>Đã thay đổi tùy chọn &lt;b>chế độ máy bay&lt;/b> để nó bỏ qua các báo thức nếu chế độ này được bật, thay vì tắt/bật tất cả các báo thức khi chế độ máy bay được chuyển đổi.</item>
+		<item>Đã khắc phục sự cố nhấp nháy của &lt;b>đèn pin&lt;/b>, trong đó thời gian bật/tắt không được chuyển đổi chính xác. Nếu không thể chuyển đổi thời gian, nó sẽ mặc định là 1 giây.</item>
+		<item>Đã khắc phục sự cố &lt;b>tạm dừng dễ dàng&lt;/b> khiến việc chạm vào màn hình không thực hiện được thao tác tạm dừng.</item>
 		<item>12.7.1</item>
 		<item>Đã khắc phục sự cố nhấp nháy của &lt;b>đèn pin&lt;/b> khi thời gian bật/tắt bị trống.</item>
 		<item>Đã khắc phục lỗi hiển thị hình ảnh bất thường trong &lt;b>Android 15&lt;/b>.</item>
@@ -62,24 +67,6 @@
 		<item>Đã khắc phục sự cố không phát/trộn tất cả &lt;b>nhạc&lt;/b> trong thư mục &lt;b>.</item>
 		<item>Đã cập nhật để hỗ trợ &lt;b>Android 15&lt;/b>.</item>
 		<item>Đã cập nhật để hỗ trợ chủ đề &lt;b>Material 3&lt;/b> của Android.</item>
-		<item>12.5.4</item>
-		<item>Đã khắc phục sự cố trong đó &lt;b>bỏ qua báo thức tiếp theo&lt;/b> sẽ tiếp tục bỏ qua báo thức.</item>
-		<item>12.5.3</item>
-		<item>Đã khắc phục sự cố liên quan đến &lt;b>giọng nói&lt;/b> khi tính năng chuyển văn bản thành giọng nói sử dụng giọng nói mặc định ngay cả khi đã chọn giọng nói khác.</item>
-		<item>Đã thêm tùy chọn &lt;b>căn chỉnh&lt;/b> vào tiện ích &lt;/b> để căn chỉnh toàn bộ văn bản.</item>
-		<item>Đã thêm tùy chọn &lt;b>vị trí&lt;/b> vào &lt;b>tiện ích&lt;/b> để định vị văn bản cảnh báo.</item>
-		<item>Đã thêm tùy chọn &lt;b>chỉ hiển thị báo thức ứng dụng&lt;/b> vào &lt;b>tiện ích&lt;/b> để kiểm soát việc chỉ hiển thị báo thức được tạo trong ứng dụng này hay báo thức được tạo trong bất kỳ ứng dụng nào.</item>
-		<item>Đã thêm thông tin về &lt;b>số lần báo lại còn lại&lt;/b> khi vuốt để báo lại báo thức đang hoạt động.</item>
-		<item>Cập nhật giao diện của hộp thoại &lt;b>Có gì mới&lt;/b>.</item>
-		<item>12.5.2</item>
-		<item>Đã thêm tính năng &lt;b>chọn nhiều thẻ NFC&lt;/b> để có thể tắt báo thức.</item>
-		<item>Đã thêm &lt;b>tốc độ giọng nói&lt;/b> vào tùy chọn chuyển văn bản thành giọng nói để thay đổi tốc độ nói.</item>
-		<item>Đã khắc phục sự cố liên quan đến đèn pin khi tắt chức năng nhấp nháy thì đèn vẫn nhấp nháy.</item>
-		<item>12.5.0</item>
-		<item>Đã cập nhật giao diện &lt;b>thẻ báo thức&lt;/b> để hiển thị các nút cho tùy chọn hủy báo thức, tùy chọn báo lại và tùy chọn báo thức thông thường.</item>
-		<item>Đã thêm tùy chọn &lt;b>mẫu rung tùy chỉnh&lt;/b> cho báo thức.</item>
-		<item>Đã thêm tùy chọn &lt;b>tiết kiệm pin&lt;/b> để tắt màn hình khi báo thức đang hoạt động. Tìm thấy trong Cài đặt > Chung.</item>
-		<item>Đã thêm tùy chọn &lt;b>giọng nói&lt;/b> vào &lt;b>chuyển văn bản thành giọng nói&lt;/b> để chọn giọng nói sẽ sử dụng.</item>
 	</string-array>
 
 </resources>

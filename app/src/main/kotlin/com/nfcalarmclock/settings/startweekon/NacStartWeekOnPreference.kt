@@ -7,6 +7,7 @@ import androidx.fragment.app.FragmentManager
 import androidx.preference.Preference
 import com.nfcalarmclock.R
 import com.nfcalarmclock.shared.NacSharedPreferences
+import com.nfcalarmclock.system.NacCalendar
 
 /**
  * Preference that prompts the user what day to start the week on.
@@ -51,19 +52,15 @@ class NacStartWeekOnPreference @JvmOverloads constructor(
 	 */
 	override fun getSummary(): CharSequence?
 	{
-		val week = context.resources.getStringArray(R.array.days_of_week_full)
-		var index = startWeekOnIndex
+		// Get the weekdays
+		val week = NacCalendar.getFullWeekdays()
 
 		// Get the name of the day by the index
-		return when (index)
+		return when (startWeekOnIndex)
 			{
-				1, 0 -> week[index]
-				2 -> week[6]
-				else ->
-				{
-					index = 0
-					week[index]
-				}
+				1, 0 -> week[startWeekOnIndex]
+				2    -> week[6]
+				else -> week[0]
 			}
 	}
 

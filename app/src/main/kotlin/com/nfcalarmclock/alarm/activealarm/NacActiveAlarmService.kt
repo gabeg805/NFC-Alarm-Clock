@@ -10,6 +10,7 @@ import android.os.Handler
 import android.os.IBinder
 import android.os.PowerManager.WakeLock
 import android.os.UserManager
+import android.provider.Settings
 import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.lifecycle.lifecycleScope
@@ -34,6 +35,7 @@ import com.nfcalarmclock.system.enableActivityAlias
 import com.nfcalarmclock.system.getAlarm
 import com.nfcalarmclock.system.scheduler.NacScheduler
 import com.nfcalarmclock.view.quickToast
+import com.nfcalarmclock.view.toast
 import com.nfcalarmclock.widget.refreshAllWidgets
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.Dispatchers
@@ -364,15 +366,15 @@ class NacActiveAlarmService
 		// Setup the service
 		setupActiveAlarmService(intent)
 
-		// Setup the service and disable any reminder notification that may be present
-		// when NOT skipping this alarm
+		// Clear the upcoming reminder notification. Normally this would only show up if not
+		// skipping, but if airplane mode can skip alarms, it is possible that an upcoming
+		// reminder is visible
+		NacUpcomingReminderService.stopService(this, alarm)
+
+		// Show active alarm notification when NOT skipping the alarm
 		if (intentAction != ACTION_SKIP_SERVICE)
 		{
-			// Show active alarm notification
 			showActiveAlarmNotification()
-
-			// Clear the upcoming reminder notification
-			NacUpcomingReminderService.stopService(this, alarm)
 		}
 
 		NacLog.i("Preparing active alarm service. Action=$intentAction")
@@ -497,6 +499,27 @@ class NacActiveAlarmService
 
 		// Attempt to get the alarm from the intent
 		val intentAlarm = intent?.getAlarm()
+
+		// Airplane mode share preference is set
+		if ((intentAlarm != null) && sharedPreferences.shouldToggleAlarmsWithAirplaneMode)
+		{
+			// Get the airplane mode state
+			val airplaneModeState = Settings.Global.getInt(contentResolver, Settings.Global.AIRPLANE_MODE_ON) != 0
+
+			NacLog.i("Airplane mode state=$airplaneModeState")
+
+			// Airplane mode is enabled. Skip this alarm
+			if (airplaneModeState)
+			{
+				intentAction = ACTION_SKIP_SERVICE
+				alarm = intentAlarm
+				alarm!!.shouldSkipNextAlarm = true
+
+				// Show toast
+				toast(this, R.string.message_skip_airplane_mode_alarm)
+				return
+			}
+		}
 
 		// New service was started
 		if (isNewServiceStarted(intentAlarm, intentAction))

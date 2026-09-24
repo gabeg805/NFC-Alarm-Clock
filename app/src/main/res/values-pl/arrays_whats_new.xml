@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.2</item>
+		<item>Dodano opcję jednoczesnego odtwarzania dźwięku przez &lt;b>głośniki&lt;/b> i &lt;b>Bluetooth&lt;/b>. Można ją znaleźć w Ustawieniach > Źródła dźwięku, w przypadku alarmu.</item>
+		<item>Dodano opcję &lt;b>wykluczania zakresu dat/godzin&lt;/b>. Można ją znaleźć w Ustawieniach > Powtarzanie, dla alarmu i jest używana na przykład wtedy, gdy alarm włącza się co kilka godzin, ale nie chcesz go ręcznie wyłączać/włączać przed pójściem spać.</item>
+		<item>Dodano obsługę języków: &lt;b>francuskiego&lt;/b>, &lt;b>włoskiego&lt;/b>, &lt;b>japońskiego&lt;/b>, &lt;b>polskiego&lt;/b>, &lt;b>tajskiego&lt;/b> i &lt;b>tureckiego&lt;/b>. Jeśli masz jakieś sugestie dotyczące ulepszenia tłumaczenia, wyślij mi e-mail w Ustawieniach > Pomoc.</item>
+		<item>Ulepszono funkcję &lt;b>odrzucania NFC&lt;/b>, która próbuje odrzucić ekran blokady, aby umożliwić skanowanie NFC. Wymaga to, aby urządzenie znajdowało się w stanie zaufanym, więc może nie być niezawodne, ale zawsze coś.</item>
+		<item>Zmieniono opcję &lt;b>trybu samolotowego&lt;/b> tak, aby pomijała alarmy, jeśli jest włączona, zamiast wyłączać/włączać wszystkie alarmy, gdy tryb samolotowy jest przełączany.</item>
+		<item>Naprawiono problem z miganiem &lt;b>latarki&lt;/b>, w wyniku którego czasy włączenia/wyłączenia nie były poprawnie konwertowane. Jeśli nie można przekonwertować czasu trwania, domyślnie będzie to 1 sekunda.</item>
+		<item>Naprawiono problem z &lt;b>łatwym drzemaniem&lt;/b>, w wyniku którego dotknięcie ekranu nie powodowało drzemki.</item>
+		<item>12.7.1</item>
+		<item>Naprawiono problem z miganiem &lt;b>latarki&lt;/b>, w którym czasy włączania/wyłączania były puste.</item>
+		<item>Naprawiono artefakty wizualne pojawiające się w &lt;b>Androidzie 15&lt;/b>.</item>
+		<item>Naprawiono problem z alarmem/timerem w systemie &lt;b>Android 13&lt;/b>.</item>
+		<item>Naprawiono próbę odświeżenia &lt;b>widżetów&lt;/b>, gdy urządzenie jest zablokowane.</item>
+		<item>Naprawiono wyświetlanie okna dialogowego &lt;b>czas&lt;/b> po zmianie orientacji ekranu lub zamknięciu aplikacji, co skutkowało awarią.</item>
+		<item>Zaktualizowano &lt;b>tryb debugowania&lt;/b>, aby uzyskać bardziej informacyjne logi.</item>
+		<item>12.7.0</item>
+		<item>Dodano etykiety przycisków, aby lepiej było widać, do czego służą poszczególne przyciski. Można to zmienić w &lt;b>Ustawieniach > Wygląd > Style&lt;/b>.</item>
+		<item>Dodano opcję włączania/wyłączania alarmów po zmianie &lt;b>trybu samolotowego&lt;/b>.</item>
+		<item>Dodano opcję wyłączania alarmu za pomocą &lt;b>przycisków głośności.&lt;/b></item>
+		<item>Dodano &lt;b>podgląd&lt;/b> do opcji głośności.</item>
+		<item>Dodano ekran &lt;b>wprowadzania&lt;/b> dla nowych użytkowników.</item>
+		<item>Dodano sekcję &lt;b>Pomoc&lt;/b> w Ustawieniach.</item>
+		<item>Dodano obsługę języków dla poszczególnych aplikacji.</item>
+		<item>Zaktualizowano w celu zapewnienia obsługi &lt;b>Androida 16&lt;/b>.</item>
+		<item>Zaktualizowano &lt;b>widżet&lt;/b> tak, aby data była zgodna z formatem ustawień regionalnych.</item>
+		<item>Zaktualizowano funkcję &lt;b>odrzucania z logiką NFC&lt;/b>, gdy konieczne jest zeskanowanie wielu tagów NFC. Teraz można ją uśpić, a tagi NFC, które zostały już zeskanowane, nie muszą być skanowane ponownie.</item>
+		<item>Ulepszono &lt;b>kartę alarmową&lt;/b>, aby umożliwić kopiowanie/usuwanie poprzez przesunięcie, gdy karta jest rozłożona.</item>
+		<item>Ulepszono opcję &lt;b>ustawiania daty&lt;/b>, dzięki czemu podczas ustawiania daty zapisywany jest także czas.</item>
+		<item>Ulepszono powiadomienie o &lt;b>pominiętym alarmie&lt;/b>, pokazując teraz nazwę i godzinę pominiętego alarmu.</item>
+		<item>Zwiększono rozmiar przycisków drzemki i zamknięcia na &lt;b>ekranie alarmu&lt;/b>.</item>
+		<item>Naprawiono problem z funkcją &lt;b>wibracji&lt;/b> występujący w niektórych telefonach.</item>
+		<item>Naprawiono problem z &lt;b>importem&lt;/b> i &lt;b>eksportem&lt;/b>.</item>
+		<item>Naprawiono problem, w wyniku którego &lt;b>ekran alarmu&lt;/b> w rzadkich przypadkach nie zamykał się po wyłączeniu alarmu, co powodowało pętlę błędów.</item>
+		<item>Naprawiono drobny problem z powiadomieniem &lt;b>odrzuć wcześniej&lt;/b>.</item>
+		<item>12.6.4</item>
+		<item>Naprawiono problem występujący przy używaniu &lt;b>NFC&lt;/b> do odrzucania alarmu lub timera, ale opcje &lt;b>kolejności odrzucania&lt;/b> również zostały ustawione.</item>
+		<item>Naprawiono problem, w wyniku którego użycie &lt;b>mrugnięcia latarką&lt;/b> powodowało awarię.</item>
+		<item>Naprawiono różne problemy z interfejsem użytkownika &lt;b>timera&lt;/b>.</item>
+		<item>Dodano przycisk &lt;b>zapisz&lt;/b> podczas dodawania &lt;b>timera&lt;/b>, dzięki czemu nie musisz od razu uruchamiać timera, aby go zapisać.</item>
+		<item>Poprawiono wygląd ekranów &lt;b>alarmu&lt;/b> i &lt;b>timera&lt;/b> na urządzeniach o niskiej gęstości pikseli.</item>
+		<item>12.6.3</item>
+		<item>Zmieniono wygląd okna dialogowego &lt;b>Opcje NFC&lt;/b>, tak aby wszystkie były widoczne na jednym ekranie.</item>
+		<item>Naprawiono problem występujący przy próbie &lt;b>odrzucenia&lt;/b> za pomocą &lt;b>NFC&lt;/b>.</item>
+		<item>Naprawiono problem, który występował, gdy po &lt;b>ukryciu&lt;/b> &lt;b>przycisku NFC&lt;/b> opcja alarmu/timera NFC była nadal widoczna.</item>
+		<item>Naprawiono problem z czasem usuwania &lt;b>alarmu&lt;/b>/&lt;b>timera&lt;/b>.</item>
+		<item>Naprawiono rzadki problem występujący przy uruchamianiu &lt;b>timera&lt;/b>.</item>
+		<item>Naprawiono problem, w wyniku którego &lt;b>dzwonek&lt;/b> nie odtwarzał się, gdy &lt;b>telefon był zablokowany&lt;/b> i używana była funkcja &lt;b>NFC&lt;/b>.</item>
+		<item>12.6.2</item>
+		<item>Naprawiono problem z tłumaczeniem na &lt;b>język portugalski&lt;/b>.</item>
+		<item>Naprawiono problem z niedziałającą &lt;b>latarką&lt;/b>.</item>
+		<item>Naprawiono błąd interfejsu użytkownika w &lt;b>Ustawieniach&lt;/b>.</item>
+		<item>Poprawiono wygląd ekranu &lt;b>aktywnego alarmu&lt;/b> w przypadku urządzeń o niskiej gęstości.</item>
+		<item>12.6.1</item>
+		<item>Naprawiono problem z edycją &lt;b>timera&lt;/b>.</item>
+		<item>12.6.0</item>
+		<item>Dodano &lt;b>timer&lt;/b>. Można również skanować tagi NFC, aby uruchamiać timery.</item>
+		<item>Dodano opcję &lt;b>powtarzania&lt;/b> w ustawieniach alarmu. Można powtarzać alarm co godzinę, dzień, tydzień lub miesiąc.</item>
+		<item>Dodano opcję &lt;b>data&lt;/b>, aby ustawić alarm na konkretny dzień. Dostępna po wybraniu godziny.</item>
+		<item>Dodano funkcję &lt;b>drzemki&lt;/b> za pomocą &lt;b>przycisków głośności&lt;/b>.</item>
+		<item>Dodano opcję &lt;b>odrzucania tagów NFC&lt;/b> w &lt;b>kolejności&lt;/b>, jeśli wybrano wiele tagów NFC. Można odrzucać w dowolnej kolejności, losowo lub sekwencyjnie.</item>
+		<item>Dodano opcję &lt;b>odrzuć powiadomienie wcześniej&lt;/b>. Opcjonalnie wyświetl powiadomienie, gdy alarm można odrzucić wcześniej.</item>
+		<item>Dodano &lt;b>długie naciśnięcie&lt;/b> przycisków powtarzania, wibracji, NFC i latarki, aby umożliwić szybki dostęp do tych opcji.</item>
+		<item>Naprawiono problem, w wyniku którego odtwarzanie/tasowanie całej &lt;b>muzyki&lt;/b> w &lt;b>folderze&lt;/b> nie działało.</item>
+		<item>Zaktualizowano w celu zapewnienia obsługi &lt;b>Androida 15&lt;/b>.</item>
+		<item>Zaktualizowano w celu zapewnienia obsługi motywu &lt;b>Material 3&lt;/b> dla systemu Android.</item>
+	</string-array>
+
+</resources>

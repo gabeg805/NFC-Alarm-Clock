@@ -56,6 +56,8 @@
 	<string name="key_default_alarm_repeat_should_repeat">pref_repeat</string>
 	<string name="key_default_alarm_repeat_frequency">pref_repeat_frequency</string>
 	<string name="key_default_alarm_repeat_frequency_units">pref_repeat_frequency_units</string>
+	<string name="key_default_alarm_repeat_frequency_exclude_start_date_time">pref_repeat_frequency_exclude_start_date_time</string>
+	<string name="key_default_alarm_repeat_frequency_exclude_end_date_time">pref_repeat_frequency_exclude_end_date_time</string>
 	<string name="key_default_alarm_repeat_frequency_days_to_run_before_starting">pref_repeat_frequency_days_to_run_before_starting</string>
 	<string name="key_default_alarm_vibrate_should_vibrate">pref_vibrate</string>
 	<string name="key_default_alarm_vibrate_duration">pref_vibrate_duration</string>
@@ -158,7 +160,7 @@
 	<string name="key_alarm_screen_battery_saver">pref_alarm_screen_battery_saver</string>
 
 	<!-- Miscellaneous -->
-	<string name="key_misc_should_toggle_alarms_with_airplane_mode">pref_should_toggle_alarms_with_airplane_mode</string>
+	<string name="key_misc_should_airplane_mode_skip_alarms">pref_should_toggle_alarms_with_airplane_mode</string>
 
 	<!-- Appearance -->
 	<string name="key_settings_appearance">pref_screen_appearance</string>

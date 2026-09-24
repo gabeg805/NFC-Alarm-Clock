@@ -200,12 +200,13 @@ open class NacDismissOptionsDialog
 		autoDismissSwitch.isChecked = defaultState
 		autoDismissSwitch.setupSwitchColor(sharedPreferences)
 
-		// Setup the minutes and seconds
+		// Setup the minutes and seconds. 0-60 minutes
 		setupMinutesAndSecondsOption(
 			autoDismissMinutesInputLayout,
 			autoDismissSecondsInputLayout,
 			minutesAutoCompleteTextView,
 			secondsAutoCompleteTextView,
+			numMinutes = 61,
 			startIndices = NacAlarm.calcAutoDismissIndex(defaultTime),
 			onTimeChanged = { minIndex, secIndex ->
 
@@ -248,10 +249,22 @@ open class NacDismissOptionsDialog
 		dismissEarlySwitch.setupSwitchColor(sharedPreferences)
 		dismissEarlyNotificationSwitch.setupSwitchColor(sharedPreferences)
 
+		// Setup the input layout
+		dismissEarlyInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
+
+		// Build the items for the dropdown menu
+		// X minutes, ...
+		val allItems: Array<String> = mutableListOf<String>()
+			.apply {
+				repeat(28) { i ->
+					val time = NacAlarm.calcDismissEarlyTime(i)
+					add(resources.getQuantityString(R.plurals.unit_minute, time, time))
+				}
+			}.toTypedArray()
+
 		// Setup the dropdown
 		val index = NacAlarm.calcDismissEarlyIndex(defaultTime)
-
-		dismissEarlyInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
+		autoCompleteTextView.setSimpleItems(allItems)
 		autoCompleteTextView.setTextFromIndex(index)
 
 		// Set the listener for the dismiss early parent to change the checkbox

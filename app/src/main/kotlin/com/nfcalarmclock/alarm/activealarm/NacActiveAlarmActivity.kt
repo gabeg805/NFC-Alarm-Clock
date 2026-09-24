@@ -117,6 +117,11 @@ class NacActiveAlarmActivity
 	}
 
 	/**
+	 * Whether the keyguard has been attempted to be dismissed.
+	 */
+	private var wasKeyguardDismissRequested: Boolean = false
+
+	/**
 	 * Shutdown broadcast receiver.
 	 */
 	private val shutdownBroadcastReceiver: NacShutdownBroadcastReceiver = NacShutdownBroadcastReceiver()
@@ -157,8 +162,7 @@ class NacActiveAlarmActivity
 			@OptIn(UnstableApi::class)
 			override fun onSnooze(alarm: NacAlarm)
 			{
-				// Snooze the alarm service. Whether the alarm is actually
-				// snoozed is determined in the service
+				// Attempt to snooze the alarm service
 				service?.attemptSnooze()
 			}
 
@@ -346,6 +350,65 @@ class NacActiveAlarmActivity
 	}
 
 	/**
+	 * After activity is resumed.
+	 */
+	override fun onPostResume()
+	{
+		// Super
+		super.onPostResume()
+
+		// Already requested keyguard be dismissed
+		if (wasKeyguardDismissRequested)
+		{
+			return
+		}
+
+		// Start the keyguard dismiss request when the device is locked and alarm requires NFC
+		if ((Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
+			&& keyguardManager.isKeyguardLocked
+			&& (alarm?.shouldUseNfc(this@NacActiveAlarmActivity) == true))
+		{
+			NacLog.i("Requesting the keyguard be dismissed so NFC scans will work on lock screen")
+
+			keyguardManager.requestDismissKeyguard(this, object: KeyguardManager.KeyguardDismissCallback() {
+
+				/**
+				 * Dismiss succeeded.
+				 */
+				override fun onDismissSucceeded()
+				{
+					NacLog.i("Keyguard dismiss succeeded")
+
+					// Re-setup the layout handler NFC so the NFC text no longer gives the note
+					// saying that the user should unlock their phone. Instead it should say the
+					// names of the NFC tags they need to use to dismiss the alarm
+					setupLayoutHandlerNfc()
+				}
+
+				/**
+				 * Dismiss cancelled.
+				 */
+				override fun onDismissCancelled()
+				{
+					NacLog.i("Keyguard dismiss cancelled")
+				}
+
+				/**
+				 * Dismiss error.
+				 */
+				override fun onDismissError()
+				{
+					NacLog.i("Keyguard dismiss error")
+				}
+
+			})
+		}
+
+		// Set the flag to request the keyguard to be dismissed
+		wasKeyguardDismissRequested = true
+	}
+
+	/**
 	 * Activity is resumed.
 	 */
 	@OptIn(UnstableApi::class)
@@ -369,7 +432,11 @@ class NacActiveAlarmActivity
 				return@launch
 			}
 
-			NacLog.i("NFC tags needed to dismiss. nfcSize=${nfcTagsNeededToDismissList?.size} | initialSize=$initialSizeOfNfcTagsNeededToDismiss")
+			// Log NFC tags if alarm requires NFC
+			if (alarm?.shouldUseNfc(this@NacActiveAlarmActivity) == true)
+			{
+				NacLog.i("NFC tags needed to dismiss. nfcSize=${nfcTagsNeededToDismissList?.size} | initialSize=$initialSizeOfNfcTagsNeededToDismiss")
+			}
 
 			// Size of the NFC tags dismiss list changed during the scan check.
 			// Save the list to the alarm and update the database
@@ -447,8 +514,8 @@ class NacActiveAlarmActivity
 	}
 
 	/**
-	 * Called when the window focus has changed. This is the best indicator of
-	 * whether the activity is visible to the user, or not.
+	 * Window focus has changed. This is the best indicator of whether the activity is visible
+	 * to the user, or not.
 	 */
 	override fun onWindowFocusChanged(hasFocus: Boolean)
 	{
@@ -457,15 +524,14 @@ class NacActiveAlarmActivity
 
 		NacLog.i("Window focus changed in active alarm activity")
 
-		// Check if the window focus has changed
+		// Start the layout handler
 		if (hasFocus)
 		{
-			// Start the layout handler
 			layoutHandler.start(this)
 		}
+		// Stop the layout handler
 		else
 		{
-			// Stop the layout handler
 			layoutHandler.stop(this)
 		}
 	}
