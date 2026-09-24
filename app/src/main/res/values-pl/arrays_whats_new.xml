@@ -5,6 +5,7 @@
 		<item>12.7.2</item>
 		<item>Dodano opcję jednoczesnego odtwarzania dźwięku przez &lt;b>głośniki&lt;/b> i &lt;b>Bluetooth&lt;/b>. Można ją znaleźć w Ustawieniach > Źródła dźwięku, w przypadku alarmu.</item>
 		<item>Dodano opcję &lt;b>wykluczania zakresu dat/godzin&lt;/b>. Można ją znaleźć w Ustawieniach > Powtarzanie, dla alarmu i jest używana na przykład wtedy, gdy alarm włącza się co kilka godzin, ale nie chcesz go ręcznie wyłączać/włączać przed pójściem spać.</item>
+		<item>Dodano obsługę języków: &lt;b>francuskiego&lt;/b>, &lt;b>włoskiego&lt;/b>, &lt;b>japońskiego&lt;/b>, &lt;b>polskiego&lt;/b>, &lt;b>tajskiego&lt;/b> i &lt;b>tureckiego&lt;/b>. Jeśli masz jakieś sugestie dotyczące ulepszenia tłumaczenia, wyślij mi e-mail w Ustawieniach > Pomoc.</item>
 		<item>Ulepszono funkcję &lt;b>odrzucania NFC&lt;/b>, która próbuje odrzucić ekran blokady, aby umożliwić skanowanie NFC. Wymaga to, aby urządzenie znajdowało się w stanie zaufanym, więc może nie być niezawodne, ale zawsze coś.</item>
 		<item>Zmieniono opcję &lt;b>trybu samolotowego&lt;/b> tak, aby pomijała alarmy, jeśli jest włączona, zamiast wyłączać/włączać wszystkie alarmy, gdy tryb samolotowy jest przełączany.</item>
 		<item>Naprawiono problem z miganiem &lt;b>latarki&lt;/b>, w wyniku którego czasy włączenia/wyłączenia nie były poprawnie konwertowane. Jeśli nie można przekonwertować czasu trwania, domyślnie będzie to 1 sekunda.</item>

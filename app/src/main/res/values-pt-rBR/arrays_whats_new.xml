@@ -5,6 +5,7 @@
 		<item>12.7.2</item>
 		<item>Adicionada opção para reproduzir áudio simultaneamente pelos &lt;b>alto-falantes&lt;/b> e &lt;b>Bluetooth&lt;/b>. Pode ser encontrada em Configurações > Fontes de áudio, para alarmes.</item>
 		<item>Adicionada opção para &lt;b>excluir intervalo de data/hora&lt;/b>. Pode ser encontrada em Configurações > Repetir, para um alarme, e é útil se, por exemplo, um alarme estiver tocando a cada duas horas, mas você não quiser desativá-lo/ativá-lo manualmente quando for dormir.</item>
+		<item>Adicionamos suporte aos idiomas &lt;b>francês&lt;/b>, &lt;b>italiano&lt;/b>, &lt;b>japonês&lt;/b>, &lt;b>polonês&lt;/b>, &lt;b>tailandês&lt;/b> e &lt;b>turco&lt;/b>. Se tiver alguma sugestão para melhorar uma tradução, envie-me um e-mail em Configurações > Ajuda.</item>
 		<item>Melhoria na função de &lt;b>dispensar NFC&lt;/b>, que tenta dispensar a tela de bloqueio para permitir a leitura do NFC. Isso exige que o dispositivo esteja em um estado confiável, portanto, pode não ser totalmente seguro, mas já é alguma coisa.</item>
 		<item>A opção &lt;b>modo avião&lt;/b> foi alterada para que ignore os alarmes se estiver ativada, em vez de desativar/ativar todos os alarmes quando o modo avião é alternado.</item>
 		<item>Corrigido o problema de intermitência da &lt;b>lanterna&lt;/b>, onde as durações de ligar/desligar não estavam sendo convertidas corretamente. Se não for possível converter uma duração, ela será definida como 1 segundo por padrão.</item>

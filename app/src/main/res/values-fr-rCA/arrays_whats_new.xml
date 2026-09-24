@@ -3,8 +3,9 @@
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
 		<item>12.7.2</item>
-		<item>Ajout d\'une option permettant de diffuser simultanément le son par les haut-parleurs et le Bluetooth. Cette option se trouve dans Réglages > Sources audio, pour une alarme.</item>
+		<item>Ajout d\'une option permettant de diffuser simultanément le son par les &lt;b>haut-parleurs&lt;/b> et le &lt;b>Bluetooth&lt;/b>. Cette option se trouve dans Réglages > Sources audio, pour une alarme.</item>
 		<item>Ajout d\'une option pour &lt;b>exclure une plage de dates/heures&lt;/b>. Elle se trouve dans Réglages > Répétition, pour une alarme, et est utilisée si, par exemple, une alarme sonne toutes les deux heures, mais que vous ne voulez pas la désactiver/réactiver manuellement lorsque vous vous endormez.</item>
+		<item>Ajout de la prise en charge des langues suivantes: &lt;b>français&lt;/b>, &lt;b>italien&lt;/b>, &lt;b>japonais&lt;/b>, &lt;b>polonais&lt;/b>, &lt;b>thaï&lt;/b> et &lt;b>turc&lt;/b>. N\'hésitez pas à m\'envoyer un courriel par Paramètres > Aide si vous avez des suggestions pour améliorer la traduction.</item>
 		<item>Amélioration de la fonction de déverrouillage NFC: l’écran de verrouillage est maintenant déverrouillé pour permettre la lecture NFC. Cette fonction nécessite que l\'appareil soit en mode de confiance et peut donc ne pas être fiable, mais elle constitue un progrès.</item>
 		<item>L\'option &lt;b>mode avion&lt;/b> a été modifiée afin qu\'elle ignore les alarmes si elle est activée, au lieu de désactiver/activer toutes les alarmes lorsque le mode avion est activé.</item>
 		<item>Correction d\'un problème de clignotement de la lampe de poche: la durée d\'allumage/extinction n\'était pas correctement convertie. En cas d\'impossibilité de conversion, la durée sera désormais fixée à 1 seconde.</item>

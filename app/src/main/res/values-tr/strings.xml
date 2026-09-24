@@ -191,7 +191,7 @@
 	<string name="message_disabled_named_alarm">&lt;b>%1$s&lt;/b> devre dışı bırakıldı.</string>
 	<string name="message_will_run_on_general_alarm" tools:ignore="StringFormatCount">%2$s üzerinden çalışacaktır.</string>
 	<string name="message_will_run_on_named_alarm">&lt;b>%1$s&lt;/b>%2$s üzerinde çalışacak.</string>
-	<string name="message_will_run_in_general_alarm" tools:ignore="StringFormatCount">Saniyeler içinde çalışacak.</string>
+	<string name="message_will_run_in_general_alarm" tools:ignore="StringFormatCount">%2$s dakika içinde çalışacak.</string>
 	<string name="message_will_run_in_named_alarm">&lt;b>%1$s&lt;/b> %2$s içinde çalışacak.</string>
 	<string name="message_next_alarm_on">Sonraki alarm %1$s\'de</string>
 	<string name="message_next_alarm_in">Sonraki alarm %1$s saniye sonra</string>

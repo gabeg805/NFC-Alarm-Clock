@@ -365,19 +365,16 @@ fun NacAlarm.toDayString(
 		val betterFormat = DateFormat.getBestDateTimePattern(locale, skeletonFormat)
 		val date = DateFormat.format(betterFormat, cal).toString()
 
-		// Alarm will repeat
+		// Alarm will repeat. Combine the date and repeat frequency string
 		if (this.shouldRepeat)
 		{
-			// Get the repeat frequency string
 			val repeatFrequency = this.toRepeatFrequencyString(context)
 
-			// Combine the date and repeat frequency string
 			return "$date \u2027 $repeatFrequency"
 		}
-		// Do not repeat alarm
+		// Will NOT repeat. Simply return the date
 		else
 		{
-			// Simply return the date
 			return date
 		}
 	}
@@ -387,10 +384,9 @@ fun NacAlarm.toDayString(
 		// Today or tomorrow
 		val oneTime = this.toOneTimeString(context)
 
-		// Alarm will not repeat
+		// Will NOT repeat. Only show the one time alarm
 		if (!this.shouldRepeat)
 		{
-			// Only show the one time alarm
 			return oneTime
 		}
 
@@ -406,16 +402,14 @@ fun NacAlarm.toDayString(
 				// Tomorrow string
 				val tomorrow = context.getString(R.string.dow_tomorrow)
 
-				// One time alarm will occur tomorrow
+				// One time alarm will occur tomorrow: Tomorrow * Every X <min/hour>
 				if (oneTime == tomorrow)
 				{
-					// Tomorrow * Every X <min/hour>
 					"$oneTime \u2027 $repeatFrequency"
 				}
-				// Alarm will occur today
+				// Alarm will occur today: Every X <min/hour>
 				else
 				{
-					// Every X <min/hour>
 					repeatFrequency
 				}
 			}
@@ -423,21 +417,19 @@ fun NacAlarm.toDayString(
 			// Days
 			3 ->
 			{
-				// Every day alarm
+				// Every day alarm. Today/tomorrow
 				if (this.repeatFrequency == 1)
 				{
-					// Today/tomorrow
 					oneTime
 				}
-				// Every X days
+				// Every X days. Today/tomorrow * Every X days
 				else
 				{
-					// Today/tomorrow * Every X days
 					"$oneTime \u2027 $repeatFrequency"
 				}
 			}
 
-			// Months. Show: Today/tomorrow * Every X months
+			// Months: Today/tomorrow * Every X months
 			5 -> "$oneTime \u2027 $repeatFrequency"
 
 			// Unknown or weeks, but don't think this is possible? Since

@@ -5,6 +5,7 @@
 		<item>12.7.2</item>
 		<item>Đã thêm tùy chọn phát âm thanh đồng thời qua &lt;b>loa&lt;/b> và &lt;b>Bluetooth&lt;/b>. Có thể tìm thấy trong Cài đặt > Nguồn âm thanh, dành cho báo thức.</item>
 		<item>Đã thêm tùy chọn &lt;b>loại trừ khoảng thời gian/ngày tháng&lt;/b>. Có thể tìm thấy trong Cài đặt > Lặp lại, đối với báo thức và được sử dụng nếu, ví dụ, báo thức reo mỗi vài giờ, nhưng bạn không muốn tự tắt/bật nó khi đi ngủ.</item>
+		<item>Đã thêm hỗ trợ ngôn ngữ cho các ngôn ngữ &lt;b>Pháp&lt;/b>, &lt;b>Ý&lt;/b>, &lt;b>Nhật Bản&lt;/b>, &lt;b>Ba Lan&lt;/b>, &lt;b>Thái Lan&lt;/b> và &lt;b>Thổ Nhĩ Kỳ&lt;/b>. Vui lòng gửi email cho tôi qua mục Cài đặt > Trợ giúp nếu bạn có bất kỳ đề xuất nào để cải thiện bản dịch.</item>
 		<item>Cải thiện chức năng &lt;b>tắt NFC&lt;/b>, trong đó màn hình khóa được cố gắng tắt để có thể quét NFC. Điều này yêu cầu thiết bị phải ở trạng thái đáng tin cậy, vì vậy có thể không hoàn toàn đáng tin cậy, nhưng dù sao cũng là một bước tiến.</item>
 		<item>Đã thay đổi tùy chọn &lt;b>chế độ máy bay&lt;/b> để nó bỏ qua các báo thức nếu chế độ này được bật, thay vì tắt/bật tất cả các báo thức khi chế độ máy bay được chuyển đổi.</item>
 		<item>Đã khắc phục sự cố nhấp nháy của &lt;b>đèn pin&lt;/b>, trong đó thời gian bật/tắt không được chuyển đổi chính xác. Nếu không thể chuyển đổi thời gian, nó sẽ mặc định là 1 giây.</item>

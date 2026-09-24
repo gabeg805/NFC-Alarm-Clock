@@ -4,7 +4,8 @@
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
 		<item>12.7.2</item>
 		<item>Se agregó la opción de reproducir audio a través de &lt;b>altavoces&lt;/b> y &lt;b>bluetooth&lt;/b> simultáneamente. Se encuentra en Ajustes > Fuentes de audio, para una alarma.</item>
-		<item>Se ha añadido la opción de &lt;b>excluir rango de fecha/hora&lt;/b>. Se encuentra en Ajustes > Repetir, para una alarma, y se utiliza si, por ejemplo, una alarma suena cada dos horas, pero no desea desactivarla/activarla manualmente cuando se vaya a dormir.</item>
+		<item>Se agregó la opción de &lt;b>excluir rango de fecha/hora&lt;/b>. Se encuentra en Ajustes > Repetir, para una alarma, y se utiliza si, por ejemplo, una alarma suena cada dos horas, pero no desea desactivarla/activarla manualmente cuando se vaya a dormir.</item>
+		<item>Se agregó compatibilidad con los idiomas &lt;b>francés&lt;/b>, &lt;b>italiano&lt;/b>, &lt;b>japonés&lt;/b>, &lt;b>polaco&lt;/b>, &lt;b>tailandés&lt;/b> y &lt;b>turco&lt;/b>. Si tiene alguna sugerencia para mejorar una traducción, envíeme un correo electrónico a través de Configuración > Ayuda.</item>
 		<item>Se ha mejorado la función &lt;b>NFC dispass&lt;/b>, que permite desactivar la pantalla de bloqueo para escanear mediante NFC. Esto requiere que el dispositivo esté en un estado de confianza, por lo que puede que no sea del todo fiable, pero es un avance.</item>
 		<item>Se modificó la opción &lt;b>modo avión&lt;/b> para que omita las alarmas si está activado, en lugar de desactivar/activar todas las alarmas cuando se activa/desactiva el modo avión.</item>
 		<item>Se solucionó el problema de parpadeo de la &lt;b>linterna&lt;/b>, donde la duración de encendido/apagado no se convertía correctamente. Si no se puede convertir una duración, se establecerá por defecto en 1 segundo.</item>

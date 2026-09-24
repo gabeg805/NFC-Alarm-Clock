@@ -191,7 +191,7 @@
 	<string name="message_disabled_named_alarm">&lt;b>%1$s&lt;/b> ถูกปิดใช้งาน</string>
 	<string name="message_will_run_on_general_alarm" tools:ignore="StringFormatCount">จะทำงานโดยใช้ %2$s</string>
 	<string name="message_will_run_on_named_alarm">&lt;b>%1$s&lt;/b> จะทำงานบน %2$s</string>
-	<string name="message_will_run_in_general_alarm" tools:ignore="StringFormatCount">จะใช้เวลา 2 วินาที</string>
+	<string name="message_will_run_in_general_alarm" tools:ignore="StringFormatCount">จะใช้เวลา %2$s วินาที</string>
 	<string name="message_will_run_in_named_alarm">&lt;b>%1$s&lt;/b> จะทำงานในเวลา %2$s</string>
 	<string name="message_next_alarm_on">นาฬิกาปลุกครั้งต่อไปเวลา %1$s</string>
 	<string name="message_next_alarm_in">นาฬิกาปลุกครั้งต่อไปในอีก %1$s</string>

@@ -5,6 +5,7 @@
 		<item>12.7.2</item>
 		<item>Sesleri aynı anda hoparlörlerden ve Bluetooth üzerinden çalma seçeneği eklendi. Bu özellik Ayarlar > Ses kaynakları bölümünde, alarm için bulunabilir.</item>
 		<item>&lt;b>Tarih/saat aralığını hariç tutma&lt;/b> seçeneği eklendi. Ayarlar > Tekrar bölümünde, bir alarm için bulunur ve örneğin, alarm birkaç saatte bir çalıyorsa ancak uykuya dalmadan önce manuel olarak devre dışı bırakmak/etkinleştirmek istemiyorsanız kullanılır.</item>
+		<item>&lt;b>Fransızca&lt;/b>, &lt;b>İtalyanca&lt;/b>, &lt;b>Japonca&lt;/b>, &lt;b>Lehçe&lt;/b>, &lt;b>Tayca&lt;/b> ve &lt;b>Türkçe&lt;/b> dilleri için dil desteği eklendi. Çeviriyi iyileştirmek için herhangi bir öneriniz varsa lütfen Ayarlar > Yardım bölümünden bana e-posta gönderin.</item>
 		<item>NFC taraması yapılabilmesi için kilit ekranının kapatılması girişiminde kullanılan NFC kapatma özelliği iyileştirildi. Bu özellik, cihazın güvenilir durumda olmasını gerektirir, bu nedenle her zaman güvenilir olmayabilir, ancak yine de bir çözümdür.</item>
 		<item>Uçak modu seçeneği, etkinleştirildiğinde tüm alarmları devre dışı bırakmak/etkinleştirmek yerine, etkinleştirildiğinde alarmları atlayacak şekilde değiştirildi.</item>
 		<item>&lt;b>El feneri&lt;/b> yanıp sönme sorununu düzelttik; açma/kapama süreleri doğru şekilde dönüştürülemiyordu. Süre dönüştürülemezse, varsayılan olarak 1 saniye kullanılır.</item>

@@ -5,6 +5,7 @@
 		<item>12.7.2</item>
 		<item>Added option to play audio through &lt;b>speakers&lt;/b> and &lt;b>bluetooth&lt;/b> simultaneously. Can be found in Settings > Audio sources, for an alarm.</item>
 		<item>Added option to &lt;b>exclude date/time range&lt;/b>. Can be found in Settings > Repeat, for an alarm and is used if, for instance, an alarm is going off every couple hours, but you do not want to manually disable/enable it when you go to sleep.</item>
+		<item>Added language support for &lt;b>French&lt;/b>, &lt;b>Italian&lt;/b>, &lt;b>Japanese&lt;/b>, &lt;b>Polish&lt;/b>, &lt;b>Thai&lt;/b>, and &lt;b>Turkish&lt;/b>. Please send me an email under Settings > Help if you have any suggestions to improve a translation.</item>
 		<item>Improved &lt;b>NFC dismiss&lt;/b> where the lock screen is attempted to be dismissed so that NFC can be scanned. This requires the device to be in a trusted state, so may not be reliable, but it is something.</item>
 		<item>Changed &lt;b>airplane mode&lt;/b> option so that it skips alarms if it is enabled, instead of disabling/enabling all alarms when airplane mode is toggled.</item>
 		<item>Fixed &lt;b>flashlight&lt;/b> blink issue where on/off durations were not being converted properly. If unable to convert a duration, it will default to 1 sec.</item>

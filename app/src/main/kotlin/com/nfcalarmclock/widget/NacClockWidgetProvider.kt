@@ -129,8 +129,15 @@ internal fun RemoteViews.updateText(helper: NacClockWidgetDataHelper)
 	// Date visible
 	if ((helper.dateVis == View.VISIBLE) || (helper.dateBoldVis == View.VISIBLE))
 	{
-		this.setTextViewText(R.id.widget_date, helper.date)
-		this.setTextViewText(R.id.widget_date_bold, helper.date)
+		val dateFormat = helper.dateFormat
+		val date = helper.getDate(dateFormat)
+
+		this.setCharSequence(R.id.widget_date, "setFormat12Hour", dateFormat)
+		this.setCharSequence(R.id.widget_date, "setFormat24Hour", dateFormat)
+		this.setCharSequence(R.id.widget_date_bold, "setFormat12Hour", dateFormat)
+		this.setCharSequence(R.id.widget_date_bold, "setFormat24Hour", dateFormat)
+		this.setTextViewText(R.id.widget_date, date)
+		this.setTextViewText(R.id.widget_date_bold, date)
 	}
 }
 
@@ -252,19 +259,13 @@ internal fun RemoteViews.updateVisuals(
 /**
  * Helper for determining various important aspects of the clock widget, such as what
  * views should be visible, text for the alarm, should views be bold or not, etc.
+ *
+ * @param context Context.
+ * @param sharedPreferences Shared preferences.
  */
 internal class NacClockWidgetDataHelper(
-
-	/**
-	 * Context
-	 */
 	val context: Context,
-
-	/**
-	 * Shared preferences.
-	 */
 	val sharedPreferences: NacSharedPreferences = NacSharedPreferences(context)
-
 )
 {
 
@@ -597,18 +598,26 @@ internal class NacClockWidgetDataHelper(
 		}
 
 	/**
-	 * Date in the current locale.
+	 * Best date format in the current locale.
 	 */
-	val date: String
+	val dateFormat: String
 		get()
 		{
 			val locale = Locale.getDefault()
-			val now = Calendar.getInstance()
-			val skeletonFormat = "E MMM d"
-			val betterFormat = DateFormat.getBestDateTimePattern(locale, skeletonFormat)
+			val skeletonFormat = "E, MMM d"
 
-			return DateFormat.format(betterFormat, now).toString()
+			return DateFormat.getBestDateTimePattern(locale, skeletonFormat)
 		}
+
+	/**
+	 * Date in the desired format.
+	 */
+	fun getDate(format: String): String
+	{
+		val now = Calendar.getInstance()
+
+		return DateFormat.format(format, now).toString()
+	}
 
 	companion object
 	{

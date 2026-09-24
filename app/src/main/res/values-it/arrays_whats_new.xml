@@ -5,6 +5,7 @@
 		<item>12.7.2</item>
 		<item>Aggiunta l\'opzione per riprodurre l\'audio tramite &lt;b>altoparlanti&lt;/b> e &lt;b>Bluetooth&lt;/b> contemporaneamente. Si trova in Impostazioni > Sorgenti audio, per una sveglia.</item>
 		<item>Aggiunta l\'opzione per &lt;b>escludere un intervallo di date/ore&lt;/b>. Si trova in Impostazioni > Ripeti, per una sveglia, ed è utile se, ad esempio, una sveglia suona ogni due ore, ma non si desidera disattivarla/attivarla manualmente prima di andare a dormire.</item>
+		<item>Aggiunto il supporto linguistico per &lt;b>francese&lt;/b>, &lt;b>italiano&lt;/b>, &lt;b>giapponese&lt;/b>, &lt;b>polacco&lt;/b>, &lt;b>tailandese&lt;/b> e &lt;b>turco&lt;/b>. Se avete suggerimenti per migliorare una traduzione, inviatemi un\'email tramite Impostazioni > Aiuto.</item>
 		<item>Funzione di chiusura NFC migliorata: si tenta di chiudere la schermata di blocco per consentire la scansione NFC. Questa funzione richiede che il dispositivo si trovi in uno stato attendibile, quindi potrebbe non essere del tutto affidabile, ma è comunque un passo avanti.</item>
 		<item>Modificata l\'opzione &lt;b>modalità aereo&lt;/b> in modo che, se abilitata, ignori gli allarmi, anziché disabilitarli/abilitarli tutti quando si attiva/disattiva la modalità aereo.</item>
 		<item>Risolto il problema di lampeggio della &lt;b>torcia&lt;/b> in cui le durate di accensione/spegnimento non venivano convertite correttamente. Se non è possibile convertire una durata, verrà utilizzata come valore predefinito 1 secondo.</item>

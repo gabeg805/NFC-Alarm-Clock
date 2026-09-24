@@ -11,14 +11,13 @@ plugins {
 	id("com.google.devtools.ksp")
 }
 
-// Create a variable called keystorePropertiesFile, and initialize it to your
-// keystore.properties file, in the rootProject folder.
+// Create a file() object pointing to the keystore.properties file
 val keystorePropertiesFile = rootProject.file("keystore.properties")
 
-// Initialize a new Properties() object called keystoreProperties.
+// Initialize a new Properties() for the keystore.
 val keystoreProperties = Properties()
 
-// Load your keystore.properties file into the keystoreProperties object if it exists
+// Read the keystore.properties file if it exists
 if (keystorePropertiesFile.exists()) {
 	keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 }
@@ -32,8 +31,8 @@ android {
 		applicationId = "com.nfcalarmclock"
 		minSdk = 24
 		targetSdk = 36
-		versionCode = 642
-		versionName = "12.7.2-beta029"
+		versionCode = 643
+		versionName = "12.7.2-beta030"
 	}
 
 	// Configuration for signing the app on release builds. The keystore.properties file must exist
