@@ -147,23 +147,6 @@ class NacDateAndTimePickerDialog
 	}
 
 	/**
-	 * Fragment is resumed.
-	 */
-	override fun onResume()
-	{
-		// Super
-		super.onResume()
-
-		// Get the width of the screen
-		val screenWidth = resources.displayMetrics.widthPixels
-		val height = ViewGroup.LayoutParams.WRAP_CONTENT
-		val width = 0.9f * screenWidth
-
-		// Set the dialog to 90% width and wrap the height
-		dialog?.window?.setLayout(width.toInt(), height)
-	}
-
-	/**
 	 * View has been created.
 	 */
 	override fun onViewCreated(view: View, savedInstanceState: Bundle?)

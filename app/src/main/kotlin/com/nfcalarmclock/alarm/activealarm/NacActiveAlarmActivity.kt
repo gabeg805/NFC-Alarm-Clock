@@ -133,7 +133,10 @@ class NacActiveAlarmActivity
 		override fun onReceive(context: Context, intent: Intent)
 		{
 			// Setup NFC for the layout handler
-			setupLayoutHandlerNfc()
+			if (nfcTagsNeededToDismissList != null)
+			{
+				setupLayoutHandlerNfc()
+			}
 		}
 	}
 
@@ -145,7 +148,11 @@ class NacActiveAlarmActivity
 		{
 			// Setup NFC
 			startNfc()
-			setupLayoutHandlerNfc()
+
+			if (nfcTagsNeededToDismissList != null)
+			{
+				setupLayoutHandlerNfc()
+			}
 		}
 	}
 
