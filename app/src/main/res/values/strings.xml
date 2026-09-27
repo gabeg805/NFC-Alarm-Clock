@@ -230,6 +230,7 @@
 	<string name="error_message_unable_to_volume_dismiss_nfc_alarm">Unable to dismiss NFC alarm with volume button</string>
 	<string name="error_message_unable_to_email">Unable to draft email</string>
 	<string name="error_message_unable_to_email_statistics">Unable to email statistics</string>
+	<string name="error_message_unable_to_vibrate">Unable to vibrate — please email me so I can figure out why this happens</string>
 	<string name="error_message_unable_to_shine_flashlight">Unable to shine flashlight — %1$s</string>
 	<string name="error_message_unable_to_get_flashlight_characteristics">Unable to get flashlight information</string>
 	<string name="error_message_unable_to_access_flashlight">Unable to access flashlight — %1$s</string>

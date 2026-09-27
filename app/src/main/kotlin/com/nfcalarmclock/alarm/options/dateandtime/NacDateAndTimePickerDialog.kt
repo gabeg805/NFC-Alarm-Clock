@@ -135,6 +135,28 @@ class NacDateAndTimePickerDialog
 	var shouldAlwaysShowClearButton: Boolean = false
 
 	/**
+	 * Calculate the minimum date for the DatePicker.
+	 */
+	private fun calcMinDate(cal: Calendar): Long
+	{
+		// Get the current time
+		val now = Calendar.getInstance()
+
+		// Determine whether today or tomorrow is the min date
+		return if (cal.before(now))
+		{
+			// Tomorrow
+			now.add(Calendar.DAY_OF_MONTH, 1)
+			now.timeInMillis
+		}
+		else
+		{
+			// Today
+			System.currentTimeMillis() - 1000
+		}
+	}
+
+	/**
 	 * View is created.
 	 */
 	override fun onCreateView(
@@ -321,7 +343,6 @@ class NacDateAndTimePickerDialog
 		alarm.date = ""
 
 		// Get the next time the alarm will go off
-		val now = Calendar.getInstance()
 		val alarmCal = NacCalendar.alarmToCalendar(alarm)
 
 		// Restore the alarm's date
@@ -338,15 +359,7 @@ class NacDateAndTimePickerDialog
 		}
 
 		// Min date
-		datePicker.minDate = if (alarmCal.before(now))
-		{
-			now.add(Calendar.DAY_OF_MONTH, 1)
-			now.timeInMillis
-		}
-		else
-		{
-			System.currentTimeMillis() - 1000
-		}
+		datePicker.minDate = calcMinDate(alarmCal)
 
 		// First day of week
 		datePicker.firstDayOfWeek = if (sharedPreferences.startWeekOn == 1) Calendar.MONDAY else Calendar.SUNDAY

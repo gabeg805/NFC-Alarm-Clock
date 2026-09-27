@@ -263,31 +263,9 @@ class NacRepeatOptionsDialog
 		alarm.excludeEndDateTime = endDateTime
 		alarm.repeatFrequencyDaysToRunBeforeStarting = selectedDaysToRunBeforeFrequency
 
-		// Weekly frequency unit
-		if (selectedRepeatFrequencyUnits == 4)
+		// Daily frequency with 2+ days selected. This cannot be done, so clear all days
+		if ((selectedRepeatFrequencyUnits == 3) && (alarm.days.size > 1))
 		{
-			// Days are empty
-			if (alarm.days.isEmpty())
-			{
-				// Every 1 week or no days to run before starting were selected
-				if ((selectedRepeatFrequencyValue == 1) || selectedDaysToRunBeforeFrequency.isEmpty())
-				{
-					// Set the days and days to run before starting to the entire week
-					alarm.days = Day.WEEK
-					alarm.repeatFrequencyDaysToRunBeforeStarting = alarm.days
-				}
-				// Every 2+ weeks and days to run before starting has at least 1 day selected
-				else
-				{
-					alarm.days = selectedDaysToRunBeforeFrequency
-				}
-			}
-		}
-		// Every other frequency unit
-		else
-		{
-			// Clear various alarm attributes
-			alarm.repeatFrequencyDaysToRunBeforeStarting = Day.NONE
 			alarm.setDays(0)
 		}
 	}

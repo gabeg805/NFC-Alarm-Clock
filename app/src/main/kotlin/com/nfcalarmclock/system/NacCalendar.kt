@@ -236,8 +236,8 @@ fun Calendar.adjustOutOfExcludeTimeRange(
 		NacLog.w("Calendar is within exclude range. initCal=${this.toFullTime()} | startCal=${startCal.toFullTime()} | endCal=${endCal.toFullTime()}", offsetIndex = 1)
 	}
 
-	// Adjust all calendars so that if they are within the exclude time range, add the
-	// repeat frequency until they are outside the range
+	// Adjust the calendar so if it is within the exclude time range, add the repeat frequency
+	// until it is outside the range
 	var i = 0
 	while ((this >= startCal) && (this < endCal!!))
 	{
@@ -255,6 +255,40 @@ fun Calendar.adjustOutOfExcludeTimeRange(
 }
 
 /**
+ * Adjust a Calendar until it lands on a valid day.
+ *
+ * @param alarm Alarm.
+ * @param shouldLog Whether to log or not.
+ */
+fun Calendar.adjustToValidDay(
+	alarm: NacAlarm,
+	shouldLog: Boolean = false
+): Boolean
+{
+	// Day is already valid
+	if (this.isOnValidDay(alarm.days))
+	{
+		return false
+	}
+
+	// Adjust the calendar so if it is not on a valid day, add the repeat frequency until it is
+	var i = 0
+	while (!this.isOnValidDay(alarm.days))
+	{
+		i += 1
+		this.addRepeatFrequency(alarm)
+	}
+
+	// Log when a calendar is within the exclude range
+	if ((i > 0) && shouldLog)
+	{
+		NacLog.w("Adjusted calendar $i times to valid day. newCal=${this.toFullTime()}", offsetIndex = 1)
+	}
+
+	return (i > 0)
+}
+
+/**
  * Check if a calendar's time matches the dismiss early time of an alarm.
  *
  * @return True if a calendar's time matches the dismiss early time of an alarm, and
@@ -263,6 +297,20 @@ fun Calendar.adjustOutOfExcludeTimeRange(
 fun Calendar.equalsDismissEarlyTime(alarm: NacAlarm): Boolean
 {
 	return (alarm.timeOfDismissEarlyAlarm > 0) && (this.timeInMillis == alarm.timeOfDismissEarlyAlarm)
+}
+
+/**
+ * Whether the Calendar resides on a valid day or not.
+ *
+ * @return True if it is on a valid day, and False otherwise.
+ */
+fun Calendar.isOnValidDay(validDays: EnumSet<Day>): Boolean
+{
+	// Get the current calendar day
+	val day = this.get(Calendar.DAY_OF_WEEK).toDay()
+
+	// Validity check
+	return validDays.isEmpty() || (day in validDays)
 }
 
 /**
@@ -414,8 +462,8 @@ fun NacAlarm.toDayString(
 				}
 			}
 
-			// Days
-			3 ->
+			// Days or weeks
+			3, 4 ->
 			{
 				// Every day alarm. Today/tomorrow
 				if (this.repeatFrequency == 1)
@@ -432,7 +480,7 @@ fun NacAlarm.toDayString(
 			// Months: Today/tomorrow * Every X months
 			5 -> "$oneTime \u2027 $repeatFrequency"
 
-			// Unknown or weeks, but don't think this is possible? Since
+			// Unknown, but don't think this is possible? Since
 			// no day = current day so a day would always be selected
 			else -> repeatFrequency
 		}
@@ -685,9 +733,11 @@ object NacCalendar
 			// Alarm was dismissed early at the same time matching this calendar. Add the repeat
 			// frequency to this calendar
 			//
-			// Note: Dismiss early time can only be set if repeat is enabled
+			// Note: Dismiss early time can only be set if repeat is enabled.
+			// TODO: How can the code even reach this point? Isn't date removed/changed after every use?
 			if (c.equalsDismissEarlyTime(alarm))
 			{
+				println("DATE DISMISS EARLY TIME")
 				c.addRepeatFrequency(alarm)
 			}
 
@@ -706,8 +756,10 @@ object NacCalendar
 				// repeat frequency to this calendar
 				//
 				// Note: Dismiss early time can only be set if repeat is enabled
+				// TODO: Is this only reachable when the time and days don't changed. So only weekly/month?
 				if (c.equalsDismissEarlyTime(alarm))
 				{
+					println("DAYS DISMISS EARLY TIME")
 					c.addRepeatFrequency(alarm)
 				}
 

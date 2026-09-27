@@ -29,7 +29,6 @@ import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.card.NacBaseCardHolder
 import com.nfcalarmclock.card.NacHeightAnimator
 import com.nfcalarmclock.log.NacLog
-import com.nfcalarmclock.system.NacCalendar.Day
 import com.nfcalarmclock.system.toDayString
 import com.nfcalarmclock.view.dayofweek.NacDayOfWeek
 import com.nfcalarmclock.view.dayofweek.NacDayOfWeek.OnWeekChangedListener
@@ -1736,67 +1735,17 @@ class NacAlarmCardHolder(root: View)
 				// Toggle the day
 				alarm!!.toggleDay(day)
 
-				// No days are selected
-				if (alarm!!.days.isEmpty())
+				// Days are selected. This is a daily repeat frequency alarm. Only allow one day
+				// to be selected at a time
+				if (alarm!!.days.isNotEmpty() && (alarm!!.repeatFrequencyUnits == 3) && (day in alarm!!.days))
 				{
-					// Repeat frequency is every 1 week
-					if ((alarm!!.repeatFrequency == 1) && (alarm!!.repeatFrequencyUnits == 4))
-					{
-						NacLog.i("Changing repeat frequency to daily")
+					NacLog.i("Only 1 day can be active. day=$day")
 
-						// Change to daily
-						alarm!!.repeatFrequency = 1
-						alarm!!.repeatFrequencyUnits = 3
-						alarm!!.repeatFrequencyDaysToRunBeforeStarting = Day.NONE
-					}
-				}
-				// Days are selected
-				else
-				{
-					// Repeat frequency units
-					when (alarm!!.repeatFrequencyUnits)
-					{
-						// Minutes, hours, and days
-						1, 2, 3 ->
-						{
-							// Repeat frequency is the default value of 1 but not on a weekly
-							// cadence. When days are selected, the repeat frequency should be
-							// weekly, with few exceptions
-							if ((alarm!!.repeatFrequency == 1) && (alarm!!.repeatFrequencyUnits == 3))
-							{
-								NacLog.i("Changing repeat frequency to weekly")
-
-								// Change to weekly
-								alarm!!.repeatFrequency = 1
-								alarm!!.repeatFrequencyUnits = 4
-								alarm!!.repeatFrequencyDaysToRunBeforeStarting = Day.WEEK
-							}
-							// Custom repeat frequency
-							else
-							{
-								// The day was selected, and not deselected
-								if (day in alarm!!.days)
-								{
-									// Deselect any other days that may be selected. Only
-									// allow one day to be selected at a time for
-									// minute/hour/day repeat frequencies
-									alarm!!.days = EnumSet.of(day)
-									dayOfWeek.setDays(alarm!!.days)
-
-									NacLog.i("Custom repeat frequency only 1 day can be active. day=$day")
-								}
-							}
-						}
-
-						// Do nothing for weeks/months. These types can have multiple days selected
-						else -> {}
-					}
+					alarm!!.days = EnumSet.of(day)
+					dayOfWeek.setDays(alarm!!.days)
 				}
 
 				NacLog.i("repeatFreq=${alarm!!.repeatFrequency} | repeatFreqUnits=${alarm!!.repeatFrequencyUnits}")
-
-				// Clear the date
-				alarm!!.date = ""
 
 				// Setup the views
 				setRepeatButton()

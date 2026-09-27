@@ -19,6 +19,7 @@ import com.nfcalarmclock.system.NacCalendar
 import com.nfcalarmclock.system.NacCalendar.Day
 import com.nfcalarmclock.system.addRepeatFrequency
 import com.nfcalarmclock.system.adjustOutOfExcludeTimeRange
+import com.nfcalarmclock.system.adjustToValidDay
 import com.nfcalarmclock.system.daysToValue
 import com.nfcalarmclock.system.removeToday
 import com.nfcalarmclock.system.toDay
@@ -171,6 +172,8 @@ open class NacAlarm()
 
 	/**
 	 * Days to run before starting the repeat frequency.
+	 *
+	 * TODO: Change to WEEKDAY (value=62)
 	 */
 	@ColumnInfo(name = "repeat_frequency_days_to_run_before_starting", defaultValue = "127")
 	var repeatFrequencyDaysToRunBeforeStarting: EnumSet<Day> = Day.WEEK
@@ -538,6 +541,14 @@ open class NacAlarm()
 		get() = (snoozeCount < maxSnooze) || (maxSnooze < 0)
 
 	/**
+	 * Whether there are NO days to run before starting or not.
+	 *
+	 * @return True if there are NO days to run before starting, and False otherwise.
+	 */
+	val hasEmptyRepeatFrequencyDaysToRunBeforeStarting: Boolean
+		get() = days.isEmpty() || days.none { repeatFrequencyDaysToRunBeforeStarting.contains(it) }
+
+	/**
 	 * Check if the alarm is being used, by being active or snoozed.
 	 */
 	val isInUse: Boolean
@@ -705,7 +716,7 @@ open class NacAlarm()
 			false
 		}
 
-		// Every 1 day
+		// Every 1 day. Does not need to have day set and labeled like 2+ days
 		if ((repeatFrequency == 1) && !wasAdjusted)
 		{
 			return
@@ -714,7 +725,11 @@ open class NacAlarm()
 		else if ((repeatFrequency <= 7) && !wasAdjusted)
 		{
 			// Remove today if it is in the days
+			NacLog.i("Before: $days")
+			println("Before: $days")
 			days.removeToday()
+			println("After : $days")
+			NacLog.i("After : $days")
 
 			// Get the new day of week
 			val calDay = alarmCal.get(Calendar.DAY_OF_WEEK)
@@ -741,10 +756,15 @@ open class NacAlarm()
 	 */
 	fun addRepeatFrequencyHoursToTime(alarmCal: Calendar)
 	{
-		// Adjust the calendar in the event that it lies within the exclude time range
+		// Adjust the calendar to make sure it is on a valid day
+		alarmCal.adjustToValidDay(this)
+
+		// Adjust the calendar in the event that it lies within the exclude time range,
+		// and also adjust it back to a valid day afterwards if necessary
 		if (shouldCheckExcludeTimeRange)
 		{
 			alarmCal.adjustOutOfExcludeTimeRange(this)
+			alarmCal.adjustToValidDay(this)
 		}
 
 		// Update the alarm hour
@@ -770,10 +790,15 @@ open class NacAlarm()
 	 */
 	fun addRepeatFrequencyMinutesToTime(alarmCal: Calendar)
 	{
-		// Adjust the calendar in the event that it lies within the exclude time range
+		// Adjust the calendar to make sure it is on a valid day
+		alarmCal.adjustToValidDay(this)
+
+		// Adjust the calendar in the event that it lies within the exclude time range,
+		// and also adjust it back to a valid day afterwards if necessary
 		if (shouldCheckExcludeTimeRange)
 		{
 			alarmCal.adjustOutOfExcludeTimeRange(this)
+			alarmCal.adjustToValidDay(this)
 		}
 
 		// Update the alarm hour and minute
@@ -803,15 +828,6 @@ open class NacAlarm()
 
 	/**
 	 * Add the weeks repeat frequency to the alarm time.
-	 *
-	 * TODO: An alarm that runs on a single day. If you change the repeat frequency to > 1 and
-	 * choose the days to run before starting to be the same day, the alarm will work normally.
-	 * However, if you deselect that day so there are no days to run before starting, the next
-	 * alarm will be correct, but there will be no date set. This means that if the device is
-	 * reset, the day when the alarm should run will be forgotten and have to be recomputed,
-	 * potentially to a further date than anticipated.
-	 *
-	 * TODO: Consider how this should be wrt days to run before starting. Should it be required?
 	 */
 	fun addRepeatFrequencyWeeksToTime(alarmCal: Calendar)
 	{
@@ -838,31 +854,14 @@ open class NacAlarm()
 		}
 		else
 		{
+			// Days are not empty
 			NacCalendar.getNextAlarmDay(this)!!
 		}
 
-		NacLog.i("nextCal=${nextCal.toFullTime()} | daysToRunBefore=$repeatFrequencyDaysToRunBeforeStarting | days=$days")
-
-		// Ensure that the days to run before starting does not have any extra
-		// days selected. These would be days that do not match the alarm days.
-		// Remove any of the extra days and do a final compare if the days to run
-		// before starting should be marked as empty or not
-		if (repeatFrequencyDaysToRunBeforeStarting.isNotEmpty())
-		{
-			// Get any overlap between the days to run before starting and the days selected for the alarm
-			val daysToRunOverlap = EnumSet.copyOf(repeatFrequencyDaysToRunBeforeStarting)
-			daysToRunOverlap.retainAll(days)
-
-			// There is no overlap between the days to run before starting and the days selected for the alarm
-			if (daysToRunOverlap.isEmpty())
-			{
-				// Clear the days to run as it probably had extra days that were not needed
-				repeatFrequencyDaysToRunBeforeStarting = EnumSet.noneOf(Day::class.java)
-			}
-		}
+		NacLog.i("nextCal=${nextCal.toFullTime()} | daysToRunBefore=$repeatFrequencyDaysToRunBeforeStarting | days=$days | hasDaysToRun=$hasEmptyRepeatFrequencyDaysToRunBeforeStarting")
 
 		// No more days to run before starting the repeat frequency
-		if (repeatFrequencyDaysToRunBeforeStarting.isEmpty() || wasAdjusted)
+		if (hasEmptyRepeatFrequencyDaysToRunBeforeStarting || wasAdjusted)
 		{
 			// Get the new day of week
 			val year = nextCal.get(Calendar.YEAR)
@@ -882,16 +881,17 @@ open class NacAlarm()
 	/**
 	 * Add the repeat frequency to the alarm time, if it should be added.
 	 */
-	fun addRepeatFrequencyToTime()
+	fun addRepeatFrequencyToTime(): Calendar
 	{
+		// Create a calendar from the alarm
+		val alarmCal = NacCalendar.alarmToCalendar(this)
+
 		// Alarm will not repeat or weekly repeat frequency
 		if (!shouldRepeat || ((repeatFrequencyUnits == 4) && (repeatFrequency == 1)))
 		{
-			return
+			return alarmCal
 		}
 
-		// Create a calendar from the alarm
-		val alarmCal = NacCalendar.alarmToCalendar(this)
 		NacLog.i("addRepeatFrequency initial cal=${alarmCal.toFullTime()}")
 
 		// Add the repeat frequency to the calendar
@@ -917,6 +917,7 @@ open class NacAlarm()
 			5 -> addRepeatFrequencyMonthsToTime(alarmCal)
 		}
 
+		return alarmCal
 	}
 
 	/**
@@ -1206,20 +1207,29 @@ open class NacAlarm()
 		// Alarm will repeat
 		if (shouldRepeat)
 		{
-			// Repeat frequency starting days needs to be cleaned up
-			if ((repeatFrequencyUnits == 4) && (repeatFrequency > 1) && repeatFrequencyDaysToRunBeforeStarting.isNotEmpty())
+			// Week and month
+			if ((repeatFrequencyUnits == 4) || (repeatFrequencyUnits == 5))
 			{
-				// Remove today if it is in the days
-				repeatFrequencyDaysToRunBeforeStarting.removeToday()
+				// TODO: Check Today logic
+				// Remove today if it is in the days. Only when the repeat frequency is not
+				// every 1 week (the normal cadence)
+				if ((repeatFrequency != 1) || (repeatFrequencyUnits != 4))
+				{
+					NacLog.i("Before: $repeatFrequencyDaysToRunBeforeStarting")
+					println("Before: $repeatFrequencyDaysToRunBeforeStarting")
+					repeatFrequencyDaysToRunBeforeStarting.removeToday()
+					println("After : $repeatFrequencyDaysToRunBeforeStarting")
+					NacLog.i("After : $repeatFrequencyDaysToRunBeforeStarting")
+				}
 			}
 
-			// Add the repeat frequency to the alarm time, if it should be added
+			// Add repeat frequency and adjust to valid day and/or adjust out of exclude time
+			// range if present
 			addRepeatFrequencyToTime()
 		}
-		// Alarm will not repeat
+		// Alarm will not repeat. Toggle the alarm
 		else
 		{
-			// Toggle the alarm
 			toggleAlarm()
 		}
 	}

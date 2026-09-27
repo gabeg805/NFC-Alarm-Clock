@@ -11,6 +11,7 @@ import android.os.Handler
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
+import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.alarm.options.flashlight.NacFlashlight
 import com.nfcalarmclock.alarm.options.tts.NacTextToSpeech
@@ -27,6 +28,7 @@ import com.nfcalarmclock.system.media.saveCurrentBluetoothVolume
 import com.nfcalarmclock.system.media.saveCurrentVolume
 import com.nfcalarmclock.system.media.setStreamVolume
 import com.nfcalarmclock.system.mediaplayer.NacMediaPlayer
+import com.nfcalarmclock.view.quickToast
 
 /**
  * Actions to take upon waking up, such as enabling NFC, playing music, etc.
@@ -364,7 +366,6 @@ class NacWakeupProcess(
 			override fun onAudioDevicesAdded(devices: Array<out AudioDeviceInfo>)
 			{
 				devices.toList().forEach {
-					println("Device type=${it.type} | product=${it.productName}")
 					NacLog.i("Device type=${it.type} | product=${it.productName}")
 				}
 
@@ -595,7 +596,14 @@ class NacWakeupProcess(
 		// Vibrate
 		if (shouldVibrate)
 		{
-			vibrator?.vibrateAlarm(alarm)
+			try
+			{
+				vibrator?.vibrateAlarm(alarm)
+			}
+			catch (_: IllegalArgumentException)
+			{
+				quickToast(context, R.string.error_message_unable_to_vibrate)
+			}
 		}
 
 		// Flashlight

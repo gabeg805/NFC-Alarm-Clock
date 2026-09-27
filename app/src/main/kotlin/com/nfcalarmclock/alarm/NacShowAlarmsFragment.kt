@@ -1653,10 +1653,6 @@ class NacShowAlarmsFragment
 				// Clear the dismiss early time
 				alarm.timeOfDismissEarlyAlarm = 0
 
-				// Clear all the days
-				alarm.setDays(0)
-				alarm.repeatFrequencyDaysToRunBeforeStarting = NacCalendar.Day.NONE
-
 				// Update all alarm references
 				// Refresh the schedule date and time views
 				updateAllAlarmReferences(card, alarm)
