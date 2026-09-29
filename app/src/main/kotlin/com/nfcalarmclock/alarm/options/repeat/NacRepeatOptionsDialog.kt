@@ -17,6 +17,7 @@ import com.nfcalarmclock.system.NacCalendar
 import com.nfcalarmclock.system.NacCalendar.Day
 import com.nfcalarmclock.system.excludeDateTimesToCalendars
 import com.nfcalarmclock.system.toBestDateTimeString
+import com.nfcalarmclock.system.toDayString
 import com.nfcalarmclock.system.toFullTime
 import com.nfcalarmclock.view.calcAlpha
 import com.nfcalarmclock.view.dayofweek.NacDayOfWeek
@@ -149,7 +150,8 @@ class NacRepeatOptionsDialog
 			resources.getQuantityString(R.plurals.unit_week,   value),
 			resources.getQuantityString(R.plurals.unit_month,  value),
 		).map {
-			it.replace("%d", "").trim()
+			it.replace("%d", "")
+				.trim()
 				.replaceFirstChar { firstChar ->
 					firstChar.titlecase(locale)
 				}
@@ -430,7 +432,6 @@ class NacRepeatOptionsDialog
 
 		// Show the time dialog on click
 		excludeStartEditText.setOnClickListener {
-			// TODO: Warning message can be one of: current alarm is in exclude range
 			showTimeDialog(
 				excludeStartAlarm,
 				dateTitle = R.string.title_select_start_date,
@@ -627,8 +628,8 @@ class NacRepeatOptionsDialog
 		val endCal = if (hasEnd) NacCalendar.alarmToCalendar(excludeEndAlarm) else null
 		val now = Calendar.getInstance()
 
-		// Helper descriptor strings
-		val everyday = getString(R.string.dow_everyday)
+		// Strings for today and tomorrow
+		val context = requireContext()
 		val today = getString(R.string.dow_today)
 		val tomorrow = getString(R.string.dow_tomorrow)
 
@@ -637,14 +638,19 @@ class NacRepeatOptionsDialog
 		{
 			NacLog.i("Both start and end dates are empty. hasStart=$hasStart | hasEnd=$hasEnd")
 
+			// Build a string of the current selected days
+			//val everyday = getString(R.string.dow_everyday)
+			val selectedDays = excludeStartAlarm.toDayString(context, sharedPreferences.startWeekOn)
+
+			// Add it to start/end
 			if (hasStart)
 			{
-				startTime = "$everyday $startTime"
+				startTime = "$selectedDays $startTime"
 			}
 
 			if (hasEnd)
 			{
-				endTime = "$everyday $endTime"
+				endTime = "$selectedDays $endTime"
 			}
 		}
 		// Today start time

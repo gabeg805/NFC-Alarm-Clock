@@ -143,7 +143,7 @@ fun NacAlarm.updateMediaFromDb(
 /**
  * Store alarms in a Room database.
  */
-@Database(version = 50,
+@Database(version = 51,
 	entities = [
 		NacAlarm::class,
 		NacAlarmCreatedStatistic::class,
@@ -203,6 +203,7 @@ fun NacAlarm.updateMediaFromDb(
 		AutoMigration(from = 47, to = 48),
 		AutoMigration(from = 48, to = 49),
 		AutoMigration(from = 49, to = 50),
+		AutoMigration(from = 50, to = 51),
 	]
 )
 @TypeConverters(NacAlarmTypeConverters::class, NacStatisticTypeConverters::class)

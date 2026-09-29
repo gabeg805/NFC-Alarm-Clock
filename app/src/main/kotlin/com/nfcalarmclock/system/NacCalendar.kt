@@ -51,21 +51,6 @@ fun EnumSet<Day>.daysToValue(): Int
 }
 
 /**
- * Remove today if it is present in the set.
- */
-fun EnumSet<Day>.removeToday()
-{
-	// Get today
-	val today = Day.TODAY
-
-	// Remove today if it is in the set
-	if (today in this)
-	{
-		this.remove(today)
-	}
-}
-
-/**
  * Convert a set of days to a comma separate string of days.
  *
  * @param context Context.
@@ -78,6 +63,22 @@ fun EnumSet<Day>.toDayString(
 	start: Int
 ): String
 {
+	// Match the enum set with sets that correspond to fixed strings
+	when (this)
+	{
+		// Every day
+		WEEK -> return context.getString(R.string.dow_everyday)
+
+		// Weekdays
+		WEEKDAY -> return context.getString(R.string.dow_weekdays)
+
+		// Weekend
+		WEEKEND -> return context.getString(R.string.dow_weekend)
+
+		// Other combination of days
+		else -> {}
+	}
+
 	// Get the abbreviated days of week
 	val daysOfWeek = context.resources.getStringArray(R.array.days_of_week_abbr)
 
@@ -392,15 +393,102 @@ fun NacAlarm.toBestDateTimeString(format: String = ""): CharSequence
 }
 
 /**
- * Convert an alarm to a string of days.
+ * Convert an alarm to a string of date/days/repeat frequency.
  *
- * If no days are specified and the alarm is enable.
+ * Possible combinations are as follows, where 0 days represents "Today" or "Tomorrow":
+ *
+ *     Date @ 1+ days @ Repeat freq
+ *     Date @ 1+ days
+ *     Date @           Repeat freq (0 days)
+ *
+ *            1+ days @ Repeat freq
+ *            1+ days
+ *            0 days  @ Repeat Freq
+ *            0 days
  */
 fun NacAlarm.toDayString(
 	context: Context,
 	start: Int
 ): String
 {
+	// Snoozed
+	if (this.snoozeCount > 0)
+	{
+		val locale = Locale.getDefault()
+
+		return context.resources.getString(R.string.label_snoozed_statistic)
+			.replaceFirstChar { firstChar ->
+				firstChar.titlecase(locale)
+			}
+	}
+
+	// Initialize the date, days, and repeat frequency strings
+	var dateString = ""
+	var dayString = ""
+	var repeatFreqString = ""
+
+	// Date
+	if (this.date.isNotEmpty())
+	{
+		// Build a calendar with the date
+		val cal = alarmToCalendar(this)
+
+		// Convert date to string
+		val locale = Locale.getDefault()
+		val skeletonFormat = "MMM d"
+		val betterFormat = DateFormat.getBestDateTimePattern(locale, skeletonFormat)
+		dateString = DateFormat.format(betterFormat, cal).toString()
+	}
+
+	// 1+ days
+	if (this.days.isNotEmpty())
+	{
+		dayString = this.days.toDayString(context, start)
+	}
+	// 0 days and NO date. When there is a date, do not show "Today" or "Tomorrow"
+	else if (this.date.isEmpty())
+	{
+		dayString = this.toOneTimeString(context)
+	}
+
+	// Repeat frequency. Show in all cases except "Every 1 day/week"
+	if (this.shouldRepeat
+		&& ((this.repeatFrequencyUnits != 3) && (this.repeatFrequencyUnits != 4)
+				|| (this.repeatFrequency != 1)))
+	{
+		repeatFreqString = this.toRepeatFrequencyString(context)
+	}
+
+	// Build the string and trim any excess space or divider characters. In the event that no
+	// days are present, but date and repeat frequency are, remove the extra divider
+	return "$dateString \u2027 $dayString \u2027 $repeatFreqString"
+		.trim { c ->
+			c.isWhitespace() || c == '\u2027'
+		}
+		.replace(" \u2027  \u2027 ",  " \u2027 ")
+}
+
+/**
+ * Convert an alarm to a string of days.
+ *
+ * If no days are specified and the alarm is enable.
+ */
+fun NacAlarm.origToDayString(
+	context: Context,
+	start: Int
+): String
+{
+	// Snoozed
+	if (this.snoozeCount > 0)
+	{
+		val locale = Locale.getDefault()
+
+		return context.resources.getString(R.string.label_snoozed_statistic)
+			.replaceFirstChar { firstChar ->
+				firstChar.titlecase(locale)
+			}
+	}
+
 	// Date
 	if (this.date.isNotEmpty())
 	{
@@ -488,30 +576,8 @@ fun NacAlarm.toDayString(
 	// Combination of days
 	else
 	{
-		// Build string
-		val days = when (this.days)
-		{
-			// Every day
-			WEEK ->
-			{
-				context.getString(R.string.dow_everyday)
-			}
-			// Weekdays
-			WEEKDAY ->
-			{
-				context.getString(R.string.dow_weekdays)
-			}
-			// Weekend
-			WEEKEND ->
-			{
-				context.getString(R.string.dow_weekend)
-			}
-			// Other combination of days
-			else ->
-			{
-				this.days.toDayString(context, start)
-			}
-		}
+		// Build day string
+		val dayString = this.days.toDayString(context, start)
 
 		// Alarm should be repeat at a frequency that is NOT just every 1 week (which is the norm)
 		if (this.shouldRepeat && !((this.repeatFrequencyUnits == 4) && (this.repeatFrequency == 1)))
@@ -520,12 +586,12 @@ fun NacAlarm.toDayString(
 			val repeatFrequency = this.toRepeatFrequencyString(context)
 
 			// Combine the date and repeat frequency string
-			return "$days \u2027 $repeatFrequency"
+			return "$dayString \u2027 $repeatFrequency"
 		}
 		// Alarm will not be repeated or if it is, it will be every 1 week (the norm)
 		else
 		{
-			return days
+			return dayString
 		}
 	}
 }
@@ -678,14 +744,8 @@ object NacCalendar
 	 */
 	fun alarmToCalendar(alarm: NacAlarm): Calendar
 	{
-		// Get the current calendar instance
-		val cal = Calendar.getInstance()
-
-		// Set the calendar instance with attributes from the alarm
-		cal[Calendar.HOUR_OF_DAY] = alarm.hour
-		cal[Calendar.MINUTE] = alarm.minute
-		cal[Calendar.SECOND] = 0
-		cal[Calendar.MILLISECOND] = 0
+		// Get a calendar instance with the time from the alarm
+		val cal = getSimpleInstance(alarm.hour, alarm.minute)
 
 		// Alarm date was set
 		if (alarm.date.isNotEmpty())
@@ -725,8 +785,21 @@ object NacCalendar
 	{
 		val calendars: MutableList<Calendar> = ArrayList()
 
+		// Snoozed
+		if (alarm.nextAlarmTimeMillis > 0)
+		{
+			// Create the snoozed calendar
+			val snoozedCal = Calendar.getInstance()
+				.apply {
+					timeInMillis = alarm.nextAlarmTimeMillis
+				}
+
+			// Add it and return here
+			calendars.add(snoozedCal)
+			return calendars
+		}
 		// Date is set
-		if (alarm.date.isNotEmpty())
+		else if (alarm.date.isNotEmpty())
 		{
 			val c = alarmToCalendar(alarm)
 
@@ -737,6 +810,7 @@ object NacCalendar
 			// TODO: How can the code even reach this point? Isn't date removed/changed after every use?
 			if (c.equalsDismissEarlyTime(alarm))
 			{
+				NacLog.i("DATE DISMISS EARLY TIME")
 				println("DATE DISMISS EARLY TIME")
 				c.addRepeatFrequency(alarm)
 			}
@@ -759,6 +833,7 @@ object NacCalendar
 				// TODO: Is this only reachable when the time and days don't changed. So only weekly/month?
 				if (c.equalsDismissEarlyTime(alarm))
 				{
+					NacLog.i("DAYS DISMISS EARLY TIME")
 					println("DAYS DISMISS EARLY TIME")
 					c.addRepeatFrequency(alarm)
 				}
@@ -1219,6 +1294,22 @@ object NacCalendar
 	}
 
 	/**
+	 * Get a simple Calendar instance for the current day with the given time.
+	 *
+	 * @return A simple Calendar instance for the current day with the given time.
+	 */
+	fun getSimpleInstance(hour: Int, minute: Int): Calendar
+	{
+		return Calendar.getInstance()
+			.apply {
+				set(Calendar.HOUR_OF_DAY, hour)
+				set(Calendar.MINUTE, minute)
+				set(Calendar.SECOND, 0)
+				set(Calendar.MILLISECOND, 0)
+			}
+	}
+
+	/**
 	 * Get the Calendar day on which the next upcoming reminder for the
 	 * alarm will run.
 	 *
@@ -1566,6 +1657,7 @@ object NacCalendar
 			else
 			{
 				// Get the next alarm day
+				// TODO: Do I need inputCalendar still?
 				val calendar = inputCalendar ?: getNextAlarmDay(alarm)
 
 				// No alarm scheduled, possibly because the next alarm is skipped

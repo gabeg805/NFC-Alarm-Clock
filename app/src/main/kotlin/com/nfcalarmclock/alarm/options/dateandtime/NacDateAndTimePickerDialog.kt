@@ -379,6 +379,25 @@ class NacDateAndTimePickerDialog
 		timePicker.hour = if (alarm.hour >= 0) alarm.hour else now[Calendar.HOUR_OF_DAY]
 		timePicker.minute = if (alarm.minute >= 0) alarm.minute else now[Calendar.MINUTE]
 		timePicker.setIs24HourView(is24HourFormat)
+
+		// Set the time changed listener
+		timePicker.setOnTimeChangedListener { _, h, m ->
+
+			// Create a calendar with the updated time changed
+			val timeCal = NacCalendar.getSimpleInstance(h, m)
+
+			// Create a calendar a year ago to force the internal validation to clear the cache
+			// and redraw the calendar
+			val yearAgoCal = Calendar.getInstance()
+				.apply {
+					set(timeCal.get(Calendar.YEAR) - 1, 0, 1)
+				}
+
+			// Update the min date
+			datePicker.minDate = yearAgoCal.timeInMillis
+			datePicker.minDate = calcMinDate(timeCal)
+
+		}
 	}
 
 	companion object

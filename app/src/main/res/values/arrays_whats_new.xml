@@ -3,10 +3,10 @@
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
 		<item>12.7.3-beta</item>
-		<item>Fixed issue with setting the &lt;b>time&lt;/b> of an alarm, on low DPI devices.</item>
-		<item>Fixed issue with &lt;b>NFC&lt;/b> alarms.</item>
 		<item>Improved &lt;b>repeat frequency&lt;/b> so that it is easier to use.</item>
-		<item>Prevent &lt;b>vibrate&lt;/b> issue from crashing app. Added extra logging, but need user help to figure out why it is happening.</item>
+		<item>Prevented &lt;b>vibrate&lt;/b> issue from crashing app. Added extra logging, but need user help to figure out why it is happening.</item>
+		<item>Fixed issue with setting the &lt;b>time&lt;/b> of an alarm on low DPI devices.</item>
+		<item>Fixed issue with &lt;b>NFC&lt;/b> alarms.</item>
 		<item>12.7.2</item>
 		<item>Added option to play audio through &lt;b>speakers&lt;/b> and &lt;b>bluetooth&lt;/b> simultaneously. Can be found in Settings > Audio sources, for an alarm.</item>
 		<item>Added option to &lt;b>exclude date/time range&lt;/b>. Can be found in Settings > Repeat, for an alarm and is used if, for instance, an alarm is going off every couple hours, but you do not want to manually disable/enable it when you go to sleep.</item>

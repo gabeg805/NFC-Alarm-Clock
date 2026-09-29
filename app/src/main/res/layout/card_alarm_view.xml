@@ -112,6 +112,12 @@
 					app:tint="@color/red"
 					/>
 
+				<LinearLayout
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_weight="1"
+					android:orientation="horizontal">
+
 				<!-- Days -->
 				<TextView
 					style="@style/Widget.TextView.Summary"
@@ -120,22 +126,13 @@
 					android:layout_height="wrap_content"
 					android:layout_marginStart="@dimen/nudge"
 					android:layout_marginEnd="@dimen/tiny"
+					android:ellipsize="end"
 					android:focusable="false"
+					android:maxLines="1"
+					android:singleLine="true"
 					android:textColor="?attr/colorAccent"
 					android:text=""
 					/>
-
-					<!--
-					android:focusable="true"
-					android:focusableInTouchMode="true"
-					android:singleLine="true"
-					android:scrollHorizontally="true"
-					android:ellipsize="marquee"
-					android:marqueeRepeatLimit ="marquee_forever"
-
-					android:ellipsize="end"
-					android:focusable="false"
-					-->
 
 				<!-- Name -->
 				<TextView
@@ -143,14 +140,27 @@
 					android:id="@+id/nac_summary_name"
 					android:layout_width="0dp"
 					android:layout_height="wrap_content"
-					android:layout_marginEnd="@dimen/nudge"
 					android:layout_weight="1"
+					android:minWidth="0dp"
 					android:ellipsize="end"
 					android:focusable="false"
+					android:maxLines="1"
 					android:singleLine="true"
 					android:textColor="@color/sky_blue"
 					android:text=""
 					/>
+
+					<!--
+						android:focusable="true"
+						android:focusableInTouchMode="true"
+						android:singleLine="true"
+						android:scrollHorizontally="true"
+						android:ellipsize="marquee"
+						android:marqueeRepeatLimit ="marquee_forever"
+						android:ellipsize="end"
+						android:focusable="false"
+					-->
+				</LinearLayout>
 
 				<!-- Expand button -->
 				<com.google.android.material.button.MaterialButton

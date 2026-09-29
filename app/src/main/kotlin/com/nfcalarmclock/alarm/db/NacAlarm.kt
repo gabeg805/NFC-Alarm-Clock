@@ -21,7 +21,6 @@ import com.nfcalarmclock.system.addRepeatFrequency
 import com.nfcalarmclock.system.adjustOutOfExcludeTimeRange
 import com.nfcalarmclock.system.adjustToValidDay
 import com.nfcalarmclock.system.daysToValue
-import com.nfcalarmclock.system.removeToday
 import com.nfcalarmclock.system.toDay
 import com.nfcalarmclock.system.toDays
 import com.nfcalarmclock.system.toFullTime
@@ -89,7 +88,7 @@ open class NacAlarm()
 	var isActive: Boolean = false
 
 	/**
-	 * Amount of time, in milliseconds, the alarm has been active for.
+	 * Amount of time the alarm has been active for. [Units: millisec]
 	 *
 	 * This will typically only change when the alarm is snoozed.
 	 */
@@ -172,11 +171,9 @@ open class NacAlarm()
 
 	/**
 	 * Days to run before starting the repeat frequency.
-	 *
-	 * TODO: Change to WEEKDAY (value=62)
 	 */
-	@ColumnInfo(name = "repeat_frequency_days_to_run_before_starting", defaultValue = "127")
-	var repeatFrequencyDaysToRunBeforeStarting: EnumSet<Day> = Day.WEEK
+	@ColumnInfo(name = "repeat_frequency_days_to_run_before_starting", defaultValue = "62")
+	var repeatFrequencyDaysToRunBeforeStarting: EnumSet<Day> = Day.WEEKDAY
 
 	/**
 	 * Whether the alarm should vibrate the phone or not.
@@ -533,6 +530,14 @@ open class NacAlarm()
 	var shouldSkipNextAlarm: Boolean = false
 
 	/**
+	 * Next alarm time. [Units: millisec since 1970]
+	 *
+	 * This is currently only set when an alarm is snoozed. Otherwise it should be 0.
+	 */
+	@ColumnInfo(name = "next_alarm_time_millis", defaultValue = "0")
+	var nextAlarmTimeMillis: Long = 0
+
+	/**
 	 * Check if the alarm can be snoozed.
 	 *
 	 * @return True if the alarm can be snoozed, and False otherwise.
@@ -697,8 +702,9 @@ open class NacAlarm()
 		reminderFrequency = input.readInt()
 		shouldUseTtsForReminder = input.readInt() != 0
 
-		// Skip next alarm
+		// Next alarm
 		shouldSkipNextAlarm = input.readInt() != 0
+		nextAlarmTimeMillis = input.readLong()
 	}
 
 	/**
@@ -724,12 +730,13 @@ open class NacAlarm()
 		// Every 2-7 days
 		else if ((repeatFrequency <= 7) && !wasAdjusted)
 		{
-			// Remove today if it is in the days
-			NacLog.i("Before: $days")
-			println("Before: $days")
-			days.removeToday()
-			println("After : $days")
-			NacLog.i("After : $days")
+			// Remove all days as there can only be one selected for this cadence
+			NacLog.i("Before remove all days: $days")
+			println("Before remove all days: $days")
+			//days.removeToday()
+			days.clear()
+			println("After remove all days: $days")
+			NacLog.i("After remove all days: $days")
 
 			// Get the new day of week
 			val calDay = alarmCal.get(Calendar.DAY_OF_WEEK)
@@ -1169,8 +1176,9 @@ open class NacAlarm()
 		alarm.reminderFrequency = reminderFrequency
 		alarm.shouldUseTtsForReminder = shouldUseTtsForReminder
 
-		// Skip next alarm
+		// Next alarm
 		alarm.shouldSkipNextAlarm = shouldSkipNextAlarm
+		alarm.nextAlarmTimeMillis = nextAlarmTimeMillis
 
 		return alarm
 	}
@@ -1193,6 +1201,7 @@ open class NacAlarm()
 	{
 		isActive = false
 		shouldSkipNextAlarm = false
+		nextAlarmTimeMillis = 0
 		timeActive = 0
 		snoozeCount = 0
 		timeOfDismissEarlyAlarm = 0
@@ -1210,16 +1219,11 @@ open class NacAlarm()
 			// Week and month
 			if ((repeatFrequencyUnits == 4) || (repeatFrequencyUnits == 5))
 			{
-				// TODO: Check Today logic
 				// Remove today if it is in the days. Only when the repeat frequency is not
 				// every 1 week (the normal cadence)
 				if ((repeatFrequency != 1) || (repeatFrequencyUnits != 4))
 				{
-					NacLog.i("Before: $repeatFrequencyDaysToRunBeforeStarting")
-					println("Before: $repeatFrequencyDaysToRunBeforeStarting")
-					repeatFrequencyDaysToRunBeforeStarting.removeToday()
-					println("After : $repeatFrequencyDaysToRunBeforeStarting")
-					NacLog.i("After : $repeatFrequencyDaysToRunBeforeStarting")
+					removeDayFromDaysToRunBeforeStarting()
 				}
 			}
 
@@ -1366,6 +1370,7 @@ open class NacAlarm()
 			&& (reminderFrequency == alarm.reminderFrequency)
 			&& (shouldUseTtsForReminder == alarm.shouldUseTtsForReminder)
 			&& (shouldSkipNextAlarm == alarm.shouldSkipNextAlarm)
+			&& (nextAlarmTimeMillis == alarm.nextAlarmTimeMillis)
 	}
 
 	/**
@@ -1465,6 +1470,7 @@ open class NacAlarm()
 			+ reminderFrequency
 			+ shouldUseTtsForReminder.hashCode()
 			+ shouldSkipNextAlarm.hashCode()
+			+ nextAlarmTimeMillis.hashCode()
 			+ days.hashCode()
 			+ date.hashCode()
 			+ repeatFrequencyDaysToRunBeforeStarting.hashCode()
@@ -1564,6 +1570,43 @@ open class NacAlarm()
 		println("Reminder freq         : $reminderFrequency")
 		println("Use Tts 4 Reminder    : $shouldUseTtsForReminder")
 		println("Should skip next      : $shouldSkipNextAlarm")
+		println("Next alarm time millis: $nextAlarmTimeMillis")
+	}
+
+	/**
+	 * Remove the day that was just run, current/previous (if alarm was run on a day boundary),
+	 * from the days to run before starting.
+	 */
+	private fun removeDayFromDaysToRunBeforeStarting()
+	{
+		NacLog.i("Before: $repeatFrequencyDaysToRunBeforeStarting")
+		println("Before: $repeatFrequencyDaysToRunBeforeStarting")
+
+		// Create a simple calendar from the alarm time
+		val testCal = NacCalendar.getSimpleInstance(hour, minute)
+		val now = Calendar.getInstance()
+
+		// Test calendar occurs after the current time. This can only happen if alarm was
+		// started before a day boundary and then dismissed after. Subtract a day as the alarm
+		// that was just run should always be in the past
+		if (testCal.after(now))
+		{
+			testCal.add(Calendar.DAY_OF_MONTH, -1)
+		}
+
+
+		// Convert the day of week to a NacCalendar.Day
+		val day = testCal[Calendar.DAY_OF_WEEK].toDay()
+
+		// Remove the day from the enum set
+		if (day in repeatFrequencyDaysToRunBeforeStarting)
+		{
+			repeatFrequencyDaysToRunBeforeStarting.remove(day)
+		}
+
+		//repeatFrequencyDaysToRunBeforeStarting.removeToday()
+		println("After : $repeatFrequencyDaysToRunBeforeStarting")
+		NacLog.i("After : $repeatFrequencyDaysToRunBeforeStarting")
 	}
 
 	/**
@@ -1962,8 +2005,9 @@ open class NacAlarm()
 		output.writeInt(reminderFrequency)
 		output.writeInt(if (shouldUseTtsForReminder) 1 else 0)
 
-		// Skip next alarm
+		// Next alarm
 		output.writeInt(if (shouldSkipNextAlarm) 1 else 0)
+		output.writeLong(nextAlarmTimeMillis)
 	}
 
 	companion object
@@ -2004,6 +2048,7 @@ open class NacAlarm()
 			// Defaults that probably do not need it because they are already set this way
 			alarm.timeOfDismissEarlyAlarm = 0
 			alarm.shouldSkipNextAlarm = false
+			alarm.nextAlarmTimeMillis = 0
 
 			// Unable to access defaults in shared preferences because null
 			if (shared == null)

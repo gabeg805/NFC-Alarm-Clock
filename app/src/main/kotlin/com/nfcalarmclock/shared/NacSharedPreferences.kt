@@ -3315,10 +3315,13 @@ class NacSharedPreferences(context: Context)
 
 	/**
 	 * Find and save the next alarm.
+	 *
+	 * TODO: May not need snoozeCal if already saved to alarm and checked in getNextAlarm()
 	 */
 	fun saveNextAlarm(allAlarms: List<NacAlarm>, snoozeCal: Calendar? = null)
 	{
 		// Find the next alarm
+		val now = Calendar.getInstance()
 		val nextAlarm = NacCalendar.getNextAlarm(allAlarms)
 
 		// Determine the time in milliseconds to use
@@ -3338,7 +3341,7 @@ class NacSharedPreferences(context: Context)
 		} ?: 0L
 
 		// Save the next alarm information
-		appNextAlarmTimezoneId = Calendar.getInstance().timeZone.id
+		appNextAlarmTimezoneId = now.timeZone.id
 		appNextAlarmTimeMillis = millis
 	}
 

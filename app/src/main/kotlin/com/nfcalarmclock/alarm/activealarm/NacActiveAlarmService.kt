@@ -600,6 +600,7 @@ class NacActiveAlarmService
 
 			// Update the time the alarm was active
 			alarm!!.timeActive += System.currentTimeMillis() - startTime
+			alarm!!.nextAlarmTimeMillis = cal.timeInMillis
 
 			NacLog.i("Snoozing the active alarm service: id=${alarm!!.id} | timeActive=${alarm!!.timeActive}")
 
