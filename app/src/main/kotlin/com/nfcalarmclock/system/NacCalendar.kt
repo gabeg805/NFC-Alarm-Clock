@@ -11,7 +11,6 @@ import com.nfcalarmclock.system.NacCalendar.Day
 import com.nfcalarmclock.system.NacCalendar.Day.Companion.WEEK
 import com.nfcalarmclock.system.NacCalendar.Day.Companion.WEEKDAY
 import com.nfcalarmclock.system.NacCalendar.Day.Companion.WEEKEND
-import com.nfcalarmclock.system.NacCalendar.Day.Companion.WEEK_LENGTH
 import com.nfcalarmclock.system.NacCalendar.Day.FRIDAY
 import com.nfcalarmclock.system.NacCalendar.Day.MONDAY
 import com.nfcalarmclock.system.NacCalendar.Day.SATURDAY
@@ -79,37 +78,79 @@ fun EnumSet<Day>.toDayString(
 		else -> {}
 	}
 
-	// Get the abbreviated days of week
-	val daysOfWeek = context.resources.getStringArray(R.array.days_of_week_abbr)
+	// Get the abbreviated days of week. Order them by the start day
+	val daysOfWeek = context.resources.getStringArray(R.array.days_of_week_abbr).toList()
+	val orderedDaysOfWeek = daysOfWeek.subList(start, daysOfWeek.size) + daysOfWeek.subList(0, start)
 
-	// Iterate over each day in the week
-	val days = entries
-	val summary = StringBuilder(32)
-	var count = 0
-	var i = start
+	// Prepare to build the day string. Have a cache of days that will be used in the summary
+	// in the event that the days ARE NOT in sequence. Otherwise, a range will be used
+	// (e.g. Mon-Wed)
+	val dayCache = mutableListOf<String>()
+	var summary = ""
+	var startIndex = -1
+	var prevIndex = -1
 
-	while (count < WEEK_LENGTH)
-	{
+	orderedDaysOfWeek.forEachIndexed { index, d ->
 
-		// Check if the day is in the enum set
-		if (this.contains(days[i]))
+		// Get the index of the day in the unsorted days of week list. This index will match
+		// the indices of the EnumSet entries as they are in the same order
+		val i = daysOfWeek.indexOf(d)
+		var shouldClear = false
+
+		// Day selected
+		if (this.contains(entries[i]))
 		{
-			// Add a dot in between each day
-			if (summary.isNotEmpty())
+			// Add the day to the cache
+			dayCache.add(d)
+
+			// Set the start index
+			if (startIndex < 0)
 			{
-				summary.append(" \u2027 ")
+				startIndex = index
 			}
 
-			// Append the day
-			summary.append(daysOfWeek[i])
+			// On the last iteration of the loop. Need to add all days in the cache, this will
+			// allow for the same logic as when a day is NOT selected
+			if (index == orderedDaysOfWeek.lastIndex)
+			{
+				prevIndex = index
+			}
+		}
+		// Not selected
+		else
+		{
+			shouldClear = true
 		}
 
-		count++
-		i = (i + 1) % WEEK_LENGTH
+		// There are days in the cache and they should be added to the summary because the
+		// current day is NOT selected, or this is the last iteration of the loop
+		if ((startIndex >= 0) && (shouldClear || (prevIndex == index)))
+		{
+			// Add the day range
+			if ((prevIndex-startIndex) > 1)
+			{
+				summary += if (summary.isNotEmpty()) " \u2027 " else ""
+				summary += "${orderedDaysOfWeek[startIndex]}—${orderedDaysOfWeek[prevIndex]}"
+			}
+			// Add the days in the cache
+			else if (dayCache.isNotEmpty())
+			{
+				summary += if (summary.isNotEmpty()) " \u2027 " else ""
+				summary += dayCache.joinToString(" \u2027 ")
+			}
+
+			// Clear the cache and start index
+			if (shouldClear)
+			{
+				dayCache.clear()
+				startIndex = -1
+			}
+		}
+
+		prevIndex = index
 	}
 
-	// Convert the string builder to a string
-	return summary.toString()
+	return summary
 }
 
 /**
@@ -466,134 +507,6 @@ fun NacAlarm.toDayString(
 			c.isWhitespace() || c == '\u2027'
 		}
 		.replace(" \u2027  \u2027 ",  " \u2027 ")
-}
-
-/**
- * Convert an alarm to a string of days.
- *
- * If no days are specified and the alarm is enable.
- */
-fun NacAlarm.origToDayString(
-	context: Context,
-	start: Int
-): String
-{
-	// Snoozed
-	if (this.snoozeCount > 0)
-	{
-		val locale = Locale.getDefault()
-
-		return context.resources.getString(R.string.label_snoozed_statistic)
-			.replaceFirstChar { firstChar ->
-				firstChar.titlecase(locale)
-			}
-	}
-
-	// Date
-	if (this.date.isNotEmpty())
-	{
-		// Build a calendar with the date
-		val cal = alarmToCalendar(this)
-
-		// Convert date to string
-		val locale = Locale.getDefault()
-		val skeletonFormat = "MMM d"
-		val betterFormat = DateFormat.getBestDateTimePattern(locale, skeletonFormat)
-		val date = DateFormat.format(betterFormat, cal).toString()
-
-		// Alarm will repeat. Combine the date and repeat frequency string
-		if (this.shouldRepeat)
-		{
-			val repeatFrequency = this.toRepeatFrequencyString(context)
-
-			return "$date \u2027 $repeatFrequency"
-		}
-		// Will NOT repeat. Simply return the date
-		else
-		{
-			return date
-		}
-	}
-	// No days
-	else if (this.days.isEmpty())
-	{
-		// Today or tomorrow
-		val oneTime = this.toOneTimeString(context)
-
-		// Will NOT repeat. Only show the one time alarm
-		if (!this.shouldRepeat)
-		{
-			return oneTime
-		}
-
-		// Repeat frequency string
-		val repeatFrequency = this.toRepeatFrequencyString(context)
-
-		// Check the repeat frequency units
-		return when (this.repeatFrequencyUnits)
-		{
-			// Minutes or Hours
-			1, 2 ->
-			{
-				// Tomorrow string
-				val tomorrow = context.getString(R.string.dow_tomorrow)
-
-				// One time alarm will occur tomorrow: Tomorrow * Every X <min/hour>
-				if (oneTime == tomorrow)
-				{
-					"$oneTime \u2027 $repeatFrequency"
-				}
-				// Alarm will occur today: Every X <min/hour>
-				else
-				{
-					repeatFrequency
-				}
-			}
-
-			// Days or weeks
-			3, 4 ->
-			{
-				// Every day alarm. Today/tomorrow
-				if (this.repeatFrequency == 1)
-				{
-					oneTime
-				}
-				// Every X days. Today/tomorrow * Every X days
-				else
-				{
-					"$oneTime \u2027 $repeatFrequency"
-				}
-			}
-
-			// Months: Today/tomorrow * Every X months
-			5 -> "$oneTime \u2027 $repeatFrequency"
-
-			// Unknown, but don't think this is possible? Since
-			// no day = current day so a day would always be selected
-			else -> repeatFrequency
-		}
-	}
-	// Combination of days
-	else
-	{
-		// Build day string
-		val dayString = this.days.toDayString(context, start)
-
-		// Alarm should be repeat at a frequency that is NOT just every 1 week (which is the norm)
-		if (this.shouldRepeat && !((this.repeatFrequencyUnits == 4) && (this.repeatFrequency == 1)))
-		{
-			// Get the repeat frequency string
-			val repeatFrequency = this.toRepeatFrequencyString(context)
-
-			// Combine the date and repeat frequency string
-			return "$dayString \u2027 $repeatFrequency"
-		}
-		// Alarm will not be repeated or if it is, it will be every 1 week (the norm)
-		else
-		{
-			return dayString
-		}
-	}
 }
 
 /**
@@ -1450,15 +1363,10 @@ object NacCalendar
 
 	/**
 	 * Day of week.
+	 *
+	 * @param value Value associated with an enum.
 	 */
-	enum class Day(
-
-		/**
-		 * The value associated with an enum.
-		 */
-		val value: Int
-
-	)
+	enum class Day(val value: Int)
 	{
 
 		/**
@@ -1507,12 +1415,6 @@ object NacCalendar
 			@Suppress("MemberVisibilityCanBePrivate")
 			val WEEKEND: EnumSet<Day>
 				get() = EnumSet.of(SUNDAY, SATURDAY)
-
-			/**
-			 * Length of week.
-			 */
-			@Suppress("MemberVisibilityCanBePrivate")
-			val WEEK_LENGTH = WEEK.size
 
 		}
 

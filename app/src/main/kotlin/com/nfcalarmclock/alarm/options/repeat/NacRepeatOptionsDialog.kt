@@ -639,18 +639,17 @@ class NacRepeatOptionsDialog
 			NacLog.i("Both start and end dates are empty. hasStart=$hasStart | hasEnd=$hasEnd")
 
 			// Build a string of the current selected days
-			//val everyday = getString(R.string.dow_everyday)
-			val selectedDays = excludeStartAlarm.toDayString(context, sharedPreferences.startWeekOn)
+			val selectedDays = excludeStartAlarm.days.toDayString(context, sharedPreferences.startWeekOn)
 
 			// Add it to start/end
 			if (hasStart)
 			{
-				startTime = "$selectedDays $startTime"
+				startTime = "$selectedDays, $startTime"
 			}
 
 			if (hasEnd)
 			{
-				endTime = "$selectedDays $endTime"
+				endTime = "$selectedDays, $endTime"
 			}
 		}
 		// Today start time

@@ -1216,15 +1216,14 @@ open class NacAlarm()
 		// Alarm will repeat
 		if (shouldRepeat)
 		{
-			// Week and month
-			if ((repeatFrequencyUnits == 4) || (repeatFrequencyUnits == 5))
+			// Remove the alarm day from the days to run before starting set.
+			//
+			// Weekly and monthly are the only repeat frequencies that use days to run before
+			// starting. Do not do anything for every 1 week though. This is the normal cadence
+			if (((repeatFrequencyUnits == 4) || (repeatFrequencyUnits == 5))
+				&& ((repeatFrequency != 1) || (repeatFrequencyUnits != 4)))
 			{
-				// Remove today if it is in the days. Only when the repeat frequency is not
-				// every 1 week (the normal cadence)
-				if ((repeatFrequency != 1) || (repeatFrequencyUnits != 4))
-				{
-					removeDayFromDaysToRunBeforeStarting()
-				}
+				removeAlarmDayFromDaysToRunBeforeStarting()
 			}
 
 			// Add repeat frequency and adjust to valid day and/or adjust out of exclude time
@@ -1574,10 +1573,10 @@ open class NacAlarm()
 	}
 
 	/**
-	 * Remove the day that was just run, current/previous (if alarm was run on a day boundary),
-	 * from the days to run before starting.
+	 * Remove the alarm day that was just run, current/previous (if alarm was run on a day
+	 * boundary), from the days to run before starting.
 	 */
-	private fun removeDayFromDaysToRunBeforeStarting()
+	private fun removeAlarmDayFromDaysToRunBeforeStarting()
 	{
 		NacLog.i("Before: $repeatFrequencyDaysToRunBeforeStarting")
 		println("Before: $repeatFrequencyDaysToRunBeforeStarting")

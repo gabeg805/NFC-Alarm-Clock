@@ -2705,6 +2705,9 @@ class NacSharedPreferences(context: Context)
 
 	/**
 	 * Value indicating which day to start on.
+	 *
+	 * 0 = Sunday
+	 * 1 = Monday
 	 */
 	val startWeekOn: Int
 		get()
