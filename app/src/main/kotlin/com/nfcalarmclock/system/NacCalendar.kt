@@ -490,12 +490,22 @@ fun NacAlarm.toDayString(
 	else if (this.date.isEmpty())
 	{
 		dayString = this.toOneTimeString(context)
+
+		// Do not show "Today" except for "Every 1 day/week". It can get cluttered and looks
+		// messier with it there
+		if (this.shouldRepeat
+			&& ((this.repeatFrequencyUnits != 3) && (this.repeatFrequencyUnits != 4)
+				|| (this.repeatFrequency != 1)))
+		{
+			val tomorrow = context.getString(R.string.dow_tomorrow)
+			dayString = if (dayString == tomorrow) dayString else ""
+		}
 	}
 
 	// Repeat frequency. Show in all cases except "Every 1 day/week"
 	if (this.shouldRepeat
 		&& ((this.repeatFrequencyUnits != 3) && (this.repeatFrequencyUnits != 4)
-				|| (this.repeatFrequency != 1)))
+			|| (this.repeatFrequency != 1)))
 	{
 		repeatFreqString = this.toRepeatFrequencyString(context)
 	}

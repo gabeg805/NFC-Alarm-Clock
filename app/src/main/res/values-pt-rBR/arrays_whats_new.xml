@@ -2,6 +2,12 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.3</item>
+		<item>Melhoria na &lt;b>frequência de repetição&lt;/b> para facilitar o uso.</item>
+		<item>Resumo aprimorado da data, dias e frequência de repetição de quando um alarme será acionado.</item>
+		<item>Corrigido problema com a configuração da &lt;b>hora&lt;/b> de um alarme em dispositivos com baixa densidade de pixels (DPI).</item>
+		<item>Problema resolvido com alarmes &lt;b>NFC&lt;/b>.</item>
+		<item>Corrigido o problema de vibração que causava o travamento do aplicativo. Adicionadas informações de registro adicionais, mas precisamos da ajuda dos usuários para descobrir por que isso está acontecendo.</item>
 		<item>12.7.2</item>
 		<item>Adicionada opção para reproduzir áudio simultaneamente pelos &lt;b>alto-falantes&lt;/b> e &lt;b>Bluetooth&lt;/b>. Pode ser encontrada em Configurações > Fontes de áudio, para alarmes.</item>
 		<item>Adicionada opção para &lt;b>excluir intervalo de data/hora&lt;/b>. Pode ser encontrada em Configurações > Repetir, para um alarme, e é útil se, por exemplo, um alarme estiver tocando a cada duas horas, mas você não quiser desativá-lo/ativá-lo manualmente quando for dormir.</item>

@@ -230,6 +230,7 @@
 	<string name="error_message_unable_to_volume_dismiss_nfc_alarm">Impossibile disattivare l\'allarme NFC con il pulsante del volume</string>
 	<string name="error_message_unable_to_email">Impossibile redigere l\'e-mail</string>
 	<string name="error_message_unable_to_email_statistics">Impossibile inviare le statistiche via e-mail</string>
+	<string name="error_message_unable_to_vibrate">Impossibile vibrare: per favore, inviami un\'email così posso capire perché succede.</string>
 	<string name="error_message_unable_to_shine_flashlight">Impossibile illuminare con la torcia — %1$s</string>
 	<string name="error_message_unable_to_get_flashlight_characteristics">Impossibile ottenere informazioni sulla torcia</string>
 	<string name="error_message_unable_to_access_flashlight">Impossibile accedere alla torcia — %1$s</string>
@@ -250,6 +251,7 @@
 	<string name="error_message_exclude_start_datetime_missing">Data/ora di inizio dell\'esclusione mancante</string>
 	<string name="error_message_exclude_end_datetime_missing">Data/ora di fine esclusione mancante</string>
 	<string name="error_message_exclude_start_end_calendar_not_in_order">La data/ora di inizio deve essere precedente alla data/ora di fine.</string>
+	<string name="error_message_out_of_memory">Memoria insufficiente: per favore, inviami un\'email così posso capire perché succede.</string>
 
 	<!-- Titles -->
 	<string name="title_timer_main">Timer NFC</string>

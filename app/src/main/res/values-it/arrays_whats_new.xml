@@ -2,6 +2,12 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.3</item>
+		<item>&lt;b>Frequenza di ripetizione&lt;/b> migliorata per facilitarne l\'utilizzo.</item>
+		<item>&lt;b>Riepilogo&lt;/b> migliorato della data, dei giorni e della frequenza di ripetizione di un allarme.</item>
+		<item>Risolto il problema relativo all\'impostazione dell\'&lt;b>ora&lt;/b> di una sveglia su dispositivi a bassa risoluzione (DPI).</item>
+		<item>Risolto il problema con gli allarmi &lt;b>NFC&lt;/b>.</item>
+		<item>Risolto il problema di &lt;b>vibrazione&lt;/b> che causava il crash dell\'app. Aggiunti log aggiuntivi, ma abbiamo bisogno dell\'aiuto dell\'utente per capire perché si verifica.</item>
 		<item>12.7.2</item>
 		<item>Aggiunta l\'opzione per riprodurre l\'audio tramite &lt;b>altoparlanti&lt;/b> e &lt;b>Bluetooth&lt;/b> contemporaneamente. Si trova in Impostazioni > Sorgenti audio, per una sveglia.</item>
 		<item>Aggiunta l\'opzione per &lt;b>escludere un intervallo di date/ore&lt;/b>. Si trova in Impostazioni > Ripeti, per una sveglia, ed è utile se, ad esempio, una sveglia suona ogni due ore, ma non si desidera disattivarla/attivarla manualmente prima di andare a dormire.</item>

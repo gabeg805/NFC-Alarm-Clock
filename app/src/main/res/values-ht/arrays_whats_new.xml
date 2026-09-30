@@ -2,6 +2,12 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.3</item>
+		<item>&lt;b>Frekans repetisyon&lt;/b> an amelyore pou l pi fasil pou itilize.</item>
+		<item>&lt;b>Rezime&lt;/b> amelyore dat, jou, ak frekans repetisyon lè yon alam pral sonnen.</item>
+		<item>Pwoblèm ak mete &lt;/b>lè&lt;/b> yon alam sou aparèy ki gen ti DPI rezoud.</item>
+		<item>Pwoblèm ak alam &lt;b>NFC&lt;/b> yo rezoud.</item>
+		<item>Pwoblèm &lt;b>vibrasyon&lt;/b> la anpeche aplikasyon an plante. Mwen ajoute plis anrejistreman, men mwen bezwen èd itilizatè a pou mwen konprann poukisa sa rive.</item>
 		<item>12.7.2</item>
 		<item>Yo ajoute opsyon pou jwe odyo atravè &lt;b>oratè&lt;/b> ak &lt;b>bluetooth&lt;/b> an menm tan. Ou ka jwenn li nan Anviwònman > Sous odyo, pou yon alam.</item>
 		<item>Yo ajoute yon opsyon pou &lt;b>eskli entèval dat/lè&lt;/b>. Ou ka jwenn li nan Anviwònman > Repetisyon, pou yon alam epi ou itilize li si, pa egzanp, yon alam ap sonnen chak de zèdtan, men ou pa vle dezaktive/aktive li manyèlman lè w pral dòmi.</item>

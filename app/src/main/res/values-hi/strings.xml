@@ -230,6 +230,7 @@
 	<string name="error_message_unable_to_volume_dismiss_nfc_alarm">वॉल्यूम बटन से NFC अलार्म बंद नहीं हो रहा है</string>
 	<string name="error_message_unable_to_email">ईमेल ड्राफ्ट करने में असमर्थ</string>
 	<string name="error_message_unable_to_email_statistics">आंकड़े ईमेल करने में असमर्थ</string>
+	<string name="error_message_unable_to_vibrate">वाइब्रेट नहीं हो रहा है — कृपया मुझे ईमेल करें ताकि मैं इसका कारण पता लगा सकूं।</string>
 	<string name="error_message_unable_to_shine_flashlight">टॉर्च चमकाने में असमर्थ — %1$s</string>
 	<string name="error_message_unable_to_get_flashlight_characteristics">टॉर्च संबंधी जानकारी प्राप्त करने में असमर्थ</string>
 	<string name="error_message_unable_to_access_flashlight">फ्लैशलाइट तक पहुंचने में असमर्थ — %1$s</string>
@@ -250,6 +251,7 @@
 	<string name="error_message_exclude_start_datetime_missing">बहिष्करण प्रारंभ तिथि/समय गायब है</string>
 	<string name="error_message_exclude_end_datetime_missing">बहिष्करण समाप्ति तिथि/समय गायब है</string>
 	<string name="error_message_exclude_start_end_calendar_not_in_order">प्रारंभ तिथि/समय समाप्ति तिथि/समय से पहले होना चाहिए।</string>
+	<string name="error_message_out_of_memory">मेमोरी कम है — कृपया मुझे ईमेल करें ताकि मैं पता लगा सकूं कि ऐसा क्यों हो रहा है।</string>
 
 	<!-- Titles -->
 	<string name="title_timer_main">एनएफसी टाइमर</string>

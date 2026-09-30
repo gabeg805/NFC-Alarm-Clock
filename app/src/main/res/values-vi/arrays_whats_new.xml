@@ -2,6 +2,12 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.3</item>
+		<item>Tần suất lặp lại được cải thiện để dễ sử dụng hơn.</item>
+		<item>Đã cải thiện phần tóm tắt ngày, các ngày trong tuần và tần suất lặp lại của thời điểm báo thức sẽ chạy.</item>
+		<item>Đã khắc phục sự cố khi thiết lập thời gian báo thức trên các thiết bị có độ phân giải thấp.</item>
+		<item>Đã khắc phục sự cố với cảnh báo NFC.</item>
+		<item>Đã ngăn chặn lỗi rung gây sập ứng dụng. Đã thêm nhật ký ghi nhật ký bổ sung, nhưng cần sự trợ giúp của người dùng để tìm ra nguyên nhân gây ra lỗi.</item>
 		<item>12.7.2</item>
 		<item>Đã thêm tùy chọn phát âm thanh đồng thời qua &lt;b>loa&lt;/b> và &lt;b>Bluetooth&lt;/b>. Có thể tìm thấy trong Cài đặt > Nguồn âm thanh, dành cho báo thức.</item>
 		<item>Đã thêm tùy chọn &lt;b>loại trừ khoảng thời gian/ngày tháng&lt;/b>. Có thể tìm thấy trong Cài đặt > Lặp lại, đối với báo thức và được sử dụng nếu, ví dụ, báo thức reo mỗi vài giờ, nhưng bạn không muốn tự tắt/bật nó khi đi ngủ.</item>

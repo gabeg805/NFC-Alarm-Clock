@@ -251,6 +251,7 @@
 	<string name="error_message_exclude_start_datetime_missing">Missing exclude start date/time</string>
 	<string name="error_message_exclude_end_datetime_missing">Missing exclude end date/time</string>
 	<string name="error_message_exclude_start_end_calendar_not_in_order">Start date/time must be before end date/time</string>
+	<string name="error_message_out_of_memory">Out of memory — please email me so I can figure out why this happens</string>
 
 	<!-- Titles -->
 	<string name="title_timer_main">NFC Timer</string>

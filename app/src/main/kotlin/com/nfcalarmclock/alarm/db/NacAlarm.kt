@@ -732,10 +732,7 @@ open class NacAlarm()
 		{
 			// Remove all days as there can only be one selected for this cadence
 			NacLog.i("Before remove all days: $days")
-			println("Before remove all days: $days")
-			//days.removeToday()
 			days.clear()
-			println("After remove all days: $days")
 			NacLog.i("After remove all days: $days")
 
 			// Get the new day of week
@@ -1578,9 +1575,6 @@ open class NacAlarm()
 	 */
 	private fun removeAlarmDayFromDaysToRunBeforeStarting()
 	{
-		NacLog.i("Before: $repeatFrequencyDaysToRunBeforeStarting")
-		println("Before: $repeatFrequencyDaysToRunBeforeStarting")
-
 		// Create a simple calendar from the alarm time
 		val testCal = NacCalendar.getSimpleInstance(hour, minute)
 		val now = Calendar.getInstance()
@@ -1602,10 +1596,6 @@ open class NacAlarm()
 		{
 			repeatFrequencyDaysToRunBeforeStarting.remove(day)
 		}
-
-		//repeatFrequencyDaysToRunBeforeStarting.removeToday()
-		println("After : $repeatFrequencyDaysToRunBeforeStarting")
-		NacLog.i("After : $repeatFrequencyDaysToRunBeforeStarting")
 	}
 
 	/**

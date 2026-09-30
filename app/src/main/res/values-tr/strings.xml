@@ -230,6 +230,7 @@
 	<string name="error_message_unable_to_volume_dismiss_nfc_alarm">Ses düğmesiyle NFC alarmını kapatmak mümkün değil.</string>
 	<string name="error_message_unable_to_email">E-posta taslağı oluşturulamadı.</string>
 	<string name="error_message_unable_to_email_statistics">İstatistikleri e-posta ile gönderemiyorum.</string>
+	<string name="error_message_unable_to_vibrate">Titreşim özelliği çalışmıyor — lütfen bana e-posta gönderin, böylece sorunun nedenini anlayabileyim.</string>
 	<string name="error_message_unable_to_shine_flashlight">El fenerini yakamıyorum — %1$s</string>
 	<string name="error_message_unable_to_get_flashlight_characteristics">El feneri bilgisine erişilemiyor.</string>
 	<string name="error_message_unable_to_access_flashlight">El fenerine erişilemiyor — %1$s</string>
@@ -250,6 +251,7 @@
 	<string name="error_message_exclude_start_datetime_missing">Başlangıç tarihi/saati eksikse hariç tutulacak.</string>
 	<string name="error_message_exclude_end_datetime_missing">Eksik olan hariç tutma bitiş tarihi/saati</string>
 	<string name="error_message_exclude_start_end_calendar_not_in_order">Başlangıç tarihi/saati, bitiş tarihi/saatinden önce olmalıdır.</string>
+	<string name="error_message_out_of_memory">Bellek yetersizliği nedeniyle bu sorunun neden kaynaklandığını anlamak için lütfen bana e-posta gönderin.</string>
 
 	<!-- Titles -->
 	<string name="title_timer_main">NFC Zamanlayıcı</string>

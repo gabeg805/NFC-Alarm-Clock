@@ -189,8 +189,7 @@ class NacFileTree(path: String)
 			recursive: Boolean = false
 		): List<Uri>
 		{
-			// File path is empty
-			//if (filePath.isNullOrEmpty())
+			// Invalid file path
 			if (filePath == null)
 			{
 				return emptyList()

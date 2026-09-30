@@ -604,6 +604,10 @@ class NacWakeupProcess(
 			{
 				quickToast(context, R.string.error_message_unable_to_vibrate)
 			}
+			catch (_: OutOfMemoryError)
+			{
+				quickToast(context, R.string.error_message_out_of_memory)
+			}
 		}
 
 		// Flashlight

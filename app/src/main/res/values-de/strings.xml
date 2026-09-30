@@ -230,6 +230,7 @@
 	<string name="error_message_unable_to_volume_dismiss_nfc_alarm">NFC-Alarm lässt sich nicht mit der Lautstärketaste ausschalten</string>
 	<string name="error_message_unable_to_email">E-Mail konnte nicht verfasst werden</string>
 	<string name="error_message_unable_to_email_statistics">Statistiken können nicht per E-Mail versendet werden</string>
+	<string name="error_message_unable_to_vibrate">Das Gerät vibriert nicht – bitte kontaktieren Sie mich per E-Mail, damit ich die Ursache herausfinden kann.</string>
 	<string name="error_message_unable_to_shine_flashlight">Taschenlampe kann nicht leuchten — %1$s</string>
 	<string name="error_message_unable_to_get_flashlight_characteristics">Taschenlampeninformationen können nicht abgerufen werden.</string>
 	<string name="error_message_unable_to_access_flashlight">Auf Taschenlampe kann nicht zugegriffen werden — %1$s</string>
@@ -250,6 +251,7 @@
 	<string name="error_message_exclude_start_datetime_missing">Fehlendes Ausschluss-Startdatum/-zeit</string>
 	<string name="error_message_exclude_end_datetime_missing">Fehlendes Ausschluss-Enddatum/-zeit</string>
 	<string name="error_message_exclude_start_end_calendar_not_in_order">Startdatum/-zeit muss vor Enddatum/-zeit liegen.</string>
+	<string name="error_message_out_of_memory">Mein Speicher ist leer – bitte schreiben Sie mir eine E-Mail, damit ich herausfinden kann, warum das passiert.</string>
 
 	<!-- Titles -->
 	<string name="title_timer_main">NFC-Timer</string>

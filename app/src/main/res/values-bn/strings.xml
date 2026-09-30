@@ -230,6 +230,7 @@
 	<string name="error_message_unable_to_volume_dismiss_nfc_alarm">ভলিউম বাটন দিয়ে NFC অ্যালার্ম বন্ধ করা সম্ভব নয়</string>
 	<string name="error_message_unable_to_email">ইমেইল খসড়া করতে অক্ষম</string>
 	<string name="error_message_unable_to_email_statistics">পরিসংখ্যান ইমেল করতে অক্ষম</string>
+	<string name="error_message_unable_to_vibrate">ভাইব্রেট করতে পারছে না — অনুগ্রহ করে আমাকে ইমেল করুন যাতে আমি এর কারণ খুঁজে বের করতে পারি।</string>
 	<string name="error_message_unable_to_shine_flashlight">টর্চলাইট জ্বলতে অক্ষম — %1$s</string>
 	<string name="error_message_unable_to_get_flashlight_characteristics">টর্চলাইট তথ্য পেতে অক্ষম</string>
 	<string name="error_message_unable_to_access_flashlight">ফ্ল্যাশলাইট অ্যাক্সেস করতে অক্ষম — %1$s৷</string>
@@ -250,6 +251,7 @@
 	<string name="error_message_exclude_start_datetime_missing">বাদ দেওয়ার শুরুর তারিখ/সময় অনুপস্থিত।</string>
 	<string name="error_message_exclude_end_datetime_missing">বাদ দেওয়ার শেষ তারিখ/সময় অনুপস্থিত</string>
 	<string name="error_message_exclude_start_end_calendar_not_in_order">শুরুর তারিখ/সময় অবশ্যই শেষের তারিখ/সময়ের আগে হতে হবে।</string>
+	<string name="error_message_out_of_memory">মেমোরি শেষ — অনুগ্রহ করে আমাকে ইমেল করুন যাতে আমি এর কারণ খুঁজে বের করতে পারি।</string>
 
 	<!-- Titles -->
 	<string name="title_timer_main">NFC টাইমার</string>

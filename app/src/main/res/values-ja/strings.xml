@@ -230,6 +230,7 @@
 	<string name="error_message_unable_to_volume_dismiss_nfc_alarm">音量ボタンでNFCアラームを解除できません</string>
 	<string name="error_message_unable_to_email">メールを作成できません</string>
 	<string name="error_message_unable_to_email_statistics">統計情報をメールで送信できません</string>
+	<string name="error_message_unable_to_vibrate">振動しません。原因を調査するため、メールでご連絡ください。</string>
 	<string name="error_message_unable_to_shine_flashlight">懐中電灯を照らすことができません — %1$s</string>
 	<string name="error_message_unable_to_get_flashlight_characteristics">懐中電灯の情報を取得できません</string>
 	<string name="error_message_unable_to_access_flashlight">懐中電灯にアクセスできません — %1$s</string>
@@ -250,6 +251,7 @@
 	<string name="error_message_exclude_start_datetime_missing">除外開始日時が指定されていません</string>
 	<string name="error_message_exclude_end_datetime_missing">除外終了日時が指定されていません</string>
 	<string name="error_message_exclude_start_end_calendar_not_in_order">開始日時が終了日時より前である必要があります</string>
+	<string name="error_message_out_of_memory">メモリ不足です。原因を突き止めるため、メールでご連絡ください。</string>
 
 	<!-- Titles -->
 	<string name="title_timer_main">NFCタイマー</string>

@@ -230,6 +230,7 @@
 	<string name="error_message_unable_to_volume_dismiss_nfc_alarm">ไม่สามารถปิดการแจ้งเตือน NFC ด้วยปุ่มปรับระดับเสียงได้</string>
 	<string name="error_message_unable_to_email">ไม่สามารถร่างอีเมลได้</string>
 	<string name="error_message_unable_to_email_statistics">ไม่สามารถส่งอีเมลสถิติได้</string>
+	<string name="error_message_unable_to_vibrate">ไม่สามารถสั่นได้ — กรุณาส่งอีเมลมาหาฉัน เพื่อที่ฉันจะได้หาสาเหตุว่าทำไมจึงเกิดเหตุการณ์เช่นนี้</string>
 	<string name="error_message_unable_to_shine_flashlight">ไม่สามารถส่องไฟฉายได้ — %1$s</string>
 	<string name="error_message_unable_to_get_flashlight_characteristics">ไม่สามารถรับข้อมูลไฟฉายได้</string>
 	<string name="error_message_unable_to_access_flashlight">ไม่สามารถเข้าถึงไฟฉายได้ — %1$s</string>
@@ -250,6 +251,7 @@
 	<string name="error_message_exclude_start_datetime_missing">ขาดวันที่/เวลาเริ่มต้นการยกเว้น</string>
 	<string name="error_message_exclude_end_datetime_missing">ขาดวันที่/เวลาสิ้นสุดการยกเว้น</string>
 	<string name="error_message_exclude_start_end_calendar_not_in_order">วัน/เวลาเริ่มต้นต้องอยู่ก่อนวัน/เวลาสิ้นสุด</string>
+	<string name="error_message_out_of_memory">หน่วยความจำเต็ม — โปรดส่งอีเมลมาหาฉัน เพื่อที่ฉันจะได้หาสาเหตุว่าทำไมถึงเกิดเหตุการณ์นี้ขึ้น</string>
 
 	<!-- Titles -->
 	<string name="title_timer_main">ตัวจับเวลา NFC</string>

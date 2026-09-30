@@ -2,6 +2,12 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.3</item>
+		<item>繰り返し頻度を改善し、使いやすくしました。</item>
+		<item>アラームが作動する日付、曜日、および繰り返し頻度に関する&lt;b>概要&lt;/b>表示を改善しました。</item>
+		<item>低DPIデバイスでアラームの&lt;b>時刻&lt;/b>を設定する際の問題を修正しました。</item>
+		<item>&lt;b>NFC&lt;/b>アラームに関する問題を修正しました。</item>
+		<item>アプリがクラッシュする原因となっていた&lt;b>バイブレーション&lt;/b>の問題を防止しました。ログ記録機能を追加しましたが、原因究明にはユーザーの協力が必要です。</item>
 		<item>12.7.2</item>
 		<item>スピーカーとBluetoothで同時に音声を再生するオプションを追加しました。アラーム音の場合、「設定」＞「音声ソース」から設定できます。</item>
 		<item>日付/時間範囲を除外するオプションを追加しました。これは、設定 > 繰り返し からアラームに対して設定でき、たとえば、アラームが数時間ごとに鳴るが、寝るときに手動でアラームを無効/有効にしたくない場合に使用します。</item>

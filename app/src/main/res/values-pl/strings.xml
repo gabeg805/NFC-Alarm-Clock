@@ -230,6 +230,7 @@
 	<string name="error_message_unable_to_volume_dismiss_nfc_alarm">Nie można wyłączyć alarmu NFC przyciskiem głośności</string>
 	<string name="error_message_unable_to_email">Nie można utworzyć wersji roboczej wiadomości e-mail</string>
 	<string name="error_message_unable_to_email_statistics">Nie można wysłać statystyk e-mailem</string>
+	<string name="error_message_unable_to_vibrate">Nie można włączyć wibracji — proszę o kontakt mailowy, abym mógł dowiedzieć się, dlaczego tak się dzieje</string>
 	<string name="error_message_unable_to_shine_flashlight">Nie można świecić latarką — %1$s</string>
 	<string name="error_message_unable_to_get_flashlight_characteristics">Nie można uzyskać informacji o latarce</string>
 	<string name="error_message_unable_to_access_flashlight">Nie można uzyskać dostępu do latarki — %1$s</string>
@@ -250,6 +251,7 @@
 	<string name="error_message_exclude_start_datetime_missing">Brak daty/godziny rozpoczęcia wykluczenia</string>
 	<string name="error_message_exclude_end_datetime_missing">Brak daty/godziny zakończenia wykluczenia</string>
 	<string name="error_message_exclude_start_end_calendar_not_in_order">Data i godzina rozpoczęcia muszą przypadać przed datą i godziną zakończenia</string>
+	<string name="error_message_out_of_memory">Brak pamięci — proszę o kontakt mailowy, abym mógł dowiedzieć się, dlaczego tak się dzieje</string>
 
 	<!-- Titles -->
 	<string name="title_timer_main">Timer NFC</string>

@@ -230,6 +230,7 @@
 	<string name="error_message_unable_to_volume_dismiss_nfc_alarm">Pa ka fèmen alam NFC a avèk bouton volim nan</string>
 	<string name="error_message_unable_to_email">Pa kapab bouyonnen imèl la</string>
 	<string name="error_message_unable_to_email_statistics">Pa kapab voye imèl estatistik</string>
+	<string name="error_message_unable_to_vibrate">Pa ka vibre — tanpri voye yon imèl ban mwen pou m ka konprann poukisa sa rive.</string>
 	<string name="error_message_unable_to_shine_flashlight">Pa kapab klere flach — %1$s</string>
 	<string name="error_message_unable_to_get_flashlight_characteristics">Pa kapab jwenn enfòmasyon flach</string>
 	<string name="error_message_unable_to_access_flashlight">Pa kapab jwenn aksè nan flach — %1$s</string>
@@ -250,6 +251,7 @@
 	<string name="error_message_exclude_start_datetime_missing">Dat/lè kòmansman esklizyon an manke</string>
 	<string name="error_message_exclude_end_datetime_missing">Dat/lè fen esklizyon an manke</string>
 	<string name="error_message_exclude_start_end_calendar_not_in_order">Dat/lè kòmansman an dwe anvan dat/lè fen an</string>
+	<string name="error_message_out_of_memory">Mwen pa gen memwa ankò — tanpri voye yon imèl ban mwen pou m ka konprann poukisa sa rive.</string>
 
 	<!-- Titles -->
 	<string name="title_timer_main">NFC Timer</string>

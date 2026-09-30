@@ -230,6 +230,7 @@
 	<string name="error_message_unable_to_volume_dismiss_nfc_alarm">No se puede desactivar la alarma NFC con el botón de volumen.</string>
 	<string name="error_message_unable_to_email">No se puede redactar el correo electrónico</string>
 	<string name="error_message_unable_to_email_statistics">No se pueden enviar estadísticas por correo electrónico</string>
+	<string name="error_message_unable_to_vibrate">No puedo vibrar; por favor, envíame un correo electrónico para que pueda averiguar por qué sucede esto.</string>
 	<string name="error_message_unable_to_shine_flashlight">No se puede encender la linterna — %1$s</string>
 	<string name="error_message_unable_to_get_flashlight_characteristics">No se puede obtener información de la linterna</string>
 	<string name="error_message_unable_to_access_flashlight">No se puede acceder a la linterna — %1$s</string>
@@ -250,6 +251,7 @@
 	<string name="error_message_exclude_start_datetime_missing">Faltan fechas/horas de inicio de exclusión</string>
 	<string name="error_message_exclude_end_datetime_missing">Faltan fechas/horas de finalización de exclusión</string>
 	<string name="error_message_exclude_start_end_calendar_not_in_order">La fecha y hora de inicio deben ser anteriores a la fecha y hora de finalización.</string>
+	<string name="error_message_out_of_memory">No lo recuerdo bien; por favor, envíame un correo electrónico para que pueda averiguar por qué sucede esto.</string>
 
 	<!-- Titles -->
 	<string name="title_timer_main">Temporizador NFC</string>

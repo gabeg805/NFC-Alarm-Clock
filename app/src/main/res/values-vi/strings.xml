@@ -230,6 +230,7 @@
 	<string name="error_message_unable_to_volume_dismiss_nfc_alarm">Không thể tắt báo thức NFC bằng nút âm lượng</string>
 	<string name="error_message_unable_to_email">Không thể soạn thảo email</string>
 	<string name="error_message_unable_to_email_statistics">Không thể gửi số liệu thống kê qua email</string>
+	<string name="error_message_unable_to_vibrate">Không thể rung — vui lòng gửi email cho tôi để tôi có thể tìm hiểu lý do tại sao điều này xảy ra.</string>
 	<string name="error_message_unable_to_shine_flashlight">Không thể chiếu đèn pin — %1$s</string>
 	<string name="error_message_unable_to_get_flashlight_characteristics">Không thể lấy thông tin đèn pin</string>
 	<string name="error_message_unable_to_access_flashlight">Không thể truy cập đèn pin — %1$s</string>
@@ -250,6 +251,7 @@
 	<string name="error_message_exclude_start_datetime_missing">Thiếu ngày/giờ bắt đầu loại trừ</string>
 	<string name="error_message_exclude_end_datetime_missing">Thiếu ngày/giờ kết thúc loại trừ</string>
 	<string name="error_message_exclude_start_end_calendar_not_in_order">Ngày/giờ bắt đầu phải trước ngày/giờ kết thúc.</string>
+	<string name="error_message_out_of_memory">Hết bộ nhớ — vui lòng gửi email cho tôi để tôi tìm hiểu lý do tại sao điều này xảy ra.</string>
 
 	<!-- Titles -->
 	<string name="title_timer_main">Bộ hẹn giờ NFC</string>

@@ -2,6 +2,12 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.3</item>
+		<item>Ulepszono &lt;b>częstotliwość powtarzania&lt;/b>, dzięki czemu korzystanie z aplikacji stało się łatwiejsze.</item>
+		<item>Ulepszone &lt;b>podsumowanie&lt;/b> daty, dni i częstotliwości powtarzania alarmu.</item>
+		<item>Naprawiono problem z ustawianiem &lt;b>czasu&lt;/b> alarmu na urządzeniach o niskiej rozdzielczości DPI.</item>
+		<item>Naprawiono problem z alarmami &lt;b>NFC&lt;/b>.</item>
+		<item>Zapobiegliśmy problemowi &lt;b>wibracji&lt;/b>, który powodował awarię aplikacji. Dodaliśmy dodatkowe logowanie, ale potrzebujemy pomocy użytkownika, aby dowiedzieć się, dlaczego tak się dzieje.</item>
 		<item>12.7.2</item>
 		<item>Dodano opcję jednoczesnego odtwarzania dźwięku przez &lt;b>głośniki&lt;/b> i &lt;b>Bluetooth&lt;/b>. Można ją znaleźć w Ustawieniach > Źródła dźwięku, w przypadku alarmu.</item>
 		<item>Dodano opcję &lt;b>wykluczania zakresu dat/godzin&lt;/b>. Można ją znaleźć w Ustawieniach > Powtarzanie, dla alarmu i jest używana na przykład wtedy, gdy alarm włącza się co kilka godzin, ale nie chcesz go ręcznie wyłączać/włączać przed pójściem spać.</item>

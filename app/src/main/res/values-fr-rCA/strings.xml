@@ -230,6 +230,7 @@
 	<string name="error_message_unable_to_volume_dismiss_nfc_alarm">Impossible de désactiver l\'alarme NFC avec le bouton de volume</string>
 	<string name="error_message_unable_to_email">Impossible de rédiger un courriel</string>
 	<string name="error_message_unable_to_email_statistics">Impossible d\'envoyer les statistiques par courriel</string>
+	<string name="error_message_unable_to_vibrate">Impossible de faire vibrer l\'appareil — veuillez m\'envoyer un courriel pour que je puisse comprendre pourquoi cela se produit.</string>
 	<string name="error_message_unable_to_shine_flashlight">Impossible d\'allumer la lampe de poche — %1$s</string>
 	<string name="error_message_unable_to_get_flashlight_characteristics">Impossible d\'obtenir les renseignements sur la lampe de poche</string>
 	<string name="error_message_unable_to_access_flashlight">Impossible d\'accéder à la lampe de poche — %1$s</string>
@@ -250,6 +251,7 @@
 	<string name="error_message_exclude_start_datetime_missing">Date/heure de début d\'exclusion manquante</string>
 	<string name="error_message_exclude_end_datetime_missing">Date/heure de fin d\'exclusion manquante</string>
 	<string name="error_message_exclude_start_end_calendar_not_in_order">La date/l\'heure de début doit être antérieure à la date/l\'heure de fin.</string>
+	<string name="error_message_out_of_memory">Je n\'ai plus de mémoire — veuillez m\'envoyer un courriel pour que je puisse comprendre pourquoi cela se produit.</string>
 
 	<!-- Titles -->
 	<string name="title_timer_main">Minuterie NFC</string>
