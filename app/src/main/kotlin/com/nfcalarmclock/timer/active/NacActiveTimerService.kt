@@ -925,7 +925,7 @@ class NacActiveTimerService
 				waitForAutoDismiss(timer)
 
 				// Start the wakeup process and add it to the hashmap
-				val wakeupProcess = NacWakeupProcess(this@NacActiveTimerService, timer)
+				val wakeupProcess = NacWakeupProcess(this@NacActiveTimerService, lifecycleScope, timer)
 				wakeupProcess.start()
 				allWakeupProcesses[timer.id] = wakeupProcess
 

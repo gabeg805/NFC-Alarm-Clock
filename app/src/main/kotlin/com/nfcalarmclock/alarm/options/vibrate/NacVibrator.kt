@@ -7,12 +7,12 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import android.os.VibratorManager
 import android.media.AudioAttributes
-import android.os.Handler
 import androidx.lifecycle.LifecycleCoroutineScope
 import com.nfcalarmclock.alarm.db.NacAlarm
 import com.nfcalarmclock.log.NacLog
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 
 /**
@@ -47,9 +47,8 @@ class NacVibrator(
 		}
 
 	/**
-	 * Handler to repeatedly vibrate the device.
+	 * Job that handles to repeatedly vibrate the device.
 	 */
-	private val handler : Handler = Handler(context.mainLooper)
 	private var job: Job? = null
 
 	/**
@@ -66,15 +65,6 @@ class NacVibrator(
 		job?.cancel()
 
 		// Stop any current vibrations
-		stop()
-	}
-
-	/**
-	 * Stop any vibration.
-	 */
-	private fun stop()
-	{
-		// Stop any current vibrations
 		vibrator.cancel()
 
 		// Clear the flag
@@ -85,7 +75,7 @@ class NacVibrator(
 	 * Vibrate the device using on/off timings.
 	 */
 	@Suppress("deprecation")
-	private fun vibrate(timings: List<Long>, wait: Long)
+	private fun vibrate(timings: List<Long>)
 	{
 		// API 26+
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
@@ -99,13 +89,6 @@ class NacVibrator(
 			repeat(repeatPattern) {
 				amplitudes.addAll(listOf(0, VibrationEffect.DEFAULT_AMPLITUDE, 0))
 			}
-
-			//// This vibration sequence uses a pattern that ends with a different wait than
-			//// wait in between vibrations. Add another wait at the end to account for this pattern
-			//if (amplitudes.size != timings.size)
-			//{
-			//	amplitudes.add(0)
-			//}
 
 			//// Create a vibration that will repeat indefinitely (that is what the 0 is for)
 			// Create a vibration
@@ -144,26 +127,6 @@ class NacVibrator(
 
 		// Set the flag
 		isRunning = true
-
-		job = scope.launch {
-
-			// Calculate the total duration of the vibration
-			val duration = timings.sum()
-			delay(duration)
-
-			// Stop any previous vibration that may be running
-			stop()
-
-			// Avoid race condition between canceling and starting the vibration back to back
-			delay(wait)
-
-			vibrate(timings, wait)
-			//handler.postDelayed({
-
-			//}, duration)
-
-		}
-
 	}
 
 	/**
@@ -192,16 +155,48 @@ class NacVibrator(
 	}
 
 	/**
+	 * Vibrate the device indefinitely, or at least until cleanup() is called or the lifecycle
+	 * scope is destroyed.
+	 */
+	private fun vibrateIndefinitely(timings: List<Long>, wait: Long)
+	{
+		// Calculate the total duration of the vibration
+		val duration = timings.sum()
+
+		job = scope.launch {
+
+			// Vibrate indefinitely
+			while (isActive)
+			{
+				// Vibrate
+				vibrate(timings)
+
+				// Wait for the duration of the vibration before stopping the vibration
+				println("Total vibration duration = $duration")
+				delay(duration)
+				println("Stopping vib")
+				vibrator.cancel()
+
+				// Wait for the designated wait time to avoid a potential race condition between
+				// canceling and starting the vibration back to back
+				println("Delaying wait = $wait")
+				delay(wait)
+				println("Vibrating again!")
+			}
+
+		}
+	}
+
+	/**
 	 * Vibrate the device normally.
 	 */
 	fun vibrateNormally(duration: Long, wait: Long)
 	{
 		// Vibrate pattern will be: pause 0ms, vibrate <duration> ms, pause <wait> ms
-		//val timings = listOf(0, duration, wait)
 		val timings = listOf(0, duration, 0)
 
 		// Vibrate
-		vibrate(timings, wait)
+		vibrateIndefinitely(timings, wait)
 	}
 
 	/**
@@ -226,11 +221,8 @@ class NacVibrator(
 			timings.addAll(listOf(0, duration, wait))
 		}
 
-		//// Lastly, add a wait of <waitAfterPattern> ms
-		//timings.add(waitAfterPattern)
-
 		// Vibrate
-		vibrate(timings, waitAfterPattern)
+		vibrateIndefinitely(timings, waitAfterPattern)
 	}
 
 }
