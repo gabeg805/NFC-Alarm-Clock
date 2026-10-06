@@ -144,7 +144,7 @@ open class NacVibrateOptionsDialog
 	{
 		// Get the vibrator
 		val context = requireContext()
-		vibrator = NacVibrator(context)
+		vibrator = NacVibrator(context, lifecycleScope)
 
 		// Setup the views
 		setupVibrationDuration(alarm.vibrateDuration, alarm.vibrateWaitTime)

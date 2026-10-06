@@ -683,7 +683,7 @@ class NacActiveAlarmService
 	private fun startWakeupProcess()
 	{
 		// Create the wakeup process
-		wakeupProcess = NacWakeupProcess(this, alarm!!)
+		wakeupProcess = NacWakeupProcess(this, lifecycleScope, alarm!!)
 
 		// Add a volume key press listener so that the volume keys can dismiss/snooze the alarm
 		if (alarm!!.shouldVolumeDismiss || alarm!!.shouldVolumeSnooze)

@@ -205,7 +205,7 @@ class NacActiveAlarmNotification(
 		// Setup the channel
 		channel.setShowBadge(true)
 		channel.enableLights(true)
-		channel.enableVibration(true)
+		channel.enableVibration(false)
 		channel.setSound(null, null)
 
 		return channel

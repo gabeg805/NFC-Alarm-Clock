@@ -2,12 +2,6 @@
 TODO
 ----
 
-* Check all this *Today() logic where removeToday() may fail if dismiss() is
-  called after day that is supposed to run, such as when near day boundary and
-  user takes a long time to dismiss
-
-  Need to check this near midnight
-
 * Think of a better way to handle the was NFC just scanned preference logic.
 
 * Update website with f-droid and izzy
