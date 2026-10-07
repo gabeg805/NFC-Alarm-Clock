@@ -1,0 +1,1 @@
+Fixed vibrate issue where it would stop when turning the screen off.

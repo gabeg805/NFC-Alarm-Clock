@@ -175,7 +175,6 @@ class NacVibrator(
 				if ((currentTime - startTime) > 30)
 				{
 					NacLog.i("Vibration still running. duration=$duration | wait=$wait")
-					println("Vibration still running. duration=$duration | wait=$wait")
 					startTime = currentTime
 				}
 
