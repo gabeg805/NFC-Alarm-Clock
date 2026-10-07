@@ -2,6 +2,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.4</item>
+		<item>স্ক্রিন বন্ধ করার সময় &lt;b>ভাইব্রেট&lt;/b> বন্ধ হয়ে যাওয়ার সমস্যাটি সমাধান করা হয়েছে।</item>
 		<item>12.7.3</item>
 		<item>&lt;b>পুনরাবৃত্তির হার&lt;/b> উন্নত করা হয়েছে, যাতে এটি ব্যবহার করা আরও সহজ হয়।</item>
 		<item>অ্যালার্ম কখন বাজবে তার তারিখ, দিন এবং পুনরাবৃত্তির সারসংক্ষেপ উন্নত করা হয়েছে।</item>

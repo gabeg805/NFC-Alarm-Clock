@@ -162,26 +162,33 @@ class NacVibrator(
 	{
 		// Calculate the total duration of the vibration
 		val duration = timings.sum()
+		var startTime = System.currentTimeMillis() / 1000
 
 		job = scope.launch {
 
 			// Vibrate indefinitely
 			while (isActive)
 			{
+				// Log every 30 sec (or so)
+				val currentTime = System.currentTimeMillis() / 1000
+
+				if ((currentTime - startTime) > 30)
+				{
+					NacLog.i("Vibration still running. duration=$duration | wait=$wait")
+					println("Vibration still running. duration=$duration | wait=$wait")
+					startTime = currentTime
+				}
+
 				// Vibrate
 				vibrate(timings)
 
 				// Wait for the duration of the vibration before stopping the vibration
-				println("Total vibration duration = $duration")
 				delay(duration)
-				println("Stopping vib")
 				vibrator.cancel()
 
 				// Wait for the designated wait time to avoid a potential race condition between
 				// canceling and starting the vibration back to back
-				println("Delaying wait = $wait")
 				delay(wait)
-				println("Vibrating again!")
 			}
 
 		}

@@ -2,6 +2,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.4</item>
+		<item>Đã khắc phục sự cố rung, khiến chức năng rung dừng lại khi tắt màn hình.</item>
 		<item>12.7.3</item>
 		<item>Tần suất lặp lại được cải thiện để dễ sử dụng hơn.</item>
 		<item>Đã cải thiện phần tóm tắt ngày, các ngày trong tuần và tần suất lặp lại của thời điểm báo thức sẽ chạy.</item>

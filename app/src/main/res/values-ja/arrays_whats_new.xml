@@ -2,6 +2,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.4</item>
+		<item>画面をオフにしたときに振動が停止してしまう問題を修正しました。</item>
 		<item>12.7.3</item>
 		<item>繰り返し頻度を改善し、使いやすくしました。</item>
 		<item>アラームが作動する日付、曜日、および繰り返し頻度に関する&lt;b>概要&lt;/b>表示を改善しました。</item>

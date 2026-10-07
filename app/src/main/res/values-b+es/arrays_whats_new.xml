@@ -2,6 +2,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.4</item>
+		<item>Se solucionó el problema de &lt;b>vibración&lt;/b> que provocaba que dejara de funcionar al apagar la pantalla.</item>
 		<item>12.7.3</item>
 		<item>&lt;b>Frecuencia de repetición&lt;/b> mejorada para que sea más fácil de usar.</item>
 		<item>&lt;b>Resumen&lt;/b> mejorado de la fecha, los días y la frecuencia de repetición de cuándo se activará una alarma.</item>

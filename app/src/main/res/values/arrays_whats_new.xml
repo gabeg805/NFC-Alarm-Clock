@@ -2,6 +2,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.4</item>
+		<item>Fixed &lt;b>vibrate&lt;/b> issue where it would stop when turning the screen off.</item>
 		<item>12.7.3</item>
 		<item>Improved &lt;b>repeat frequency&lt;/b> so that it is easier to use.</item>
 		<item>Improved &lt;b>summary&lt;/b> of the date, days, and repeat frequency of when an alarm will run.</item>

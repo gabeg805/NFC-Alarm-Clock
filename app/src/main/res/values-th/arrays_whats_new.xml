@@ -2,6 +2,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.4</item>
+		<item>แก้ไขปัญหาการสั่นที่หยุดลงเมื่อปิดหน้าจอ</item>
 		<item>12.7.3</item>
 		<item>ปรับปรุงความถี่ในการทำซ้ำเพื่อให้ใช้งานง่ายขึ้น</item>
 		<item>ปรับปรุงสรุปข้อมูลวันที่ วัน และความถี่ในการตั้งปลุกให้ดียิ่งขึ้น</item>
