@@ -638,8 +638,16 @@ class NacRepeatOptionsDialog
 		{
 			NacLog.i("Both start and end dates are empty. hasStart=$hasStart | hasEnd=$hasEnd")
 
-			// Build a string of the current selected days
-			val selectedDays = excludeStartAlarm.days.toDayString(context, sharedPreferences.startWeekOn)
+			// Build a string from the current selected days
+			val selectedDays = if (excludeStartAlarm.days.isNotEmpty())
+			{
+				excludeStartAlarm.days.toDayString(context, sharedPreferences.startWeekOn)
+			}
+			else
+			{
+				// No days selected. Will run everyday
+				context.getString(R.string.dow_everyday)
+			}
 
 			// Add it to start/end
 			if (hasStart)

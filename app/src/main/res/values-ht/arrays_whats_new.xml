@@ -2,6 +2,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.4</item>
+		<item>Pwoblèm &lt;b>vibrasyon&lt;/b> an te rezoud lè li te konn sispann lè w te fèmen ekran an.</item>
 		<item>12.7.3</item>
 		<item>&lt;b>Frekans repetisyon&lt;/b> an amelyore pou l pi fasil pou itilize.</item>
 		<item>&lt;b>Rezime&lt;/b> amelyore dat, jou, ak frekans repetisyon lè yon alam pral sonnen.</item>

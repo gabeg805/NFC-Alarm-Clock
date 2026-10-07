@@ -2,6 +2,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.4</item>
+		<item>Correction d\'un problème de &lt;b>vibration&lt;/b> qui s\'arrêtait lors de l\'extinction de l\'écran.</item>
 		<item>12.7.3</item>
 		<item>&lt;b>Fréquence de répétition&lt;/b> améliorée pour une utilisation plus facile.</item>
 		<item>Amélioration du &lt;b>résumé&lt;/b> de la date, des jours et de la fréquence de répétition de l\'exécution d\'une alarme.</item>

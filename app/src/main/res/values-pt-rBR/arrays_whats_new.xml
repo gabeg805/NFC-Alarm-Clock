@@ -2,6 +2,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.4</item>
+		<item>Corrigido o problema de &lt;b>vibração&lt;/b> que fazia com que ela parasse ao desligar a tela.</item>
 		<item>12.7.3</item>
 		<item>Melhoria na &lt;b>frequência de repetição&lt;/b> para facilitar o uso.</item>
 		<item>Resumo aprimorado da data, dias e frequência de repetição de quando um alarme será acionado.</item>

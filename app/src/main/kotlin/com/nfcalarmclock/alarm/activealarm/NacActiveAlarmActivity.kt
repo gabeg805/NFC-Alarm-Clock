@@ -439,17 +439,11 @@ class NacActiveAlarmActivity
 				return@launch
 			}
 
-			// Log NFC tags if alarm requires NFC
-			if (alarm?.shouldUseNfc(this@NacActiveAlarmActivity) == true)
-			{
-				NacLog.i("NFC tags needed to dismiss. nfcSize=${nfcTagsNeededToDismissList?.size} | initialSize=$initialSizeOfNfcTagsNeededToDismiss")
-			}
-
 			// Size of the NFC tags dismiss list changed during the scan check.
 			// Save the list to the alarm and update the database
 			if (nfcTagsNeededToDismissList!!.size != initialSizeOfNfcTagsNeededToDismiss)
 			{
-				NacLog.i("List size of NFC tags needed to dismiss changed")
+				NacLog.i("List size of NFC tags needed to dismiss changed. initialSize=$initialSizeOfNfcTagsNeededToDismiss")
 
 				// Get an up to date alarm to ensure that all the necessary flags and whatnot
 				// (such as isActive) are set on the alarm
@@ -529,7 +523,7 @@ class NacActiveAlarmActivity
 		// Super
 		super.onWindowFocusChanged(hasFocus)
 
-		NacLog.i("Window focus changed in active alarm activity")
+		NacLog.i("Window focus changed in active alarm activity. hasFocus=$hasFocus")
 
 		// Start the layout handler
 		if (hasFocus)
@@ -621,13 +615,27 @@ class NacActiveAlarmActivity
 	 */
 	private suspend fun setupNfcTags()
 	{
-		// Already been setup
-		if (nfcTagsNeededToDismissList != null)
+		// Alarm does not require NFC
+		if (!alarm!!.shouldUseNfc(this@NacActiveAlarmActivity))
+		{
+			NacLog.i("Alarm does not require NFC")
+			nfcTagsNeededToDismissList = mutableListOf()
+			return
+		}
+		// NFC tags already setup
+		else if (nfcTagsNeededToDismissList != null)
 		{
 			NacLog.i("NFC tags needed to dismiss already setup. size=${nfcTagsNeededToDismissList!!.size}")
 
-			// Set the size of the list
+			// Set the initial size of the list
 			initialSizeOfNfcTagsNeededToDismiss = nfcTagsNeededToDismissList!!.size
+			return
+		}
+		// Any NFC tag can be used
+		else if (alarm?.nfcTagId == "")
+		{
+			NacLog.i("Any NFC tag can be used to dismiss alarm")
+			nfcTagsNeededToDismissList = mutableListOf()
 			return
 		}
 
@@ -686,21 +694,20 @@ class NacActiveAlarmActivity
 			// Show when locked
 			setShowWhenLocked(true)
 		}
+
+		// Add flag to show when locked
+		window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED)
+
+		// Battery saver enabled
+		if (sharedPreferences.shouldSaveBatteryInAlarmScreen)
+		{
+			NacLog.i("setting up screen on, battery saver is enabled.")
+		}
+		// Battery saver disabled. Turn the screen on and keep it on
 		else
 		{
-			// Check if should NOT save battery and turn screen on
-			if (!sharedPreferences.shouldSaveBatteryInAlarmScreen)
-			{
-				window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
-			}
-
-			// Add flag to show when locked
-			window.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED)
-		}
-
-		// Check if should NOT save battery and keep screen on
-		if (!sharedPreferences.shouldSaveBatteryInAlarmScreen)
-		{
+			NacLog.i("setting up screen on. Turn screen on, keep screen on, and show when locked")
+			window.addFlags(WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON)
 			window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
 		}
 	}
@@ -747,7 +754,7 @@ class NacActiveAlarmActivity
 
 		// Run the check
 		return NacNfc.wasScanned(intent)
-				&& NacNfc.canDismissWithScannedNfc(this@NacActiveAlarmActivity, alarm, nfcId, nfcTagsNeededToDismissList)
+			&& NacNfc.canDismissWithScannedNfc(this@NacActiveAlarmActivity, alarm, nfcId, nfcTagsNeededToDismissList)
 	}
 
 	companion object

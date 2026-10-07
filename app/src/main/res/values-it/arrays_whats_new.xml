@@ -2,6 +2,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.4</item>
+		<item>Risolto il problema della &lt;b>vibrazione&lt;/b> che si interrompeva allo spegnimento dello schermo.</item>
 		<item>12.7.3</item>
 		<item>&lt;b>Frequenza di ripetizione&lt;/b> migliorata per facilitarne l\'utilizzo.</item>
 		<item>&lt;b>Riepilogo&lt;/b> migliorato della data, dei giorni e della frequenza di ripetizione di un allarme.</item>

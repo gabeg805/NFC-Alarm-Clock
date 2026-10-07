@@ -2,12 +2,14 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.4</item>
+		<item>Problem mit der &lt;b>Vibrationsfunktion&lt;/b> behoben, die beim Ausschalten des Bildschirms aufhörte.</item>
 		<item>12.7.3</item>
 		<item>Verbesserte &lt;b>Wiederholungsfrequenz&lt;/b> für eine einfachere Bedienung.</item>
 		<item>Verbesserte &lt;b>Zusammenfassung&lt;/b> des Datums, der Tage und der Wiederholungshäufigkeit, wann ein Alarm ausgelöst wird.</item>
 		<item>Problem beim Einstellen der &lt;b>Zeit&lt;/b> eines Alarms auf Geräten mit niedriger DPI-Auflösung behoben.</item>
 		<item>Problem mit NFC-Alarmen behoben.</item>
-		<item>Das Problem mit der Vibrationsfunktion, das zum Absturz der App führte, wurde behoben. Zusätzliche Protokollierung wurde implementiert, aber wir benötigen die Hilfe der Benutzer, um die Ursache zu ermitteln.</item>
+		<item>Das Problem mit der &lt;b>Vibrationsfunktion&lt;/b>, das zum Absturz der App führte, wurde behoben. Zusätzliche Protokollierung wurde implementiert, aber wir benötigen die Hilfe der Benutzer, um die Ursache zu ermitteln.</item>
 		<item>12.7.2</item>
 		<item>Es wurde eine Option hinzugefügt, um Audio gleichzeitig über &lt;b>Lautsprecher&lt;/b> und &lt;b>Bluetooth&lt;/b> wiederzugeben. Diese Option finden Sie unter Einstellungen > Audioquellen für einen Wecker.</item>
 		<item>Es wurde eine Option hinzugefügt, um einen &lt;b>Datums-/Zeitbereich auszuschließen&lt;/b>. Diese Option finden Sie unter Einstellungen > Wiederholen für einen Alarm und ist beispielsweise nützlich, wenn ein Alarm alle paar Stunden ertönt, Sie ihn aber nicht manuell deaktivieren/aktivieren möchten, wenn Sie schlafen gehen.</item>

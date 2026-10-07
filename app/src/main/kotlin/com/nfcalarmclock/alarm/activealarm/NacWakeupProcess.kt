@@ -8,6 +8,7 @@ import android.media.AudioFocusRequest
 import android.media.AudioManager
 import android.os.Build
 import android.os.Handler
+import androidx.lifecycle.LifecycleCoroutineScope
 import androidx.media3.common.MediaItem
 import androidx.media3.common.Player
 import androidx.media3.common.util.UnstableApi
@@ -34,11 +35,13 @@ import com.nfcalarmclock.view.quickToast
  * Actions to take upon waking up, such as enabling NFC, playing music, etc.
  *
  * @param context Application context.
+ * @param scope Coroutine scope.
  * @param alarm Alarm.
  */
 @UnstableApi
 class NacWakeupProcess(
 	private val context: Context,
+	private val scope: LifecycleCoroutineScope,
 	private val alarm: NacAlarm
 )
 {
@@ -133,7 +136,7 @@ class NacWakeupProcess(
 	 */
 	private val vibrator: NacVibrator? = if (shouldVibrate)
 	{
-		NacVibrator(context)
+		NacVibrator(context, scope)
 	}
 	else
 	{

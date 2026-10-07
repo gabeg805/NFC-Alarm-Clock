@@ -2,6 +2,8 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.4</item>
+		<item>स्क्रीन बंद करने पर कंपन बंद हो जाने की समस्या को ठीक कर दिया गया है।</item>
 		<item>12.7.3</item>
 		<item>उपयोग में आसानी के लिए &lt;b>पुनरावृति आवृत्ति&lt;/b> में सुधार किया गया है।</item>
 		<item>अलार्म कब बजेगा, इसकी तिथि, दिन और आवृत्ति का बेहतर सारांश।</item>
