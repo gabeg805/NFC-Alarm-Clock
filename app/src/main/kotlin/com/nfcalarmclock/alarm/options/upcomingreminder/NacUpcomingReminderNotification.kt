@@ -148,6 +148,7 @@ class NacUpcomingReminderNotification(
 		channel.setShowBadge(true)
 		channel.enableLights(true)
 		channel.enableVibration(false)
+		channel.setBypassDnd(true)
 
 		return channel
 	}

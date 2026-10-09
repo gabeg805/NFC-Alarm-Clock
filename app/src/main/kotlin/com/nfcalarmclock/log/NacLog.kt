@@ -1,6 +1,7 @@
 package com.nfcalarmclock.log
 
 import android.content.Context
+import com.nfcalarmclock.BuildConfig
 import com.nfcalarmclock.shared.NacSharedPreferences
 import java.io.File
 import java.text.SimpleDateFormat
@@ -42,14 +43,17 @@ object NacLog
 		val stackTrace = Thread.currentThread().stackTrace
 
 		// Find the index where this class is being used
-		val index = stackTrace.indexOfFirst { it.className == NacLog::class.java.name }
+		val classIndex = stackTrace.indexOfFirst { it.className == NacLog::class.java.name }
+
+		// Compute the final index to use
+		val finalIndex = classIndex + offsetIndex + 3
 
 		// In a method so get the class name and method, such as:
 		// NacMainActivity:onCreate
-		return if ((index > 0) && (index+2+offsetIndex in stackTrace.indices))
+		return if ((classIndex > 0) && (finalIndex in stackTrace.indices))
 		{
 			val maxLength = 30
-			val element = stackTrace[index+2+offsetIndex]
+			val element = stackTrace[finalIndex]
 			val className = element.className.substringAfterLast('.')
 			val methodName = element.methodName
 
@@ -226,6 +230,13 @@ object NacLog
 	)
 	{
 		fileLogger?.let { logger ->
+
+			// Print message in debug builds
+			if (BuildConfig.DEBUG)
+			{
+				println(formattedMessage)
+			}
+
 			// Exception message
 			if (throwable != null)
 			{

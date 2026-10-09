@@ -20,6 +20,7 @@ import androidx.annotation.OptIn
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.media3.common.util.UnstableApi
+import com.nfcalarmclock.BuildConfig
 import com.nfcalarmclock.R
 import com.nfcalarmclock.alarm.NacAlarmViewModel
 import com.nfcalarmclock.alarm.db.NacAlarm
@@ -133,10 +134,7 @@ class NacActiveAlarmActivity
 		override fun onReceive(context: Context, intent: Intent)
 		{
 			// Setup NFC for the layout handler
-			if (nfcTagsNeededToDismissList != null)
-			{
-				setupLayoutHandlerNfc()
-			}
+			setupLayoutHandlerNfc()
 		}
 	}
 
@@ -148,11 +146,7 @@ class NacActiveAlarmActivity
 		{
 			// Setup NFC
 			startNfc()
-
-			if (nfcTagsNeededToDismissList != null)
-			{
-				setupLayoutHandlerNfc()
-			}
+			setupLayoutHandlerNfc()
 		}
 	}
 
@@ -207,7 +201,10 @@ class NacActiveAlarmActivity
 			// Super
 			super.onBindingDied(name)
 
+			NacLog.i("Binding to alarm service died")
+
 			// Finish the activity
+			service = null
 			finish()
 		}
 
@@ -236,7 +233,11 @@ class NacActiveAlarmActivity
 		/**
 		 * Service disconnected.
 		 */
-		override fun onServiceDisconnected(className: ComponentName) {}
+		override fun onServiceDisconnected(className: ComponentName)
+		{
+			NacLog.i("Active alarm service disconnected from activity")
+			service = null
+		}
 	}
 
 	/**
@@ -284,6 +285,14 @@ class NacActiveAlarmActivity
 	{
 		// Super
 		super.onCreate(savedInstanceState)
+
+		// Finish the activity
+		if (intent.action == ACTION_STOP_ACTIVITY)
+		{
+			NacLog.i("Destroying active alarm activity from onCreate")
+			finish()
+			return
+		}
 
 		NacLog.i("Creating active alarm activity")
 
@@ -423,6 +432,14 @@ class NacActiveAlarmActivity
 	{
 		// Super
 		super.onResume()
+
+		// Finish the activity
+		if (intent.action == ACTION_STOP_ACTIVITY)
+		{
+			NacLog.i("Destroying active alarm activity from onResume")
+			finish()
+			return
+		}
 
 		lifecycleScope.launch {
 
@@ -594,7 +611,8 @@ class NacActiveAlarmActivity
 	private fun setupLayoutHandlerNfc()
 	{
 		// NFC does not need to be used so do nothing with the layout handler
-		if (alarm?.shouldUseNfc(this) != true)
+		// Alternatively, NFC tags needed for dismiss have not been setup yet
+		if ((alarm?.shouldUseNfc(this) != true) || (nfcTagsNeededToDismissList == null))
 		{
 			return
 		}
@@ -761,6 +779,11 @@ class NacActiveAlarmActivity
 	{
 
 		/**
+		 * Stop the activity action.
+		 */
+		private const val ACTION_STOP_ACTIVITY = "com.nfcalarmclock.ACTION_STOP_ALARM_ACTIVITY"
+
+		/**
 		 * Create an intent that will be used to start the Alarm activity.
 		 *
 		 * @param context A context.
@@ -828,6 +851,24 @@ class NacActiveAlarmActivity
 
 			// Start the activity
 			context.startActivity(updatedIntent)
+		}
+
+		/**
+		 * Stop the alarm activity
+		 */
+		fun stopAlarmActivity(context: Context)
+		{
+			// Create the intent and its flags
+			val intent = Intent(context, NacActiveAlarmActivity::class.java)
+			val flags = (Intent.FLAG_ACTIVITY_NEW_TASK
+					or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+
+			// Add the flags to the intent
+			intent.addFlags(flags)
+			intent.action = ACTION_STOP_ACTIVITY
+
+			// Start the activity
+			context.startActivity(intent)
 		}
 
 	}

@@ -601,11 +601,12 @@ class NacWakeupProcess(
 		{
 			try
 			{
-				vibrator?.vibrateAlarm(alarm)
-			}
-			catch (_: IllegalArgumentException)
-			{
-				quickToast(context, R.string.error_message_unable_to_vibrate)
+				vibrator?.vibrateAlarm(alarm, onException = { e ->
+					if (e is IllegalArgumentException)
+					{
+						quickToast(context, R.string.error_message_unable_to_vibrate)
+					}
+				})
 			}
 			catch (_: OutOfMemoryError)
 			{

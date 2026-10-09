@@ -186,6 +186,7 @@ class NacActiveTimerNotification(
 		channel.enableLights(true)
 		channel.enableVibration(false)
 		channel.setSound(null, null)
+		channel.setBypassDnd(true)
 
 		return channel
 	}

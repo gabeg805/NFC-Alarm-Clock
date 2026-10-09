@@ -336,8 +336,8 @@ class NacActiveAlarmService
 			return
 		}
 
-		//// Stop the alarm activity
-		//NacActiveAlarmActivity.stopAlarmActivity(this)
+		// Stop the alarm activity
+		NacActiveAlarmActivity.stopAlarmActivity(this)
 
 		// Set the alarm as not active and update the alarm
 		lifecycleScope.launch {

@@ -75,7 +75,10 @@ class NacVibrator(
 	 * Vibrate the device using on/off timings.
 	 */
 	@Suppress("deprecation")
-	private fun vibrate(timings: List<Long>)
+	private fun vibrate(
+		timings: List<Long>,
+		onException: (Exception) -> Unit = {}
+	)
 	{
 		// API 26+
 		if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O)
@@ -90,7 +93,6 @@ class NacVibrator(
 				amplitudes.addAll(listOf(0, VibrationEffect.DEFAULT_AMPLITUDE, 0))
 			}
 
-			//// Create a vibration that will repeat indefinitely (that is what the 0 is for)
 			// Create a vibration
 			val effect = try
 			{
@@ -99,6 +101,7 @@ class NacVibrator(
 			catch (e: IllegalArgumentException)
 			{
 				NacLog.e("Unable to create vibration effect. timings=$timings | amplitudes=$amplitudes", throwable = e)
+				onException(e)
 				throw e
 			}
 
@@ -132,7 +135,10 @@ class NacVibrator(
 	/**
 	 * Vibrate the device for an alarm.
 	 */
-	fun vibrateAlarm(alarm: NacAlarm)
+	fun vibrateAlarm(
+		alarm: NacAlarm,
+		onException: (Exception) -> Unit = {}
+	)
 	{
 		// Vibrate with a pattern
 		if (alarm.shouldVibratePattern)
@@ -143,14 +149,15 @@ class NacVibrator(
 				alarm.vibrateDuration,
 				alarm.vibrateWaitTime,
 				alarm.vibrateRepeatPattern,
-				alarm.vibrateWaitTimeAfterPattern)
+				alarm.vibrateWaitTimeAfterPattern,
+				onException = onException)
 		}
 		// Vibrate normally
 		else
 		{
 			NacLog.i("Vibrating for ${alarm.vibrateDuration} ms, then waiting for ${alarm.vibrateWaitTime} ms (indefinitely)")
 
-			vibrateNormally(alarm.vibrateDuration, alarm.vibrateWaitTime)
+			vibrateNormally(alarm.vibrateDuration, alarm.vibrateWaitTime, onException = onException)
 		}
 	}
 
@@ -158,7 +165,11 @@ class NacVibrator(
 	 * Vibrate the device indefinitely, or at least until cleanup() is called or the lifecycle
 	 * scope is destroyed.
 	 */
-	private fun vibrateIndefinitely(timings: List<Long>, wait: Long)
+	private fun vibrateIndefinitely(
+		timings: List<Long>,
+		wait: Long,
+		onException: (Exception) -> Unit = {}
+	)
 	{
 		// Calculate the total duration of the vibration
 		val duration = timings.sum()
@@ -179,7 +190,7 @@ class NacVibrator(
 				}
 
 				// Vibrate
-				vibrate(timings)
+				vibrate(timings, onException = onException)
 
 				// Wait for the duration of the vibration before stopping the vibration
 				delay(duration)
@@ -195,14 +206,21 @@ class NacVibrator(
 
 	/**
 	 * Vibrate the device normally.
+	 *
+	 * @param duration Amount of time (ms) to vibrate for.
+	 * @param wait Amount of time (ms) to wait after vibrating.
 	 */
-	fun vibrateNormally(duration: Long, wait: Long)
+	fun vibrateNormally(
+		duration: Long,
+		wait: Long,
+		onException: (Exception) -> Unit = {}
+	)
 	{
-		// Vibrate pattern will be: pause 0ms, vibrate <duration> ms, pause <wait> ms
-		val timings = listOf(0, duration, 0)
+		// Vibrate pattern will be: pause 1ms, vibrate <duration> ms, pause 1 ms
+		val timings = listOf(1, duration, 1)
 
 		// Vibrate
-		vibrateIndefinitely(timings, wait)
+		vibrateIndefinitely(timings, wait, onException = onException)
 	}
 
 	/**
@@ -217,18 +235,20 @@ class NacVibrator(
 		duration: Long,
 		wait: Long,
 		repeatPattern: Int,
-		waitAfterPattern: Long)
+		waitAfterPattern: Long,
+		onException: (Exception) -> Unit = {}
+	)
 	{
 		val timings: MutableList<Long> = ArrayList()
 
-		// Vibrate pattern will be: pause 0ms, vibrate <duration> ms, pause <wait> ms
+		// Vibrate pattern will be: pause 1ms, vibrate <duration> ms, pause <wait> ms
 		// Repeat this for <repeatPattern> times
 		repeat(repeatPattern) {
-			timings.addAll(listOf(0, duration, wait))
+			timings.addAll(listOf(1, duration, wait))
 		}
 
 		// Vibrate
-		vibrateIndefinitely(timings, waitAfterPattern)
+		vibrateIndefinitely(timings, waitAfterPattern, onException = onException)
 	}
 
 }
