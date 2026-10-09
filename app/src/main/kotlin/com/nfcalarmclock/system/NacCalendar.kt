@@ -386,7 +386,7 @@ fun Calendar.toFullTime(): String
  */
 fun NacAlarm.excludeDateTimesToCalendars(): Pair<Calendar?, Calendar?>
 {
-	NacLog.i("Converting exlude datetimes. start='${this.excludeStartDateTime}' | end='${this.excludeEndDateTime}'")
+	NacLog.i("Converting exclude datetimes. start='${this.excludeStartDateTime}' | end='${this.excludeEndDateTime}'")
 
 	// Convert to calendars
 	val startCal = dateTimeToCalendar(this.excludeStartDateTime)
