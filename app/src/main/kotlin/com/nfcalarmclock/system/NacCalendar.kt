@@ -1113,7 +1113,14 @@ object NacCalendar
 			}
 
 			// Get the calendar instance for the next time the alarm will run
-			val calendar = getNextAlarmDay(a)!!
+			val calendar = getNextAlarmDay(a)
+
+			// Note: This should never happen, but a crash occurred where this calendar was null. Log it and hopefully someone tells me about it so I can update this logic
+			if (calendar == null)
+			{
+				NacLog.w("How is this next alarm calendar null? This should normally not be possible. excludeStart=${a.excludeStartDateTime} | excludeEnd=${a.excludeEndDateTime} | canDismissEarly=${a.canDismissEarly} | dismissEarlyTime=${a.timeOfDismissEarlyAlarm} | shouldDeleteAfter=${a.shouldDeleteAfterDismissed} | shouldSkip=${a.shouldSkipNextAlarm}")
+				continue
+			}
 
 			// Check if this is either the first calendar being checked,
 			// or if this calendar corresponds to an earlier time than the

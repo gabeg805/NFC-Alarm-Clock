@@ -2,6 +2,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.5</item>
+		<item>早期退室の最大時間を2時間から6時間に延長しました。</item>
+		<item>&lt;b>懐中電灯&lt;/b> オプションの翻訳に関する問題を修正しました。この問題によりクラッシュが発生していました。</item>
+		<item>アラームが解除された後も&lt;b>アラーム画面&lt;/b>が表示され続けるという稀な問題を修正しました。</item>
 		<item>12.7.4</item>
 		<item>画面をオフにしたときに振動が停止してしまう問題を修正しました。</item>
 		<item>12.7.3</item>

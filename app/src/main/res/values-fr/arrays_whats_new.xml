@@ -2,6 +2,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.5</item>
+		<item>Augmentation du délai maximal de &lt;b>renvoi anticipé&lt;/b> de 2 heures à 6 heures.</item>
+		<item>Correction d\'un problème de traduction avec les options &lt;b>lampe torche&lt;/b> qui causait un plantage.</item>
+		<item>Correction d\'un problème rare où &lt;b>l\'écran d\'alarme&lt;/b> restait affiché même après la désactivation de l\'alarme.</item>
 		<item>12.7.4</item>
 		<item>Correction d\'un problème de &lt;b>vibration&lt;/b> qui s\'arrêtait lors de l\'extinction de l\'écran.</item>
 		<item>12.7.3</item>

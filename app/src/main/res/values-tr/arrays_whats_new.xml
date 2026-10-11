@@ -2,6 +2,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.5</item>
+		<item>&lt;b>Erken ayrılma&lt;/b> için azami süre 2 saatten 6 saate çıkarıldı.</item>
+		<item>Çökmeye neden olan &lt;b>el feneri&lt;/b> seçenekleriyle ilgili çeviri sorunu düzeltildi.</item>
+		<item>Alarm kapatıldıktan sonra bile &lt;b>alarm ekranının&lt;/b> görünmeye devam etmesine neden olan nadir bir sorun düzeltildi.</item>
 		<item>12.7.4</item>
 		<item>Ekran kapatıldığında &lt;b>titreşimin&lt;/b> durmasına neden olan sorun giderildi.</item>
 		<item>12.7.3</item>

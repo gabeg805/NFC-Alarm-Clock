@@ -2,6 +2,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.5</item>
+		<item>जल्दी छुट्टी देने की अधिकतम समय सीमा 2 घंटे से बढ़ाकर 6 घंटे कर दी गई है।</item>
+		<item>टॉर्च के विकल्पों से संबंधित अनुवाद समस्या को ठीक कर दिया गया है, जिसके कारण ऐप क्रैश हो रहा था।</item>
+		<item>उस दुर्लभ समस्या को ठीक कर दिया गया है जिसमें अलार्म बंद होने के बाद भी अलार्म स्क्रीन दिखाई देती रहती थी।</item>
 		<item>12.7.4</item>
 		<item>स्क्रीन बंद करने पर कंपन बंद हो जाने की समस्या को ठीक कर दिया गया है।</item>
 		<item>12.7.3</item>

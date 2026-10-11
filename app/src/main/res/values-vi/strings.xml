@@ -623,6 +623,6 @@
 		<item quantity="other">Đã xóa phương tiện trong báo thức/hẹn giờ %1$d do không tìm thấy phương tiện.</item>
 	</plurals>
 
-	<string name="float_duration_seconds">{count, plural, one{{count} giây} other{{count} giây}}</string>
+	<string name="float_duration_seconds">{count, plural, other{{count} giây}}</string>
 
 </resources>

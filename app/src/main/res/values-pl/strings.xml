@@ -659,6 +659,6 @@
 		<item quantity="many">Wyczyszczono media w %1$d alarmach/minutników z powodu nieznalezienia plików</item>
 	</plurals>
 
-	<string name="float_duration_seconds">{count, plural, one{{count} sekunda} few{{count} sekundy} many{{count} sekund}}</string>
+	<string name="float_duration_seconds">{count, plural, one{{count} sekunda} few{{count} sekundy} many{{count} sekund} other{{count} sekundy}}</string>
 
 </resources>

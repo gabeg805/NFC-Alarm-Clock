@@ -22,6 +22,7 @@ import com.nfcalarmclock.view.setTextFromIndex
 import com.nfcalarmclock.view.setupInputLayoutColor
 import com.nfcalarmclock.view.setupProgressAndThumbColor
 import com.nfcalarmclock.view.setupSwitchColor
+import java.util.Locale
 
 /**
  * Flashlight options for an alarm.
@@ -154,6 +155,8 @@ open class NacFlashlightOptionsDialog
 		onDurationInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
 		offDurationInputLayout.setupInputLayoutColor(requireContext(), sharedPreferences)
 
+		NacLog.i("Setting up blink values. defaultOn=$defaultOn | defaultOff=$defaultOff | locale=${Locale.getDefault()}")
+
 		// Build the items for the dropdown menu. 0.5 to 10 seconds
 		val context = requireContext()
 		val allItems: Array<String> = mutableListOf<String>()
@@ -171,8 +174,6 @@ open class NacFlashlightOptionsDialog
 		offDurationAutoCompleteTextView.setSimpleItems(allItems)
 		onDurationAutoCompleteTextView.setTextFromIndex(onIndex)
 		offDurationAutoCompleteTextView.setTextFromIndex(offIndex)
-
-		NacLog.i("Setting up blink values. on=$defaultOn | off=$defaultOff | onIndex=$onIndex | offIndex=$offIndex")
 
 		// Set the listener
 		relativeLayout.setOnClickListener {

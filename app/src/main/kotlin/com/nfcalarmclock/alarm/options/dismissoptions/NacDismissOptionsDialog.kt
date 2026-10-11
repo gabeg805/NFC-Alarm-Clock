@@ -256,7 +256,7 @@ open class NacDismissOptionsDialog
 		// X minutes, ...
 		val allItems: Array<String> = mutableListOf<String>()
 			.apply {
-				repeat(28) { i ->
+				repeat(76) { i ->
 					val time = NacAlarm.calcDismissEarlyTime(i)
 					add(resources.getQuantityString(R.plurals.unit_minute, time, time))
 				}

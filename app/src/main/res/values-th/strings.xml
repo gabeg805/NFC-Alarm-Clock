@@ -623,6 +623,6 @@
 		<item quantity="other">ล้างสื่อใน %1$d alarms/timers เนื่องจากไม่พบสื่อ</item>
 	</plurals>
 
-	<string name="float_duration_seconds">{count, plural, one{{count} วินาที} other{{count} วินาที}}</string>
+	<string name="float_duration_seconds">{count, plural, other{{count} วินาที}}</string>
 
 </resources>

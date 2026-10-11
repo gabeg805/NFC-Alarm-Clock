@@ -2,6 +2,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.5</item>
+		<item>Se ha aumentado el tiempo máximo de &lt;b>salida anticipada&lt;/b> de 2 horas a 6 horas.</item>
+		<item>Se solucionó un problema de traducción con las opciones &lt;b>linterna&lt;/b> que estaba provocando un fallo.</item>
+		<item>Se solucionó un problema poco frecuente por el cual la &lt;b>pantalla de alarma&lt;/b> seguía mostrándose incluso después de que se hubiera desactivado una alarma.</item>
 		<item>12.7.4</item>
 		<item>Se solucionó el problema de &lt;b>vibración&lt;/b> que provocaba que dejara de funcionar al apagar la pantalla.</item>
 		<item>12.7.3</item>

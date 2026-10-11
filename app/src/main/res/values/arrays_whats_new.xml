@@ -3,7 +3,9 @@
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
 		<item>12.7.5</item>
-		<item>Fixed rare issue where the &lt;b>alarm screen&lt;/b> would still show even after an alarm is dismissed.</item>
+		<item>Increased maximum &lt;b>dismiss early&lt;/b> time from 2 hours to 6 hours.</item>
+		<item>Fixed translation issue with &lt;b>flashlight&lt;/b> options which was causing a crash.</item>
+		<item>Fixed rare issue where the &lt;b>alarm screen&lt;/b> would still show even after an alarm was dismissed.</item>
 		<item>12.7.4</item>
 		<item>Fixed &lt;b>vibrate&lt;/b> issue where it would stop when turning the screen off.</item>
 		<item>12.7.3</item>

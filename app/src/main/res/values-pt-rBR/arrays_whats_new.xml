@@ -2,6 +2,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.5</item>
+		<item>Aumento do tempo máximo de &lt;b>dispensa antecipada&lt;/b> de 2 horas para 6 horas.</item>
+		<item>Corrigido problema de tradução com as opções de &lt;b>lanterna&lt;/b> que estava causando o travamento do jogo.</item>
+		<item>Corrigido um problema raro em que a &lt;b>tela de alarme&lt;/b> continuava aparecendo mesmo depois que um alarme era desativado.</item>
 		<item>12.7.4</item>
 		<item>Corrigido o problema de &lt;b>vibração&lt;/b> que fazia com que ela parasse ao desligar a tela.</item>
 		<item>12.7.3</item>

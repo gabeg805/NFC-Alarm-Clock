@@ -2,6 +2,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.5</item>
+		<item>เพิ่มเวลาเลิกเรียนก่อนเวลาสูงสุดจาก 2 ชั่วโมง เป็น 6 ชั่วโมง</item>
+		<item>แก้ไขปัญหาการแปลที่เกี่ยวข้องกับตัวเลือก &lt;b>ไฟฉาย&lt;/b> ซึ่งทำให้โปรแกรมหยุดทำงาน</item>
+		<item>แก้ไขปัญหาที่เกิดขึ้นไม่บ่อยนัก ซึ่งหน้าจอแจ้งเตือนจะยังคงแสดงอยู่แม้ว่าจะปิดการแจ้งเตือนไปแล้วก็ตาม</item>
 		<item>12.7.4</item>
 		<item>แก้ไขปัญหาการสั่นที่หยุดลงเมื่อปิดหน้าจอ</item>
 		<item>12.7.3</item>

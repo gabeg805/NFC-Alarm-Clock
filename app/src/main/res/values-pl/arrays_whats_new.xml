@@ -2,6 +2,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.5</item>
+		<item>Maksymalny czas &lt;b>wcześniejszego&lt;/b> zwolnienia wydłużono z 2 do 6 godzin.</item>
+		<item>Naprawiono problem z tłumaczeniem opcji &lt;b>latarki&lt;/b>, który powodował awarię.</item>
+		<item>Naprawiono rzadki problem, w wyniku którego &lt;b>ekran alarmu&lt;/b> był nadal wyświetlany, nawet po wyłączeniu alarmu.</item>
 		<item>12.7.4</item>
 		<item>Naprawiono problem z &lt;b>wibracjami&lt;/b>, które zatrzymywały się po wyłączeniu ekranu.</item>
 		<item>12.7.3</item>

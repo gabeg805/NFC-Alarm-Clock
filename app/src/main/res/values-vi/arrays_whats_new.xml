@@ -2,6 +2,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.5</item>
+		<item>Tăng thời gian cho phép nghỉ học sớm tối đa từ 2 giờ lên 6 giờ.</item>
+		<item>Đã khắc phục sự cố dịch thuật liên quan đến tùy chọn &lt;b>đèn pin&lt;/b> gây ra lỗi ứng dụng.</item>
+		<item>Đã khắc phục sự cố hiếm gặp khiến màn hình báo động vẫn hiển thị ngay cả sau khi báo động đã được tắt.</item>
 		<item>12.7.4</item>
 		<item>Đã khắc phục sự cố rung, khiến chức năng rung dừng lại khi tắt màn hình.</item>
 		<item>12.7.3</item>

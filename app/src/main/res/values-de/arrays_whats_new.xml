@@ -2,6 +2,14 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.5</item>
+		<item>Die maximale &lt;b>vorzeitige Entlassung&lt;/b> wurde von 2 Stunden auf 6 Stunden erhöht.</item>
+		<item>Es wurde ein Übersetzungsproblem mit den Optionen für die &lt;b>Taschenlampe&lt;/b> behoben, das zu einem Absturz führte.</item>
+		<item>Es wurde ein seltenes Problem behoben, bei dem der &lt;b>Alarmbildschirm&lt;/b> auch nach dem Abweisen eines Alarms noch angezeigt wurde.</item>
+		<item>12.7.5</item>
+		<item>Die maximale &lt;b>vorzeitige Entlassung&lt;/b> wurde von 2 Stunden auf 6 Stunden erhöht.</item>
+		<item>Es wurde ein Übersetzungsproblem mit den Optionen für die Taschenlampe behoben, das zu einem Absturz führte.</item>
+		<item>Es wurde ein seltenes Problem behoben, bei dem der &lt;b>Alarmbildschirm&lt;/b> auch nach dem Abweisen eines Alarms noch angezeigt wurde.</item>
 		<item>12.7.4</item>
 		<item>Problem mit der &lt;b>Vibrationsfunktion&lt;/b> behoben, die beim Ausschalten des Bildschirms aufhörte.</item>
 		<item>12.7.3</item>

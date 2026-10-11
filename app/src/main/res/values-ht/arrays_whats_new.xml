@@ -2,6 +2,10 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
 
 	<string-array name="whats_new_items" tools:ignore="InconsistentArrays">
+		<item>12.7.5</item>
+		<item>Tan maksimòm pou &lt;b>ranvwaye bonè&lt;/b> a ogmante soti nan 2 èdtan pou rive nan 6 èdtan.</item>
+		<item>Pwoblèm tradiksyon ak opsyon &lt;b>flach&lt;/b> la ki te lakòz yon aksidan rezoud.</item>
+		<item>Pwoblèm ra kote &lt;b>ekran alam&lt;/b> lan te toujou ap parèt menm apre yo te fin fèmen yon alam rezoud.</item>
 		<item>12.7.4</item>
 		<item>Pwoblèm &lt;b>vibrasyon&lt;/b> an te rezoud lè li te konn sispann lè w te fèmen ekran an.</item>
 		<item>12.7.3</item>

@@ -659,6 +659,6 @@
 		<item quantity="other">Se borraron los medios en %1$d alarmas/temporizadores debido a que no se encontraron medios.</item>
 	</plurals>
 
-	<string name="float_duration_seconds">{count, plural, one{{count} segundo} many{{count} segundos}} other{{count} segundos}}</string>
+	<string name="float_duration_seconds">{count, plural, one{{count} segundo} many{{count} segundos} other{{count} segundos}}</string>
 
 </resources>
