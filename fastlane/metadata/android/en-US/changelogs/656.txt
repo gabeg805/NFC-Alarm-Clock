@@ -1,0 +1,3 @@
+Increased maximum dismiss early time from 2 hours to 6 hours.
+Fixed translation issue with flashlight options which was causing a crash.
+Fixed rare issue where the alarm screen would still show even after an alarm was dismissed.
